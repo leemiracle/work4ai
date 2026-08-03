@@ -4,9 +4,9 @@
 
 ---
 
-## 16 个「讲透」系列 + 总纲
+## 19 个「讲透」系列 + 总纲
 
-> 现状（2026-08-03 实盘核对）：13 个有完整内容（含新加的「讲透AI应用全景」7 篇）、4 个已开篇待补全（含「讲透KV Cache」00/01）。
+> 现状（2026-08-03 实盘核对）：13 个有完整内容、6 个已开篇待补全（含本轮新加的「讲透RL」+「讲透分布式AI系统」）。
 
 ### A. 已完整（12 个）✅
 
@@ -26,14 +26,16 @@
 | **讲透生成模型** | 统一视角 → AR → VAE → GAN → Flow → Diffusion → Score/SDE | 9+README |
 | **讲透AI应用全景**（新） | 应用视角：AI4Science/AI4Math/AI4Code/Medicine/创意/企业 六大领域 | 7（README+00+01-06）|
 
-### B. 待补全（4 个，已开篇）🟡
+### B. 待补全（6 个，已开篇）🟡
 
 | 系列 | 现状 |
 |---|---|
 | **讲透Agent** | `00` + `01-经典范式对比`（在写）|
 | **讲透优化器** | 仅 `00-优化器全景.md`（236 行全景已写），待补各优化器深挖 |
 | **讲透损失函数** | 仅 `00-损失函数全景.md`，待补各 loss 深挖 |
-| **讲透KV Cache**（新） | `00` + `01` + README（推理优化核心，已开篇），待补 02-07（PagedAttention/RadixAttention/MLA/量化/分层）|
+| **讲透KV Cache** | `00` + `01` + README（推理优化核心），待补 02-07（PagedAttention/RadixAttention/MLA/量化/分层）|
+| **讲透RL**（新）| README + `00`(MDP) + `01`(DQN) + `02`(PPO) + `03`(RLHF/DPO/GRPO)，LLM 对齐核心 |
+| **讲透分布式AI系统**（新）| README + `00`(显存账) + `01`(DDP/FSDP) + `02`(ZeRO) + `03`(TP/PP)，大模型训练工程 |
 
 ### C. 总纲
 
@@ -62,7 +64,8 @@
 
 | 文件 | 类型 | 收录范围 |
 |------|------|---------|
-| [`前沿与媒体/01-AI顶级信息源实时清单.md`](前沿与媒体/01-AI顶级信息源实时清单.md) | **AI 顶级信息源清单**（9 大类 80+ 条）| 论文聚合（arXiv/HF Papers/AK）/ 顶级播客（Lex/Dwarkesh/MLST/Latent Space）/ 个人博客（Karpathy/Lilian Weng/Raschka）/ 机构 blog / Newsletter / 社区 / 中文资源 / AI Safety / 评测榜单。2026-08-03 首版，标注一手>二手的金字塔分层。 |
+| [`前沿与媒体/01-AI顶级信息源实时清单.md`](前沿与媒体/01-AI顶级信息源实时清单.md) | **AI 顶级信息源清单**（9 大类 80+ 条）| 论文聚合（arXiv/HF Papers/AK）/ 顶级播客（Lex/Dwarkesh/MLST/Latent Space）/ 个人博客（Karpathy/Lilian Weng/Raschka）/ 机构 blog / Newsletter / 社区 / 中文资源 / AI Safety / 评测榜单。2026-08-03 二轮核对（联网实抓 50+ URL）。 |
+| [`前沿与媒体/02-后训练信息源专题.md`](前沿与媒体/02-后训练信息源专题.md) | **后训练垂直专题**（8 大类 30+ 条）| 综述博客（Nathan Lambert/Lilian Weng/Raschke）/ 代码库（TRL/PEFT/Axolotl/Unsloth/LLaMA-Factory/OpenRLHF/open-instruct）/ 数据集（UltraFeedback/HH-RLHF/Magpie/Tülu mix）/ 评测（RewardBench/AlpacaEval/LightEval）/ 关键论文（InstructGPT/CAI/DPO/KTO/GRPO/DeepSeek-R1）。2026-08-03 首版核对。 |
 
 ### 3. 中文深度：[`访谈及其他/`](访谈及其他/)（人物与脉络）
 

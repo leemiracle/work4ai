@@ -109,7 +109,83 @@ GPT-4 / Gemini 的 128k-2M 上下文窗口让人以为"塞进去就行"，但：
 
 ---
 
-## 五、挑战与开放问题
+## 五、深入：上下文工程实战 + Agent 的 plan-execute-verify
+
+### 5.1 Copilot 的 FIM 训练（Fill-in-the-Middle）
+
+代码模型的核心训练技巧是 **FIM**（Fill-in-the-Middle）：让模型学会"给定前后文，填中间"。
+
+```
+原始代码：    def add(a, b):  return a + b
+标准训练：    输入 "def add(a, b):"  → 预测 "return a + b"  （只前缀）
+FIM 训练：    输入 "<prefix>def add(a, b):\n<suffix>  # 这里返回和\n<middle>"
+             → 预测 "  return a + b"  （中间填空）
+```
+
+**为什么关键**：IDE 里光标在代码**中间**，不是末尾——纯前缀训练的模型不会"向左看"。FIM 训练让模型同时利用前后文，**这是 Copilot 能用的根本**。
+
+Codex（2021）/ Code Llama / DeepSeek-Coder / Qwen-Coder 全用 FIM 训练，比例通常 50%-90%。
+
+### 5.2 Codebase indexing 实战
+
+Cursor / Windsurf 的"读整个仓库"靠 **embedding 检索**：
+
+```
+建索引（一次性）：
+  遍历所有 .py/.ts/.md 文件
+  → 按语义分块（函数/类边界，~100-500 tokens/块）
+  → 用 code embedding 模型编码
+  → 存进本地向量库（Chroma/LanceDB）
+
+查询时：
+  用户问 "X 功能在哪实现"
+  → embed(query) → 向量库 top-k 检索
+  → rerank（cross-encoder）→ 取最相关 3-10 块
+  → 塞进 LLM 上下文
+```
+
+**关键选型**：
+- **embedding 模型**：`voyage-code-2` / `bge-large` / `text-embedding-3-large`——专门 code 的比通用的好
+- **分块策略**：**按 AST 分**（函数/类边界）比固定长度好——保持语义完整
+- **rerank**：必做——初次检索召回多，rerank 提精度
+
+### 5.3 Agent 的 plan-execute-verify（IDE 落地）
+
+Cursor Agent / Devin 内部的核心循环：
+
+```
+用户目标（"修复 issue #123"）
+    ↓
+【Plan】LLM 拆解任务：
+    1. 读 issue 理解问题
+    2. grep 找相关代码
+    3. 定位 bug
+    4. 改代码
+    5. 跑测试验证
+    6. 提 PR
+    ↓
+【Execute】逐步执行，每步：
+    - 选工具（read_file / grep / edit / run）
+    - 调工具，拿结果
+    - 把结果加进上下文
+    ↓
+【Verify】每步后：
+    - LLM 自检："这步做对了吗？"
+    - 或客观验证（测试通过？编译成功？）
+    ↓ 失败则回退 / 重新 plan
+```
+
+**关键工程**：
+- **工具 schema 严格**：每个工具有明确参数 + 校验，防止 LLM 瞎调
+- **上下文压缩**：长任务时，把旧步骤总结，腾出 context window
+- **checkpoint**：每步存状态，崩溃可恢复
+- **human approval**：高风险操作（push、删文件）必须人确认
+
+> 🎯 **现实**：当前 Agent 在 SWE-bench Verified 上 ~30-50%——**能用但不稳**。复杂任务经常崩溃，需要人介入。所以产品形态是"**副驾驶 + 频繁确认**"，不是"甩手掌柜"。
+
+---
+
+## 六、挑战与开放问题
 
 1. **长任务的可靠性**：Agent 跑 30 步后经常崩溃（错误累积）
 2. **大型 codebase 的导航**：百万行代码的依赖理解，RAG 不够
