@@ -27,7 +27,8 @@
 | **03** | AI4Code — AI 写代码 | 🟡 | Copilot / Cursor / 代码生成评估 / Agent 化 IDE |
 | **04** | AI4Medicine — AI 做医疗 | 🟡 | 影像 / 药物发现 / 诊断 / Med-PaLM |
 | **05** | 创意 AI — AI 做内容 | 🟡 | ChatGPT / Midjourney / Sora / Suno + 创意工作流 |
-| **06** | 企业 AI 应用 — AI 做业务 | 🟡 | RAG / Agent 在企业的落地（和讲透RAG/Agent 互补）|
+| **06** | 企业 AI 应用 — AI 做业务 | ✅ | RAG / Agent 在企业的落地（和讲透RAG/Agent 互补）|
+| **07** | [AI for AI](./07-AI for AI.md) — AI 应用到自己 | ✅ | **元应用**：AI Scientist/Lion/合成数据/Constitutional AI/LLM-as-judge/interpretability + 递归自我改进 |
 
 ---
 
@@ -36,6 +37,7 @@
 - **想理解 AI 为什么是通用革命**：从 [00 统一框架](./00-AI应用的统一框架.md) 开始
 - **想跟前沿突破**：直接看 [01 AI4Science](./01-AI4Science.md) 和 [02 AI4Math](./02-AI4Math.md)（2024-2026 最震撼的两个方向）
 - **想做产品**：看 03/05/06（代码/创意/企业方向）
+- **想思考 AGI**：看 [07 AI for AI](./07-AI for AI.md)（元应用，递归自我改进）
 - **想做研究**：00 + 01 + 02 + 顶会 workshop（每篇都给）
 
 ---

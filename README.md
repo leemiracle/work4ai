@@ -24,7 +24,7 @@
 | **讲透复用权重** | 迁移学习 → 预训练范式 → PEFT → 蒸馏 → 持续学习 → LoRA 深水区 | 10 |
 | **讲透泛化** | 泛化悖论 → 隐式正则 → 平坦极小值 → 双层下降 → 归纳偏置 | 6+练习+实验 |
 | **讲透生成模型** | 统一视角 → AR → VAE → GAN → Flow → Diffusion → Score/SDE | 9+README |
-| **讲透AI应用全景**（新） | 应用视角：AI4Science/AI4Math/AI4Code/Medicine/创意/企业 六大领域 | 7（README+00+01-06）|
+| **讲透AI应用全景** | 应用视角：AI4Science/AI4Math/AI4Code/Medicine/创意/企业/**AI for AI** 七大领域 | 8（README+00+01-07）|
 
 ### B. 待补全（6 个，已开篇）🟡
 
