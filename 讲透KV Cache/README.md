@@ -1,0 +1,58 @@
+# 讲透 KV Cache
+
+> 自回归 LLM 推理的"记忆体"。**没有它每步重算（O(n²)），有了它增量计算（O(n)）；但它本身随上下文线性膨胀，到 2024-2026 成了推理显存第一大头**——vLLM 的 PagedAttention、SGLang 的 RadixAttention、DeepSeek 的 MLA、KV 量化全围绕它转。本系列把 KV Cache 从概念钻到工业实现。
+>
+> 配套实验：`experiments/`（纯 CPU + numpy，全部已实跑验证，数字都是跑出来的）
+
+---
+
+## 为什么单独开一个系列
+
+- [`讲透GPU与系统级/03-推理引擎`](../讲透GPU与系统级/03-推理引擎.md) 已经从**系统级视角**讲过 PagedAttention/continuous batching 的概览（84 行）。
+- 但 KV Cache 本身的**数学、显存账、架构演进（GQA→MLA）、量化、分层存储**值得单独深钻——这是 2024-2026 推理优化最核心的战场。
+- 本系列是「讲透GPU与系统级」的 KV Cache 部分的**深钻展开版**，并和 [`讲透公开课/03-AI Infra 源码导读`](<../讲透公开课/03-AI Infra 源码导读清单.md>) 的 vLLM/SGLang 源码条目无缝衔接。
+
+---
+
+## 篇目
+
+| # | 标题 | 状态 | 核心 |
+|---|------|------|------|
+| **00** | [为什么 KV Cache 是推理的生命线](./00-为什么KV Cache是推理的生命线.md) | ✅ | 为什么需要、成本账、为什么是核心战场 |
+| **01** | [KV Cache 的数学与内存账](./01-KV Cache的数学与内存账.md) | ✅ | 精确公式 + 思考题答案 + prefill/decode + MLA 对比 |
+| 02 | PagedAttention 深挖 | 🟡 待写 | vLLM 怎么用 OS 虚存思想管 KV Cache |
+| 03 | RadixAttention 深挖 | 🟡 待写 | SGLang 怎么用基数树复用共享前缀 |
+| 04 | MLA 深挖 | 🟡 待写 | DeepSeek 怎么把 KV 压缩 85x |
+| 05 | KV Cache 量化 | 🟡 待写 | FP8/INT4/1.58-bit 的代价与收益 |
+| 06 | 分层 KV Cache | 🟡 待写 | GPU/CPU/SSD 三级存储 |
+| 07 | 横评与选型 | 🟡 待写 | 不同场景该用哪种方案 |
+
+---
+
+## 怎么用
+
+- **只想要直觉**：看 [00](./00-为什么KV Cache是推理的生命线.md) 一、二节
+- **想会算 KV Cache 账（面试常考）**：看 [01](./01-KV Cache的数学与内存账.md)
+- **想读懂 vLLM 源码**：等 02 + 配 [`讲透公开课/03`](<../讲透公开课/03-AI Infra 源码导读清单.md>) 的 vLLM 条目
+- **想理解 DeepSeek-V3 为什么能跑**：等 04（MLA）
+- **想优化自己的推理服务**：等 05 + 06 + 07
+
+---
+
+## 跑实验
+
+```bash
+cd experiments
+python3 00_why_kv_cache.py          # O(n²) vs O(n) + 显存账
+python3 01_kv_cache_accounting.py   # 思考题答案 + MLA 压缩比
+```
+
+所有数字都是跑出来的，可复现。
+
+---
+
+## 配套资源
+
+- 上游（系统级概览）：[`讲透GPU与系统级/03-推理引擎`](../讲透GPU与系统级/03-推理引擎.md)
+- 下游（源码导读）：[`讲透公开课/03-AI Infra 源码导读`](<../讲透公开课/03-AI Infra 源码导读清单.md>) 的 I1 vLLM / I2 SGLang 条目
+- 地基课：[`讲透公开课/02`](../讲透公开课/02-数理计算机神课清单.md) 的 C4 6.1810 OS（虚存）+ C8 15-213 CSAPP（缓存）
