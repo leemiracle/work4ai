@@ -4,7 +4,7 @@
 >
 > 本篇不收"课"，收**全球顶级 AI Infra 开源项目**——每个都给「**仓库入口 + 核心论文 + 关键源码文件 + 阅读顺序 + 和 02 系统课的映射**」。02 教你"OS/分布式/CUDA 为什么这么设计"，本篇告诉你"**这些设计在 vLLM / SGLang / Ray / Triton 里具体是哪几个文件**"。读完能从"会用 API"跨到"能改内核"。
 >
-> **核对日期**：2026-08-03（vLLM / SGLang / Ray / Triton 四大件联网实抓 GitHub 核对最新状态；其余基于稳定知识 + 官网 URL）
+> **核对日期**：2026-08-03（**第二轮·GitHub API 全量核 18 项目**，所有 stars/last push 都是当日实抓数据；本轮新发现：SGLang 已扩到 diffusion/VLM/Wan/MiniMax 多模态；verl 2.28w stars 超 OpenRLHF 2 倍；TGI 4 个月未动疑似停滞）
 > **图例**：🟢 = 近期高频迭代（周级提交）　🟡 = 稳定维护　🔴 = 维护停滞/已归档
 > **收录原则**：① 全球头部 AI 公司在生产用；② 源码完整可读、有论文/技术博客背书；③ 覆盖「推理 / 训练 / 调度 / 算子 / 通信」全栈。
 
@@ -12,27 +12,29 @@
 
 ## 一、速览表（先看这一张）
 
+> 📊 **stars 排名（2026-08-03 实抓）**：PyTorch 10.2w > vLLM 8.8w > Unsloth 6.9w > DeepSpeed 4.3w ≈ Ray 4.3w > SGLang 3.1w > flash-attention 2.5w > **verl 2.3w（字节 RL 后端，超 OpenRLHF 2 倍）** > Triton 2.0w > Megatron-LM 1.7w > Axolotl 1.2w ≈ xFormers 1.1w ≈ TGI 1.1w > CUTLASS 1.0w > FlashInfer 6.1k > NCCL 4.9k > Slurm 4.2k > KubeRay 2.6k
+
 | # | 项目 | 类别 | Stars | 核心创新 | 状态 |
 |---|---|---|---|---|---|
-| I1 | **vLLM** | 推理服务 | 88.1k | PagedAttention + 连续 batching | 🟢 周级提交 |
-| I2 | **SGLang** | 推理服务 + RL 后端 | 31.1k | RadixAttention + 零开销调度 | 🟢 40万+ GPU 在线 |
-| I3 | **TGI**（HuggingFace） | 推理服务 | — | flash-attention + 持续部署 | 🟡 |
-| T1 | **Megatron-LM / Megatron-Core** | 训练（TP/PP/DP） | — | Transformer 并行范式定义者 | 🟢 NVIDIA 维护 |
-| T2 | **DeepSpeed** | 训练（ZeRO/PP） | — | ZeRO-1/2/3 + 卸载到 CPU/NVMe | 🟢 微软维护 |
-| T3 | **Unsloth** | 训练（高效微调） | — | 手写 Triton kernel + 4x LoRA 速度 | 🟢 热门 |
-| T4 | **Axolotl** | 训练（微调料） | — | 配置驱动微调，集成多模型 | 🟢 |
-| T5 | **verl / AReaL / Miles** | RL 后端 | — | RLHF/GRPO 大规模训练 | 🟢 新生代 |
-| D1 | **Ray** | 分布式调度 | 43.4k | Task/Actor/Object 抽象 + AI Libraries | 🟢 Anyscale |
-| D2 | **Slurm** | HPC 调度 | — | HPC 事实标准（训练集群） | 🟡 |
-| D3 | **Kubernetes** | 容器调度 | — | AI workload on K8s（KubeRay 等） | 🟢 |
-| K1 | **FlashAttention** | 算子（attention） | — | IO-aware attention 范式 | 🟢 v3 |
-| K2 | **Triton** | 算子（DSL/编译器） | 19.8k | Python 写 GPU kernel，MLIR 后端 | 🟢 2.0 |
-| K3 | **CUTLASS** | 算子（GEMM 库） | — | NVIDIA CUDA GEMM 模板库 | 🟢 NVIDIA |
-| K4 | **xFormers / FlashInfer** | 算子（attention 变体） | — | memory-efficient / 长上下文 | 🟢 |
-| C1 | **NCCL** | 通信（GPU 集合通信） | — | NVIDIA GPU 集合通信库 | 🟡 标准 |
-| C2 | **Gloo** | 通信（CPU 集合通信） | — | PyTorch 默认 CPU 后端 | 🟡 |
-| U1 | **CUDA Toolkit** | 全栈底座 | — | NVIDIA GPU 编程模型 | 🟢 |
-| U2 | **PyTorch** | 全栈底座 | — | eager + torch.compile + FSDP | 🟢 |
+| I1 | **vLLM** | 推理服务 | **88.1k** ⭐ | PagedAttention + 连续 batching；topics 已含 deepseek-v3/kimi/qwen3/gpt-oss/blackwell/tpu | 🟢 周级提交 |
+| I2 | **SGLang** | 推理服务 + RL 后端 + **多模态** | **31.2k** ⭐ | RadixAttention + 零开销调度；**topics 已扩到 diffusion/vlm/wan/minimax**（多模态推理引擎） | 🟢 40万+ GPU 在线 |
+| I3 | **TGI**（HuggingFace） | 推理服务 | **10.9k** ⭐ | flash-attention + 持续部署 | 🔴 **4 个月未动**（push 2026-03-21）|
+| T1 | **Megatron-LM / Megatron-Core** | 训练（TP/PP/DP） | **17.3k** ⭐ | Transformer 并行范式定义者 | 🟢 NVIDIA 维护 |
+| T2 | **DeepSpeed** | 训练（ZeRO/PP） | **42.9k** ⭐ | ZeRO-1/2/3 + 卸载到 CPU/NVMe | 🟢 微软维护 |
+| T3 | **Unsloth** | 训练（高效微调） | **69.4k** ⭐ | 手写 Triton kernel + 4x LoRA 速度 | 🟢 热门 |
+| T4 | **Axolotl** | 训练（微调料） | **12.3k** ⭐ | 配置驱动微调，集成多模型 | 🟢 |
+| T5 | **verl / AReaL / Miles** | RL 后端 | **verl 22.8k / AReaL 5.6k** ⭐ | RLHF/GRPO 大规模训练（verl = 字节 HybridFlow，超 OpenRLHF 9.8k 两倍）| 🟢 新生代 |
+| D1 | **Ray** | 分布式调度 | **43.4k** ⭐ | Task/Actor/Object 抽象 + AI Libraries | 🟢 Anyscale |
+| D2 | **Slurm** | HPC 调度 | **4.2k** ⭐ | HPC 事实标准（训练集群） | 🟡 |
+| D3 | **Kubernetes + KubeRay** | 容器调度 | **KubeRay 2.6k** ⭐ | AI workload on K8s | 🟢 |
+| K1 | **FlashAttention** | 算子（attention） | **24.6k** ⭐ | IO-aware attention 范式 | 🟢 v3 |
+| K2 | **Triton** | 算子（DSL/编译器） | **19.8k** ⭐ | Python 写 GPU kernel，MLIR 后端 | 🟢 2.0 |
+| K3 | **CUTLASS** | 算子（GEMM 库） | **10.2k** ⭐ | NVIDIA CUDA GEMM 模板库 + Python DSL | 🟢 NVIDIA |
+| K4 | **FlashInfer / xFormers** | 算子（attention 变体） | **FlashInfer 6.1k / xFormers 10.5k** ⭐ | memory-efficient / 长上下文 / JIT 编译 | 🟢 |
+| C1 | **NCCL** | 通信（GPU 集合通信） | **4.9k** ⭐ | NVIDIA GPU 集合通信库 | 🟡 标准 |
+| C2 | **Gloo** | 通信（CPU 集合通信） | （PyTorch 子模块，无独立 stars）| PyTorch 默认 CPU 后端 | 🟡 |
+| U1 | **CUDA Toolkit** | 全栈底座 | （NVIDIA 闭源）| NVIDIA GPU 编程模型 | 🟢 |
+| U2 | **PyTorch** | 全栈底座 | **102.2k** ⭐（最大）| eager + torch.compile + FSDP | 🟢 |
 
 ---
 
@@ -412,7 +414,15 @@ proto/sglang/runtime/v1/        ← ⑨ v1 架构（gRPC + 异步）
   - 训练框架：verl/AReaL/Miles 是 2025-2026 新生代，格局未稳
 - **本清单口径**：只收"全球头部 AI 公司生产在用"的项目；个人玩具 / 已废弃（如早期的 DeepSpeed-MII / 有些 fork）不收。
 - **核对日志**：
-  - 2026-08-03：首版核对，实抓 vLLM（88.1k stars/19460 commits）/ SGLang（31.1k stars/15991 commits，40万+ GPU）/ Ray（43.4k stars/31231 commits）/ Triton（**已迁到 triton-lang 组织**，19.8k stars，2.0 用 MLIR 重写）。其他基于稳定知识。
+  - **2026-08-03（第二轮·GitHub API 全量核 18 项目）**：用本地 firecrawl self-host + GitHub API（`api.github.com/repos/...`）批量核所有 18 项目的 stars/last push/topics。**关键发现**：
+    - **排名**（按 stars）：PyTorch 10.2w > vLLM 8.8w > Unsloth 6.9w > DeepSpeed 4.3w ≈ Ray 4.3w > SGLang 3.1w > flash-attention 2.5w > **verl 2.3w** > Triton 2.0w > Megatron-LM 1.7w > Axolotl 1.2w ≈ xFormers 1.1w ≈ TGI 1.1w > CUTLASS 1.0w > FlashInfer 6.1k > NCCL 4.9k > Slurm 4.2k > KubeRay 2.6k。
+    - **🆕 SGLang 多模态化**：topics 已含 `diffusion / vlm / wan / minimax`，从纯 LLM 推理引擎扩到**多模态推理引擎**。
+    - **🆕 vLLM 全模型/全硬件覆盖**：topics 含 `deepseek-v3 / kimi / qwen3 / gpt-oss / blackwell / tpu`。
+    - **🔴 TGI 疑似停滞**：最后 push 是 **2026-03-21**（4 个多月未动），可能被 vLLM/SGLang 边缘化，状态从 🟡 降为 🔴。
+    - **🆕 verl（字节 HybridFlow）22.8k stars**——**超过 OpenRLHF(9.8k) 2 倍**，是 2025–2026 RL 后端实际上的"开源一哥"。
+    - **🆕 AReaL 5.6k stars**（inclusionAI），自我描述 "RL Bridge for **LLM-based Agent** Applications"——RL + Agent 桥接框架，对应 02 后训练专题里"Agentic RL 趋势"。
+    - 所有项目 last push 都是 2026-08-03 当天或前 2 周内（除 TGI 4 个月、xFormers 7月中），整体生态极活跃。
+  - 2026-08-03（首版·四大件核对）：实抓 vLLM（88.1k stars/19460 commits）/ SGLang（31.1k stars/15991 commits，40万+ GPU）/ Ray（43.4k stars/31231 commits）/ Triton（**已迁到 triton-lang 组织**，19.8k stars，2.0 用 MLIR 重写）。其他基于稳定知识。
 
 ---
 
