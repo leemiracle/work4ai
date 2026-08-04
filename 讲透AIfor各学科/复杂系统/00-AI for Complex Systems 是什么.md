@@ -87,3 +87,21 @@
 - Mitchell *Complexity: A Guided Tour*
 - Wolfram *A New Kind of Science*
 - Noble *The Music of Life*
+
+
+---
+
+## 领域知识深化：复杂系统核心概念
+
+| 概念 | 含义 | AI 对应 |
+|---|---|---|
+| **涌现** | 整体>部分之和 | LLM 涌现能力 |
+| **自组织** | 局部规则→全局秩序 | 训练=熵减 |
+| **相变** | 跨阈值行为突变 | 涌现阈值 |
+| **网络拓扑** | 小世界/无标度 | 神经网络结构 |
+| **混沌** | 确定性不可预测 | 训练敏感性 |
+| **反馈环** | 正反馈→雪崩/负反馈→稳定 | RLHF 闭环 |
+
+**关键人物**：Bertalanffy(1968系统论) / Prigogine(耗散结构) / Holland(CAS) / Barabasi(无标度网络)
+
+**研究方法**：Agent-based modeling(NetLogo) / 网络科学(NetworkX) / 动力系统(分岔图) / 信息论(熵)

@@ -96,3 +96,22 @@
 - Parcak 2017 *Archaeology from Space*
 - Chase 2011 *PNAS*（玛雅 LiDAR）
 - UNESCO 报告
+
+
+---
+
+## 领域知识深化：考古学核心技术
+
+| 技术 | 原理 | AI 角色 |
+|---|---|---|
+| **LiDAR** | 激光雷达穿透植被测地形 | AI 自动识别遗址特征 |
+| **遥感(卫星/无人机)** | 多光谱/雷达成像 | AI 图像分类/变化检测 |
+| **地层学** | 文化层堆积顺序 | AI 辅助 3D 地层建模 |
+| **类型学** | 文物分类/断代 | AI 图像分类/相似度匹配 |
+| **C14 测年** | 放射性碳衰变 | 贝叶斯校正(BCal/OxCal) |
+| **古DNA** | 古代基因组测序 | AI 基因组组装/人群分析 |
+| **3D 重建** | 摄影/激光扫描 | NeRF/Gaussian Splatting |
+
+**关键遗址项目**：Vesuvius Challenge(赫库兰尼姆古卷 AI 解读) / Giza Plateau(3D 重建)
+
+**工具**：QGIS(地理信息) / Agisoft Metashape(3D) / Google Earth Engine / 古DNA分析

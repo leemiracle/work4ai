@@ -95,3 +95,20 @@
 - Moretti 2005 *Graphs, Maps, Trees*
 - Underwood 2019 *Distant Horizons*
 - Bender 2021 *FAIR*
+
+
+---
+
+## 领域知识深化：文学研究方法与数字人文
+
+| 方法 | 核心思想 | AI 工具 |
+|---|---|---|
+| **远读(Distant Reading)** | 用计算分析海量文本模式 | 主题模型/词频统计/网络分析 |
+| **近读(Close Reading)** | 深入文本细节/修辞/结构 | LLM 辅助标注/对比 |
+| **叙事学** | 叙事结构/视角/时间线 | 情节图/情感弧线 |
+| **文体学** | 词汇/句法/风格量化 | Stylometry(作者鉴定) |
+| **互文性** | 文本间的引用/改写关系 | 引用网络/语义相似度 |
+
+**关键理论家**：Moretti(远读) / Barthes(作者之死) / Genette(叙事学) / Jockers(宏观分析)
+
+**数字人文工具**：Voyant(文本分析) / Gephi(网络) / NLTK/spaCy(NLP) / Topic Modeling
