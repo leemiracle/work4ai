@@ -4,7 +4,13 @@
 >
 > 这是所有 AI 应用里**最特殊的一类**：它有**递归性**（AI 改进 AI → 改进后的 AI 再改进 AI → ...），有 **self-reference**（AI 理解自己），也带来**独特风险**（model collapse、不可控的递归自我改进）。理解 AI for AI，是理解 AGI 可能性的钥匙。
 >
-> 配套：[`讲透RL/03 RLHF/DPO/GRPO`](../讲透RL/03-RLHF-DPO-GRPO.md)（AI 对齐 AI）+ [`讲透AI应用全景/02-AI4Math`](./02-AI4Math.md)（AlphaProof 是 AI for AI 的雏形——AI 做推理）
+> 配套（4 条线）：
+> - [`讲透RL/03 RLHF/DPO/GRPO`](../讲透RL/03-RLHF-DPO-GRPO.md)（AI 对齐 AI 的工程实现）
+> - [`讲透AI应用全景/02-AI4Math`](./02-AI4Math.md)（AlphaProof 是 AI for AI 的雏形——AI 做推理）
+> - **第③层（AI 训练 AI）深挖** → [`讲透数据`](../讲透数据/)（合成数据/Model Collapse/数据墙）
+> - **第⑥层（AI 理解 AI）深挖** → [`讲透可解释性`](../讲透可解释性/)（mechanistic interpretability/SAE/circuits）
+> - **哲学反思** → [`讲透科学的现代性`](../讲透科学的现代性/)（"AI 发现算理解吗"+ 第五范式 + 可重复性危机）
+> - **AI 理解世界吗** → [`讲透世界模型`](../讲透世界模型/)（四派统一框架：视频生成/RL 内部模型/JEPA/具身）
 
 ---
 
