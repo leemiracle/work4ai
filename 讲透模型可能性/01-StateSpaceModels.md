@@ -73,20 +73,22 @@ $$
 
 这是一个**连续时间**的 ODE。要处理离散的 token 序列，必须**离散化**。
 
-### 3.2 离散化（Zero-Order Hold / 双线性变换）
+### 3.2 离散化：ZOH 与双线性（两种方法）
 
-假设每个输入 token 在一个步长 $\Delta$ 内保持不变（零阶保持），可解出离散递推：
+连续 ODE 必须离散化成递推才能处理 token 序列。离散递推形式：
 
 $$
 \boxed{\;h_t = \bar A\,h_{t-1} + \bar B\,x_t,\qquad y_t = C\,h_t\;}
 $$
 
-其中 $\bar A, \bar B$ 由连续 $A,B$ 经双线性（Tustin）变换得到（只需矩阵求逆）：
+$\bar A, \bar B$ 的计算方式取决于离散化方法——**这两种不是同义词**：
 
-$$
-\bar A = (I - \tfrac{\Delta}{2}A)^{-1}(I + \tfrac{\Delta}{2}A),\qquad
-\bar B = (I - \tfrac{\Delta}{2}A)^{-1}\Delta B
-$$
+| 方法 | $\bar A$ 公式 | 性质 | 用于 |
+|---|---|---|---|
+| **ZOH**（零阶保持，精确）| $\bar A = e^{\Delta A}$ | 输入分段常数时的**精确解** | **Mamba** |
+| **双线性/Tustin**（近似）| $\bar A = (I - \frac{\Delta}{2}A)^{-1}(I + \frac{\Delta}{2}A)$ | $e^{\Delta A}$ 的 Padé(1,1) 近似，保持稳定性 | S4（也可用 ZOH）|
+
+> ⚠️ **ZOH ≠ 双线性**：ZOH 是精确的矩阵指数 $e^{\Delta A}$，双线性是其有理近似。S4 论文两者都讨论；**Mamba 统一用 ZOH**（$\bar{A}_t = e^{\Delta_t A}$，且步长 $\Delta_t$ 随输入变化——这就是"选择性"的实现）。
 
 > **关键**：$\bar A$ 的特征值 $|\lambda|<1$（稳定），信号每步被乘以 $\lambda$——$\lambda$ 越接近 1，记忆越长。HiPPO 的多档对角元正好给了一组从"很接近 1"到"显著小于 1"的特征值，覆盖各种时间尺度。
 
