@@ -27,6 +27,8 @@ import pathlib
 import argparse
 import datetime
 import importlib.util
+from multiprocessing import Pool, cpu_count
+from collections import Counter
 
 _HERE = pathlib.Path(__file__).resolve().parent
 _spec = importlib.util.spec_from_file_location("fb", _HERE / "feynman-batch.py")
@@ -252,6 +254,304 @@ def lens_analogy(text: str) -> dict:
 
 
 # ============================================================
+# 视角 7：Paul-Elder 思维标准（8 元素）
+# ============================================================
+
+PE_STANDARDS = {
+    "清晰": ["明确", "即指", "就是指", "例子", "比如"],
+    "准确": ["精确", "测量", "数据点", "具体值"],
+    "精确": ["恰好", "正好", "等于", "±", "误差"],
+    "相关": ["相关", "联系", "有关", "涉及"],
+    "深度": ["因为", "由于", "原因", "本质", "为什么"],
+    "广度": ["另一方面", "不同视角", "其他观点", "从.{0,5}看"],
+    "逻辑": ["因此", "故", "推导", "推出", "所以"],
+    "公平": ["然而", "但是", "反例", "尽管", "批评"],
+}
+
+
+def lens_paul_elder(text: str) -> dict:
+    counts = {k: sum(len(re.findall(p, text)) for p in vs) for k, vs in PE_STANDARDS.items()}
+    weak = [k for k, v in counts.items() if v == 0]
+    return {
+        "name": "Paul-Elder 思维标准（8 元素）",
+        "emoji": "🎯",
+        "headline": f"8 标准覆盖 {sum(1 for v in counts.values() if v > 0)}/8，弱项 = {weak or '无明显'}",
+        "auto_findings": {
+            "summary": [f"{k}: {v} 次" for k, v in counts.items()]
+                       + ([f"⚠️ 弱项: {', '.join(weak)}"] if weak else []),
+        },
+        "author_questions": [
+            f"🤖 启发式说弱项是 {weak or '无明显弱项'}——作者复核每项是否真弱",
+            "**清晰度**：每个核心概念都有例子吗？",
+            "**深度**：是描述表面还是追问'为什么'？",
+            "**广度**：考虑了不同视角吗？还是单一立场？",
+            "**公平性**：公平对待反方观点吗？还是 strawman？",
+        ],
+    }
+
+
+# ============================================================
+# 视角 8：Popper 可证伪性
+# ============================================================
+
+def lens_popper(text: str) -> dict:
+    soft = ["可能", "也许", "似乎", "大致", "或许", "大约", "看起来"]
+    soft_count = sum(len(re.findall(re.escape(s), text)) for s in soft)
+    hard_pred = len(re.findall(r"\d+\.?\d*\s*[%％]", text))
+    specific_cond = len(re.findall(r"如果.{0,30}则|当.{0,20}时|若.{0,20}则", text))
+    return {
+        "name": "Popper 可证伪性",
+        "emoji": "🔬",
+        "headline": f"软论断词 {soft_count} / 具体百分比 {hard_pred} / 条件预测 {specific_cond}",
+        "auto_findings": {
+            "summary": [
+                f"软论断（可能/也许/似乎）: {soft_count} 次",
+                f"具体百分比/数字: {hard_pred} 次",
+                f"条件预测（如果X则Y）: {specific_cond} 次",
+            ],
+        },
+        "author_questions": [
+            "🤖 软论断多 = 不可证伪——本文的核心论断能被实验证伪吗？",
+            "把每个论断改写成'如果 X 则 Y'——能改写的才算科学论断",
+            "**最不可证伪的论断**：____（写出来，问'什么证据能让你改变想法'）",
+            "答不出'什么证据能证伪' = 这个论断是修辞不是科学",
+        ],
+    }
+
+
+# ============================================================
+# 视角 9：DIKW 层级
+# ============================================================
+
+DIKW_MARKERS = {
+    "Data": [r"测量", r"数据", r"数字", r"记录"],
+    "Information": [r"关系", r"相关", r"连接", r"关联", r"映射"],
+    "Knowledge": [r"模式", r"规律", r"原理", r"理论", r"解释"],
+    "Wisdom": [r"判断", r"应用", r"伦理", r"意义", r"应该", r"价值"],
+}
+
+
+def lens_dikw(text: str) -> dict:
+    counts = {k: sum(len(re.findall(p, text)) for p in vs) for k, vs in DIKW_MARKERS.items()}
+    total = sum(counts.values()) or 1
+    dominant = max(counts, key=counts.get)
+    return {
+        "name": "DIKW 层级（Data/Information/Knowledge/Wisdom）",
+        "emoji": "🔺",
+        "headline": f"D{counts['Data']}/I{counts['Information']}/K{counts['Knowledge']}/W{counts['Wisdom']}，主导 = {dominant}",
+        "auto_findings": {
+            "summary": [f"{k}: {v}（{round(100*v/total)}%）" for k, v in counts.items()],
+        },
+        "author_questions": [
+            f"🤖 主导层是 {dominant}——本文停在数据罗列还是到了智慧/判断？",
+            "**升级问题**：停在 Data 能否抽 Information？停在 Knowledge 能否到 Wisdom？",
+            "**Wisdom 层**：本文有讨论'应该怎样'（伦理/价值）吗？",
+        ],
+    }
+
+
+# ============================================================
+# 视角 10：因果 vs 相关（Pearl）
+# ============================================================
+
+def lens_causality(text: str) -> dict:
+    causal = sum(len(re.findall(p, text)) for p in [r"导致", r"引起", r"造成", r"使得", r"促使"])
+    corr = sum(len(re.findall(p, text)) for p in [r"相关", r"有关", r"联系到"])
+    inter = len(re.findall(r"随机对照|RCT|do\(|干预|反事实|实验组", text))
+    return {
+        "name": "因果 vs 相关（Pearl）",
+        "emoji": "🔗",
+        "headline": f"因果声明 {causal} / 相关声明 {corr} / 干预讨论 {inter}",
+        "auto_findings": {
+            "summary": [
+                f"因果动词（导致/引起）: {causal} 次",
+                f"相关动词（相关/有关）: {corr} 次",
+                f"干预讨论（RCT/do/反事实）: {inter} 次",
+            ],
+        },
+        "author_questions": [
+            f"🤖 因果声明 {causal} 处但干预讨论只 {inter}——多数'导致'是观察相关冒充因果",
+            "每个'X 导致 Y'问：有 RCT/自然实验吗？还是观察相关？",
+            "**最强因果论断**：____（写出来，问'反事实是什么'）",
+            "Pearl do-calculus：do(X) vs see(X) 区分清楚了吗？",
+        ],
+    }
+
+
+# ============================================================
+# 视角 11：机制可解释性
+# ============================================================
+
+def lens_mechinterp(text: str) -> dict:
+    why = len(re.findall(r"为什么|为何|何以", text))
+    how = len(re.findall(r"如何|怎么|怎样", text))
+    mech = sum(len(re.findall(p, text)) for p in [r"机制", r"原理", r"电路", r"特征", r"探测", r"归因"])
+    blackbox = len(re.findall(r"黑箱|黑盒|black\s*box|不可解释|不透明", text))
+    return {
+        "name": "机制可解释性",
+        "emoji": "🔍",
+        "headline": f"'为什么' {why} / '如何' {how} / 机制词 {mech} / 黑箱讨论 {blackbox}",
+        "auto_findings": {
+            "summary": [
+                f"'为什么'类追问: {why} 次",
+                f"'如何'类描述: {how} 次",
+                f"机制词（机制/原理/电路/特征）: {mech} 次",
+                f"黑箱讨论: {blackbox} 次",
+            ],
+        },
+        "author_questions": [
+            "🤖 机制词密度反映'解释力'——本文是预测性（黑箱）还是解释性（机制）？",
+            "**最强黑箱声明**：'模型能 X 但不知道为什么'——作者讨论了吗？",
+            "**电路/特征层面**：本文有没有分解到具体机制？",
+        ],
+    }
+
+
+# ============================================================
+# 视角 12：Cynefin 框架（4 问题域）
+# ============================================================
+
+def lens_cynefin(text: str) -> dict:
+    simple = len(re.findall(r"最佳实践|SOP|标准流程|规范|protocol", text))
+    complicated = len(re.findall(r"专家分析|建模分析|良好实践", text))
+    complex_ = len(re.findall(r"涌现|probe|复杂适应|不可预测|非线性", text))
+    chaotic = len(re.findall(r"危机|紧急|混沌|chaos|act.sense", text))
+    return {
+        "name": "Cynefin 框架（4 问题域）",
+        "emoji": "🌐",
+        "headline": f"简单 {simple} / 繁杂 {complicated} / 复杂 {complex_} / 混沌 {chaotic}",
+        "auto_findings": {
+            "summary": [
+                f"简单域（最佳实践）: {simple}",
+                f"繁杂域（专家分析）: {complicated}",
+                f"复杂域（涌现/Probe）: {complex_}",
+                f"混沌域（危机）: {chaotic}",
+            ],
+        },
+        "author_questions": [
+            "🤖 本文处理的问题在哪个域？方法匹配吗？",
+            "**常见错误**：用简单域方法（SOP）处理复杂域问题——本文犯了吗？",
+            "**AI 主题**：训练是繁杂域，部署是复杂域，对齐是混沌域——本文区分了吗？",
+        ],
+    }
+
+
+# ============================================================
+# 视角 13：MECE（互斥穷尽）
+# ============================================================
+
+def lens_mece(text: str) -> dict:
+    lists = len(re.findall(r"(?:[一二三四五六七八九十]+|[1234567890]+)[、.]\s*\S", text))
+    not_exh = len(re.findall(r"等等|之类|以及其他|等等等", text))
+    return {
+        "name": "MECE（互斥穷尽）",
+        "emoji": "🔀",
+        "headline": f"分类项 {lists} / 不穷尽信号 {not_exh}",
+        "auto_findings": {
+            "summary": [
+                f"分类列表项: {lists}",
+                f"'等等/之类'（不穷尽信号）: {not_exh}",
+            ],
+        },
+        "author_questions": [
+            f"🤖 抓到 {lists} 个分类项——逐个问：互斥吗？穷尽吗？",
+            f"'等等/之类'出现 {not_exh} 次——作者是否在逃避穷尽性？",
+            "**最强分类**：本文最重要的一个分类，能严格证明互斥穷尽吗？",
+        ],
+    }
+
+
+# ============================================================
+# 视角 14：黄金圈（Sinek Why/How/What）
+# ============================================================
+
+def lens_golden_circle(text: str) -> dict:
+    lines = text.split("\n")
+    intro = " ".join(lines[:30])
+    why = len(re.findall(r"为什么|为何|为了|目的|意义|动机", intro))
+    how = len(re.findall(r"如何|方法|步骤|怎么做", intro))
+    what = len(re.findall(r"是什么|定义|内容|清单|包括", intro))
+    return {
+        "name": "黄金圈（Sinek Why/How/What）",
+        "emoji": "🟡",
+        "headline": f"开头 30 行：Why {why} / How {how} / What {what}",
+        "auto_findings": {
+            "summary": [
+                f"开头 Why 词（动机）: {why}",
+                f"开头 How 词（方法）: {how}",
+                f"开头 What 词（内容）: {what}",
+            ],
+        },
+        "author_questions": [
+            "🤖 本文是从 Why（为什么讨论这个）还是 What（定义/列表）开始？",
+            "**Sinek 论点**：好文档应从 Why 开始——本文符合吗？",
+            "如果从 What 开始：能否把 Why 提到开头？",
+        ],
+    }
+
+
+# ============================================================
+# 视角 15：认知负荷（Sweller）
+# ============================================================
+
+def lens_cognitive_load(text: str) -> dict:
+    lines = text.split("\n")
+    h_levels = [len([l for l in lines if l.startswith("#" * i + " ")]) for i in range(1, 5)]
+    avg_line_len = sum(len(l) for l in lines) / max(len(lines), 1)
+    formula_density = len(re.findall(r"\$\$", text)) // 2
+    long_lists = len([l for l in lines if re.match(r"^\s*[\-\*\+]\s", l)])
+    max_depth = max((i for i, c in enumerate(h_levels, 1) if c > 0), default=0)
+    return {
+        "name": "认知负荷（Sweller）",
+        "emoji": "🧩",
+        "headline": f"嵌套深度 {max_depth} / 平均行长 {avg_line_len:.0f} / 块公式 {formula_density}",
+        "auto_findings": {
+            "summary": [
+                f"标题层级 H1/H2/H3/H4: {h_levels}",
+                f"平均行长: {avg_line_len:.0f} 字",
+                f"块公式: {formula_density}",
+                f"列表项: {long_lists}",
+            ],
+        },
+        "author_questions": [
+            f"🤖 嵌套深度 = {max_depth} 层——超过 3 层认知负荷高",
+            f"平均行长 {avg_line_len:.0f}——超过 100 字建议拆句",
+            "公式密度高 = 内在负荷高，需要更多解释",
+        ],
+    }
+
+
+# ============================================================
+# 视角 16：不确定性与校准
+# ============================================================
+
+def lens_calibration(text: str) -> dict:
+    hedging = sum(len(re.findall(p, text)) for p in [r"可能", r"大约", r"估计", r"似乎", r"或许", r"约"])
+    confident = sum(len(re.findall(p, text)) for p in [r"必然", r"一定", r"绝对", r"毫无疑问", r"证明"])
+    ci = len(re.findall(r"\d+\s*[%％]|置信区间|CI|p\s*[<>=]", text))
+    ratio = hedging / max(confident, 1)
+    return {
+        "name": "不确定性与校准",
+        "emoji": "📉",
+        "headline": f"Hedging {hedging} / 自信词 {confident} / 比 {ratio:.1f}:1 / 置信数字 {ci}",
+        "auto_findings": {
+            "summary": [
+                f"含糊词（可能/大约）: {hedging}",
+                f"自信词（必然/一定）: {confident}",
+                f"hedging:confident 比: {ratio:.1f}:1",
+                f"具体置信度（%/CI/p<）: {ci}",
+            ],
+        },
+        "author_questions": [
+            f"🤖 hedging:confident = {ratio:.1f}:1（>3:1 过度含糊，<0.5:1 过度自信）",
+            "好文档应该 hedging 适度 + 有具体置信度数字——本文有吗？",
+            "**过度自信论断**：哪个最该加'约/大概'？",
+            "**过度含糊论断**：哪个最该给具体数字？",
+        ],
+    }
+
+
+# ============================================================
 # 视角注册表
 # ============================================================
 
@@ -262,6 +562,16 @@ LENSES = {
     "red_team": lens_redteam,
     "systems": lens_systems,
     "analogies": lens_analogy,
+    "paul_elder": lens_paul_elder,
+    "popper": lens_popper,
+    "dikw": lens_dikw,
+    "causality": lens_causality,
+    "mechinterp": lens_mechinterp,
+    "cynefin": lens_cynefin,
+    "mece": lens_mece,
+    "golden_circle": lens_golden_circle,
+    "cognitive_load": lens_cognitive_load,
+    "calibration": lens_calibration,
 }
 
 
@@ -340,6 +650,12 @@ def gen_multi_lens_report(src_path: pathlib.Path, text: str, rel: str,
             for a in af["analogies_sample"]:
                 lines.append(f"- `{a['marker']}`: {a['context']}")
             lines.append("")
+        # 通用 summary 兜底（新 10 视角用 summary 字段）
+        if "summary" in af:
+            lines.append("**自动统计**：")
+            for s in af["summary"]:
+                lines.append(f"- {s}")
+            lines.append("")
 
         # author questions
         lines.append("**✍️ 作者必答（启发式不能答）**：")
@@ -348,10 +664,11 @@ def gen_multi_lens_report(src_path: pathlib.Path, text: str, rel: str,
         lines += ["", "---", ""]
 
     lines += [
-        "## 7 视角汇总（含费曼）",
+        "## 17 视角汇总（含费曼）",
         "",
-        "**7 视角清单**：",
+        "**17 视角清单**：",
         "",
+        "**核心 7 视角**：",
         "- 费曼学习法 → 外行能懂吗？术语偷懒？（见 `.费曼检验.md`）",
         "- 第一性原理 → 拆到公理重推？假设链？",
         "- 布鲁姆 6 层 → 认知层级？停在哪层？",
@@ -360,7 +677,19 @@ def gen_multi_lens_report(src_path: pathlib.Path, text: str, rel: str,
         "- 系统论 → 反馈环？涌现？杠杆点？",
         "- 跨学科类比 → 类比强度？失效边界？",
         "",
-        "**真懂 = 7 视角都过关**。任何一视角不过关 = 该维度的盲区。",
+        "**扩展 10 视角**：",
+        "- Paul-Elder 8 标准 → 清晰/准确/深度/广度/逻辑/公平？",
+        "- Popper 可证伪 → 论断能被实验证伪吗？",
+        "- DIKW 层级 → 停在 Data 还是到 Wisdom？",
+        "- 因果 vs 相关 → '导致'有 RCT 支撑吗？",
+        "- 机制可解释性 → 黑箱还是机制？",
+        "- Cynefin 框架 → 问题在简单/繁杂/复杂/混沌哪域？",
+        "- MECE → 分类互斥穷尽吗？",
+        "- 黄金圈 → 从 Why 还是 What 开始？",
+        "- 认知负荷 → 嵌套深度/行长/公式密度？",
+        "- 不确定性校准 → hedging/confident 比例？",
+        "",
+        "**真懂 = 17 视角都过关**。任何一视角不过关 = 该维度的盲区。",
         "",
         "---",
         "_由 `multi-lens-batch.py` 生成。启发式部分自动；判断质量必须作者本人。_",
@@ -371,6 +700,30 @@ def gen_multi_lens_report(src_path: pathlib.Path, text: str, rel: str,
 # ============================================================
 # 主流程
 # ============================================================
+
+def _worker(task):
+    """并行 worker：处理单个文档。返回 status 字符串。Linux fork 模式可继承全局函数。"""
+    abs_path_str, rel, selected, force, dry_run = task
+    abs_path = pathlib.Path(abs_path_str)
+    cls = classify(rel)
+    if cls == "skip":
+        return "skip"
+    out_path = abs_path.with_name(abs_path.stem + ".多视角.md")
+    if out_path.exists() and not force:
+        return "skipped"
+    try:
+        text = abs_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return "failed"
+    if dry_run:
+        return "produced"
+    try:
+        content = gen_multi_lens_report(abs_path, text, rel, selected)
+        out_path.write_text(content, encoding="utf-8")
+        return "produced"
+    except Exception:
+        return "failed"
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -405,41 +758,22 @@ def main():
     print(f"\n🔍 扫描 {len(all_mds)} 文档 | 视角：{', '.join(selected)}")
     print(f"   模式：{'DRY-RUN' if args.dry_run else '生产'}\n")
 
-    produced = 0
-    skipped = 0
-    failed = 0
+    # 准备并行任务（加大并行度）
+    tasks = [(str(p), rel, selected, args.force, args.dry_run) for p, rel in all_mds]
+    n_proc = min(cpu_count(), 16)
+    print(f"   并行度: {n_proc} 进程（{len(tasks)} 任务）\n")
 
-    for i, (abs_path, rel) in enumerate(all_mds, 1):
-        cls = classify(rel)
-        # 只对强制/推荐做（不适用文档不产多视角）
-        if cls == "skip":
-            continue
+    results = []
+    with Pool(n_proc) as pool:
+        for i, result in enumerate(pool.imap_unordered(_worker, tasks), 1):
+            results.append(result)
+            if i % 100 == 0:
+                print(f"   进度 {i}/{len(tasks)}")
 
-        out_path = abs_path.with_name(abs_path.stem + ".多视角.md")
-        if out_path.exists() and not args.force:
-            skipped += 1
-            continue
-
-        try:
-            text = abs_path.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError):
-            failed += 1
-            continue
-
-        if args.dry_run:
-            produced += 1
-            continue
-
-        try:
-            content = gen_multi_lens_report(abs_path, text, rel, selected)
-            out_path.write_text(content, encoding="utf-8")
-            produced += 1
-        except Exception as e:
-            print(f"  ⚠️ {rel}: {e}", file=sys.stderr)
-            failed += 1
-
-        if i % 50 == 0:
-            print(f"   进度 {i}/{len(all_mds)}")
+    stats = Counter(results)
+    produced = stats.get("produced", 0)
+    skipped = stats.get("skipped", 0)
+    failed = stats.get("failed", 0)
 
     print(f"\n{'='*60}")
     print(f"  多视角审视批处理" + ("（DRY-RUN）" if args.dry_run else ""))
