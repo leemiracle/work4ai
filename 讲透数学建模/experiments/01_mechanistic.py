@@ -11,13 +11,13 @@ import numpy as np
 beta = 0.4       # 传染率
 gamma = 0.1      # 康复率（1/gamma = 平均病程 10 天）
 N = 1000         # 总人口
-S0, I0, R0 = N - 1, 1, 0  # 初始：1人感染
+S0, I0, R_init = N - 1, 1, 0  # 初始：1人感染
 Rnought = beta * S0 / gamma  # 基本再生数
 
 dt = 0.5  # 时间步（天）
 days = 500
 
-S, I, R = float(S0), float(I0), float(R0)
+S, I, R = float(S0), float(I0), float(R_init)
 peak_I, peak_day = 0, 0
 history = []
 

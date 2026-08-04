@@ -32,12 +32,16 @@ def discretize(A, B, delta):
     return np.linalg.solve(denom, I + delta * A / 2.0), np.linalg.solve(denom, delta * B)
 
 def hippo(N):
-    """HiPPO-LegS 矩阵: 下三角, A[i,j]=-sqrt((2i+1)(2j+1)).
-    对角元 -(2i+1) → 不同阶模态有不同时间尺度, 天生适合长程记忆."""
+    """HiPPO-LegS 矩阵: 下三角.
+    对角元 -(i+1) → 等间距负整数, 等间距衰减时间尺度.
+    严格下三角 -sqrt((2i+1)(2j+1))."""
     A = np.zeros((N, N))
     for i in range(N):
         for j in range(i + 1):
-            A[i, j] = -((2 * i + 1) * (2 * j + 1)) ** 0.5
+            if i == j:
+                A[i, j] = -(i + 1)  # 对角: -(1,2,3,...)
+            else:
+                A[i, j] = -((2 * i + 1) * (2 * j + 1)) ** 0.5  # 严格下三角
     return A
 
 # ------------------------------------------------------------

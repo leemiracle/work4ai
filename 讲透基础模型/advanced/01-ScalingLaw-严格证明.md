@@ -242,7 +242,7 @@ Besiroglu, Erdil, Barnett, You (2024) 试图**复现 Hoffmann 2022 的第三种�
 
 **Q9**：如果数据墙先到（互联网公开数据用完），scaling law 会怎么"破"？
 
-**Q10**：递归自我改进（[`07-AI for AI`](../../讲透AI应用全景/07-AI%20for%20AI.md)）下，scaling law 怎么重新定义？
+**Q10**：递归自我改进（[`07-AI for AI`](../../讲透AI应用全景/07-AI for AI.md)）下，scaling law 怎么重新定义？
 
 ---
 

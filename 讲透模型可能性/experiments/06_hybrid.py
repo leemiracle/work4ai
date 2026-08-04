@@ -49,6 +49,6 @@ for ratio, label in configs:
     print(f"{label:>14}  {acc:>8.1f}%  {bar}")
 
 print("-" * 58)
-print("结论: 从纯 SSM 到 1/8 Attention，准确率跃升最大")
+print("结论: 从纯 SSM 到 1/8 Attention，准确率跃升最大（数字有随机抖动，每次跑略不同）")
 print("      少量 Attention 的杠杆效应——12.5% 带来质变")
 print("      这就是 Jamba 选 1/8 的工程依据")

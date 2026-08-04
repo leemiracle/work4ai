@@ -1,7 +1,7 @@
 """
 实验 05 — 数据驱动建模：Bias-Variance 权衡
 =============================================
-用 1/3/5/10/20 阶多项式拟合带噪 sin，观察 train/test 误差。
+用 1/3/5/10/15/20 阶多项式拟合带噪 sin，观察 train/test 误差。
 跑法: python3 05_data_driven.py  (需 numpy, <1秒)
 """
 import numpy as np

@@ -27,7 +27,9 @@ dummy = torch.randn(4, 8)   # 导出用的示例输入 (定义输入形状)
 print("=" * 66)
 print("二、导出 ONNX (torch.onnx.export)")
 print("=" * 66)
+import os
 onnx_path = "/tmp/opencode/model.onnx"
+os.makedirs(os.path.dirname(onnx_path), exist_ok=True)
 torch.onnx.export(
     model, dummy, onnx_path,
     input_names=["input"], output_names=["logits"],
@@ -40,7 +42,10 @@ print(f"  dynamic_axes 让 batch 维可变 (部署时任意 batch 大小都能�
 print("\n" + "=" * 66)
 print("三、用 ONNX Runtime 加载并推理")
 print("=" * 66)
-import onnxruntime as ort
+try:
+    import onnxruntime as ort
+except ImportError:
+    print("[skip] 未装 onnxruntime"); import sys; sys.exit(0)
 sess = ort.InferenceSession(onnx_path, providers=["CPUExecutionProvider"])
 print(f"  ONNX Runtime 加载成功. 可用 providers: {ort.get_available_providers()}")
 print(f"  输入: {[(i.name, i.shape, i.type) for i in sess.get_inputs()]}")
