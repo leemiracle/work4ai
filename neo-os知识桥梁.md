@@ -48,15 +48,19 @@ neo-os 的产物分两类，**只有"通用 AI 知识"才回流** work4ai：
 | [`02-research/deep/R2-lean4-os-verification-sota.md`](../neo-os/02-research/deep/R2-lean4-os-verification-sota.md) | **Lean4 形式化 OS 验证 SOTA**（seL4/Verus/Atmosphere/seLe4n/Veil）| ❌ **完全无新主题** | 🔴 | [`讲透形式化验证/00-为什么形式化+Lean4SOTA.md`](./讲透形式化验证/00-为什么形式化+Lean4SOTA.md) |
 | [`02-research/deep/R5-neuro-symbolic-loop-sota.md`](../neo-os/02-research/deep/R5-neuro-symbolic-loop-sota.md) | **神经符号闭环 SOTA**（AlphaProof/Delta-Prover/KVerus/VERISPECGEN）| ❌ **完全无新主题** | 🔴 | [`讲透神经符号/00-神经符号循环为什么是新范式.md`](./讲透神经符号/00-神经符号循环为什么是新范式.md) |
 | [`02-research/deep/LEAN4_REWARD_BENCH.md`](../neo-os/02-research/deep/LEAN4_REWARD_BENCH.md) | Lean4 作为 RL reward verifier 的速度可行性（实测 sub-second）| ❌ 无 | 🟡 | [`讲透形式化验证/01-Lean4作为RL奖励验证器.md`](./讲透形式化验证/01-Lean4作为RL奖励验证器.md) |
+| [`02-research/deep/R4-ai-software-explainability-landscape.md`](../neo-os/02-research/deep/R4-ai-software-explainability-landscape.md) | AI 驱动的软件可解释性竞品全景（4类竞品 + 解释性幻觉71.2%）| 讲透可解释性 仅模型可解释性（00-01）| 🟡 | [`讲透可解释性/S1-AI驱动的软件可解释性.md`](./讲透可解释性/S1-AI驱动的软件可解释性.md) |
+
+### 已评估结案（不回流，附理由）
+
+| neo-os 源文件 | 主题 | 不回流理由 |
+|--------------|------|-----------|
+| [`02-research/rl/02b-rl-scientific-discovery.md`](../neo-os/02-research/rl/02b-rl-scientific-discovery.md) | RL + 科学发现（GNoME/AI-Scientist）| 🟢 边际价值中：核心洞察（GNoME/AlphaFold 本质不是 RL）已在 [`讲透RL/04`](./讲透RL/04-RL与形式证明.md) 提及；剩余是应用综述 |
+| [`02-research/rl/06-pass-k-experiment-design.md`](../neo-os/02-research/rl/06-pass-k-experiment-design.md) | pass@k 实验设计 | 🟢 边际价值低：是**实验方案非知识**；核心 pass@k 反转论证已在 [`讲透RL/05`](./讲透RL/05-RLVR的极限.md) 完整覆盖 |
+| [`02-research/rl/04-rl-as-math-direction.md`](../neo-os/02-research/rl/04-rl-as-math-direction.md) | RL 作数学方向评估 | 🟢 不适合回流：高度**个人化**（基于个人画像的方向建议），非通用知识 |
 
 ### 待回流（留给后续轮次）
 
-| neo-os 源文件（重组后路径） | 主题 | 建议回流位置 | 优先级 |
-|--------------|------|-------------|--------|
-| [`02-research/deep/R4-ai-software-explainability-landscape.md`](../neo-os/02-research/deep/R4-ai-software-explainability-landscape.md) | AI 软件可解释性竞品全景 | `讲透可解释性/`（现有 README+00，深化用）| 🟡 |
-| [`02-research/rl/02b-rl-scientific-discovery.md`](../neo-os/02-research/rl/02b-rl-scientific-discovery.md) | RL + 科学发现（GNoME/AI-Scientist 去偏见）| `讲透RL/07-RL与科学发现.md` | 🟢 |
-| [`02-research/rl/06-pass-k-experiment-design.md`](../neo-os/02-research/rl/06-pass-k-experiment-design.md) | pass@k 实验设计 | 并入 `讲透RL/05` 的实验章节 | 🟢 |
-| [`02-research/rl/04-rl-as-math-direction.md`](../neo-os/02-research/rl/04-rl-as-math-direction.md) | RL 作数学方向（三大支柱的应用熔炉）| `讲透RL/` 综述篇 | 🟢 |
+> ✅ **暂无待回流项**——所有 🔴 高 gap 与 🟡 中 gap 已全部处理完毕（已回流 7 份 / 已评估结案 3 份）。剩余 🟢 低优先级见上"已评估结案"表。
 
 ---
 
@@ -72,6 +76,7 @@ work4ai 的费曼门要求每个讲透文件配套 `.费曼检验.md`（F1 外�
 | 讲透形式化验证/00 | [`.费曼检验.md`](./讲透形式化验证/00-为什么形式化+Lean4SOTA.费曼检验.md) | ✅ | 🔴 待作者 |
 | 讲透形式化验证/01 | [`.费曼检验.md`](./讲透形式化验证/01-Lean4作为RL奖励验证器.费曼检验.md) | ✅ | 🔴 待作者 |
 | 讲透神经符号/00 | [`.费曼检验.md`](./讲透神经符号/00-神经符号循环为什么是新范式.费曼检验.md) | ✅ | 🔴 待作者 |
+| 讲透可解释性/S1 | [`.费曼检验.md`](./讲透可解释性/S1-AI驱动的软件可解释性.费曼检验.md) | ✅ | 🔴 待作者 |
 
 > 🚨 **铁律**：F2（卡壳点自曝）/ F4（回炉记录）**必须作者本人填**——AI 代写 = 伪造费曼（见 [`费曼学习法/费曼检验模板.md`](./费曼学习法/费曼检验模板.md)）。骨架里的 AI 草稿仅供参考，作者必须重写或确认。
 
