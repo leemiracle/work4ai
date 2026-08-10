@@ -15,7 +15,8 @@
 |------|------|-------------|---------|
 | [第140集-姚顺宇-在Anthropic与Gemini训模型.md](./第140集-姚顺宇-在Anthropic与Gemini训模型.md) | 姚顺宇 | 讲透基础模型 / 讲透微调 | ★★★ 完整文字版 |
 | [第138集-罗福莉-OpenClaw与Agent范式巨变.md](./第138集-罗福莉-OpenClaw与Agent范式巨变.md) | 罗福莉 | 讲透微调 / 讲透Agent | ★★★ 多源完整 |
-| [第139集-苏煜-Agent技术史与OpenClaw-Moment.md](./第139集-苏煜-Agent技术史与OpenClaw-Moment.md) | 苏煜 | 讲透Agent | ★★★ transcript+精读 |
+| [第139集-苏煜-Agent技术史与OpenClaw-Moment.md](./第139集-苏煜-Agent技术史与OpenClaw-Moment.md) | 苏煜 | 讲透Agent | ★★★ transcript+精读（精读笔记，多源交叉）|
+| [第139集-苏煜-Agent技术演化简史.详尽整理.md](./第139集-苏煜-Agent技术演化简史.详尽整理.md) | 苏煜 | 讲透Agent / 讲透世界模型 | ★★★ 第三方详尽整理（14 章+原文引用）|
 | [第133集-谢赛宁-世界模型与逃出硅谷.md](./第133集-谢赛宁-世界模型与逃出硅谷.md) | 谢赛宁 | 讲透生成模型 | ★★★ 多源深度 |
 
 ### 待补（按梯队推进中）
