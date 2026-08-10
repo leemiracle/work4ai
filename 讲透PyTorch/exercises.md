@@ -14,6 +14,14 @@
 
 **Q02.1** `torch.save(model)` vs `torch.save(model.state_dict())`，为何推荐后者？
 
+**Q01.3** ⭐ 用一句话区分"链式法则"和"反向传播"。反传一次算出的 $J^\top\bar v$ 里 $\bar v$ 是什么？为什么最终取 1？
+
+**Q01.4** ⭐ 为什么深度学习用反向模式而非前向模式？用 $m,n$ 解释。O(N) 证明里"算 $J_i^\top\bar v$ 与前向 $c_i$ 同量级"——为什么？
+
+**Q01.5** ⭐ 为什么 `grad.shape` 必然等于 `param.shape`？用 VJP 维度规则解释。任何"梯度形状对不上"的报错根源是什么？
+
+**Q01.6** 跑 `experiments/15_mlp_by_hand.py`，故意把 `dL_dW2 = dL_dyhat @ a1`（漏转置），看与 autograd 差多少，体会"形状一致≠数值正确"。
+
 ---
 
 ## 训练（03-05）
@@ -27,6 +35,14 @@
 **Q04.1** `num_workers>0` 为何加速？代价是什么？
 
 **Q05.1** ⭐ fp16 为何梯度下溢？bf16 为何不会？
+
+**Q03.4** ⭐ sigmoid 深层为何训不动？ReLU + 残差如何救场？梯度裁剪能解决消失吗（为什么）？
+
+**Q03.5** 反传算出的"原始梯度"经 Momentum 和 Adam 加工后有何不同？（跑 `experiments/18_optimizer_gradients.py`）
+
+**Q11.1** ⭐ MSE + sigmoid 为何梯度消失？CE + sigmoid 的梯度为何是 $\hat{y}-y$？
+
+**Q11.2** 为什么多分类永远用 `CrossEntropyLoss` 而非手动 softmax+NLL？AdamW 把 weight decay 解耦解决了什么？
 
 ---
 
@@ -72,18 +88,26 @@
 
 **P.3** ⭐⭐ 用 `torch.export` 导出一个模型，对比它和 eager 的输出与速度；再查 torch.export 能否捕获带 if 控制流的模型（graph break 体验）。
 
+**P.4** ⭐⭐⭐ 从零实现一个 1→16→16→1 的 MLP（**不用 torch，纯实验01 的 Value 类 + numpy 前向**），在 make_moons 上训练分类，记录 loss 曲线。这是"理解反传本身（而非只会调 API）"的毕业项目。
+
 ---
 
 ## 自测清单（全部能答 = 讲透）
 
 - [ ] 能解释 `loss.backward()` 的底层（计算图 + 链式法则 + 拓扑排序）
+- [ ] 能区分链式法则 vs 反传（后者是反向模式 AD），证明反传代价 O(N)
+- [ ] 能用 VJP 解释 grad.shape == param.shape，手算一个 2 层 MLP 的完整反传
 - [ ] 知道 `zero_grad`/`no_grad`/`detach`/`requires_grad_` 各自用途
 - [ ] 能写出黄金 5 步训练循环 + 三个常见 bug
+- [ ] 能解释梯度消失/爆炸的连乘根因 + 残差为何救场
+- [ ] 会选损失函数（MLE 统一视角：MSE/MAE/CE 的噪声假设）和优化器（SGD→AdamW 演化）
 - [ ] 会用 Dataset/DataLoader/Sampler/collate
 - [ ] 懂 AMP（autocast + GradScaler，bf16 vs fp16）
 - [ ] 能解释 compile 三段流水线 + 算子融合 + 何时翻车
 - [ ] 知道 torch.export 取代 TorchScript、AOTInductor 部署
 - [ ] 会用自定义 Function 接入 autograd
 - [ ] 能走通 ONNX 导出 + ORT 推理
+- [ ] 能解释 in-place/version counter/CopySlices/rebase（autograd+mutation 边界）
+- [ ] 知道 reparameterization/forward-forward 等绕过/替代范式
 - [ ] 知道 2.x 现代特性：SDPA/FlexAttention/DTensor/FSDP2/torchao
 - [ ] 知道生态里哪些库废弃了（torchtext/torchtune/TorchScript）及替代

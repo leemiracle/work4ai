@@ -180,6 +180,32 @@ mutation 后：`y.grad_fn → CopySlices`；view `v` 的 `grad_fn` 被 **rebase*
 ### 4.5 串到 dispatcher
 autograd 就是 dispatcher 表上的一个 key（见 3.2 的 exclude set 机制）。这也是为什么 `loss.backward()` 能在任意后端上工作——autograd 层和 backend 层是正交的 dispatch key。
 
+### 4.6 实验19透视：version counter 报错与 detach 边界
+
+```bash
+cd experiments && python3 19_mutation_views.py
+```
+
+**version counter（安全网）**：每个 tensor 有 version 计数器，in-place 改它就 +1。如果反传发现"我为这个节点存的输入 version 变了"，**拒绝算（报错而非算错）**：
+```python
+y = x**2; z = y.sum(); y.add_(1)   # 在非leaf y上in-place
+z.backward()  # RuntimeError: variable needed for gradient
+              # computation has been modified by inplace
+```
+> 这解释了常见报错"variable modified by inplace"的根因——反传检测到缓存失效。
+
+**detach：断梯度但不断 version**：`y.detach()` 把 tensor 摘下当普通数据（`requires_grad=False`），但**仍共享 version counter**。所以 detach 后 in-place 仍能被反传安全网检测到。
+
+**数学反传 vs PyTorch backward 的鸿沟**：
+
+| 数学反传（理想）| PyTorch backward（工程）|
+|--------------|----------------------|
+| 纯函数、无 mutation | 必须处理 in-place、view 别名 |
+| 梯度直接算 | 用 version counter 防过期 |
+| 节点固定 | CopySlices + rebase + 惰性 rebase |
+
+过了这层，才算真懂 PyTorch 的 `backward()`——它不只是 VJP，还解决了真实代码里 mutation/aliasing 带来的所有边界。
+
 ---
 
 ## 五、编译栈：Dynamo → AOTAutograd → Inductor（出处：Perone "PyTorch 2 Internals"；ASPLOS'24 论文）
@@ -302,7 +328,33 @@ JAX 的 sharding 类型系统四组件（DTensor 重构的词汇表）：
 
 ---
 
+## 九、反传的边界与未来
+
+> 第四章讲了 autograd 怎么工作。最后反思：**反传的局限在哪？有没有替代范式？** 这关系到"PyTorch 的核心求导机制是否永远是反传"。
+
+### 9.1 反传的四个局限
+1. **要求完全可微**：不可导点用次梯度（ReLU 的 0），不可微操作（采样）要绕过。
+2. **需要完整计算图**：要等整个前向跑完才能反传，无法在线增量学习。
+3. **全局同步**：所有参数梯度一起算，和生物大脑的局部、异步学习完全不同。
+4. **能耗巨大**：训 GPT-4 要消耗海量电力（前向+反向各一遍）。
+
+### 9.2 绕过不可微：reparameterization 与 straight-through
+- **重参数化（VAE）**：采样 $z\sim\mathcal{N}(\mu,\sigma)$ 不可微。改写成 $z=\mu+\sigma\epsilon,\ \epsilon\sim\mathcal{N}(0,1)$——把随机性外移到 $\epsilon$，对 $\mu,\sigma$ 的路径就可微了。
+- **Straight-Through Estimator**：量化/离散化前向不可微（argmax），但前向用硬离散、反传用软近似（sigmoid）的梯度"假装"流过。用于二值网络、VQ-VAE。
+
+### 9.3 绕过"需要完整图"：graph break
+`torch.compile` 捕获计算图时，遇到不可捕获部分（调 numpy、`Tensor.item()`）会**断图**（graph break），回退 eager（见 5.2 TorchDynamo）。这是"反传/编译要求可捕获"约束在现代编译栈里的体现。
+
+### 9.4 替代反传的范式（研究前沿）
+- **Forward-Forward Algorithm（Hinton 2022）**：用两次前向（正/负样本各算 goodness）替代"前向+反向"，更接近生物学习。目前精度不如反传，但是对"反传是否唯一可能"的重要探索。
+- **Feedback Alignment**：用固定随机矩阵传反向梯度，证明网络能学会自己对齐——挑战反传的"精确转置"必要性，更接近生物（突触没有精确转置）。
+- **预测编码（Predictive Coding）**：类脑算法，层级预测误差驱动学习，局部更新无需全局反传。
+
+> **批判**：这些替代范式**目前都不如反传**（精度/效率）。反传的"VJP + $m\ll n$"优势太硬。但它们回应了真实担忧：反传的生物不合理性、能耗、对完整图的依赖。**短期反传仍是唯一主流；长期若硬件范式（类脑/光计算）变化，格局可能变。** 一句话：反传是当前深度学习的唯一答案，但不是唯一可能的答案。
+
+---
+
 📌 **下一步**：
-- 想动手验证：跑 `experiments/01_autograd_from_scratch.py`（90 行手写引擎，对应第四章）+ `experiments/07_compile_deep.py`（profiler 看 fusion，对应第五章）。
+- 想动手验证：跑 `experiments/01_autograd_from_scratch.py`（90 行手写引擎，对应第四章）+ `experiments/19_mutation_views.py`（version counter/CopySlices，对应 4.6）+ `experiments/07_compile_deep.py`（profiler 看 fusion，对应第五章）。
 - 想挖更深：每章末尾的"出处"文章都是一手材料，按主题速查表（[README](README.md) 权威资源索引）入门。
 - 本文是"深入理解 PyTorch 内核"的核心综合。配合前面 00–09 章（怎么用）+ 实验（实证），构成"原理→实现→用法→内核"的完整闭环。

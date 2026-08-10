@@ -16,10 +16,12 @@
 ## 与前两个项目的关系
 
 ```
-讲透激活函数  →  网络能否训练（反向传播/Dead ReLU/梯度消失）
+讲透激活函数  →  网络能否训练（Dead ReLU/梯度消失，反传里每层局部导数）
 讲透泛化      →  训练好为何对新数据有效（隐式正则/双层下降）
 讲透 PyTorch  →  上面这一切在框架层如何实现 + 怎么工程化用起来  ★你在这里
 ```
+
+> **注**：原独立的「讲透反向传播」「讲透损失函数」「讲透优化器」三个系列已**整合进本教程**——反传数学本质并入 [01-Autograd](01-Autograd与计算图.md)，故障/梯度全景并入 [03-训练循环](03-训练循环.md)，mutation 边界/反传未来并入 [10-内核精读](10-PyTorch内核精读.md)，损失+优化器合成 [11-损失函数与优化器](11-损失函数与优化器.md)。三者原本单薄（各 2 章无 README），合并后成为完整训练链。
 
 本教程会让前面所有理论（ReLU 反向、梯度消失、泛化）在 PyTorch 代码里**落地可见**——你终于能看到 `loss.backward()` 如何驱动那些数学。
 
@@ -53,6 +55,7 @@ graph LR
     end
     subgraph 训练["二·训练工程"]
         M --> TL[03 训练循环]
+        TL --> LO[11 损失与优化器 ★]
         TL --> DP[04 数据管道]
         TL --> AMP[05 混合精度+调度]
     end
@@ -68,16 +71,17 @@ graph LR
 | 章节 | 文档 | 核心问题 | 实验 |
 |------|------|---------|------|
 | 00 | 00-Tensor基础.md | Tensor 不只是 numpy，view/广播/device | `00_tensor_basics` |
-| 01 | **01-Autograd与计算图.md ★** | `loss.backward()` 底层干什么 | `01_autograd_from_scratch`(手写引擎) `02_autograd_internals` |
+| 01 | **01-Autograd与计算图.md ★** | 反传数学本质(VJP/m≪n/O(N)) + `backward()`底层 | `01_autograd_from_scratch` `02_autograd_internals` `13_numerical_vs_backprop` `14_vjp_and_shapes` `15_mlp_by_hand` `16_gradient_check` |
 | 02 | 02-nnModule与参数管理.md | 所有模型如何组织 | `04_module_hooks` |
-| 03 | 03-训练循环.md | 黄金5步 + 常见bug + 调度/累积/裁剪 | `03_training_loop` `09_amp_scheduler` |
+| 03 | 03-训练循环.md | 黄金5步 + 常见bug + 故障(消失/爆炸) + 梯度全景 | `03_training_loop` `09_amp_scheduler` `17_vanishing_exploding` `18_optimizer_gradients` |
 | 04 | 04-数据管道.md | Dataset/DataLoader/Sampler/collate | `08_data_pipeline` |
 | 05 | 05-混合精度AMP.md | autocast+GradScaler | `09_amp_scheduler` |
 | 06 | **06-编译与图模式.md ★** | torch.compile 三段流水线/算子融合 | `05_custom_function_compile` `07_compile_deep` |
 | 07 | 07-性能与部署.md | 自定义Function/ONNX/量化 | `05` `06_onnx_export` `10_quantization` |
 | 08 | **08-现代PyTorch(2.x).md ★** | export/SDPA/FlexAttention/DTensor/FSDP2/torchao | `11_sdpa_export` `12_modern_overview` |
-| 09 | **09-PyTorch生态全景.md ★** | 生态库分类/选型/废弃警示(vision/audio/text/tune/ExecuTorch/torchao/HF) | （纯文档,无实验）|
-| 10 | **10-PyTorch内核精读.md ★★★** | 精读 ezyang/Kieran Didi/Perone 官方源:用 dispatch 主线串起架构/调度/autograd/编译栈/DTensor重构 | （精读综合文档,无实验）|
+| 09 | **09-PyTorch生态全景.md ★** | 生态库分类/选型/废弃警示 | （纯文档,无实验）|
+| 10 | **10-PyTorch内核精读.md ★★★** | 精读 ezyang 源:dispatcher主线串架构/调度/autograd+mutation边界/编译栈/DTensor/反传边界与未来 | `19_mutation_views` |
+| 11 | **11-损失函数与优化器.md ★** | 损失怎么选(MLE统一/CE为何胜MSE) + 优化器怎么选(SGD→AdamW演化) | `20_loss_overview` `21_optimizer_overview` |
 
 ## 环境与运行
 
@@ -87,7 +91,7 @@ torch 2.10.0 (CPU)  |  onnx 1.17 / onnxruntime 1.21  |  python 3.12
 ```
 
 ```bash
-cd 讲透PyTorch/experiments && bash run_all.sh    # 一键跑通全部 13 个实验
+cd 讲透PyTorch/experiments && bash run_all.sh    # 一键跑通全部 21 个实验
 ```
 
 ## 实证速览（全部 bash 跑通）
@@ -102,6 +106,15 @@ cd 讲透PyTorch/experiments && bash run_all.sh    # 一键跑通全部 13 个�
 | 10 量化 | 模型压缩 ~4×（CPU小模型速度反降，诚实标注） | 动态PTQ |
 | 11 SDPA+export | SDPA=手写attention；export捕获7节点图；AOTInductor生成.so | 2.x部署新范式 |
 | 12 现代概览 | FlexAttention/DTensor/FSDP2/TP/torchao 原理+API可达 | 2.x全景 |
+| 13 数值vs反传 | 1000参数数值微分慢 200×，反传几乎不变 | O(n) vs O(1) 渐近阶胜利 |
+| 14 VJP与形状 | VJP 自动与输入同形；JVP 要跑 n 次 | m≪n 不对称实证 |
+| 15 手算MLP反传 | 手算 vs autograd 最大差 2.6e-6 | 链式法则逐层落地 |
+| 16 梯度检查 | gradcheck 抓出写错的 backward | 数值验证解析梯度 |
+| 17 消失爆炸 | sigmoid 浅层 3.6e-15；ReLU 高 8 数量级；残差救场 | 连乘诅咒实证 |
+| 18 优化器加工 | 同一梯度，Momentum/Adam 更新天差地别 | 反传输出只是原料 |
+| 19 mutation边界 | version counter 报错；CopySlices 正确处理 view | 数学→工程鸿沟 |
+| 20 损失函数 | MSE 被离群点拉飞(1.818)；MAE 稳(1.111)；softmax+CE 梯度=p-y | MLE 统一视角 |
+| 21 优化器 | SGD 震荡；Momentum 完美命中；Adam 对 lr 宽容 | SGD→AdamW 演化 |
 
 ---
 
