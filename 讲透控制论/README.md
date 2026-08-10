@@ -78,7 +78,7 @@ graph LR
 ## 怎么跑
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透控制论
+cd 讲透控制论
 python3 -u experiments/00_why_cybernetics.py    # PID 恒温器
 python3 -u experiments/01_pid_tuning.py         # Ziegler-Nichols 整定
 python3 -u experiments/02_system_modeling.py    # 传递函数/状态空间

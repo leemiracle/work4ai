@@ -11,7 +11,7 @@
 
 依赖：仅 NumPy + 标准库。几秒跑完。
 跑法：
-    cd /data/usershare/ai/work4ai/讲透NLP
+    cd 讲透NLP
     python3 -u experiments/03_ngram_lm.py
 """
 import re

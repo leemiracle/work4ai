@@ -36,7 +36,7 @@
 ## 怎么跑
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透RAG
+cd 讲透RAG
 for f in experiments/0*.py; do echo "=== $f ==="; python3 -u "$f"; done
 ```
 纯 CPU + sklearn/numpy 可跑（无 GPU/HF 依赖）。

@@ -80,7 +80,7 @@ graph LR
 ## 怎么跑
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透信息论
+cd 讲透信息论
 python3 -u experiments/00_why_info_theory.py    # Shannon 极限
 python3 -u experiments/01_entropy.py            # 熵的各种形式
 python3 -u experiments/02_ce_vs_mse.py          # CE vs MSE

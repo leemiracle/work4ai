@@ -280,7 +280,7 @@ Conformer 已经**达到人类水平**（在干净朗读语音上）。但在嘈
    - **发现 2**：beam search 加宽 (5→10→20) 不仅不提升反而略差 (-9.7%)，但词典 LM rescoring 将 CER 从 22.8% 降到 0.5% (97.8% 降低)。**CTC 的瓶颈不在解码算法，在条件独立假设。**
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透NLP
+cd 讲透NLP
 python3 -u experiments/15_ctc_decode.py
 ```
 

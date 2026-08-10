@@ -94,7 +94,7 @@ SLP3 把 NLP 分两卷：
 ## 5. 代码：歧义性 + 三代方法对比（bash 跑通）
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透NLP
+cd 讲透NLP
 python3 -u experiments/01_nlp_overview.py
 ```
 

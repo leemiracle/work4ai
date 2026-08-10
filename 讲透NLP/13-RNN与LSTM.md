@@ -158,7 +158,7 @@ GRU 参数少 1/3、速度快，效果通常和 LSTM 持平。**选择 LSTM 还�
 ## 6. 代码：字符级 RNN 学 "hello"（BPTT）
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透NLP
+cd 讲透NLP
 python3 -u experiments/13_rnn_lm.py
 ```
 

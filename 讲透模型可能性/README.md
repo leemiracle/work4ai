@@ -115,7 +115,7 @@ graph TB
 ## 怎么跑
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透模型可能性
+cd 讲透模型可能性
 python3 -u experiments/00_why_not_transformer.py    # 复杂度对比
 python3 -u experiments/01_ssm.py                     # SSM/Mamba
 python3 -u experiments/02_linear_attn.py             # Linear Attention

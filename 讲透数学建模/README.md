@@ -71,7 +71,7 @@ graph LR
 ## 怎么跑
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透数学建模
+cd 讲透数学建模
 python3 -u experiments/00_what_is_modeling.py    # 三大流派对比
 python3 -u experiments/01_mechanistic.py          # SIR 传染病
 python3 -u experiments/02_optimization.py         # LP 生产计划

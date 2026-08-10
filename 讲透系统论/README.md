@@ -82,7 +82,7 @@ graph LR
 ## 怎么跑
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透系统论
+cd 讲透系统论
 python3 -u experiments/00_why_systems_theory.py    # 康威生命游戏
 python3 -u experiments/01_emergence.py             # Boids 鸟群 + 涌现阈值
 python3 -u experiments/02_feedback_loops.py        # 洛伦兹吸引子

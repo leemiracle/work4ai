@@ -107,7 +107,7 @@ graph LR
 ## 怎么跑
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透AI for 职业
+cd 讲透AI for 职业
 python3 -u experiments/00_profession_analyzer.py    # 职业任务自动化评估
 ```
 

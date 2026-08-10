@@ -59,7 +59,7 @@
 ## 怎么跑
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透基础模型
+cd 讲透基础模型
 python3 -u experiments/00_why_ntp.py        # 第一性原理
 python3 -u experiments/01_attention.py      # 手写 attention
 python3 -u experiments/02_scaling_law.py    # 幂律

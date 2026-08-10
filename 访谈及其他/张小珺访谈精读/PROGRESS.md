@@ -79,7 +79,7 @@
 ## 🔄 家里电脑续接步骤
 
 ```bash
-cd /data/usershare/ai/work4ai
+
 git pull origin main
 # 看本进度文件
 cat 访谈及其他/张小珺访谈精读/PROGRESS.md

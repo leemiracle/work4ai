@@ -40,7 +40,7 @@
 ## 怎么跑
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透微调
+cd 讲透微调
 for f in experiments/0*.py experiments/1*.py; do echo "=== $f ==="; python3 -u "$f"; done
 ```
 小模型纯 CPU 可跑（01–05），06 实战需 GPU。

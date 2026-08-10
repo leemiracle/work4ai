@@ -61,7 +61,7 @@ graph LR
 ## 怎么跑
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透模型
+cd 讲透模型
 python3 -u experiments/00_what_is_model.py    # 四要素实证
 python3 -u experiments/01_architectures.py     # 架构对比
 python3 -u experiments/02_scaling.py           # Scaling Laws

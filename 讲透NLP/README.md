@@ -99,7 +99,7 @@
 ## 怎么跑
 
 ```bash
-cd /data/usershare/ai/work4ai/讲透NLP
+cd 讲透NLP
 python3 -u experiments/02_edit_distance.py        # 编辑距离
 python3 -u experiments/03_ngram_lm.py             # N-gram LM
 python3 -u experiments/04_logistic_textclass.py   # 文本分类
