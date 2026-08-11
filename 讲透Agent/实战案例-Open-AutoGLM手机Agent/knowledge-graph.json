@@ -1,0 +1,2390 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "Open-AutoGLM",
+    "languages": [
+      "python",
+      "markdown",
+      "yaml",
+      "json",
+      "txt"
+    ],
+    "frameworks": [
+      "openai-sdk",
+      "vllm",
+      "sglang",
+      "pre-commit",
+      "ruff"
+    ],
+    "description": "Open-AutoGLM（Phone Agent）是基于 AutoGLM-Phone-9B 视觉语言模型的手机 GUI Agent 框架。它通过截图→模型决策→设备执行→循环的方式，用自然语言控制 Android（ADB）/HarmonyOS（HDC）/iOS（WDA）三平台手机完成自动化任务。项目本身不含模型，通过 OpenAI 兼容 HTTP API 调用模型服务。内置敏感操作确认与人工接管机制，支持远程 WiFi 调试。",
+    "analyzedAt": "2026-08-11T05:48:11.839Z",
+    "gitCommitHash": "86f55382982fb054e8fc98ca80609dff8a2cdc3c"
+  },
+  "nodes": [
+    {
+      "id": "file:main.py",
+      "type": "file",
+      "name": "main.py",
+      "filePath": "main.py",
+      "summary": "项目统一 CLI 入口（853 行）。解析参数 → set_device_type 全局 → 处理设备子命令（--list-devices/--connect/--enable-tcpip）→ check_system_requirements 自检（adb/hdc/idevice 装好、设备连上、ADB Keyboard/WDA 就绪）→ check_model_api 探活 → 实例化 PhoneAgent 或 IOSPhoneAgent → 单任务或交互模式运行。注册 console_script `phone-agent`。",
+      "tags": [
+        "cli",
+        "entry-point",
+        "argparse",
+        "system-check",
+        "i18n"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 853
+    },
+    {
+      "id": "file:ios.py",
+      "type": "file",
+      "name": "ios.py",
+      "filePath": "ios.py",
+      "summary": "iOS 独立 CLI 入口（550 行，历史遗留）。与 main.py --device-type ios 功能重叠，项目推荐用 main.py。仍保留是因为早期 iOS 支持单独开发时的入口。",
+      "tags": [
+        "cli",
+        "entry-point",
+        "ios",
+        "legacy",
+        "duplicate"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 550
+    },
+    {
+      "id": "file:phone_agent/agent.py",
+      "type": "file",
+      "name": "agent.py",
+      "filePath": "phone_agent/agent.py",
+      "summary": "PhoneAgent 主类（253 行，Android/HarmonyOS）。提供三层 API：run(task) 一次性跑完、step(task?) 手动单步、_execute_step 内部核心（截图→组消息→调模型→parse_action→execute→回填上下文→终止判断）。图片一次性消费策略省 token：每步只保留最新截图，历史截图即时移除。",
+      "tags": [
+        "core",
+        "agent",
+        "perception-action-loop",
+        "context-management"
+      ],
+      "complexity": "complex",
+      "language": "python",
+      "sizeLines": 253
+    },
+    {
+      "id": "file:phone_agent/agent_ios.py",
+      "type": "file",
+      "name": "agent_ios.py",
+      "filePath": "phone_agent/agent_ios.py",
+      "summary": "IOSPhoneAgent（277 行，与 agent.py 重复度约 90%）。差异：直接调 xctest.get_screenshot 而不走 DeviceFactory；启动时自动 start_wda_session 创建 WDA 会话；持 IOSActionHandler。agent_ios.py:222 有重复打印 thinking 的小 bug（流式已打印过）。",
+      "tags": [
+        "core",
+        "agent",
+        "ios",
+        "wda-session",
+        "duplicate"
+      ],
+      "complexity": "complex",
+      "language": "python",
+      "sizeLines": 277
+    },
+    {
+      "id": "file:phone_agent/actions/handler.py",
+      "type": "file",
+      "name": "handler.py",
+      "filePath": "phone_agent/actions/handler.py",
+      "summary": "ActionHandler + parse_action + do/finish 辅助函数（399 行）。解析层用 ast 安全解析（防 eval 注入），Type 动作走特殊字符串切分路径（处理引号/换行）。handler 字典注册 14 个动作（Launch/Tap/Type/Type_Name/Swipe/Back/Home/Double Tap/Long Press/Wait/Take_over/Note/Call_API/Interact），其中 Note/Call_API/Interact 是 noop 占位。坐标系 [0-1000] 相对值 → 像素。",
+      "tags": [
+        "core",
+        "action-handler",
+        "ast-parsing",
+        "coordinate-transform",
+        "security"
+      ],
+      "complexity": "complex",
+      "language": "python",
+      "sizeLines": 399
+    },
+    {
+      "id": "file:phone_agent/actions/handler_ios.py",
+      "type": "file",
+      "name": "handler_ios.py",
+      "filePath": "phone_agent/actions/handler_ios.py",
+      "summary": "IOSActionHandler（280 行）。直接持 wda_url/session_id 调 xctest 模块（不走 DeviceFactory）。time.sleep 硬编码（0.5s）不受 TIMING_CONFIG 控制。无 _send_keyevent 死代码。",
+      "tags": [
+        "action-handler",
+        "ios",
+        "wda",
+        "hardcoded-timing"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 280
+    },
+    {
+      "id": "file:phone_agent/model/client.py",
+      "type": "file",
+      "name": "client.py",
+      "filePath": "phone_agent/model/client.py",
+      "summary": "ModelClient 流式客户端 + MessageBuilder（290 行）。request() 用 stream=true 边收边打印 thinking：带缓冲的 marker 检测器（\"do(action=\"/\"finish(message=\"），marker 前缀时不打印避免误出。_parse_response 四条规则优先匹配裸函数调用（XML 是 fallback）。采集 time_to_first_token/time_to_thinking_end/total_time 三项性能指标。图片在文前（VLM 偏好格式）。",
+      "tags": [
+        "core",
+        "model-client",
+        "streaming",
+        "vlm",
+        "performance-metrics",
+        "openai-sdk"
+      ],
+      "complexity": "complex",
+      "language": "python",
+      "sizeLines": 290
+    },
+    {
+      "id": "file:phone_agent/device_factory.py",
+      "type": "file",
+      "name": "device_factory.py",
+      "filePath": "phone_agent/device_factory.py",
+      "summary": "DeviceFactory 工厂 + 全局单例（167 行）。module 属性 lazy-load adb 或 hdc 模块（iOS 走不到，会 raise ValueError——历史遗留不一致）。所有方法（tap/swipe/launch_app/...）都是纯转发。set_device_type 由 main.py 启动时设置。",
+      "tags": [
+        "core",
+        "factory-pattern",
+        "singleton",
+        "lazy-loading",
+        "architecture-debt"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 167
+    },
+    {
+      "id": "file:phone_agent/adb/connection.py",
+      "type": "file",
+      "name": "connection.py",
+      "filePath": "phone_agent/adb/connection.py",
+      "summary": "ADBConnection + 设备列举/远程连接（353 行）。connect/disconnect/enable_tcpip/list_devices/is_connected/restart_server/get_device_ip。DeviceInfo 含 android_version 字段。",
+      "tags": [
+        "android",
+        "adb",
+        "connection",
+        "remote-debugging"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 353
+    },
+    {
+      "id": "file:phone_agent/adb/device.py",
+      "type": "file",
+      "name": "device.py",
+      "filePath": "phone_agent/adb/device.py",
+      "summary": "Android 设备控制（252 行）。tap/double_tap/long_press/swipe 用 adb shell input 命令；launch_app 用 monkey -p package；get_current_app 解析 dumpsys window mCurrentFocus。每个动作后 delay（来自 TIMING_CONFIG）。",
+      "tags": [
+        "android",
+        "adb",
+        "device-control",
+        "shell-commands"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 252
+    },
+    {
+      "id": "file:phone_agent/adb/input.py",
+      "type": "file",
+      "name": "input.py",
+      "filePath": "phone_agent/adb/input.py",
+      "summary": "ADB Keyboard 文本输入（109 行）。中文输入靠第三方 ADBKeyBoard APK：base64 编码后 am broadcast ADB_INPUT_B64。clear_text 用 ADB_CLEAR_TEXT 广播。detect_and_set_adb_keyboard 切换 IME 并返回原 IME 供恢复。",
+      "tags": [
+        "android",
+        "adb",
+        "input-method",
+        "adbkeyboard",
+        "base64",
+        "broadcast"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 109
+    },
+    {
+      "id": "file:phone_agent/adb/screenshot.py",
+      "type": "file",
+      "name": "screenshot.py",
+      "filePath": "phone_agent/adb/screenshot.py",
+      "summary": "Android 截图（109 行）。两步：adb shell screencap -p /sdcard/tmp.png + adb pull。检测 \"Status: -1\" 判断敏感页面（支付/银行），返回黑图 + is_sensitive=true 触发 takeover。fallback 分辨率 1080×2400。",
+      "tags": [
+        "android",
+        "adb",
+        "screenshot",
+        "sensitive-detection"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 109
+    },
+    {
+      "id": "file:phone_agent/hdc/connection.py",
+      "type": "file",
+      "name": "connection.py",
+      "filePath": "phone_agent/hdc/connection.py",
+      "summary": "HDCConnection（381 行）。结构与 ADBConnection 几乎相同，命令换成 hdc tconn/tdisconn/tmode/list targets。_run_hdc_command 辅助函数。DeviceInfo 含 harmony_version。",
+      "tags": [
+        "harmonyos",
+        "hdc",
+        "connection",
+        "remote-debugging"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 381
+    },
+    {
+      "id": "file:phone_agent/hdc/device.py",
+      "type": "file",
+      "name": "device.py",
+      "filePath": "phone_agent/hdc/device.py",
+      "summary": "HarmonyOS 设备控制（310 行）。用 hdc shell uitest uiInput 系列命令（click/swipe/doubleClick/longClick/keyEvent）。Back/Home 用 uitest uiInput keyEvent Back/Home（非 input keyevent）。launch_app 用 aa start -b bundle -a ability，ability 从 APP_ABILITIES 查询（默认 EntryAbility）。",
+      "tags": [
+        "harmonyos",
+        "hdc",
+        "uitest",
+        "device-control",
+        "aa-start"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 310
+    },
+    {
+      "id": "file:phone_agent/hdc/input.py",
+      "type": "file",
+      "name": "input.py",
+      "filePath": "phone_agent/hdc/input.py",
+      "summary": "HarmonyOS 文本输入（149 行）。原生 uitest uiInput text 支持中文（无需 ADB Keyboard）。多行按 \\n 分割，每行后 keyEvent 2054（回车）。detect_and_set_adb_keyboard 是 noop 占位。",
+      "tags": [
+        "harmonyos",
+        "hdc",
+        "native-input",
+        "multiline"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 149
+    },
+    {
+      "id": "file:phone_agent/hdc/screenshot.py",
+      "type": "file",
+      "name": "screenshot.py",
+      "filePath": "phone_agent/hdc/screenshot.py",
+      "summary": "HarmonyOS 截图（125 行）。snapshot_display -f /tmp.jpeg + hdc file recv。JPEG → PIL → PNG 转换。检测 \"fail\"/\"error\" 判断敏感页面。",
+      "tags": [
+        "harmonyos",
+        "hdc",
+        "screenshot",
+        "jpeg-conversion"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 125
+    },
+    {
+      "id": "file:phone_agent/xctest/connection.py",
+      "type": "file",
+      "name": "connection.py",
+      "filePath": "phone_agent/xctest/connection.py",
+      "summary": "XCTestConnection（382 行）。iOS 独有：is_wda_ready/start_wda_session/get_wda_status/pair_device。start_wda_session 发 POST /session 创建 WDA 会话（有状态）。restart_wda 名字误导——实际只检查状态提示手动重启。用 requests 库 + subprocess 调 idevice_id/ideviceinfo/idevicepair。",
+      "tags": [
+        "ios",
+        "xctest",
+        "wda",
+        "http",
+        "session",
+        "libimobiledevice"
+      ],
+      "complexity": "complex",
+      "language": "python",
+      "sizeLines": 382
+    },
+    {
+      "id": "file:phone_agent/xctest/device.py",
+      "type": "file",
+      "name": "device.py",
+      "filePath": "phone_agent/xctest/device.py",
+      "summary": "iOS 设备控制（458 行，最大单文件）。WDA Actions API（pointerDown/Up/move）实现 tap/double_tap/long_press/swipe。SCALE_FACTOR=3 硬编码（物理像素→逻辑 points），对 1x/2x 设备会算错。get_current_app 用 GET /wda/activeAppInfo。launch_app POST /wda/apps/launch。",
+      "tags": [
+        "ios",
+        "xctest",
+        "wda-actions",
+        "scale-factor",
+        "coordinate-transform"
+      ],
+      "complexity": "complex",
+      "language": "python",
+      "sizeLines": 458
+    },
+    {
+      "id": "file:phone_agent/xctest/input.py",
+      "type": "file",
+      "name": "input.py",
+      "filePath": "phone_agent/xctest/input.py",
+      "summary": "iOS 文本输入（299 行）。POST /wda/keys 逐字符发送（frequency=60 char/s）。clear_text 用 WDA element/active → clear。含 6 个未导出函数：send_keys/press_enter/hide_keyboard/is_keyboard_shown/set_pasteboard/get_pasteboard（IOSActionHandler 直接 import 用）。",
+      "tags": [
+        "ios",
+        "xctest",
+        "wda-keys",
+        "clipboard",
+        "keyboard-detection"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 299
+    },
+    {
+      "id": "file:phone_agent/xctest/screenshot.py",
+      "type": "file",
+      "name": "screenshot.py",
+      "filePath": "phone_agent/xctest/screenshot.py",
+      "summary": "iOS 截图（230 行）。双 fallback：WDA GET /screenshot → idevicescreenshot CLI（libimobiledevice）→ 黑图。最健壮的截图实现。fallback 分辨率 1179×2556（iPhone 14 Pro）。",
+      "tags": [
+        "ios",
+        "xctest",
+        "wda-screenshot",
+        "idevicescreenshot",
+        "dual-fallback"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 230
+    },
+    {
+      "id": "file:phone_agent/config/apps.py",
+      "type": "file",
+      "name": "apps.py",
+      "filePath": "phone_agent/config/apps.py",
+      "summary": "Android 应用映射（226 行，168 个 app）。中文名 → package name（如 \"小红书\" → com.xingin.xhs）。含大量大小写/空格变体容错（\"Chrome\"/\"chrome\"/\"Google Chrome\" 均命中）。get_package_name/get_app_name/list_supported_apps 查询函数。",
+      "tags": [
+        "config",
+        "apps",
+        "android",
+        "package-names",
+        "fuzzy-matching"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 226
+    },
+    {
+      "id": "file:phone_agent/config/apps_harmonyos.py",
+      "type": "file",
+      "name": "apps_harmonyos.py",
+      "filePath": "phone_agent/config/apps_harmonyos.py",
+      "summary": "HarmonyOS 应用映射（266 行，154 个 app + APP_ABILITIES 39 项）。HarmonyOS 启动需 bundle name + ability name 双重查找，APP_ABILITIES 默认 EntryAbility。22 条注释掉的条目是从 apps.py 复制后验证失败的遗留。",
+      "tags": [
+        "config",
+        "apps",
+        "harmonyos",
+        "bundle-id",
+        "ability"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 266
+    },
+    {
+      "id": "file:phone_agent/config/apps_ios.py",
+      "type": "file",
+      "name": "apps_ios.py",
+      "filePath": "phone_agent/config/apps_ios.py",
+      "summary": "iOS 应用映射（339 行，182 个 app）。中文名 → bundle ID（如 \"微信\" → com.tencent.xin）。独有 3 个 iTunes API 函数：check_app_installed/get_app_info_from_itunes/get_app_info_by_id，调 itunes.apple.com/lookup。",
+      "tags": [
+        "config",
+        "apps",
+        "ios",
+        "bundle-id",
+        "itunes-api"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 339
+    },
+    {
+      "id": "file:phone_agent/config/prompts_zh.py",
+      "type": "file",
+      "name": "prompts_zh.py",
+      "filePath": "phone_agent/config/prompts_zh.py",
+      "summary": "中文 system prompt（77 行，~1200 token）。15 种 do(...) 动作 + finish + 18 条硬性行为规则（导航/等待/搜索/购物车/外卖/游戏/死循环防护等领域知识）。要求模型输出 <think>...</think><answer>...</answer>，但实际 client.py 优先匹配裸 do(...)/finish(...)——prompt 与实现的协议演进脱节。",
+      "tags": [
+        "config",
+        "prompt",
+        "chinese",
+        "domain-knowledge",
+        "protocol-evolution"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 77
+    },
+    {
+      "id": "file:phone_agent/config/prompts_en.py",
+      "type": "file",
+      "name": "prompts_en.py",
+      "filePath": "phone_agent/config/prompts_en.py",
+      "summary": "英文 system prompt（79 行，~650 token）。仅 7 种动作 + 3 条通用规则。是 prompts_zh 的精简版，缺少中文版的领域特定策略（购物车、外卖等）。",
+      "tags": [
+        "config",
+        "prompt",
+        "english",
+        "simplified"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 79
+    },
+    {
+      "id": "file:phone_agent/config/prompts.py",
+      "type": "file",
+      "name": "prompts.py",
+      "filePath": "phone_agent/config/prompts.py",
+      "summary": "⚠ 遗留废弃文件（75 行）。与 prompts_zh.py 95% 相同，唯一区别是日期格式无星期。无任何模块 import 它，应删除。",
+      "tags": [
+        "config",
+        "prompt",
+        "deprecated",
+        "dead-code",
+        "cleanup-candidate"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 75
+    },
+    {
+      "id": "file:phone_agent/config/i18n.py",
+      "type": "file",
+      "name": "i18n.py",
+      "filePath": "phone_agent/config/i18n.py",
+      "summary": "UI 消息国际化（81 行）。22 个 key × 中/英字典。get_messages(lang)/get_message(key, lang)。**只给终端 UI 用，不影响模型行为**。消费者：agent.py（thinking/action 标签）、client.py（性能指标标签）。",
+      "tags": [
+        "config",
+        "i18n",
+        "ui-messages",
+        "terminal"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 81
+    },
+    {
+      "id": "file:phone_agent/config/timing.py",
+      "type": "file",
+      "name": "timing.py",
+      "filePath": "phone_agent/config/timing.py",
+      "summary": "时间常量配置（167 行）。4 个 dataclass（Action/Device/Connection/TimingConfig 组合根）共 14 个常量。每个常量都支持 PHONE_AGENT_*_DELAY 环境变量覆盖。**iOS 版 handler_ios.py 不消费这些常量，硬编码 0.5s**。",
+      "tags": [
+        "config",
+        "timing",
+        "environment-variables",
+        "tuning",
+        "ios-gap"
+      ],
+      "complexity": "moderate",
+      "language": "python",
+      "sizeLines": 167
+    },
+    {
+      "id": "file:phone_agent/config/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "phone_agent/config/__init__.py",
+      "summary": "config 包导出与路由（53 行）。__all__ 导出 15 个名字（APP_PACKAGES/APP_PACKAGES_IOS/PROMPTS/i18n/timing）。get_system_prompt(lang) 路由 cn→zh / en→en。**apps_harmonyos.py 的 APP_PACKAGES 和 APP_ABILITIES 未导出**——hdc 层直接从子模块 import，三平台地位不平等。",
+      "tags": [
+        "config",
+        "package-init",
+        "router",
+        "export-gap"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 53
+    },
+    {
+      "id": "file:phone_agent/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "phone_agent/__init__.py",
+      "summary": "phone_agent 包入口（12 行）。导出 PhoneAgent + IOSPhoneAgent。__version__ = \"0.1.0\"。",
+      "tags": [
+        "package-init",
+        "export"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 12
+    },
+    {
+      "id": "file:phone_agent/actions/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "phone_agent/actions/__init__.py",
+      "summary": "actions 包入口（5 行）。导出 ActionHandler + ActionResult。",
+      "tags": [
+        "package-init",
+        "export"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 5
+    },
+    {
+      "id": "file:phone_agent/adb/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "phone_agent/adb/__init__.py",
+      "summary": "adb 包入口（51 行）。统一接口导出：tap/swipe/launch_app/get_screenshot/list_devices + ADBConnection + DeviceInfo。",
+      "tags": [
+        "package-init",
+        "android",
+        "export",
+        "unified-interface"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 51
+    },
+    {
+      "id": "file:phone_agent/hdc/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "phone_agent/hdc/__init__.py",
+      "summary": "hdc 包入口（53 行）。结构与 adb/__init__.py 完全平行。",
+      "tags": [
+        "package-init",
+        "harmonyos",
+        "export",
+        "unified-interface"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 53
+    },
+    {
+      "id": "file:phone_agent/xctest/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "phone_agent/xctest/__init__.py",
+      "summary": "xctest 包入口（47 行）。结构与 adb/__init__.py 平行，但签名多了 wda_url/session_id。",
+      "tags": [
+        "package-init",
+        "ios",
+        "export",
+        "unified-interface"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 47
+    },
+    {
+      "id": "file:phone_agent/model/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "phone_agent/model/__init__.py",
+      "summary": "model 包入口（5 行）。**只导出 ModelClient 和 ModelConfig**——ModelResponse 和 MessageBuilder 未在包级导出（agent.py 从 model.client 子模块直接 import）。",
+      "tags": [
+        "package-init",
+        "export",
+        "export-gap"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 5
+    },
+    {
+      "id": "class:phone_agent/agent.py:PhoneAgent",
+      "type": "class",
+      "name": "PhoneAgent",
+      "filePath": "phone_agent/agent.py",
+      "summary": "AI 驱动的 Android/HarmonyOS 手机自动化 Agent。组合 ModelClient（决策）+ ActionHandler（执行）+ DeviceFactory（设备访问）。run/step/_execute_step 三层 API。",
+      "tags": [
+        "core-class",
+        "agent",
+        "perception-action-loop"
+      ],
+      "complexity": "complex",
+      "language": "python"
+    },
+    {
+      "id": "class:phone_agent/agent.py:AgentConfig",
+      "type": "class",
+      "name": "AgentConfig",
+      "filePath": "phone_agent/agent.py",
+      "summary": "PhoneAgent 行为配置（dataclass）。max_steps=100/device_id/lang/cn/system_prompt（__post_init__ 默认调 get_system_prompt）/verbose。",
+      "tags": [
+        "config",
+        "dataclass"
+      ],
+      "complexity": "simple",
+      "language": "python"
+    },
+    {
+      "id": "class:phone_agent/agent.py:StepResult",
+      "type": "class",
+      "name": "StepResult",
+      "filePath": "phone_agent/agent.py",
+      "summary": "单步执行结果（dataclass）。success/finished/action/thinking/message。step() 返回此类型供手动调试。",
+      "tags": [
+        "dataclass",
+        "result"
+      ],
+      "complexity": "simple",
+      "language": "python"
+    },
+    {
+      "id": "class:phone_agent/agent_ios.py:IOSPhoneAgent",
+      "type": "class",
+      "name": "IOSPhoneAgent",
+      "filePath": "phone_agent/agent_ios.py",
+      "summary": "iOS 版 PhoneAgent。差异：直接调 xctest 模块、自动创建 WDA session、持 IOSActionHandler。",
+      "tags": [
+        "core-class",
+        "agent",
+        "ios",
+        "wda-session"
+      ],
+      "complexity": "complex",
+      "language": "python"
+    },
+    {
+      "id": "class:phone_agent/actions/handler.py:ActionHandler",
+      "type": "class",
+      "name": "ActionHandler",
+      "filePath": "phone_agent/actions/handler.py",
+      "summary": "动作执行器核心类。execute() 调度（finish/do/unknown 三层），_get_handler 字典查 14 个 handler，_convert_relative_to_absolute 坐标转换。confirmation_callback/takeover_callback 双回调注入点。",
+      "tags": [
+        "core-class",
+        "action-handler",
+        "dispatcher"
+      ],
+      "complexity": "complex",
+      "language": "python"
+    },
+    {
+      "id": "function:phone_agent/actions/handler.py:parse_action",
+      "type": "function",
+      "name": "parse_action",
+      "filePath": "phone_agent/actions/handler.py",
+      "summary": "模型响应字符串 → dict 解析器。模块级函数。三路径：Type 走 split 字符串切分（处理特殊字符），其他 do() 走 ast.parse+literal_eval（防注入），finish() 简单切分。**handler.py:345 有 debug print 残留**。",
+      "tags": [
+        "parser",
+        "security",
+        "ast",
+        "string-parsing"
+      ],
+      "complexity": "moderate",
+      "language": "python"
+    },
+    {
+      "id": "class:phone_agent/actions/handler.py:ActionResult",
+      "type": "class",
+      "name": "ActionResult",
+      "filePath": "phone_agent/actions/handler.py",
+      "summary": "动作执行结果（dataclass）。success/should_finish/message/requires_confirmation。",
+      "tags": [
+        "dataclass",
+        "result"
+      ],
+      "complexity": "simple",
+      "language": "python"
+    },
+    {
+      "id": "class:phone_agent/model/client.py:ModelClient",
+      "type": "class",
+      "name": "ModelClient",
+      "filePath": "phone_agent/model/client.py",
+      "summary": "OpenAI 兼容的 VLM 客户端。request(messages) 流式请求 + 实时分离 thinking/action + 性能指标采集。直接用 openai SDK，与 vLLM/SGLang/BigModel 等任何 OpenAI 兼容服务对接。",
+      "tags": [
+        "core-class",
+        "model-client",
+        "streaming",
+        "openai-sdk"
+      ],
+      "complexity": "complex",
+      "language": "python"
+    },
+    {
+      "id": "class:phone_agent/model/client.py:ModelConfig",
+      "type": "class",
+      "name": "ModelConfig",
+      "filePath": "phone_agent/model/client.py",
+      "summary": "模型配置（dataclass）。base_url/api_key/model_name=autoglm-phone-9b/max_tokens=3000/temperature=0.0/top_p=0.85/frequency_penalty=0.2/extra_body/lang。temperature=0 保证 Agent 确定性。",
+      "tags": [
+        "config",
+        "dataclass",
+        "deterministic"
+      ],
+      "complexity": "simple",
+      "language": "python"
+    },
+    {
+      "id": "class:phone_agent/model/client.py:ModelResponse",
+      "type": "class",
+      "name": "ModelResponse",
+      "filePath": "phone_agent/model/client.py",
+      "summary": "模型响应（dataclass）。thinking/action/raw_content + 3 项性能指标（time_to_first_token/time_to_thinking_end/total_time）。",
+      "tags": [
+        "dataclass",
+        "result",
+        "metrics"
+      ],
+      "complexity": "simple",
+      "language": "python"
+    },
+    {
+      "id": "class:phone_agent/model/client.py:MessageBuilder",
+      "type": "class",
+      "name": "MessageBuilder",
+      "filePath": "phone_agent/model/client.py",
+      "summary": "OpenAI 消息构造工具类。create_system_message/create_user_message（图前文后）/create_assistant_message/remove_images_from_message（图片一次性消费关键）/build_screen_info。",
+      "tags": [
+        "utility",
+        "message-builder",
+        "multimodal"
+      ],
+      "complexity": "simple",
+      "language": "python"
+    },
+    {
+      "id": "class:phone_agent/device_factory.py:DeviceFactory",
+      "type": "class",
+      "name": "DeviceFactory",
+      "filePath": "phone_agent/device_factory.py",
+      "summary": "设备工厂类 + 全局单例。module 属性 lazy-load adb/hdc。纯转发所有方法。**iOS 走不到此工厂**（架构不一致，应由 Protocol 抽象重构）。",
+      "tags": [
+        "factory-pattern",
+        "singleton",
+        "architecture-debt"
+      ],
+      "complexity": "simple",
+      "language": "python"
+    },
+    {
+      "id": "class:phone_agent/device_factory.py:DeviceType",
+      "type": "class",
+      "name": "DeviceType",
+      "filePath": "phone_agent/device_factory.py",
+      "summary": "设备类型枚举：ADB/HDC/IOS。被 device_factory 和 main.py 使用。",
+      "tags": [
+        "enum",
+        "device-type"
+      ],
+      "complexity": "simple",
+      "language": "python"
+    },
+    {
+      "id": "config:setup.py",
+      "type": "config",
+      "name": "setup.py",
+      "filePath": "setup.py",
+      "summary": "Python 包定义（49 行）。包名 phone-agent，version 0.1.0，Apache 2.0。entry_points 注册 phone-agent 命令。**已知问题**：url 是 yourusername/phone-agent 占位符未改；install_requires 漏 requests（iOS 用户 pip install phone-agent 会 ImportError）；extras_require[dev] 同时含 black + ruff（formatter 冲突）。",
+      "tags": [
+        "config",
+        "packaging",
+        "setuptools",
+        "known-bugs",
+        "entry-points"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 49
+    },
+    {
+      "id": "config:requirements.txt",
+      "type": "config",
+      "name": "requirements.txt",
+      "filePath": "requirements.txt",
+      "summary": "运行时依赖清单（20 行）。必装 Pillow + openai；iOS 加 requests；本地部署按需启 sglang/vllm/transformers>=5.0.0rc0（注释掉）。**transformers 依赖冲突可忽略**（README 明示）。",
+      "tags": [
+        "config",
+        "dependencies",
+        "pip"
+      ],
+      "complexity": "simple",
+      "language": "txt",
+      "sizeLines": 20
+    },
+    {
+      "id": "config:.pre-commit-config.yaml",
+      "type": "config",
+      "name": ".pre-commit-config.yaml",
+      "filePath": ".pre-commit-config.yaml",
+      "summary": "Git pre-commit hooks 配置（23 行）。3 工具：ruff（lint+format）、typos（拼写）、pymarkdown（md 格式）。**已知 bug**：YAML 有两个 exclude: key，后者覆盖前者，apps.py 仍被检查（应只排除 README_en.md）。",
+      "tags": [
+        "config",
+        "pre-commit",
+        "ruff",
+        "typos",
+        "pymarkdown",
+        "yaml-bug"
+      ],
+      "complexity": "simple",
+      "language": "yaml",
+      "sizeLines": 23
+    },
+    {
+      "id": "config:.github/ISSUE_TEMPLATE/bug_report.yaml",
+      "type": "config",
+      "name": "bug_report.yaml",
+      "filePath": ".github/ISSUE_TEMPLATE/bug_report.yaml",
+      "summary": "GitHub bug 报告模板（72 行）。字段：System Info / Who can help / Information / Reproduction / Expected behavior。",
+      "tags": [
+        "config",
+        "github",
+        "issue-template"
+      ],
+      "complexity": "simple",
+      "language": "yaml",
+      "sizeLines": 72
+    },
+    {
+      "id": "config:.github/ISSUE_TEMPLATE/feature-request.yaml",
+      "type": "config",
+      "name": "feature-request.yaml",
+      "filePath": ".github/ISSUE_TEMPLATE/feature-request.yaml",
+      "summary": "GitHub 功能请求模板（34 行）。",
+      "tags": [
+        "config",
+        "github",
+        "issue-template"
+      ],
+      "complexity": "simple",
+      "language": "yaml",
+      "sizeLines": 34
+    },
+    {
+      "id": "config:scripts/sample_messages.json",
+      "type": "config",
+      "name": "sample_messages.json",
+      "filePath": "scripts/sample_messages.json",
+      "summary": "中文部署验证测试消息（20 行）。含完整 system prompt + 一张小红书洗发水截图（base64）+ 比价任务。check_deployment_cn.py 默认加载。",
+      "tags": [
+        "config",
+        "test-data",
+        "deployment-check",
+        "chinese"
+      ],
+      "complexity": "simple",
+      "language": "json",
+      "sizeLines": 20
+    },
+    {
+      "id": "config:scripts/sample_messages_en.json",
+      "type": "config",
+      "name": "sample_messages_en.json",
+      "filePath": "scripts/sample_messages_en.json",
+      "summary": "英文部署验证测试消息（20 行）。check_deployment_en.py 默认加载。",
+      "tags": [
+        "config",
+        "test-data",
+        "deployment-check",
+        "english"
+      ],
+      "complexity": "simple",
+      "language": "json",
+      "sizeLines": 20
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "项目主 README（991 行，中文）。含完整安装/部署/使用指南，含面向 AI 的自动化部署章节。引用 AutoGLM（arXiv:2411.00820）+ MobileRL（arXiv:2509.18119）两篇论文。",
+      "tags": [
+        "docs",
+        "readme",
+        "installation",
+        "deployment",
+        "ai-friendly"
+      ],
+      "complexity": "moderate",
+      "language": "markdown",
+      "sizeLines": 991
+    },
+    {
+      "id": "document:README_en.md",
+      "type": "document",
+      "name": "README_en.md",
+      "filePath": "README_en.md",
+      "summary": "英文版 README（933 行）。",
+      "tags": [
+        "docs",
+        "readme",
+        "english"
+      ],
+      "complexity": "moderate",
+      "language": "markdown",
+      "sizeLines": 933
+    },
+    {
+      "id": "document:README_coding_agent.md",
+      "type": "document",
+      "name": "README_coding_agent.md",
+      "filePath": "README_coding_agent.md",
+      "summary": "面向 coding agent 的 README（430 行）。指引 Claude Code/Cursor 等通过 GLM Coding Plan 部署。",
+      "tags": [
+        "docs",
+        "readme",
+        "coding-agent",
+        "ai-friendly"
+      ],
+      "complexity": "simple",
+      "language": "markdown",
+      "sizeLines": 430
+    },
+    {
+      "id": "document:docs/README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "docs/README.md",
+      "summary": "文档集索引页（128 行）。",
+      "tags": [
+        "docs",
+        "index"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/ARCHITECTURE.md",
+      "type": "document",
+      "name": "ARCHITECTURE.md",
+      "filePath": "docs/ARCHITECTURE.md",
+      "summary": "总体架构总览（413 行）。6 层架构视图 + mermaid 时序图 + 模块依赖图 + 5 个核心设计决策 + 与 DeepWiki 的 10 条勘误（全以源码为准）。",
+      "tags": [
+        "docs",
+        "architecture",
+        "mermaid",
+        "deepwiki"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/EXTENDING.md",
+      "type": "document",
+      "name": "EXTENDING.md",
+      "filePath": "docs/EXTENDING.md",
+      "summary": "二次开发指南（552 行）。加动作/平台/app/回调/prompt 语言/模型/step hook 的最小修改清单 + 统一设备抽象建议（Protocol 重构）+ iOS 不走 DeviceFactory 的历史原因。",
+      "tags": [
+        "docs",
+        "extending",
+        "tutorial"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/01-entry-cli.md",
+      "type": "document",
+      "name": "01-entry-cli.md",
+      "filePath": "docs/01-entry-cli.md",
+      "summary": "入口与 CLI 解析（345 行）。main.py 全流程 + 所有 CLI 参数 + 自检流程 + ios.py 历史遗留。",
+      "tags": [
+        "docs",
+        "cli",
+        "entry"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/02-agent-loop.md",
+      "type": "document",
+      "name": "02-agent-loop.md",
+      "filePath": "docs/02-agent-loop.md",
+      "summary": "核心循环 PhoneAgent（372 行）。三层 API + _execute_step 六段拆解 + 上下文演化表 + iOS 差异 + 常见陷阱。",
+      "tags": [
+        "docs",
+        "agent",
+        "loop"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/03-device-layer.md",
+      "type": "document",
+      "name": "03-device-layer.md",
+      "filePath": "docs/03-device-layer.md",
+      "summary": "设备抽象层（453 行）。DeviceFactory + adb/hdc/xctest 三套对照 + 平台能力矩阵 + 截图实现 + 输入法 + iOS 坐标缩放 + 代码重复度评估。",
+      "tags": [
+        "docs",
+        "device",
+        "cross-platform"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/04-action-handler.md",
+      "type": "document",
+      "name": "04-action-handler.md",
+      "filePath": "docs/04-action-handler.md",
+      "summary": "动作执行器（408 行）。AutoGLM 协议 + parse_action 三路径 + 14 种 handler + 坐标系 + iOS 版差异 + 与 prompt 对照表。",
+      "tags": [
+        "docs",
+        "action",
+        "protocol"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/05-model-client.md",
+      "type": "document",
+      "name": "05-model-client.md",
+      "filePath": "docs/05-model-client.md",
+      "summary": "模型客户端（402 行）。流式 marker 检测算法 + _parse_response 四条规则 + 配置参数详解 + 换模型注意事项。",
+      "tags": [
+        "docs",
+        "model",
+        "streaming"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/06-config-prompts.md",
+      "type": "document",
+      "name": "06-config-prompts.md",
+      "filePath": "docs/06-config-prompts.md",
+      "summary": "配置层（371 行）。apps×3 + prompts×3 + i18n + timing 14 常量 + 添加 app/语言步骤。",
+      "tags": [
+        "docs",
+        "config",
+        "i18n"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/07-deployment.md",
+      "type": "document",
+      "name": "07-deployment.md",
+      "filePath": "docs/07-deployment.md",
+      "summary": "模型部署完整指南（432 行）。第三方 API/vLLM/SGLang 三方案 + 完整启动参数 + 验证脚本 + 故障排查 + 性能调优。",
+      "tags": [
+        "docs",
+        "deployment",
+        "vllm",
+        "sglang"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/08-development.md",
+      "type": "document",
+      "name": "08-development.md",
+      "filePath": "docs/08-development.md",
+      "summary": "开发指南（473 行）。setup.py 详解 + pre-commit + 测试现状 + PR 流程 + 已知问题清单（10 项贡献机会）。",
+      "tags": [
+        "docs",
+        "development",
+        "contributing"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/09-remote-advanced.md",
+      "type": "document",
+      "name": "09-remote-advanced.md",
+      "filePath": "docs/09-remote-advanced.md",
+      "summary": "远程设备与高级用法（547 行）。三平台 WiFi 调试 + 交互模式 + 4 种回调实战（Web/Slack/日志/超时）+ 远程协助老人综合案例。",
+      "tags": [
+        "docs",
+        "remote",
+        "advanced",
+        "callbacks"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:docs/ios_setup/ios_setup.md",
+      "type": "document",
+      "name": "ios_setup.md",
+      "filePath": "docs/ios_setup/ios_setup.md",
+      "summary": "iOS 环境配置指南（134 行）。WebDriverAgent 部署 + 签名 + 设备信任 + iproxy 端口映射 + xcodebuild 命令行模式。",
+      "tags": [
+        "docs",
+        "ios",
+        "setup",
+        "wda"
+      ],
+      "complexity": "moderate",
+      "language": "markdown"
+    },
+    {
+      "id": "document:.github/PULL_REQUEST_TEMPLATE.md",
+      "type": "document",
+      "name": "PULL_REQUEST_TEMPLATE.md",
+      "filePath": ".github/PULL_REQUEST_TEMPLATE.md",
+      "summary": "PR 模板（40 行）。接受的 PR 类型/代码风格/命名规范。**小 bug**：第 31-39 行引用不存在的 glmv-reward/ 目录（复制粘贴遗留）。",
+      "tags": [
+        "docs",
+        "github",
+        "pr-template",
+        "known-bug"
+      ],
+      "complexity": "simple",
+      "language": "markdown",
+      "sizeLines": 40
+    },
+    {
+      "id": "document:resources/WECHAT.md",
+      "type": "document",
+      "name": "WECHAT.md",
+      "filePath": "resources/WECHAT.md",
+      "summary": "微信社区二维码资源（6 行）。",
+      "tags": [
+        "docs",
+        "community",
+        "resource"
+      ],
+      "complexity": "simple",
+      "language": "markdown",
+      "sizeLines": 6
+    },
+    {
+      "id": "document:resources/privacy_policy.txt",
+      "type": "document",
+      "name": "privacy_policy.txt",
+      "filePath": "resources/privacy_policy.txt",
+      "summary": "中文隐私政策（131 行）。",
+      "tags": [
+        "docs",
+        "legal",
+        "privacy",
+        "chinese"
+      ],
+      "complexity": "simple",
+      "language": "txt",
+      "sizeLines": 131
+    },
+    {
+      "id": "document:resources/privacy_policy_en.txt",
+      "type": "document",
+      "name": "privacy_policy_en.txt",
+      "filePath": "resources/privacy_policy_en.txt",
+      "summary": "英文隐私政策（133 行）。",
+      "tags": [
+        "docs",
+        "legal",
+        "privacy",
+        "english"
+      ],
+      "complexity": "simple",
+      "language": "txt",
+      "sizeLines": 133
+    },
+    {
+      "id": "file:scripts/check_deployment_cn.py",
+      "type": "file",
+      "name": "check_deployment_cn.py",
+      "filePath": "scripts/check_deployment_cn.py",
+      "summary": "中文部署验证脚本（115 行）。加载 sample_messages.json，发非流式 chat completion 请求，打印 thinking + action + token 统计。失败时打印错误类型 + 排查提示。",
+      "tags": [
+        "script",
+        "deployment-check",
+        "chinese",
+        "non-streaming"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 115
+    },
+    {
+      "id": "file:scripts/check_deployment_en.py",
+      "type": "file",
+      "name": "check_deployment_en.py",
+      "filePath": "scripts/check_deployment_en.py",
+      "summary": "英文部署验证脚本（129 行）。结构与中文版相同，加载 sample_messages_en.json。",
+      "tags": [
+        "script",
+        "deployment-check",
+        "english"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 129
+    },
+    {
+      "id": "file:examples/basic_usage.py",
+      "type": "file",
+      "name": "basic_usage.py",
+      "filePath": "examples/basic_usage.py",
+      "summary": "5 种 Python API 用法示例（190 行）：基础任务/带回调/单步调试/批量任务/远程设备。",
+      "tags": [
+        "example",
+        "python-api",
+        "tutorial",
+        "callbacks",
+        "remote"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 190
+    },
+    {
+      "id": "file:examples/demo_thinking.py",
+      "type": "file",
+      "name": "demo_thinking.py",
+      "filePath": "examples/demo_thinking.py",
+      "summary": "verbose 模式最小 demo（64 行）。跑 agent.run 展示 thinking + action 输出。",
+      "tags": [
+        "example",
+        "demo",
+        "verbose"
+      ],
+      "complexity": "simple",
+      "language": "python",
+      "sizeLines": 64
+    },
+    {
+      "id": "concept:autoglm-action-protocol",
+      "type": "concept",
+      "name": "AutoGLM 动作协议",
+      "summary": "模型输出函数调用风格字符串（非 JSON、非 tool_call）：do(action=\"Tap\", element=[500,300]) 或 finish(message=\"...\")。坐标系 [0-1000, 0-1000] 相对值，跨设备复用。带 message 字段的 Tap 触发 sensitive 操作确认。",
+      "tags": [
+        "concept",
+        "protocol",
+        "function-call-style",
+        "relative-coords"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "concept:perception-action-loop",
+      "type": "concept",
+      "name": "感知-动作循环",
+      "summary": "截图 → 视觉模型决策 → 设备执行 → 回填上下文 → 循环。整个项目的核心抽象。终止条件：模型主动 finish 或步数耗尽。",
+      "tags": [
+        "concept",
+        "agent-loop",
+        "core-pattern"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "concept:image-once-consumption",
+      "type": "concept",
+      "name": "图片一次性消费",
+      "summary": "VLM 推理贵在图片 token。策略：每步模型回复后立即 remove_images_from_message，历史截图只保留 text 部分，最新 user message 永远是唯一带图。token 节省 80%+。",
+      "tags": [
+        "concept",
+        "token-optimization",
+        "context-management"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "concept:three-platform-parallels",
+      "type": "concept",
+      "name": "三平台平行实现",
+      "summary": "adb/hdc/xctest 三套目录结构完全相同（connection/device/input/screenshot），代码重复度 70-80%。ADB/HDC 用 subprocess 无状态命令，iOS 用 HTTP+WDA session 有状态。无共同基类——是改进点。",
+      "tags": [
+        "concept",
+        "architecture",
+        "code-duplication",
+        "refactoring-target"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:examples/basic_usage.py",
+      "target": "file:phone_agent/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:examples/basic_usage.py",
+      "target": "file:phone_agent/agent.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:examples/basic_usage.py",
+      "target": "file:phone_agent/config/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:examples/basic_usage.py",
+      "target": "file:phone_agent/model/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:examples/demo_thinking.py",
+      "target": "file:phone_agent/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:examples/demo_thinking.py",
+      "target": "file:phone_agent/agent.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:examples/demo_thinking.py",
+      "target": "file:phone_agent/config/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:examples/demo_thinking.py",
+      "target": "file:phone_agent/model/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ios.py",
+      "target": "file:phone_agent/agent_ios.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ios.py",
+      "target": "file:phone_agent/config/apps_ios.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ios.py",
+      "target": "file:phone_agent/model/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ios.py",
+      "target": "file:phone_agent/xctest/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:main.py",
+      "target": "file:phone_agent/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:main.py",
+      "target": "file:phone_agent/agent_ios.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:main.py",
+      "target": "file:phone_agent/agent.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:main.py",
+      "target": "file:phone_agent/config/apps_harmonyos.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:main.py",
+      "target": "file:phone_agent/config/apps_ios.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:main.py",
+      "target": "file:phone_agent/config/apps.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:main.py",
+      "target": "file:phone_agent/device_factory.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:main.py",
+      "target": "file:phone_agent/model/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:main.py",
+      "target": "file:phone_agent/xctest/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/__init__.py",
+      "target": "file:phone_agent/agent_ios.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/__init__.py",
+      "target": "file:phone_agent/agent.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/actions/__init__.py",
+      "target": "file:phone_agent/actions/handler.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/actions/handler_ios.py",
+      "target": "file:phone_agent/xctest/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/actions/handler_ios.py",
+      "target": "file:phone_agent/xctest/input.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/actions/handler.py",
+      "target": "file:phone_agent/config/timing.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/actions/handler.py",
+      "target": "file:phone_agent/device_factory.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/adb/__init__.py",
+      "target": "file:phone_agent/adb/connection.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/adb/__init__.py",
+      "target": "file:phone_agent/adb/device.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/adb/__init__.py",
+      "target": "file:phone_agent/adb/input.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/adb/__init__.py",
+      "target": "file:phone_agent/adb/screenshot.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/adb/connection.py",
+      "target": "file:phone_agent/config/timing.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/adb/device.py",
+      "target": "file:phone_agent/config/apps.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/adb/device.py",
+      "target": "file:phone_agent/config/timing.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent_ios.py",
+      "target": "file:phone_agent/actions/handler_ios.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent_ios.py",
+      "target": "file:phone_agent/actions/handler.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent_ios.py",
+      "target": "file:phone_agent/config/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent_ios.py",
+      "target": "file:phone_agent/model/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent_ios.py",
+      "target": "file:phone_agent/model/client.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent_ios.py",
+      "target": "file:phone_agent/xctest/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent.py",
+      "target": "file:phone_agent/actions/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent.py",
+      "target": "file:phone_agent/actions/handler.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent.py",
+      "target": "file:phone_agent/config/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent.py",
+      "target": "file:phone_agent/device_factory.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent.py",
+      "target": "file:phone_agent/model/__init__.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent.py",
+      "target": "file:phone_agent/model/client.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/config/__init__.py",
+      "target": "file:phone_agent/config/apps_ios.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/config/__init__.py",
+      "target": "file:phone_agent/config/apps.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/config/__init__.py",
+      "target": "file:phone_agent/config/i18n.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/config/__init__.py",
+      "target": "file:phone_agent/config/prompts_en.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/config/__init__.py",
+      "target": "file:phone_agent/config/prompts_zh.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/config/__init__.py",
+      "target": "file:phone_agent/config/timing.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/hdc/__init__.py",
+      "target": "file:phone_agent/hdc/connection.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/hdc/__init__.py",
+      "target": "file:phone_agent/hdc/device.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/hdc/__init__.py",
+      "target": "file:phone_agent/hdc/input.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/hdc/__init__.py",
+      "target": "file:phone_agent/hdc/screenshot.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/hdc/connection.py",
+      "target": "file:phone_agent/config/timing.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/hdc/device.py",
+      "target": "file:phone_agent/config/apps_harmonyos.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/hdc/device.py",
+      "target": "file:phone_agent/config/timing.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/hdc/device.py",
+      "target": "file:phone_agent/hdc/connection.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/hdc/input.py",
+      "target": "file:phone_agent/hdc/connection.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/hdc/screenshot.py",
+      "target": "file:phone_agent/hdc/connection.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/model/__init__.py",
+      "target": "file:phone_agent/model/client.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/model/client.py",
+      "target": "file:phone_agent/config/i18n.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/xctest/__init__.py",
+      "target": "file:phone_agent/xctest/connection.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/xctest/__init__.py",
+      "target": "file:phone_agent/xctest/device.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/xctest/__init__.py",
+      "target": "file:phone_agent/xctest/input.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/xctest/__init__.py",
+      "target": "file:phone_agent/xctest/screenshot.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/xctest/device.py",
+      "target": "file:phone_agent/config/apps_ios.py",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:phone_agent/agent.py",
+      "target": "class:phone_agent/agent.py:PhoneAgent",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/agent.py",
+      "target": "class:phone_agent/agent.py:AgentConfig",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/agent.py",
+      "target": "class:phone_agent/agent.py:StepResult",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/agent_ios.py",
+      "target": "class:phone_agent/agent_ios.py:IOSPhoneAgent",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/actions/handler.py",
+      "target": "class:phone_agent/actions/handler.py:ActionHandler",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/actions/handler.py",
+      "target": "function:phone_agent/actions/handler.py:parse_action",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/actions/handler.py",
+      "target": "class:phone_agent/actions/handler.py:ActionResult",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/model/client.py",
+      "target": "class:phone_agent/model/client.py:ModelClient",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/model/client.py",
+      "target": "class:phone_agent/model/client.py:ModelConfig",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/model/client.py",
+      "target": "class:phone_agent/model/client.py:ModelResponse",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/model/client.py",
+      "target": "class:phone_agent/model/client.py:MessageBuilder",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/device_factory.py",
+      "target": "class:phone_agent/device_factory.py:DeviceFactory",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:phone_agent/device_factory.py",
+      "target": "class:phone_agent/device_factory.py:DeviceType",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "class:phone_agent/agent.py:PhoneAgent",
+      "target": "class:phone_agent/model/client.py:ModelClient",
+      "type": "calls",
+      "weight": 0.8
+    },
+    {
+      "source": "class:phone_agent/agent.py:PhoneAgent",
+      "target": "class:phone_agent/actions/handler.py:ActionHandler",
+      "type": "calls",
+      "weight": 0.8
+    },
+    {
+      "source": "class:phone_agent/agent.py:PhoneAgent",
+      "target": "class:phone_agent/device_factory.py:DeviceFactory",
+      "type": "calls",
+      "weight": 0.8
+    },
+    {
+      "source": "class:phone_agent/agent.py:PhoneAgent",
+      "target": "function:phone_agent/actions/handler.py:parse_action",
+      "type": "calls",
+      "weight": 0.8
+    },
+    {
+      "source": "class:phone_agent/actions/handler.py:ActionHandler",
+      "target": "class:phone_agent/device_factory.py:DeviceFactory",
+      "type": "calls",
+      "weight": 0.8
+    },
+    {
+      "source": "class:phone_agent/model/client.py:ModelClient",
+      "target": "class:phone_agent/model/client.py:MessageBuilder",
+      "type": "calls",
+      "weight": 0.8
+    },
+    {
+      "source": "class:phone_agent/agent_ios.py:IOSPhoneAgent",
+      "target": "class:phone_agent/agent.py:PhoneAgent",
+      "type": "similar_to",
+      "weight": 0.9
+    },
+    {
+      "source": "class:phone_agent/agent.py:PhoneAgent",
+      "target": "concept:perception-action-loop",
+      "type": "implements",
+      "weight": 0.9
+    },
+    {
+      "source": "class:phone_agent/agent.py:PhoneAgent",
+      "target": "concept:image-once-consumption",
+      "type": "implements",
+      "weight": 0.9
+    },
+    {
+      "source": "function:phone_agent/actions/handler.py:parse_action",
+      "target": "concept:autoglm-action-protocol",
+      "type": "implements",
+      "weight": 0.9
+    },
+    {
+      "source": "class:phone_agent/actions/handler.py:ActionHandler",
+      "target": "concept:autoglm-action-protocol",
+      "type": "implements",
+      "weight": 0.9
+    },
+    {
+      "source": "class:phone_agent/device_factory.py:DeviceFactory",
+      "target": "concept:three-platform-parallels",
+      "type": "related",
+      "weight": 0.6
+    },
+    {
+      "source": "config:setup.py",
+      "target": "file:main.py",
+      "type": "configures",
+      "weight": 0.6
+    },
+    {
+      "source": "config:setup.py",
+      "target": "config:requirements.txt",
+      "type": "related",
+      "weight": 0.5
+    },
+    {
+      "source": "config:.pre-commit-config.yaml",
+      "target": "file:phone_agent/config/apps.py",
+      "type": "configures",
+      "weight": 0.5
+    },
+    {
+      "source": "config:scripts/sample_messages.json",
+      "target": "file:scripts/check_deployment_cn.py",
+      "type": "configures",
+      "weight": 0.6
+    },
+    {
+      "source": "config:scripts/sample_messages_en.json",
+      "target": "file:scripts/check_deployment_en.py",
+      "type": "configures",
+      "weight": 0.6
+    },
+    {
+      "source": "document:docs/ARCHITECTURE.md",
+      "target": "file:phone_agent/agent.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/02-agent-loop.md",
+      "target": "file:phone_agent/agent.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/04-action-handler.md",
+      "target": "file:phone_agent/actions/handler.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/05-model-client.md",
+      "target": "file:phone_agent/model/client.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/03-device-layer.md",
+      "target": "file:phone_agent/device_factory.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/01-entry-cli.md",
+      "target": "file:main.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/ios_setup/ios_setup.md",
+      "target": "file:phone_agent/xctest/connection.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/07-deployment.md",
+      "target": "file:scripts/check_deployment_cn.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/08-development.md",
+      "target": "config:setup.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/06-config-prompts.md",
+      "target": "file:phone_agent/config/prompts_zh.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:main.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "file:examples/basic_usage.py",
+      "target": "class:phone_agent/agent.py:PhoneAgent",
+      "type": "calls",
+      "weight": 0.5
+    },
+    {
+      "source": "file:examples/demo_thinking.py",
+      "target": "class:phone_agent/agent.py:PhoneAgent",
+      "type": "calls",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ios.py",
+      "target": "file:main.py",
+      "type": "similar_to",
+      "weight": 0.9
+    },
+    {
+      "source": "file:phone_agent/device_factory.py",
+      "target": "class:phone_agent/device_factory.py:DeviceType",
+      "type": "depends_on",
+      "weight": 0.6
+    },
+    {
+      "source": "file:main.py",
+      "target": "class:phone_agent/device_factory.py:DeviceType",
+      "type": "depends_on",
+      "weight": 0.6
+    },
+    {
+      "source": "document:docs/README.md",
+      "target": "document:docs/ARCHITECTURE.md",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/EXTENDING.md",
+      "target": "class:phone_agent/agent.py:PhoneAgent",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/EXTENDING.md",
+      "target": "class:phone_agent/device_factory.py:DeviceFactory",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/09-remote-advanced.md",
+      "target": "file:main.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/09-remote-advanced.md",
+      "target": "file:phone_agent/adb/connection.py",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README_en.md",
+      "target": "document:README.md",
+      "type": "related",
+      "weight": 0.8
+    },
+    {
+      "source": "document:README_coding_agent.md",
+      "target": "document:README.md",
+      "type": "related",
+      "weight": 0.8
+    },
+    {
+      "source": "config:.github/ISSUE_TEMPLATE/bug_report.yaml",
+      "target": "document:.github/PULL_REQUEST_TEMPLATE.md",
+      "type": "related",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "document:resources/privacy_policy.txt",
+      "type": "documents",
+      "weight": 0.5
+    },
+    {
+      "source": "file:phone_agent/config/prompts.py",
+      "target": "file:phone_agent/config/prompts_zh.py",
+      "type": "related",
+      "weight": 0.9
+    },
+    {
+      "source": "document:README.md",
+      "target": "document:resources/WECHAT.md",
+      "type": "documents",
+      "weight": 0.5
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:entry-cli",
+      "name": "入口与 CLI 层",
+      "description": "用户交互入口。解析 CLI 参数、自检环境、路由到对应平台的 Agent。包含统一入口 main.py 和历史遗留的 iOS 独立入口 ios.py。",
+      "nodeIds": [
+        "file:main.py",
+        "file:ios.py",
+        "config:setup.py",
+        "config:requirements.txt",
+        "config:.pre-commit-config.yaml",
+        "document:README.md",
+        "document:README_en.md",
+        "document:README_coding_agent.md"
+      ]
+    },
+    {
+      "id": "layer:core-agent",
+      "name": "Agent 核心层",
+      "description": "PhoneAgent / IOSPhoneAgent 主类。编排感知-动作循环：截图→模型决策→动作执行→回填上下文。提供 run/step/_execute_step 三层 API。实现图片一次性消费策略节省 token。",
+      "nodeIds": [
+        "file:phone_agent/agent.py",
+        "file:phone_agent/agent_ios.py",
+        "file:phone_agent/__init__.py",
+        "class:phone_agent/agent.py:PhoneAgent",
+        "class:phone_agent/agent.py:AgentConfig",
+        "class:phone_agent/agent.py:StepResult",
+        "class:phone_agent/agent_ios.py:IOSPhoneAgent",
+        "concept:perception-action-loop",
+        "concept:image-once-consumption"
+      ]
+    },
+    {
+      "id": "layer:action-processing",
+      "name": "动作执行层",
+      "description": "Agent 决策与设备执行之间的桥梁。实现 AutoGLM 动作协议：parse_action 解析模型输出字符串、ActionHandler 调度 14 种 handler、坐标相对值→像素转换、confirmation/takeover 双回调注入。",
+      "nodeIds": [
+        "file:phone_agent/actions/handler.py",
+        "file:phone_agent/actions/handler_ios.py",
+        "file:phone_agent/actions/__init__.py",
+        "class:phone_agent/actions/handler.py:ActionHandler",
+        "function:phone_agent/actions/handler.py:parse_action",
+        "class:phone_agent/actions/handler.py:ActionResult",
+        "concept:autoglm-action-protocol"
+      ]
+    },
+    {
+      "id": "layer:ai-model",
+      "name": "AI 模型客户端层",
+      "description": "与 OpenAI 兼容的 VLM 服务通信。ModelClient 流式接收响应并实时分离 thinking/action（带缓冲的 marker 检测器），采集性能指标。MessageBuilder 构造多模态消息（图前文后）。",
+      "nodeIds": [
+        "file:phone_agent/model/client.py",
+        "file:phone_agent/model/__init__.py",
+        "class:phone_agent/model/client.py:ModelClient",
+        "class:phone_agent/model/client.py:ModelConfig",
+        "class:phone_agent/model/client.py:ModelResponse",
+        "class:phone_agent/model/client.py:MessageBuilder"
+      ]
+    },
+    {
+      "id": "layer:device-abstraction",
+      "name": "设备抽象层",
+      "description": "DeviceFactory 工厂 + 全局单例。lazy-load adb/hdc 模块，纯转发方法。注意：iOS 不走此工厂（架构不一致），由 IOSPhoneAgent 直接调 xctest。",
+      "nodeIds": [
+        "file:phone_agent/device_factory.py",
+        "class:phone_agent/device_factory.py:DeviceFactory",
+        "class:phone_agent/device_factory.py:DeviceType"
+      ]
+    },
+    {
+      "id": "layer:platform-android",
+      "name": "Android 平台层（ADB）",
+      "description": "Android 设备的 subprocess 命令实现。ADBConnection 管理设备连接、ADB Keyboard + base64 广播实现中文输入、两步截图（screencap + pull）。",
+      "nodeIds": [
+        "file:phone_agent/adb/__init__.py",
+        "file:phone_agent/adb/connection.py",
+        "file:phone_agent/adb/device.py",
+        "file:phone_agent/adb/input.py",
+        "file:phone_agent/adb/screenshot.py"
+      ]
+    },
+    {
+      "id": "layer:platform-harmonyos",
+      "name": "HarmonyOS 平台层（HDC）",
+      "description": "HarmonyOS 设备的 subprocess 命令实现。结构与 ADB 层平行（重复度 80%+）。用 uitest uiInput 系列命令，原生支持中文输入，启动 app 需 bundle + ability 双重查找。",
+      "nodeIds": [
+        "file:phone_agent/hdc/__init__.py",
+        "file:phone_agent/hdc/connection.py",
+        "file:phone_agent/hdc/device.py",
+        "file:phone_agent/hdc/input.py",
+        "file:phone_agent/hdc/screenshot.py"
+      ]
+    },
+    {
+      "id": "layer:platform-ios",
+      "name": "iOS 平台层（XCTest/WDA）",
+      "description": "iOS 设备的 HTTP API 实现（WebDriverAgent）。差异最大：有状态 WDA session、坐标 SCALE_FACTOR=3 缩放、双 fallback 截图（WDA→idevicescreenshot→黑图）、6 个剪贴板/键盘辅助函数。libimobiledevice 工具配合。",
+      "nodeIds": [
+        "file:phone_agent/xctest/__init__.py",
+        "file:phone_agent/xctest/connection.py",
+        "file:phone_agent/xctest/device.py",
+        "file:phone_agent/xctest/input.py",
+        "file:phone_agent/xctest/screenshot.py"
+      ]
+    },
+    {
+      "id": "layer:configuration",
+      "name": "配置层",
+      "description": "横切关注点：三平台 app ID 映射（apps×3，共 504 个 app）、中英文 system prompt（prompts×3，prompts.py 已废弃）、22 key 国际化、14 个时间常量（环境变量可覆盖）。",
+      "nodeIds": [
+        "file:phone_agent/config/__init__.py",
+        "file:phone_agent/config/apps.py",
+        "file:phone_agent/config/apps_harmonyos.py",
+        "file:phone_agent/config/apps_ios.py",
+        "file:phone_agent/config/prompts_zh.py",
+        "file:phone_agent/config/prompts_en.py",
+        "file:phone_agent/config/prompts.py",
+        "file:phone_agent/config/i18n.py",
+        "file:phone_agent/config/timing.py"
+      ]
+    },
+    {
+      "id": "layer:scripts-deployment",
+      "name": "脚本与 CI 层",
+      "description": "部署验证脚本（中英文版本）+ GitHub Issue/PR 模板。验证脚本发非流式 chat completion 测模型服务可达性。",
+      "nodeIds": [
+        "file:scripts/check_deployment_cn.py",
+        "file:scripts/check_deployment_en.py",
+        "config:scripts/sample_messages.json",
+        "config:scripts/sample_messages_en.json",
+        "config:.github/ISSUE_TEMPLATE/bug_report.yaml",
+        "config:.github/ISSUE_TEMPLATE/feature-request.yaml",
+        "document:.github/PULL_REQUEST_TEMPLATE.md"
+      ]
+    },
+    {
+      "id": "layer:examples",
+      "name": "示例层",
+      "description": "Python API 用法示例。basic_usage 覆盖 5 种场景（基础/回调/单步/批量/远程），demo_thinking 演示 verbose 模式。",
+      "nodeIds": [
+        "file:examples/basic_usage.py",
+        "file:examples/demo_thinking.py"
+      ]
+    },
+    {
+      "id": "layer:documentation",
+      "name": "文档层",
+      "description": "11 篇源码级技术文档集（共约 4900 行）+ iOS 配置指南 + 法律文档。文档以源码为唯一真相，修正了 DeepWiki 的 10 处错误。每篇文档大量使用行号引用（78 处引用，准确率 100%）。",
+      "nodeIds": [
+        "document:docs/README.md",
+        "document:docs/ARCHITECTURE.md",
+        "document:docs/EXTENDING.md",
+        "document:docs/01-entry-cli.md",
+        "document:docs/02-agent-loop.md",
+        "document:docs/03-device-layer.md",
+        "document:docs/04-action-handler.md",
+        "document:docs/05-model-client.md",
+        "document:docs/06-config-prompts.md",
+        "document:docs/07-deployment.md",
+        "document:docs/08-development.md",
+        "document:docs/09-remote-advanced.md",
+        "document:docs/ios_setup/ios_setup.md",
+        "document:resources/WECHAT.md",
+        "document:resources/privacy_policy.txt",
+        "document:resources/privacy_policy_en.txt",
+        "concept:three-platform-parallels"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "从 README 开始",
+      "description": "理解项目定位：Open-AutoGLM 是基于 AutoGLM-Phone-9B 视觉语言模型的手机 GUI Agent 框架，跨 Android（ADB）/HarmonyOS（HDC）/iOS（WDA）三平台。它本身不含模型，通过 OpenAI 兼容 HTTP API 调用模型服务。先读 README 整体概览，再看 docs/ARCHITECTURE.md 的 6 层架构与核心循环时序图。",
+      "nodeIds": [
+        "document:README.md",
+        "document:docs/ARCHITECTURE.md"
+      ],
+      "languageLesson": "核心抽象是「截图 → 模型决策 → 设备执行 → 循环」。整本项目的所有代码都是这一过程的服务者。"
+    },
+    {
+      "order": 2,
+      "title": "入口：python main.py 全流程",
+      "description": "main.py（853 行）是统一 CLI 入口。流程：argparse 解析参数 → set_device_type 设置全局工厂 → 处理 --list-devices/--connect 等子命令 → check_system_requirements（adb/hdc 装好？设备连上？ADB Keyboard/WDA 就绪？）→ check_model_api（chat completion 探活）→ 实例化 PhoneAgent/IOSPhoneAgent → 单任务或交互模式。",
+      "nodeIds": [
+        "file:main.py",
+        "document:docs/01-entry-cli.md"
+      ],
+      "languageLesson": "注意 main.py:697-698 的设计：iOS 设备跳过 set_device_type（DeviceFactory 不支持 iOS）。这是历史架构不一致的体现。"
+    },
+    {
+      "order": 3,
+      "title": "PhoneAgent：感知-动作循环",
+      "description": "agent.py 的 PhoneAgent 是核心。三层 API：run(task) 一次性跑完、step(task?) 手动单步调试、_execute_step 内部心脏。_execute_step 分 6 段：截图+当前app → 组消息 → 调模型+实时打印 thinking → parse_action 解析 → 图片清理+动作执行 → 回填上下文+终止判断。",
+      "nodeIds": [
+        "file:phone_agent/agent.py",
+        "class:phone_agent/agent.py:PhoneAgent",
+        "class:phone_agent/agent.py:AgentConfig",
+        "class:phone_agent/agent.py:StepResult",
+        "document:docs/02-agent-loop.md"
+      ],
+      "languageLesson": "关键设计：「图片一次性消费」——每步模型回复后立即 remove_images_from_message，最新 user message 永远是唯一带图的。token 节省 80%+。"
+    },
+    {
+      "order": 4,
+      "title": "AutoGLM 动作协议",
+      "description": "模型输出非 JSON、非 tool_call，而是 Python 函数调用风格的字符串：do(action=\"Tap\", element=[500,300]) 或 finish(message=\"...\")。坐标系是 [0-1000, 0-1000] 相对值（跨设备复用）。带 message 字段的 Tap 触发 sensitive 操作确认。",
+      "nodeIds": [
+        "concept:autoglm-action-protocol",
+        "concept:perception-action-loop"
+      ],
+      "languageLesson": "为什么用相对坐标？模型不需要知道设备具体分辨率，同一份决策可跨设备复用。iOS 多一层 SCALE_FACTOR=3 缩放（物理像素→逻辑 points）。"
+    },
+    {
+      "order": 5,
+      "title": "parse_action：字符串→dict 的安全解析",
+      "description": "handler.py:332 的 parse_action 是协议入口。三条路径：Type 动作走字符串切分（处理引号/换行会破坏 AST）、其他 do() 走 ast.parse+literal_eval（防代码注入）、finish() 简单切分。**handler.py:345 有 debug print 残留**，生产可删。",
+      "nodeIds": [
+        "function:phone_agent/actions/handler.py:parse_action",
+        "file:phone_agent/actions/handler.py",
+        "class:phone_agent/actions/handler.py:ActionHandler",
+        "class:phone_agent/actions/handler.py:ActionResult",
+        "document:docs/04-action-handler.md"
+      ],
+      "languageLesson": "为什么不用 eval？模型可能输出 __import__('os').system('rm -rf /') 这种代码。ast.parse + ast.literal_eval 只允许字面量，注入会被 ValueError 捕获。"
+    },
+    {
+      "order": 6,
+      "title": "14 种 handler 与双回调",
+      "description": "ActionHandler._get_handler 字典注册 14 个 handler（Launch/Tap/Type/Type_Name/Swipe/Back/Home/Double Tap/Long Press/Wait/Take_over/Note/Call_API/Interact）。其中 Note/Call_API/Interact 是 noop 占位（二次开发扩展点）。confirmation_callback 处理敏感 Tap、takeover_callback 处理登录/验证码接管——两个回调都可注入自定义实现（Web UI、Slack 通知等）。",
+      "nodeIds": [
+        "class:phone_agent/actions/handler.py:ActionHandler",
+        "file:phone_agent/actions/handler_ios.py",
+        "document:docs/09-remote-advanced.md"
+      ],
+      "languageLesson": "回调必须阻塞直到用户响应。Agent 主循环在调用期间是停住的。默认实现是 input()，可注入 Web 长轮询、Slack webhook 等异步前端。"
+    },
+    {
+      "order": 7,
+      "title": "ModelClient：流式响应实时分离",
+      "description": "client.py 的 request() 用 stream=true 边收边处理。核心是「带缓冲的 marker 检测器」：维护 buffer，检测到 do(action=/finish(message= 完整 marker 时把前面内容当 thinking 打印；检测到 marker 前缀（如 \"do(ac\"）时不打印等下一 chunk；都不是时安全打印。这样 thinking 实时逐字符打到 stdout（打字机效果），action 静默累积。",
+      "nodeIds": [
+        "file:phone_agent/model/client.py",
+        "class:phone_agent/model/client.py:ModelClient",
+        "class:phone_agent/model/client.py:ModelConfig",
+        "class:phone_agent/model/client.py:ModelResponse",
+        "class:phone_agent/model/client.py:MessageBuilder",
+        "document:docs/05-model-client.md"
+      ],
+      "languageLesson": "_parse_response 的四条规则优先级：finish > do > <answer> XML > 全部当 action。这说明模型实际行为已演化为直接输出函数调用，prompt 里的 <think>/<answer> XML 描述滞后。"
+    },
+    {
+      "order": 8,
+      "title": "DeviceFactory：不完整的统一抽象",
+      "description": "device_factory.py 是工厂模式 + 全局单例。lazy-load adb 或 hdc 模块，所有方法纯转发。**关键架构债**：iOS 走不到此工厂（会 raise ValueError），由 IOSPhoneAgent 直接调 xctest 模块。这是因为 iOS 用 HTTP API（有状态 WDA session），与 adb/hdc 的 subprocess 无状态模式差异大。",
+      "nodeIds": [
+        "file:phone_agent/device_factory.py",
+        "class:phone_agent/device_factory.py:DeviceFactory",
+        "class:phone_agent/device_factory.py:DeviceType",
+        "document:docs/03-device-layer.md",
+        "document:docs/EXTENDING.md"
+      ],
+      "languageLesson": "改进方向：用 Protocol 抽象（DeviceControl + ScreenshotProvider + DeviceConnection），让 DeviceFactory 支持所有平台，PhoneAgent 和 IOSPhoneAgent 合并为一个类 + 策略注入。"
+    },
+    {
+      "order": 9,
+      "title": "三平台平行实现对照",
+      "description": "adb/hdc/xctest 三套目录结构完全相同（connection/device/input/screenshot），代码重复度 70-80%，无共同基类。ADB/HDC 用 subprocess 无状态命令，iOS 用 HTTP+WDA session+SCALE_FACTOR 坐标缩放。最复杂的截图实现在 iOS（双 fallback：WDA→idevicescreenshot→黑图）。",
+      "nodeIds": [
+        "file:phone_agent/adb/connection.py",
+        "file:phone_agent/hdc/connection.py",
+        "file:phone_agent/xctest/connection.py",
+        "file:phone_agent/adb/input.py",
+        "file:phone_agent/hdc/input.py",
+        "file:phone_agent/xctest/input.py",
+        "concept:three-platform-parallels"
+      ],
+      "languageLesson": "ADB 输入中文最复杂：需 ADBKeyBoard APK + base64 + am broadcast。HDC 原生 uitest uiInput text 支持中文。iOS 用 WDA /wda/keys 逐字符发送（frequency=60 char/s）。"
+    },
+    {
+      "order": 10,
+      "title": "配置层：app 映射、prompt、时间常量",
+      "description": "config/ 9 个文件覆盖：三平台 app ID 映射（Android 168/HarmonyOS 154/iOS 182 个 app）、中英文 system prompt（中文版有 15 动作+18 条领域规则，英文是 7 动作的精简版）、22 key 国际化、14 个时间常量（环境变量 PHONE_AGENT_*_DELAY 可覆盖）。注意 iOS 版 handler_ios.py 硬编码 sleep(0.5)，不受 TIMING_CONFIG 控制。",
+      "nodeIds": [
+        "file:phone_agent/config/__init__.py",
+        "file:phone_agent/config/apps.py",
+        "file:phone_agent/config/apps_harmonyos.py",
+        "file:phone_agent/config/apps_ios.py",
+        "file:phone_agent/config/prompts_zh.py",
+        "file:phone_agent/config/prompts_en.py",
+        "file:phone_agent/config/i18n.py",
+        "file:phone_agent/config/timing.py",
+        "document:docs/06-config-prompts.md"
+      ],
+      "languageLesson": "添加新 app 只需改 1-3 个 apps*.py 文件（看支持几个平台），其他配置无需动。这是项目较好的关注点分离。"
+    },
+    {
+      "order": 11,
+      "title": "部署模型服务",
+      "description": "三种部署方案：第三方 API（智谱 BigModel/ModelScope，最简单）、本地 vLLM（24GB+ VRAM，参数严格）、本地 SGLang（VLM 内存效率更优）。验证用 scripts/check_deployment_cn.py（中文测试消息）或 _en.py。关键参数：--mm_processor_kwargs {max_pixels:5000000}（容纳高分辨率截图）、--max-model-len 25480。",
+      "nodeIds": [
+        "file:scripts/check_deployment_cn.py",
+        "file:scripts/check_deployment_en.py",
+        "config:scripts/sample_messages.json",
+        "config:scripts/sample_messages_en.json",
+        "document:docs/07-deployment.md"
+      ],
+      "languageLesson": "transformers>=5.0.0rc0 是非常超前的版本要求（主流是 4.x），与 vLLM/SGLang 协同需要。README 明示依赖冲突可忽略。"
+    },
+    {
+      "order": 12,
+      "title": "二次开发与贡献",
+      "description": "EXTENDING.md 给出加动作/平台/app/回调/prompt 语言的完整最小修改清单。08-development.md 列出 10 项已知问题（贡献机会）：pre-commit YAML 重复 exclude bug、setup.py 漏 requests、url 占位符、handler.py:345 debug print、_send_keyevent 死代码、SCALE_FACTOR 硬编码、缺 tests/ 目录等。",
+      "nodeIds": [
+        "document:docs/EXTENDING.md",
+        "document:docs/08-development.md",
+        "config:setup.py",
+        "config:.pre-commit-config.yaml",
+        "file:phone_agent/config/prompts.py"
+      ],
+      "languageLesson": "提 PR 前必跑：pre-commit run --all-files。注意当前没有 tests/ 目录（虽然 README 提到），主要靠 examples/ 和真机验证。"
+    }
+  ]
+}

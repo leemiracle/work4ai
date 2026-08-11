@@ -220,6 +220,110 @@ $$\text{pos\_enc}(i, 2k) = \sin\!\left(\frac{i}{10000^{2k/d}}\right), \quad \tex
 | 2021- | **RoPE**（旋转位置编码） | LLaMA, Qwen, DeepSeek |
 | 2025- | iRoPE / 各种 RoPE 变体 | LLaMA 4 |
 
+### 位置编码到底加在哪里?(三种注入路径——真正的分水岭)
+
+很多人记住了 $\text{input}_i = \text{token\_emb}(x_i) + \text{pos\_enc}(i)$ 这个公式,于是默认"位置编码加在 input embedding 上"。**但这只是 2017 年原始论文的做法**。演化路线表里那四个方法,注入位置**根本不同**——这才是真正的分水岭。
+
+#### 路径 1:加在 input embedding 上(原论文 sin/cos / BERT / GPT-2)
+
+**只在第 0 层之前注入一次**,之后这个带位置信息的向量 $X$ 一路进入所有 Transformer 层:
+
+$$X_i = \text{token\_emb}(x_i) + \text{pos\_enc}(i) \;\;\Rightarrow\;\; Q=XW^Q,\;K=XW^K,\;V=XW^V$$
+
+位置信息靠**残差连接**带到深层。BERT/GPT-2 把 sin/cos 换成可学习的 `nn.Embedding(max_len, d)` 查表,但**注入方式相同**(都是相加、都是一次性)。
+
+**两个天生缺陷**:
+- 超出 `max_len` 的位置完全无法泛化(训练 512,推理 1024 直接崩)
+- 学到的是**绝对位置**,而语言真正关心的是**相对位置**(相差几步)
+
+#### 路径 2:旋转 Q、K —— RoPE(LLaMA / Qwen / DeepSeek / Mistral / Gemma)
+
+**不在 input 上加任何东西**。而是在**每个 attention 层内部**,对投影后的 Q 和 K 做"按位置旋转":
+
+$$\widetilde{Q}_i = R_{\theta_i}\, Q_i,\qquad \widetilde{K}_j = R_{\theta_j}\, K_j$$
+
+$R_\theta$ 是 2D 旋转矩阵(把 $d$ 维两两分组成 2D 平面各自旋转),角度随位置线性增长 $\theta_i = i\theta_0$。妙在点积会自动消掉绝对位置:
+
+$$\widetilde{Q}_i \cdot \widetilde{K}_j = Q_i^\top R_{\theta_j-\theta_i} K_j \;\;\text{只依赖相对距离 } j{-}i$$
+
+→ 天生就是相对位置编码,**外推性极好**(没见过的长度也照样旋转)。
+
+**关键细节:V 不旋转**——V 是被检索的"内容",带位置无意义;只有参与"打分"的 Q/K 需要位置。
+
+> **反直觉铁证(初学者最大坑)** — 看 HuggingFace `transformers 5.10` 的 `LlamaModel` 源码(`models/llama/modeling_llama.py:355`):
+>
+> ```python
+> class LlamaModel(LlamaPreTrainedModel):
+>     def __init__(self, config):
+>         ...
+>         self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, ...)
+>         self.layers = nn.ModuleList([LlamaDecoderLayer(...) for ... in range(...)])
+>         self.norm = LlamaRMSNorm(...)
+>         self.rotary_emb = LlamaRotaryEmbedding(config=config)   # ← 位置编码在这,不是加在 input 上
+> ```
+>
+> **没有 `embed_positions` 这个子模块**。input 只是单纯的 token embedding,位置信息全部靠**每层 attention 内部**的 RoPE 注入。再看 `LlamaAttention`(line 262-267):
+>
+> ```python
+> query_states = self.q_proj(hidden_states).view(...).transpose(1, 2)
+> key_states   = self.k_proj(hidden_states).view(...).transpose(1, 2)
+> value_states = self.v_proj(hidden_states).view(...).transpose(1, 2)
+>
+> cos, sin = position_embeddings
+> query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin)
+> # ↑ 只旋转 Q 和 K,value_states 不传入 → V 不带位置
+> ```
+>
+> **如果你照 2017 原论文实现 `input = emb + pos_emb` 然后去复现 LLaMA,第一行结构就对不上**——这是读老资料最大的坑。
+
+#### 路径 3:加在 attention 分数上 —— ALiBi(BLOOM / MPT / 某些长上下文模型)
+
+**既不碰 embedding 也不碰 Q/K**。直接给分数矩阵加一个按距离线性衰减的偏置:
+
+$$\text{score}_{ij} = Q_i K_j^\top \,+\, b_{\text{head},\,|i-j|}$$
+
+$b$ 是负的、随距离 $|i-j|$ 线性变小。最简单,外推性也极好,但表达力弱,目前小众。
+
+#### 一张图看清三种注入路径
+
+```
+Token id
+   │
+   ▼
+token_emb(x_i)                  ← 仅此一步,纯语义向量,无位置
+   │
+   ├─ + pos_enc(i)                    【路径1】原始 sin/cos、BERT、GPT-2
+   │     (第 0 层之前,一次性注入)        靠残差带到深层;V 也带位置
+   │
+   ▼
+Transformer Block × N
+   │
+   │   每层 Attention 内部:
+   │     Q = X W^Q ,  K = X W^K ,  V = X W^V
+   │        │             │             │
+   │     R_θ · Q      R_θ · K         (不动)   【路径2】RoPE (LLaMA/Qwen/DeepSeek/Mistral/Gemma)
+   │        │             │             │
+   │        └──────┬──────┘             │
+   │            Q̃ K̃^T                   │
+   │              │                     │
+   │        + b_|i-j|                    【路径3】ALiBi (BLOOM, MPT)
+   │              │
+   │           softmax → weights → @ V → output
+   │
+   ▼
+output
+```
+
+#### 三路径对照铁律
+
+| 方法 | 注入位置 | 数学操作 | 作用对象 | V 带位置吗? | 2026 主流? |
+|------|---------|---------|---------|-----------|----------|
+| sin/cos、learnable | input embedding(一次性) | **加法** | token 向量本身 | ✓ | 已退场 |
+| **RoPE** | 每个 attention 层内 | **乘法(旋转矩阵)** | Q、K | ✗ | **绝对主流** |
+| ALiBi | 每个 attention 层的 score | **加法偏置** | 分数矩阵 | — | 小众,长上下文场景 |
+
+**一句话铁律**:"位置编码加在 input embedding 上"是 2017-2020 年的理解,**不适用现代大模型**。2026 年几乎所有开源大模型都用 RoPE——位置信息**只**注入在每层 attention 的 Q/K 上,input 上根本看不到位置编码层。读懂这一点,你才算真正跨过了"原论文版 Transformer"到"现代大模型"的鸿沟。
+
 > 深入 RoPE → [`../讲透Transformer/02-位置编码演进.md`](../讲透Transformer/02-位置编码演进.md)
 
 ---

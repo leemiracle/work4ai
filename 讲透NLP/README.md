@@ -56,7 +56,7 @@
 | 06 | `06-神经网络基础.md` | 反向传播与梯度下降（导引到《讲透基础模型》） | MLP(1377参)仅比 logistic(42参)高 1.1%(91.1→92.2%)；logistic 权重全部 ±1.112 对称 |
 | 07 | `07-大语言模型.md` | GPT 类模型如何工作（导引） | mini-GPT 学到语法(CE 6.62→3.48bit 省 47%)学不到知识(生成"the big stone swam")；温度悬崖 T=0.7 最自然(0.46) |
 | 08 | `08-Transformer.md` | attention 为何革命性（导引到《讲透Transformer》） | 多头注意力总有效秩随头数 12→62，每头骤降 12→2（多头=子空间分工）|
-| 09 | `09-后训练-SFT对齐DPO-test-time.md` | 基座怎么变助手？DPO/RLHF/test-time compute | SFT 无对比信号:P(rejected) 先升后降; DPO β=0.05→KL 爆炸+熵坍塌 <35% |
+| 09 | `09-后训练-SFT对齐DPO-test-time.md` | 基座怎么变助手？DPO/RLHF/test-time compute + §8 后训练的镜子（探测与充分利用） | SFT 无对比信号:P(rejected) 先升后降; DPO β=0.05→KL 爆炸+熵坍塌 <35%; **§8 refusal direction 复现：玩具 GPT(39K参) PC1=99.9%、ablation ↓74.4%、addition coeff=0.5 让无害拒绝率 0.03%→87%** |
 | 10 | `10-掩码语言模型-BERT.md` | BERT 与 GPT 的根本差异？双向编码器 | [MASK]上瘾 80%≫随机40%；未微调 BERT 句向量 AUC~0.65 < 静态~0.95(各向异性)；MLM 比 NTP 慢~7x |
 | 11 | `11-信息检索与RAG.md` | 检索增强生成的工作原理（导引到《讲透RAG》） | 原始 TF 被关键词堆砌骗(垃圾页 7.69>正解 D0=3.07)；BM25 饱和项(tf→2.29 渐近 2.5)治此病，正解排回第 1 |
 | 12 | `12-机器翻译.md` | 从 IBM Model 到 Transformer MT，再到 LLM 翻译 | Model1 EM 无监督学出 the→那个(t=0.696)；打乱词序后 t 表【完全相同】(差 6.66e-16)→证其对词序盲目 |
