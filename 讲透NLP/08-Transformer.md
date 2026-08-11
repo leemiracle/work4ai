@@ -445,6 +445,8 @@ x ──┬──> LayerNorm ──> Multi-Head Self-Attention ──┐
 
 1. **$O(N^2)$ 复杂度**：序列长度是硬约束。虽然 FlashAttention 在工程上缓解了显存问题，但计算量仍是平方级。线性注意力（Linformer/Performers/RWKV/SSM）是活跃研究方向，但目前还无法在大规模上全面替代标准 attention。
 
+   > **[2026 更新]** 2026 多篇论文给出结构性证据：linear attention 表达力**根本性**不足（[谱论证](https://arxiv.org/abs/2607.06546)）、state 容量有天花板（[Sparse Delta Memory](https://arxiv.org/abs/2607.07386)）、parametric 形式陷入"容量 vs 更新成本"两难（[综述](https://arxiv.org/abs/2606.25342)）。**纯 linear attention 不会替代 softmax，但 hybrid 会**（Kimi Linear 48B / Nemotron 3 已生产部署）。免训练替换虽做不到，但 [FlashMorph](https://arxiv.org/abs/2606.30562) 走通"冻结权重 + 学 gates + 蒸馏 → hybrid"的近似路线。完整分析见 [`讲透模型可能性/02-LinearAttention`](../讲透模型可能性/02-LinearAttention.md) §4–§7。
+
 2. **位置编码仍是开放问题**：RoPE 在长上下文上的外推能力有限（需要 NTK-aware / YaRN 等 scaling 技巧）。对于"第 1 个 token 和第 100 万个 token 的关系"这类超长距离依赖，现有方法都不够好。
 
 3. **Multi-head 的冗余**：研究表明训练后很多 attention head 是冗余的（可以剪枝而不掉点），说明"多头"在实践中并未完全发挥理论上的"多视角"作用。GQA/MQA 等变体就是在 head 间共享 KV 来减少冗余。
