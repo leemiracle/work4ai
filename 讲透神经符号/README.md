@@ -29,3 +29,15 @@
 - 形式化背景：[`讲透形式化验证`](../讲透形式化验证/)
 - RL + 形式证明：[`讲透RL/04`](../讲透RL/04-RL与形式证明.md)
 - RL 能力边界：[`讲透RL/05`](../讲透RL/05-RLVR的极限.md)
+
+---
+
+## 🔗 理论锚点（§12-15 横向打通）
+
+> 本系列讲"LLM + Lean4 闭环 / AlphaProof"；名校理论课把"自指 + 类型论"**公理化**：
+> 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
+
+| 课程 | 产物 | 公理化的内容 |
+|---|---|---|
+| §12.2 CMU 15-251 GITCS | [`gitcs.py`](../cmu-cs-projects/topic12-theory/gitcs.py) | Y combinator / Lawvere 不动点——自指的 constructive 版（AlphaProof 闭环的数学骨架：AI 用形式系统验证自己的输出）|
+| §13.1 Oxford CPP | [`cpp.py`](../oxford-cs-projects/topic12-foundations/cpp.py) | STLC + Curry-Howard + CCC——Lean4 / Coq 的类型论地基（LLM 生成 Lean4 代码 = LLM 在做证明）|

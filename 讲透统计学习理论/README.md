@@ -57,3 +57,14 @@
 - 优化：[`讲透优化理论`](../讲透优化理论/)
 - 信息论：[`讲透信息论`](../讲透信息论/)
 - 反思：[`讲透科学的现代性/03`](../讲透科学的现代性/03-AI时代的科学哲学.md)
+
+---
+
+## 🔗 理论锚点（§12-15 横向打通）
+
+> 本系列讲"可学性 / 复杂度 / 收敛"的统计学习理论；这门课是它的**英语世界圣地**：
+> 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
+
+| 课程 | 产物 | 公理化的内容 |
+|---|---|---|
+| §12.1 Princeton COS 511/512（Elad Hazan）| [`theory.py`](../princeton-cs-projects/topic9-ml-theory/theory.py) | PAC + VC 维 + Rademacher + Multiplicative Weights（regret ≤ O(√(T·ln N))）+ SGD 收敛速率（凸 vs 强凸）—— Hazan 是《Introduction to Online Convex Optimization》作者 |

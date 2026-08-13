@@ -30,3 +30,17 @@
 - 实战：[`讲透RL/04-RL与形式证明`](../讲透RL/04-RL与形式证明.md)（AlphaProof 后时代）
 - 神经符号闭环：[`讲透神经符号`](../讲透神经符号/)
 - RL 能力边界：[`讲透RL/05-RLVR的极限`](../讲透RL/05-RLVR的极限.md)
+
+---
+
+## 🔗 理论锚点（§12-15 横向打通）
+
+> 本系列讲"为什么形式化 + Lean4 SOTA"；名校理论课把每一层**公理化**：
+> 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
+
+| 课程 | 产物 | 公理化的内容 |
+|---|---|---|
+| §13.1 Oxford CPP | [`cpp.py`](../oxford-cs-projects/topic12-foundations/cpp.py) | Curry-Howard + STLC + CCC——Lean4 的类型论根基 |
+| §13.2 Cambridge Hoare Logic | [`hoare_logic.py`](../cambridge-cs-projects/topic4-compiler/hoare_logic.py) | Hoare 三元组 + WP + 循环不变式方法（seL4 验证的方法论祖先）|
+| §13.3 ETH FM（Basin）| [`formal_methods.py`](../eth-cs-projects/topic3-fm/formal_methods.py) | CTL Model Checking + DPLL + TLA+ 规约 |
+| §13.4 CMU 15-414（Platzer）| [`diff_dyn_logic.py`](../cmu-cs-projects/topic12-theory/diff_dyn_logic.py) | differential dynamic logic + barrier certificate（cyber-physical 验证）|

@@ -428,5 +428,95 @@ $K=J/(k_BT),\ h=\beta\mu B$。
 
 ---
 
-**版本**：v1.0 (2026-08-12) · Oxford MPhys Phase 1 Topic 04
+**版本**：v1.1 (2026-08-12) · Oxford MPhys Phase 1 Topic 04
 **依据**：SURVEY.md Oxford Y2 课程表 + Zemansky & Dittman (1997) 7ed + Pathria & Beale (2011) 4ed
+
+---
+
+## 🎯 费曼式入口（白话版）
+
+> **一句话解释**：统计力学是「从 $10^{23}$ 个分子的混乱中，提炼出温度、压强、熵这些宏观规律」的学问——热力学是它的「表象」，分子运动是它的「底牌」。
+>
+> **生活类比**：想象一个体育馆十万个观众。你预测不了某个具体观众何时鼓掌，但你能预测「平均音量」「何时雷鸣般掌声」——这就是统计力学。Boltzmann 公式 $S=k_B\ln\Omega$ 把「混乱程度」（微观态数 $\Omega$）翻译成「熵」（宏观量），是物理最美的桥梁之一。Fermi-Dirac 与 Bose-Einstein 的差别就像「单人间旅馆」（费米子，一人一间）vs「大通铺」（玻色子，挤一起）——后者冷到极点会突然「全员挤进同一间」，这就是 BEC。
+>
+> **反直觉发现**：
+> - **金属电子在绝对零度仍有巨大动能**：Fermi 能 $\epsilon_F\sim10$ eV，对应 $T_F\sim10^5$ K。室温 300 K 对电子气是「冰点」——这就是金属电子简并压的来源。
+> - **熵不是「混乱」而是「可能性」**：$S=k_B\ln\Omega$。气体自由膨胀熵增，不是因为分子「更乱」，而是因为可达到的微观态变多。
+> - **玻璃在 $T\to0$ 残余熵不为零**：$S_0\ne0$ 不是公理违反，而是有无穷多简并基态——这挑战了第三定律的简单表述。
+
+---
+
+## 🔗 衔接：从哪来，到哪去
+
+### 前置
+- **Y1 Mechanics + 数学方法**：能量守恒、概率论基础、积分
+- **Y2 量子力学**（Topic 03）：全同粒子、Fermi-Dirac/Bose-Einstein 的量子起源
+- **A-level 热学**：理想气体方程、卡诺循环的现象学
+
+### 本课的危机
+- **热力学先于统计力学的 Oxford 顺序**：先严格建立唯象热力学，再用微观验证——学生容易把两者混淆。
+- **配分函数 $Z$ 是「翻译机」**：$F=-k_BT\ln Z$ 把微观（能级）翻译到宏观（自由能）。学生常忘记 $Z$ 编码**全部**热力学。
+- **三个系综在热力学极限下等价**——但小系统（纳米、生物分子）差异显著，涨落不再是 $\sim1/\sqrt{N}$。
+
+### 新危机
+- **等先验概率与各态历经假设未必成立**——非平衡系统（生命、湍流、玻璃）的核心难题。Oxford Y4 有专门 Non-equilibrium Statistical Mechanics 选修。
+- **Landau 平均场给出错误临界指数**（如 Ising $\beta_{\text{MF}}=1/2$ 而非 $1/8$）——需 Y4 Wilson 重整化群修正。
+- **量子统计仅处理理想气体**——相互作用费米液体（Landau 理论）、超流 He-4、超导 BCS 都到 Y3/Y4。
+
+### 后续
+- **Y3 Statistical Mechanics 进阶**：Landau 平均场、相变理论
+- **Y3 Condensed Matter**（Topic 06）：Debye 比热、Sommerfeld 电子比热——直接用本课的量子统计
+- **Y4 Non-equilibrium Stat Mech / Soft Matter**：Oxford Rudnick、Marenduzzo 等组
+- **Y4 重整化群 / Quantum Field Theory**：临界指数的现代化解释
+
+---
+
+## 🏭 理论联系实际：5 个应用
+
+1. **超低温技术（稀释制冷机）**：$^3$He-$^4$He 混合熵差（$^3$He 是费米子、$^4$He 是玻色子）驱动降温——量子统计的直接工程应用，量子计算机的 mK 环境。
+2. **白矮星与中子星稳定**：电子/中子的 Fermi 简并压抵抗引力塌缩——Chandrasekhar 极限（$1.44 M_\odot$）完全由 Fermi 气体物理算出。
+3. **黑体辐射与宇宙微波背景**：CMB 是 $T=2.725$ K 的近完美黑体——大爆炸遗骸，宇宙学（Topic 08）的「化石记录」。COBE/Planck 卫星精密测量其涨落。
+4. **化学与生物分子的自由能计算**：药物设计用 $F=-k_BT\ln Z$ 算蛋白质折叠自由能面——分子动力学模拟的核心统计力学。
+5. **Ising 模型与机器学习**：Hopfield 神经网络（2024 诺奖物理！Hinton）的能量函数就是 Ising 哈密顿量——「联想记忆」= 自旋玻璃基态。统计力学是深度学习的数学基础。
+
+---
+
+## 🔬 最新研究前沿（2024-2026）
+
+> 注：firecrawl 搜索返回空数据，以下基于 2024 Nobel Prize、Oxford Soft Matter Group、Nature 公开报道整理。
+
+1. **2024 诺贝尔物理学奖：Hopfield 与 Hinton**——机器学习的基础是统计力学！Hopfield 网络（Ising 自旋玻璃）、Boltzmann 机（配分函数采样）把「学习」翻译成「寻找能量极小」。Oxford 数据科学/统计物理交叉方向因此大热。
+2. **活性物质与细胞物理（2024-2025）**：生物分子（肌动蛋白、微管）的自驱动聚合形成「活性液态晶体」——非平衡统计力学的实验平台。Oxford Marenduzzo、Fletcher 组在拓扑缺陷与细胞运动方向活跃。
+3. **拓扑相变与非平衡量子系统（2024-2025）**：用量子气体模拟「时间晶体」「费米子拓扑相」——超越传统 Ising 模型的新相变类别。Oxford 与剑桥合作。
+4. **超冷原子的量子模拟（2024-2025）**：用光晶格中的超冷原子实现 Hubbard 模型——直接观测 Mott 绝缘体-超流相变。这是「量子气体显微镜」时代，统计力学的实验黄金期。
+5. **热力学信息与 Maxwell 妖的最终定论（2024）**：Landauer 原理（擦除 1 比特耗散 $k_BT\ln2$）在纳米尺度实验精确验证——信息真的是物理的。
+
+---
+
+## 🗺️ 学习 Roadmap（Oxford MPhys 路径）
+
+```
+Year 2 (HT)                 Year 2 (TT)                 Year 3-4
+───────────                ───────────                ─────────
+Thermodynamics             Statistical Mechanics      Advanced Stat Mech
+· 四定律（零~三）          · 系综理论（微正则/正则/巨）  · 相变与重整化群
+· 热力学势 + 麦克斯韦关系  · 量子统计 (FD/BE)          · 非平衡统计力学
+· 相变/Clapeyron           · 理想气体/简并费米/BEC     · 软物质/活性物质 (Y4)
+· 化学势                    · Ising / 临界指数          · 量子多体 (Y4)
+教材: Zemansky             教材: Pathria / Guenther    教材: Kardar, Chaikin-Lubensky
+```
+
+**知识检查清单**：
+- [ ] 能说出热力学四定律各自的「不可能性」表述
+- [ ] 能从 $dU=TdS-pdV+\mu dN$ 推出 4 个麦克斯韦关系（用 Born 方阵）
+- [ ] 能算理想气体的配分函数并推出 $pV=Nk_BT$
+- [ ] 能解释 Fermi 简并压为何稳定白矮星
+- [ ] 能推出 Debye $T^3$ 比热律（与 Topic 06 串联）
+- [ ] 能说出 2024 诺奖物理如何把统计力学与机器学习联系起来
+
+**Oxford 特色资源**：
+- Soft Matter & Biological Physics Group：Rudnick（DNA 物理）、Marenduzzo（活性物质）
+- Y4 选修 *Non-equilibrium Statistical Mechanics* 直通现代前沿
+- 与 Oxford Maths Institute 的概率论组交叉（随机过程、大偏差）
+
+---

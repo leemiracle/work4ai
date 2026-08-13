@@ -22,6 +22,20 @@
 
 ▶ **[AUDIT_FIX_REPORT.md](AUDIT_FIX_REPORT.md)** — **质量审计报告**：3 轮深审 + 81 个 bug 修复详情。
 
+### 🔬 深读系列（"顿悟是天花板，硬核阶梯是地面"）
+
+▶ **[CSAPP_HARDWARE_TRUTHS.md](CSAPP_HARDWARE_TRUTHS.md)** — ⭐ **CSAPP 8 个硬件真相**：软件抽象的幻觉 vs 硅片真相（Cache/虚拟内存/栈溢出/分支预测/伪共享/syscall/内存乱序/IEEE754）。L03 完全体，配可运行 demo。
+
+▶ **[INSIGHTS_FULL_PICTURE.md](INSIGHTS_FULL_PICTURE.md)** — ⭐ **10 个元洞察的完全体**：每个洞察补齐"被省略的硬核全貌 + 学习阶梯 + 通过测试"。回答"元洞察之外还有什么"。
+
+▶ **[AGNER_FOG_OPTIMIZATION.md](AGNER_FOG_OPTIMIZATION.md)** — ⭐ **Agner Fog 优化手册完全综合**：5 卷圣经（C++优化/汇编/微架构/指令表/ABI）+ 4 工具（VCL/testp/objconv/asmlib）+ 10 大优化原则 + Intel/AMD 微架构对比 + SIMD 实战 + CPU dispatch。**优化方向的旗舰**，配 [可运行 demo](../cmu-cs-projects/topic2-systems/agner_optimization_demo.py)。
+
+▶ **[ARM_AND_RISCV_OPTIMIZATION.md](ARM_AND_RISCV_OPTIMIZATION.md)** — ⭐ **ARM 与 RISC-V 优化圣经**：x86 之外的两大世界（Apple Silicon/AWS Graviton/NVIDIA Grace/A64FX/SiFive/平头哥）。三 ISA 微架构对比 + OSACA 工具 + ARM 独特性 6 点（弱内存模型/SVE2/Apple 逆向）+ RISC-V 独特性 7 点（VLA/vfrec7/RVWMO/厂商差异）+ 跨平台优化原则。配 [可运行 demo](../cmu-cs-projects/topic2-systems/arm_riscv_optimization_demo.py)。
+
+▶ **[HIGHWAY_SIMD_LIBRARY.md](HIGHWAY_SIMD_LIBRARY.md)** — ⭐ **Google Highway SIMD 库完全综合（三部曲终章）**：[CSAPP](CSAPP_HARDWARE_TRUTHS.md)（原理层）→ [Agner Fog](AGNER_FOG_OPTIMIZATION.md)（x86 手法）→ [ARM/RISC-V](ARM_AND_RISCV_OPTIMIZATION.md)（非 x86 手法）→ **Highway（跨架构工程化）**。一份 C++ 源码跑 7 架构 27 target，运行时自动 CPUID dispatch。驱动 JPEG XL / libjxl / Chromium / Firefox / **gemma.cpp / ScaNN / TensorFlow** 等上百项目。Tag/Vec/Mask 三件套 + 静态 vs 动态分发 + strip-mining 4 策略 + AVX-512 降频陷阱 + 源码导航。配 [可运行 demo](../cmu-cs-projects/topic2-systems/highway_simd_demo.py)。
+
+▶ **[OSACA_INTEGRATION.md](OSACA_INTEGRATION.md)** — ⭐ **OSACA 深度集成**：把 github.com/RRZE-HPC/OSACA 的内部模型、YAML 数据库 schema、核心算法（throughput/CP/LCD）、扩展新核心方法深度拆解。配 [osaca_data.py](../cmu-cs-projects/topic2-systems/osaca_data.py)（数据库本地化，可离线查询）+ [osaca_mini.py](../cmu-cs-projects/topic2-systems/osaca_mini.py)（核心算法复现）。
+
 ---
 
 ## 📊 9 校总览（实际产出）

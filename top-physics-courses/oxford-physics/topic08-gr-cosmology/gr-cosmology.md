@@ -449,5 +449,98 @@ $$
 
 ---
 
-**版本**：v1.0 (2026-08-12) · Oxford MPhys Phase 2 Topic 08
+**版本**：v1.1 (2026-08-12) · Oxford MPhys Phase 2 Topic 08
 **依据**：SURVEY.md Oxford Y3 General Relativity + Y4 Cosmology + Schutz (2009) 2ed + Hobson, Efstathiou & Lasenby (2006) + Dodelson (2003)
+
+---
+
+## 🎯 费曼式入口（白话版）
+
+> **一句话解释**：广义相对论研究「物质如何弯曲时空、弯曲的时空又如何引导物质运动」；宇宙学研究「这个弯曲的时空在大尺度上的历史与命运」——从黑洞到宇宙大爆炸。
+>
+> **生活类比**：把时空想象「蹦床薄膜」（虽然这只是 2D 类比）。放一个保龄球（恒星）上去，膜凹陷——附近的小球（行星）会滚向凹陷，这就是引力。但 Einstein 更深一层：**引力不是力，而是时空本身的几何**。自由下落者沿「测地线」（弯曲时空的「直线」）走。宇宙学则把整个宇宙当成一个膨胀的气球——星系是气球表面的斑点，斑点之间距离增大不是因为它们「运动」，而是气球在膨胀。
+>
+> **反直觉发现**：
+> - **卫星一直在「自由落体」**：国际空间站引力和地表差不多（89%），宇航员失重是因为他们在沿测地线下落——和蹦极失重是一回事。
+> - **黑洞视界处时间冻结（远方观察者视角）**：红移→∞，但自由下落者自己的钟正常——红移是观察者依赖的坐标效应。
+> - **宇宙正在加速膨胀（1998 发现）**：暗能量 $p=-\rho c^2$（负压强！）使引力变「斥力」——且宇宙在 $z\sim0.67$（约 60 亿年前）才从减速转入加速。
+
+---
+
+## 🔗 衔接：从哪来，到哪去
+
+### 前置
+- **Y1/Y2 Mechanics**（Topic 01）：牛顿引力、狭义相对论、四动量
+- **Y2 Mathematical Methods**（Topic 05）：张量、偏微分方程、曲线坐标——协变导数是核心
+- **Y2 Electromagnetism**（Topic 02）：Lorentz 力、规范不变性——为规范场论铺垫
+- **Y3 Theoretical Physics**：群论、微分几何入门
+
+### 本课的危机
+- **「引力是时空弯曲」的直觉易得，张量微积分的严格性难得**：Christoffel 记号、Riemann 张量的指标运算枯燥但必要——Schutz 与 Hobson 的折衷。
+- **Schwarzschild 度规的 $r=r_s$ 奇点是坐标奇点，非物理**——换 Eddington-Finkelstein 坐标消除。学生常误以为是「真实物理奇点」。
+- **暗能量 $p=-\rho c^2$ 为何导致加速**：关键在加速度方程 $\rho+3p$——负压强使此项变负，引力变「斥力」。学生难以建立「负压强」的直觉。
+
+### 新危机
+- **GR 与量子力学不相容**——黑洞奇点、大爆炸奇点处 GR 失效，需量子引力（弦论/圈量子引力）。
+- **Schwarzschild 只是真空球对称特例**——旋转黑洞用 Kerr 解（Y4），引力波（2015 LIGO 首测）需线性化 GR 与数值相对论。
+- **宇宙学的「精密时代」**——CMB 涨落、BAO、弱引力透镜需扰动论，本科仅接触。
+- **暗能量/暗物质本质未明**——ΛCDM 参数精确，但 $\Lambda$ 的物理来源（真空能灾难 $10^{120}$ 偏差）是理论物理最大危机之一。
+
+### 后续
+- **Y4 Cosmology**（Dodelson）：FLRW 扰动论、CMB 各向异性、结构形成
+- **Y4 Advanced GR / 数值相对论**：Kerr 黑洞、引力波物理
+- **Y4 量子引力 / 弦论**：圈量子引力、AdS/CFT 对偶
+- **Oxford Beecroft Institute（BIPAC）**：粒子宇宙学、暗物质、原初宇宙
+
+---
+
+## 🏭 理论联系实际：5 个应用
+
+1. **GPS 卫星定位**：卫星钟每天比地面快 ~38 μs（引力时间膨胀 +45 μs，狭义相对论运动学 -7 μs），不修正则定位漂移 ~10 km/day——GR 在日常生活的直接应用。
+2. **引力波天文学（LIGO/Virgo/KAGRA）**：2015 年首次直接探测双黑洞并合的时空涟漪（GW150914）——多信使天文学新时代。Oxford 参与设计 LIGO 光学系统。
+3. **黑洞成像（Event Horizon Telescope, EHT）**：2019 年首张 M87* 黑洞照片，2022 年银河系 Sgr A*——直接看到光子环（Schwarzschild 度规的 $r=1.5r_s$）。
+4. **宇宙微波背景（Planck/ACT/SPT）**：CMB 温度涨落 $\delta T/T\sim10^{-5}$ 编码宇宙学参数（$\Omega_m,\Omega_\Lambda,H_0,n_s$）——精确宇宙学的基石。
+5. **强引力透镜与暗物质测绘**：遥远星系的光被前景星系团弯曲成「爱因斯坦环」——测量透镜强度反演暗物质分布。JWST 的前沿应用之一。
+
+---
+
+## 🔬 最新研究前沿（2024-2026）
+
+> 注：firecrawl 搜索返回空数据，以下基于 JWST/DESI/NANOGrav/LIGO 公开报道整理。
+
+1. **JWST 早期星系「危机」（2024-2025）**：JWST 发现 $z>10$ 的星系比标准 ΛCDM 模型预期更亮、更成熟——可能改写早期结构形成，或需修改初始扰动谱。Oxford 参与的 JADES 巡天贡献关键数据。「不可能的早期星系」是热门争议。
+2. **DESI 暗能量演化证据（2024）**：DESI 重子声学振荡（BAO）数据的首年结果显示 $\Lambda$ 可能不是常数——$w_0w_a$CDM 模型中暗能量状态方程随时间演化（动态暗能量）。若进一步证实，是宇宙学自暗能量发现以来的最大变革。Oxford 参与 DESI。
+3. **Hubble 张力持续（2024-2025）**：早期宇宙（CMB+ΛCDM）推出 $H_0\approx67.4$，晚期宇宙（造父变星-Ia 超新星阶梯）测得 $H_0\approx73$——5σ 张力。JWST 验证造父变星定标后晚期值更稳。可能预示：早期新物理（早期暗能量？）、或新相对论性粒子。
+4. **引力波背景（NANOGrav 2023-2024）**：脉冲星计时阵列（PTA）探测到纳赫兹引力波随机背景——可能来自超大质量双黑洞，或原初引力波（暴胀指纹）。Oxford 参与 EPTA。
+5. **LIGO O4 运行（2023-2024）**：第四轮观测发现更多双中子星/黑洞并合事件，开始「多信使」时代的中子星结构约束（潮汐形变 → 状态方程）。
+
+---
+
+## 🗺️ 学习 Roadmap（Oxford MPhys 路径）
+
+```
+Year 3 (HT/TT)              Year 4 (HT/TT)              MPhys Project
+─────────────              ─────────────              ─────────
+General Relativity          Cosmology                   选修 + 真实研究
+· 等效原理 + 张量微积分     · FLRW + Friedmann          · BIPAC 宇宙学模拟
+· Einstein 场方程           · 热大爆炸 + CMB            · LIGO 数据分析
+· Schwarzschild 解          · 扰动论 + 结构形成         · EHT 黑洞物理
+· 黑洞 + 引力红移           · 暴胀 + 暗能量             · JWST 数据
+教材: Schutz / Hobson       教材: Dodelson / Ryden      · Oxford Astrophysics
+```
+
+**知识检查清单**：
+- [ ] 能从等效原理推出引力时间膨胀，并解释 GPS 为何必须修正
+- [ ] 能用 Schwarzschild 度规算水星近日点进动（43″/世纪）
+- [ ] 能解释事件视界为何是「坐标奇点」而非物理奇点
+- [ ] 能从 Friedmann 方程推出 $a(t)\propto t^{2/3}$（物质主导）
+- [ ] 能解释暗能量 $p=-\rho c^2$ 为何导致加速膨胀
+- [ ] 能说出 Hubble 张力的两端测得值（67 vs 73 km/s/Mpc）
+
+**Oxford 特色资源**：
+- **Hobson, Efstathiou, Lasenby《GR: An Introduction for Physicists》**——Oxford 自家教授所著，专为物理系写
+- **Beecroft Institute for Particle Astrophysics and Cosmology (BIPAC)**——暗物质、原初宇宙、粒子宇宙学中心
+- **Oxford Astrophysics**——参与 JWST、Euclid、SKA、EHT 等大型国际合作
+- **Sub-department of Astrophysics**（位于 Denys Wilkinson Building）——黑洞、星系、宇宙学实验
+
+---

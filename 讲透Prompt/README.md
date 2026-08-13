@@ -40,3 +40,14 @@
 
 ## 环境备忘
 本机无本地 LLM。实验用小模型(trigram/最近邻)演示**原理**(prompt作为条件/ICL类比/CoT分治)，真实 Prompt 工程的指令遵循/ICL/CoT 依赖大模型涌现，在豆包/DeepSeek 等上才完全显现（可在它们上验证练习）。
+
+---
+
+## 🔗 理论锚点（§12-15 横向打通）
+
+> 本系列讲"条件概率/ICL/CoT/结构化输出"的 Prompt 工程；这门课把**偏好数据聚合**公理化：
+> 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
+
+| 课程 | 产物 | 公理化的内容 |
+|---|---|---|
+| §15.3 Stanford CS329T/CS324（Percy Liang）| [`pluralistic_safety.py`](../stanford-cs-projects/topic3-safety/pluralistic_safety.py) | preference data 聚合数学（Borda/Approval/Condorcet）+ Arrow 不可能性——Prompt 对齐背后的社会选择理论 |

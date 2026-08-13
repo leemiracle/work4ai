@@ -111,6 +111,8 @@ python3 supplementary/micro_projects.py
 
 **反直觉发现**：$\alpha\beta$ 在分支因子 $b$、深度 $d$ 上最优只需 $O(b^{d/2})$ → 可搜索深度翻倍。
 
+> 🆕 **按 SP26 P0-P5 迭代组织的完整整合**：[`topic5-ai/cs188-sp26-pacman-projects.md`](./topic5-ai/cs188-sp26-pacman-projects.md)（6 个迭代专章 + autograder 拆解 + 学生卡点 + 项目内连接）+ 配套代码 [`cs188_sp26_iterations.py`](./topic5-ai/cs188_sp26_iterations.py)（5 个迭代核心算法跑通：DFS/BFS/A* + Minimax/Expectimax + Value Iteration/Q-Learning + HMM Forward + Perceptron）。
+
 ---
 
 ### 主题 6：CS 189 机器学习 — Sahai/Hasson

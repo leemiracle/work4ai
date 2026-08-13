@@ -28,6 +28,8 @@
 
 这些洞察**跨学校**，是 9 校招牌课的"共同灵魂"。学透它们，108 主题里 80% 都会"原来如此"。
 
+> 📖 **深度展开**：每条元洞察背后都有 100+ 小时的硬核阶梯。完整的"被省略全貌 + 学习阶梯 + 通过测试"见 **[INSIGHTS_FULL_PICTURE.md](INSIGHTS_FULL_PICTURE.md)**。
+
 ### 洞察 1：抽象层次思维（来自 Berkeley CS 61A + MIT 6.101 + Cambridge Part IA）
 
 **核心**：所有 CS 问题都是"在哪个抽象层次思考"的问题。
@@ -180,6 +182,7 @@
   - 想要中等深度 → Berkeley CS 61C
 - **知识检查**：能否解释为什么 `arr[i][j]` 比 `arr[j][i]` 快 50×？
 - **配套**：CSAPP 教材（中文版有）+ 全部 lab 公开。
+- ⭐ **深读**：[CSAPP_HARDWARE_TRUTHS.md](CSAPP_HARDWARE_TRUTHS.md)（8 个硬件真相的完全体）+ [可运行 demo](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py)（cache 局部性 / TLB / 栈溢出 / 分支预测 / 伪共享 / syscall / 内存乱序 / IEEE754，跑 `python3 hardware_truths_demo.py` 即可看到 8 个反直觉对比）。
 
 ---
 
@@ -221,12 +224,14 @@
 ---
 
 #### **L07 分布式系统** ⭐⭐⭐ 必学（工程师 + 研究员）
-- **最佳版本**：**MIT 6.824**（Kaashoek，4 个 Go lab）
+- **最佳版本**：**MIT 6.5840 / 6.824**（Kaashoek & Morris，4 个渐进式 Go lab：MR → Raft → KV on Raft → Sharded KV on Raft）
 - **时间**：6-8 周
 - **学完后能**：写 Raft；理解线性一致 / 顺序一致 / 因果一致；从零搭 shard KV
 - **跨校替代**：
-  - ETH Reliable Distributed Systems（理论更深，PBFT/CRDT）
-  - CMU 15-721 Advanced DB（OLAP/OLTP 工程视角）
+  - ETH Reliable Distributed Systems（Wattenhofer，理论更深，PBFT/CRDT）
+  - CMU 15-440（Andersen，系统研究向，读论文为主）
+  - CMU 15-721 Advanced DB（Pavlo，OLAP/OLTP/Cloud DB 工程视角）
+- **学完能去哪**：6.5840 lab 全做 → Google/ByteDance/AWS 分布式后端；15-721 → DB 研究；ETH RDS → 一致性证明。详见 [`INSIGHTS_FULL_PICTURE.md`](./INSIGHTS_FULL_PICTURE.md) 洞察 7「学完后能干什么」。
 - **知识检查**：解释 FLP 不可能性为什么不影响 Raft 的工程实用性。
 
 ---
@@ -297,13 +302,15 @@
 ---
 
 #### **L13 深度强化学习** ⭐⭐ RL 方向必学
-- **最佳版本**：**Berkeley CS 285**（Sergey Levine）
+- **最佳版本**：**Berkeley CS 285**（Sergey Levine，YouTube 全公开，全球 RL 学习者事实入口）
 - **时间**：5-7 周
-- **学完后能**：手写 SAC/PPO；理解 model-based RL；训练机器人
+- **学完后能**：手写 SAC/PPO；理解 model-based RL + world model；训练连续控制机器人
 - **跨校替代**：
-  - Stanford CS234（Brunskill，偏理论）
-  - MIT 6.S193（Amini 短期版）
-- **知识检查**：解释 PPO 比 REINFORCE 好在哪。
+  - **Stanford CS234**（Emma Brunskill，偏理论 / online learning / safe RL，能严格推导 Bellman / TD / Q-Learning 收敛性）
+  - **MIT 6.S191 RL 章节 / 6.S192-198 IAP**（Alexander Amini，1 月 IAP 短期版，与 6.S191 配套；注：6.S192-6.S198 在 MIT catalog 是 placeholder，实际课号随年份浮动）
+- **作者归属校正**：Levine 是 **DDPG / GPS / PETS / MBPO / CQL / AWAC / Diffusion Policy** 的核心；TRPO 一作 Schulman、SAC 一作 Haarnoja，Levine 都是共同作者（不要再说"SAC/TRPO 之父"）。
+- **学完能去哪**：CS 285 → 机器人/具身智能（Boston Dynamics / Tesla Optimus / Figure）/ DeepMind / OpenAI RL 团队；CS234 → RL 理论 PhD / safe RL；6.S191-RL → 入门跳板。详见 [`INSIGHTS_FULL_PICTURE.md`](./INSIGHTS_FULL_PICTURE.md) 洞察 11 + [`讲透RL/`](../讲透RL/) 全套笔记。
+- **知识检查**：解释 PPO 比 REINFORCE 好在哪；解释 Q-Learning 的 deadly triad 为什么会发散。
 
 ---
 
@@ -574,7 +581,7 @@
 | 深度学习 | Stanford CS231N (Karpathy) ⭐⭐⭐ | MIT 6.S191 (现代) | Karpathy 2017 录像已成传奇 |
 | NLP | **Stanford CS224N Manning ⭐⭐⭐** | CMU 11-711 | 配套 SLP3 教材 |
 | CV | Oxford VGG Zisserman ⭐⭐⭐ | Berkeley CV (Malik) | VGG 实验室是 VGGNet 源头 |
-| RL | **Berkeley CS 285 Levine ⭐⭐⭐** | Stanford CS234 | Levine 是 SAC/TRPO 之父 |
+| RL | **Berkeley CS 285 Levine ⭐⭐⭐** | Stanford CS234 | Levine 是 deep RL for robotics 奠基人之一（注意：TRPO 一作 Schulman、SAC 一作 Haarnoja，Levine 均为共同作者）|
 | 理论 ML | Princeton COS 511 Hazan ⭐⭐⭐ | Cambridge Part II | Hazan OCO 教材作者 |
 | 形式化 | Oxford CPP ⭐⭐⭐ | Cambridge Hoare Logic | Oxford 是唯一系统教范畴论的本科 CS 课 |
 | 因果 | **ETH Causality Peters ⭐⭐⭐** | Princeton COS 595 | Peters 是该领域教材作者 |

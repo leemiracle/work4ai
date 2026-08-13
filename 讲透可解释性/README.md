@@ -56,3 +56,14 @@
 - 模型基础：[`讲透基础模型`](../讲透基础模型/) + [`讲透Transformer`](../讲透Transformer/)
 - 哲学反思：[`讲透科学的现代性/03`](../讲透科学的现代性/03-AI时代的科学哲学.md)
 - 信息源：[`前沿与媒体/01-AI顶级信息源`](../前沿与媒体/01-AI顶级信息源实时清单.md) 的 Anthropic blog + Transformer Circuits Thread
+
+---
+
+## 🔗 理论锚点（§12-15 横向打通）
+
+> 本系列讲"为什么模型这样做"的工程方法；这门课揭示**AI 自评的数学边界**：
+> 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
+
+| 课程 | 产物 | 公理化的内容 |
+|---|---|---|
+| §12.2 CMU 15-251 GITCS | [`gitcs.py`](../cmu-cs-projects/topic12-theory/gitcs.py) | 对角线/自指暗线（Cantor→Gödel→Turing→Lawvere）——任何形式系统不能证明自己的一致性，对应**AI 不能完美解释/评估自己**（constitutional AI / self-rewarding LM 的理论边界）|

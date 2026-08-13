@@ -126,3 +126,14 @@ python3 -u experiments/07_agent_cybernetics.py  # Reflexion 控制论
 ---
 
 📌 **下一步**：从 [00-为什么需要控制论.md](00-为什么需要控制论.md) 开始，看实验如何用 PID 把误差从 7°C 压到 0°C；或跳 [05-模型预测控制MPC.md](05-模型预测控制MPC.md) 看它和 Agent 的 Plan-Execute 怎么同根；或直奔 [06-控制论与RL.md](06-控制论与RL.md) 看 RLHF 怎么从 PI 控制推出。
+
+---
+
+## 🔗 理论锚点（§12-15 横向打通）
+
+> 本系列讲"反馈/PID/MPC"的工程直觉；这门课把"连续动力学 + 离散控制"放进**同一逻辑框架**证明：
+> 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
+
+| 课程 | 产物 | 公理化的内容 |
+|---|---|---|
+| §13.4 CMU 15-414（André Platzer）| [`diff_dyn_logic.py`](../cmu-cs-projects/topic12-theory/diff_dyn_logic.py) | differential dynamic logic (dL) + Lie 导数 + barrier certificate——**barrier certificate = 连续版循环不变式**（离散 Hoare 找 I 使 I∧B→wp(body,I)；连续 dL 找 B 使 B=0→L_f(B)≥0）|

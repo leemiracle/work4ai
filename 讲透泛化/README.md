@@ -84,3 +84,15 @@ for f in 0*.py; do echo "===== $f ====="; python3 "$f"; done
 ---
 
 📌 **下一步**：从 [00-泛化悖论.md](00-泛化悖论.md) 开始，先搞清"问题"是什么；或直接跳到 [01-隐式正则.md](01-隐式正则.md) 看最核心的解释。如果你只关心工程手段，直奔 [04](04-架构归纳偏置与显式正则.md)。
+
+---
+
+## 🔗 理论锚点（§12-15 横向打通）
+
+> 本系列讲"为什么深度网络能泛化"；名校理论课把"容量/惩罚/复杂度"**公理化**：
+> 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
+
+| 课程 | 产物 | 公理化的内容 |
+|---|---|---|
+| §12.1 Princeton COS 511/512（Hazan）| [`theory.py`](../princeton-cs-projects/topic9-ml-theory/theory.py) | PAC/Hoeffding 界、VC 维（区间假设 shattering）、Rademacher 复杂度——本系列所有"容量/惩罚"的数学根基 |
+| §15.2 Princeton COS 595（Hardt）| [`fairness.py`](../princeton-cs-projects/topic12-fairness/fairness.py) | 公平性-准确性不可能性定理（Chouldechova/Kleinberg）——泛化-公平 tradeoff |

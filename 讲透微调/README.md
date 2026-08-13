@@ -55,3 +55,14 @@ for f in experiments/0*.py experiments/1*.py; do echo "=== $f ==="; python3 -u "
 
 ## 环境备忘
 本机无 GPU/无 peft 库。01–05 用小 MLP 在 CPU 上讲透数学（已跑通）；06 实战给可移植代码骨架，在有 GPU 的机器上跑。
+
+---
+
+## 🔗 理论锚点（§12-15 横向打通）
+
+> 本系列讲"LoRA/QLoRA/RLHF"的微调实战；这门课把 RLHF 背后的**偏好聚合数学**公理化：
+> 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
+
+| 课程 | 产物 | 公理化的内容 |
+|---|---|---|
+| §15.3 Stanford CS329T/CS324（Percy Liang）| [`pluralistic_safety.py`](../stanford-cs-projects/topic3-safety/pluralistic_safety.py) | preference aggregation（Plurality/Borda/Approval）+ Condorcet 悖论 + Arrow 不可能性——RLHF "对齐谁的偏好"的社会选择理论根基 |

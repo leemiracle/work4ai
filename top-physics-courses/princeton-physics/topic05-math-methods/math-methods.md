@@ -489,3 +489,81 @@ Princeton `PHY 403/517` 的教学不追求数学严格性（那是数学系的�
 > **上一主题**：[04 统计力学](../topic04-statistical/statistical.md)
 >
 > **下一主题**：[06 凝聚态与固体物理](../topic06-solid-state/solid-state.md) — 从晶体结构到 BCS 超导，Anderson 的「More Is Different」遗产
+
+---
+
+## 🎯 费曼式入口（白话版）
+
+> **一句话解释**：数学方法是物理学家的「工具箱」——复变留数、特殊函数、群论、微分几何，每一件都是解决某类物理问题的「钥匙」。
+>
+> **生活类比**：想象你要开不同的门。有些门用平口螺丝刀（线性代数），有些用十字（复变函数），有些需要生物识别（群论）。物理学家不证明这些工具「为什么」存在（那是数学家的工作），而是知道**什么时候用哪把**。Morse & Feshbach（1953，MIT/Princeton 经典）就是这个工具箱的说明书。
+>
+> **反直觉发现**：复变留数定理说——一条沿着实数轴的无限长积分 $\int_{-\infty}^{\infty} dx/(x^2+a^2)$，它的值**只由复平面上的一个点决定**（极点 $z=ia$ 处的留数）。整个实轴的「质量」塌缩为一个点的局部信息。这就是解析函数的「刚性」：复变函数被它在极点处的留数**完全编码**。物理中粒子的所有散射信息，也浓缩在 $S$ 矩阵的几个极点中。
+
+---
+
+## 🔗 衔接：从哪来，到哪去
+
+| 阶段 | 内容 | 关键转折 |
+|------|------|---------|
+| **前置** | 高等微积分 + 线性代数（MAT 201/202） | 物理直觉需要数学语言精确化 |
+| **危机 1** | 解析方法（分离变量、级数解）只对线性 + 简单边界有效 | 真实物理（非线性、复杂几何）需要数值 + 渐近 |
+| **升级** | 复变（留数） + 特殊函数（Bessel, Legendre） + 群论 | 解析工具箱成型（Wigner 把群论引入量子，结束 Gruppenpest） |
+| **危机 2** | 「方法」替代不了「物理」 + 非线性 PDE 无统一解法 | 混沌、孤子、冲击波需要全新思路（反散射、弱解） |
+| **后续** | → [06 凝聚态](../topic06-solid-state/solid-state.md)：群论用于晶体对称 → [08 GR](../topic08-gr-cosmology/gr-cosmology.md)：微分几何是 GR 的语言 → 弦理论 | 数学方法是所有高级物理课程的「前置依赖」 |
+
+---
+
+## 🏭 理论联系实际：5 个现代应用
+
+1. **快速傅里叶变换（FFT）与信号处理** — 你的手机 4G/WiFi 解调、MP3 压缩、JPEG 图像，全部依赖 FFT。本质是把信号从时域变到频域——Boas 教材第 7 章的傅里叶级数，是每个电子工程师的日常。
+
+2. **有限元方法（FEM）与工程仿真** — 飞机机翼应力分析、汽车碰撞模拟、桥梁设计，本质是用变分法 + 分片多项式近似求解 PDE。本文 §6 的有限差分法是其简化版。
+
+3. **群论与粒子物理标准模型** — Wigner（IAS）用群论理解原子光谱后，Yang-Mills（1954）把规范群从 $U(1)$ 推广到 $SU(2)$，最终标准模型 = $SU(3)\times SU(2)\times U(1)$ 规范对称性。**对称性决定相互作用**是 Princeton 的精神信条。
+
+4. **压缩感知（Compressed Sensing）** — Emmanuel Candès（斯坦福，与 Princeton 数学系合作）发现：稀疏信号可以用远少于 Nyquist 采样定理要求的样本数重建。医院 MRI 扫描时间因此缩短 5-10 倍——这是泛函分析 + 概率论的胜利。
+
+5. **拓扑数据分析**（2014–2026）— Stanford 的 Gunnar Carlsson 用代数拓扑（同调群）分析高维数据点云的「形状」。Princeton 数学系的拓扑传统（与 IAS 交叉）正与机器学习结合——persistent homology 用于识别神经网络训练中的相变。
+
+---
+
+## 🔬 最新研究前沿（2024-2026）
+
+1. **AI for Math：Lean/Coq 自动定理证明**（2024–2025）— DeepMind 的 AlphaProof 在 2024 IMO 中达到银牌水平；Google 的 FunSearch 发现了新的组合学下界。Princeton 数学系与 Fields Medal 得主 Peter Scholze 合作「_liquid tensor experiment_」用 Lean 验证凝聚数学——数学方法正在被 AI 重新定义。
+
+2. **2026 年 Fields Medal 与 Princeton**（2026 年 7 月）— Princeton 校友获得 4 枚 Fields Medal 中的 3 枚（John Pardon, Jacob Tsimerman, Yu Deng），延续 Princeton/IAS 的数学王朝。这些工作（解析数论、代数几何）是数学物理方法的高级延伸。
+
+3. **拓扑量子场论的数值实现**（2024–2026 IAS）— Witten 框架的 Chern-Simons 理论（拓扑不变量 = 纽结多项式）正被用张量网络数值实现。Princeton 凝聚态组用 Rydberg 原子阵列**实验模拟**了 $Z_2$ 规范理论——数学物理的方法正在变成可测量的实验。
+
+4. **Princeton 加入 Leinweber 理论物理网络**（2026 年 6 月）— Princeton 获 Leinweber 基金会重大捐赠，加入理论物理「 powerhouse network」。Frans Pretorius（相对论数值专家）领衔，强化 Princeton/IAS 在数学物理方法上的全球领导地位。
+
+5. **算术几何与 Langlands 纲领**（2024–2026 IAS）— Witten, Langlands 等人的「_geometric Langlands_」对应在 2024 年被 Dennis Gaitsgory（曾访问 IAS）完整证明。这套数学方法连接了数论、表示论、规范理论——是 21 世纪数学最宏大的统一。
+
+---
+
+## 🗺️ 学习 Roadmap（Princeton 路径）
+
+```
+MAT 201/202  多变量微积分 + 线性代数           ← 物理100level 的并行数学
+   │
+PHY 403      Mathematical Methods (Boas/Arfken) ← 复变、特殊函数、PDE
+   │
+   ├──[群论] PHY 507 / MAT 447  Group Theory    ← Wigner 传统：SO(3), SU(2), 角动量
+   │
+PHY 517      Advanced Math Methods (Morse&Feshbach) ← 研究生：格林函数、张量分析
+   │
+   ╰──→ MAT 440/522  Functional Analysis         ← Reed & Simon：Hilbert 空间、谱定理
+   ╰──→ PHY 563  General Relativity              ← 微分几何（Nakahara）是前置
+   ╰──→ PHY 639/689 String Theory                ← Riemann 面、Calabi-Yau 流形
+```
+
+**知识检查清单**：
+
+- [ ] 能否用留数定理计算 $\int_{-\infty}^{\infty} dx/(x^2+a^2)$ 而不积分？（一个极点 = 全部答案）
+- [ ] 能否写出球坐标下拉普拉斯算子的分离变量形式？
+- [ ] 能否说出 Bessel 函数与柱对称波传播的关系？
+- [ ] 能否解释为什么 $Y_\ell^m$ 是 SO(3) 的不可约表示基？（Wigner）
+- [ ] 能否用 Frobenius 法推出 $J_\nu(x)$ 的级数形式？
+
+> **Wigner 的反击**（IAS, 1930s）：当物理学家嘲笑群论是「_Gruppenpest_（群的瘟疫）」时，Wigner 证明了球谐函数不是任意数学，而是三维旋转对称性的**自然语言**。本文教的方法不是「为算而算」，而是**大自然语言本身**——Princeton 的数理交叉传统由此奠基。

@@ -2,7 +2,7 @@
 
 > **博士级地基**——为什么相关 ≠ 因果？这是 Judea Pearl 拿 Turing Award 的工作，也是 AI 圈最大的"未解理论债"。
 >
-> 一句话定位：[`讲透世界模型/advanced/02`](../讲透世界模型/advanced/02-视频生成是世界模型吗.md) 问"Sora 有因果吗"，本系列问"**因果到底是什么**"。
+> 一句话定位：[`讲透世界模型/03`](../讲透世界模型/03-视频生成是世界模型吗.md) 问"Sora 有因果吗"，本系列问"**因果到底是什么**"。
 >
 > **博士级标准**：哲学 + 数学 + 统计三位一体。
 >
@@ -21,7 +21,7 @@
 
 ## 篇目
 
-### 基础层（00-06）
+### 基础层（00-07）
 
 | # | 标题 | 核心 |
 |---|------|------|
@@ -32,6 +32,7 @@
 | 04 | 因果发现 | PC 算法 / FCI / NOTEARS |
 | 05 | 工具变量与中介分析 | IV / 中介效应 |
 | 06 | 因果 ML | uplift modeling / causal forest / doubly robust |
+| **07** | ⭐ **[AI 时代的必要性与现代学习路径](./07-AI时代的必要性与现代学习路径.md)** | **LLM 还需要因果吗？** Pearl 因果阶梯 + 现代因果 ML（TARNet/X-Learner/DML）+ Kıcıman 2022 LLM 因果推理 + Pearl vs LeCun 辩论 + IHDP/ACIC 基准 + 4 周速通路径 |
 
 ### advanced 层（博士级，4 篇）
 
@@ -50,3 +51,15 @@
 - World Model：[`讲透世界模型`](../讲透世界模型/)（必须有因果）
 - 哲学：[`讲透科学的现代性/03`](../讲透科学的现代性/03-AI时代的科学哲学.md)
 - 历史：[`讲透AI历史`](../讲透AI历史/)（Pearl 谱系）
+
+---
+
+## 🔗 理论锚点（§12-15 横向打通）
+
+> 工程与直觉在本系列；**可证明的公理化版本**在名校理论课。
+> 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
+
+| 课程 | 产物 | 公理化的内容 |
+|---|---|---|
+| §15.1 ETH Causality（Jonas Peters）| [`causality.py`](../eth-cs-projects/topic12-causality/causality.py) | PC 算法骨架+定向、do-calculus Simpson 数值验证、LiNGAM 峰度法、通用 d-separation |
+| §15.2 Princeton COS 595（Hardt）| [`fairness.py`](../princeton-cs-projects/topic12-fairness/fairness.py) | counterfactual fairness（本系列 03 篇 SCM 的公平性应用）|

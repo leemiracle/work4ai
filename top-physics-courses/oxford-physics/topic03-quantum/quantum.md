@@ -370,5 +370,95 @@ print("  - 量子计算: 相干态 |alpha> = e^{-|alpha|^2/2} sum (alpha^n/sqrt(
 
 ---
 
-**版本**：v1.0 (2026-08-12) · Oxford MPhys Phase 1 Topic 03
+**版本**：v1.1 (2026-08-12) · Oxford MPhys Phase 1 Topic 03
 **依据**：SURVEY.md Oxford Y2 课程表 + Shankar (1994) 2ed
+
+---
+
+## 🎯 费曼式入口（白话版）
+
+> **一句话解释**：量子力学是研究「极小尺度下，确定性消失、概率成为基本」的物理——电子不再是小球，而是弥散的「概率波」，测量前它没有确定位置。
+>
+> **生活类比**：把电子想象成「一团雾」——不是在哪，而是「这里 30%、那里 70%」。你用手电一照（测量），雾瞬间凝结成一个点——但凝结到哪是掷骰子决定的，连上帝都猜不到。谐振子的升降算子就像楼梯：粒子只能站在某一阶（$E_n=\hbar\omega(n+\tfrac12)$），不能悬空，最底层（$n=0$）也有一份「零点能」——这是真空永不寂静的根源。
+>
+> **反直觉发现**：
+> - **零点能不是数学技巧**：$E_0=\hbar\omega/2$ 是物理实在——它产生 Casimir 力（两块不带电的平行板会被真空涨落推到一起）、Hawking 辐射（黑洞会蒸发）。
+> - **1s 电子在原子核里**：经典力学里电子进不了核（离心势太高），但 $|\psi_{1s}(0)|^2\ne0$——这是 β 衰变需要 s 电子参与的根据。
+> - **自旋是相对论效应**：Dirac 方程把自旋「自然涌现」——它是时空对称性（旋转群表示论）的必然结果，而不是把电子想象成「自转小球」。
+
+---
+
+## 🔗 衔接：从哪来，到哪去
+
+### 前置
+- **Y1 Quantum intro**（Rae）：黑体辐射、光电效应、德布罗意波——历史动机
+- **Y1/Y2 Mathematical Methods**（RHB）：线性代数（本征值/本征矢、厄米矩阵）、ODE 级数解（Frobenius）、复变
+- **Y2 Classical Mechanics**（Topic 01）：哈密顿力学——Poisson 括号 $\{\cdot,\cdot\}\to\frac{1}{i\hbar}[\cdot,\cdot]$ 是量子化的正则形式
+
+### 本课的危机
+- **测不准不是测量精度问题**：$\Delta x\Delta p\ge\hbar/2$ 是态本身的内禀性质，与仪器无关。压缩态可以让 $\Delta x$ 更小，但 $\Delta p$ 必然变大。
+- **谐振子的算子代数超越有限差分**：用 $a,a^\dagger$ 代数得到 $E_n$ 完全无离散化误差——这是「对称性比方程更强大」的第一课。
+- **测量塌缩的哲学争议**：塌缩是物理过程还是信息更新？Oxford 的 Vedral、Oppenheim 等在量子信息方向给出新视角。
+
+### 新危机
+- **多体问题在 Y2 范围外**：氦原子变分只是入门，真正的多体（Hartree-Fock、DFT）要到 Y4 凝聚态（Topic 06）。
+- **Shankar 不讲路径积分**：Feynman 形式留到 Y4 Theoretical Physics——它把量子振幅与经典作用量直接联系。
+- **不涉及相对论量子力学**：Dirac 方程、反粒子、自旋的相对论起源是 Y3/Y4 内容。
+
+### 后续
+- **Y3 Quantum**（Sakurai / Cohen-Tannoudji）：角动量加法、散射、Dirac 方程
+- **Y4 Advanced QM**：路径积分、量子信息、QFT 入门
+- **Y4 Quantum Information**（Oxford 强项）：Vedral/Oppenheim 的量子计算与量子热力学
+- **Y4 Atomic & Laser Physics**：相干态、压缩光、腔 QED
+
+---
+
+## 🏭 理论联系实际：5 个应用
+
+1. **半导体与晶体管**：能带理论（Y3 凝聚态）的量子基础——硅的导带/价带间隙源自薛定谔方程在周期势中的解，整个数字电子学建立于此。
+2. **激光**：受激辐射的概念源自 Einstein 1917——相干态 $|\alpha\rangle$（谐振子基态平移）饱和测不准下界，是激光「相位确定」的量子描述。
+3. **核磁共振（MRI）**：自旋 1/2 在磁场中的拉莫尔进动（Shankar §14.5）+ 射频脉冲的 Rabi 振荡——医疗 MRI 的全部物理。
+4. **量子计算**：量子比特 = 两能级系统（自旋 1/2、离子阱、超导约瑟夫森结）。Oxford Lucas group 用 $^{43}\text{Ca}^+$ 离子做逻辑门——Shankar 的角动量代数就是 gate 操作的数学。
+5. **原子钟与 GPS**：铯原子基态超精细跃迁（$9.2\times10^9$ Hz）定义「秒」——精度 $10^{-15}$，是 GPS 定位（需纳秒级时间同步）的物理基础。
+
+---
+
+## 🔬 最新研究前沿（2024-2026）
+
+> 注：firecrawl 搜索返回空数据，以下基于 Oxford Quantum、Google Quantum AI、Nature/Science 公开报道整理。
+
+1. **Google Willow 量子纠错芯片（2024-12）**：105 个物理量子比特实现表面码纠错——增加码距时错误率反而**下降**（越过「纠错阈值」），首次实验演示 logical qubit 比 physical qubit 更可靠。这是容错量子计算的里程碑。
+2. **Oxford 离子阱量子计算（2024-2025）**：Lucas group 用 $^{43}\text{Ca}^+$ 与 $^{88}\text{Sr}^+$ 离子链演示高保真度双比特门（$>99.9\%$），并探索可扩展的模块化架构（光子互连连接不同离子阱）。
+3. **中性原子量子计算（2024-2025）**：用光镊阵列捕获单个原子（Rb/Cs/Sr），通过 Rydberg 阻塞实现纠缠——Atom Computing、QuEra、Pasqal 等公司竞逐千比特规模，Oxford 亦有相关组。
+4. **量子热力学与量子信息（2024-2025）**：Oxford Oppenheim 提出「重力-量子信息」一致性问题，Vedral 探索宏观量子纠缠（纳米机械振子、生物系统）。这是量子力学边界问题的新前沿。
+5. **拓扑量子比特的回归（2024-2025）**：Microsoft 的 Majorana 费米子路线在 2023 受挫后，2024-2025 通过更严格的拓扑间隙测量重新推进——若成功，将天然免疫局域噪声。
+
+---
+
+## 🗺️ 学习 Roadmap（Oxford MPhys 路径）
+
+```
+Year 1                       Year 2                       Year 3-4
+─────                       ─────                       ─────────
+Quantum (intro)             Quantum Mechanics           Advanced QM
+· 历史 + 黑体辐射           · Shankar 公理体系           · Sakurai: 对称性、散射
+· 德布罗意波                · 一维问题、谐振子           · Dirac 方程、反粒子
+· 波函数初识                · 氢原子、自旋               · 量子信息 (Y4)
+                            · 微扰理论                   · 路径积分 (Y4)
+教材: Rae                   教材: Shankar               教材: Sakurai, Feynman & Hibbs
+```
+
+**知识检查清单**：
+- [ ] 能默写量子力学五公理（Hilbert 空间、厄米算子、Born 规则、塌缩、薛定谔方程）
+- [ ] 能用升降算子推出谐振子能级（不写微分方程）
+- [ ] 能解释零点能的物理实在性（Casimir、Hawking）
+- [ ] 能算氢原子 1s 态的 $\langle r\rangle,\langle 1/r\rangle$
+- [ ] 能用变分法估算氦原子基态（含有效核电荷 $Z^*$）
+- [ ] 能解释为何量子谐振子代数直接映射到电磁场量子化
+
+**Oxford 特色资源**：
+- **Dirac 的遗产**：bra-ket 记号就是 Oxford 出品（Dirac 1930《The Principles of QM》）
+- **量子信息重镇**：Vedral（量子纠缠与热力学）、Oppenheim（量子信息与引力）
+- **Ion Trap 实验室**：Lucas group 在 Clarendon Lab，本科生 MPhys 项目可参与
+
+---

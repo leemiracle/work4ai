@@ -128,3 +128,14 @@ python3 -u experiments/07_attention_info.py      # 信息论视角看 attention
 ---
 
 📌 **下一步**：从 [00-为什么需要信息论.md](00-为什么需要信息论.md) 开始，看实验如何用算术编码证明"Shannon 极限"；或直接跳 [02-交叉熵与KL.md](02-交叉熵与KL.md) 看分类损失的信息论根基；或直奔 [06-压缩即学习.md](06-压缩即学习.md) 看 DeepMind 2024 的 "Compression is Intelligence"。
+
+---
+
+## 🔗 理论锚点（§12-15 横向打通）
+
+> 本系列讲"熵/KL/交叉熵"的工程与直觉；这门课是它的**本科正典**：
+> 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
+
+| 课程 | 产物 | 公理化的内容 |
+|---|---|---|
+| §12.3 Cambridge Part II Info Theory | [`info_theory.py`](../cambridge-cs-projects/topic12-info/info_theory.py) | Shannon 熵 + Huffman 最优前缀码 + LZ77 通用压缩 + BSC 信道容量 + (7,4) 汉明码纠错 |

@@ -69,6 +69,16 @@
 
 **元洞察**：FLP 不可能性像 Gödel 不完备定理——理论上"不能"，但工程上我们"够用"。这种"**理论极限 vs 工程实用**"的张力贯穿整个分布式系统。看懂这一点，看区块链（绕过 FLP 用同步假设）/ 看 CRDT（绕过共识用最终一致）都通了。
 
+**🎓 学完能去哪（课程 → 去向）**：
+
+| 课程 | 学完能做到 | 典型去向 |
+|------|----------|---------|
+| MIT 6.5840 / 6.824（lab1-4 全做） | 手写 Raft、独立设计中型分布式系统 | Google / ByteDance / AWS 分布式后端 |
+| CMU 15-721（Pavlo） | 读现代 OLAP/OLTP/Cloud DB 论文 | DB 研究 / Snowflake / Databricks / PingCAP |
+| ETH Reliable Dist（Wattenhofer） | 写一致性证明、吃透 FLP/PBFT/CRDT 理论 | 理论分布式 PhD / 区块链共识设计 |
+
+> 三家**互补**：工程派（6.5840）+ 理论派（ETH）+ DB 视角（15-721）。详见 [`INSIGHTS_FULL_PICTURE.md`](./INSIGHTS_FULL_PICTURE.md) 洞察 7「学完后能干什么」。
+
 ---
 
 ## §5 「贝叶斯思维」的 5 个跃迁
@@ -125,6 +135,10 @@
 | Berkeley CS 285 | RL = 在线学习 + 搜索 |
 
 **元洞察**：纯搜索太慢（围棋搜索树 > 原子数），纯学习无规划能力。**最优 AI 系统都是"学习如何搜索"或"搜索学习到的空间"**。LLM 的 reasoning 也是隐式搜索（chain-of-thought = 在 token 空间搜索）。
+
+**🎓 RL 三家互补**：Berkeley **CS 285**（Levine，工程派，能写 SAC + world model）+ Stanford **CS234**（Brunskill，理论派，能证 Bellman/TD 收敛）+ **MIT 6.S191-RL / 6.S192-198 IAP**（Amini，入门短期版）。详见 [`INSIGHTS_FULL_PICTURE.md`](./INSIGHTS_FULL_PICTURE.md) 洞察 11 + [`讲透RL/`](../讲透RL/)。
+
+> ⚠️ **作者归属校正**：项目此前把 Levine 称为 "SAC/TRPO 之父"是错的。TRPO 一作 Schulman、SAC 一作 Haarnoja，Levine 是共同作者；Levine 自己的招牌是 GPS / DDPG（共作）/ PETS/MBPO / CQL/AWAC / Diffusion Policy。
 
 ---
 
