@@ -15,6 +15,7 @@
 | **AIfor 各学科** | **29** |
 | **本质探索** | **29** |
 | **费曼学习法** | **质量门 F1-F4 + AI 陪练脚本**（戳穿"自以为懂"）|
+| **CS 课程整合** | **4 跨校主题**（算法 + 数据库 + 网络 + CS224N/NLP）+ 5 单校纵深（CMU/MIT/Berkeley/Cambridge/ETH）⭐ 2026-08 |
 
 ---
 
@@ -41,7 +42,7 @@
 
 | 系列 | 现状 |
 |---|---|
-| **讲透RL** | 00(MDP) + 01(DQN) + 02(PPO) + 03(RLHF/DPO/GRPO) + **04(RL+形式证明) + 05(RLVR极限) + 06(RL+系统软件)** ⭐ 2026-08 |
+| **讲透RL** | 00(MDP) + 01(DQN) + 02(PPO) + 03(RLHF/DPO/GRPO) + **04(RL+形式证明) + 05(RLVR极限) + 06(RL+系统软件) + 07(全景地图+2026最新研究)** ⭐ 2026-08-12 |
 | **讲透分布式AI系统** | 00-03（DDP/FSDP/ZeRO/TP）|
 | **讲透KV Cache** | 00-01 + README |
 | **讲透世界模型**（博士级试点）| README + 00 + **advanced×4** |
@@ -153,6 +154,32 @@
 
 ### 10. 高效 AI 全行业热点：[`高效AI前沿-全行业热点地图.md`](高效AI前沿-全行业热点地图.md)
 - 2025-2026 六大热点（推理优化/test-time scaling/端侧 LLM/hybrid 架构/agent RL/MoE）+ 趋势洞察 + 速查表 ⭐ 2026-08
+
+### 11. CS 名校课程整合：`algorithms/` · `database-systems/` · `network-systems/` · `cs224n/` · `*-cs-projects/`
+> 把同一主题在多所名校的"不同讲法"整合成对比矩阵，快速建立完整能力。⭐ 2026-08
+
+**跨校整合模块（按主题/课程，多源对比）：**
+
+| 目录 | 主题 | 整合来源 | 核心文件 | 特色 |
+|---|---|---|---|---|
+| [`algorithms/`](algorithms/) | 算法设计 | Princeton COS 226 × MIT 6.006 × CMU 15-251 | `algo_integration.py` + `algo_weekly.py` | 可视化 / 数学严谨 / 思想史 三极 |
+| [`database-systems/`](database-systems/) | 数据库系统 | CMU 15-445 × MIT 6.830 × UCB CS186 × Stanford CS145 | `db_integration.py` + `db_weekly.py` | 实现 / 抽象 / 实战 / 分布 四视角 |
+| [`network-systems/`](network-systems/) | 网络系统 | Stanford CS144 × Berkeley CS162 × 路由(OSPF/BGP) | `mini_tcp.py` + `routing.py` | mini-TCP 项目 + 路由协议 |
+| [`cs224n/`](cs224n/) | NLP + 深度学习 | Stanford CS224N **Winter 2026**（Diyi Yang + Yejin Choi）| `cs224n_assignments.py` + `gpt2_project.py` | 4 作业 + GPT-2 项目（2026最新版）|
+
+每个模块含：① 整合层/作业层（可跑代码）② README（对比矩阵 + 学习路径）。纯标准库/numpy，零外部依赖。`cs224n/` 对应**最新 2026 schedule**（A4 改 LLM 评测、默认项目改 GPT-2），与 work4ai「讲透」系列深度互补。
+
+**按学校的完整课程（单校纵深）：**
+
+| 目录 | 学校 | 覆盖 |
+|---|---|---|
+| [`cmu-cs-projects/`](cmu-cs-projects/) | CMU | 12 主题（DB/分布式/ML/PGM/NLP/CV/机器人/HCI/理论）+ 本科/研究生补充 |
+| [`mit-cs-projects/`](mit-cs-projects/) | MIT | 12 主题（DB/OS/性能/AI/ML/DL/机器人/安全）+ 补充 |
+| [`berkeley-cs-projects/`](berkeley-cs-projects/) | UC Berkeley | 12 主题（SICP/DSA/架构/离散/AI/ML/RL/NLP/CV/OS/数据）|
+| [`cambridge-cs-projects/`](cambridge-cs-projects/) | Cambridge | 同构 |
+| [`eth-cs-projects/`](eth-cs-projects/) | ETH Zürich | 同构 |
+
+> **两种用法**：想横向对比"同主题不同讲法" → 跨校整合模块；想纵深单校完整课程 → `*-cs-projects/`。两者衔接（整合模块的 README 标注了对应单校文件路径）。
 
 ---
 
