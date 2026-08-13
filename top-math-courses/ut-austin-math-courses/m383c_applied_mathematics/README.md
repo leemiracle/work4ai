@@ -51,3 +51,24 @@
 - **先修**：M 365C（Rudin）必须扎实
 
 📌 **下一步**：→ [M 383E Numerical Linear Algebra](../m383e_numerical_linear_algebra/) 或 [M 385C Theory of Probability](../m385c_theory_of_probability/)
+
+---
+
+## 📍 在数学全景中的位置
+
+- **前置**：[M 365C 实分析](../m365c_real_analysis/) + ODE + 线性代数
+- **本课**：应用数学工具箱 → 量纲分析 + 渐近方法 + 变分法 + 积分变换（研究生核心）
+- **交叉**：[Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde/) + [Berkeley 185 复分析](../../berkeley-math-courses/math185_complex_analysis/)
+
+## 🔬 理论联系实际
+1. **变分法 → VAE/ELBO**：$\mathcal{L}_{\text{ELBO}}$ 是泛函，VAE 用变分法优化
+2. **渐近分析 → Neural Scaling Laws**：大参数/大数据的极限标度行为
+3. **量纲分析 → Scaling Laws**：Kaplan et al. [2001.08361](https://arxiv.org/abs/2001.08361) ✅
+4. **稳定性分析 → GAN 训练**：纳什均衡的分岔理论分析
+
+## 🆕 2024-2026 最新研究
+| 子主题 | 进展 | 参考 |
+|---|---|---|
+| Scaling Laws | Chinchilla 最优计算分配 | [Hoffmann et al. 2022, 2203.15556](https://arxiv.org/abs/2203.15556) ✅ |
+| 变分推断 | 用变分法做贝叶斯深度学习 | ⚠️ 2024 |
+| 渐近展开 | 大模型训练 dynamics 的渐近分析 | ⚠️ 研究 |

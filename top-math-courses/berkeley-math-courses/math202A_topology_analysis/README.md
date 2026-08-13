@@ -35,4 +35,34 @@
 - **节奏**：每周 7-10 小时，16 周
 - **先修**：104 + 110 + 185 都要扎实
 
+## 📍 在数学全景中的位置
+
+```
+前置                         本课                         后续
+───────────────────────────────────────────────────────────────
+Math 104+110+113+185 →   Berkeley Math 202A      →   Math 202B 继续
+(本科分析+线代)             (拓扑+分析+泛函融合)        Math 218 概率
+                                                          Cam Part III
+```
+
+| 阶梯 | 课程 | 角色 |
+|---|---|---|
+| 本科 | Berkeley Math 104 | Ross 实分析 |
+| **研究生 ★** | **Math 202A** | **拓扑+测度+泛函一站式** |
+| 进阶 | Math 202B | 泛函深化 |
+
+## 🔬 理论联系实际
+1. **Banach 空间 → SGD 收敛**: 压缩映射在函数空间中的不动点
+2. **Hilbert 空间 → RKHS**: $f(x) = \langle f, k_x \rangle$ → SVM / Kernel PCA / GP
+3. **DCT → SGD 合法性**: mini-batch 梯度→全梯度的极限换序
+4. **$L^p$ 对偶 → Fenchel 对偶**: 变分推断与强化学习的对偶框架
+5. **4 种收敛模式 → 概率论**: $L^p \Rightarrow$ 依概率 $\Rightarrow$ 依分布; a.s. $\Rightarrow$ 依概率
+
+## 🆕 2024-2026 最新研究
+- **RKHS = NTK 的函数空间**: 无限宽 NN 等价于核回归 ⚠️
+- **最优传输**: 测度间距离 = 弱收敛 + Radon 测度理论 ⚠️
+- **Score-based diffusion**: 测度流 + Radon-Nikodym ⚠️
+
+---
+
 📌 **下一步**：→ 进入 [Cambridge](../../cambridge-math-courses/) 或 [UT Austin](../../ut-austin-math-courses/)

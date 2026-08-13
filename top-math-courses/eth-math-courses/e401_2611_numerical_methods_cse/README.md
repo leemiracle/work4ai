@@ -31,3 +31,24 @@
 - UT Austin 对照：[M 383E](../../ut-austin-math-courses/math_ga_2010_numerical_methods_I/)
 
 📌 **下一步**：→ [401-3651 Numerical Solution of SDEs](../e401_3651_numerical_sde/)
+
+---
+
+## 📍 在数学全景中的位置
+
+- **前置**：线性代数 + 多元微积分 + 编程能力
+- **本课**：插值 → 数值积分 → ODE/PDE 数值解 → FEM/FDM → 谱方法
+- **交叉**：[UT Austin M 383E Trefethen](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)（数值线代）+ [Princeton MAT 322](../../princeton-math-courses/mat322_pde/)（PDE 理论）
+
+## 🔬 理论联系实际
+1. **FEM → PINN / Neural Operators**：PDE 数值方法启发用 NN 解 PDE（Fourier Neural Operator [2010.08895](https://arxiv.org/abs/2010.08895) ✅）
+2. **CG/GMRES → 注意力加速**：大规模稀疏线性系统的 Krylov 方法
+3. **Chebyshev 逼近 → 谱归一化**：GAN 的 Lipschitz 约束与算子范数估计
+4. **数值积分 → 蒙特卡洛方法**：高维积分的随机化
+
+## 🆕 2024-2026 最新研究
+| 子主题 | 进展 | 参考 |
+|---|---|---|
+| Fourier Neural Operator | 频域学习 PDE 解算子 | [Li et al. 2021, 2010.08895](https://arxiv.org/abs/2010.08895) ✅ |
+| Physics-Informed NN | 数值方法的神经化 | [Raissi et al. 2019](https://arxiv.org/abs/1711.10561) ✅ |
+| 自适应网格 + ML | 用 ML 引导网格加密 | ⚠️ 2024 |

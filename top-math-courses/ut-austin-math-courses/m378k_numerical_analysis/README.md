@@ -26,3 +26,24 @@
 - Sauer, *Numerical Analysis*
 
 📌 **下一步**：→ [M 383E Numerical Linear Algebra graduate](../m383e_numerical_linear_algebra/)
+
+---
+
+## 📍 在数学全景中的位置
+
+- **前置**：线性代数 + 微积分 + 编程
+- **本课**：Burden-Faires 体系 → 求根 + 插值 + 积分 + ODE + 线性系统（本科级 NA）
+- **后续**：[M 383E Trefethen & Bau](../m383e_numerical_linear_algebra/)（研究生级，招牌课）
+
+## 🔬 理论联系实际
+1. **条件数 → 训练数值稳定性**：大 $\kappa$ → 梯度消失/爆炸
+2. **Newton 法 → 优化**：二阶方法 $H^{-1}\nabla f$
+3. **RK4 → Neural ODE**：高阶 ODE 求解器
+4. **迭代法 → 大规模优化**：Jacobi/Gauss-Seidel → 共轭梯度
+
+## 🆕 2024-2026 最新研究
+| 子主题 | 进展 | 参考 |
+|---|---|---|
+| Neural ODE | 数值 ODE 求解器作为可逆层 | [1806.07366](https://arxiv.org/abs/1806.07366) ✅ |
+| 混合精度 | fp16 数值稳定性分析 | ⚠️ 2024 |
+| 可微分物理 | 数值方法 + 自动微分 | JAX 生态 ✅ |

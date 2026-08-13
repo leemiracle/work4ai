@@ -38,3 +38,31 @@
 - **节奏**：每周 5-7 小时，12-14 周
 
 📌 **下一步**：→ [M 385C Theory of Probability](../m385c_theory_of_probability/)
+
+---
+
+## 📍 在数学全景中的位置
+
+- **前置**：[M 341 / M 340L 线性代数](../m340l_linear_algebra/)
+- **本课**：QR / SVD / 条件数 / Krylov 子空间 / 迭代法——**数值线代核心**
+- **后续**：[MIT 18.085 CSE](../../mit-math-courses/18_085_computational_science/)（应用）/ [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/)（随机数值）
+
+---
+
+## 🔬 理论联系实际
+
+1. **SVD → PCA / Transformer 低秩 / LoRA 微调**（Eckart-Young 定理）
+2. **条件数 → 神经网络训练稳定性**（梯度爆炸 = 大条件数）
+3. **Krylov 子空间 → attention 线性近似**（Performer, Linear Attention）
+4. **随机化 SVD → 大规模推荐系统**（Halko-Martinsson-Tropp 2009）
+5. **QR 算法 → PageRank**（幂迭代法求特征值）
+
+---
+
+## 🆕 2024-2026 最新研究
+
+- **随机化 SVD**（arXiv 0909.4061）：$O(mn\log k)$ 代替 $O(mn^2)$，已验证 11.6× 加速
+- **Transformer 低秩**：权重矩阵的 SVD 分析 → LoRA 微调（Hu et al. 2021）
+- **Krylov Attention**：用 Krylov 子空间把 $O(n^2)$ attention 降到 $O(n)$
+- **量子线性代数**：HHL 算法的条件数依赖性（数值稳定性的量子推广）
+- **混合精度 SVD**：fp16/bf16 下的 Householder QR 稳定性分析

@@ -300,11 +300,87 @@ Strang 6th edition 新增（2022）。
 - 最大特征值 = 1
 - **ML 关联**：PageRank、MCMC
 
-### 9.4 深度学习
+### 9.4 深度学习与低秩微调 ★★★
 
-- **权重矩阵**：$F(\mathbf{x}, W) = \sigma(W\mathbf{x})$
-- **梯度**：$\partial L/\partial W$（= 反向传播）
-- **低秩近似**：$W \approx UV^T$（如 LoRA）
+深度网络的每一个"层"本质就是**线性变换 + 非线性**：
+
+$$\mathbf{h} = \sigma(W\mathbf{x} + \mathbf{b})$$
+
+18.06 的全部工具都在这里派上用场。
+
+#### (a) 反向传播 = Jacobian 链式法则
+
+对复合函数 $L = L(\mathbf{h}_3),\ \mathbf{h}_3 = f_3(\mathbf{h}_2),\dots,\mathbf{h}_1 = f_1(\mathbf{x})$，梯度是 **Jacobian 矩阵的链式乘积**：
+
+$$\frac{\partial L}{\partial \mathbf{x}} = J_1^T J_2^T J_3^T \frac{\partial L}{\partial \mathbf{h}_3}$$
+
+- 每层 $f_i$ 的 Jacobian $J_i = \partial\mathbf{h}_{i}/\partial\mathbf{h}_{i-1}$。
+- **梯度消失/爆炸**的本质：$\prod J_i^T$ 的乘积 → 特征值的乘积 $\prod\lambda_i$。当 $\lambda_i<1$ 连乘→消失；$\lambda_i>1$→爆炸。正交初始化让 $\|J_i\|\approx1$，是为了保持谱半径稳定。
+
+#### (b) Attention = 矩阵乘法 + softmax
+
+$$\text{Attention}(Q,K,V) = \text{softmax}\!\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+- $QK^T$：$(n\times d)(d\times n)=n\times n$ 的**相似度矩阵**（列空间几何：query 投影到 key 方向）。
+- $\sqrt{d_k}$ 缩放：点积的方差 $\sim d_k$，除以 $\sqrt{d_k}$ 控制 softmax 输入的尺度（数值稳定性）。
+- **ML 关联**：18.06 第 1 章（矩阵乘法）+ 第 4 章（正交性 = 注意力的几何）。
+
+#### (c) LoRA = 低秩参数更新（2024-2026 大热）★★★
+
+**问题**：微调 175B 参数的 GPT 需要存全部 $\Delta W\in\mathbb{R}^{d\times k}$，显存爆炸。
+
+**LoRA 假设**（已被实验验证）：预训练权重的**任务适配增量是低秩的**。
+
+$$W = W_0 + \Delta W \approx W_0 + BA$$
+
+- $W_0\in\mathbb{R}^{d\times k}$：冻结的预训练权重（不训练）。
+- $B\in\mathbb{R}^{d\times r},\ A\in\mathbb{R}^{r\times k}$：可训练的低秩因子，秩 $r\ll\min(d,k)$。
+- 参数量：$dk \to r(d+k)$。当 $d=k=4096,\ r=8$ 时，$16{,}777{,}216 \to 65{,}536$（缩减 256×）。
+
+**为什么有效？** Eckart-Young 定理保证：若真实的 $\Delta W$ 近似秩 $r$，则 $BA$ 这个秩-$r$ 参数化能很好地重建它。实验显示语言模型的适配增量本征维度确实很低（Aghajanyan 等发现 $r\sim O(100)$ 即可）。
+
+**QLoRA**（[arXiv:2305.14314](https://arxiv.org/abs/2305.14314)）：在 LoRA 基础上把 $W_0$ 量化到 **4-bit NormalFloat**。NF4 的设计利用了权重近似正态分布 $W\sim\mathcal{N}(0,\sigma^2)$，量化格点按正态分位数 $\Phi^{-1}$ 排布，使量化误差信息论最优——这是**概率分布 + 矩阵量化**的交叉。
+
+**统一视角**：LoRA / PCA / 推荐系统 / 图像压缩，都是**同一个 SVD 低秩近似**的不同应用：
+
+| 应用 | 矩阵 | 低秩近似 |
+|---|---|---|
+| PCA | 中心化数据 $X$ | 主成分 = $V$ 前 $k$ 列 |
+| 图像压缩 | 像素矩阵 | $A_k=\sum_{i=1}^k\sigma_i u_iv_i^T$ |
+| 推荐系统 | 用户-物品评分 | 低秩潜在因子 |
+| **LoRA** | 权重增量 $\Delta W$ | $\Delta W\approx BA$ |
+
+#### (d) 正交性与 Transformer 稳定性
+
+- 残差连接 $\mathbf{h}_{l+1}=\mathbf{h}_l+f(\mathbf{h}_l)$ 让信息"恒等"流动，本质是让变换接近**单位矩阵** $I$（谱 = 全 1）。
+- LayerNorm 把每层激活归一化到 $\|\mathbf{h}\|\approx\text{const}$，等价于在每层约束**范数**，防止谱爆炸。
+
+---
+
+## 线性代数的统一图景（Strang 的"Big Picture"）
+
+把全书串成一张图：
+
+```
+        ┌─────────────── 五个矩阵分解（贯穿全书）───────────────┐
+        │  A=CR → A=LU → A=QR → S=QΛQ⁻¹ → A=UΣVᵀ              │
+        │  (独立列) (消元) (正交化) (谱分解)   (SVD 万能)        │
+        └──────────────────────────────────────────────────────┘
+                              │
+        ┌─────────────── 四个基本子空间（几何骨架）─────────────┐
+        │  行空间 C(Aᵀ) ⟂ 零空间 N(A)        (在 ℝⁿ 中正交补)   │
+        │  列空间 C(A)  ⟂ 左零空间 N(Aᵀ)     (在 ℝᵐ 中正交补)   │
+        │  维度: r + (n-r) = n ;  r + (m-r) = m                 │
+        └──────────────────────────────────────────────────────┘
+                              │
+        ┌─────────────── 应用出口 ──────────────────────────────┐
+        │  最小二乘 → 回归    正定矩阵 → 优化     图拉普拉斯→GNN│
+        │  谱定理 → PCA       SVD → 降维/LoRA    傅里叶→卷积    │
+        │  马尔可夫 → PageRank/MCMC                              │
+        └──────────────────────────────────────────────────────┘
+```
+
+**一句话总结**：所有线代应用都归结为"**找一个好的基**"——SVD/PCA 找统计最优基，傅里叶找频域基，特征向量找不变方向基，Gram-Schmidt 找正交基。
 
 ---
 

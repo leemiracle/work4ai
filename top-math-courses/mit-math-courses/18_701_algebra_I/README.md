@@ -40,4 +40,32 @@
 - **重点**：群论与群作用（在 ML 中最多出现）
 - **跳过**：纯数论部分（除非你做密码学）
 
-📌 **下一步**：→ [18.901 拓扑](../18_901_topology/)
+📌 **下一步**：→ [18.901 拓扑](../18_901_topology/) 或 [Berkeley Math 113](../../berkeley-math-courses/math113_abstract_algebra/)
+
+---
+
+## 📍 在数学全景中的位置
+
+- **前置**：[18.06 线性代数](../18_06_linear_algebra/)（矩阵/线性变换）
+- **本课**：群 / 环 / 域 / 群作用 / 表示论入门——抽象代数的根基
+- **后续**：[Harvard Math 122](../../harvard-math-courses/math122_algebra/)（Dummit-Foote 体系）/ [Princeton MAT 345](../../princeton-math-courses/mat345_algebra/)
+
+---
+
+## 🔬 理论联系实际
+
+1. **群表示论 → 等变神经网络**（Cohen-Welling G-CNN, SE(3)-equivariant）
+2. **CNN 平移等变 = $\mathbb{Z}^d$ 群卷积**
+3. **AlphaFold 2/3 → SE(3)-等变网络**做分子结构预测
+4. **密码学 → RSA / 椭圆曲线**（有限域群）
+5. **张量分解 → 对称性降维**（CP/Tucker）
+
+---
+
+## 🆕 2024-2026 最新研究
+
+- **几何深度学习**（Bronstein et al.）：统一 GNN、CNN、Transformer 的群论框架
+- **Equivariant Transformer**：用群论设计对称 attention
+- **AlphaFold 3**（2024）：SE(3)-等变扩散模型预测分子相互作用
+- **拓扑数据分析 + ML**：用群论分析神经网络损失景观的对称性
+- **量子机器学习**：有限群表示论是量子算法（QFT）的基础

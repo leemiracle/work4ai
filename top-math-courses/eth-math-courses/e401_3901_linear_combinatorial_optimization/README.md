@@ -31,3 +31,30 @@
 - Stanford 对照：[MS&E 211](../../stanford-math-courses/)
 
 📌 **下一步**：→ [401-3904 Convex Optimization](../e401_3904_convex_optimization/)
+
+---
+
+## 📍 在数学全景中的位置
+
+- **前置**：线代 + 基础算法
+- **本课**：LP / ILP / 网络流 / 次模优化
+- **后续**：[ETH 401-3904 凸优化](../e401_3904_convex_optimization/)（连续版）/ [Cambridge Part IB Optimisation](../../cambridge-math-courses/partIB_optimisation/)
+
+---
+
+## 🔬 理论联系实际
+
+1. **最大流 → 图分割、社区检测、GNN**
+2. **匹配 → 推荐系统、稳定婚姻**
+3. **次模优化 → 特征选择、影响力最大化**（社交网络）
+4. **ILP + ML → GNN 加速分支定界**（2024 前沿）
+5. **LP 松弛 → SVM / Lasso 的理论基础**（[CME 364A](../../stanford-math-courses/cme364A_convex_optimization/)）
+
+---
+
+## 🆕 2024-2026 最新研究
+
+- **GNN + MILP**：机器学习预测分支变量，加速 10-100×（Gasse 2019 → 2024）
+- **GPU LP/ILP**：cuPDLP-C、SCIP-GPU
+- **次模神经网络**：可解释 ML 的新范式
+- **QAOA 量子优化**：组合问题的量子启发算法（早期阶段）

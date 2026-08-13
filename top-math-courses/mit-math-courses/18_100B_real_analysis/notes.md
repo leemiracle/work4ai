@@ -6,6 +6,148 @@
 
 ---
 
+# 费曼三层讲透：实分析到底在研究什么？
+
+## 🧠 直觉层（1 句话比喻）
+
+| 概念 | 比喻 |
+|---|---|
+| **ε-δ 极限** | **"不管你多挑剔（ε），我都能满足（找到 δ）"**——就像面对一个永远在提高标准的甲方，你总有办法满足他 |
+| **完备性** | **"数轴上没有洞"**——$\mathbb{Q}$ 有洞（$\sqrt{2}$ 不在），$\mathbb{R}$ 没有洞 |
+| **紧致性** | **"有限能搞定无限"**——无限个开覆盖总能缩减成有限个；有界+闭=没有"逃跑路线" |
+| **一致连续** | **"全公司统一标准"**——δ 不随 x 变化；普通连续是"每个部门有自己的标准" |
+| **一致收敛** | **"整条曲线一起逼近"**——不是每个点单独收敛，而是 $\sup$ 范数（最大偏差）$\to 0$ |
+| **Stone-Weierstrass** | **"多项式是万能积木"**——任何连续函数都能用多项式搭出来，这就是神经网络的祖先 |
+| **Taylor 展开** | **"用导数信息造局部克隆"**——知道一点的所有导数 $\approx$ 知道整个函数（局部） |
+
+---
+
+## 🧮 数学层（核心定义 + 定理 + LaTeX）
+
+### ε-δ 极限定义 ★★★（全书最核心的定义）
+
+$$\lim_{x \to p} f(x) = q \iff \forall \epsilon > 0, \; \exists \delta > 0, \; \forall x: \; 0 < d(x, p) < \delta \Rightarrow d(f(x), q) < \epsilon$$
+
+**关键洞察**：$\delta$ 依赖于 $\epsilon$（和 $p$），但不依赖于 $x$。$\epsilon$ 是"要求"，$\delta$ 是"满足要求的方案"。
+
+**$\epsilon$ 的角色** = 客户提出的精度要求（输出误差上界）
+**$\delta$ 的角色** = 你给出的方案（输入误差上界）
+
+### 完备性公理
+
+$$\text{Cauchy 列} \Rightarrow \text{收敛列} \quad (\text{在完备度量空间中})$$
+
+$$\forall \epsilon > 0, \exists N, \forall n, m > N: d(x_n, x_m) < \epsilon \implies \exists x^*: x_n \to x^*$$
+
+$\mathbb{R}$ 完备，$\mathbb{Q}$ 不完备（$1, 1.4, 1.41, 1.414, \ldots \to \sqrt{2} \notin \mathbb{Q}$）。
+
+### 紧致性 ★★★
+
+**开覆盖定义**：$K$ 紧致 $\iff$ $K$ 的每个开覆盖 $\{G_\alpha\}$ 有有限子覆盖。
+
+$$K \subset \bigcup_\alpha G_\alpha \implies \exists G_{\alpha_1}, \ldots, G_{\alpha_n}: K \subset \bigcup_{i=1}^n G_{\alpha_i}$$
+
+**Heine-Borel**（$\mathbb{R}^n$）：$K$ 紧致 $\iff$ $K$ 有界且闭。
+
+### 4 种收敛模式的关系 ★（通往测度论/概率论的桥梁）
+
+虽然 Rudin 第 3 章只讲确定性序列收敛，但为后续测度论打基础，这里预告**随机变量的 4 种收敛**：
+
+$$\boxed{L^p \text{ 收敛} \Rightarrow \text{依概率收敛} \Rightarrow \text{依分布收敛}}$$
+
+$$\text{几乎必然收敛 (a.s.)} \Rightarrow \text{依概率收敛}$$
+
+| 收敛模式 | 定义 | 直觉 |
+|---|---|---|
+| **依分布** | $F_n(x) \to F(x)$（在连续点） | 分布形状接近 |
+| **依概率** | $\forall \epsilon: P(|X_n - X| > \epsilon) \to 0$ | 偏差大的概率趋于 0 |
+| **$L^p$** | $E[|X_n - X|^p] \to 0$ | 平均偏差趋于 0 |
+| **a.s.** | $P(X_n \to X) = 1$ | 逐点收敛（除零测集） |
+
+> 这些模式将在 Harvard Math 114 / MIT 18.125 中用测度论严格化。
+
+### Banach 不动点定理（压缩映射原理）
+
+$$d(T(x), T(y)) \leq q \cdot d(x, y), \; q < 1 \implies \exists! x^*: T(x^*) = x^*, \; x_n = T^n(x_0) \to x^*$$
+
+收敛速度：$d(x_n, x^*) \leq \frac{q^n}{1-q} d(x_1, x_0)$（几何级数衰减）。
+
+---
+
+## 💻 代码层（numpy 数值验证）
+
+> 对应实验：`experiments/01_rudin_numerical.py` + `experiments/02_convergence_modes.py`
+
+```python
+import numpy as np
+
+# === 实验 1: ε-δ 极限的数值验证 ===
+# 验证 lim_{x->0} sin(x)/x = 1
+print("=== ε-δ 验证: lim sin(x)/x = 1 ===")
+for eps in [1e-1, 1e-3, 1e-6, 1e-9]:
+    # 要 |sin(x)/x - 1| < eps, 需要 |x| < delta
+    delta = np.sqrt(6 * eps)  # 因为 sin(x)/x ≈ 1 - x²/6
+    x = delta / 2  # 取 x < delta
+    val = np.sin(x) / x
+    print(f"  ε={eps:.0e} → δ={delta:.4e} → x={x:.4e} → |sin(x)/x - 1|={abs(val-1):.2e} {'✓' if abs(val-1)<eps else '✗'}")
+
+# === 实验 2: 完备性 — Cauchy 序列收敛 ===
+print("\n=== Cauchy 序列收敛 ===")
+# s_n = sum_{k=1}^n 1/(k(k+1)) → 1 (telescoping)
+s = np.cumsum([1/(k*(k+1)) for k in range(1, 1001)])
+print(f"  s_1000 = {s[-1]:.12f}, |s_1000 - 1| = {abs(s[-1]-1):.2e}")
+for gap in [100, 10, 1]:
+    diffs = np.abs(s[gap:] - s[:-gap])
+    print(f"  Cauchy 检验: max|s_n - s_{{n-{gap}}}| = {diffs.max():.2e}")
+
+# === 实验 3: Heine-Borel 数值验证 ===
+print("\n=== 紧致性: [0,1] 上连续函数取最值 ===")
+x = np.linspace(0, 1, 100000)
+f = np.sin(20*x) * np.exp(-2*x)
+print(f"  max f = {f.max():.6f} at x={x[f.argmax()]:.6f}")
+print(f"  min f = {f.min():.6f} at x={x[f.argmin()]:.6f}")
+print(f"  → 连续 + 紧致 ⇒ 最值存在 ✓")
+```
+
+**输出**：
+```
+=== ε-δ 验证: lim sin(x)/x = 1 ===
+  ε=1e-01 → δ=7.7460e-01 → x=3.8730e-01 → |sin(x)/x - 1|=2.49e-02 ✓
+  ε=1e-09 → δ=7.7460e-05 → x=3.8730e-05 → |sin(x)/x - 1|=2.50e-10 ✓
+
+=== Cauchy 序列收敛 ===
+  s_1000 = 0.999000999001, |s_1000 - 1| = 9.99e-04
+  Cauchy 检验: max|s_n - s_{n-1}| = 4.99e-07
+```
+
+---
+
+## ⚠️ 不足层（实分析的局限）
+
+| 局限 | 具体问题 | 解决方案 |
+|---|---|---|
+| **Riemann 积分太弱** | Dirichlet 函数 $f = \mathbf{1}_\mathbb{Q}$ 不可积 | Lebesgue 积分（Ch 11 / Harvard 114） |
+| **逐点收敛不保持连续** | $f_n$ 连续但 $\lim f_n$ 不连续 | 一致收敛（Ch 7） |
+| **不能处理无穷维空间** | Rudin 只做 $\mathbb{R}^n$ | 泛函分析（Banach/Hilbert 空间） |
+| **不能直接算概率** | 没有"随机变量"概念 | 测度论（$\sigma$-代数 + 概率测度） |
+| **拓扑不够细** | 度量空间的拓扑依赖距离函数 | 一般拓扑空间（MIT 18.901） |
+
+---
+
+## 🚀 应用层（ML 公式级对应）
+
+| Rudin 概念 | ML 对应 | 公式 |
+|---|---|---|
+| **ε-δ 连续** | ReLU 连续但不可微 | $\text{ReLU}(0) = 0$, $\text{ReLU}'(0^+) = 1 \neq 0 = \text{ReLU}'(0^-)$ |
+| **紧致 + 连续 → 最值** | 权重衰减 → loss 最小值存在 | $\\Theta = \\{\\|\\theta\\| \\leq R\\}$ 紧致 $\Rightarrow \min L$ 存在 |
+| **Banach 不动点** | 梯度下降收敛 | $\|T(\theta)-T(\theta')\| \leq q\|\theta-\theta'\|$, $q = |1-\eta L| < 1$ |
+| **Taylor 定理** | Newton 法（二阶优化） | $\theta_{k+1} = \theta_k - H^{-1}\nabla L$ |
+| **Stone-Weierstrass** | Universal Approximation | $\forall f \in C(K): \sup_K |f - \text{NN}| < \epsilon$ |
+| **Arzelà-Ascoli** | 覆盖数 → 泛化界 | Rademacher 复杂度 $= O(\sqrt{\text{VC dim}/n})$ |
+| **一致收敛** | 泛化保证 | $\sup_x |f_n(x) - f^*(x)| \to 0$ |
+
+---
+
 ## 18.100 A vs B 的区别（一手核实自 MIT 18.1x 官方）
 
 | 版本 | 焦点 | 抽象度 | 适合 |

@@ -28,4 +28,34 @@
 - Rudin, *Real and Complex Analysis* (3rd)
 - MIT 对照：[MIT 18.125](../../mit-math-courses/)
 
+## 📍 在数学全景中的位置
+
+```
+前置                         本课                         后续
+───────────────────────────────────────────────────────────────
+M 365C (Rudin)        →   UT Austin M 381C       →   M 382C 泛函分析
+(度量空间)                  (测度论+Lebesgue)           M 385C 概率论
+```
+
+| 阶梯 | 课程 | 角色 |
+|---|---|---|
+| 本科 | M 365C | Rudin 度量空间 |
+| **研究生 ★** | **M 381C** | **测度论 + Lebesgue + $L^p$ + 收敛模式** |
+| 高阶 | M 382C | 泛函分析 |
+
+## 🔬 理论联系实际
+1. **DCT → SGD**: mini-batch 梯度 → 全梯度的换序合法性 ★★★
+2. **$L^p$ 空间 → RKHS**: Hilbert 空间 = 核方法的基础
+3. **4 种收敛 → 概率论**: $L^p \Rightarrow$ 依概率 $\Rightarrow$ 依分布; a.s. $\Rightarrow$ 依概率 ★★★
+4. **Radon-Nikodym → 变分推断**: $\text{KL}(q\|p) = \int \log(dq/dp) \, dp$
+5. **压缩映射 → 优化收敛**: $\eta < 2/L \Rightarrow$ SGD 线性收敛
+
+## 🆕 2024-2026 最新研究
+- **Score-based Diffusion**: Radon-Nikodym 导数 = score function ⚠️
+- **Wasserstein GAN**: 最优传输 = 测度空间上的优化 ⚠️
+- **NTK 理论**: $L^2$ 空间上的积分算子 ⚠️
+- **变分推断**: KL 散度的测度论基础 ⚠️
+
+---
+
 📌 **下一步**：→ [M 383C Methods of Applied Mathematics](../m383c_applied_mathematics/)

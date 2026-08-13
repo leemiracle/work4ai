@@ -42,3 +42,31 @@
 - **配合**：[UT Austin M 383E Numerical Methods I](../../ut-austin-math-courses/math_ga_2010_numerical_methods_I/)（更现代的数值线代）
 
 📌 **下一步**：→ [18.701 代数 I](../18_701_algebra_I/) 或 [UT Austin M 383E](../../ut-austin-math-courses/math_ga_2010_numerical_methods_I/)
+
+---
+
+## 📍 在数学全景中的位置
+
+- **前置**：[MIT 18.06 线代](../18_06_linear_algebra/)（四子空间、SVD）
+- **本课**：用线代统一应用数学——**差分 → 矩阵 → PDE / FFT / FEM / 图拉普拉斯**
+- **后续**：[UT Austin M 383E 数值线代](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)（Trefethen & Bau）/ [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/)（diffusion）
+
+---
+
+## 🔬 理论联系实际
+
+1. **图拉普拉斯 $L = D - A$ → 谱聚类、GNN 正则化**
+2. **FFT → CNN 卷积加速**（conv = IFFT(FFT·FFT)）
+3. **泊松方程离散化 → 图半监督学习**
+4. **热方程 → diffusion model 的 PDE 根基**（→ [ETH 401-3651](../../eth-math-courses/e401_3651_numerical_sde/)）
+5. **Krylov 子空间 → attention 线性近似**（→ [M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)）
+
+---
+
+## 🆕 2024-2026 最新研究
+
+- **GNN = 图上的谱卷积**：ChebNet、GCN 与图拉普拉斯特征基的深度联系
+- **PINN（物理信息神经网络）**：用神经网络解 PDE，与传统 FEM 互补
+- **Neural Operator（FNO, DeepONet）**：学习参数化 PDE 的解算子
+- **线性 attention**：Krylov 子空间 / 核技巧把 $O(n^2)$ 降到 $O(n)$
+- **图上扩散模型**：score-based 生成在图结构数据上的推广
