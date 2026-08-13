@@ -1,0 +1,83 @@
+# Skills 工程手册 · 入口
+
+> **建立**：2026-08-13
+> **触发**：你前面要参照 prompt 那套方法论（手册 + demo + 工具）来处理 skills
+> **现状**：37 个 AI skill（`~/.config/opencode/skills/`）+ 60+ 金融 skill（`~/.agents/skills/`）= 100+ skill 全集
+> **宗旨**：把"有 100+ skill 但不知道用哪个 / 写不好"变成"分类清晰 + 评价客观 + 按需写"
+
+---
+
+## 🎯 一句话定位
+
+**Skill 是 opencode 的"插件"。100+ 个不算多，但 90% 没用 = 等于没有。本手册把 skill 当"产品"管理——分类、评价、迭代、退役。**
+
+---
+
+## 📂 文件导航
+
+| # | 文件 | 解决什么 |
+|---|---|---|
+| - | [README](README.md) | 总览（你在这里）|
+| 01 | [`现有skills审计报告`](01-现有skills审计报告.md) | **核心**：37 AI skill 分类 + 评价 + 删减/合并建议 |
+| 02 | [`SKILL.md规范与7步写法`](02-SKILL.md规范与7步写法.md) | SKILL.md 标准结构 + 写新 skill 的 7 步法 |
+| 03 | [`skill评价6维度`](03-skill评价6维度.md) | 准确性 / 触发精度 / 资源质量 / 协作性 / 维护性 / 安全性 |
+| 04 | [`跨skill协作设计`](04-跨skill协作设计.md) | 多 skill 怎么串联（用户问 X → 哪几个 skill 联动）|
+| 05 | [`实战-写expert-track新skill`](05-实战-写expert-track新skill.md) | **示范**：基于顶级专家目标写一个真新 skill |
+| 06 | [`审计脚本`](../prompt-eval-demo/scripts/audit_skills.py) | 可重用工具：扫所有 skill + 自动分类 + 评分 |
+
+---
+
+## 🚀 怎么用
+
+### 路径 1（审计现有）
+1. 读 [`01-审计报告`](01-现有skills审计报告.md)
+2. 按建议删/合并冗余 skill
+3. 用 [`06-审计脚本`](../prompt-eval-demo/scripts/audit_skills.py) 重新跑
+
+### 路径 2（写新 skill）
+1. 读 [`02-SKILL规范`](02-SKILL.md规范与7步写法.md)
+2. 参照 [`05-实战`](05-实战-写expert-track新skill.md)
+3. 用 [`03-评价6维度`](03-skill评价6维度.md) 自查
+
+### 路径 3（跨 skill 设计）
+1. 读 [`04-协作设计`](04-跨skill协作设计.md)
+2. 在你的 SKILL.md 里加 "跨 Skill 协作" 段
+
+---
+
+## 🔑 核心方法论速查
+
+### SKILL.md 7 要素（参照 ROIF-CSE）
+```
+1. name + description（元数据）
+2. Role（角色）
+3. Triggers（何时激活）
+4. Workflow（具体步骤）
+5. Resources（资源链接）
+6. Cross-skill（协作）
+7. Quality gates（质量门）
+```
+
+### 6 维度评价
+```
+1. 准确性（输出有用吗）
+2. 触发精度（该激活时激活，不该时不打扰）
+3. 资源质量（链接 / 例子是否最新）
+4. 协作性（能否与其他 skill 联动）
+5. 维护性（是否容易过时）
+6. 安全性（是否暴露敏感信息）
+```
+
+---
+
+## 📌 本周必做
+
+1. [ ] 读 [`01-审计报告`](01-现有skills审计报告.md)
+2. [ ] 删 / 合并 5+ 个冗余 skill
+3. [ ] 写 1 个新 skill（参照 [`05-实战`](05-实战-写expert-track新skill.md)）
+4. [ ] 跑 [`06-审计脚本`](../prompt-eval-demo/scripts/audit_skills.py)
+
+---
+
+**版本**：v1.0（2026-08-13）
+**核心理念**：**Skill 是产品，要管理生命周期。100+ 没用 = 5 个有用的。**

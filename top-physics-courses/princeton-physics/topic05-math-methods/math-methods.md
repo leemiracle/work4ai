@@ -567,3 +567,8 @@ PHY 517      Advanced Math Methods (Morse&Feshbach) ← 研究生：格林函数
 - [ ] 能否用 Frobenius 法推出 $J_\nu(x)$ 的级数形式？
 
 > **Wigner 的反击**（IAS, 1930s）：当物理学家嘲笑群论是「_Gruppenpest_（群的瘟疫）」时，Wigner 证明了球谐函数不是任意数学，而是三维旋转对称性的**自然语言**。本文教的方法不是「为算而算」，而是**大自然语言本身**——Princeton 的数理交叉传统由此奠基。
+
+
+---
+
+*完成日期：2026-08-13*

@@ -181,6 +181,75 @@
 
 > **两种用法**：想横向对比"同主题不同讲法" → 跨校整合模块；想纵深单校完整课程 → `*-cs-projects/`。两者衔接（整合模块的 README 标注了对应单校文件路径）。
 
+### 12. 数学家资源中心：[`top-math-courses/`](top-math-courses/) ⭐ 2026-08-13 新增
+
+为"成为顶级数学家"目标准备的**全栈资源中心**。20 文档覆盖：路径 / 教材 / 工具 / 社区 / 品味 / 现实路径。入口 [`top-math-courses/MATHEMATICIAN_MASTER_INDEX.md`](top-math-courses/MATHEMATICIAN_MASTER_INDEX.md)。
+
+| 类别 | 文档 |
+|---|---|
+| 路径 | `UNIFIED_ROADMAP`（30 课）· `FAST_TRACK`（12 课速成）· `FIELDS_LEVEL_PLAYBOOK`（顶级路径 + 现实校准）|
+| 教材 | `TEXTBOOK_LIBRARY`（按方向的金标准库，10+ 方向 100+ 本书）|
+| 方法 | `RESEARCH_METHODOLOGY`（解题/阅读/写作/提问）· `FEYNMAN_TEACHING_GUIDE` |
+| 工具 | `TOOLS_STACK`（Lean/SageMath/LaTeX/Julia/文献管理）· `LEAN_MATH_TRACK`（学数学+练 Lean 并行）|
+| 方向 | `SUBFIELDS_DEEP_DIVE`（ML 理论 / 形式化数学 / 数值 / 概率 / 优化 / 代数几何 / 数论...）|
+| 社区 | `COMMUNITY_AND_CAREER`（暑期学校 / 会议 / PhD 项目 / fellowship）|
+| 论文 | `PAPERS_COLLECTION` · `LATEST_RESEARCH` |
+| 品味 | `HISTORY_AND_TASTE`（数学史 / 传记 / taste 培养）|
+| 映射 | `CROSS_INDEX_WITH_WORK4AI`（数学↔讲透X 双向）· `CROSS_SCHOOL_INSIGHTS`（9 校对比）|
+
+**配套执行系列**（2026-08-13 新建，骨架 + 示范章）：
+- [`讲透Lean4数学/`](讲透Lean4数学/) — 把已有的 Lean4 OS 经验（ai-os-dd/law/neo-os）升级为数学武器。README + 00 范式变革 + 01 NNG 讲透（含完整 Lean 代码 + Python 实验跑通）+ 02-11 大纲
+- [`讲透实分析/`](讲透实分析/) — 配 Tao Analysis I + Lean companion。README + 00 实分析是什么 + 01 实数构造 + 02 极限ε-δ + 03 连续性 + 04 微分（含 Python 实验跑通）+ 05-10 大纲
+- [`讲透NLP/math/`](讲透NLP/math/) — NLP 每章用到的数学反向索引到 top-math-courses
+
+### 13. 5 本经典讲义内容化（2026-08-13 第二批）⭐
+
+把 [`top-math-courses/LECTURES_AND_COURSES.md`](top-math-courses/LECTURES_AND_COURSES.md) 列的"免费八书"逐本做成可学的"讲透"系列（每本 README + 核心章节 + Python 实验跑通）：
+
+| 讲义 | 系列 | 已落盘内容 |
+|------|------|-----------|
+| **Tao Analysis I + Lean companion** | [`讲透实分析/`](讲透实分析/) | README + 00-04 章 + 4 实验（Leibniz 伪导数崩坏 / ε-δ / 连续性 / 微分）|
+| **Vershynin HDP** | [`讲透高维概率/`](讲透高维概率/) | README + 00 高维反直觉 + 01 集中不等式 + 2 实验（4 大高维反直觉 / Hoeffding vs Bernstein）|
+| **Milne Group Theory** | [`讲透群论/`](讲透群论/) | README + 00 群论是什么 + 01 Sylow 定理 + 实验（Z/12Z / S3 / Lagrange 验证）|
+| **Boyd Convex Optimization** | [`讲透优化理论/`](讲透优化理论/) | 已有 00-03，加 04 Lagrange 对偶 + SVM 强对偶实验 |
+| **Hatcher AT** | [`讲透代数拓扑/`](讲透代数拓扑/) | README + 00 代数拓扑是什么 + 实验（同调群表 / Euler 示性数 / TDA）|
+
+每本实验均 `python3 -u experiments/*.py` 跑通，含反直觉发现。
+
+### 14. 讲义内容化第二 + 第三批（2026-08-13）⭐
+
+**A. 5 本现有系列填充核心章节**：
+- 讲透实分析：加 05 Riemann 积分 + FTC 实验
+- 讲透高维概率：加 02 次高斯分布 + mgf 验证实验
+- 讲透代数拓扑：加 01 基本群 + 绕数/缩点可视化实验
+- 讲透群论：加 02 群作用 + Burnside 计数实验
+- 讲透优化理论：加 05 内点法 + log barrier 实验
+
+**B. 2 本新讲义系列**：
+- [`讲透数值线代/`](讲透数值线代/) — 基于 Trefethen & Bau。README + 00 数值线代是什么 + 01 SVD + Hilbert 条件数/低秩近似/LoRA 演示实验
+- [`讲透分析进阶/`](讲透分析进阶/) — 基于 Stein-Shakarchi 4 卷（Fourier / 复 / 实 / 泛函）。README + 00 全景
+
+至此 **7 本经典讲义内容化**（Tao / Vershynin / Milne / Boyd / Hatcher / Trefethen / Stein-Shakarchi），共 ~30 章节 + 12 实验，全部 bash 跑通。
+
+### 15. 全章节填充 + 第 8 本讲义（2026-08-13 终批）⭐
+
+**A. 7 本现有系列的"剩余章节"全部以合集形式落盘**（每本一个紧凑合集文件覆盖剩余所有章节）：
+
+| 系列 | 合集文件 | 覆盖章节 |
+|------|---------|---------|
+| 讲透实分析 | `06-10-进阶合集.md` | 无穷级数 / 函数序列 / Lebesgue / 度量空间 / ML 应用 |
+| 讲透高维概率 | `03-08-进阶合集.md` | 随机向量 + JL / 随机矩阵 + MP / 凸几何 / 鞅 / 泛化界 / 矩阵补全 |
+| 讲透群论 | `03-07-进阶合集.md` | 对称群 / 商群 / 直积 / 可解群 / 自由群 |
+| 讲透代数拓扑 | `02-07-进阶合集.md` | 覆叠 / van Kampen / 同调 / 上同调 / 同伦群 / TDA |
+| 讲透数值线代 | `02-06-进阶合集.md` | QR / 条件数 / 特征值算法 / 迭代法 / ML 应用 |
+| 讲透优化理论 | `06-进阶合集.md` | 凸应用 / 非凸 / 一阶 / 分布式 / 二阶 / 2024-2026 前沿 |
+| 讲透分析进阶 | `01-08-合集.md` | Fourier / 复分析 / 测度 / 泛函（Stein-Shakarchi 4 卷）|
+| 讲透Lean4数学 | `02-11-合集.md` | 类型论 / Mathlib / tactic / 集合 / 实分析 / 线代 / 抽代 / PR / AI / 项目 |
+
+**B. 第 8 本讲义**：[`讲透Artin抽代/`](讲透Artin抽代/) — 基于 Artin《Algebra》2e（MIT 18.701/702）。README + 00-Artin抽代是什么（矩阵群 + 几何直觉 + Galois）
+
+**总计**：8 本讲义 × 平均 8-10 章 = **~70 章节**（含合集）+ 16 实验，全部 bash 跑通。
+
 ---
 
 ## 四、维度矩阵

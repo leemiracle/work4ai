@@ -618,3 +618,8 @@ PHY 519  Advanced GR / Cosmology (Wald/Weinberg)    ← Kerr 黑洞、宇宙微�
 - [ ] 能否解释黑洞信息悖论与 Page 曲线？（量子信息 vs 经典几何的冲突）
 
 > **Wheeler 的命题**（Princeton 教授，Feynman 的导师）：「_时空不是物理发生的舞台，时空本身就是物理_」。从 Einstein 在 IAS 22 年的沉思，到 Wheeler 命名「_黑洞_」，到 Taylor 17 年的脉冲星观测，到 LIGO 2015 年的直接探测，到 2026 年 NANOGrav 纳赫兹背景——Princeton 在引力物理的 90 年传承，是「_几何与物质一体两面_」这句话最完美的注脚。当你理解了 $G_{\mu\nu} = 8\pi G T_{\mu\nu}/c^4$，你就理解了 Princeton 引力传统的灵魂。
+
+
+---
+
+*完成日期：2026-08-13*
