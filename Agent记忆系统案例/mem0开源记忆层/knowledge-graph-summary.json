@@ -1,0 +1,231 @@
+{
+  "project": {
+    "name": "Mem0",
+    "description": "Mem0 (\"mem-zero\") — 面向 AI agents 和 assistants 的智能记忆层。提供持久化、个性化的长期记忆，通过 Hosted Platform API 和自托管开源 SDK 两种方式交付。核心是 April 2026 新算法：single-pass ADD-only 抽取、entity linking、multi-signal retrieval（semantic + BM25 + entity）、temporal reasoning。Polyglot monorepo：Python SDK + TypeScript SDK（平行实现）+ 双 CLI + FastAPI 自托管 Server（含 Next.js dashboard）+ 6 个 Agent/Editor 集成 + 6 个 AI agent skill + Mintlify 文档站。",
+    "languages": [
+      "typescript",
+      "python",
+      "markdown",
+      "yaml",
+      "json",
+      "shell",
+      "dockerfile",
+      "toml"
+    ],
+    "frameworks": [
+      "Pydantic v2",
+      "FastAPI",
+      "Typer",
+      "Commander",
+      "tsup",
+      "Hatch",
+      "pnpm",
+      "Next.js",
+      "React",
+      "Tailwind CSS",
+      "Mintlify",
+      "LangChain",
+      "MCP",
+      "Jest",
+      "Vitest",
+      "pytest",
+      "Ruff",
+      "Biome",
+      "Docker Compose",
+      "Alembic"
+    ],
+    "analyzedAt": "2026-08-11T07:12:28.874Z",
+    "gitCommitHash": "4debc58a83377b18be81ae1e5969a300736b2fac"
+  },
+  "stats": {
+    "totalFiles": 0,
+    "totalNodes": 2071,
+    "totalEdges": 3600,
+    "totalLayers": 15,
+    "totalTourSteps": 15
+  },
+  "layers": [
+    {
+      "id": "layer:py-sdk-core",
+      "name": "Python SDK 核心引擎",
+      "description": "mem0/ SDK 的核心：Memory/MemoryBase 类、add/search/update/delete pipeline、SQLite 存储、telemetry、用户 notice 系统。是整个项目的算法心脏。",
+      "nodeCount": 33
+    },
+    {
+      "id": "layer:py-sdk-providers",
+      "name": "Python SDK Provider 抽象",
+      "description": "5 类 provider 插件体系：21 个 LLM、15 个 embedding、28 个 vector store、5 个 reranker，每个都继承对应的 base.py 抽象基类。mem0/utils/factory.py 按配置实例化。",
+      "nodeCount": 116
+    },
+    {
+      "id": "layer:py-sdk-config",
+      "name": "Python SDK 配置系统",
+      "description": "MemoryConfig Pydantic 主模型 + 各 provider 的 config 子类（mem0/configs/llms/embeddings/vector_stores/rerankers/）。April 2026 重构后 graph config 已移除。",
+      "nodeCount": 76
+    },
+    {
+      "id": "layer:py-sdk-utils",
+      "name": "Python SDK 工具模块",
+      "description": "mem0/utils/ 下的工具：Factory 工厂、entity_extraction、scoring（多信号融合）、lemmatization、http、gcp_auth、spacy_models。是核心 pipeline 的支撑层。",
+      "nodeCount": 19
+    },
+    {
+      "id": "layer:py-sdk-client",
+      "name": "Python Hosted Platform Client",
+      "description": "MemoryClient / AsyncMemoryClient —— 通过 HTTPS 调用 Mem0 Platform 的客户端，与自托管 Memory 类 API 同构。含 HTTP proxy 与匿名遥测。",
+      "nodeCount": 12
+    },
+    {
+      "id": "layer:ts-sdk",
+      "name": "TypeScript SDK（平行实现）",
+      "description": "mem0-ts/ —— 与 Python SDK 平行的完整 TS 实现：client/（Hosted MemoryClient）+ oss/src/（自托管 Memory + 平行 providers）+ common/exceptions + community/ 第三方集成。",
+      "nodeCount": 346
+    },
+    {
+      "id": "layer:server-dashboard",
+      "name": "Server Dashboard（Next.js 前端）",
+      "description": "server/dashboard/ —— 独立的 Next.js + React + Tailwind 子项目，提供 server 的可视化管理面板（API keys、memories、requests 浏览，登录鉴权）。容器化部署在 :3000。**必须放在 server 层之前匹配**，否则会被 server 的通配 matcher 吞掉。",
+      "nodeCount": 149
+    },
+    {
+      "id": "layer:server",
+      "name": "FastAPI 自托管 Server",
+      "description": "server/（排除 dashboard 子目录）—— 把 OSS SDK 包装成 REST API 的 FastAPI 服务：main.py、auth.py（JWT）、routers/（api_keys/auth/entities/requests）、models.py/schemas.py（ORM + Pydantic）、alembic DB 迁移、Docker 部署。Graph memory 仅 Platform 支持。",
+      "nodeCount": 84
+    },
+    {
+      "id": "layer:cli",
+      "name": "双 CLI（Python Typer + Node Commander）",
+      "description": "cli/python（Typer，mem0-cli PyPI 包）+ cli/node（Commander，@mem0/cli npm 包）—— 同一份 CLI_SPECIFICATION.md / cli-spec.json 规范下的平行实现，覆盖 add/search/init/config 等命令。",
+      "nodeCount": 109
+    },
+    {
+      "id": "layer:integrations",
+      "name": "Agent & Editor 集成（6 个）",
+      "description": "integrations/ —— 6 个自包含集成包：mem0-plugin（MCP server，含 .opencode-plugin/）、openclaw、pi-agent-plugin、vercel-ai-sdk、n8n-nodes-mem0、zapier-mem0。每个独立 package.json/build/tests。",
+      "nodeCount": 332
+    },
+    {
+      "id": "layer:skills",
+      "name": "AI Agent Skill 体系（6 个）",
+      "description": "skills/ —— 给 AI coding assistant 用的 skill 包：3 个 reference skill（mem0、mem0-cli、mem0-vercel-ai-sdk，always-on）+ 3 个 pipeline skill（mem0-integrate、mem0-test-integration、mem0-oss-to-platform，on-demand）。每个有 SKILL.md 主入口。",
+      "nodeCount": 35
+    },
+    {
+      "id": "layer:docs",
+      "name": "Mintlify 文档站",
+      "description": "docs/ —— 247 个 .mdx 文件构成的 Mintlify 静态文档站，覆盖 api-reference、platform、open-source、integrations、core-concepts、cookbooks、contributing、migration。docs.json 站点配置，openapi.json API 规范，llms.txt 给 LLM 的索引。",
+      "nodeCount": 251
+    },
+    {
+      "id": "layer:examples",
+      "name": "示例项目（10 个 demo）",
+      "description": "examples/ —— 10 个可运行示例：mem0-demo（Next.js + assistant-ui）、multimodal-demo、vercel-ai-sdk-chat-app、multiagents、yt-assistant-chrome（MV3 扩展）、nemoclaw、graph-db-demo（notebooks）、openai-inbuilt-tools、notebooks、misc。",
+      "nodeCount": 169
+    },
+    {
+      "id": "layer:tests",
+      "name": "Python SDK 测试套件",
+      "description": "tests/ —— pytest 测试套件，覆盖 Memory 类、MemoryClient、server auth/proxy、telemetry、所有 provider 子模块（llms/embeddings/vector_stores/utils）。每条 tested_by 边连接到被测生产代码。",
+      "nodeCount": 285
+    },
+    {
+      "id": "layer:ci-cd-top",
+      "name": "CI/CD + 顶层项目配置",
+      "description": ".github/workflows/（CI Gate 单入口编排 + Release Router 单入口发布 + 各包独立 CI/CD）+ 顶层项目配置（pyproject.toml、Makefile、pre-commit、AGENTS.md/CLAUDE.md/LLM.md AI 助手上下文、marketplace.json 编辑器注册、README/CONTRIBUTING/SECURITY 文档）。",
+      "nodeCount": 55
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "项目入口与定位",
+      "description": "从 README 和 AGENTS.md 开始，理解 Mem0 是什么：面向 AI agents 的智能记忆层，提供持久化长期记忆，有 OSS SDK 和 Hosted Platform 两种交付方式。April 2026 新算法带来 LoCoMo 92.5 / LongMemEval 94.4 的 benchmark 突破。",
+      "nodeCount": 4
+    },
+    {
+      "order": 2,
+      "title": "Python SDK 的\"门面\"：__init__.py",
+      "description": "看 mem0/__init__.py 暴露的 public API（Memory、AsyncMemory、MemoryClient、AsyncMemoryClient），理解四种使用方式的入口契约。这是用户接触 SDK 的第一行代码。",
+      "nodeCount": 1
+    },
+    {
+      "order": 3,
+      "title": "⭐ Memory 类——整个项目的心脏",
+      "description": "mem0/memory/main.py 的 Memory 类 3851 行：核心引擎。AsyncMemory 是其异步镜像。所有 add/search/update/delete pipeline 的入口。这是后续所有讲解的根。",
+      "nodeCount": 4
+    },
+    {
+      "order": 4,
+      "title": "add() 全链路：从消息到记忆",
+      "description": "⭐ 重点跟踪 Memory.add() → _add_to_vector_store → _create_memory / _link_entities_for_memory：single-pass ADD-only 抽取（一次 LLM 调用，只 ADD 不 UPDATE/DELETE）、UUID→整数防幻觉、md5 hash 去重、entity 抽取 + linking、批量 embed + upsert。这是 April 2026 新算法的核心创新。",
+      "nodeCount": 4
+    },
+    {
+      "order": 5,
+      "title": "search() 多信号融合",
+      "description": "⭐ Memory.search() → _search_vector_store → _compute_entity_boosts：三路并行（semantic over-fetch + BM25 keyword + entity boost）→ ThreadPoolExecutor → score_and_rank 融合 → 可选 rerank。理解为什么 single-pass retrieval 能在 BEAM 1M 上拿 64.1 分。",
+      "nodeCount": 4
+    },
+    {
+      "order": 6,
+      "title": "Provider 插件体系（5 类抽象）",
+      "description": "看 5 类 base.py 抽象基类：LLMBase / EmbeddingBase / VectorStoreBase / BaseReranker，理解 mem0 的 provider 插件模式。然后看 mem0/utils/factory.py 的 Factory 类如何按配置实例化——这是支持 21 LLM × 15 embedding × 28 vector store × 5 reranker 组合的关键。",
+      "nodeCount": 5
+    },
+    {
+      "order": 7,
+      "title": "配置系统：MemoryConfig",
+      "description": "mem0/configs/base.py 的 MemoryConfig Pydantic 模型——所有配置（LLM/embedder/vector_store/graph/reranker/custom_fact_extraction_prompt 等）的统一入口。April 2026 重构后 graph 字段已移除。配套看默认 prompt 模板（mem0/utils/prompts.py 1062 行）。",
+      "nodeCount": 2
+    },
+    {
+      "order": 8,
+      "title": "Hosted Platform Client：API 同构",
+      "description": "mem0/client/main.py 的 MemoryClient / AsyncMemoryClient——通过 HTTPS 调用 Mem0 Platform，与自托管 Memory 类 API 完全同构。同一个用户代码只需换 import 即可在 OSS 和 Platform 间切换。",
+      "nodeCount": 4
+    },
+    {
+      "order": 9,
+      "title": "TypeScript SDK：Python 的平行实现",
+      "description": "mem0-ts/src/oss/src/ 是与 Python SDK 1:1 平行的整套 TS 实现：memory/（Memory 类）、llms/embeddings/vector_stores/rerankers/、prompts、storage、types（Zod schema 替代 Pydantic）。client/ 是 Hosted MemoryClient。看 TS 端 loadPeer() peer-dep 懒加载机制——这是与 Python 的关键差异。",
+      "nodeCount": 3
+    },
+    {
+      "order": 10,
+      "title": "自托管 Server：FastAPI REST 包装",
+      "description": "server/main.py 把 OSS SDK 包装成 REST API，带完整 JWT 认证、PostgreSQL（pgvector）、Alembic 迁移。看 endpoint 节点理解 API 面，看 routers/ 理解模块化路由。docker-compose.yaml 一键启动 API + DB（+ 可选 Neo4j）。",
+      "nodeCount": 4
+    },
+    {
+      "order": 11,
+      "title": "双 CLI：同一规范的两种实现",
+      "description": "cli/python（Typer，mem0-cli PyPI）+ cli/node（Commander，@mem0/cli npm）——同一份 CLI_SPECIFICATION.md / cli-spec.json 规范下的平行实现。理解 polyglot monorepo 如何用 spec 文档对齐双语言 CLI 的命令树与行为。",
+      "nodeCount": 4
+    },
+    {
+      "order": 12,
+      "title": "Agent & Editor 集成（MCP server）",
+      "description": "integrations/mem0-plugin/ 是最大的集成——一个 MCP server 让 Claude Code/Cursor/Codex/OpenCode 等 AI 编辑器都能访问 Mem0 记忆。含 lifecycle hooks（session_start/user_prompt/stop 自动捕获）、嵌套的 .opencode-plugin/（独立 Bun + TS 包）。其他 5 个集成（openclaw/pi/vercel-ai/n8n/zapier）覆盖更多场景。",
+      "nodeCount": 4
+    },
+    {
+      "order": 13,
+      "title": "AI Agent Skill 体系",
+      "description": "skills/ 是给 AI coding assistant 用的 skill 包：3 个 reference skill（mem0 / mem0-cli / mem0-vercel-ai-sdk，always-on，提供 SDK 知识）+ 3 个 pipeline skill（mem0-integrate / mem0-test-integration / mem0-oss-to-platform，on-demand，跑工程流水线）。每个的 SKILL.md 是 AI assistant 装上后永远在 context 里的主入口。",
+      "nodeCount": 3
+    },
+    {
+      "order": 14,
+      "title": "测试与验证",
+      "description": "tests/ 是 Python SDK 的 pytest 套件。看 tested_by 边的网络——每条测试连接到被测生产代码。重点看 test_memory.py（Memory 类全链路）、test_main.py（server main）、test_server_auth.py（JWT 流程）。benchmark 在外部 evaluation/ submodule（memory-benchmarks repo，LOCOMO/LongMemEval/BEAM）。",
+      "nodeCount": 4
+    },
+    {
+      "order": 15,
+      "title": "CI/CD：CI Gate + Release Router 双单入口",
+      "description": ".github/workflows/ 的编排模式：CI Gate（ci-gate.yml）单入口 PR 检测 + 路由到各包 CI workflow；Release Router（release.yml）单入口 release 事件 + 按标签前缀（v* / ts-v* / cli-v* / ...）路由到对应 CD workflow。这是 11 个 polyglot 包的发布治理核心。所有发布用 OIDC trusted publishing，无需 token。",
+      "nodeCount": 5
+    }
+  ]
+}

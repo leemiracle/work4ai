@@ -1,0 +1,257 @@
+# 00 · AI for Biology 是什么
+
+> **第一性问题**：生物是**最复杂的科学**——一个细胞有 $10^{14}$ 个原子协同工作，远远超出人类直觉。
+>
+> AI 是**生物学家的超级显微镜**——从基因组（$10^9$ bp）到蛋白质（AlphaFold）到细胞（Cell Painting）到器官（医学影像）到生态系统。**AlphaFold 拿 2024 Nobel Chemistry** 标志 AI4Bio 的成熟。
+>
+> 配套：[`讲透AI应用全景/01-AI4Science`](../../讲透AI应用全景/01-AI4Science.md) + [`讲透AIfor各学科/化学`](../化学/) + [`讲透科学的现代性`](../../讲透科学的现代性/)
+
+---
+
+## 一、生物为什么需要 AI
+
+### 1.1 数据洪流
+
+```
+基因组（人类）：3 × 10^9 bp
+转录组（每细胞）：~20000 基因 × 时间 × 状态
+蛋白组：~10^6 蛋白形态
+微生物组：~10^13 微生物 / 人
+医学影像：每 CT 扫描 ~500 MB
+```
+
+**生物学家从"做实验"变成"分析数据"**——但数据量超出人类处理能力。
+
+### 1.2 系统复杂性
+
+- **非线性**：基因 → 蛋白 → 代谢 → 细胞 → 组织 → 个体
+- **涌现**：意识、疾病、衰老从分子相互作用涌现
+- **个体差异**：每个人的生物都不同（精准医疗）
+
+### 1.3 时间尺度跨越大
+
+- 飞秒（蛋白折叠）→ 秒（细胞信号）→ 年（发育）→ 千年（进化）
+- 没有单一方法能跨越所有尺度——AI 可以**多尺度建模**。
+
+---
+
+## 二、AI 在生物的六大应用
+
+### 2.1 基因组学
+
+**应用**：
+- **测序比对**：BLAST → BWA → 深度学习（DeepAlign）
+- **变异检测**：GATK + AI（DeepVariant, Google 2018）
+- **基因表达预测**：从 DNA 序列预测 RNA 表达（Enformer, DeepMind 2021）
+- **表观遗传**：预测 chromatin 状态（DeepSEA）
+
+**代表**：
+- **Enformer**（2021）：Transformer 预测基因表达
+- **Borzoi**（2024）：改进版
+
+### 2.2 蛋白质（AlphaFold 革命）
+
+**AlphaFold 2**（2020）：解 50 年蛋白质折叠问题。
+- **AlphaFold 数据库**：2 亿+ 蛋白结构（覆盖几乎所有已知）
+- **AlphaFold 3**（2024）：扩展到 DNA/RNA/小分子
+- **AlphaMissense**（2023）：预测错义突变致病性
+
+**应用**：
+- 药物发现（靶向蛋白设计）
+- 疾病机制（变异效应）
+- 合成生物学（设计新酶）
+
+详见 [`讲透AIfor各学科/化学`](../化学/)（化学的兄弟）。
+
+### 2.3 显微镜与细胞生物学
+
+**Cell Painting**（Broad Institute）：高内涵细胞成像 + AI。
+
+- 每孔 5 通道荧光 → 数千细胞 × 数百特征
+- AI 用于：**表型聚类** / **药物作用机制** / **毒性预测**
+- **代表**：**CytoSelf**（2024）——自监督细胞表型
+
+### 2.4 医学影像
+
+**应用**：
+- **放射学**：X 光 / CT / MRI 自动诊断
+- **病理学**：组织切片癌症分级
+- **眼科**：糖尿病视网膜病变（Google 2016 *JAMA*）
+- **皮肤科**：皮肤癌分类（Esteva 2017 *Nature*）
+
+**代表**：
+- **Med-PaLM 2**（Google）：医学多模态 LLM
+- **Mia**（2024）：乳腺癌筛查 AI，比医生多发现 13% 早期
+
+详见 [`讲透AI应用全景/04-AI4Medicine`](../../讲透AI应用全景/04-AI4Medicine.md)。
+
+### 2.5 神经科学
+
+**应用**：
+- **脑图谱**：连接组学（connectomics）—— EM 图像分割
+- **神经解码**：fMRI → 思想（2023 多篇论文）
+- **脑机接口**：Neuralink / Synchron—— AI 解码运动意图
+
+**代表**：
+- **FlyWire**（2020-2023）：果蝇全脑连接组（Janelia + Princeton）
+- **H01**（Google + Harvard）：人脑 1 立方毫米数据集
+
+### 2.6 进化与生态
+
+- **系统发育**：用 AI 推断物种进化树
+- **生态建模**：物种分布预测（气候变化下）
+- **蛋白质进化**：用 AlphaFold 推断祖先蛋白
+
+---
+
+## 三、生物专属的方法学
+
+### 3.1 多尺度建模
+
+```
+DNA → RNA → Protein → 复合体 → 细胞 → 组织 → 个体
+↑     ↑      ↑          ↑        ↑       ↑      ↑
+AI   AI   AlphaFold  AlphaFold  Cell  Medical  EHR
+预测   预测   (结构)     (3)      Painting 影像   数据
+```
+
+**跨尺度 AI** 是 2024+ 前沿（**Cellular Foundation Models**）。
+
+### 3.2 因果推断（重要！）
+
+生物数据高相关 + 隐藏混杂——**必须用因果**。
+
+- **孟德尔随机化**（Mendelian Randomization）：基因作工具变量
+- **药物再利用**：从 EHR 数据找因果
+- 详见 [`讲透因果推断`](../../讲透因果推断/)
+
+### 3.3 数据稀缺 + 迁移学习
+
+- 罕见病数据少
+- 跨物种迁移（小鼠 → 人）
+- **少样本学习** + **领域适配**
+
+### 3.4 解释性要求高（医疗场景）
+
+- 医生不能用黑箱——**必须解释**
+- 监管（FDA）要求可解释
+- 详见 [`讲透可解释性`](../../讲透可解释性/)
+
+---
+
+## 四、当前前沿（2024-2026）
+
+### 4.1 单细胞生物学
+
+- **scGPT**（2024）：单细胞 RNA 测序的基础模型
+- **Geneformer**（2023, *Nature*）：迁移学习
+- **意义**：理解细胞异质性（癌症、发育）
+
+### 4.2 细胞基础模型
+
+- **CellPLM / CellFoundation**（2024-2025）
+- 一个模型解多种细胞任务——**生物学的基础模型**
+
+### 4.3 脑机接口的 AI
+
+- **Neuralink**（2024 人体试验）
+- AI 解码语音（2024 *Nature*）：瘫痪患者每分钟 78 词
+
+### 4.4 AI 药物发现商业化
+
+- **Insilico Medicine**：AI 药物临床 II 期
+- **Isomorphic Labs**：AlphaFold 商业化
+- **Recursion**：表型 AI
+
+### 4.5 合成生物学
+
+- 设计新酶（如降解塑料）
+- **AlphaFold + diffusion**：从头设计蛋白
+- **RFdiffusion**（2023, Baker lab）
+
+---
+
+## 五、AI 改变了生物学的什么
+
+### 5.1 蛋白质折叠的解决
+
+- 50 年难题 → 一次解决（AlphaFold）
+- **"分子生物学"教科书重写**
+
+### 5.2 假设驱动 → 数据驱动
+
+经典生物：**假设驱动**（先猜机制，再验证）
+AI4Bio：**数据驱动**（先找模式，再问为什么）
+
+——[`讲透科学的现代性/01`](../../讲透科学的现代性/01-第五范式.md) 在生物的实证。
+
+### 5.3 个人化医疗
+
+- 基因组 + 影像 + EHR → 个体化诊断
+- **AI 是核心**——人不可能处理这么多数据。
+
+### 5.4 生物学的反思
+
+- AlphaFold 我们"理解"吗？（[`讲透科学的现代性/03`](../../讲透科学的现代性/03-AI时代的科学哲学.md)）
+- **生物学是工程还是科学**？（合成生物学挑战）
+
+---
+
+## 六、开放问题
+
+1. **细胞基础模型能统一生物学吗**？
+2. **AI 能预测生物涌现吗**？（如意识、衰老）
+3. **AI 设计的生命**伦理？
+4. **基因编辑 + AI 的安全**？
+5. **生物学的"理解"边界**？
+
+---
+
+## 七、一句话总结
+
+> 🎯 **四句话**：
+> 1. AI 是生物学的**超级显微镜**——跨基因组 / 蛋白 / 细胞 / 影像 / 神经 / 进化多尺度。
+> 2. **AlphaFold 是 50 年革命的标志**——2024 Nobel Chemistry。
+> 3. **方法学**：多尺度 + 因果推断 + 解释性（医疗）+ 迁移学习。
+> 4. **2024 前沿**：单细胞基础模型 + BCI + 合成生物 + AI 药物——**生物学的第五范式**。
+
+---
+
+📌 **下一步**
+
+1. **读**：AlphaFold 2/3 / RFdiffusion / scGPT。
+2. **和 [`讲透AIfor各学科/化学`](../化学/) + [`讲透AI应用全景/04`](../../讲透AI应用全景/04-AI4Medicine.md) 对照**。
+3. **思考开放问题**——细胞基础模型 + AI 设计生命，博士论文级方向。
+4. **进入 [01 AlphaFold 革命深挖](./)**（待补）。
+---
+
+
+---
+
+## 🇨🇳 国内可访问资源映射
+
+> 本领域核心资源多托管在大陆不易访问的平台（Google 系被墙、GitHub/HuggingFace 不稳定、Nature/Science 付费墙）。下表给出**国内可直接访问**的对应入口。
+
+### 通用映射（所有 AI for 学科共享）
+
+| 类型 | 境外 | 国内可访问 |
+|---|---|---|
+| 论文检索 | Google Scholar | [百度学术](https://xueshu.baidu.com) / [Semantic Scholar](https://semanticscholar.org)（可直连）/ [知网](https://cnki.net) |
+| 论文全文 | Nature/Science/arXiv | [NSTL](https://nstl.gov.cn) 免费文献传递 / Semantic Scholar / 中科院文献情报中心 |
+| 代码 | GitHub | [Gitee](https://gitee.com) / [ghproxy](https://ghproxy.com) 加速 |
+| 模型/权重 | HuggingFace | [ModelScope 魔搭](https://modelscope.cn) / [百度千帆](https://cloud.baidu.com/product/wenxinworkshop) |
+| 数据集 | 境外数据托管 | [阿里云天池](https://tianchi.aliyun.com) / [百度 AI Studio](https://aistudio.baidu.com) |
+| 算力 | Colab / AWS GPU | [阿里 PAI](https://pai.alibaba.com) / [百度 BCC](https://cloud.baidu.com/product/bcc/gpu.html) / 各地**智算中心** |
+| 大模型 API | GPT-4 / Claude | [智谱 GLM](https://zhipuai.cn) / [DeepSeek](https://deepseek.com) / [通义千问](https://tongyi.aliyun.com) / [文心](https://yiyan.baidu.com) |
+| 视频/课程 | YouTube / Coursera | [B站](https://bilibili.com) / [学堂在线](https://xuetangx.com) / [中国大学 MOOC](https://icourse163.org) |
+
+### 本学科特有
+
+| 境外资源 | 国内可访问对应 |
+|---|---|
+| AlphaFold（GitHub）| Gitee 镜像 / ModelScope 搜 AlphaFold |
+| RCSB PDB（蛋白结构，美国）| [国家蛋白质科学中心·北京](http://ncpss.org) / 上海光源 |
+| EBI / NCBI 数据 | [国家基因库 CNGB](https://cncb.ac.cn)（深圳）|
+| 单细胞数据库 | CNGB / 阿里云天池 |
+
+📌 **一句话**：论文→Semantic Scholar/NSTL；代码→Gitee；模型→ModelScope；数据→天池/AI Studio；全程无需翻墙。

@@ -1,0 +1,225 @@
+# 00 · AI for Physics 是什么
+
+> **第一性问题**：物理是"科学之王"——500 年来靠**理论 + 实验**推进。AI 来了，物理会变成什么样？
+>
+> 答案：AI 正在成为物理的**第三种方法**——除了理论推导和实验观测，**AI 模拟 + 数据驱动发现**已成主流。LIGO 找到引力波、CERN 发现希格斯、量子计算优化——背后都有 AI。
+>
+> 配套：[`讲透AI应用全景/01-AI4Science`](../../讲透AI应用全景/01-AI4Science.md) + [`讲透科学的现代性/01 第五范式`](../../讲透科学的现代性/01-第五范式.md)
+
+---
+
+## 一、物理为什么需要 AI
+
+### 1.1 数据爆炸
+
+- **LIGO**：每秒产生 1TB 数据，找引力波信号 = 找针在 haystack
+- **CERN LHC**：每年 100 PB 数据，找新粒子 = 极稀疏事件
+- **巡天望远镜**（LSST）：10 年拍 800 张全天空，每夜 15TB
+- **量子模拟**：希尔伯特空间指数爆炸
+
+**经典方法**：写明确算法找信号——但**不知道信号长什么样**。
+
+**AI 方法**：从已知信号学，泛化到未知——**异常检测 + 模式识别**。
+
+### 1.2 计算复杂度爆炸
+
+- **多体问题**：N 个粒子，维度 $3^N$
+- **强关联电子**：经典方法算不动
+- **湍流**：Navier-Stokes 高维混沌
+- **量子化学**：精确解需要指数算力
+
+**AI 解药**：**神经算子**（Neural Operator）—— 学物理场映射，比经典数值快几个数量级。
+
+---
+
+## 二、AI 在物理的五大应用
+
+### 2.1 高能物理（粒子物理）
+
+**CERN / LHC 的核心场景**：
+- 希格斯玻色子发现（2012）—— 信号 vs 噪声比 $10^{-12}$
+- AI 用于**径迹重建**（track reconstruction）——从碰撞碎片还原粒子轨迹
+- **触发系统**（trigger）—— 实时决定哪些数据保留（99.99% 丢弃）
+- **异常检测**—— 找新物理（没见过的信号）
+
+**代表**：
+- **CMS / ATLAS 实验**全用深度学习
+- **Graph Neural Networks** 处理粒子事件（点 + 边）
+- 2024 CERN 公开 LLM（**Cerulean**）用于物理文献分析
+
+### 2.2 引力波天文学
+
+**LIGO/Virgo**：
+- 引力波信号比噪声小 ~100 倍
+- 经典方法：matched filtering（已知信号波形）
+- **AI 方法**：CNN / Transformer 直接从噪声提取信号
+- 2017 第一个双中子星合并 GW170817—— AI 辅助实时检测
+
+**Deep Filtering**（George-Huerta 2018）：CNN 做引力波检测，**比经典方法快几个数量级**。
+
+### 2.3 量子物理与量子计算
+
+**两类应用**：
+1. **用 AI 解量子问题**：
+   - **Neural Quantum States**（Carleo-Troyer 2017, *Nature Physics*）—— 用神经网络表示量子波函数
+   - **DMRG 替代**—— 1D 强关联系统的深度学习
+2. **AI 加速量子计算**：
+   - 量子纠错码的解码（Google Sycamore）
+   - 量子电路优化
+   - 变分量子算法（VQE）的参数搜索
+
+### 2.4 凝聚态物理
+
+**NOMAD**（新材料数据库）+ AI 预测：
+- 拓扑材料发现
+- 超导预测（**GitHub 上 2023 多篇 ML 超导论文**）
+- 电子结构计算（DFT 加速）
+
+**代表**：
+- **Equiformer**（2023 SOTA for materials）
+- **M3GNet**（Materials Project）
+
+### 2.5 天体物理与宇宙学
+
+- **系外行星发现**（Kepler / TESS 数据）
+- **暗物质 / 暗能量**检测
+- **宇宙微波背景**（CMB）分析
+- **星系形态分类**（Galaxy Zoo + CNN）
+
+---
+
+## 三、方法学的特点
+
+### 3.1 物理约束的 AI（Physics-Informed AI）
+
+**核心**：把物理定律（守恒律、对称性、运动方程）**嵌入 AI**。
+
+**代表方法**：
+- **PINN（Physics-Informed Neural Networks, Raissi 2019）**—— 把 PDE 作为 loss 项
+- **Neural Operators（FNO, DeepONet）**—— 学 PDE 解的算子
+- **Equivariant Networks**—— 满足旋转/平移对称性
+
+**意义**：**纯数据驱动不可信**——物理学家要 AI 尊重守恒律。
+
+### 3.2 可解释性要求高
+
+物理学家**不接受黑箱**——他们要**理解为什么**。
+
+- 不是预测对了就行，是预测要揭示**新物理**
+- 这是 [`讲透可解释性`](../../讲透可解释性/) 在物理学的应用
+
+### 3.3 数据稀缺 + 仿真丰富
+
+- **真实实验数据少**（CERN 一年才几个关键事件）
+- **仿真数据多**（蒙特卡洛模拟）
+- **Sim2Real**：仿真训练 + 真实校准
+
+---
+
+## 四、当前前沿（2024-2026）
+
+### 4.1 量子机器学习（QML）
+
+- **量子硬件**：Google Sycamore / IBM Quantum / IonQ
+- **量子经典混合**：变分量子算法
+- **理论**：量子优势何时显现？（5-15 年）
+
+### 4.2 核聚变 AI
+
+- **ITER / SPARC**：等离子体控制
+- DeepMind 2022 *Nature*：**RL 控制托卡马克等离子体**——避免破裂
+- **意义**：商业核聚变可能依赖 AI
+
+### 4.3 超导发现的 AI
+
+- **2018 / 2023 LK-99 事件**：AI 预测超导候选
+- 数据库：**SuperCon**
+- 开放问题：室温超导存在吗？AI 能找到吗？
+
+### 4.4 物理基础模型
+
+- **PDEBench** / **Cursor**：物理场的基础模型
+- **通用物理 AI**：一个模型解所有物理问题？（早期）
+
+---
+
+## 五、AI 改变了物理学的什么
+
+### 5.1 第三种科学方法
+
+经典：**理论推导** + **实验观测**。
+现代：**理论** + **实验** + **AI 模拟/数据驱动**。
+
+——参考 [`讲透科学的现代性/01 第五范式`](../../讲透科学的现代性/01-第五范式.md)
+
+### 5.2 新发现的加速
+
+- LIGO 用 AI 找到**人类漏掉的引力波**信号
+- GNoME 发现**800 年传统矿物学没找到的**新晶体
+- **AI 不是工具，是合作者**
+
+### 5.3 物理学的反思
+
+- AI 发现但人不懂——**算物理吗**？（[`讲透科学的现代性/03`](../../讲透科学的现代性/03-AI时代的科学哲学.md)）
+- 物理学的"理解"在 AI 时代怎么定义？
+
+---
+
+## 六、开放问题
+
+1. **AI 能发现新物理吗**？（如弦理论、量子引力）
+2. **量子机器学习的真实优势**？何时？
+3. **物理基础模型**能统一吗？
+4. **AI + 物理法则的可融合性**？黑箱 vs 解释
+5. **核聚变 AI 控制能商用**？
+
+---
+
+## 七、一句话总结
+
+> 🎯 **四句话**：
+> 1. AI 是物理的**第三种方法**——理论 + 实验 + AI 模拟/数据驱动。
+> 2. **五大应用**：高能物理 / 引力波 / 量子 / 凝聚态 / 天体——LIGO/CERN/Google 都在用。
+> 3. **方法学特点**：Physics-Informed AI（PINN/FNO）+ 可解释性 + 仿真-真实校准。
+> 4. **AI 改变物理**：发现加速 + 新方法论 + 认识论反思（[`讲透科学的现代性`](../../讲透科学的现代性/)）。
+
+---
+
+📌 **下一步**
+
+1. **进入 [01 高能物理深挖](./)**（待补）。
+2. **读 Carleo-Troyer 2017 + Raissi PINN 2019**。
+3. **和 [`讲透科学的现代性/01`](../../讲透科学的现代性/01-第五范式.md) 对照**——第五范式在物理的实证。
+4. **思考开放问题**——AI 能发现新物理吗？博士论文级方向。
+---
+
+
+---
+
+## 🇨🇳 国内可访问资源映射
+
+> 本领域核心资源多托管在大陆不易访问的平台（Google 系被墙、GitHub/HuggingFace 不稳定、Nature/Science 付费墙）。下表给出**国内可直接访问**的对应入口。
+
+### 通用映射（所有 AI for 学科共享）
+
+| 类型 | 境外 | 国内可访问 |
+|---|---|---|
+| 论文检索 | Google Scholar | [百度学术](https://xueshu.baidu.com) / [Semantic Scholar](https://semanticscholar.org)（可直连）/ [知网](https://cnki.net) |
+| 论文全文 | Nature/Science/arXiv | [NSTL](https://nstl.gov.cn) 免费文献传递 / Semantic Scholar / 中科院文献情报中心 |
+| 代码 | GitHub | [Gitee](https://gitee.com) / [ghproxy](https://ghproxy.com) 加速 |
+| 模型/权重 | HuggingFace | [ModelScope 魔搭](https://modelscope.cn) / [百度千帆](https://cloud.baidu.com/product/wenxinworkshop) |
+| 数据集 | 境外数据托管 | [阿里云天池](https://tianchi.aliyun.com) / [百度 AI Studio](https://aistudio.baidu.com) |
+| 算力 | Colab / AWS GPU | [阿里 PAI](https://pai.alibaba.com) / [百度 BCC](https://cloud.baidu.com/product/bcc/gpu.html) / 各地**智算中心** |
+| 大模型 API | GPT-4 / Claude | [智谱 GLM](https://zhipuai.cn) / [DeepSeek](https://deepseek.com) / [通义千问](https://tongyi.aliyun.com) / [文心](https://yiyan.baidu.com) |
+| 视频/课程 | YouTube / Coursera | [B站](https://bilibili.com) / [学堂在线](https://xuetangx.com) / [中国大学 MOOC](https://icourse163.org) |
+
+### 本学科特有
+
+| 境外资源 | 国内可访问对应 |
+|---|---|
+| NeuralOperator / PINN（GitHub）| Gitee 搜同名镜像 |
+| DeepMind GraphCast（天气）| ModelScope 搜 GraphCast |
+| LIGO 引力波数据 | 中科院国家天文台 / 中科院高能所 |
+| APS/IEEE 物理 preprint | 中科院文献情报中心 / Semantic Scholar |
+
+📌 **一句话**：论文→Semantic Scholar/NSTL；代码→Gitee；模型→ModelScope；数据→天池/AI Studio；全程无需翻墙。
