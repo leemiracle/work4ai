@@ -1,0 +1,215 @@
+# 00 · AI for Statistics 是什么
+
+> **第一性问题**：统计学是 ML 的**祖父**——但**现在 ML 反过来重塑统计学**。贝叶斯深度学习、神经过程、因果 ML——AI 让统计学家重写教科书。
+>
+> **2024 共识**：现代统计学 = 经典统计 + 机器学习。
+>
+> 配套：[`讲透统计学习理论`](../../讲透统计学习理论/) + [`讲透概率图模型`](../../讲透概率图模型/) + [`讲透因果推断`](../../讲透因果推断/)
+
+---
+
+## 一、统计为什么被 AI 重塑
+
+### 1.1 经典统计 vs ML
+
+| | 经典统计 | ML |
+|---|---|---|
+| 数据假设 | $n > p$ | $p \gg n$ |
+| 目标 | 推断 / 置信区间 | 预测 |
+| 方法 | 线性模型 / 假设检验 | 神经网络 |
+| 不确定性 | 显式（CI / p-value）| 隐式 |
+
+**冲突**：深度学习"不严谨"——但 work。
+
+### 1.2 现代统计学的混合
+
+- **贝叶斯深度学习**：神经网络 + 不确定性
+- **因果 ML**：因果 + 预测
+- **可解释 ML**：黑箱 + 解释
+
+---
+
+## 二、AI 在统计的五大应用
+
+### 2.1 贝叶斯深度学习
+
+- 神经网络 + 贝叶斯推断
+- 输出**不确定性**（epistemic + aleatoric）
+- **代表**：MC Dropout / Deep Ensembles / Bayes by Backprop
+
+**应用**：医疗 / 自动驾驶（必须知道"不知道"）
+
+### 2.2 神经过程（Neural Processes）
+
+- **Gaussian Process 的神经网络版**
+- 跨任务元学习
+- **代表**：Attentive NP / Latent NP（DeepMind）
+
+### 2.3 变分推断的现代化
+
+- **VAE** = 神经网络参数化的 VI
+- **扩散模型** = 特殊 VI
+- 详见 [`讲透概率图模型`](../../讲透概率图模型/)。
+
+### 2.4 因果机器学习
+
+- **EconML**（Microsoft）
+- **Double Machine Learning**
+- **Causal Forests**（Athey/Wager）
+- 应用：政策评估 / 个性化治疗
+
+详见 [`讲透因果推断`](../../讲透因果推断/)。
+
+### 2.5 自动统计
+
+- **Automatic Statistician**（Google 2014+）
+- LLM 自动数据分析（GPT-4 + Code Interpreter）
+- **统计学民主化**
+
+---
+
+## 三、统计学专属的方法学
+
+### 3.1 不确定性量化
+
+- 经典：CI / p-value / 后验分布
+- ML：Deep Ensembles / Bayesian NN / Conformal Prediction
+
+### 3.2 高维统计
+
+- $p \gg n$ 问题（基因组 / 文本）
+- **Lasso / Elastic Net** + ML
+- **Double Descent**（[`讲透泛化/03`](../../讲透泛化/03-双层下降.md)）
+
+### 3.3 多重检验
+
+- 基因组数据：100 万个 SNP 同时检验
+- **FDR 控制**（Benjamini-Hochberg）
+- ML 加速
+
+### 3.4 实验设计
+
+- A/B 测试 + ML 个性化
+- **Bandit 算法**
+- **Sequential Testing**
+
+---
+
+## 四、当前前沿（2024-2026）
+
+### 4.1 Conformal Prediction
+
+- 分布无关的**预测区间**
+- 2024 爆发：每个 LLM 都该有 conformal 区间
+- **代表**：AWS / Google Cloud 内部用
+
+### 4.2 因果表示学习
+
+- **Schölkopf**（MPI）的 IRM / Causal RL
+- 学表示同时学因果结构
+- 详见 [`讲透因果推断`](../../讲透因果推断/)。
+
+### 4.3 LLM 自动统计
+
+- **GPT-4 + Code Interpreter**：自动 EDA / 建模
+- **ChatGPT Analysis** 替代部分统计师
+- **代表性研究**：自动假设检验
+
+### 4.4 Foundation Model for Tabular Data
+
+- **TabPFN**（2022）：表格基础模型
+- **Tabula**（2024）
+- 表格数据 = 工业界 80%——AI 必然方向
+
+### 4.5 合成数据生成
+
+- **差分隐私 + 生成模型**
+- 释放敏感数据
+- 统计 + 隐私
+
+---
+
+## 五、AI 改变了统计学的什么
+
+### 5.1 不确定性量化
+
+- 经典统计 vs ML：CI vs 准确率
+- **现代统计**：两者结合
+
+### 5.2 数据科学的兴起
+
+- 统计学家 + 计算机 = 数据科学家
+- 2012 *Harvard Business Review* "最性感工作"
+- 2024：**全民数据科学**
+
+### 5.3 统计教育的危机
+
+- 经典统计学家不懂 ML
+- ML 工程师不懂统计
+- **教育改革**：跨学科
+
+### 5.4 可重复性
+
+- ML 论文复现难（[`讲透科学的现代性/02`](../../讲透科学的现代性/02-可重复性危机.md)）
+- 统计学的方法（CI / 实验）回归
+- **混合方法论**
+
+---
+
+## 六、开放问题
+
+1. **深度学习的统计基础**？为什么 work？
+2. **不确定性量化的统一框架**？
+3. **因果 + 深度学习的融合边界**？
+4. **LLM 自动统计可靠吗**？
+5. **统计教育怎么改**？
+
+---
+
+## 七、一句话总结
+
+> 🎯 **四句话**：
+> 1. **现代统计学 = 经典 + ML**——不可分割。
+> 2. **五大应用**：贝叶斯 DL / 神经过程 / 现代 VI / 因果 ML / 自动统计（LLM）。
+> 3. **方法学核心**：不确定性量化（Conformal / Deep Ensemble）。
+> 4. **AI 让统计 + ML 边界模糊**——**数据科学成为新学科**。
+
+---
+
+📌 **下一步**
+
+1. **读**：EconML / Conformal Prediction（Angelopoulos）。
+2. **和 [`讲透统计学习理论`](../../讲透统计学习理论/) + [`讲透因果推断`](../../讲透因果推断/) 对照**。
+3. **进入 [01 因果 ML 深挖](./)**（待补）。
+---
+
+
+---
+
+## 🇨🇳 国内可访问资源映射
+
+> 本领域核心资源多托管在大陆不易访问的平台（Google 系被墙、GitHub/HuggingFace 不稳定、Nature/Science 付费墙）。下表给出**国内可直接访问**的对应入口。
+
+### 通用映射（所有 AI for 学科共享）
+
+| 类型 | 境外 | 国内可访问 |
+|---|---|---|
+| 论文检索 | Google Scholar | [百度学术](https://xueshu.baidu.com) / [Semantic Scholar](https://semanticscholar.org)（可直连）/ [知网](https://cnki.net) |
+| 论文全文 | Nature/Science/arXiv | [NSTL](https://nstl.gov.cn) 免费文献传递 / Semantic Scholar / 中科院文献情报中心 |
+| 代码 | GitHub | [Gitee](https://gitee.com) / [ghproxy](https://ghproxy.com) 加速 |
+| 模型/权重 | HuggingFace | [ModelScope 魔搭](https://modelscope.cn) / [百度千帆](https://cloud.baidu.com/product/wenxinworkshop) |
+| 数据集 | 境外数据托管 | [阿里云天池](https://tianchi.aliyun.com) / [百度 AI Studio](https://aistudio.baidu.com) |
+| 算力 | Colab / AWS GPU | [阿里 PAI](https://pai.alibaba.com) / [百度 BCC](https://cloud.baidu.com/product/bcc/gpu.html) / 各地**智算中心** |
+| 大模型 API | GPT-4 / Claude | [智谱 GLM](https://zhipuai.cn) / [DeepSeek](https://deepseek.com) / [通义千问](https://tongyi.aliyun.com) / [文心](https://yiyan.baidu.com) |
+| 视频/课程 | YouTube / Coursera | [B站](https://bilibili.com) / [学堂在线](https://xuetangx.com) / [中国大学 MOOC](https://icourse163.org) |
+
+### 本学科特有
+
+| 境外资源 | 国内可访问对应 |
+|---|---|
+| CRAN / PyPI（R/Python 包）| [清华 TUNA 镜像](https://mirrors.tuna.tsinghua.edu.cn) / 中科大镜像 |
+| Conformal Prediction 库（GitHub）| Gitee 镜像 |
+| JSM / RSS 会议论文 | 知网 / 中科院文献 |
+| Stata / SAS（商业）| 国产替代：**R + Python**（开源）/ **SPSS**（国内有代理）|
+
+📌 **一句话**：论文→Semantic Scholar/NSTL；代码→Gitee；模型→ModelScope；数据→天池/AI Studio；全程无需翻墙。
