@@ -482,7 +482,7 @@ UNIFIED_ROADMAP **L13**（Berkeley CS 285）+ **L09**（Berkeley CS 188 经典 A
 | 本文洞察 | UNIFIED_ROADMAP 课号 | 项目代码 |
 |---------|---------------------|---------|
 | 1 抽象层次 | L01 | [berkeley topic1 cs61a] |
-| 2 程序在机器上跑 | L03 | ⭐ [CSAPP_HARDWARE_TRUTHS.md](CSAPP_HARDWARE_TRUTHS.md) + [csapp.py](../cmu-cs-projects/topic2-systems/csapp.py) |
+| 2 程序在机器上跑 | L03 | ⭐ [CSAPP_HARDWARE_TRUTHS.md](CSAPP_HARDWARE_TRUTHS.md) + [csapp.py](./cmu-cs-projects/topic2-systems/csapp.py) |
 | 3 搜索 | L09 | [berkeley topic4 cs188] |
 | 4 概率 | L10 | [cmu topic5 ml] + [cmu topic6 pgm] |
 | 5 反向传播 | L11 | [toronto topic8 deep] |

@@ -17,6 +17,7 @@
 | `topic10-os/os.py` | CS 162 OS | ~350 | ✅ |
 | `topic11-data/data_science.py` | Data 8/100 | ~370 | ✅ |
 | `topic12-opt/optimization.py` | EECS 127 Optimization | ~350 | ✅ |
+| `topic13-sec/cs161_security.py` | CS 161 Computer Security | ~350 | ✅ |
 
 ### 补充课程（3 个文件，30 个微项目）
 | 文件 | 覆盖课程数 | 状态 |

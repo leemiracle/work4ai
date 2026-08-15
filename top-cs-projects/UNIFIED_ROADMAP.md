@@ -182,7 +182,7 @@
   - 想要中等深度 → Berkeley CS 61C
 - **知识检查**：能否解释为什么 `arr[i][j]` 比 `arr[j][i]` 快 50×？
 - **配套**：CSAPP 教材（中文版有）+ 全部 lab 公开。
-- ⭐ **深读**：[CSAPP_HARDWARE_TRUTHS.md](CSAPP_HARDWARE_TRUTHS.md)（8 个硬件真相的完全体）+ [可运行 demo](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py)（cache 局部性 / TLB / 栈溢出 / 分支预测 / 伪共享 / syscall / 内存乱序 / IEEE754，跑 `python3 hardware_truths_demo.py` 即可看到 8 个反直觉对比）。
+- ⭐ **深读**：[CSAPP_HARDWARE_TRUTHS.md](CSAPP_HARDWARE_TRUTHS.md)（8 个硬件真相的完全体）+ [可运行 demo](./cmu-cs-projects/topic2-systems/hardware_truths_demo.py)（cache 局部性 / TLB / 栈溢出 / 分支预测 / 伪共享 / syscall / 内存乱序 / IEEE754，跑 `python3 hardware_truths_demo.py` 即可看到 8 个反直觉对比）。
 
 ---
 

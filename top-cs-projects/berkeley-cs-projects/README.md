@@ -22,6 +22,7 @@
 | 10 | 操作系统 | `topic10-os/os.py` | CS 162 | ✅ |
 | 11 | 数据科学 | `topic11-data/data_science.py` | Data 8 / 100 | ✅ |
 | 12 | 最优化 | `topic12-opt/optimization.py` | EECS 127 | ✅ |
+| 13 | 计算机安全 | `topic13-sec/cs161_security.py` | CS 161 | ✅ |
 | 📚 | 补充本科 | `supplementary/undergrad_projects.py` | CS 61A进阶/70进阶/EE16A/CS170/161/164/169/174/C100/EE120 | ✅ |
 | 📚 | 补充研究生 | `supplementary/grad_projects.py` | CS 288/294/267/287/294-141/294-165/280/EE227BT/281A/C267 | ✅ |
 | 📚 | 杂项微项目 | `supplementary/micro_projects.py` | CS 198/9K/Data6/188进阶/M11/Stat154/EE127/CS191/198-126/198-127 | ✅ |

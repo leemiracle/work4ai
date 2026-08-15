@@ -5,8 +5,8 @@
 > 这是 [ARM_AND_RISCV_OPTIMIZATION.md](ARM_AND_RISCV_OPTIMIZATION.md) 第 6 部分 OSACA 章节的**完全展开**。
 >
 > **配套本地代码**（已落地）：
-> - [`../cmu-cs-projects/topic2-systems/osaca_data.py`](../cmu-cs-projects/topic2-systems/osaca_data.py) — 数据库本地化（可离线查询任意指令）
-> - [`../cmu-cs-projects/topic2-systems/osaca_mini.py`](../cmu-cs-projects/topic2-systems/osaca_mini.py) — 核心算法复现（throughput + CP + LCD）
+> - [`./cmu-cs-projects/topic2-systems/osaca_data.py`](./cmu-cs-projects/topic2-systems/osaca_data.py) — 数据库本地化（可离线查询任意指令）
+> - [`./cmu-cs-projects/topic2-systems/osaca_mini.py`](./cmu-cs-projects/topic2-systems/osaca_mini.py) — 核心算法复现（throughput + CP + LCD）
 
 ---
 
@@ -188,7 +188,7 @@ def import_data(type, arch, path)            # 导入 ibench/asmbench 微基准
 
 **OSACA 的解药**（assign_optimal_throughput）：
 - 用**线性规划**做最优分配（指令有多个可选端口时，怎么分摊最小化总周期）
-- 本地 [`osaca_mini.py::analyze_throughput`](../cmu-cs-projects/topic2-systems/osaca_mini.py) 用**贪心**（均匀分摊）简化
+- 本地 [`osaca_mini.py::analyze_throughput`](./cmu-cs-projects/topic2-systems/osaca_mini.py) 用**贪心**（均匀分摊）简化
 
 **输出**：`{port: total_cycles}`，找最大值即为 throughput bound。
 
@@ -201,7 +201,7 @@ def import_data(type, arch, path)            # 导入 ibench/asmbench 微基准
 2. 用 networkx 拓扑排序
 3. DP 求最长路径：`cp[node] = max(cp[pred] + pred.latency for pred in predecessors)`
 
-**本地复现**：[`osaca_mini.py::find_critical_path`](../cmu-cs-projects/topic2-systems/osaca_mini.py) 实现了 Kahn 算法变种。
+**本地复现**：[`osaca_mini.py::find_critical_path`](./cmu-cs-projects/topic2-systems/osaca_mini.py) 实现了 Kahn 算法变种。
 
 **实测**（daxpy kernel on skx）：
 ```
@@ -215,7 +215,7 @@ CP length: 16 cyc（4+4+4+4）
 
 **LCD 定义**：指令 A 在迭代 N 写寄存器 R，指令 B 在迭代 N+1 读 R。在静态汇编中：A 的行号 > B 的行号（A 在循环末尾，B 在循环开头）。
 
-**本地复现**：[`osaca_mini.py::find_lcd`](../cmu-cs-projects/topic2-systems/osaca_mini.py) 检测所有"writer 行号 > reader 行号"的寄存器依赖。
+**本地复现**：[`osaca_mini.py::find_lcd`](./cmu-cs-projects/topic2-systems/osaca_mini.py) 检测所有"writer 行号 > reader 行号"的寄存器依赖。
 
 ### 3.4 OSACA 的核心模型
 
@@ -392,8 +392,8 @@ osaca_mini.py（算法可复现）
 - **[uops.info](https://uops.info/)** —— OSACA 数据的主要来源之一
 
 ### 学习路径
-1. 跑 [`osaca_data.py`](../cmu-cs-projects/topic2-systems/osaca_data.py) 看热点指令跨架构对比
-2. 跑 [`osaca_mini.py`](../cmu-cs-projects/topic2-systems/osaca_mini.py) 看 daxpy 的 CP/LCD 分析
+1. 跑 [`osaca_data.py`](./cmu-cs-projects/topic2-systems/osaca_data.py) 看热点指令跨架构对比
+2. 跑 [`osaca_mini.py`](./cmu-cs-projects/topic2-systems/osaca_mini.py) 看 daxpy 的 CP/LCD 分析
 3. 装 `pip install osaca`，在真实汇编上跑
 4. 在 [Godbolt](https://godbolt.org) 用 OSACA 分析你的代码
 5. 读 OSACA 论文理解 LP 最优端口分配

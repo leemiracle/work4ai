@@ -115,7 +115,7 @@ CS191 / CS192 / CS195 / CS197 / CS199 / CS390A-D / CS399 / CS499 / CS802
 ## 🚀 快速开始
 
 ```bash
-cd /mnt/c/workspace/work4ai/stanford-cs-projects
+cd top-cs-projects/stanford-cs-projects
 
 # 跑通所有代码
 bash run_all.sh

@@ -4,7 +4,7 @@
 >
 > CSAPP 之所以被奉为程序员"神作"，不是因为它教你写 C，而是因为它**系统性地打破高级语言制造的"软件抽象幻觉"**——让你直面硅片、电路、总线、物理时钟的冷酷现实。本文把 CSAPP 全书浓缩为 **8 个「软件幻觉 vs 硬件真相」的碰撞**，每个都给出：幻觉→真相→性能/安全黑洞→工程结论→对应 Lab→关键数字。
 >
-> **配套代码**：[`../cmu-cs-projects/topic2-systems/csapp.py`](../cmu-cs-projects/topic2-systems/csapp.py)（cache 模拟 / malloc / 多级页表）+ [`../cmu-cs-projects/topic2-systems/hardware_truths_demo.py`](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py)（8 个真相的可运行对比演示）。
+> **配套代码**：[`./cmu-cs-projects/topic2-systems/csapp.py`](./cmu-cs-projects/topic2-systems/csapp.py)（cache 模拟 / malloc / 多级页表）+ [`./cmu-cs-projects/topic2-systems/hardware_truths_demo.py`](./cmu-cs-projects/topic2-systems/hardware_truths_demo.py)（8 个真相的可运行对比演示）。
 >
 > **读完这句话你该记住**：在编写 C 程序时，你面对的不是一个理想化的逻辑黑盒，而是一台受物理规律和硬件架构支配的机器。**Bit、Byte、Word、Cache、Page、Process，每一个都是真实存在于硅片、电路和操作系统内核中的物理实体。**
 
@@ -53,8 +53,8 @@ CPU 从内存中读取数据时，**从来不是按"字节（Byte）"读取的**
 
 ### 🧪 Lab / 代码指针
 - **CSAPP Lab**：无直接 lab，但 Ch 6.4–6.5 的 mountain 程序（`cache/mountain` 源码随书公开）画出的"存储器山"是教科书级可视化。
-- **本项目代码**：[`csapp.py`](../cmu-cs-projects/topic2-systems/csapp.py) 的 `Cache` 类（set-associative 模拟，统计 hit/miss）。
-- **可跑演示**：[`hardware_truths_demo.py`](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §1 `demo_cache_locality` —— 在纯 Python 里用 `Cache` 模拟器对比 row-major vs col-major 的 miss 率。
+- **本项目代码**：[`csapp.py`](./cmu-cs-projects/topic2-systems/csapp.py) 的 `Cache` 类（set-associative 模拟，统计 hit/miss）。
+- **可跑演示**：[`hardware_truths_demo.py`](./cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §1 `demo_cache_locality` —— 在纯 Python 里用 `Cache` 模拟器对比 row-major vs col-major 的 miss 率。
 
 ### 📐 关键数字
 - L1 Cache 延迟：**1–4 cycle**（~1 ns）
@@ -91,8 +91,8 @@ CPU 从内存中读取数据时，**从来不是按"字节（Byte）"读取的**
 
 ### 🧪 Lab / 代码指针
 - **CSAPP Lab**：无单独 lab，但 Ch 9 整章（Virtual Memory）是核心。`vm` 相关练习在书末习题。
-- **本项目代码**：[`csapp.py`](../cmu-cs-projects/topic2-systems/csapp.py) 的 `translate_addr` + `TLB` 类（多级页表 + TLB 模拟）。
-- **可跑演示**：[`hardware_truths_demo.py`](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §2 `demo_tlb_and_pages` —— 模拟 4 级页表翻译 + TLB 命中率随访问跨页数变化。
+- **本项目代码**：[`csapp.py`](./cmu-cs-projects/topic2-systems/csapp.py) 的 `translate_addr` + `TLB` 类（多级页表 + TLB 模拟）。
+- **可跑演示**：[`hardware_truths_demo.py`](./cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §2 `demo_tlb_and_pages` —— 模拟 4 级页表翻译 + TLB 命中率随访问跨页数变化。
 
 ### 📐 关键数字
 - x86-64 标准页：**4 KB**
@@ -146,7 +146,7 @@ C 语言调用一个函数时，系统会在 Stack（栈）上**按严格顺序*
 ### 🧪 Lab / 代码指针
 - **CSAPP Lab**：⭐ **Attack Lab**（Phase 1–5，从栈溢出到 ROP 攻击，全公开放在 `csapp.cs.cmu.edu/3e/labs.html`）。这是 CSAPP 最有名的 lab 之一。
 - **本项目代码**：纯 Python 难以演示真实栈溢出，但理解原理后请配合 Attack Lab 实战。
-- **可跑演示**：[`hardware_truths_demo.py`](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §3 `demo_stack_overflow` —— 用 `bytearray` 模拟栈帧，演示越界写如何覆盖"返回地址"。
+- **可跑演示**：[`hardware_truths_demo.py`](./cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §3 `demo_stack_overflow` —— 用 `bytearray` 模拟栈帧，演示越界写如何覆盖"返回地址"。
 
 ### 📐 关键数字
 - x86-64 栈大小：默认 **8 MB**（`ulimit -s`）
@@ -183,8 +183,8 @@ C 语言调用一个函数时，系统会在 Stack（栈）上**按严格顺序*
 
 ### 🧪 Lab / 代码指针
 - **CSAPP Lab**：无单独 lab，但 Ch 5.8–5.12（优化程序性能）整章在讲这个。`opt` lab（在某些版本 CSAPP 里）。
-- **本项目代码**：纯 Python 看不到流水线效果（CPython 是解释器），但 [`csapp.py`](../cmu-cs-projects/topic2-systems/csapp.py) §"反直觉"段提到有序数据预测率高。
-- **可跑演示**：[`hardware_truths_demo.py`](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §4 `demo_branch_prediction` —— 用简化 2-bit 饱和计数器模拟预测器，对比有序 vs 乱序数组的预测准确率。
+- **本项目代码**：纯 Python 看不到流水线效果（CPython 是解释器），但 [`csapp.py`](./cmu-cs-projects/topic2-systems/csapp.py) §"反直觉"段提到有序数据预测率高。
+- **可跑演示**：[`hardware_truths_demo.py`](./cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §4 `demo_branch_prediction` —— 用简化 2-bit 饱和计数器模拟预测器，对比有序 vs 乱序数组的预测准确率。
 
 ### 📐 关键数字
 - Skylake 流水线深度：**14–19 级**
@@ -227,7 +227,7 @@ C 语言调用一个函数时，系统会在 Stack（栈）上**按严格顺序*
 ### 🧪 Lab / 代码指针
 - **CSAPP Lab**：无单独 lab，但 Ch 12（并发编程）整章。`proxy` lab 涉及多线程。
 - **本项目代码**：纯 Python（GIL）看不到真正伪共享，但概念在 [csapp.py] 的并发段。
-- **可跑演示**：[`hardware_truths_demo.py`](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §5 `demo_false_sharing` —— 用 MESI 状态机模型对比"两个变量同 Cache Line vs 不同 Cache Line"时的 invalidate 次数。
+- **可跑演示**：[`hardware_truths_demo.py`](./cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §5 `demo_false_sharing` —— 用 MESI 状态机模型对比"两个变量同 Cache Line vs 不同 Cache Line"时的 invalidate 次数。
 
 ### 📐 关键数字
 - Cache Line：**64 Bytes**
@@ -270,7 +270,7 @@ x86 CPU 在硬件电路上区分了**特权级**：
 ### 🧪 Lab / 代码指针
 - **CSAPP Lab**：无单独 lab，但 Ch 8（异常控制流 ECF）+ Ch 10（系统级 I/O）整章。`shlab`（某些版本）涉及信号处理。
 - **本项目代码**：[csapp.py] 未直接覆盖，但跨主题在 [cmu dist_sys] / [mit 6.824] 都用到 syscall 概念。
-- **可跑演示**：[`hardware_truths_demo.py`](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §6 `demo_syscall_cost` —— 用 `time.perf_counter_ns()` 对比纯加法 vs `os.getpid()` syscall 的耗时差（真实可测）。
+- **可跑演示**：[`hardware_truths_demo.py`](./cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §6 `demo_syscall_cost` —— 用 `time.perf_counter_ns()` 对比纯加法 vs `os.getpid()` syscall 的耗时差（真实可测）。
 
 ### 📐 关键数字
 - 纯函数调用（无 syscall）：**~1 ns**
@@ -328,7 +328,7 @@ ready = 1;                   print(data);  // 可能打印 0！
 ### 🧪 Lab / 代码指针
 - **CSAPP Lab**：无单独 lab，但 Ch 12.5（用信号量同步）涉及。MIT 6.828 xv6 lab 更深入。
 - **本项目代码**：纯 Python（GIL 保证内存可见）看不到，但 [mit-cs-projects dist] 的 Raft lab 是无内存模型灾难的高发地。
-- **可跑演示**：[`hardware_truths_demo.py`](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §7 `demo_memory_reordering` —— 用一个状态机模拟 Store Buffer + Load Buffer 重排，展示"代码顺序 ≠ 可见顺序"。
+- **可跑演示**：[`hardware_truths_demo.py`](./cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §7 `demo_memory_reordering` —— 用一个状态机模拟 Store Buffer + Load Buffer 重排，展示"代码顺序 ≠ 可见顺序"。
 
 ### 📐 关键数字
 - x86 Store Buffer 深度：**56 项**（Skylake）
@@ -374,7 +374,7 @@ double (64 bit): 1 符号位 | 11 指数位 | 52 尾数位
 ### 🧪 Lab / 代码指针
 - **CSAPP Lab**：无单独 lab，Ch 2.4（浮点数表示）讲原理。家庭作业习题非常经典。
 - **本项目代码**：跨主题，在 [toronto-cs deep learning] / [berkeley cs231n] 涉及 GPU 浮点。
-- **可跑演示**：[`hardware_truths_demo.py`](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §8 `demo_float_denormal` —— 用 `struct` 显示 `0.1+0.2` 的真实位模式，演示非规格化数如何产生。
+- **可跑演示**：[`hardware_truths_demo.py`](./cmu-cs-projects/topic2-systems/hardware_truths_demo.py) §8 `demo_float_denormal` —— 用 `struct` 显示 `0.1+0.2` 的真实位模式，演示非规格化数如何产生。
 
 ### 📐 关键数字
 - double 精度 machine epsilon：**2.22 × 10⁻¹⁶**

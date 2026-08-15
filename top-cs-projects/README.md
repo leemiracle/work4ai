@@ -28,13 +28,13 @@
 
 ▶ **[INSIGHTS_FULL_PICTURE.md](INSIGHTS_FULL_PICTURE.md)** — ⭐ **10 个元洞察的完全体**：每个洞察补齐"被省略的硬核全貌 + 学习阶梯 + 通过测试"。回答"元洞察之外还有什么"。
 
-▶ **[AGNER_FOG_OPTIMIZATION.md](AGNER_FOG_OPTIMIZATION.md)** — ⭐ **Agner Fog 优化手册完全综合**：5 卷圣经（C++优化/汇编/微架构/指令表/ABI）+ 4 工具（VCL/testp/objconv/asmlib）+ 10 大优化原则 + Intel/AMD 微架构对比 + SIMD 实战 + CPU dispatch。**优化方向的旗舰**，配 [可运行 demo](../cmu-cs-projects/topic2-systems/agner_optimization_demo.py)。
+▶ **[AGNER_FOG_OPTIMIZATION.md](AGNER_FOG_OPTIMIZATION.md)** — ⭐ **Agner Fog 优化手册完全综合**：5 卷圣经（C++优化/汇编/微架构/指令表/ABI）+ 4 工具（VCL/testp/objconv/asmlib）+ 10 大优化原则 + Intel/AMD 微架构对比 + SIMD 实战 + CPU dispatch。**优化方向的旗舰**，配 [可运行 demo](./cmu-cs-projects/topic2-systems/agner_optimization_demo.py)。
 
-▶ **[ARM_AND_RISCV_OPTIMIZATION.md](ARM_AND_RISCV_OPTIMIZATION.md)** — ⭐ **ARM 与 RISC-V 优化圣经**：x86 之外的两大世界（Apple Silicon/AWS Graviton/NVIDIA Grace/A64FX/SiFive/平头哥）。三 ISA 微架构对比 + OSACA 工具 + ARM 独特性 6 点（弱内存模型/SVE2/Apple 逆向）+ RISC-V 独特性 7 点（VLA/vfrec7/RVWMO/厂商差异）+ 跨平台优化原则。配 [可运行 demo](../cmu-cs-projects/topic2-systems/arm_riscv_optimization_demo.py)。
+▶ **[ARM_AND_RISCV_OPTIMIZATION.md](ARM_AND_RISCV_OPTIMIZATION.md)** — ⭐ **ARM 与 RISC-V 优化圣经**：x86 之外的两大世界（Apple Silicon/AWS Graviton/NVIDIA Grace/A64FX/SiFive/平头哥）。三 ISA 微架构对比 + OSACA 工具 + ARM 独特性 6 点（弱内存模型/SVE2/Apple 逆向）+ RISC-V 独特性 7 点（VLA/vfrec7/RVWMO/厂商差异）+ 跨平台优化原则。配 [可运行 demo](./cmu-cs-projects/topic2-systems/arm_riscv_optimization_demo.py)。
 
-▶ **[HIGHWAY_SIMD_LIBRARY.md](HIGHWAY_SIMD_LIBRARY.md)** — ⭐ **Google Highway SIMD 库完全综合（三部曲终章）**：[CSAPP](CSAPP_HARDWARE_TRUTHS.md)（原理层）→ [Agner Fog](AGNER_FOG_OPTIMIZATION.md)（x86 手法）→ [ARM/RISC-V](ARM_AND_RISCV_OPTIMIZATION.md)（非 x86 手法）→ **Highway（跨架构工程化）**。一份 C++ 源码跑 7 架构 27 target，运行时自动 CPUID dispatch。驱动 JPEG XL / libjxl / Chromium / Firefox / **gemma.cpp / ScaNN / TensorFlow** 等上百项目。Tag/Vec/Mask 三件套 + 静态 vs 动态分发 + strip-mining 4 策略 + AVX-512 降频陷阱 + 源码导航。配 [可运行 demo](../cmu-cs-projects/topic2-systems/highway_simd_demo.py)。
+▶ **[HIGHWAY_SIMD_LIBRARY.md](HIGHWAY_SIMD_LIBRARY.md)** — ⭐ **Google Highway SIMD 库完全综合（三部曲终章）**：[CSAPP](CSAPP_HARDWARE_TRUTHS.md)（原理层）→ [Agner Fog](AGNER_FOG_OPTIMIZATION.md)（x86 手法）→ [ARM/RISC-V](ARM_AND_RISCV_OPTIMIZATION.md)（非 x86 手法）→ **Highway（跨架构工程化）**。一份 C++ 源码跑 7 架构 27 target，运行时自动 CPUID dispatch。驱动 JPEG XL / libjxl / Chromium / Firefox / **gemma.cpp / ScaNN / TensorFlow** 等上百项目。Tag/Vec/Mask 三件套 + 静态 vs 动态分发 + strip-mining 4 策略 + AVX-512 降频陷阱 + 源码导航。配 [可运行 demo](./cmu-cs-projects/topic2-systems/highway_simd_demo.py)。
 
-▶ **[OSACA_INTEGRATION.md](OSACA_INTEGRATION.md)** — ⭐ **OSACA 深度集成**：把 github.com/RRZE-HPC/OSACA 的内部模型、YAML 数据库 schema、核心算法（throughput/CP/LCD）、扩展新核心方法深度拆解。配 [osaca_data.py](../cmu-cs-projects/topic2-systems/osaca_data.py)（数据库本地化，可离线查询）+ [osaca_mini.py](../cmu-cs-projects/topic2-systems/osaca_mini.py)（核心算法复现）。
+▶ **[OSACA_INTEGRATION.md](OSACA_INTEGRATION.md)** — ⭐ **OSACA 深度集成**：把 github.com/RRZE-HPC/OSACA 的内部模型、YAML 数据库 schema、核心算法（throughput/CP/LCD）、扩展新核心方法深度拆解。配 [osaca_data.py](./cmu-cs-projects/topic2-systems/osaca_data.py)（数据库本地化，可离线查询）+ [osaca_mini.py](./cmu-cs-projects/topic2-systems/osaca_mini.py)（核心算法复现）。
 
 ---
 
@@ -42,18 +42,25 @@
 
 | # | 学校 | 院系 | 项目路径 | 主题 | .py 文件 | 代码行数 | 招牌特色 |
 |---|------|------|---------|-----|---------|---------|---------|
-| 0 | **Stanford** | CS Department | [`../stanford-cs-projects/`](../stanford-cs-projects/) | 13 | 34 | 9,338 | LLM/Alignment/Agent（CS329H/Z/K）|
-| 1 | **CMU** | SCS | [`../cmu-cs-projects/`](../cmu-cs-projects/) | 12 | 22 | 5,655 | CSAPP / PGM / PAVL DBMS / NLP |
-| 2 | **MIT** | EECS / CSAIL | [`../mit-cs-projects/`](../mit-cs-projects/) | 12 | 22 | 5,779 | 6.824/828/858 + Tedrake Underactuated |
-| 3 | **UC Berkeley** | EECS | [`../berkeley-cs-projects/`](../berkeley-cs-projects/) | 12 | 22 | 6,403 | CS 61A SICP-Py / CS 188 Pacman / CS 285 RL |
-| 4 | **Princeton** | COS | [`../princeton-cs-projects/`](../princeton-cs-projects/) | 12 | 22 | 6,532 | Sedgewick Algos / COS 511 ML Theory / Fairness |
-| 5 | **Cambridge** | Computer Lab (Tripos) | [`../cambridge-cs-projects/`](../cambridge-cs-projects/) | 12 | 22 | 6,115 | Tripos 四年体系 / Hoare Logic / Compiler / Info Theory |
-| 6 | **Oxford** | CS Department | [`../oxford-cs-projects/`](../oxford-cs-projects/) | 12 | 22 | 7,502 | Categories/Proofs / Automated Reasoning / KR |
-| 7 | **ETH Zürich** | Informatik | [`../eth-cs-projects/`](../eth-cs-projects/) | 12 | 22 | 5,923 | Formal Methods / Paxos / Causality (Peters) / Krause |
-| 8 | **Toronto** | DCS | [`../toronto-cs-projects/`](../toronto-cs-projects/) | 12 | 22 | 7,320 | CSC 413 Deep / CSC 2547H Generative / Hinton 母校 |
+| 0 | **Stanford** | CS Department | [`./stanford-cs-projects/`](./stanford-cs-projects/) | 13 | 34 | 9,338 | LLM/Alignment/Agent（CS329H/Z/K）|
+| 1 | **CMU** | SCS | [`./cmu-cs-projects/`](./cmu-cs-projects/) | 12 | 22 | 5,655 | CSAPP / PGM / PAVL DBMS / NLP |
+| 2 | **MIT** | EECS / CSAIL | [`./mit-cs-projects/`](./mit-cs-projects/) | 12 | 22 | 5,779 | 6.824/828/858 + Tedrake Underactuated |
+| 3 | **UC Berkeley** | EECS | [`./berkeley-cs-projects/`](./berkeley-cs-projects/) | 12 | 22 | 6,403 | CS 61A SICP-Py / CS 188 Pacman / CS 285 RL |
+| 4 | **Princeton** | COS | [`./princeton-cs-projects/`](./princeton-cs-projects/) | 12 | 22 | 6,532 | Sedgewick Algos / COS 511 ML Theory / Fairness |
+| 5 | **Cambridge** | Computer Lab (Tripos) | [`./cambridge-cs-projects/`](./cambridge-cs-projects/) | 12 | 22 | 6,115 | Tripos 四年体系 / Hoare Logic / Compiler / Info Theory |
+| 6 | **Oxford** | CS Department | [`./oxford-cs-projects/`](./oxford-cs-projects/) | 12 | 22 | 7,502 | Categories/Proofs / Automated Reasoning / KR |
+| 7 | **ETH Zürich** | Informatik | [`./eth-cs-projects/`](./eth-cs-projects/) | 12 | 22 | 5,923 | Formal Methods / Paxos / Causality (Peters) / Krause |
+| 8 | **Toronto** | DCS | [`./toronto-cs-projects/`](./toronto-cs-projects/) | 12 | 22 | 7,320 | CSC 413 Deep / CSC 2547H Generative / Hinton 母校 |
 | | **合计** | | | **109** | **210** | **60,567** | |
 
 每校另含：6-7 个 `core/` 共享基础设施文件（llm.py / rag.py / tools.py / react.py / eval.py / hybrid_search.py / __init__.py）+ `supplementary/` 三个文件（undergrad/grad/micro，每文件覆盖 8-10 门课）。
+
+### 附：单课深修库（与大系互补）
+
+| 库 | 定位 | 入口 |
+|---|------|------|
+| [`cs224n/`](./cs224n/) | Stanford CS224N（Winter 2026）教学简化版：A1-A4 作业 + mini-GPT-2 前向推理 | [`cs224n/README.md`](./cs224n/README.md) |
+| [`cs61a-learning/`](./cs61a-learning/) | Berkeley CS 61A 逐周学习笔记：week01 10 个 .py（lecture/hw/lab/hog 项目，2796 行）+ 2 篇周记 | 见 `week01/` 与 `notes/` |
 
 ---
 
@@ -280,7 +287,7 @@
 ## 🛠️ 一键运行所有 9 校
 
 ```bash
-cd ~/ai/work4ai
+cd top-cs-projects
 for uni in stanford cmu mit berkeley princeton cambridge oxford eth toronto; do
     echo "==================== $uni ===================="
     bash $uni-cs-projects/run_all.sh 2>&1 | tail -5
@@ -290,7 +297,7 @@ done
 或单独跑一所：
 
 ```bash
-cd ~/ai/work4ai/cmu-cs-projects
+cd cmu-cs-projects
 bash run_all.sh
 ```
 

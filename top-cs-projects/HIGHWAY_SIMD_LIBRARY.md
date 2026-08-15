@@ -13,7 +13,7 @@
 >
 > **来源**：[google/highway](https://github.com/google/highway)（Apache-2.0 / BSD-3 双许可，1.0 版本承诺向后兼容，C++11，2026-08 仍在每周级更新）。本文所有 API/数据均对照 master 分支与 `g3doc/` 官方文档。
 >
-> **配套代码**：[`../cmu-cs-projects/topic2-systems/highway_simd_demo.py`](../cmu-cs-projects/topic2-systems/highway_simd_demo.py)（7 个可运行 demo：lane 概念 / AOS vs SOA / strip-mining 4 策略 / 静态 vs 动态分发 / Mask 谓词 / Highway API 速查 / SAXPY 真实案例）。
+> **配套代码**：[`./cmu-cs-projects/topic2-systems/highway_simd_demo.py`](./cmu-cs-projects/topic2-systems/highway_simd_demo.py)（7 个可运行 demo：lane 概念 / AOS vs SOA / strip-mining 4 策略 / 静态 vs 动态分发 / Mask 谓词 / Highway API 速查 / SAXPY 真实案例）。
 
 ---
 
@@ -756,14 +756,14 @@ int main() {
 | [`../讲透PyTorch/`](../讲透PyTorch/) | PyTorch CPU kernel 部分用类似抽象；gemma.cpp 是"不用 PyTorch 也能跑 LLM"的证据 |
 | [`../讲透NLP/`](../讲透NLP/) | gemma.cpp / ScaNN 是 NLP 推理 + 检索的 SIMD 工程化 |
 | [`../端侧AI压缩技术/`](../端侧AI压缩技术/) | 跨架构单 binary 是端侧 AI 部署的关键技术（vs 动态下载架构专用二进制）|
-| [`../cmu-cs-projects/topic2-systems/`](../cmu-cs-projects/topic2-systems/) | CSAPP → Agner → Highway 是 CMU 15-213 性能优化路线的应用层闭环 |
+| [`./cmu-cs-projects/topic2-systems/`](./cmu-cs-projects/topic2-systems/) | CSAPP → Agner → Highway 是 CMU 15-213 性能优化路线的应用层闭环 |
 
 ---
 
 ## ✍️ 下一步 / 练习
 
 **📌 推荐学习路径**：
-1. 跑通 [`highway_simd_demo.py`](../cmu-cs-projects/topic2-systems/highway_simd_demo.py) 的 7 个 demo（纯 Python，10 分钟）
+1. 跑通 [`highway_simd_demo.py`](./cmu-cs-projects/topic2-systems/highway_simd_demo.py) 的 7 个 demo（纯 Python，10 分钟）
 2. 打开 [Godbolt 静态分发示例](https://gcc.godbolt.org/z/rGnjMevKG)，改 `-mavx2` → `-mavx512f`，看汇编变化
 3. clone Highway，跑 `hwy/examples/skeleton.cc`（5 分钟编译运行）
 4. 读 `g3doc/quick_reference.md`（1 小时过完所有 op）
@@ -776,7 +776,7 @@ int main() {
 - ⭐⭐⭐ **L3**：用 Highway 写向量内积（dot product），用 `SumOfLanes` 做 reduction
 - ⭐⭐⭐⭐ **L4**：用 `MaskedLoad + BlendedStore` 处理 `n % Lanes(d) != 0` 的尾巴（§5 策略 4b）
 - ⭐⭐⭐⭐⭐ **L5**：用 Highway 写一个 `matmul(M, N, K)`，对比 `gemma.cpp` 的实现
-- ⭐⭐⭐⭐⭐ **L6**：把 Agner Fog 的[ Newton-Raphson 倒数近似](../cmu-cs-projects/topic2-systems/agner_optimization_demo.py §7)用 Highway 跨架构重写（5-10 行核心代码）
+- ⭐⭐⭐⭐⭐ **L6**：把 Agner Fog 的[ Newton-Raphson 倒数近似](./cmu-cs-projects/topic2-systems/agner_optimization_demo.py)用 Highway 跨架构重写（5-10 行核心代码）
 
 **📌 进阶**：
 - 读 [`hwy/contrib/sort/README.md`](https://github.com/google/highway/blob/master/hwy/contrib/sort/README.md) —— AVX-512 降频实测分析
@@ -789,4 +789,4 @@ int main() {
 **完成日期**：2026-08-12
 **版本**：v1.0（对照 google/highway master 分支）
 **姊妹文档**：[AGNER_FOG_OPTIMIZATION.md](AGNER_FOG_OPTIMIZATION.md) · [ARM_AND_RISCV_OPTIMIZATION.md](ARM_AND_RISCV_OPTIMIZATION.md) · [CSAPP_HARDWARE_TRUTHS.md](CSAPP_HARDWARE_TRUTHS.md)
-**配套代码**：[`../cmu-cs-projects/topic2-systems/highway_simd_demo.py`](../cmu-cs-projects/topic2-systems/highway_simd_demo.py)（7 个可运行 demo）
+**配套代码**：[`./cmu-cs-projects/topic2-systems/highway_simd_demo.py`](./cmu-cs-projects/topic2-systems/highway_simd_demo.py)（7 个可运行 demo）

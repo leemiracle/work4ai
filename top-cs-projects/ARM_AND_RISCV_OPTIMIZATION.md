@@ -6,7 +6,7 @@
 >
 > **关键差异**：ARM/RISC-V 的微架构、内存模型、SIMD（NEON/SVE/SVE2 vs RVV）与 x86 **完全不同**，盲目把 x86 优化经验搬过去会失效甚至变慢。本文给出 ARM/RISC-V 的权威资源地图 + 与 x86 的精确对比 + 跨平台代码原则。
 >
-> **配套代码**：[`../cmu-cs-projects/topic2-systems/arm_riscv_optimization_demo.py`](../cmu-cs-projects/topic2-systems/arm_riscv_optimization_demo.py)（6 个可运行对比 demo）。
+> **配套代码**：[`./cmu-cs-projects/topic2-systems/arm_riscv_optimization_demo.py`](./cmu-cs-projects/topic2-systems/arm_riscv_optimization_demo.py)（6 个可运行对比 demo）。
 
 ---
 
@@ -418,7 +418,7 @@ osaca --arch SKX my_kernel.s  # 对比 x86 Skylake-X
 
 **互补**：Agner Vol 3 的微架构**叙述**更深入（讲设计权衡），OSACA 的**数据 + 自动分析**更实用。两者都看最佳。
 
-> 📖 **OSACA 深度拆解**：仓库结构 + YAML schema + 主类 API + 核心算法（throughput/CP/LCD）+ 怎么扩展新核心，见 **[OSACA_INTEGRATION.md](OSACA_INTEGRATION.md)**（含本地化的 [osaca_data.py](../cmu-cs-projects/topic2-systems/osaca_data.py) 可离线查询 + [osaca_mini.py](../cmu-cs-projects/topic2-systems/osaca_mini.py) 算法复现）。
+> 📖 **OSACA 深度拆解**：仓库结构 + YAML schema + 主类 API + 核心算法（throughput/CP/LCD）+ 怎么扩展新核心，见 **[OSACA_INTEGRATION.md](OSACA_INTEGRATION.md)**（含本地化的 [osaca_data.py](./cmu-cs-projects/topic2-systems/osaca_data.py) 可离线查询 + [osaca_mini.py](./cmu-cs-projects/topic2-systems/osaca_mini.py) 算法复现）。
 
 ---
 
