@@ -1,0 +1,45 @@
+# 字段定义：仓库迭代用例卡（v1，2026-08-15）
+# detail_level: 极简(一句话) / 简要(几行) / 详细(带证据段落)
+# 适用：A层自有项目 / B层知识库 / C层外部库；代码维度对 C层 与 含代码的 A层 必填
+
+fields:
+  基本信息:
+    name: {desc: 仓库名, detail_level: 极简}
+    tier: {desc: A(自有AI项目)/B(自有知识库)/C(外部参考库), detail_level: 极简}
+    kind: {desc: git-repo 或 dir(非git), detail_level: 极简}
+    scale: {desc: 体积MB/文件规模/commit数/最后提交日（dir 则体积+文件数）, detail_level: 简要}
+    一句话本质: {desc: 用一句有洞察的话概括这个仓库到底是什么, detail_level: 极简}
+
+  目录结构与知识形态:
+    顶层组织: {desc: 一级目录结构及各自职责（表格或列表）, detail_level: 简要}
+    知识形态: {desc: md知识卡/代码/数据/配置/教材，比例估计, detail_level: 简要}
+    组织约定: {desc: frontmatter/编号体系/索引文件/命名规范/交叉引用方式, detail_level: 简要}
+
+  核心资产:
+    资产Top5: {desc: 最有价值的5个内容/文件/目录，每条带相对路径 + 一句话价值说明, detail_level: 详细}
+    亮点发现: {desc: 意外的宝藏内容（高质量单篇/独特数据/独有视角），带路径, detail_level: 简要}
+
+  代码维度:
+    required_when: "C层全部 + A/B层含实质性代码的项目；纯md知识库标[不适用]"
+    语言栈: {desc: 主语言/框架/构建工具, detail_level: 简要}
+    架构模式: {desc: 分层/模块组织/核心抽象, detail_level: 详细}
+    关键机制: {desc: 2-4个最值得学的机制，带 file:line 或 file 证据（大仓用抽样，勿全量遍历）, detail_level: 详细}
+    工程质量: {desc: 测试/CI/文档密度, detail_level: 简要}
+
+  活跃度与质量:
+    迭代节奏: {desc: commit 时间分布（git库）/ 最后修改（dir）, detail_level: 简要}
+    完成度: {desc: 成熟/活跃开发/半途/归档，给证据, detail_level: 简要}
+
+  与work4ai关系:
+    重叠度: {desc: 高/中/低 + 与哪些单元重叠（讲透X/前沿与媒体/用例库/复杂系统等）, detail_level: 详细}
+    可合并资产: {desc: 具体可搬进 work4ai 的内容清单（带源路径→建议目标位置）, detail_level: 详细}
+    建议动作: {desc: 合并/桥接互链/仅索引/考古参考/跳过，五选一或组合，给理由, detail_level: 详细}
+
+  证据锚点:
+    key_files: {desc: 支撑以上结论的关键文件路径列表（3-8个）, detail_level: 简要}
+
+rules:
+  - 所有字段值用中文；仓库/文件名保留原文
+  - 不确定值标 [不确定]，并汇总到 uncertain 数组
+  - 大仓（CNTK/csdiy/aiplugin 类）必须抽样取证：README + 目录结构 + 2-3 个核心文件深读，禁止全量遍历
+  - 每个论断尽量带 文件路径（或 file:line）证据，与用例库卡同标准

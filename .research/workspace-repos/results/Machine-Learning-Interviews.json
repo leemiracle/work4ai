@@ -1,0 +1,78 @@
+{
+  "基本信息": {
+    "name": "Machine-Learning-Interviews",
+    "tier": "C",
+    "kind": "git-repo",
+    "scale": "工作树51个文件/5.35MB（27个md + 17个ipynb + 图片与1个0.65MB的ml-system-design.pdf）；117个commit；首提2021-01-30，末提2023-10-25；作者Alireza Dirafzoon占105/117个commit",
+    "一句话本质": "一位手握Meta/Google/Amazon/Apple/Roku多个offer的ML工程师（前Meta ML Specialist方向）把自身面试备考经验结构化成的'五模块ML面试指南'——真正的核心资产不是题库而是MLSD章节：一套9步系统设计公式+约18个按产品场景展开的模板化案例，2023年10月后归档"
+  },
+  "目录结构与知识形态": {
+    "顶层组织": [
+      "README.md（46行）：全书封面+五章目录表（Coding/ML Coding/ML System Design/ML Fundamentals/Behavioral）+作者offer背景声明",
+      "src/lc-coding.md（17行）：第1章通用算法编码，极薄，主要是leetcode/educative.io外链",
+      "src/MLC/（ml-coding.md + notebooks/17个ipynb）：第2章ML手写算法，清单式索引+numpy从零实现notebook",
+      "src/MLSD/（22项，含1个PDF）：第3章核心资产——ml-system-design.md主文（425行+，含9步公式详解）+ mlsd-template.md模板 + 18个场景案例（newsfeed/ads-ranking/search/event-recom/video-recom/image-search/typeahead/harmful-content/自动驾驶/目标检测等）+ ml-comapnies.md公司ML系统参考索引",
+      "src/ml-fundamental.md（155行）：第4章ML基础八股主题大纲（算法类别/评估指标/优化器/正则等）",
+      "src/behavior.md（4行）+ src/ml-depth.md（10行，TBD）：第5章行为面与ML深度面，均为占位stub",
+      "src/imgs/ + LICENSE(MIT) + .gitignore"
+    ],
+    "知识形态": "md知识大纲与案例卡约60%（27个md）+可执行notebook约30%（17个ipynb）+图片/PDF约10%；无roadmap、无questions分类目录——组织方式是'按面试轮次（模块）'而非'按主题/难度/公司'，公司维度只体现在ml-comapnies.md的参考链接聚合上",
+    "组织约定": "①README章节表→src文件一一映射的'章=文件'约定；②MLSD内部强模板化：mlsd-template.md定义9段骨架（问题形式化/指标/架构/数据/特征/模型/预测服务/在线测试与部署/扩缩容监控），18个mlsd-*.md全部按此填充且文件名按产品场景命名（mlsd-newsfeed.md等）；③MLC用checkbox+外链清单管理算法覆盖度（ml-coding.md:5-27）；④锚点目录+目录内链接（ml-system-design.md:3-9）"
+  },
+  "核心资产": {
+    "资产Top5": [
+      "src/MLSD/ml-system-design.md——9-Step ML System Design Formula主文：从问题形式化到A/B测试与监控的完整方法论+离线/在线指标全景（:79-103的metrics清单堪称速查表），是该库被社区引用最多的部分",
+      "src/MLSD/mlsd-*.md（18个场景案例）——每个案例按9步模板给出可直接背诵的完整答案（如mlsd-ads-ranking.md:36-100含point-wise LTR、特征embedding、GBDT+LR等选型讨论），是'系统设计面试答案册'",
+      "src/MLSD/ml-comapnies.md——按LinkedIn/Google/Meta/Netflix/Amazon等公司聚合的ML系统论文与工程博客链接库（YouTube DNN推荐、Facebook广告CTR预测等一手来源），长期有效的素材索引",
+      "src/MLC/notebooks/（17个ipynb）——logistic_regression/k_means/knn/decision_tree/perceptron/convolution等numpy从零实现，带原理解释（logistic_regression.ipynb:8-33为markdown推导+44-60为类实现），面试手写算法的直接素材",
+      "src/ml-fundamental.md——ML基础八股的完整topic checklist（算法对比/损失函数/交叉验证/偏差方差等），可当复习大纲直接使用"
+    ],
+    "亮点发现": [
+      "README.md:16作者战绩声明（Meta ML Specialist/Google MLE/Amazon Applied Scientist/Apple/Roku五offer）赋予内容'实战检验过'的可信度背书，且指向其姊妹库Production-Level-Deep-Learning",
+      "mlsd-template.md与18个案例构成'模板+实例'的教科书式配套，比一般面试库的散题组织结构化程度高一档",
+      "src/MLSD/ml-system-design.pdf（0.65MB）——作者把MLSD章节排版成书的样子（配合src/imgs/MLI-Book-Cover.png封面图），显示作者有意做成'电子书'形态"
+    ]
+  },
+  "代码维度": {
+    "语言栈": "Python（numpy为主，无框架依赖）+ Jupyter notebook；正文为markdown；无构建工具",
+    "架构模式": "无软件架构（知识库）；但存在清晰的知识架构：①五模块面试管线映射（coding→ML coding→MLSD→fundamentals→behavioral，README.md:23-31）；②MLSD层的'1模板:N实例'复用结构（mlsd-template.md的9段骨架被18个场景文件逐段填充，如mlsd-newsfeed.md:3-40完全对位）；③notebook层的OOP封装惯例（LogisticRegression类带fit/predict接口，logistic_regression.ipynb:44-60）",
+    "关键机制": [
+      "9步公式模板复用机制：mlsd-template.md:1-47定义9段固定骨架，mlsd-ads-ranking.md/mlsd-newsfeed.md等18文件按同一骨架填充，保证案例间可比性——这是把'开卷系统设计'标准化的关键设计",
+      "离线/在线指标双轨清单：ml-system-design.md:79-103系统区分offline（CE/mAP/nDCG/BLEU）与online（CTR/engagement/revenue lift/counter metrics）指标，案例文件逐一落实",
+      "从零实现+原理解释双层notebook：每个算法notebook前半为markdown数学推导后半为numpy类实现（logistic_regression.ipynb:8-60），可直接当面试手写范本",
+      "覆盖度checkbox清单：ml-coding.md:5-27用清单+外链管理'必须会手写的算法集合'，未完成的留白（CNN/RNN无code链接）"
+    ],
+    "工程质量": "无测试、无CI、无lint（notebooks/.test.ipynb疑似残留草稿）；文档密度高（每章主文件自成体系，含锚点目录）；末次大更新（2023-02/03）后仅零星修补"
+  },
+  "活跃度与质量": {
+    "迭代节奏": "117个commit分四波：2021-01/02（36个，初版五章）→2021-06~2022-05（11个，零星）→2023-02/03（56个，MLSD大扩容+notebooks上传，最大一波）→2023-09/10（13个，MLSD收尾）；2023-10-25后无任何提交，至2026-08已沉寂约2年10个月",
+    "完成度": "核心章节成熟、尾部明显烂尾：MLSD（主文+18案例+模板+公司索引）与MLC（清单+17 notebook）完整可用；ml-fundamental是完整大纲；但behavior.md仅4行外链、ml-depth.md通篇TBD（ml-depth.md:9），五章承诺兑现约80%；定性为'成熟后归档'"
+  },
+  "与work4ai关系": {
+    "重叠度": "低-中（内容层低、方法论与主题索引层中）——①MLSD场景（推荐/搜索/广告排序/新闻流）与recommendation-system/、讲透RAG（检索部分）、讲透LLM（应用侧）主题相邻但形态不同（面试答案vs深度知识）；②ml-fundamental主题清单与讲透统计学习理论、讲透模型的大纲层重叠（前者只是checklist无内容）；③MLC notebooks与Karpathy经典代码精读同型（numpy从零实现）；④work4ai已有面试触点：讲透AI for 职业/职业全貌与面试指南.md、讲透RL/09-工业实践与能力建设.md §6面试高频题、讲透KV Cache/01的面试速算节、顶级专家资源库/09-奖学金与求职.md（该文件已引用同类库khangich/machine-learning-interview），本库可作这些触点的C层参考源",
+    "可合并资产": [
+      "（索引级，不搬内容）src/MLSD/ml-comapnies.md的公司ML系统一手参考清单 → recommendation-system/或前沿与媒体的外部参考索引（2020-2023年的论文/工程博客，多数长期有效）",
+      "（索引级）9步公式+18个场景文件清单 → 作为讲透系列相关单元（讲透RAG/讲透推荐）若增设'面试视角'小节的框架引用源，引用mlsd-template.md即可",
+      "（索引级）顶级专家资源库/09-奖学金与求职.md的ML面试资源清单中补一条本库条目（与已引的khangich库并列，注明'2023止、经典ML系统设计视角强、无LLM题'）"
+    ],
+    "建议动作": "仅索引（+考古参考）。理由：①C层定位本就不合并内容；②内容2023-10止，完全无LLM/GenAI面试题（2026年ML面试已大半转向LLM系统设计/RAG/Agent，经典推荐搜索题仍在但只是子集），时效性打折；③真正长保质期的是MLSD 9步方法论、18个场景题目清单、公司系统索引三样'结构'而非'内容'，在work4ai面试相关单元建2-3条索引引用即可零成本获益；④体量小（27md+17ipynb）无合并压力，跳过亦可，但相比跳过，索引的边际收益为正"
+  },
+  "证据锚点": {
+    "key_files": [
+      "README.md",
+      "src/MLSD/ml-system-design.md",
+      "src/MLSD/mlsd-template.md",
+      "src/MLSD/mlsd-ads-ranking.md",
+      "src/MLSD/ml-comapnies.md",
+      "src/MLC/ml-coding.md",
+      "src/MLC/notebooks/logistic_regression.ipynb",
+      "src/ml-fundamental.md"
+    ]
+  },
+  "uncertain": [
+    "基本信息：作者'前Meta'身份系README.md:16的offer声明推断（Meta ML Specialist offer），其后续任职履历本地无法核实 [不确定]",
+    "目录结构与知识形态：mlsd案例文件按文件名计为18个（mlsd-*.md含下划线变体mlsd_obj_detection.md），个别文件（mlsd-prediction/mlsd-feature-eng等）是否属于案例还是方法论短文未逐篇深读 [不确定]",
+    "活跃度与质量：GitHub star数与社区引用量（离线仓库无法取证，该库公开知名度为[不确定]）",
+    "与work4ai关系：讲透系列各单元对'面试视角'小节是否有规划未知，索引建议的落点单元为推测 [不确定]"
+  ]
+}

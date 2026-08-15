@@ -1,0 +1,76 @@
+{
+  "基本信息": {
+    "name": "CNTK",
+    "tier": "C",
+    "kind": "git-repo",
+    "scale": "552MB（Source/ 为 C++ 核心）/ 16117 commits / 首 commit 2014-07-29 → 末 commit 2022-09-23 / 峰值 2016-05-03 单日 122 commits / 官方 2.7 为 2019-03-29 最终版（README.md:75），GitHub 2022 归档只读",
+    "一句话本质": "微软 2015 年开源的 C++ 深度学习框架——用有向计算图 + CPU/GPU 双引擎矩阵抽象把内部语音识别基础设施泛化成通用 DL 工具包，2019 年让位 ONNX/PyTorch 生态主动退役，是第一代深度学习框架大战（2015-2019）保存最完整的'败者标本'"
+  },
+  "目录结构与知识形态": {
+    "顶层组织": [
+      "Source/ — C++ 核心 16 个子库：Math（矩阵与 CUDA 抽象，46 个头文件）、ComputationNetworkLib（计算图核心）、CNTKv2LibraryDll（V2 公共 C++ API：Function/NDArrayView/Learner/DistributedLearner）、SGDLib（训练循环与梯度聚合）、CNTK/BrainScript（自研 DSL 解释器）、1BitSGD（1-bit 梯度量化）、Readers（16 种数据读取器：HTK/Kaldi/Image/CNTKTextFormat...）、Multiverso（参数服务器）、EvalDll 等",
+      "bindings/ — python/csharp/java 三语言绑定；bindings/python/cntk 下 ops/layers/learners/losses/train/metrics 等 14 个子模块（V2 Python API）",
+      "Examples/ — 按任务域 13 类：Image（AlexNet/VGG/GoogLeNet/ResNet/ConvNet/MLP）、Speech、SequenceToSequence、ReinforcementLearning、Text、Video 等",
+      "Documentation/（CNTK-TechReport 技术报告，含 lyx 论文源码）+ Manual/（7 个 ipynb 操作手册：喂数据/调试/训练/learners/自定义 deserializer）+ Tutorials/",
+      "Tests/（UnitTests + EndToEndTests）、Tools/（devInstall/docker）、Scripts/、PretrainedModels/（下载入口）、external/（第三方 git 子模块）",
+      "根目录：CNTK.sln（271KB VS 解决方案）、Makefile（77KB）、configure（38KB）——Windows 优先 + Linux 移植的双构建体系"
+    ],
+    "知识形态": "约 70% C++/CUDA 源码，约 15% Python 绑定与示例代码，约 10% 文档（TechReport lyx + Manual ipynb + 在线文档外链），约 5% 构建配置与测试；纯工程仓，无知识卡形态",
+    "组织约定": "C++ 按静态库分目录（Source/xxxLib 每库独立 .vcxproj + CMake）；计算图节点按算子域分头文件（LinearAlgebraNodes.h/ConvolutionalNodes.h/RecurrentNodes.h/TrainingNodes.h/ReshapingNodes.h/EvaluationNodes.h）；Python 绑定镜像 C++ API 命名空间；Examples 按 任务域/模型/语言 三级组织；MIT 许可 + ThirdPartyNotices"
+  },
+  "核心资产": {
+    "资产Top5": [
+      {"资产": "Source/Math/Matrix.h（716 行）", "价值": "双引擎矩阵抽象的教科书实现：Matrix<ElemType> 同时持有 CPUMatrix/GPUMatrix 两个 shared_ptr，用 CurrentDataLocation 枚举（NONE/CPU/GPU/BOTH，:35-41）+ 惰性迁移（_transferFromDeviceToDevice，:93-100）实现'一处声明、双后端执行'——PyTorch Tensor(device) 语义的直系前世"},
+      {"资产": "Source/ComputationNetworkLib/ComputationNode.h（2602 行）", "价值": "计算图节点继承体系全景：ComputationNodeBase 十重继承基类（:298）+ 模板 ComputationNode<ElemType>（:1254，带 Forward/Backprop 钩子），静态 C++ 类型系统定义全部算子——与 PyTorch 动态 Python 图对照的世代差实证"},
+      {"资产": "Source/CNTK/BrainScript/（4 文件：Parser 41KB + Evaluator 66KB）", "价值": "自研声明式 DSL 的完整化石：词法/语法/求值三层，带 TextLocation 源码定位与错误美化（BrainScriptParser.h:26-40）；后因 Python API 兴起而边缘化——'框架该不该发明自己的语言'这一决策的最佳反面/正面双面教材"},
+      {"资产": "README.md:47-65 Disclaimer 段 + :75-130 版本演化史", "价值": "框架退场宣言一手史料：官方明言 2.7 为最后一版、'鼓励用户改用 PyTorch 原生导出 ONNX'、转向 ONNX Runtime——生态收敛的直接证据，讲框架演化史的核心引用源"},
+      {"资产": "Source/1BitSGD/ + Source/SGDLib/（IDistGradAggregator/V2SimpleDistGradAggregator 聚合器抽象）+ Source/Multiverso/", "价值": "2016-2018 大规模分布式训练工程化石：1-bit 梯度量化（2018 年从微软研究院私有代码以 MIT 并入开源，README.md:283-286）+ 数据并行梯度聚合接口 + 参数服务器——为语音识别超大规模训练而生，是梯度压缩通信的早期工业实现"}
+    ],
+    "亮点发现": "Documentation/CNTK-TechReport/ 有论文级技术报告的 lyx 源码（可追溯系统设计原文）；代码注释坦率到罕见——Matrix.h:110 自标 'design BUGBUG'、ComputationNode.h:321 自问 TODO，是研究微软内部 C++ 工程文化的样本；Source/Readers 保留了 HTK/Kaldi 双语音数据格式的完整读取器（深度学习与语音识别血缘关系的物证）；README.md:105 提到 Netron 至今支持可视化 CNTK v1/v2 模型文件（考古工具链仍在服务）"
+  },
+  "代码维度": {
+    "语言栈": "主体 C++（CUDA/.cu、cuDNN、MKL/MKL-DNN、OpenMP、NCCL、MPI）；绑定层 Python（V2 API 主力）+ C#/.NET Standard + Java；构建 CMake + MSBuild 双轨（configure 脚本 + Makefile 77KB + CNTK.sln）；DSL 为自研 BrainScript；测试含 Python doctest",
+    "架构模式": "五层单向依赖栈：①Math 层（Matrix<ElemType> 统一封装 CPU(GPUMatrix)+GPU(GPUMatrix)+稀疏四实现，设备间数据按需迁移）→ ②ComputationNetworkLib 层（ComputationNetwork 持有节点集，ComputationNodeBase/ComputationNode<ElemType> 构成静态类型算子图，MBLayout 抽象可变长度序列/小批量轴——比 PyTorch 早起家的动态轴设计）→ ③SGDLib 层（SGD.cpp 训练循环、SimpleEvaluator、分布式梯度聚合器接口、1BitSGD 量化）→ ④Readers 层（16 种数据读取器插件式接入）→ ⑤接口层双轨（BrainScript 配置求值器 Source/CNTK/ + CNTKv2LibraryDll 的 Function/NDArrayView/Learner C++ API，再经 SWIG 式绑定暴露给 Python/C#/Java）。关键特征：全部算子在 C++ 编译期静态定死，Python 只是薄封装——与 PyTorch 'Python 即图'的哲学根本对立",
+    "关键机制": [
+      "双引擎惰性迁移（Source/Math/Matrix.h:71-100）：Matrix 同时持有 m_GPUMatrix/m_CPUMatrix 两个实现指针，m_currentDataLocation 记录数据当前在哪端，二元/三元运算前 DecideAndMoveToRightDevice 自动搬数——一套算法代码透明跑 CPU(MKL)/GPU(CUDA/cuDNN) 两后端的 2015 年标准答案",
+      "静态计算图节点体系（Source/ComputationNetworkLib/ComputationNode.h:298 ComputationNodeBase，:1254 ComputationNode<ElemType>）：Forward/Backprop 虚函数钩子 + m_evalTimeStamp 时间戳去重（:291）+ 按域分文件的算子组织（TrainingNodes.h 136KB/ConvolutionalNodes.h 79KB）——define-and-run 世代与 PyTorch define-by-run 的架构分水岭实物",
+      "BrainScript DSL 三件套（Source/CNTK/BrainScript/BrainScriptParser.cpp 41KB + BrainScriptEvaluator.cpp 66KB）：表达式树求值式配置语言，ComputationNetwork 自身注册为 ScriptableObjects::Object（ComputationNetwork.h:46-49）可被脚本直接操纵；与后期 Python API 构成双接口分裂——新人要同时学两套心智模型，被普遍认为是败因之一",
+      "分布式训练栈（Source/SGDLib/IDistGradAggregator.h 聚合器接口 + SimpleDistGradAggregator.h 默认实现 + Source/1BitSGD/ 量化通信 + Source/Multiverso/ 参数服务器 + DataParallelDistributedLearner.cpp）：为百度/微软级语音识别集群训练设计的完整方案，1-bit SGD 把梯度通信量压到 1/32（README.md:283-286）"
+    ],
+    "工程质量": "Tests/ 分 UnitTests 与 EndToEndTests 两级；Documentation/CNTK-TechReport 含论文级 lyx 源；CI 为当时微软 VSTS（README 徽章指向 aiinfra.visualstudio.com）；代码注释密度高且自省坦率（'BUGBUG'/'TODO'/'design BUGBUG' 散布核心头文件）；.clang-format 统一风格；无现代 PR 模板/issue 模板（2015 年代 GitHub 工作流）"
+  },
+  "活跃度与质量": {
+    "迭代节奏": "git log 取证：2014-07-29 首 commit（内部代码导入）→ 2015-04 开源（README.md:7）→ 2016-05 达峰（单日 122 commits，微软全职投入期）→ 2019-03-29 2.7 终版 → 2020-03-31 后仅剩零星修复（3 commits/月以下）→ 2022-09-23 最后一个 commit 后归档",
+    "完成度": "完整退役而非半途而废：功能完备（训练/评估/推理/分布式/三语言绑定/16 种读取器/Keras 后端支持），README Disclaimer 明确宣布无新功能计划、官方指路 ONNX Runtime——属于'产品线主动终结'的归档形态，代码库本身处于稳定可编译的终态"
+  },
+  "与work4ai关系": {
+    "重叠度": "内容重叠低、史料价值高，具体对接单元：①讲透PyTorch/（核心）：框架演化史一讲的对照物主证据——静态 C++ 图 vs 动态 Python 图、BrainScript vs Python API 双接口分裂、Windows 优先 vs Linux/Python 原生生态，'为什么 CNTK 败出'三条原因（接口心智负担、生态慢一步、微软战略转向 ONNX）全部有仓内实物可查；②讲透基础模型/：大规模训练前史（1-bit SGD、数据并行聚合器、为语音识别而生的架构）；③讲透GPU集群系统/ + 讲透分布式AI系统/：CPU/GPU 双引擎数据迁移、梯度量化通信的早期工业实现；④讲透AI历史/：2015-2019 框架大战完整时间线标本（与 Theano/MXNet/TF1 同代）",
+    "可合并资产": [
+      {"源": "README.md:47-65（Disclaimer 退场宣言）+ :75-130（2.4-2.7 版本演化史）", "去向": "讲透PyTorch/框架演化史单元（一手史料直接引用）"},
+      {"源": "Source/Math/Matrix.h:35-100（双引擎抽象）+ Source/ComputationNetworkLib/ComputationNode.h:294-325,1254（节点体系）关键代码段摘录", "去向": "讲透PyTorch/（'前世今生对比盒'：与 torch.Tensor 设备语义、autograd 图对照）"},
+      {"源": "Source/CNTK/BrainScript/（Parser/Evaluator 结构 + 一个 .cntk 配置示例）", "去向": "讲透PyTorch/ 或 工程化手册库（'框架该不该自研 DSL'决策卡）"},
+      {"源": "Source/1BitSGD/ + Source/SGDLib/IDistGradAggregator.h + README.md:283-286", "去向": "讲透分布式AI系统/（梯度量化通信考古证据）"},
+      {"源": "Documentation/CNTK-TechReport/（lyx 源）", "去向": "讲透AI历史/（仅索引，不搬运）"}
+    ],
+    "建议动作": "考古参考 + 仅索引（C 层不合并）。2026 年去留评估：考古价值真实但高度集中于约 5 处文件（README Disclaimer、Matrix.h、ComputationNode.h、BrainScript/、1BitSGD），552MB 磁盘成本中约 80% 是 Examples/Tests/external 子模块与二进制资产，属低价值重量。建议两步走：①先按'可合并资产'清单把关键代码段摘录进讲透PyTorch/与讲透分布式AI系统/（一次性动作，约半天）；②之后本仓降级为冷数据——磁盘紧张时可改为 GitHub 远程索引 + 按需浅克隆（github.com/microsoft/CNTK 永久可取），磁盘不紧张则原地保留不再投入。结论：'值得留'是弱结论，'摘录后即可释怀'是强结论"
+  },
+  "证据锚点": {
+    "key_files": [
+      "README.md（:47-65 退役声明、:75 起 2.7 终版说明、:283-286 1BitSGD 开源）",
+      "Source/Math/Matrix.h（:35-41 CurrentDataLocation、:71-100 双引擎持有与迁移）",
+      "Source/ComputationNetworkLib/ComputationNode.h（:298 ComputationNodeBase、:1254 ComputationNode 模板）",
+      "Source/ComputationNetworkLib/ComputationNetwork.h（:43-49 计算图与脚本对象绑定）",
+      "Source/CNTK/BrainScript/BrainScriptParser.h（:14-40 DSL 词法定位设计）",
+      "Source/SGDLib/IDistGradAggregator.h（分布式聚合接口）",
+      "Documentation/CNTK-TechReport/（论文级技术报告 lyx 源）",
+      "Tests/（UnitTests + EndToEndTests 两级测试组织）"
+    ]
+  },
+  "uncertain": [
+    "语言占比（约 70% C++）为按目录结构与文件大小抽样估计，未做全量统计",
+    "552MB 中 external/ 子模块与二进制资产的具体占比未精确测量（.gitmodules 仅 535 字节，子模块体积主要在工作区外）",
+    "'CNTK 败因'三条（双接口分裂/生态慢一步/微软转向 ONNX）中前两条为社区公认叙事 + 仓内代码佐证的推断，微软官方仅明示第三条（README Disclaimer）",
+    "本地副本与 GitHub 归档版是否完全一致未做 remote 校验（commit 数 16117 与任务描述吻合）",
+    "BrainScript 与 Python API 用户采用率的量化数据仓内不可得"
+  ]
+}

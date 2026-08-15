@@ -1,0 +1,83 @@
+{
+  "基本信息": {
+    "name": "mips-sim",
+    "tier": "C",
+    "kind": "git-repo",
+    "scale": "工作树约 5.7MB / 约 560 个文件（不含 MARS jar）；git 仅跟踪 101 个文件——Perspectives、Capstone、GPU_MODE_* 等 v1.0 核心增量全部未提交；7 个 commit 全部集中在 2026-07-04 单日，最后提交 2026-07-04（工作树存在 2026-07-05/06 的未入库产物，如 AUDIT_REPORT.md 标注 2026-07-06）",
+    "一句话本质": "以 MIPS 为线索横跨 MARS→qemu-user→TCG→gem5→qemu-system→KVM→Unicorn→Renode 八级工具栈的自建学习宇宙——表面是实验仓，实质是『63 章自著 CPU 教材 + 100 结构化视角 + 可跑工程』三位一体的体系结构知识工厂，且其方法论模板已被复制到 ai-llm-lab 姊妹项目。"
+  },
+  "目录结构与知识形态": {
+    "顶层组织": [
+      "00-mars ~ 07-renode/：W0-W7 八个工具模块（汇编示例/Makefile/README），按仿真抽象层级递进",
+      "docs/：12 篇主题短文（qemu-tcg、gem5-basics、mips-isa 等）+ cpu-book/（8 个 Part、63 章自著教材）",
+      "Perspectives/：100 个结构化视角 × 13 类（A 技术~M 性能，含 H_GPU_MODE/I_User_Personas/J_Parallelism 等），114 个 md",
+      "Capstone/：3 个毕业项目（MIPS 解释器骨架/固件分析/MIPS→LoongArch 移植全量版）",
+      "ai-llm-lab/：同构模板复制出的 LLM 姊妹项目（llm-book 27 章 + 8 个 labs + Perspectives）",
+      "顶层 19 个横切 md：Views/GPU_MODE_INDEX/REALITY_CASES/INTERVIEW_QUESTIONS(100题)/CHEATSHEET/GLOSSARY(200+术语)/KNOWLEDGE_COVERAGE 等",
+      "tools/、scripts/、View_02_CrossTool/：工具链说明、安装验证脚本、跨工具对比脚本"
+    ],
+    "知识形态": "自著 md 教材与笔记约 75%（cpu-book 22,297 行 + 100 视角 + 19 篇横切文档）；可执行代码约 20%（9 个 .asm、8 个 Unicorn Python 示例、gem5 Python 配置、3 个 Capstone Python 项目、cpu-book 配套 ch01/02/06 演示脚本）；构建配置约 5%（Makefile/install.sh/verify.sh）",
+    "组织约定": "章节头部统一元信息（状态/依赖链接/配套脑图/可运行代码/修订日期，见 ch32）；视角文件统一『角色定位+核心思维框架+与他视角边界表』骨架；W 模块编号 + 视角 A-M 字母编号双体系；00-INDEX/00-MINDMAPS/RESOURCE_INDEX 多级索引；AUDIT_REPORT 自审（断链检查+质量门槛）闭环"
+  },
+  "核心资产": {
+    "资产Top5": [
+      { "路径": "docs/cpu-book/", "价值": "63 章《多周期CPU全栈解析》自著教材：Part I-IV 完整版（每章 300-1000 行），Part V-VIII 深度大纲版，共 22,297 行（AUDIT_REPORT.md:19），ch32『CPU=FSM+Datapath』皇冠章达 1051 行含可综合 Verilog" },
+      { "路径": "Perspectives/", "价值": "100 视角 × 13 类思维库：单篇即源码级深写（如 A02 QEMU/TCG 架构师 359 行），带『MIPS 栈特异性测试』护城河标准（Views.md:13）" },
+      { "路径": "02-tcg/notes/01-04 四篇", "价值": "TCG 源码阅读笔记（decode/TB/IR/JIT）：带真实 qemu -d op trace、memop 编码、helper 机制、与 LLVM IR/MLIR 三方对比——DBT 原理的中文最佳实践笔记" },
+      { "路径": "GPU_MODE_INDEX.md + GPU_MODE_CROSSWALK.md", "价值": "把 gpu-mode/lectures（6.3k stars、50+ 讲座）逐讲映射到本项目视角/章节/W 模块——现成的『CPU 视角看 GPU』交叉索引表" },
+      { "路径": "06-unicorn/examples/（8 个示例 + mips_asm.py）", "价值": "可立即运行的 DBI 实验：syscall 仿真/shellcode 解码/crackme 暴力破解/fuzz harness，仅需 Python" }
+    ],
+    "亮点发现": [
+      "KNOWLEDGE_COVERAGE.md：57 子维度覆盖度矩阵，诚实标注 B6 FPU/B7 SIMD MSA『❌ 0% 完全缺失』等缺口——自建知识库的自我审计范式",
+      "Capstone/C_mips_to_loongarch_full.py：MIPS→LoongArch 移植完整项目，与 D_Strategy_History/02_Loongson_LoongArch 国产化视角呼应",
+      "ai-llm-lab/：同一『book+labs+Perspectives+Capstone』模板向 LLM 领域的复制实例，证明该方法论可产品化迁移",
+      "REALITY_CASES.md：全部断言锚定真实 CVE/产品/公司动态，避免『通用教科书化』",
+      "Views.md 22 专家视角+9 异质透镜矩阵（414 行）与 README 宣传的 61/100 视角版本演进并存"
+    ]
+  },
+  "代码维度": {
+    "语言栈": "MIPS 汇编（9 个 .asm）/C 与 ASM（qemu-user 示例）/Python（Unicorn 8 示例、gem5 配置 mips_simple.py、Capstone 3 项目、cpu-book 配套演示）/Bash+Make（顶层自动化）；无重框架，全轻量可跑",
+    "架构模式": "三层架构：工具层（W0-W7 按解释器→DBT→时序仿真→硬件虚拟化→DBI→SoC 仿真的抽象层级递进，模块依赖图见 README.md:94-113）／知识层（cpu-book 教材 × Perspectives 视角正交矩阵）／元层（KNOWLEDGE_COVERAGE 覆盖矩阵 + AUDIT_REPORT 自审 + GPU_MODE 交叉索引）；每个 W 模块自含 README+Makefile+示例",
+    "关键机制": [
+      { "机制": "TCG 五件套讲解落到真实源码", "证据": "Perspectives/A_Technical/02_QEMU_TCG_Architect.md:48-50 给出 TB Cache→decoder→TCG IR→JIT→Chaining 全流水线及源码入口（accel/tcg/cpu-exec.c 的 cpu_exec()、target/mips/translate.c）" },
+      { "机制": "TCG IR vs LLVM IR vs MLIR 三方对比", "证据": "02-tcg/notes/03_ir.md:75-80 抽象层级/寿命/寄存器模型对比表；:44-57 memop 位编码与 qemu_ld 映射" },
+      { "机制": "『CPU = FSM + Datapath』控制论章节", "证据": "docs/cpu-book/part4-multi-cycle/ch32-cpu-is-fsm.md（1051 行）：从 Ch31 黑盒悬念推导到完整 FSM 控制器 Verilog，五问法结构" },
+      { "机制": "gem5 Cache 敏感性实验闭环", "证据": "03-gem5/configs/mips_simple.py + cache_sweep.sh + plot.py + benchmarks/matmul.c：配置→扫描→可视化的最小完整实验管线" }
+    ],
+    "工程质量": "无 CI；但 AUDIT_REPORT.md 记录自动化审计（断链检查、15/15 实测脚本跑通、4/4 Capstone 跑通）并全部修复；Makefile 顶层自动化（verify/book/perspectives 等 target）；文档密度极高（19 个顶层横切 md）。瑕疵：根目录存在 GBK 乱码文件名 md 与 3 个 0 字节疑似 shell 误建文件；git 版本管理半途——约 2/3 高价值内容（Perspectives/Capstone/GPU_MODE_*）未提交"
+  },
+  "活跃度与质量": {
+    "迭代节奏": "7 个 commit 全部在 2026-07-04 单日（initial import + cpu-book 六连击）；但工作树存在 07-05（GPU_MODE_INDEX 更新日期）、07-06（AUDIT_REPORT）产物，说明此后的演进完全游离在 git 之外；当前无 remote",
+    "完成度": "内容完成度高：自称 v1.0→v2.5，cpu-book 63 章齐、视角扩到 100、审计三场景（教材/工程师/研究员）全过；但工程管理未收尾（未提交+无远端+宣传口径滞后），处于『内容完成、版本静止』状态"
+  },
+  "与work4ai关系": {
+    "重叠度": "中。与『讲透GPU与系统级』高度互补：GPU_MODE_INDEX/CROSSWALK 已预制 gpu-mode 讲座↔cpu-book Ch49-52↔B06 视角的 CPU→GPU 交叉表；与 top-cs-projects 重叠（W0-W7 全部是讲透级学习项目）；与视角库系列同构（100 视角的『专家+异质透镜』打法与 work4ai 视角方法论一致，且护城河测试标准更严格）；ai-llm-lab 子项目与讲透LLM/讲透AI系统 部分重叠",
+    "可合并资产": [
+      "docs/cpu-book/（63 章教材）→ 讲透GPU与系统级 的体系结构子库（或独立桥接页），是 work4ai 体系结构线的现成骨架",
+      "GPU_MODE_INDEX.md + GPU_MODE_CROSSWALK.md → 讲透GPU与系统级 索引层，直接复用其对 gpu-mode 50+ 讲座的逐讲映射",
+      "Perspectives/ 100 视角 → 视角库 的『体系结构/模拟器视角包』",
+      "02-tcg/notes/ 四篇 → 讲透GPU与系统级/DBT-TCG 原理笔记（讲透GPU与系统级 的 TCG 底层支撑）",
+      "REALITY_CASES.md + REAL_PROJECTS.md → 用例库/体系结构真实案例锚定"
+    ],
+    "建议动作": "桥接互链 + 选择性合并（并建议先做 git 收尾）。理由：这是 C 层中罕见的自有自著项目（63 章教材+100 视角+审计闭环），质量已达 A 层知识库标准，作为 A→C 过渡样本典型——建议归位升级：先 git add+commit 保护未入库的 v1.0/v2.x 增量并加 remote 备份；cpu-book/GPU_MODE_*/Perspectives 三块以桥接互链并入 work4ai 索引，讲透GPU与系统级 直接复用其交叉表；ai-llm-lab 应拆出单独评估；W0-W7 工程代码留在原仓作 top-cs-projects 指针"
+  },
+  "证据锚点": {
+    "key_files": [
+      "C:\\workspace\\mips-sim\\README.md",
+      "C:\\workspace\\mips-sim\\docs\\cpu-book\\part4-multi-cycle\\ch32-cpu-is-fsm.md",
+      "C:\\workspace\\mips-sim\\Perspectives\\A_Technical\\02_QEMU_TCG_Architect.md",
+      "C:\\workspace\\mips-sim\\02-tcg\\notes\\03_ir.md",
+      "C:\\workspace\\mips-sim\\GPU_MODE_INDEX.md",
+      "C:\\workspace\\mips-sim\\AUDIT_REPORT.md",
+      "C:\\workspace\\mips-sim\\KNOWLEDGE_COVERAGE.md",
+      "C:\\workspace\\mips-sim\\Views.md"
+    ]
+  },
+  "uncertain": [
+    "视角数量口径不一：README/Makefile help 称 61 视角 7 类（v1.0），Perspectives 实测 100 视角 13 类（A-M），AUDIT_REPORT 提及 perspectives target 更新为 100 视角——项目内多处宣传文案未同步",
+    "根目录 GBK 乱码命名 md（约 10KB/12KB 两个）与 3 个 0 字节乱码文件的确切原名与用途（疑似视角相关草稿与 shell 重定向误建）[不确定]",
+    "ai-llm-lab/ 是有意收纳的子模块还是误放（无 git 记录、无说明文档佐证）[不确定]",
+    "AUDIT_REPORT 自称『15/15 脚本跑通、4/4 Capstone 跑通』为自报告，本次调研未复跑验证 [不确定]",
+    "大量 v1.0 增量未 git 提交的原因（刻意搁置还是遗忘）未知 [不确定]"
+  ]
+}
