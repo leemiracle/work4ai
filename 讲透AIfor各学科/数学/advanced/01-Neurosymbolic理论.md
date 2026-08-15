@@ -72,7 +72,7 @@ Lean 形式化
 
 ### 4.2 不可通约性
 
-Neurosymbolic 是**新范式**还是**旧 trick**？（[`讲透AI历史/advanced/01`](../../讲透AI历史/advanced/01-范式转移的库恩分析.md)）
+Neurosymbolic 是**新范式**还是**旧 trick**？（[`讲透AI历史/advanced/01`](../../../讲透AI历史/advanced/01-范式转移的库恩分析.md)）
 
 ### 4.3 评估难题
 

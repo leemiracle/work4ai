@@ -82,27 +82,35 @@ graph LR
 | 章节 | 文档 | 职业的 AI 适配度 | 关键工具 |
 |------|------|:-----------:|---------|
 | **总览** | | | |
-| 00 | [00-AI for 所有职业.md](00-AI for 所有职业.md) | 统一框架 | 任务分析器 |
+| 00 | [00-AI for 所有职业.md](00-AI%20for%20所有职业.md) | 统一框架 | 任务分析器 |
 | **技术类** | | | |
-| 01 | 01-AI for 程序员.md | ⭐⭐⭐⭐⭐ 高 | Copilot/Cursor/Claude |
-| 02 | 02-AI for 产品经理.md | ⭐⭐⭐⭐ 中高 | PRD/Claude/ChatGPT |
-| 03 | 03-AI for 设计师.md | ⭐⭐⭐ 中 | Midjourney/Figma AI |
+| 01 | [01-AI for 程序员.md](01-AI%20for%20程序员.md) | ⭐⭐⭐⭐⭐ 高 | Copilot/Cursor/Claude |
+| 02 | [02-AI for 产品经理.md](02-AI%20for%20产品经理.md) | ⭐⭐⭐⭐ 中高 | PRD/Claude/ChatGPT |
+| 03 | [03-AI for 设计师.md](03-AI%20for%20设计师.md) | ⭐⭐⭐ 中 | Midjourney/Figma AI |
+| 14 | [14-AI for 运维.md](14-AI%20for%20运维.md) | ⭐⭐⭐⭐ 中高 | AIOps/Ansible |
+| 17 | [17-AI for 游戏开发.md](17-AI%20for%20游戏开发.md) | ⭐⭐⭐⭐ 中高 | Unity AI/AI 美术 |
+| 19 | [19-AI for 安全工程师.md](19-AI%20for%20安全工程师.md) | ⭐⭐⭐⭐ 中高 | AI 漏洞挖掘/防御 |
 | **商业类** | | | |
-| 04 | 04-AI for 销售营销.md | ⭐⭐⭐⭐ 中高 | Jasper/HubSpot AI |
-| 05 | 05-AI for 运营客服.md | ⭐⭐⭐⭐⭐ 极高 | Intercom/Zendesk AI |
-| 06 | 06-AI for 财务会计.md | ⭐⭐⭐ 中 | Excel AI/财务自动化 |
+| 04 | [04-AI for 销售营销.md](04-AI%20for%20销售营销.md) | ⭐⭐⭐⭐ 中高 | Jasper/HubSpot AI |
+| 05 | [05-AI for 运营客服.md](05-AI%20for%20运营客服.md) | ⭐⭐⭐⭐⭐ 极高 | Intercom/Zendesk AI |
+| 06 | [06-AI for 财务会计.md](06-AI%20for%20财务会计.md) | ⭐⭐⭐ 中 | Excel AI/财务自动化 |
+| 18 | [18-AI for 电商运营.md](18-AI%20for%20电商运营.md) | ⭐⭐⭐⭐ 中高 | 选品/素材/客服自动化 |
 | **专业服务** | | | |
-| 07 | 07-AI for 律师.md | ⭐⭐⭐ 中 | Harvey/Casetext |
-| 08 | 08-AI for 医生.md | ⭐⭐ 中低 | Doctolib/Co-Pilot |
-| 09 | 09-AI for 教师.md | ⭐⭐⭐ 中 | Khan Academy/ChatGPT |
+| 07 | [07-AI for 律师.md](07-AI%20for%20律师.md) | ⭐⭐⭐ 中 | Harvey/Casetext |
+| 08 | [08-AI for 医生.md](08-AI%20for%20医生.md) | ⭐⭐ 中低 | Doctolib/Co-Pilot |
+| 09 | [09-AI for 教师.md](09-AI%20for%20教师.md) | ⭐⭐⭐ 中 | Khan Academy/ChatGPT |
+| 13 | [13-AI for HR.md](13-AI%20for%20HR.md) | ⭐⭐⭐ 中 | 简历筛选/面试助手 |
 | **创意类** | | | |
-| 10 | 10-AI for 作家记者.md | ⭐⭐⭐⭐ 中高 | Sudowrite/Claude |
-| **学术** | | | |
-| 11 | 11-AI for 科研学生.md | ⭐⭐⭐⭐ 中高 | ChatGPT/ResearchRabbit |
+| 10 | [10-AI for 作家记者.md](10-AI%20for%20作家记者.md) | ⭐⭐⭐⭐ 中高 | Sudowrite/Claude |
+| 12 | [12-AI for 翻译.md](12-AI%20for%20翻译.md) | ⭐⭐⭐⭐ 中高 | LLM 翻译/术语库 |
+| **数据类** | | | |
+| 11 | [11-AI for 数据科学家.md](11-AI%20for%20数据科学家.md) | ⭐⭐⭐⭐ 中高 | AutoML/ChatGPT |
+| 16 | [16-AI for 数据分析师.md](16-AI%20for%20数据分析师.md) | ⭐⭐⭐⭐ 中高 | Text2SQL/BI Copilot |
 | **管理** | | | |
-| 12 | 12-AI for 管理创业者.md | ⭐⭐⭐ 中 | Notion AI/Linear |
-| **总结** | | | |
-| 13 | 13-总结: 转型与未来.md | 谁先被取代 / 转型路径 | — |
+| 15 | [15-AI for 项目经理.md](15-AI%20for%20项目经理.md) | ⭐⭐⭐ 中 | Notion AI/Linear |
+| **总集** | | | |
+| 🎯 | [职业全貌与面试指南.md](职业全貌与面试指南.md) | 全职业速查 + 面试题库 | — |
+| 📝 | [00-讲透笔记-算法经验枢纽.md](00-讲透笔记-算法经验枢纽.md) | 方法论沉淀笔记 | — |
 
 ## 怎么跑
 
@@ -146,4 +154,4 @@ python3 -u experiments/00_profession_analyzer.py    # 职业任务自动化评�
 
 ---
 
-📌 **下一步**：从 [00-AI for 所有职业.md](00-AI for 所有职业.md) 开始，用任务分析器评估你的职业；或直接跳到对应职业的章节；或直奔 [13-总结: 转型与未来.md](13-总结: 转型与未来.md) 看你的职业在 AI 时代的护城河。
+📌 **下一步**：从 [00-AI for 所有职业.md](00-AI for 所有职业.md) 开始，用任务分析器评估你的职业；或直接跳到对应职业的章节；或直奔 [13-总结: 转型与未来.md](职业全貌与面试指南.md) 看你的职业在 AI 时代的护城河。

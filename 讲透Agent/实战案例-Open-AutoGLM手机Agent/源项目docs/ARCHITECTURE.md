@@ -105,13 +105,13 @@ DeepWiki 把系统划分成 6 层，对理解职责边界很有帮助：
 
 | 层 | 职责 | 关键组件 | 主要文件 |
 |----|------|---------|---------|
-| **1. User Interface** | 任务入口 | `main.py`、`ios.py` | [main.py](../main.py)、[phone_agent/__init__.py](../phone_agent/__init__.py) |
-| **2. Core Agent** | 任务编排、感知-动作循环 | `PhoneAgent.run()`、`PhoneAgent.step()`、`AgentConfig` | [agent.py](../phone_agent/agent.py)、[agent_ios.py](../phone_agent/agent_ios.py) |
-| **3. AI Model** | 视觉语言模型集成 | `ModelClient.request()`、`MessageBuilder`、`ModelResponse` | [model/client.py](../phone_agent/model/client.py) |
-| **4. Action Processing** | 动作解析、校验、调度 | `ActionHandler.execute()`、`parse_action()` | [actions/handler.py](../phone_agent/actions/handler.py) |
-| **5. Device Abstraction** | 平台无关设备接口 | `DeviceFactory`、`DeviceType`、lazy loading | [device_factory.py](../phone_agent/device_factory.py) |
-| **6. Platform Implementation** | 平台特定协议 | ADB / HDC / WDA 命令执行 | [adb/](../phone_agent/adb/)、[hdc/](../phone_agent/hdc/)、[xctest/](../phone_agent/xctest/) |
-| 配置层（横切）| 应用映射、提示词、时间常量 | `APP_PACKAGES`、`get_system_prompt()`、`TIMING_CONFIG` | [config/](../phone_agent/config/) |
+| **1. User Interface** | 任务入口 | `main.py`、`ios.py` | main.py（待写/未落盘）、phone_agent/__init__.py（待写/未落盘） |
+| **2. Core Agent** | 任务编排、感知-动作循环 | `PhoneAgent.run()`、`PhoneAgent.step()`、`AgentConfig` | agent.py（待写/未落盘）、agent_ios.py（待写/未落盘） |
+| **3. AI Model** | 视觉语言模型集成 | `ModelClient.request()`、`MessageBuilder`、`ModelResponse` | model/client.py（待写/未落盘） |
+| **4. Action Processing** | 动作解析、校验、调度 | `ActionHandler.execute()`、`parse_action()` | actions/handler.py（待写/未落盘） |
+| **5. Device Abstraction** | 平台无关设备接口 | `DeviceFactory`、`DeviceType`、lazy loading | device_factory.py（待写/未落盘） |
+| **6. Platform Implementation** | 平台特定协议 | ADB / HDC / WDA 命令执行 | adb/（待写/未落盘）、hdc/（待写/未落盘）、xctest/（待写/未落盘） |
+| 配置层（横切）| 应用映射、提示词、时间常量 | `APP_PACKAGES`、`get_system_prompt()`、`TIMING_CONFIG` | config/（待写/未落盘） |
 
 **注意**：第 5 层 `DeviceFactory` 当前只覆盖 ADB/HDC，**iOS 跳过它直接走第 6 层**（`xctest/`）。这是历史遗留的不一致，详见 [03-device-layer.md](03-device-layer.md#为什么-ios-不走-devicefactory)。
 

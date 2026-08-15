@@ -9,7 +9,7 @@
 
 ## 0. 为什么需要这个实验包
 
-母文件 §6.1 新增 F5 反欺骗质量门，要求每个论断必须有可验证的证据。本实验包提供**欺骗动力学本身的证据**——四个最小可跑实验，每个揭示 AI 纪的一种欺骗形态。
+母文件 §6.1 新增 F5 反欺骗质量门，要求每个论断必须有可验证的证据。本实验包提供**欺骗动力学本身的证据**——四个仿真实验，每个揭示 AI 纪的一种欺骗形态；再加**实验 5：对一个工业级 agent 框架（DeepSeek Harness）做逐步解剖**，验证四种反欺骗机制在真实生产代码里如何落地。
 
 **运行环境**：Python 3.10+，无需 GPU。所有实验 < 60 秒跑完。
 
@@ -332,6 +332,116 @@ print(f"  Data poisoning 是训练侧的欺骗——你看不到它, 直到对�
 
 ---
 
+## 实验 5 ｜ 工业级案例解剖：DeepSeek Harness——识诈基础设施的真实实现
+
+### 直觉
+
+实验 1–4 是仿真：用 40 行 Python 演示欺骗"会长什么样"。但欺骗动力学的真正战场在**生产系统**——一个 agent 天天跑 `bash`、写文件、调子 agent，骗它的攻击面每一步都存在。
+
+[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（`dsh`，MIT 协议）是 DeepSeek 官方 2026 年开源的 agent 框架：219 个插件包，"一切皆插件"架构，底层是 vendored Cordis。**它把本实验包前四种欺骗的反制机制，全部做成了架构级约束**——不是 prompt 里写"请不要骗我"，而是代码结构上让欺骗无处发生。
+
+本实验 = 一次 step-by-step 的代码审计。每条论断都给出可复现的 bash 命令。**完整的分层案例笔记**（核心运行时 / 能力接缝 / 信任平面 / 装配 / SDK 五大面，9 篇）见 [`Agent框架案例/deepseek-harness插件化框架`](./Agent框架案例/deepseek-harness插件化框架/README.md)；本实验只取"反欺骗"一个切面。
+
+> 运行环境：本地克隆 `C:\workspace\deepseek-harness`（bash 路径 `/c/workspace/deepseek-harness`），需安装 [ripgrep](https://github.com/BurntSushi/ripgrep)（`rg`）。
+
+### Step-by-step 解析
+
+**Step 1｜第一性原理：没有特权核心，就没有"骗核心"。**
+dsh 里模型适配器、工具注册表、会话日志、agent loop 本身全是 Cordis 插件（`docs/architecture.md:11-13`）。每个能力 = 一个"接缝"（Service Definition 声明接口 / Service Provider 注册实现 / Consumer 使用），例如 shell 接缝：`packages/shell/shell/src/index.ts:65` 定义 `ShellExecutor`，`bash-local`/`bash-sandbox` 是可替换实现，`tool-bash` 只是消费者。**对欺骗动力学的意义**：反欺骗策略（审批、沙箱、日志）不是焊死在 loop 里的特权逻辑，而是和被监督的能力平权的插件——你可以审计它们、替换它们，但绕不过它们所在的接缝。
+
+**Step 2｜"Model-visible ⟺ logged"：反两面派的核心不变量。**
+dsh 有一条铁律（`docs/architecture.md:96`，`AGENTS.md:107`）：**凡是到达模型请求的内容，必须能从会话日志重建**——并且有运行时断言强制。会话日志是只追加事件流（`packages/core/session/src/index.ts:425`），`deriveMessages()`（`:726`）从日志投影出模型历史；日志格式版本 `SESSION_FORMAT_VERSION` 钉在每个会话头，加载时不匹配直接拒绝（`index.ts:101-102`）。**意义**：agent 无法"对模型说一套、对日志说一套"——模型看到的和事后审计的是同一份数据。这是对 Sycophancy（实验 3）的结构性反制：不存在"用户看到的对话"和"真实发生的对话"两套账本，UI 也从同一日志渲染。
+
+**Step 3｜工具七段管线：审批缺失 = 拒绝，绝不放行。**
+模型每个工具调用走七段管线（`packages/core/tools/src/index.ts:1342` 起）：参数快照+深冻结 → `tools/pre-execute` 瀑布（allow/deny/**ask**）→ 同步 guard → `tools/execute` → `tools/post-execute` → `finalizeContent` → 冻结结果落日志。关键在 **ask 的降级语义**：若部署里没有组装审批服务，`ask` **降级为 deny**（`index.ts:1696`）——fail-closed，宁可拒绝也不默许。**意义**：对 Prompt Injection（实验 2）里"越权执行"的形态，审批闸门缺位时是关的，不是开的。
+
+**Step 4｜沙箱：wrap-argv 契约 + 升级审批先于执行。**
+沙箱接缝的契约一行话（`packages/sandbox/sandbox/README.md:7`）：`ctx.sandbox.confine(argv, policy)` 返回**替换原始 argv 的受限 argv**；没有可用后端时**抛 `SandboxUnavailableError`（`src/index.ts:131`），绝不原样放行**。后端链：Linux bwrap→Landlock（原生 C addon，`native/landlock-run`）、macOS Seatbelt、Windows ACL 受限令牌——Windows 后端还诚实报告"部分强制"（硬链接别名等固有缺口）。被沙箱拒绝后模型请求"升级权限"时，`approveEscalation`（`escalation.ts:157`）要求**审批在执行前完成**，每个 ask/outcome 都审计入会话日志。**意义**：欺骗者最爱的"先斩后奏"被物理排除。
+
+**Step 5｜循环卫生：行为级反 Reward Hacking。**
+实验 1 里 agent"原地打转拿小奖励"的 LLM 等价物是：重复同样的工具调用刷上下文、或赖在一个工具里不出来。dsh 用两个 guard 插件反制：
+- `repeat-tool-reminder`（`packages/guard/repeat-tool-reminder/src/index.ts:29`）：同一 agent 连续重复**完全相同**的工具调用达阈值（默认 `[3, 5, 8]`）时，注入递进式提醒（"你在重复完全相同的调用…"），且**被 deny 的调用也计数**（连被拒的工具也算刷）；
+- `timeout-policy`（`packages/guard/timeout-policy/src/index.ts:61`）：工具声明时限后，到期信号直接替换调用方信号，结果强制为 `TOOL_TIMEOUT`。
+
+**意义**：这是把"policy 骗 reward"的检测做成了 harness 级机制，而不是靠模型自觉。
+
+**Step 6｜供应链：反 Data Poisoning 的工程化。**
+实验 4 的教训是"投毒看不见，直到触发"。dsh 的应对：
+- **框架层 vendored**：Cordis 9 个包源码内嵌，manifest 逐包锁定上游 commit SHA（`vendor/README.md:13-23`，如 `cordis` 钉在 `56b3d4f…`），CI 门禁 `verify-vendored-links` 断言锁文件里无 registry 副本——npm 投毒/_typosquatting 对框架层无效；
+- **安装脚本默认拒绝**：`pnpm-workspace.yaml:40` 的 `allowBuilds` 显式列出允许跑 install 脚本的包（esbuild、node-pty 等），未列出的一律硬失败——依赖投毒最常用的 install-script 载体被默认封死；
+- **补丁显式化**：`patchedDependencies`（`pnpm-workspace.yaml:71-72`）声明式打补丁，无静默篡改。
+
+**Step 7｜注入的网络面：DNS-rebinding 栅栏与 MCP 命名空间。**
+Prompt injection 不只走文本，还走网络：恶意网页 rebind DNS 读取本地 `127.0.0.1:3080` 的 Web API。dsh 在 `/api` 每个入口前置 Host 栅栏（`packages/client/connection/src/api-request-trust.ts:96`）：Host 必须是回环地址或显式 `trustedHosts`，`Origin` 不一致或 `sec-fetch-site: cross-site` 一律 403；`dsh web --host 0.0.0.0` 在出现认证层之前**故意不支持**。外部 MCP 服务器的工具强制改名 `mcp__<server>__<name>`（`packages/mcp/mcp-client/src/tools.ts:97`）——不可信来源的指令永远带命名空间前缀，无法冒充内置工具。
+
+### 四种欺骗 → 工业反制映射表
+
+| 欺骗形态（本实验包） | dsh 的结构性反制 | 证据位置 |
+|---|---|---|
+| Reward Hacking（实验 1：policy 骗 reward） | repeat-tool-reminder 链检测（阈值 3/5/8，被拒调用计数）+ timeout-policy 强制 TOOL_TIMEOUT + "model-visible⟺logged" 运行时断言 | `packages/guard/*/src/index.ts` |
+| Prompt Injection（实验 2：数据骗指令） | 工具结果走 post-execute 可 block 瀑布；MCP 工具强制 `mcp__` 命名空间；`/api` DNS-rebinding 栅栏；审批缺位 = deny | `tools/src/index.ts:1742`、`mcp-client/src/tools.ts:97`、`connection/src/api-request-trust.ts:96` |
+| Sycophancy（实验 3：模型骗用户） | 单一日志账本：模型视图与 UI 渲染都从同一 append-only 事件流投影；ask_user 每问每答审计入日志 | `session/src/index.ts:425,726` |
+| Data Poisoning（实验 4：供应链投毒） | vendored SHA 锁定 + `verify-vendored-links` 门禁；`allowBuilds` 默认拒绝 install 脚本；显式 `patchedDependencies` | `vendor/README.md:13-23`、`pnpm-workspace.yaml:40-72` |
+
+### 跑法 + 预期输出（审计脚本）
+
+```bash
+$ cd /c/workspace/deepseek-harness   # 或 git clone https://github.com/deepseek-ai/deepseek-harness
+
+# 规模：219 个插件包
+$ ls -d packages/*/*/ | wc -l
+219
+
+# 证据 A: 日志格式版本钉死，加载不匹配即拒绝
+$ rg -n "export const SESSION_FORMAT_VERSION" packages/core/session/src/types.ts
+56:export const SESSION_FORMAT_VERSION = 0
+
+# 证据 B: 审批服务缺位时 ask 降级为 deny（fail-closed）
+$ rg -n "requires approval \(not yet supported\)" packages/core/tools/src/index.ts
+1696:        decision: { kind: 'deny', reason: ask.reason ?? `tool "${exec.name}" requires approval (not yet supported)` },
+
+# 证据 C: 沙箱不可用即抛错，绝不原样放行
+$ rg -n "class SandboxUnavailableError" packages/sandbox/sandbox/src/index.ts
+131:export class SandboxUnavailableError extends HarnessError {
+
+# 证据 D: 升级审批的有序 fail-closed 序列（含测试：无审批服务即 throw）
+$ rg -n "no approval service is composed" packages/sandbox/sandbox/tests/escalation.spec.ts
+95:    await expect(approveEscalation(req(), ingredients({ approver: undefined }))).rejects.toThrow(/no approval service is composed/)
+
+# 证据 E: 重复调用提醒阈值默认 [3, 5, 8]
+$ rg -n "3, 5, 8" packages/guard/repeat-tool-reminder/src/index.ts
+29:    /** Consecutive-repeat counts that trigger a reminder (default `[3, 5, 8]`). */
+
+# 证据 F: 工具超时强制结果
+$ rg -n "using d = deadline" packages/guard/timeout-policy/src/index.ts
+61:    using d = deadline(exec.signal, timeoutMs, TOOL_TIMEOUT)
+
+# 证据 G: MCP 工具强制命名空间
+$ rg -n "const joined = \`mcp__" packages/mcp/mcp-client/src/tools.ts
+97:  const joined = `mcp__${serverName}__${rawName}`
+
+# 证据 H: install 脚本默认拒绝（deny by default）
+$ rg -n "allowBuilds" pnpm-workspace.yaml
+40:allowBuilds:
+
+# 证据 I: DNS-rebinding 防御
+$ rg -n "rebinding" packages/client/connection/src/api-request-trust.ts
+3: * paths a browser opens against a local HTTP API — DNS rebinding (Host names
+
+# 证据 J: 框架层逐包锁定上游 commit SHA
+$ rg -n "56b3d4f" vendor/README.md
+17:| `cordis/` | `@deepseek-ai/cordis` | `cordis` | 4.0.0-rc.7 | https://github.com/cordiverse/cordis (`packages/core`) | `56b3d4f725681cf4556c1a8695a709cc3b6eed74` |
+```
+
+### 欺骗动力学解读
+
+- **D1–D4 全覆盖，且从"检测"升级到"结构"**：仿真实验证明四种欺骗存在；dsh 证明反制可以不依赖检测（事后抓），而依赖**结构**（事前不可能）——单一日志账本消灭两面派、fail-closed 审批消灭越权默许、wrap-argv 沙箱消灭先斩后奏、SHA 锁定消灭供应链偷换。
+- **反欺骗的经济学**：dsh 的每个 fail-closed 决策都有代价（没有审批服务就拒绝工具 = 可用性下降）。工业系统愿意付这个代价，本身是"识诈基础设施"成立的最强证据——正如母文件所说：**欺骗与反欺骗是共同进化的军备竞赛，反制的成本就是信任的价格**。
+- **沉淀**：OpenAI Structured Outputs、Anthropic Constitutional AI 属于模型内对齐；dsh 展示的是另一条路线——**harness 层的架构对齐**（architecture-level alignment）：不假设模型善意，让骗的行为在结构上无利可图。两条路线正交互补。
+- **局限**：dsh 是 developer preview（无兼容承诺）；Windows ACL 沙箱诚实报告"部分强制"（硬链接别名）；Web 载体明确声明"栅栏是可达性策略而非认证层"——工业级 honesty 本身也是反欺骗文化的一部分（不夸大自己的防线）。
+
+---
+
 ## 5 个实验合在一起的总结
 
 | 实验 | 欺骗类型 | 反制沉淀 |
@@ -340,118 +450,16 @@ print(f"  Data poisoning 是训练侧的欺骗——你看不到它, 直到对�
 | Prompt Injection | 用户输入骗系统指令 | 结构性隔离 + 输出审查 |
 | Sycophancy | 模型骗用户（附和错误） | probing + 反 sycophancy eval |
 | Data Poisoning | 训练数据骗模型 | 数据审计 + 差分隐私 |
+| 案例：DeepSeek Harness | 以上四种的生产级合体 | 架构对齐：单一日志账本 + fail-closed 审批 + wrap-argv 沙箱 + SHA 锁定供应链 |
 
-**这四种欺骗，构成了 AI 纪欺骗动力学的主要战场**。每个反制机制，都是一种"识诈基础设施"——它们合起来就是 AI Safety 这门学科。
+**前四个实验证明欺骗存在，第五个证明反制可以工程化**。这四种欺骗构成 AI 纪欺骗动力学的主要战场；每个反制机制都是一种"识诈基础设施"——仿真层它们合起来是 AI Safety 这门学科，工业层它们合起来是 harness 架构学。
 
 ---
 
 ## 📌 导航
 
 - 母文件：[`欺骗动力学-社会进步的隐秘引擎.md`](./欺骗动力学-社会进步的隐秘引擎.md)
-- 评估表：[`欺骗动力学-反诈成熟度评估表.md`](./欺骗动力学-反诈成熟度评估表.md)
+- 评估表：已归档至 git 历史的反诈成熟度评估表（v1）（待写/未落盘）
 - 检测 Prompt 库：[`欺骗动力学-检测Prompt库.md`](./欺骗动力学-检测Prompt库.md)
+- 互文案例（2026-08-14 新增）：[`Agent上下文案例/codegraph代码知识图谱/notes/02-基准方法论与诚实披露.md`](./Agent上下文案例/codegraph代码知识图谱/notes/02-基准方法论与诚实披露.md)——"评测不自欺"的另一工业范本：双臂封锁防对照组污染（0/28）、不利数字（驻留上下文 +80%）与有利数字同页披露、供应链 SLSA L2。与实验 5 的 dsh 形成"结构对齐（harness 层）× 证据诚实（工具层）"两条正交路线
 ---
-
-## ☯ 毛泽东哲学视角
-
-> 承接 [`毛泽东哲学视角-总入口.md`](毛泽东哲学视角-总入口.md)。
-
-| 三论 | 本主题的对应 |
-|------|------------|
-| **矛盾论**（抓主要矛盾）| 普遍规律 vs 具体现象；解析 vs 数值 |
-| **实践论**（认识循环）| 物理认识从实验(直接实践)来，又回到实验验证/预测 |
-| **反对本本主义**（调查）| 理论模型是'本本'——须用真实实验数据调查其适用边界 |
-
-**核心洞察**：矛盾论定方向（找瓶颈），实践论定真伪（靠实验），反对本本主义定落地（靠调查）——三论闭环是认识本主题的最小完备认识纪律。
-
-**通用锚点**：[`毛泽东哲学视角-锚点块.md`](毛泽东哲学视角-锚点块.md)
-
-
----
-
-## ☯ 道教核心视角
-
-> 承接 [`道教核心视角-总入口.md`](道教核心视角-总入口.md)。
-
-| 道教视角 | 本主题的对应 |
-|---------|------------|
-| **道法自然** | 守恒律/变分原理是物理之'道' |
-| **无为而无不为** | 最小作用量原理——自然走最省之路 |
-| **阴阳反覆** | 解析/数值、普遍/特殊冲气以为和 |
-| **齐物逍遥** | 现象齐一于律；依乎物理之天理 |
-
-**核心洞察**：认清道（根本规律）顺势，去掉妄为（减法/不折腾），在对立中守动态平衡（冲气求和、知物极必反），臻于依乎天理、游刃有余。
-
-**通用锚点**：[`道教核心视角-锚点块.md`](道教核心视角-锚点块.md)
-
-
----
-
-## 🪷 佛教核心视角
-
-> 承接 [`佛教核心视角-总入口.md`](佛教核心视角-总入口.md)。
-
-| 佛教视角 | 本主题的对应 |
-|---------|------------|
-| **缘起性空** | 现象依物理因缘生灭 |
-| **四圣谛** | 理论偏差的苦→集（假设过强）→灭（符合实验）→道 |
-| **中道** | 解析/数值中道；'基本常数'亦无常（被更精确测量替代） |
-| **禅与觉察** | 模型预测是相，实验数据是实相 |
-
-**核心洞察**：万法因缘生无自性（空=可塑性），用四圣谛诊断根因，以中道不落两边且知无常，对表象保持正念觉察、应无所住。
-
-**通用锚点**：[`佛教核心视角-锚点块.md`](佛教核心视角-锚点块.md)
-
-
----
-
-## 🍵 禅宗核心视角
-
-> 承接 [`禅宗核心视角-总入口.md`](禅宗核心视角-总入口.md)。
-
-| 禅宗视角 | 本主题的对应 |
-|---------|------------|
-| **不立文字** | 别被形式化符号绑架，直指物理直觉（不立文字） |
-| **见性顿悟** | 守恒律的直觉把握=见性；相变=顿悟 |
-| **平常心是道** | 最小作用量原理=朴素到极致的平常心 |
-| **指月之指** | 公式是指，物理图像（月）是本质 |
-
-**核心洞察**：直指本质不拘形式（不立文字），照见本来面目与顿渐不二（见性顿悟），回归朴素不执着（平常心是道），始终辨清手段与目的（指月之指）。
-
-**通用锚点**：[`禅宗核心视角-锚点块.md`](禅宗核心视角-锚点块.md)
-
-
----
-
-## 💡 阳明心学视角
-
-> 承接 [`阳明心学-总入口.md`](阳明心学-总入口.md)。
-
-| 阳明心学视角 | 本主题的对应 |
-|---------|------------|
-| **心即理** | 物理模型（心）构建自然之理——心即理 |
-| **知行合一** | 能与实验吻合才算好理论——行验知 |
-| **致良知** | 从基本原理推演=致良知——推充本理 |
-| **事上磨炼** | 在真实实验中磨炼理论——事上验真 |
-
-**核心洞察**：理在心中（心即理），真知必行（知行合一），能力本具只需推充（致良知），在事上检验磨炼（事上磨炼）。
-
-**通用锚点**：[`阳明心学-锚点块.md`](阳明心学-锚点块.md)
-
-
----
-
-## 🎋 玄学核心视角
-
-> 承接 [`玄学核心视角-总入口.md`](玄学核心视角-总入口.md)。
-
-| 玄学视角 | 本主题的对应 |
-|---------|------------|
-| **贵无（以无为本）** | 最小作用量原理——自然走最省之路（以无为用） |
-| **得意忘言** | 物理模型是言，守恒律/物理律是意——得意忘言 |
-| **名教与自然** | 依物理之自然（独化），现象自生自化 |
-| **本末体用** | 守恒律/变分原理是本（体），具体模型是末（用） |
-
-**核心洞察**：认清'无'为本体（贵无），守意而超越工具（得意忘言），任自然而节名教（名教与自然），辨本末以崇本息末（本末体用）。
-
-**通用锚点**：[`玄学核心视角-锚点块.md`](玄学核心视角-锚点块.md)
