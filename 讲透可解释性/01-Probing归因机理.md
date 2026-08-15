@@ -89,7 +89,7 @@ Anthropic 的研究方法：在小型 transformer 里找**电路**（neuron 的�
 
 ## 📌 下一步
 
-[02-SAE与Superposition](02-SAE.md)（待补）——2024 突破：解开 neuron 的特征叠加。
+02-SAE与Superposition（待写/未落盘）（待补）——2024 突破：解开 neuron 的特征叠加。
 
 ## ✍️ 练习
 

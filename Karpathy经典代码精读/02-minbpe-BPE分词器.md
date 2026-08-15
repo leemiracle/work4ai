@@ -2,7 +2,7 @@
 
 > **Andrej Karpathy · minbpe**（10k★）。Byte Pair Encoding（BPE）分词器的最小实现——`base.py` 165 行 + `basic.py` 74 行 + `regex.py` 164 行。GPT-2/4、Llama、tiktoken 用的分词算法，Karpathy 用几百行纯 Python 讲透了。
 >
-> 源码：[`repos/minbpe/minbpe/`](./repos/minbpe/minbpe/) ｜ 原仓库：https://github.com/karpathy/minbpe ｜ 视频：*Let's build the GPT Tokenizer*（2 小时逐行讲解）
+> 源码：``repos/minbpe/minbpe/`` ｜ 原仓库：https://github.com/karpathy/minbpe ｜ 视频：*Let's build the GPT Tokenizer*（2 小时逐行讲解）
 
 ---
 
@@ -229,7 +229,7 @@ train 按**频次**选 pair（建规则），encode 按 **merge index** 选 pair
 
 | 本精读讲透的 | work4ai 深度版 |
 |---|---|
-| BPE 算法 + train/encode | [`讲透NLP/02-词与token`](../讲透NLP/02-词与token-编辑距离.md)（token 化基础）|
+| BPE 算法 + train/encode | `讲透NLP/02-词与token`（待写/未落盘）（token 化基础）|
 | GPT-2/4 tokenizer 的内部 | [`讲透Transformer/13-Tokenizer`](../讲透Transformer/13-Tokenizer.md)（生产级 tokenizer）|
 | byte-level / 子词 / OOV | [`讲透分词器/`](../notes/)（笔记，深化版）|
 | 分词对 LLM 的影响（拼写/反转/计数）| [`讲透Prompt`](../讲透Prompt/)（"LLM 不会数 token"现象）|
@@ -254,4 +254,4 @@ train 按**频次**选 pair（建规则），encode 按 **merge index** 选 pair
 
 ---
 
-> **源码**：[`repos/minbpe/minbpe/base.py`](./repos/minbpe/minbpe/base.py)（165 行）｜ [`basic.py`](./repos/minbpe/minbpe/basic.py)（74 行）｜ [`regex.py`](./repos/minbpe/minbpe/regex.py)（164 行）
+> **源码**：``repos/minbpe/minbpe/base.py``（165 行）｜ ``basic.py``（74 行）｜ ``regex.py``（164 行）

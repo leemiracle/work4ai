@@ -2,7 +2,7 @@
 
 > **Andrej Karpathy · minGPT**（24k★）。GPT（Generative Pre-trained Transformer）的最小 PyTorch 实现——`model.py` 310 行 + `trainer.py` 109 行。nanoGPT 的前身，把 OpenAI GPT-2 的 TensorFlow 实现剥到"一个文件读得完"。
 >
-> 源码：[`repos/minGPT/mingpt/model.py`](./repos/minGPT/mingpt/model.py) ｜ 原仓库：https://github.com/karpathy/minGPT
+> 源码：``repos/minGPT/mingpt/model.py`` ｜ 原仓库：https://github.com/karpathy/minGPT
 
 ---
 
@@ -274,4 +274,4 @@ minGPT 强调**可读**（教学），nanoGPT 强调**可训**（速度）。nan
 
 ---
 
-> **源码**：[`repos/minGPT/mingpt/model.py`](./repos/minGPT/mingpt/model.py)（310 行）｜ [`trainer.py`](./repos/minGPT/mingpt/trainer.py)（109 行）｜ 配套：[demos.py](./repos/minGPT/demos.py)（加法任务训 gpt-nano）
+> **源码**：``repos/minGPT/mingpt/model.py``（310 行）｜ ``trainer.py``（109 行）｜ 配套：`demos.py`（加法任务训 gpt-nano）

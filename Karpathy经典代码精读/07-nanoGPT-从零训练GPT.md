@@ -2,7 +2,7 @@
 
 > **Andrej Karpathy · nanoGPT**（62k★）。GPT 的"可训"版本——`model.py` 330 行 + `train.py` 336 行。架构与 [minGPT](./06-minGPT-minimal-GPT.md) **完全相同**，但通过 5+ 个工程优化让训练快 3-5 倍，成为**业界最广用的"从零训 GPT"代码**。
 >
-> 源码：[`repos/nanoGPT/model.py`](./repos/nanoGPT/model.py) ｜ 原仓库：https://github.com/karpathy/nanoGPT
+> 源码：``repos/nanoGPT/model.py`` ｜ 原仓库：https://github.com/karpathy/nanoGPT
 
 ---
 
@@ -233,4 +233,4 @@ minGPT 和 nanoGPT **架构完全一样**，但 nanoGPT 训练快 3-5 倍。差�
 
 ---
 
-> **源码**：[`repos/nanoGPT/model.py`](./repos/nanoGPT/model.py)（330 行）｜ [`train.py`](./repos/nanoGPT/train.py)（336 行）｜ 配套：`sample.py`（生成）/ `bench.py`（基准）
+> **源码**：``repos/nanoGPT/model.py``（330 行）｜ ``train.py``（336 行）｜ 配套：`sample.py`（生成）/ `bench.py`（基准）

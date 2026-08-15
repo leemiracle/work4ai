@@ -40,10 +40,10 @@
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §13.1 Oxford CPP | [`cpp.py`](../oxford-cs-projects/topic12-foundations/cpp.py) | Curry-Howard + STLC + CCC——Lean4 的类型论根基 |
-| §13.2 Cambridge Hoare Logic | [`hoare_logic.py`](../cambridge-cs-projects/topic4-compiler/hoare_logic.py) | Hoare 三元组 + WP + 循环不变式方法（seL4 验证的方法论祖先）|
-| §13.3 ETH FM（Basin）| [`formal_methods.py`](../eth-cs-projects/topic3-fm/formal_methods.py) | CTL Model Checking + DPLL + TLA+ 规约 |
-| §13.4 CMU 15-414（Platzer）| [`diff_dyn_logic.py`](../cmu-cs-projects/topic12-theory/diff_dyn_logic.py) | differential dynamic logic + barrier certificate（cyber-physical 验证）|
+| §13.1 Oxford CPP | [`cpp.py`](../top-cs-projects/oxford-cs-projects/topic12-foundations/cpp.py) | Curry-Howard + STLC + CCC——Lean4 的类型论根基 |
+| §13.2 Cambridge Hoare Logic | [`hoare_logic.py`](../top-cs-projects/cambridge-cs-projects/topic4-compiler/hoare_logic.py) | Hoare 三元组 + WP + 循环不变式方法（seL4 验证的方法论祖先）|
+| §13.3 ETH FM（Basin）| [`formal_methods.py`](../top-cs-projects/eth-cs-projects/topic3-fm/formal_methods.py) | CTL Model Checking + DPLL + TLA+ 规约 |
+| §13.4 CMU 15-414（Platzer）| [`diff_dyn_logic.py`](../top-cs-projects/cmu-cs-projects/topic12-theory/diff_dyn_logic.py) | differential dynamic logic + barrier certificate（cyber-physical 验证）|
 
 ---
 
@@ -52,7 +52,7 @@
 
 ## 🎭 欺骗动力学视角：数学/程序里藏漏洞
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 

@@ -200,4 +200,4 @@ graph TB
 📌 **下一步**：
 - 这份全景是**地图**。具体某个库怎么用，看其官方文档（生态库更新快，文档比任何教程都准）。
 - 选型记住三句话：**NLP/LLM 找 HuggingFace；部署看 ExecuTorch/AOTInductor；量化用 torchao**。
-- 回到 core：[01-Autograd](01-Autograd与计算图.md)（backward 本质）、[06-编译](06-编译与图模式.md)（compile）、[08-现代2.x特性](08-现代PyTorch(2.x特性).md)（export/SDPA/分布式）是理解所有生态库如何接 core 的钥匙。
+- 回到 core：[01-Autograd](01-Autograd与计算图.md)（backward 本质）、[06-编译](06-编译与图模式.md)（compile）、[08-现代2.x特性](08-现代PyTorch(2.x特性).md).md).md).md).md)（export/SDPA/分布式）是理解所有生态库如何接 core 的钥匙。

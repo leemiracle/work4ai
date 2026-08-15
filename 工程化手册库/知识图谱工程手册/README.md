@@ -170,5 +170,17 @@ Self-attention = 每个位置"看"所有其他位置，加权平均。
 
 ---
 
-**版本**：v1.0（2026-08-13）
+## 10. 自动化供给端：graphify
+
+手工建图之外，2026 年出现了**自动给图供料**的工具——[`Agent上下文案例/graphify知识图谱skill/`](../../Agent上下文案例/graphify知识图谱skill/)：
+
+- `/graphify .` 把代码库（tree-sitter AST）+ 文档/PDF/视频映射成知识图谱，**可一键导出 Obsidian vault**（`--obsidian`，节点=笔记、边=`[[链接]]`）——本手册 §3 的 ALIVE 五要素由机器预填
+- `graphify add <arxiv-url>` 收论文、`add <youtube-url>` 收视频转写，`graphify global add` 进全局图——Inbox（00-Inbox）的自动化进料口
+- Leiden 社区检测 ≈ 自动生成 MOC（每社区一个主题索引）；god nodes ≈ 自动找到你的"枢纽概念"
+
+详见该案例 [笔记 02](../../Agent上下文案例/graphify知识图谱skill/notes/02-skill交付面与平台策略.md) §6。
+
+---
+
+**版本**：v1.0（2026-08-13；2026-08-14 增 §10 graphify 自动化供给端）
 **核心理念**：**知识不是文件夹，是网络。给大脑建外存 = 给思想装扩容。**

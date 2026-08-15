@@ -34,6 +34,8 @@
 | 文档 | 主题 |
 |------|------|
 | [13-Tokenizer](13-Tokenizer.md) | BPE / SentencePiece / 大词表 (Transformer 文本前端) |
+| └ [13-Tokenizer.多视角](13-Tokenizer.多视角.md) | 13 篇的多视角重述（诸视角叠加版）|
+| └ [13-Tokenizer.费曼检验](13-Tokenizer.费曼检验.md) | 13 篇的 F1-F4 费曼检验卡（🟡 F1 血肉/F2/F4 待作者本人填）|
 | [14-训练并行](14-训练并行.md) | DP/ZeRO/TP/PP/EP/SP 五种并行 (大模型训练系统基础) |
 | [15-长上下文](15-长上下文.md) | RoPE scaling / 稀疏注意力 / Ring Attention (突破 O(n²)) |
 
@@ -47,6 +49,7 @@
 |------|------|
 | [12-权威资源库](12-权威资源库.md) | ★ 24 个硬核博客+课程, 按 ezyang 风格分级, 含阅读路径 |
 | [CS25-讲座索引](CS25-讲座索引.md) | Stanford CS25 V4/V5/V6 全部讲座 + 讲者速查 |
+| [00-讲透笔记-算法经验枢纽](00-讲透笔记-算法经验枢纽.md) | 跨单元算法经验索引（TR1-TR8）|
 
 ---
 
@@ -84,7 +87,7 @@ experiments/
 
 ## ✅ 完整度盘点: Transformer 相关是否讲完了?
 
-**已完整覆盖 (16 篇文档 + 实验)**: 架构全组件 (00-05) · 系统全链路 (06-10) · 输入前端与工程 (13-15) · 源码对照 (11) · 权威资源 (12) · CS25 索引。
+**已完整覆盖 (17 篇主线 + 3 篇辅助, + 实验)**: 架构全组件 (00-05) · 系统全链路 (06-10) · 输入前端与工程 (13-15 及其多视角/费曼变体) · 源码对照 (11) · 权威资源 (12) · CS25 索引 · 算法经验枢纽。
 
 **故意留作"应用层"的边界** (不算 Transformer 本身, 属下一站主题):
 - 📦 **RAG / Agent / 工具调用** — 在 Transformer 之上的应用 (用 LLM, 非讲 LLM)
@@ -124,3 +127,11 @@ experiments/
 - Karpathy, *nanoGPT* — 最佳参考实现
 - **HuggingFace transformers** — https://github.com/huggingface/transformers (生产级源码, 见 11 篇)
 - **Stanford CS25** (V4/V5/V6) — https://web.stanford.edu/class/cs25/
+
+
+---
+
+🔗 **交叉链接**：Stanford CS336 论文精读 · Transformer 架构组件（RoPE/SwiGLU/GQA/MLA 等 18 篇），见 [`讲透公开课/06-CS336论文精读/B-Transformer架构.md`](../讲透公开课/06-CS336论文精读/B-Transformer架构.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments/)。
+
+## 🔗 与其他宇宙的连接
+

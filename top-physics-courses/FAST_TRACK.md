@@ -8,12 +8,12 @@
 
 ## 阶段 A：经典物理地基（6-8 周）
 
-- [ ] **Week 1-2 · L01 力学** | MIT 8.09 / Cambridge Part IA | [demo](../berkeley-physics/physics_demos.py)
+- [ ] **Week 1-2 · L01 力学** | MIT 8.09 / Cambridge Part IA | [demo](berkeley-physics/physics_demos.py)
   - [ ] 读 Taylor ch 1-7（牛顿→拉格朗日）
   - [ ] 做 10 道题
   - [ ] 跑 demo：谐振子 Verlet 积分
 
-- [ ] **Week 3 · L02 电磁学** | MIT 8.022 (Purcell) | [demo](../cambridge-physics/physics_demos.py)
+- [ ] **Week 3 · L02 电磁学** | MIT 8.022 (Purcell) | [demo](cambridge-physics/physics_demos.py)
   - [ ] 读 Purcell ch 1-5
   - [ ] 从麦克斯韦方程推光速
 
@@ -21,11 +21,11 @@
   - [ ] 读 Crawford ch 1-4
   - [ ] 理解双缝干涉
 
-- [ ] **Week 5 · L04 热力学** | Stanford PHYS 45 (Schroeder) | [demo](../caltech-physics/physics_demos.py)
+- [ ] **Week 5 · L04 热力学** | Stanford PHYS 45 (Schroeder) | [demo](caltech-physics/physics_demos.py)
   - [ ] 读 Schroeder ch 1-4
   - [ ] 理解熵增
 
-- [ ] **Week 6 · L05 统计力学** | Berkeley 112 (K&K) | [demo](../caltech-physics/physics_demos.py)
+- [ ] **Week 6 · L05 统计力学** | Berkeley 112 (K&K) | [demo](caltech-physics/physics_demos.py)
   - [ ] 读 Kittel & Kroemer ch 1-6
   - [ ] 推导麦克斯韦-玻尔兹曼分布
 
@@ -39,16 +39,16 @@
 - [ ] **Week 9 · L07 狭义相对论** | MIT 8.20
   - [ ] 推导洛伦兹变换 + 时间膨胀
 
-- [ ] **Week 10-12 · L08 量子入门** | MIT 8.04 (Adams) | [demo](../mit-physics/physics_demos.py)
+- [ ] **Week 10-12 · L08 量子入门** | MIT 8.04 (Adams) | [demo](mit-physics/physics_demos.py)
   - [ ] 读 Griffiths ch 1-4
   - [ ] 跑 demo：Crank-Nicolson 波包演化
   - [ ] 解无限深势阱
 
-- [ ] **Week 13-15 · L09 量子中级** | MIT 8.05/8.06 | [demo](../oxford-physics/physics_demos.py)
+- [ ] **Week 13-15 · L09 量子中级** | MIT 8.05/8.06 | [demo](oxford-physics/physics_demos.py)
   - [ ] 读 Griffiths ch 6-11 + Sakurai ch 1-3
   - [ ] 氢原子 + 自旋 + 角动量
 
-- [ ] **Week 16-18 · L10 广义相对论** | MIT 8.962 (Carroll) | [demo](../princeton-physics/physics_demos.py)
+- [ ] **Week 16-18 · L10 广义相对论** | MIT 8.962 (Carroll) | [demo](princeton-physics/physics_demos.py)
   - [ ] 读 Carroll ch 1-6
   - [ ] 史瓦西黑洞 + 引力红移
 
@@ -60,7 +60,7 @@
   - [ ] 读 Peskin ch 1-5
   - [ ] 算一个费曼图
 
-- [ ] **Week 19-22 · L12 凝聚态**（与 L11 并行）| Oxford (Simon) | [demo](../eth-physics/physics_demos.py)
+- [ ] **Week 19-22 · L12 凝聚态**（与 L11 并行）| Oxford (Simon) | [demo](eth-physics/physics_demos.py)
   - [ ] 读 Simon 全书
   - [ ] 能带论 + 超导
 

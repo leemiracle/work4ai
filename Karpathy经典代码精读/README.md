@@ -1,6 +1,6 @@
 # Karpathy 经典代码精读
 
-> **Andrej Karpathy** 的 GitHub 仓库（`github.com/karpathy`，**54 个原创 + 9 个 fork**）系统化精读。核心教学项目已下载到 [`repos/`](./repos/)，逐项目 step-by-step 分析，每个配 bash 可跑验证。
+> **Andrej Karpathy** 的 GitHub 仓库（`github.com/karpathy`，**54 个原创 + 9 个 fork**）系统化精读。核心教学项目已下载到 ``repos/``，逐项目 step-by-step 分析，每个配 bash 可跑验证。
 >
 > Karpathy 的项目是 work4ai「三层讲透 + 源码对照」理念的最佳素材——**小而美、可纯标准库/CPU 跑透、每行都有教学价值**。micrograd 仅 94 行讲透整个 autograd，nanoGPT 666 行讲透整个 GPT 训练。
 
@@ -19,7 +19,7 @@ GitHub 直连（`github.com:443`）当前**连接超时**，主流镜像（kkgit
 | ❌ github.com 直连 clone | — | 超时 |
 | ❌ ghproxy / kkgithub / gitclone | — | 502/超时 |
 
-> 复现下载：见 [`repos/`](./repos/) 已落 14 个核心项目（11MB）。批量脚本见本目录历史会话。
+> 复现下载：见 ``repos/`` 已落 14 个核心项目（11MB）。批量脚本见本目录历史会话。
 
 ---
 

@@ -1,8 +1,8 @@
 # 讲透 Prompt 工程 · 完整版
 
-> 用「直觉 → 数学 → 代码 → 不足 → 应用」讲透 Prompt 工程。从"prompt 是条件概率里的条件"到 CoT/结构化输出/上下文工程。姊妹项目：`../讲透激活函数/`、`../讲透基础模型/`、`../讲透微调/`、`../讲透RAG/`。
+> 用「直觉 → 数学 → 代码 → 不足 → 应用」讲透 Prompt 工程。从"prompt 是条件概率里的条件"到 CoT/结构化输出/上下文工程。姊妹项目：`../讲透激活函数/`、`../讲透基础模型/`、`../讲透微调/`、`../讲透RAG/`、`../讲透LLM/`（整合枢纽）。
 
-**5 篇全部完成**。
+**主线 5 篇 + 扩展 4 篇 + 激活总纲，全部完成**（05-08 与 5W3H 总纲为扩展篇）。
 
 ## 阅读顺序
 ```
@@ -13,6 +13,10 @@
 02-CoT思维链 (分步推理=分治)  →  03-结构化输出与函数调用 (Agent基础)
    │
 04-上下文工程与评估
+   │
+扩展: 05-SelfConsistency → 06-ToT (推理深化) | 07-ReAct (推理+行动) | 08-Prompt安全 (反面)
+   │
+总纲: 激活LLM能力-5W3H分析 (22手段全景 → ../激活大语言模型能力-总结.md 四层谱系)
 ```
 
 ## 章节
@@ -26,6 +30,13 @@
 | | `experiments/02_cot.py` ✅ | | |
 | 03 | `03-结构化输出与函数调用.md` | JSON/Schema约束解码; Function Calling; Agent基础 | (概念) |
 | 04 | `04-上下文工程与评估.md` | lost in middle; 信息密度; LLM-as-Judge | (概念) |
+| 05 | `05-SelfConsistency.md` | 采样 N 次取多数票；用多样性对冲单点随机错误 | (文献) |
+| 06 | `06-TreeofThoughts.md` | 思维成树：生成-评估-剪枝-回溯，CoT 的搜索版 | (文献) |
+| 07 | `07-ReAct.md` | 推理+行动交替；工具调用补外部事实 | (文献) |
+| 08 | `08-Prompt安全.md` | 注入/越狱/上下文污染——激活的反面：防模型被骗 | (概念) |
+| **⭐ 总纲** | [`激活LLM能力-5W3H分析.md`](激活LLM能力-5W3H分析.md) | **22 个激活手段 5W3H 全解**（What/Why/How/效果/成本 + 决策树 + 9 陷阱 + 黄金组合）；四层谱系横向总结见 [`../激活大语言模型能力-总结.md`](../激活大语言模型能力-总结.md) | (文献) |
+| 枢纽 | `00-讲透笔记-算法经验枢纽.md` | 跨单元算法经验索引 | — |
+| **实战** | [`../Agent框架案例/prompt工程工具链/`](../Agent框架案例/prompt工程工具链/README.md) | 六仓蓝图（optimizer/promptfoo/ragas/opik/promptflow/leaks）→ opencode `/optimize` `/ptest` `/evalrag` 工具链 | ✅ |
 
 ## 五大核心洞见
 1. **Prompt 是条件**：改 prompt = 改 P(输出|输入) 的输出分布，模型权重不变。
@@ -50,7 +61,7 @@
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §15.3 Stanford CS329T/CS324（Percy Liang）| [`pluralistic_safety.py`](../stanford-cs-projects/topic3-safety/pluralistic_safety.py) | preference data 聚合数学（Borda/Approval/Condorcet）+ Arrow 不可能性——Prompt 对齐背后的社会选择理论 |
+| §15.3 Stanford CS329T/CS324（Percy Liang）| [`pluralistic_safety.py`](../top-cs-projects/stanford-cs-projects/topic3-safety/pluralistic_safety.py) | preference data 聚合数学（Borda/Approval/Condorcet）+ Arrow 不可能性——Prompt 对齐背后的社会选择理论 |
 
 ---
 
@@ -59,7 +70,7 @@
 
 ## 🎭 欺骗动力学视角：模型表面顺从
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 

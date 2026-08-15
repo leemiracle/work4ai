@@ -150,10 +150,10 @@
 | 本文档讲的 | work4ai 深度版 |
 |---|---|
 | 端侧 OCR（CRNN / DBNet）| [`讲透NLP`](../讲透NLP/)（分词 / NER）+ 未来 CV 系列 |
-| 端侧 NLP（FastText / 分词）| [`讲透NLP/03-N元语法`](../讲透NLP/03-N元语法语言模型.md) + [`讲透NLP/05-词嵌入`](../讲透NLP/05-词嵌入-word2vec与GloVe.md) |
+| 端侧 NLP（FastText / 分词）| [`讲透NLP/03-N元语法`](./讲透NLP/03-N元语法语言模型.md) + [`讲透NLP/05-词嵌入`](./讲透NLP/05-词嵌入-word2vec与GloVe.md) |
 | 端侧向量检索（FAISS 类）| [`讲透RAG`](../讲透RAG/)（检索原理）|
 | 端侧部署（量化 / 私有格式）| [`讲透GPU与系统级`](../讲透GPU与系统级/)（推理引擎 / 量化）|
-| 端侧 memory 架构 | [`讲透Agent/04-记忆机制`](../讲透Agent/04-记忆机制.md) |
+| 端侧 memory 架构 | [`讲透Agent/04-记忆机制`](./讲透Agent/04-记忆机制.md) |
 
 ---
 

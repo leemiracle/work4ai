@@ -44,14 +44,14 @@
 | 18 | String Theory | [18_string_theory.md](18_string_theory.md) | ★★★ | L22 |
 | 19 | Quantum Hall Effect | [19_quantum_hall.md](19_quantum_hall.md) | ★★★ | L12, L24 |
 | 20 | Supersymmetric Quantum Mechanics | [20_susy_qm.md](20_susy_qm.md) | ★★★ | 进阶 |
-| 21 | Supersymmetric Field Theory | [22_susy_ft.md](22_susy_ft.md) | ★★★ | 进阶 |
-| 22 | Gauge Theory | [23_gauge_theory.md](23_gauge_theory.md) | ★★★★ | L11 进阶 |
+| 21 | Supersymmetric Field Theory | 22_susy_ft.md（待写/未落盘） | ★★★ | 进阶 |
+| 22 | Gauge Theory | 23_gauge_theory.md（待写/未落盘） | ★★★★ | L11 进阶 |
 
 ### ★★★★★ 高级
 
 | # | 讲义 | 笔记 | 难度 | 配合项目 |
 |---|------|------|------|---------|
-| 23 | Solitons and D-Branes | [24_solitons.md](24_solitons.md) | ★★★★★ | 弦论前沿 |
+| 23 | Solitons and D-Branes | 24_solitons.md（待写/未落盘） | ★★★★★ | 弦论前沿 |
 
 ---
 

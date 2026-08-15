@@ -10,7 +10,7 @@ burke:
   purpose: "做图/文/音/视频的互译、检索、推理"
 tension: "不同模态有不同的几何结构（modality gap），找共同语义空间是核心难题"
 arc: [直觉(翻译的故事), 数学(对齐形式化), 代码(CLIP+projector), 不足(失败模式), 应用(原生多模态)]
-status: in_progress
+status: done
 next_card: MM-01
 refs:
   - "Radford et al., CLIP, 2021"
@@ -19,7 +19,7 @@ refs:
   - "GPT-4o (native multimodal), OpenAI, 2024"
   - "Qwen2-VL, Alibaba, 2024-2025"
   - "LLaVA, Liu et al., 2023"
-updated: 2026-08-13
+updated: 2026-08-15
 ---
 
 # 🎭 讲透多模态：模态对齐与统一表示
@@ -32,15 +32,16 @@ updated: 2026-08-13
 
 > **即使你用对比学习把图像和文本对齐了，它们的嵌入在共同空间里仍会形成两个分离的簇——「modality gap」。** 这个 gap 不是 bug，是不同模态的内在几何结构差异。整部「讲透多模态」在回答：**怎么缩小这个 gap？还是干脆放弃统一空间、改用 early-fusion token 化？**
 
-## 📚 五幕总览
+## 📚 五幕总览（全部 ✅）
 
 | 幕 | 文件 | 一句话 |
 |---|---|---|
-| 直觉 | `01-直觉-多模态是翻译.md` | CLIP/BLIP/Flamingo/LLaVA → 原生多模态的演化 |
-| 数学 | `02-数学-对齐形式化.md` | InfoNCE / cross-attention / VQ tokenizer / modality gap |
-| 代码 | `03-代码-最小CLIP与投影层.md` | numpy InfoNCE 前向 + PyTorch LLaVA projector |
-| 不足 | `04-不足-多模态失败模式.md` | modality gap / 幻觉 / 分辨率折中 / interleaved 难度 |
-| 应用 | `05-应用-原生多模态浪潮.md` | GPT-4o / Chameleon / Qwen2-VL / Sora / Veo3 |
+| 直觉 | [`01-直觉-多模态是翻译的故事.md`](01-直觉-多模态是翻译的故事.md) | CLIP/BLIP/Flamingo/LLaVA → 原生多模态的演化 |
+| 数学 | [`02-数学-对齐形式化.md`](02-数学-对齐形式化.md) | InfoNCE / cross-attention / VQ tokenizer / modality gap |
+| 代码 | [`03-代码-最小CLIP与投影层.md`](03-代码-最小CLIP与投影层.md) | numpy InfoNCE 前向 + PyTorch LLaVA projector |
+| 不足 | [`04-不足-多模态失败模式.md`](04-不足-多模态失败模式.md) | modality gap / 幻觉 / 分辨率折中 / interleaved 难度 |
+| 应用 | [`05-应用-2024-2026原生多模态浪潮.md`](05-应用-2024-2026原生多模态浪潮.md) | GPT-4o / Chameleon / Qwen2-VL / Sora / Veo3 |
+| 辅助 | [`HISTORY.md`](HISTORY.md) | 四代范式编年（第 3 代=把 LLM 推理能力扩展到视觉领域）|
 
 ## 🗺️ 多模态的四代演化（叙事主线）
 
@@ -81,7 +82,11 @@ updated: 2026-08-13
 
 - 与 **`讲透CV/`**：CV 讲「视觉感知本身」，本宇宙讲「视觉与语言/音频的对齐」。
 - 与 **`讲透上下文缓存/`**：多模态 token 比纯文本 token 多得多，缓存更关键。
+- 与 **[`讲透LLM/`](../讲透LLM/README.md)**：第 3 代范式（LLaVA 投影）的本质是**复用 LLM 已激活的推理能力**——见 [`激活大语言模型能力-总结.md`](../激活大语言模型能力-总结.md) §5 架构接入层。
+- 与 **[`讲透Prompt/`](../讲透Prompt/README.md)**：CLIP 零样本是"提示词式能力释放"的起点；多模态失败缓解靠结构化 prompt + 分步生成（04 篇）。
 - 与 **`故事原语/01-原语DSL`**：多模态对齐 = 给不同模态找「共同的故事语言」。
+
+
 
 ## 💡 核心洞察
 
@@ -91,4 +96,4 @@ updated: 2026-08-13
 
 ---
 
-📌 **下一步**：`02`（InfoNCE + modality gap 数学）和 `04`（幻觉）是核心。
+📌 **下一步**：五幕已齐。核心深读点是 `02`（InfoNCE + modality gap 数学）与 `04`（幻觉）；想接能力激活主线 → [`激活大语言模型能力-总结.md`](../激活大语言模型能力-总结.md) §5（LLaVA = 架构接入激活的范式样本）。

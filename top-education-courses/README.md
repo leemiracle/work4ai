@@ -65,7 +65,7 @@
 |---|---|
 | **故事即世界**（[故事即世界迭代器-元理论.md](../故事即世界迭代器-元理论.md)） | 学习 = 把世界重述成学生能上手的"故事原子"；教学 = 迭代这个故事直到学生复述得出 |
 | **熵治理**（[软件即熵治理.md](../软件即熵治理.md)） | 教学 = 对抗学生脑中的"不确定熵"；好的教学是高效率熵减，刷题是廉价熵减（边际递减） |
-| **RL 视角**（[强化学习视角-总入口.md](../强化学习视角-总入口.md)） | **学习本质就是 RL**：学生=policy，考试=reward，反馈=reward shaping，错题本=experience replay。教育学百年争论 = RL 的 credit assignment 之争 |
+| **RL 视角**（[`../强化学习视角-总入口.md`](../强化学习视角-总入口.md)） | **学习本质就是 RL**：学生=policy，考试=reward，反馈=reward shaping，错题本=experience replay。教育学百年争论 = RL 的 credit assignment 之争 |
 | **费曼闭环**（[迭代质量门-费曼闭环.md](../迭代质量门-费曼闭环.md)） | F2"卡壳"是硬门：学生"以为懂了"≠真懂；Hattie 可见学习就是教育学版的 F2 门 |
 
 > **最深的一刀**：行为主义 = model-free RL；建构主义 = model-based RL；人本主义 = intrinsic reward。教育学五范式 = RL 的五个变体。详见 [LEARNING_THEORIES/README.md](LEARNING_THEORIES/README.md)。

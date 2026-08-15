@@ -67,7 +67,7 @@
 2020s LLM for Finance (FinGPT/BloombergGPT) / RL 做市 / Agent 市场  ← 量化 3.0 = AI 原生金融
 ```
 
-**每一次危机 = 一次相变**（呼应 [`复杂系统学-处理work4ai.md`](../复杂系统学-处理work4ai.md) 的相变概念）。**故事化完整版** → 见 `ECON_FINANCE_EPIC.md`（待阶段 2 撰写，参考 [`top-physics-courses/PHYSICS_EPIC.md`](../top-physics-courses/PHYSICS_EPIC.md) 的八幕剧结构）。
+**每一次危机 = 一次相变**（呼应 [`复杂系统迭代work4ai.md`](../复杂系统迭代work4ai.md) 的相变概念）。**故事化完整版** → 见 `ECON_FINANCE_EPIC.md`（待阶段 2 撰写，参考 [`top-physics-courses/PHYSICS_EPIC.md`](../top-physics-courses/PHYSICS_EPIC.md) 的八幕剧结构）。
 
 ---
 
@@ -184,7 +184,7 @@ top-economics-finance-courses/
 
 ## 7. 三层讲透宪法（与 work4ai 一致）
 
-每门课/主题的笔记按三层（呼应 [`学习进度.md`](../学习进度.md) 与 [`故事化框架-生成器.md`](../故事化框架-生成器.md)）：
+每门课/主题的笔记按三层（呼应 [`故事化框架-生成器.md`](../故事化框架-生成器.md)）：
 
 1. **直觉层**——一句话比喻 + 为什么需要它 + 它在三大张力哪一侧
 2. **数学层**——关键定义、定理、推导（CAPM 推导 / Black-Scholes PDE / DiD 识别假设）
@@ -210,7 +210,7 @@ top-economics-finance-courses/
 
 ## 9. AI for Finance：你的弯道超车主题
 
-> 经济金融的「AI 原生」弯道超车 = 物理版的 `ai_for_physics/`。详见 [`ai_for_finance/ai_for_finance.md`](ai_for_finance/ai_for_finance.md)。
+> 经济金融的「AI 原生」弯道超车 = 物理版的 `ai_for_physics/`。详见 `ai_for_finance/ai_for_finance.md`（待写/未落盘）。
 
 **6 大子方向**：
 
@@ -297,3 +297,22 @@ graph TD
 - ✅ 本 README + [`ai_for_finance/finance_demos.py`](ai_for_finance/finance_demos.py) + [`CROSS_INDEX_WITH_WORK4AI.md`](CROSS_INDEX_WITH_WORK4AI.md) = 样板三件套
 - 🚧 **阶段 1**：10 校 `SCHOOL.md`（需逐校 webfetch 一手核实课程编号——**这是最大的工程量，建议分批/并行委派**）
 - 📝 需要你确认：① 选校表是否满意？ ② 优先做哪校/哪个主题？ ③ 是否现在就启动阶段 1 的逐校 webfetch？
+
+---
+
+## 📁 学校目录索引（2026-08-15 补挂 · 阶段 1 已完成）
+
+> 上文「🚧 阶段 1」实际已完成（Harvard/MIT/Stanford/Chicago/Princeton/Yale/Berkeley/Oxford/Cambridge/Wharton），共 10 校落盘——此前未在此 README 记账，按[复杂系统审计](../复杂系统迭代work4ai.md)补挂：
+
+| 子目录 | 入口 |
+|---|---|
+| [`berkeley-econ-finance/`](berkeley-econ-finance/) | [`SCHOOL.md`](berkeley-econ-finance/SCHOOL.md) |
+| [`cambridge-econ-finance/`](cambridge-econ-finance/) | [`SCHOOL.md`](cambridge-econ-finance/SCHOOL.md) |
+| [`chicago-econ-finance/`](chicago-econ-finance/) | [`SCHOOL.md`](chicago-econ-finance/SCHOOL.md) |
+| [`harvard-econ-finance/`](harvard-econ-finance/) | [`SCHOOL.md`](harvard-econ-finance/SCHOOL.md) |
+| [`mit-econ-finance/`](mit-econ-finance/) | [`SCHOOL.md`](mit-econ-finance/SCHOOL.md) |
+| [`oxford-econ-finance/`](oxford-econ-finance/) | [`SCHOOL.md`](oxford-econ-finance/SCHOOL.md) |
+| [`princeton-econ-finance/`](princeton-econ-finance/) | [`SCHOOL.md`](princeton-econ-finance/SCHOOL.md) |
+| [`stanford-econ-finance/`](stanford-econ-finance/) | [`SCHOOL.md`](stanford-econ-finance/SCHOOL.md) |
+| [`wharton-econ-finance/`](wharton-econ-finance/) | [`SCHOOL.md`](wharton-econ-finance/SCHOOL.md) |
+| [`yale-econ-finance/`](yale-econ-finance/) | [`SCHOOL.md`](yale-econ-finance/SCHOOL.md) |

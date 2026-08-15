@@ -4,7 +4,7 @@
 >
 > 深度版（FlashAttention / RoPE / GQA / MLA / 训练并行 / KV Cache / 16 篇）→ [`../讲透Transformer/`](../讲透Transformer/README.md)
 >
-> 配套实验：[`experiments/08_attention_demo.py`](../experiments/08_attention_demo.py)（纯 NumPy，从零实现 self-attention + 两个反直觉发现）
+> 配套实验：``experiments/08_attention_demo.py``（纯 NumPy，从零实现 self-attention + 两个反直觉发现）
 
 ---
 

@@ -276,7 +276,7 @@ JAX 的 sharding 类型系统四组件（DTensor 重构的词汇表）：
        + sharding-in-types(无隐式转换) + erasure(类型可擦除)
        + einsum 统一推导 sharding
 ```
-> 详见本教程 [08-现代PyTorch](08-现代PyTorch(2.x特性).md)（DTensor/FSDP2 基础）+ 本文（重构内部动态）。
+> 详见本教程 [08-现代PyTorch](08-现代PyTorch(2.x特性).md).md).md).md).md)（DTensor/FSDP2 基础）+ 本文（重构内部动态）。
 
 ---
 

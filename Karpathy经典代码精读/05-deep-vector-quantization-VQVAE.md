@@ -2,7 +2,7 @@
 
 > **Andrej Karpathy · deep-vector-quantization**（654★）。复现 **VQ-VAE**（Vector Quantized VAE，van den Oord et al. 2017, [arXiv:1711.00937](https://arxiv.org/abs/1711.00937)）——把 VAE 的连续潜变量换成**离散 codebook 查找**。核心在 `model/quantize.py` 的 110 行：向量量化 + straight-through 估计 + commitment loss。
 >
-> 源码：[`repos/deep-vector-quantization/dvq/model/quantize.py`](./repos/deep-vector-quantization/dvq/model/quantize.py) ｜ 主模块 [`vqvae.py`](./repos/deep-vector-quantization/dvq/vqvae.py)
+> 源码：``repos/deep-vector-quantization/dvq/model/quantize.py`` ｜ 主模块 ``vqvae.py``
 
 ---
 
@@ -183,4 +183,4 @@ VQ-VAE 把图像变成 `ind` 网格（离散 token 序列）。一旦图像 toke
 
 ---
 
-> **源码**：[`repos/deep-vector-quantization/dvq/model/quantize.py`](./repos/deep-vector-quantization/dvq/model/quantize.py)（110 行，核心）｜ [`vqvae.py`](./repos/deep-vector-quantization/dvq/vqvae.py)（201 行，组装）｜ 论文：VQ-VAE, van den Oord et al. 2017
+> **源码**：``repos/deep-vector-quantization/dvq/model/quantize.py``（110 行，核心）｜ ``vqvae.py``（201 行，组装）｜ 论文：VQ-VAE, van den Oord et al. 2017

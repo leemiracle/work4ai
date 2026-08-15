@@ -2,7 +2,7 @@
 
 > **Andrej Karpathy · makemore**（4.1k★）。**一个文件实现 6 种语言模型**——Bigram / MLP / BoW / RNN / GRU / Transformer，全部做同一件事：**给你一堆名字，生成更多像它们的名字**。这是 nn-zero-to-hero 课程的配套代码，也是"语言模型进化史"的微缩版。
 >
-> 源码：[`repos/makemore/makemore.py`](./repos/makemore/makemore.py) ｜ 数据 `names.txt`（32000 个英文名）
+> 源码：``repos/makemore/makemore.py`` ｜ 数据 `names.txt`（32000 个英文名）
 
 ---
 
@@ -238,4 +238,4 @@ Bigram 的 `logits[idx]` 查表，和 N-gram 的 `count(prev,w)/count(prev)` 数
 
 ---
 
-> **源码**：[`repos/makemore/makemore.py`](./repos/makemore/makemore.py)（719 行）｜ 数据 [`names.txt`](./repos/makemore/names.txt)（32000 名字）｜ 视频：*Neural Networks: Zero to Hero* 前 5 讲
+> **源码**：``repos/makemore/makemore.py``（719 行）｜ 数据 ``names.txt``（32000 名字）｜ 视频：*Neural Networks: Zero to Hero* 前 5 讲

@@ -44,7 +44,7 @@
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §13.2 Cambridge Hoare Logic | [`hoare_logic.py`](../cambridge-cs-projects/topic4-compiler/hoare_logic.py) | CSP 进程代数（Hoare 1978）+ trace 等价 + 死锁检测——分布式系统并发正确性的形式根基（C.A.R. Hoare 的学术遗产）|
+| §13.2 Cambridge Hoare Logic | [`hoare_logic.py`](../top-cs-projects/cambridge-cs-projects/topic4-compiler/hoare_logic.py) | CSP 进程代数（Hoare 1978）+ trace 等价 + 死锁检测——分布式系统并发正确性的形式根基（C.A.R. Hoare 的学术遗产）|
 
 ---
 
@@ -53,7 +53,7 @@
 
 ## 🎭 欺骗动力学视角：拜占庭节点欺骗
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 
@@ -64,3 +64,8 @@
 ### 一句话
 
 > 分布式系统的根本难题是「节点可能骗你」，BFT/共识算法全是反节点欺骗的产物。
+
+
+---
+
+🔗 **交叉链接**：Stanford CS336 论文精读 · 分布式训练（GPipe/Megatron/ZeRO/3D 并行/Megascale，6 篇），见 [`讲透公开课/06-CS336论文精读/F-分布式训练.md`](../讲透公开课/06-CS336论文精读/F-分布式训练.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments/)。

@@ -94,17 +94,16 @@ for f in 0*.py; do echo "===== $f ====="; python3 "$f"; done
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §12.1 Princeton COS 511/512（Hazan）| [`theory.py`](../princeton-cs-projects/topic9-ml-theory/theory.py) | PAC/Hoeffding 界、VC 维（区间假设 shattering）、Rademacher 复杂度——本系列所有"容量/惩罚"的数学根基 |
-| §15.2 Princeton COS 595（Hardt）| [`fairness.py`](../princeton-cs-projects/topic12-fairness/fairness.py) | 公平性-准确性不可能性定理（Chouldechova/Kleinberg）——泛化-公平 tradeoff |
+| §12.1 Princeton COS 511/512（Hazan）| [`theory.py`](../top-cs-projects/princeton-cs-projects/topic9-ml-theory/theory.py) | PAC/Hoeffding 界、VC 维（区间假设 shattering）、Rademacher 复杂度——本系列所有"容量/惩罚"的数学根基 |
+| §15.2 Princeton COS 595（Hardt）| [`fairness.py`](../top-cs-projects/princeton-cs-projects/topic12-fairness/fairness.py) | 公平性-准确性不可能性定理（Chouldechova/Kleinberg）——泛化-公平 tradeoff |
 
 ---
-
 
 ---
 
 ## 🎭 欺骗动力学视角：过拟合 = 自我欺骗
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 
@@ -115,3 +114,7 @@ for f in 0*.py; do echo "===== $f ====="; python3 "$f"; done
 ### 一句话
 
 > 过拟合的本质是模型在训练集上「骗」了我们；泛化理论是反这种自欺的数学。
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透统计学习理论/`](../讲透统计学习理论/)**：泛化之谜（双层下降/隐式正则）的理论工具全在 SLT（Rademacher/PAC-Bayes）

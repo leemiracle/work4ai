@@ -2,7 +2,7 @@
 
 > **博士级地基**——为什么相关 ≠ 因果？这是 Judea Pearl 拿 Turing Award 的工作，也是 AI 圈最大的"未解理论债"。
 >
-> 一句话定位：[`讲透世界模型/03`](../讲透世界模型/03-视频生成是世界模型吗.md) 问"Sora 有因果吗"，本系列问"**因果到底是什么**"。
+> 一句话定位：[`讲透世界模型/03`](../讲透世界模型/advanced/03-视频生成是世界模型吗.md) 问"Sora 有因果吗"，本系列问"**因果到底是什么**"。
 >
 > **博士级标准**：哲学 + 数学 + 统计三位一体。
 >
@@ -61,17 +61,16 @@
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §15.1 ETH Causality（Jonas Peters）| [`causality.py`](../eth-cs-projects/topic12-causality/causality.py) | PC 算法骨架+定向、do-calculus Simpson 数值验证、LiNGAM 峰度法、通用 d-separation |
-| §15.2 Princeton COS 595（Hardt）| [`fairness.py`](../princeton-cs-projects/topic12-fairness/fairness.py) | counterfactual fairness（本系列 03 篇 SCM 的公平性应用）|
+| §15.1 ETH Causality（Jonas Peters）| [`causality.py`](../top-cs-projects/eth-cs-projects/topic12-causality/causality.py) | PC 算法骨架+定向、do-calculus Simpson 数值验证、LiNGAM 峰度法、通用 d-separation |
+| §15.2 Princeton COS 595（Hardt）| [`fairness.py`](../top-cs-projects/princeton-cs-projects/topic12-fairness/fairness.py) | counterfactual fairness（本系列 03 篇 SCM 的公平性应用）|
 
 ---
-
 
 ---
 
 ## 🎭 欺骗动力学视角：相关冒充因果
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 
@@ -82,3 +81,7 @@
 ### 一句话
 
 > 统计学最大的欺骗是「相关不等于因果」，因果推断这门学科的全部存在理由就是反这种欺骗。
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透统计学习理论/`](../讲透统计学习理论/)**：因果=分布漂移的解药（不变风险最小化=SLT×因果的合流点）

@@ -2,7 +2,7 @@
 
 > **Andrej Karpathy · build-nanogpt**（5.4k★）。*Let's reproduce GPT-2 (124M)* 视频的配套代码——`train_gpt2.py` 521 行。**模型与 [nanoGPT](./07-nanoGPT-从零训练GPT.md) 几乎相同**，但补全了 nanoGPT 缺的**完整训练管线**：fineweb 数据加载 / HellaSwag 评测 / DDP 分布式 / 梯度累积 / cosine LR schedule。8×A100 训 ~1 epoch 复现 GPT-2 124M（val loss 2.85 ≈ 原版 2.84）。
 >
-> 源码：[`repos/build-nanogpt/train_gpt2.py`](./repos/build-nanogpt/train_gpt2.py) ｜ 视频：*Let's reproduce GPT-2: training in PyTorch*
+> 源码：``repos/build-nanogpt/train_gpt2.py`` ｜ 视频：*Let's reproduce GPT-2: training in PyTorch*
 
 ---
 
@@ -228,4 +228,4 @@ GPT-2/3、LLaMA、PaLM、几乎所有大模型都用 warmup + cosine decay。**�
 
 ---
 
-> **源码**：[`repos/build-nanogpt/train_gpt2.py`](./repos/build-nanogpt/train_gpt2.py)（521 行）｜ [`hellaswag.py`](./repos/build-nanogpt/hellaswag.py)（177 行评测）｜ [`fineweb.py`](./repos/build-nanogpt/fineweb.py)（82 行数据下载）
+> **源码**：``repos/build-nanogpt/train_gpt2.py``（521 行）｜ ``hellaswag.py``（177 行评测）｜ ``fineweb.py``（82 行数据下载）
