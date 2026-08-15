@@ -387,7 +387,7 @@ watch -n 1 nvidia-smi
 | `/v1/models` | GET | 列出可用模型 |
 | `/health` | GET | 健康检查 |
 
-`ModelClient`（[phone_agent/model/client.py](../phone_agent/model/client.py)）只用 `/v1/chat/completions`。
+`ModelClient`（phone_agent/model/client.py（待写/未落盘））只用 `/v1/chat/completions`。
 
 ## 与 PhoneAgent 集成
 

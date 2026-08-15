@@ -17,6 +17,8 @@
 | **03** | [规划与搜索](./03-规划与搜索.md) | MCTS / BFS / DFS / 长程任务分解 |
 | **04** | [记忆机制](./04-记忆机制.md) | short-term / long-term / RAG memory / summary buffer |
 | **实战** | [Open-AutoGLM 手机 Agent](./实战案例-Open-AutoGLM手机Agent/) | 真实端到端 Agent 案例 |
+| **实战** | [DeepSeek Harness 框架](../Agent框架案例/deepseek-harness插件化框架/) | 工业级 agent harness："一切皆插件"+ 信任平面源码解剖 |
+| **实战** | [opencode 自成长改造](../Agent框架案例/opencode自成长改造/) | hermes×ECC 蓝图：把本地 opencode 改造成自成长 Agent（闭环学习环实操） |
 
 ---
 
@@ -41,16 +43,16 @@
 - **基座**：[`讲透LLM/`](../讲透LLM/)（生命周期）
 - **架构参考**：[`Agent架构模式参考/`](../Agent架构模式参考/)（生产架构模式）
 - **记忆案例**：[`Agent记忆系统案例/`](../Agent记忆系统案例/)（MemGPT/Letta 等）
+- **框架案例**：[`Agent框架案例/deepseek-harness插件化框架/`](../Agent框架案例/deepseek-harness插件化框架/)（DeepSeek 官方 harness，loop/日志/沙箱/接缝源码级笔记）
 - **Prompt 工程**：[`讲透Prompt/03`](../讲透Prompt/03-结构化输出与函数调用.md)（function calling）
 
 ---
-
 
 ---
 
 ## 🎭 欺骗动力学视角：Agent 自主规划藏诈
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 
@@ -61,3 +63,7 @@
 ### 一句话
 
 > Agent 越自主，越需要它的每一步都可审计——这是 Agent 时代的反欺骗基础设施。
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透多Agent协作/`](../讲透多Agent协作/)**：单 Agent 的可靠性问题在多体下放大为协调问题

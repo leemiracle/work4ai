@@ -635,7 +635,7 @@ Yao 的 ReAct 和 ToT 定义了 LLM Agent 的基础范式。Wang 的 Voyager 开
 
 ## 11. 失败方向：被淘汰的 Agent 路线
 
-> 承接 [`讲透AI历史/advanced/02`](../讲透AI历史/advanced/02-失败的教训被淘汰的方向.md) 的方法论：**失败和成功同等重要。**
+> 承接 `讲透AI历史/advanced/02`（待写/未落盘） 的方法论：**失败和成功同等重要。**
 
 ### 11.1 纯符号 Agent 的死亡（2000s）
 
