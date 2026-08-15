@@ -153,7 +153,7 @@
 ### 本周做（2 小时）
 - [ ] 给 8 个 P0/P1 skill 加 "跨 Skill 协作" 段
 - [ ] 给所有 skill 加 `<!-- updated: 2026-08-13 -->` 头部
-- [ ] 跑 [`06-审计脚本`](../prompt-eval-demo/scripts/audit_skills.py) 验证
+- [ ] 跑 ``06-审计脚本`` 验证
 
 ### 本月做
 - [ ] 写新 skill `expert-track`（顶级专家路径，见 [`05-实战`](05-实战-写expert-track新skill.md)）
@@ -179,3 +179,13 @@
 
 **版本**：v1.0（2026-08-13）
 **核心隐喻**：**37 个 skill 像工具箱。10 把螺丝刀不如 1 把好用的 + 知道在哪。**
+
+---
+
+## 📥 增补记录（审计快照之后的新装技能）
+
+| 日期 | # | Skill | 来源 | 说明 |
+|---|---|---|---|---|
+| 2026-08-15 | 38 | `eng-ponytail-lazy-senior` | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail)（102.9K★，星/月榜 #1） | 最懒资深工程师：七级懒梯（YAGNI→复用→stdlib→平台原生→已有依赖→一行→最少代码）。MIT 原文忠实移植，触发词含 "ponytail"/"be lazy"/"yagni"/"simplest solution"。基准：~54% 更少代码/~20% 更便宜/~27% 更快（可复现）。**首个带生产级基准报告的本地技能**——解构卡见 [`07-案例-ponytail`](07-案例-ponytail最懒资深工程师.md) |
+
+> 审计口径：v1.0 快照为 37 个（2026-08-13）；增补不回改快照表，只在此登记。

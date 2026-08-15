@@ -23,7 +23,8 @@
 | 03 | [`skill评价6维度`](03-skill评价6维度.md) | 准确性 / 触发精度 / 资源质量 / 协作性 / 维护性 / 安全性 |
 | 04 | [`跨skill协作设计`](04-跨skill协作设计.md) | 多 skill 怎么串联（用户问 X → 哪几个 skill 联动）|
 | 05 | [`实战-写expert-track新skill`](05-实战-写expert-track新skill.md) | **示范**：基于顶级专家目标写一个真新 skill |
-| 06 | [`审计脚本`](../prompt-eval-demo/scripts/audit_skills.py) | 可重用工具：扫所有 skill + 自动分类 + 评分 |
+| 06 | ``审计脚本`` | 可重用工具：扫所有 skill + 自动分类 + 评分 |
+| 07 | [`案例-ponytail最懒资深工程师`](07-案例-ponytail最懒资深工程师.md) | **星/月榜 #1 技能解构+本地集成**（七级懒梯/三档强度/54% 基准） |
 
 ---
 
@@ -32,7 +33,7 @@
 ### 路径 1（审计现有）
 1. 读 [`01-审计报告`](01-现有skills审计报告.md)
 2. 按建议删/合并冗余 skill
-3. 用 [`06-审计脚本`](../prompt-eval-demo/scripts/audit_skills.py) 重新跑
+3. 用 ``06-审计脚本`` 重新跑
 
 ### 路径 2（写新 skill）
 1. 读 [`02-SKILL规范`](02-SKILL.md规范与7步写法.md)
@@ -75,7 +76,7 @@
 1. [ ] 读 [`01-审计报告`](01-现有skills审计报告.md)
 2. [ ] 删 / 合并 5+ 个冗余 skill
 3. [ ] 写 1 个新 skill（参照 [`05-实战`](05-实战-写expert-track新skill.md)）
-4. [ ] 跑 [`06-审计脚本`](../prompt-eval-demo/scripts/audit_skills.py)
+4. [ ] 跑 ``06-审计脚本``
 
 ---
 

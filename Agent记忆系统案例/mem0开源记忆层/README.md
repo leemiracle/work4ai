@@ -240,7 +240,7 @@ notes/09-skills/01-skills-overview.md（6 个 skill）
 | [讲透微调](../../讲透微调/) | （间接）Mem0 支持 LangChain ChatModel 接入微调后的模型 |
 | [讲透AI应用全景](../../讲透AI应用全景/) | 本案例是 AI 应用中「记忆」维度的深度展开 |
 | [Agent架构模式参考](../../Agent架构模式参考/) | 本案例是 Provider 插件模式 + 双 SDK 同构的具体系统深度分析 |
-| [项目案例-OpenPhone](../../项目案例-OpenPhone/) | 互补——OpenPhone 是"产品级"项目案例，本案例是"基础设施级" |
+| 项目案例-OpenPhone（待写/未落盘） | 互补——OpenPhone 是"产品级"项目案例，本案例是"基础设施级" |
 
 ---
 
