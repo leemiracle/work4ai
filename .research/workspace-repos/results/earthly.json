@@ -1,0 +1,79 @@
+{
+  "基本信息": {
+    "name": "earthly",
+    "tier": "C",
+    "kind": "git-repo",
+    "scale": "51.5MB / 2886 commits / 首 commit 2020-03-12 → 末 commit 2024-09-05（本地快照，末 commit 为 'Remove CLI-based account creation (#4283)'；上游此后历史未包含在本地）/ 峰值 2020-12-14 单日 21 commits",
+    "一句话本质": "'像 Dockerfile 和 Makefile 生了个孩子'（README 自述）——把 Make 的 target 复用模型嫁接到 BuildKit 的 LLB 层缓存执行引擎上，用 Earthfile 一份声明同时跑通本机与任意 CI 的可重复构建，是构建工具谱系中 Make/Bazel/Docker 之后的集大成实验"
+  },
+  "目录结构与知识形态": {
+    "顶层组织": [
+      "ast/（86 文件，独立 go module）— Earthfile 词法/语法层：ANTLR4 生成 parser + spec AST 定义 + validator + lexer 错误美化",
+      "earthfile2llb/（24 文件）— 核心编译器：interpreter.go（2239 行，解释命令序列）+ converter.go（2960 行，生成 BuildKit LLB）+ with_docker_run 系列（容器内跑 Docker 的四种实现）",
+      "buildkitd/（16 文件）— 自维护的 BuildKit daemon 入口与配置；builder/（4 文件）+ inputgraph/（11 文件）— 构建编排与 target 依赖图",
+      "states/ — 构建状态/缓存/目标去重模型（含 dedup 子包）；variables/（16 文件）— ARG/LET/SET 变量与作用域系统",
+      "cloud/ + logbus/ + billing/ + analytics/ — Earthly Cloud/Satellite 云端集成与遥测；cmd/earthly + cmd/debugger — CLI 与交互调试器入口",
+      "docs/（124 文件，GitBook 源）— earthfile 规范/earthly-command/config 三大参考 + caching 三部曲 + ci-integration 厂商指南 + 14 语言 lang-guides；docs-internals/ — 架构内幕文档",
+      "examples/（413 文件，14 种语言 + monorepo/multirepo/multiplatform/integration-test）+ tests/（412 文件）；util/（145 文件，含 llbutil LLB 工具集）",
+      "根目录：Earthfile（42KB/1012 行，earthly 用自身构建自己的自举样本）+ CHANGELOG.md（147KB 全量演化史）+ earthly-entrypoint.sh"
+    ],
+    "知识形态": "约 80% Go 源码与测试，约 10% docs/ 结构化文档（GitBook md，质量高），约 10% examples 与 CI 配置；工程仓为主但文档子树可直接当教材用",
+    "组织约定": "Go 标准包布局，按编译管线分层（ast → inputgraph → earthfile2llb → states → buildkitd）；docs 用 GitBook SUMMARY.md 目录树（.gitbook.yaml）；命令名即概念名（SAVE ARTIFACT/SAVE IMAGE/FROM DOCKERFILE/GIT CLONE）；VERSION 头声明语法版本（根 Earthfile:1 'VERSION 0.8'），features/ 包做特性开关；MPL-2.0 许可"
+  },
+  "核心资产": {
+    "资产Top5": [
+      {"资产": "earthfile2llb/converter.go（2960 行）+ interpreter.go（2239 行）", "价值": "全仓心脏：Earthfile 命令 → BuildKit LLB 的完整编译器。converter.go:68-98 枚举 27 种命令类型，:100-120 Converter 结构体注释直言设计意图；earthfile2llb 整个目录就是'如何把一门 DSL 编译到工业级中间表示'的活教材"},
+      {"资产": "Earthfile（根，1012 行）", "价值": "顶级 dogfooding 样本：earthly 团队用 Earthly 构建 earthly 自己——deps→code→lint 分层缓存链（:29-70）、IF 条件分支（:49-53）、跨仓 COPY 引用（:79）、update-buildkit 自动化 target（:72-84），Earthfile 语法全部特性在真实工程中的用法一览"},
+      {"资产": "docs/caching/（caching.md + caching-in-earthfiles.md + caching-via-registry.md + caching-via-remote-runners.md + managing-cache.md）", "价值": "缓存模型成体系文档：caching-in-earthlies.md:5-9 定义三层缓存（层缓存/CACHE 挂载/auto-skip），:23-50 给出 COPY 粒度 Avoid/Better/Best 三段式最佳实践——构建缓存教学的现成教材"},
+      {"资产": "ast/（含 ANTLR 语法与 spec/）+ docs/earthfile/earthfile.md 规范", "价值": "一门小语言的完整前世今生：ANTLR4 grammar → 生成 parser → spec.Earthfile AST（ast/ast.go:18-100 带 sourcemap 与错误 hint），配套正式语法规范文档——DSL 设计参考的端到端样板"},
+      {"资产": "examples/（413 文件）", "价值": "14 种语言（Go/JS/Python/Java/Rust/C++/COBOL...）+ monorepo/multirepo/multiplatform/integration-test 场景的现成 Earthfile 集合，每种都是可直接抄的最小工作示例"}
+    ],
+    "亮点发现": "docs-internals/ 有 4 篇架构内幕文档（外部仓库少见的自我解剖）；not-a-unit-test.sh（根目录）名字自嘲但承载端到端测试入口；earthfile2llb/with_docker_run_*.go 四个文件展示'容器里跑 Docker'的四种策略（registry/tar/local 变体）——WITH DOCKER 命令的实现细节比大多数博客讲得清楚；.vale/ 目录连文档 prose 都上了 lint（19 文件规则）"
+  },
+  "代码维度": {
+    "语言栈": "Go（主仓 go.mod + ast/util/deltautil 三个独立 module）；解析器 ANTLR4（Java 工具链生成 Go 代码）；执行引擎为 moby/buildkit（docker2llb 直接复用 buildkit/frontend/dockerfile 转换器，converter.go:57）；CLI 用 jessevdk/go-flags；MPL-2.0",
+    "架构模式": "编译器式三层管线 + 复用而非重造执行引擎：①前端 ast/：ANTLR4 lexer/parser → spec.Earthfile AST（ast/ast.go Parse/ParseOpts，带 sourcemap 支持与 antlrhandler 错误定位）；②中端：inputgraph/ 先解析 target 间 BUILD/COPY 引用构建依赖图，earthfile2llb/Interpreter 顺序解释命令流（interpreter.go:44-63 持有 Converter 引用与 withDocker/parallelConversion 等上下文），Converter 把 27 种 cmdType（converter.go:70-98：ARG/BUILD/CMD/COPY/FROM/FROM DOCKERFILE/GIT CLONE/IMPORT/LOAD/LOCALLY/RUN/SAVE ARTIFACT/SAVE IMAGE/SET/LET/HOST/CACHE/PROJECT...）逐一翻译为 LLB State 与 Mount/Secret/SSH 声明，IF/FOR/LOOP/WAIT 等控制流在解释层展开进图；③后端：buildkitd/（fork 自建 BuildKit 守护）执行 DAG、层缓存与并行调度。辅助子系统：variables/（scope.go/collection.go 变量作用域与 builtin 变量）、states/（dedup 目标去重 + image 元数据）、logbus/（结构化日志流）、cloud/（Satellite 远程构建）。与 Bazel 的本质差异在此：Bazel 自造执行引擎+语言生态闭环，earthly 只做 DSL→LLB 编译、执行全托 BuildKit/Docker 生态",
+    "关键机制": [
+      "Earthfile→LLB 编译器核心（earthfile2llb/converter.go:100-120 Converter 结构体，:489-1163 CopyArtifact/Run/SaveArtifact/SaveImage 等方法）：每个命令对应一次 LLB State 变换，依赖 buildkit/frontend/dockerfile/dockerfile2llb 复用 Dockerfile 语义——'站在 Dockerfile 肩上再抽象 target'的工程决策是全仓最值得学的一点",
+      "target 即复用与缓存单元（根 Earthfile:29-70 实战示范）：+deps/+code 的 Make 式 target 引用 + SAVE ARTIFACT 产物传递 + COPY go.mod go.sum 先于源码的缓存分层策略——README:89 自述'cache-aware, based on the individual hashes of each file'",
+      "三层缓存模型（docs/caching/caching-in-earthfiles.md:5-9）：层缓存（命令输入哈希不变即复用整层，语义同 Dockerfile）/ CACHE 挂载（RUN --mount type=cache 持久化包管理器目录）/ auto-skip（monorepo 中未变更目标整体跳过）；文档 :23-50 的 Avoid/Better/Best 三段示例把 COPY 粒度对缓存命中率的影响讲透",
+      "命令级控制流进构建图（earthfile2llb/interpreter.go:77 Interpreter.Run 逐命令解释）：IF/ELSE、FOR/LOOP、WAIT/END、WITH DOCKER 等在解释层展开为图节点——把 shell 脚本的控制流提升为一等构建图公民，是 Earthfile 区别于 Dockerfile 的语法增量主体；WITH DOCKER 有四种实现变体（with_docker_run_reg/tar/local_reg/local_tar.go）",
+      "自举与跨仓引用（根 Earthfile:72-84 update-buildkit target）：用 BUILD 命令跨目录调用 ./buildkitd+update-buildkit-earthfile，ARG 传 SHA 动态替换 go.mod 中 buildkit 依赖——Earthfile 语法表达力的验收测试"
+    ],
+    "工程质量": "tests/ 412 文件 + not-a-unit-test.sh 端到端脚本 + converter/interpreter/ast 各带单测；.buildkite/.circleci/.github 三套 CI 配置并存；.golangci.yaml 代码 lint + .vale/ 文档 prose lint + shellcheck（根 Earthfile:86-99 按架构分支装 shellcheck）；CONTRIBUTING.md 12.7KB + CHANGELOG.md 147KB 全量演化记录；docs-internals/ 架构内幕文档——商业公司开源工程化的高标准样本"
+  },
+  "活跃度与质量": {
+    "迭代节奏": "2020-03-12 首 commit → 2020-12 峰值（单日 21 commits，v0.5-0.6 语法成型期）→ 2021-2024 稳定高产（2886 commits 均摊约 2.4 commits/天）→ 本地快照截止 2024-09-05；上游此后历史未含（本地为 2024 快照）",
+    "完成度": "成熟产品期快照：VERSION 0.8 语法（根 Earthfile:1）+ PROJECT/org 概念 + Cloud/Satellite 集成齐备；功能面完整（本机/CI/云三态、14 语言示例、调试器、自动补全 autocomplete/ 包），不是半途之作而是仍在演化的活跃开源产品的时间切片"
+  },
+  "与work4ai关系": {
+    "重叠度": "内容重叠低、工程参考价值中高，具体对接单元：①工程化手册库/（主对接）：构建工具谱系（Make→Bazel→Docker multi-stage→Earthly）的现役实现样本，Earthfile 语法/缓存模型/BuildKit 集成三个专题的取证地；②讲透软件工程/ 或构建系统相关单元：DSL→中间表示编译器模式、自举构建案例；③讲透分布式AI系统/ 边缘相关：构建缓存与内容寻址（file hash→layer 复用）与 AI 工程的制品缓存/镜像缓存同构",
+    "可合并资产": [
+      {"源": "docs/caching/caching-in-earthfiles.md（220 行，三层缓存模型 + COPY 粒度最佳实践）", "去向": "工程化手册库/构建与缓存专题（可直搬或深度桥接）"},
+      {"源": "docs/earthfile/earthfile.md（Earthfile 语法规范）+ docs/basics/（入门）", "去向": "工程化手册库/构建工具横评（Make/Bazel/Nx/Earthly 对照卡的基础材料）"},
+      {"源": "Earthfile（根，1012 行自举样本，重点 :29-84 deps→code 缓存分层与跨 target 引用）", "去向": "工程化手册库/最佳实践案例卡（'一个真实工程的 Earthfile 长什么样'）"},
+      {"源": "earthfile2llb/converter.go:68-120（命令枚举与 Converter 结构）+ ast/ast.go（ANTLR 解析入口）", "去向": "工程化手册库/'DSL 编译到中间表示'模式卡（代码证据）"},
+      {"源": "examples/monorepo + examples/multirepo + examples/multiplatform", "去向": "工程化手册库（仅索引，按需查阅）"}
+    ],
+    "建议动作": "仅索引 + 考古参考（C 层不合并）。2026 年去留评估：51.5MB 磁盘成本极低（约为 CNTK 的 1/10），docs/ 教材质量高且 examples 即查即用，'留在本地'的性价比结论明确为值得；建议动作上不搬正文入 work4ai，而是在工程化手册库建'构建工具考古'桥接页引用本仓五处资产（caching 文档/earthfile 规范/自举 Earthfile/converter 架构/examples），讲透单元如涉及'为什么 Bazel 学不会'话题时来此取证；若上游有重大版本（v1？）再考虑更新本地快照"
+  },
+  "证据锚点": {
+    "key_files": [
+      "README.md（:20-31 六大卖点、:99-108 BuildKit 同源声明、:76-89 并行与缓存机制）",
+      "Earthfile（:1 VERSION 0.8、:29-70 deps→code 缓存分层、:72-84 跨 target 自动化）",
+      "earthfile2llb/converter.go（:68-98 命令枚举、:100-120 Converter 核心）",
+      "earthfile2llb/interpreter.go（:44-63 Interpreter 结构、:77 Run 解释循环）",
+      "ast/ast.go（:18-100 ANTLR 解析入口与错误处理）",
+      "docs/caching/caching-in-earthfiles.md（:5-9 三层缓存定义、:23-50 COPY 粒度最佳实践）",
+      "CHANGELOG.md（147KB 全量演化史）",
+      "tests/（412 文件测试组织）"
+    ]
+  },
+  "uncertain": [
+    "本地为 2024-09-05 快照，上游 earthly 此后的演化（含 2024 年后公司战略调整、开源社区版现状）未追踪，'成熟产品期'判断仅基于快照前历史",
+    "Go 源码约 80% 的占比为按目录文件数的抽样估计，未做全量统计",
+    "buildkitd/ 与上游 moby/buildkit fork 的具体差异深度未逐文件比对（仅确认 earthly 维护 buildkit 分支分支 earthly-main，根 Earthfile:76）",
+    "'与 Bazel 定位差异'的论述基于 README 与 docs 推断，未实测 Bazel 对照场景",
+    "earthly 在 2026 年的实际市场份额与社区活跃度未做外部调研，建议动作中的'值得保留'基于仓内价值而非生态现状"
+  ]
+}

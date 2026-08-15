@@ -1,0 +1,126 @@
+topic: "C:\\workspace 本地仓库全景迭代（A+B+C 层 20 仓）"
+purpose: "深读每个仓库，产出结构化用例卡，最终合并/桥接进 work4ai"
+created: 2026-08-15
+
+items:
+  # A 层 · 自有 AI 项目（与讲透系列直接桥接）
+  - name: neo-os
+    tier: A
+    kind: git-repo
+    path: C:\workspace\neo-os
+    description: 通用复杂软件可解释性基础设施——把 OS/浏览器/编译器/GPU/数据库行为翻译成可证明解释
+  - name: world-ai4sci-math
+    tier: A
+    kind: git-repo
+    path: C:\workspace\world-ai4sci-math
+    description: 世界大模型 · AI4Science · AI4Math 全景调研
+  - name: ai-atlas
+    tier: A
+    kind: git-repo
+    path: C:\workspace\ai-atlas
+    description: AI 学习与应用全景图——知识图谱、资源索引、前沿雷达
+  - name: ai-os-dd
+    tier: A
+    kind: git-repo
+    path: C:\workspace\ai-os-dd
+    description: AI OS 深潜（blog/briefings/deep-dive/formal_linux），无 README
+  - name: math-expert-pro
+    tier: A
+    kind: git-repo
+    path: C:\workspace\math-expert-pro
+    description: 数学专家知识库（track/lens-mathematicians/lens-practitioners），无 README
+  # B 层 · 自有知识库（资产盘点+互链）
+  - name: essence
+    tier: B
+    kind: git-repo
+    path: C:\workspace\essence
+    description: 世界运行的本质——哲学/自然科学/形式科学/社会科学知识库
+  - name: growth-hub
+    tier: B
+    kind: git-repo
+    path: C:\workspace\growth-hub
+    description: 个人成长知识库（resources/roadmaps/methodology/career-life）
+  - name: gongwen-mastery
+    tier: B
+    kind: git-repo
+    path: C:\workspace\gongwen-mastery
+    description: 公文·申论·遴选全栈知识库（316篇/163万字/1540题）
+  - name: master-equivalent
+    tier: B
+    kind: git-repo
+    path: C:\workspace\master-equivalent
+    description: 同等学力申硕备考资料（英语+计算机+新中特）
+  - name: agi-venture
+    tier: B
+    kind: dir
+    path: C:\workspace\agi-venture
+    description: AGI 创业五阶段探索（foundation→aicoding→ai-opportunities→agent-opportunities→algorithm-atlas）
+  - name: social-laws
+    tier: B
+    kind: dir
+    path: C:\workspace\social-laws
+    description: 社会科学规律库（关系/合作/不平等/权力/文化/市场城市）
+  - name: economy
+    tier: B
+    kind: dir
+    path: C:\workspace\economy
+    description: 经济学库（极小：README+CHANGELOG）
+  - name: ai-lab-landscape
+    tier: B
+    kind: dir
+    path: C:\workspace\ai-lab-landscape
+    description: AI 实验室全景调研（data/reports/synthesis + 两级 prompt 模板）
+  # C 层 · 外部参考库（考古/素材，代码维度必填）
+  - name: CNTK
+    tier: C
+    kind: git-repo
+    path: C:\workspace\CNTK
+    description: Microsoft 计算网络工具包，16117 commits，2022 归档的 DL 框架考古样本
+  - name: csdiy
+    tier: C
+    kind: git-repo
+    path: C:\workspace\csdiy
+    description: 计算机科学自学指南（22GB 课程索引清单仓）
+  - name: Foundations-of-LLMs
+    tier: C
+    kind: git-repo
+    path: C:\workspace\Foundations-of-LLMs
+    description: ZJU-LLMs 大模型基础教材
+  - name: earthly
+    tier: C
+    kind: git-repo
+    path: C:\workspace\earthly
+    description: Earthly 构建工具（2886 commits，Docker+Make 合体）
+  - name: mips-sim
+    tier: C
+    kind: git-repo
+    path: C:\workspace\mips-sim
+    description: MIPS 模拟器 5 工具栈学习项目（QEMU-TCG/gem5/KVM/Unicorn/Renode）
+  - name: Machine-Learning-Interviews
+    tier: C
+    kind: git-repo
+    path: C:\workspace\Machine-Learning-Interviews
+    description: ML 面试题库（117 commits）
+  - name: cracking-the-data-science-interview
+    tier: C
+    kind: git-repo
+    path: C:\workspace\cracking-the-data-science-interview
+    description: 数据科学面试笔记（520 commits，2024 止）
+
+execution:
+  batch_size: 4          # 每批 4 仓
+  items_per_agent: 2     # 每 agent 负责 2 仓
+  agent_type: explore    # 本地仓库深读
+  output_dir: C:\workspace\work4ai\.research\workspace-repos\results
+  batches:
+    - [neo-os, world-ai4sci-math, ai-atlas, ai-os-dd]                       # A 层
+    - [math-expert-pro, essence, growth-hub, gongwen-mastery]                # A 收尾 + B
+    - [master-equivalent, agi-venture, social-laws, economy]                # B
+    - [ai-lab-landscape, Foundations-of-LLMs, Machine-Learning-Interviews, cracking-the-data-science-interview]  # B收尾 + C 轻量
+    - [CNTK, earthly, mips-sim, csdiy]                                       # C 重型
+
+merge_strategy:
+  A层: 用例卡 + 讲透系列桥接（合并资产清单逐项落地）
+  B层: 资产盘点卡 + work4ai 互链（选择性合并，尊重领域边界）
+  C层: 考古卡 + 素材索引（不合并内容，只建引用）
+  汇总: results 全部完成后，生成总索引并入 work4ai（用例库/ 或新建 本地仓库全景/）

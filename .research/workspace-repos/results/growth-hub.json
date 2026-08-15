@@ -1,0 +1,81 @@
+{
+  "基本信息": {
+    "name": "growth-hub",
+    "tier": "B",
+    "kind": "git-repo",
+    "scale": "约 55MB / 4089 个文件（含 opencode 运行时目录）；内容层 294 个 md + 129 个 py；128 commits；最后提交 2026-07-16（v2.1 季度维护版）",
+    "一句话本质": "一个以「单一真相源 + 可验证」为设计原则的个人成长知识库：用模板化写入、全局索引登记制和 arxiv/World Bank API 验证脚本，把收藏夹变成可被 opencode/ai-mentor 检索增强的第二大脑"
+  },
+  "目录结构与知识形态": {
+    "顶层组织": [
+      "01-resources/ — 14+ 领域资源清单，每条强制附「为什么选它/局限」（含 ai-ml.md 覆盖 AI/ML/DL/LLM）",
+      "02-roadmaps/ — 7 条成长路径 + csdiy 课程路径（含 ai-engineer.md、llm-application.md 两条 AI 路径）",
+      "03-methodology/ — 10 个方法论卡（learning/learning-loop/decision-making/thinking/writing/code-reading/reading-papers/problem-solving/productivity/tech-selection）",
+      "04-career-life/ — 职场·投资·生活经验沉淀（标注来源与适用前提）",
+      "05-books/ — 17 本跨领域读书笔记；06-insights/ — 11 条带日期个人洞察",
+      "07-civics/ — 公民知识 + World Bank API 可刷新宏观数据（7 国核心 + 9 国扩展）",
+      "08-source-reading/ — 源码精读（实测 60 个 md，README 称 59 篇）；09-projects/ — 造轮子项目（实测 116 个 py，README 称 68 个项目）",
+      "10-course-guides/ — 16 篇 CS 课程指南；practice/ — 9 个练习脚本 + 4 个 Lab 指南",
+      "scripts/ — 5 个运维脚本 + MAINTENANCE.md 季度维护 SOP；templates/ — 8 个标准模板",
+      "INDEX.md（43KB 全局索引，登记制）+ AGENTS.md（AI 协作指引）为两个根级枢纽文件"
+    ],
+    "知识形态": "约 75% md 知识卡 / 约 20% Python（116 个教学性造轮子 py + 5 个验证刷新仪表板脚本）/ 约 5% 模板与配置；README 自称 64,000+ 行内容，量级可信",
+    "组织约定": "①编号目录体系（01-10）②8 类标准模板（resource-entry/roadmap/insight/book-note/methodology-entry 等）强制字段齐全 ③INDEX.md 登记制：新增 md 必须登记一行（AGENTS.md 写入规范第 4 条）④可验证原则：论文引用必带 arxiv ID、宏观数据附可复现 curl 命令、链接标注验证日期、拿不准标「待核实」——「幻觉是知识库的最大敌人」（AGENTS.md）⑤方法论卡固定结构：类别/一句话/出处/直觉/步骤/适用/反例/我的实践（03-methodology/learning.md）"
+  },
+  "核心资产": {
+    "资产Top5": [
+      "AGENTS.md — AI 协作知识库的完整规范：模式判定（知识库维护模式 vs 教学模式）、目录写入约定、常见任务工作流（给链接→webfetch→按模板归位→更新 INDEX）、工具偏好与禁止清单；是「知识库如何被 AI 增强」的可复制实践样本",
+      "06-insights/2026-07-13-verifiable-knowledge-base.md — 「可验证知识库」L1-L4 四层架构（内容层/来源层/验证层/可复现层），主张知识库从「信任」范式转向「验证」范式；源于 AI 记忆错误 4 次（arxiv 论文 ID 错配）被 curl 纠正的亲历实践",
+      "06-insights/2026-07-12-ai-notes-vs-internalization.md — 「AI 辅助知识梳理 ≠ 个人内化」双盲陷阱：L1 信息提取/L2 知识结构化 AI 可替代，L3 内化必须亲身经历；对冲规则 = AI 笔记顶部诚实标签 + 每条必带行动项；直指「知识库的虚荣指标」",
+      "scripts/（verify_arxiv.py + verify_links.py + refresh_macro_data.py + health_dashboard.py + MAINTENANCE.md）— 知识库防腐的工程化闭环：链接批量分级验证、arxiv 引用核验、宏观数据 API 刷新、季度维护 SOP",
+      "02-roadmaps/llm-application.md — LLM 应用工程师路径（Prompt→RAG→Agent→生产化，156 行），与 work4ai 讲透系列同主题的外部学习路径样本"
+    ],
+    "亮点发现": [
+      "06-insights/2026-07-16-data-decay-rate.md — 「数据腐烂率」洞察：知识库事实层存在半衰期，v2.1 季度维护正是对该问题的制度化响应",
+      "07-civics 宏观数据可刷新实践：v2.1 刷新发现 3 条重大数据变化（印度人口超中国/瑞典通胀暴跌/美国预期寿命反超中国），全部经 World Bank API 实时验证——静态知识库罕见的「负熵注入」机制",
+      "v2.0 把外部 csdiy 知识库整体合并进来（commit bd127b9，Step 1-5 分步迁移）——「知识库兼并重组」的完整可考古实践"
+    ]
+  },
+  "代码维度": {
+    "语言栈": "Python（教学造轮子 + 运维脚本）；无框架、无构建系统，脚本型",
+    "架构模式": "双层结构：内容层（md 知识卡 + 模板 + INDEX 登记）与运维层（scripts/ 验证-刷新-仪表板闭环）分离；09-projects/ 按主题分目录（网络/存储/分布式/OS/编译/AI 各自独立 tiny 实现），互不依赖",
+    "关键机制": [
+      "链接批量验证分级报告：scripts/verify_links.py 扫全库按「正常/需代理/403/死链」分级，v2.1 借此修复 6 处死链（README.md 状态节）",
+      "arxiv 引用核验：scripts/verify_arxiv.py，曾纠正 4 处论文-模型错配（DPO≠Llama-2 等，见 06-insights/2026-07-13-verifiable-knowledge-base.md）",
+      "宏观数据 API 刷新：scripts/refresh_macro_data.py 自动选最新年份 + 并发，60s→10s（commit be6d9f9）",
+      "健康仪表板：scripts/health_dashboard.py 定期扫描全库内容健康状态（commit 09e1f01）"
+    ],
+    "工程质量": "无测试/无 CI（知识库无此需求）；文档密度极高——每目录带 README、根 INDEX.md 43KB、MAINTENANCE.md 维护 SOP、commit message 规范且带量化说明"
+  },
+  "活跃度与质量": {
+    "迭代节奏": "128 commits 高度集中在 4 天：2026-07-12（63）/07-13（34）/07-14（29）/07-16（2）；版本化运营节奏：v2.0（csdiy 合并）→ v2.1（季度维护）",
+    "完成度": "成熟稳定期：v2.1 后宣告转入季度维护节奏（README「每季度跑维护脚本」）；06-insights 设计为每周回顾；结构自洽无烂尾迹象"
+  },
+  "与work4ai关系": {
+    "重叠度": "中低。重叠点：①02-roadmaps/ai-engineer.md + llm-application.md 与 work4ai 讲透系列在「AI 学习路径」层重叠 ②08-source-reading（59 篇 AI/系统/算法源码精读）与 work4ai 用例库（279 仓深读）形式同构，但深度与证据标准差一个档次 ③01-resources/ai-ml.md AI 资源清单。方法论层（06-insights 可验证知识库/数据腐烂/AI笔记vs内化）与 work4ai 元理论（软件即熵治理/费曼闭环/复杂系统迭代）高度共鸣但载体不同",
+    "可合并资产": [
+      "06-insights/2026-07-13-verifiable-knowledge-base.md（L1-L4 可验证四层架构）→ work4ai 治理方法论：知识腐烂=熵增、验证脚本=负熵注入的独立旁证，建议作为互链用例而非搬运",
+      "06-insights/2026-07-12-ai-notes-vs-internalization.md（L1/L2/L3 + 行动项桥）→ 迭代质量门-费曼闭环（F1-F4）的跨库旁证：其 L3 内化检验 ≈ F2 卡壳硬门",
+      "AGENTS.md 可验证原则 + 反幻觉条款 → work4ai 写入规范可直接借鉴（arxiv ID 强制、链接验证日期、「待核实」标注、禁止无判断的纯链接堆砌）",
+      "02-roadmaps/llm-application.md → 讲透系列的外部对照路径，仅索引不搬内容"
+    ],
+    "建议动作": "桥接互链 + 治理借鉴（组合）：内容不合并（领域为个人成长，与 AI 不重叠且深度不及 work4ai 专精单元）；但它是同一工具链（opencode）下最完整的「知识库治理实践样本」——①两篇 06-insights（可验证知识库、AI笔记vs内化）作为 work4ai 元理论的外部实证互链 ②吸收 AGENTS.md 可验证原则进 work4ai 写入规范 ③在知识工程实践索引中登记此库"
+  },
+  "证据锚点": {
+    "key_files": [
+      "AGENTS.md",
+      "README.md",
+      "INDEX.md",
+      "06-insights/2026-07-13-verifiable-knowledge-base.md",
+      "06-insights/2026-07-12-ai-notes-vs-internalization.md",
+      "03-methodology/learning.md",
+      "02-roadmaps/llm-application.md",
+      "scripts/MAINTENANCE.md"
+    ]
+  },
+  "uncertain": [
+    "README 称「59 篇源码精读/68 个造轮子项目/64,000+ 行」，实测 08-source-reading 为 60 个 md、09-projects 为 116 个 py；总行数未逐行核验",
+    "顶层 analytics/android-*/cache/codegen/memory/swarm 等目录为 opencode 运行时产物，其对 55MB 体积与 4089 文件数的贡献占比未细分",
+    "README 状态节一处写「10 个方法论/11 条洞察」、另一处写「10 条洞察」，以目录实测（11 条 insight 文件）为准"
+  ]
+}
