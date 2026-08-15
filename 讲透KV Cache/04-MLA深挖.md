@@ -81,4 +81,4 @@ DeepSeek-V3 的部署栈：**MLA + PagedAttention + latent FP8 量化**——三
 
 > 🎯 **一句话**：MLA = KV 的低秩联合压缩——**把"存档案"变成"存摘要"**，是 MoE + 长上下文时代的架构必需品，但只在朴素 KV 爆炸时才值得。
 
-📌 **下一步**：[05 KV 量化](./05-KVCache量化.md)（精度压缩），或 [03 RadixAttention](./03-RadixAttention深挖.md)（共享前缀复用）。
+📌 **下一步**：[05 KV 量化](./05-KVCache量化.md)（精度压缩），或 03 RadixAttention（待写）（共享前缀复用）。

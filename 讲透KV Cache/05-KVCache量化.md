@@ -64,7 +64,7 @@ MLA（[04](./04-MLA深挖.md)）只存 latent，**latent 量化和朴素 KV 量�
 
 - **PagedAttention**（[02](./02-PagedAttention深挖.md)）：治碎片——与量化正交，可叠加
 - **MLA**（[04](./04-MLA深挖.md)）：治表示效率——叠加时对 latent 而非 KV 量化
-- **分层存储**（[06](./06-分层KVCache.md)）：治容量——量化是"压"，分层是"卸"，**两者互补**
+- **分层存储**（06（待写））：治容量——量化是"压"，分层是"卸"，**两者互补**
 
 ## 五、选型决策树
 
@@ -90,4 +90,4 @@ MLA（[04](./04-MLA深挖.md)）只存 latent，**latent 量化和朴素 KV 量�
 
 > 🎯 **一句话**：KV 量化比权重量化风险高（softmax 放大 + outlier 集中）——**FP8 是免费午餐，INT4 必须 per-channel + 长上下文单独验证**，和 PagedAttention / MLA 正交可叠加。
 
-📌 **下一步**：[06 分层 KV Cache](./06-分层KVCache.md)（GPU/CPU/SSD 三级），或回 [README](./README.md)。
+📌 **下一步**：06 分层 KV Cache（待写）（GPU/CPU/SSD 三级），或回 [README](./README.md)。

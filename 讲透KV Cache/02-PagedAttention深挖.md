@@ -56,11 +56,11 @@ PagedAttention 重写了 CUDA kernel：给定 block table，kernel 按 block 边
 
 ### 3.2 L4 陷阱 2：以为 PagedAttention 解决一切
 
-它**只解决显存碎片，不解决显存总容量**。长上下文场景（100K+ token）仍要配合 KV 量化（[05](./05-KVCache量化.md)）或分层存储（[06](./06-分层KVCache.md)）。
+它**只解决显存碎片，不解决显存总容量**。长上下文场景（100K+ token）仍要配合 KV 量化（[05](./05-KVCache量化.md)）或分层存储（06（待写））。
 
 ### 3.3 L4 陷阱 3：copy-on-write 的隐藏成本
 
-多轮对话复用前缀时，第一个改写 token 触发 CoW——**长前缀的 CoW 可能比从头重算还慢**。SGLang 的 RadixAttention（[03](./03-RadixAttention深挖.md)）针对此优化。
+多轮对话复用前缀时，第一个改写 token 触发 CoW——**长前缀的 CoW 可能比从头重算还慢**。SGLang 的 RadixAttention（03（待写））针对此优化。
 
 ## 四、费曼回炉（L2 自检）
 
@@ -74,4 +74,4 @@ PagedAttention 重写了 CUDA kernel：给定 block table，kernel 按 block 边
 
 > 🎯 **一句话**：PagedAttention = OS 虚存思想在 LLM 推理的工程化——把 KV Cache 切成固定 block + block table 映射，治好碎片化，**显存利用率从 30% 提到 90%+**。
 
-📌 **下一步**：[03 RadixAttention](./03-RadixAttention深挖.md)（SGLang 怎么用基数树进一步治共享前缀），或 [04 MLA](./04-MLA深挖.md)（DeepSeek 怎么从架构层压缩 KV）。
+📌 **下一步**：03 RadixAttention（待写）（SGLang 怎么用基数树进一步治共享前缀），或 [04 MLA](./04-MLA深挖.md)（DeepSeek 怎么从架构层压缩 KV）。
