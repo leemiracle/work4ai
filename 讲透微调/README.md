@@ -65,4 +65,12 @@ for f in experiments/0*.py experiments/1*.py; do echo "=== $f ==="; python3 -u "
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §15.3 Stanford CS329T/CS324（Percy Liang）| [`pluralistic_safety.py`](../stanford-cs-projects/topic3-safety/pluralistic_safety.py) | preference aggregation（Plurality/Borda/Approval）+ Condorcet 悖论 + Arrow 不可能性——RLHF "对齐谁的偏好"的社会选择理论根基 |
+| §15.3 Stanford CS329T/CS324（Percy Liang）| [`pluralistic_safety.py`](../top-cs-projects/stanford-cs-projects/topic3-safety/pluralistic_safety.py) | preference aggregation（Plurality/Borda/Approval）+ Condorcet 悖论 + Arrow 不可能性——RLHF "对齐谁的偏好"的社会选择理论根基 |
+
+---
+
+🔗 **交叉链接**：Stanford CS336 论文精读 · 对齐与后训练（SFT/RLHF/DPO/GRPO/R1，8 篇），见 [`讲透公开课/06-CS336论文精读/H-对齐与后训练.md`](../讲透公开课/06-CS336论文精读/H-对齐与后训练.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments/)。
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透优化理论/`](../讲透优化理论/)**：每一行微调代码背后是一条优化定理——拉格朗日对偶见优化宇宙

@@ -39,8 +39,8 @@
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §12.2 CMU 15-251 GITCS | [`gitcs.py`](../cmu-cs-projects/topic12-theory/gitcs.py) | Y combinator / Lawvere 不动点——自指的 constructive 版（AlphaProof 闭环的数学骨架：AI 用形式系统验证自己的输出）|
-| §13.1 Oxford CPP | [`cpp.py`](../oxford-cs-projects/topic12-foundations/cpp.py) | STLC + Curry-Howard + CCC——Lean4 / Coq 的类型论地基（LLM 生成 Lean4 代码 = LLM 在做证明）|
+| §12.2 CMU 15-251 GITCS | [`gitcs.py`](../top-cs-projects/cmu-cs-projects/topic12-theory/gitcs.py) | Y combinator / Lawvere 不动点——自指的 constructive 版（AlphaProof 闭环的数学骨架：AI 用形式系统验证自己的输出）|
+| §13.1 Oxford CPP | [`cpp.py`](../top-cs-projects/oxford-cs-projects/topic12-foundations/cpp.py) | STLC + Curry-Howard + CCC——Lean4 / Coq 的类型论地基（LLM 生成 Lean4 代码 = LLM 在做证明）|
 
 ---
 
@@ -76,3 +76,7 @@
 - **L3 五层**：直觉→数学→代码→不足→本质 严守
 - **L4 工程**：本节反模式 10 条 + 选型决策树
 - **熵连接**：spec 合成 = KL 散度最小化；对抗层 = 盲区熵治理
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透符号主义/`](../讲透符号主义/)**：其符号侧的血统来自 GOFAI——被杀死两次又复活的范式

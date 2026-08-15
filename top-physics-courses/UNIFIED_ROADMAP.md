@@ -33,7 +33,7 @@
 - **衔接**：前置 = 微积分 → **本课** = 牛顿/拉格朗日/哈密顿 → 后续 = 电磁学（力学的框架被推广到场）
 - **最佳版本**：**MIT 8.09**（Taylor 教材）或 **Cambridge Part IA**（Kibble & Berkshire）
 - **替代**：Harvard Phys 15a（Morin 荣誉版，难题多）/ Caltech Ph 1a（Feynman 风格）
-- **可跑 demo**：[Berkeley 谐振子](../berkeley-physics/physics_demos.py) / [Caltech 开普勒](../caltech-physics/physics_demos.py) / [MIT 陀螺](../mit-physics/physics_demos.py)
+- **可跑 demo**：[Berkeley 谐振子](berkeley-physics/physics_demos.py) / [Caltech 开普勒](caltech-physics/physics_demos.py) / [MIT 陀螺](mit-physics/physics_demos.py)
 - **知识检查**：能否用拉格朗日方程推导出单摆的运动方程？
 
 ---
@@ -43,7 +43,7 @@
 - **衔接**：前置 = 力学 + 矢量微积分 → **本课** = 麦克斯韦方程 → 后续 = 狭义相对论（光速危机催生）
 - **最佳版本**：**MIT 8.022**（Purcell 荣誉版，从相对论视角讲电磁学）或 **Berkeley 110A**（Griffiths）
 - **替代**：Cambridge Part IB / Oxford Year 2
-- **可跑 demo**：[Cambridge RC/LC](../cambridge-physics/physics_demos.py) / [Oxford 高斯定律](../oxford-physics/physics_demos.py)
+- **可跑 demo**：[Cambridge RC/LC](cambridge-physics/physics_demos.py) / [Oxford 高斯定律](oxford-physics/physics_demos.py)
 - **知识检查**：能否从麦克斯韦方程推出光速 $c = 1/\sqrt{\mu_0\varepsilon_0}$？
 
 ---
@@ -60,7 +60,7 @@
 - **费曼一句话**：时间为什么单向？因为"回到有序"的概率太小
 - **衔接**：前置 = 力学 → **本课** = 热力学四定律 → 后续 = 统计力学（微观解释）
 - **最佳版本**：**Stanford PHYS 45**（Schroeder《热物理》）或 **MIT 8.044**
-- **可跑 demo**：[Caltech 卡诺循环](../caltech-physics/physics_demos.py)
+- **可跑 demo**：[Caltech 卡诺循环](caltech-physics/physics_demos.py)
 - **知识检查**：能否解释为什么熵增定律不是"绝对定律"而是统计规律？
 
 ---
@@ -70,7 +70,7 @@
 - **衔接**：前置 = 热力学 + 量子 → **本课** = 玻尔兹曼 + 系综理论 → 后续 = 凝聚态（多体统计）
 - **最佳版本**：**Berkeley 112**（Kittel & Kroemer）或 **Stanford PHYS 107**
 - **替代**：Cambridge Part IB / Princeton PHY 505（研究生版 Pathria）
-- **可跑 demo**：[Caltech Ising](../caltech-physics/physics_demos.py) / [ETH Ising 精确解](../eth-physics/physics_demos.py)
+- **可跑 demo**：[Caltech Ising](caltech-physics/physics_demos.py) / [ETH Ising 精确解](eth-physics/physics_demos.py)
 - **知识检查**：能否推导理想气体的麦克斯韦-玻尔兹曼分布？
 
 ---
@@ -101,7 +101,7 @@
 - **衔接**：前置 = 力学 + 波 + 统计 → **本课** = 薛定谔方程 → 后续 = 量子中级（氢原子 + 自旋）
 - **最佳版本**：**MIT 8.04**（Adams，Griffiths 教材）或 **Stanford PHYS 130**
 - **替代**：Berkeley 137A / Harvard Phys 143a / Oxford Year 2
-- **可跑 demo**：[MIT 波包演化 Crank-Nicolson](../mit-physics/physics_demos.py) / [Berkeley 势阱](../berkeley-physics/physics_demos.py) / [Oxford 轨道](../oxford-physics/physics_demos.py)
+- **可跑 demo**：[MIT 波包演化 Crank-Nicolson](mit-physics/physics_demos.py) / [Berkeley 势阱](berkeley-physics/physics_demos.py) / [Oxford 轨道](oxford-physics/physics_demos.py)
 - **知识检查**：能否从薛定谔方程推出无限深势阱的能级？
 
 ---
@@ -119,7 +119,7 @@
 - **衔接**：前置 = 狭义相对论 + 数学方法 → **本课** = 微分几何 + 爱因斯坦方程 → 后续 = 宇宙学
 - **最佳版本**：**MIT 8.962**（Carroll 教材，Carroll 本人在 Stanford）或 **Cambridge Part III**
 - **替代**：Princeton PHY 563 / Stanford PHYS 250 / ETH 402-3001-00L
-- **可跑 demo**：[Princeton 引力红移](../princeton-physics/physics_demos.py) / [ETH 等效原理](../eth-physics/physics_demos.py)
+- **可跑 demo**：[Princeton 引力红移](princeton-physics/physics_demos.py) / [ETH 等效原理](eth-physics/physics_demos.py)
 - **知识检查**：能否解释 GPS 为什么必须修正广义相对论效应？
 
 ---
@@ -141,7 +141,7 @@
 - **衔接**：前置 = 量子 + 统计 → **本课** = 能带 + 超导 + 拓扑 → 后续 = 量子计算 / 材料科学
 - **最佳版本**：**Oxford**（Simon《Oxford Solid State Basics》）或 **MIT 8.231**（Kittel）
 - **替代**：Cambridge Part II / ETH 402-2601-00L
-- **可跑 demo**：[ETH London 方程](../eth-physics/physics_demos.py) / [Tokyo BCS](../tokyo-physics/physics_demos.py)
+- **可跑 demo**：[ETH London 方程](eth-physics/physics_demos.py) / [Tokyo BCS](tokyo-physics/physics_demos.py)
 - **知识检查**：能否解释为什么金属导电而绝缘体不导电（能带论）？
 
 ---

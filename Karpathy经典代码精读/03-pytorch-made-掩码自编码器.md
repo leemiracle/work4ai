@@ -2,7 +2,7 @@
 
 > **Andrej Karpathy · pytorch-made**（594★）。Masked Autoencoder for Density Estimation（Germain et al. 2015, [arXiv:1502.03509](https://arxiv.org/abs/1502.03509)）的 PyTorch 复现。**144 行**讲透怎么用一个 MLP + 一组 mask 实现"一次前向算完所有 $P(x_k | x_{<k})$"——比 RNN 快，是自回归生成模型的关键 trick。
 >
-> 源码：[`repos/pytorch-made/made.py`](./repos/pytorch-made/made.py) ｜ 原仓库：https://github.com/karpathy/pytorch-made
+> 源码：``repos/pytorch-made/made.py`` ｜ 原仓库：https://github.com/karpathy/pytorch-made
 
 ---
 
@@ -163,7 +163,7 @@ $P(x) = \prod_k P(x_k | x_{<k})$ 的"分解顺序"不唯一（可以从左到右
 ## 📌 下一步
 
 - **继续 Karpathy 系列**：下一篇 `04-lecun1989-repro-复现1989论文.md`（377 行，复现 LeCun 1989 反向传播论文，历史+实践），对接讲透反向传播。
-- **动手**：用 MADE 建一个像素级图像生成模型（在 MNIST 上），采样看生成质量。Karpathy 的 [pytorch-normalizing-flows](./repos/pytorch-normalizing-flows/) 用 MADE 做 flow 的条件器（下一篇会精读）。
+- **动手**：用 MADE 建一个像素级图像生成模型（在 MNIST 上），采样看生成质量。Karpathy 的 `pytorch-normalizing-flows` 用 MADE 做 flow 的条件器（下一篇会精读）。
 - **对照 GPT**：把 MADE 的 mask 换成 Transformer 的 causal attention mask，理解两者"用不同方式实现同一个因果约束"。
 
 ## ✍️ 练习
@@ -175,4 +175,4 @@ $P(x) = \prod_k P(x_k | x_{<k})$ 的"分解顺序"不唯一（可以从左到右
 
 ---
 
-> **源码**：[`repos/pytorch-made/made.py`](./repos/pytorch-made/made.py)（144 行）｜ 论文：[MADE, Germain et al. 2015](https://arxiv.org/abs/1502.03509)
+> **源码**：``repos/pytorch-made/made.py``（144 行）｜ 论文：[MADE, Germain et al. 2015](https://arxiv.org/abs/1502.03509)

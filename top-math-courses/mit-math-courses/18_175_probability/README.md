@@ -54,7 +54,7 @@ Cambridge Part IA ─┘    Princeton MAT 514      Princeton MAT 575（信息论
                         UT Austin M 385C
 ```
 
-- **前置**：[MIT 18.100 实分析](../18_100B_real_analysis/)（Lebesgue 积分、$L^p$ 空间）+ 本科概率（[Stat 134](../../berkeley-math-courses/stat134_probability/) 或 [Stat 116](../../stanford-math-courses/stat116_probability/)）
+- **前置**：[MIT 18.100 实分析](../18_100B_real_analysis/)（Lebesgue 积分、$L^p$ 空间）+ 本科概率（[Stat 134](../../berkeley-math-courses/stat134_probability/) 或 [Stat 116](../../stanford-math-courses/stat116_probability_theory)）
 - **本课**：从概率公理到 SLLN + CLT + 鞅，建立 ML 理论的分析语言
 - **后续**：随机过程（[Math 218](../../berkeley-math-courses/math218_probability_graduate/) Brownian motion → 扩散模型 SDE）、信息论（[MAT 575](../../princeton-math-courses/mat575_information_theory/)）
 

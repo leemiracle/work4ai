@@ -17,6 +17,12 @@
 | 5 | **Context Engineering** | [`ContextEngineering手册/`](ContextEngineering手册/) | 上下文工程：长 context / KV cache |
 | 6 | **Quantization** | [`Quantization工程手册/`](Quantization工程手册/) | 量化：int8 / int4 / NVFP4 |
 | 7 | **知识图谱** | [`知识图谱工程手册/`](知识图谱工程手册/) | Knowledge Graph：Obsidian / Zettelkasten |
+| 8 | **Embedding** | [`Embedding工程手册/`](Embedding工程手册/) | 嵌入：编码器选型 / 微调 / 评测 |
+| 9 | **FineTuning** | [`FineTuning工程手册/`](FineTuning工程手册/) | 微调：SFT / 全参 vs PEFT / 数据配比 |
+| 10 | **LoRA** | [`LoRA工程手册/`](LoRA工程手册/) | LoRA：秩选择 / 目标模块 / [多视角深层分析](LoRA工程手册/02-多视角深层分析.md) |
+| 11 | **SafetyAlignment** | [`SafetyAlignment手册/`](SafetyAlignment手册/) | 安全对齐：红队 / 护栏 / 拒答策略 |
+| 12 | **Tokenization** | [`Tokenization工程手册/`](Tokenization工程手册/) | 分词：BPE / 词表设计 / 多语言 |
+| 13 | **VectorDB** | [`VectorDB工程手册/`](VectorDB工程手册/) | 向量库：索引（HNSW/IVF）/ 混合检索 / 选型 |
 
 ---
 

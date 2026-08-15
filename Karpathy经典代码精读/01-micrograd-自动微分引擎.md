@@ -2,7 +2,7 @@
 
 > **Andrej Karpathy · micrograd**（17k★）。一个标量级的 autograd 引擎 + 一个微缩 PyTorch nn API，**总共 154 行**（`engine.py` 94 + `nn.py` 60），却讲透了深度学习框架的核心：**前向建计算图、反向用链式法则求梯度**。
 >
-> 源码：[`repos/micrograd/micrograd/`](./repos/micrograd/micrograd/) ｜ 原仓库：https://github.com/karpathy/micrograd ｜ 视频：*The spelled-out intro to neural networks*
+> 源码：``repos/micrograd/micrograd/`` ｜ 原仓库：https://github.com/karpathy/micrograd ｜ 视频：*The spelled-out intro to neural networks*
 
 ---
 
@@ -17,7 +17,7 @@
 
 **关键洞察**：把 PyTorch 的张量 autograd 退化到"每个数都是标量"，原理就完全暴露——没有向量化/CUDA/广播的噪音，只剩**计算图 + 链式法则**这个本质。读完 micrograd，PyTorch 的 `loss.backward()` 再不是黑盒。
 
-> 类比：micrograd 之于 PyTorch，相当于 [minGPT](./02-nanoGPT-从零训练GPT.md) 之于 HuggingFace transformers——把工业级实现剥到最小可运行骨架。
+> 类比：micrograd 之于 PyTorch，相当于 [minGPT](07-nanoGPT-从零训练GPT.md) 之于 HuggingFace transformers——把工业级实现剥到最小可运行骨架。
 
 ---
 
@@ -310,4 +310,4 @@ python3 -m pytest repos/micrograd/test/ -q   # 跑官方测试（2 passed）
 
 ---
 
-> **源码**：[`repos/micrograd/micrograd/engine.py`](./repos/micrograd/micrograd/engine.py)（94 行）｜ [`nn.py`](./repos/micrograd/micrograd/nn.py)（60 行）｜ 官方测试 `test/test_engine.py`（2 passed, 1.64s）
+> **源码**：``repos/micrograd/micrograd/engine.py``（94 行）｜ ``nn.py``（60 行）｜ 官方测试 `test/test_engine.py`（2 passed, 1.64s）

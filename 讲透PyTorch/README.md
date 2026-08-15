@@ -135,16 +135,16 @@ cd 讲透PyTorch/experiments && bash run_all.sh    # 一键跑通全部 21 个�
 
 *2026 新系列（DTensor/SPMD 重构，最新动态）— 揭示 DTensor 正在被重新设计*
 - **Autograd and Mutation** — autograd 如何处理 in-place mutation 与 view aliasing（CopySlices / rebase history）。配 [01-Autograd](01-Autograd与计算图.md)。
-- **Global vs Local SPMD** + **Computing sharding with einsum** — DTensor sharding 推导机制。配 [08-现代](08-现代PyTorch(2.x特性).md)。
-- **The JAX sharding type system** + **DTensor erasure** + **Replicate Forwards, Partial Backwards** — DTensor 基于 JAX sharding-in-types 的重构（消除 eager 派发开销，实测 35–60% slowdown 的根因）。配 [08-现代](08-现代PyTorch(2.x特性).md)。
+- **Global vs Local SPMD** + **Computing sharding with einsum** — DTensor sharding 推导机制。配 [08-现代](08-现代PyTorch(2.x特性).md).md).md).md).md)。
+- **The JAX sharding type system** + **DTensor erasure** + **Replicate Forwards, Partial Backwards** — DTensor 基于 JAX sharding-in-types 的重构（消除 eager 派发开销，实测 35–60% slowdown 的根因）。配 [08-现代](08-现代PyTorch(2.x特性).md).md).md).md).md)。
 - **Megatron via shard_map** — 用 local-SPMD 实现 Megatron 张量并行。
 
 ### 二、PyTorch Developer Podcast
-ezyang 主持的播客，每集一个 PyTorch 内部主题（codegen / native_functions.yaml / dispatcher / autograd ...）。**通勤听，建立直觉**。覆盖 [00](00-Tensor基础.md)–[08](08-现代PyTorch(2.x特性).md) 全部。
+ezyang 主持的播客，每集一个 PyTorch 内部主题（codegen / native_functions.yaml / dispatcher / autograd ...）。**通勤听，建立直觉**。覆盖 [00](00-Tensor基础.md)–[08](08-现代PyTorch(2.x特性).md).md).md).md).md) 全部。
 
 ### 三、PyTorch 官方深度文档
 - **A Tour of PyTorch Internals (Part I)** + **Part II - The Build System**（2017 官方）— 官方版内部导览。配 [00](00-Tensor基础.md)。
-- **docs.pytorch.org**：`torch.compiler_internals`（compile 内部）、`export` 文档。配 [06](06-编译与图模式.md) / [08](08-现代PyTorch(2.x特性).md)。
+- **docs.pytorch.org**：`torch.compiler_internals`（compile 内部）、`export` 文档。配 [06](06-编译与图模式.md) / [08](08-现代PyTorch(2.x特性).md).md).md).md).md)。
 
 ### 四、社区深度源码博客
 - **Kieran Didi — How does PyTorch implement a linear layer?** — 从源码追踪 `addmm`：dispatcher → `native_functions.yaml` → codegen → structured kernels → CPU/CUDA 实现。**读源码的入门钥匙**。配 [00](00-Tensor基础.md) / [02-Module](02-nnModule与参数管理.md)。
@@ -165,7 +165,7 @@ ezyang 主持的播客，每集一个 PyTorch 内部主题（codegen / native_fu
 | `loss.backward()` 内部 | ezyang "Autograd and Mutation" + 本教程 [01](01-Autograd与计算图.md) |
 | 算子怎么路由到 CPU/GPU | ezyang "Let's talk about dispatcher" + Kieran Didi |
 | torch.compile 怎么工作 | Christian Perone "PyTorch 2 Internals" + 本教程 [06](06-编译与图模式.md) |
-| DTensor/FSDP2 怎么演进 | ezyang 2026 SPMD 系列（含重构动态）+ 本教程 [08](08-现代PyTorch(2.x特性).md) |
+| DTensor/FSDP2 怎么演进 | ezyang 2026 SPMD 系列（含重构动态）+ 本教程 [08](08-现代PyTorch(2.x特性).md).md).md).md).md) |
 | 一个算子源码长啥样 | Kieran Didi "linear layer" + PyTorch Developer Podcast |
 
 ---
@@ -173,6 +173,11 @@ ezyang 主持的播客，每集一个 PyTorch 内部主题（codegen / native_fu
 📌 **下一步**：
 - 完全新手 → 从 [00-Tensor基础](00-Tensor基础.md) 开始。
 - 想搞懂 backward → 直奔 [01-Autograd](01-Autograd与计算图.md)（先跑 `experiments/01_autograd_from_scratch.py`，90 行看穿计算图）。
-- 想跟上 2.x 现代 → 直奔 [08-现代PyTorch](08-现代PyTorch(2.x特性).md)（export/SDPA/FlexAttention/分布式）。
-- 系统工程师/部署 → [06 编译](06-编译与图模式.md) + [07 性能与部署](07-性能与部署.md) + [08](08-现代PyTorch(2.x特性).md)。
+- 想跟上 2.x 现代 → 直奔 [08-现代PyTorch](08-现代PyTorch(2.x特性).md).md).md).md).md)（export/SDPA/FlexAttention/分布式）。
+- 系统工程师/部署 → [06 编译](06-编译与图模式.md) + [07 性能与部署](07-性能与部署.md) + [08](08-现代PyTorch(2.x特性).md).md).md).md).md)。
 - **想挖到框架内核** → 上面「权威深度资源索引」，按主题速查表入门。
+
+
+---
+
+🔗 **交叉链接**：Stanford CS336 论文精读 · 优化器（AdamW→SOAP→Muon，8 篇），见 [`讲透公开课/06-CS336论文精读/G-优化器.md`](../讲透公开课/06-CS336论文精读/G-优化器.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments/)。

@@ -57,5 +57,9 @@
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §12.2 CMU 15-251 GITCS | [`gitcs.py`](../cmu-cs-projects/topic12-theory/gitcs.py) | Gödel 不完备定理（自指/不动点/Y combinator）——符号主义形式系统的数学边界 |
-| §13.1 Oxford CPP | [`cpp.py`](../oxford-cs-projects/topic12-foundations/cpp.py) | Curry-Howard 同构（命题=类型=定理）——符号推理的计算根基 |
+| §12.2 CMU 15-251 GITCS | [`gitcs.py`](../top-cs-projects/cmu-cs-projects/topic12-theory/gitcs.py) | Gödel 不完备定理（自指/不动点/Y combinator）——符号主义形式系统的数学边界 |
+| §13.1 Oxford CPP | [`cpp.py`](../top-cs-projects/oxford-cs-projects/topic12-foundations/cpp.py) | Curry-Howard 同构（命题=类型=定理）——符号推理的计算根基 |
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透神经符号/`](../讲透神经符号/)**：NeSy=符号主义的第三次复活：LLM 出直觉，符号系统做验证

@@ -59,4 +59,12 @@
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §12.1 Princeton COS 511/512（Hazan）| [`theory.py`](../princeton-cs-projects/topic9-ml-theory/theory.py) | SGD 收敛速率实验：凸 O(1/√T) vs λ-强凸 O(1/T)（尺度检验 10× vs √10×），含 stochastic gradient noise |
+| §12.1 Princeton COS 511/512（Hazan）| [`theory.py`](../top-cs-projects/princeton-cs-projects/topic9-ml-theory/theory.py) | SGD 收敛速率实验：凸 O(1/√T) vs λ-强凸 O(1/T)（尺度检验 10× vs √10×），含 stochastic gradient noise |
+
+---
+
+🔗 **交叉链接**：Stanford CS336 论文精读 · 优化器实战谱系（8 篇）与 K3 AdamW 解耦实验，见 [`讲透公开课/06-CS336论文精读/G-优化器.md`](../讲透公开课/06-CS336论文精读/G-优化器.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments/)。
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透微调/`](../讲透微调/)**：微调=优化理论在 LLM 上的特例（LoRA=低秩约束、lr 调度=退火）

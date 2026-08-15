@@ -29,7 +29,7 @@
 - Quarteroni, *Numerical Mathematics*
 - Heath, *Scientific Computing*
 - MIT 对照：[MIT 18.085](../../mit-math-courses/18_085_computational_science/)
-- UT Austin 对照：[M 383E](../../ut-austin-math-courses/math_ga_2010_numerical_methods_I/)
+- UT Austin 对照：M 383E（待写/未落盘）
 
 📌 **下一步**：→ [STAT 116 Probability Theory](../stat116_probability_theory/)
 

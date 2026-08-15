@@ -53,12 +53,12 @@
 
 | 瓶颈 | 为什么难 | 当前方向 | 对应数学课 |
 |------|---------|---------|----------|
-| **深度学习泛化** | overparameterized 应该 overfit，但实际不 overfit（双下降）| benign overfitting（Bartlett/Long）；implicit regularization；NTK | [实分析](../mit-math-courses/18_100B_real_analysis/) + [概率](../mit-math-courses/18_175_probability/) + 随机矩阵 |
-| **深度学习的几何** | loss landscape 的形状决定优化与泛化，但高维不可视 | information geometry；natural gradient；mode connectivity | [黎曼几何] + [优化](../stanford-math-courses/cme364A_convex_optimization/) |
+| **深度学习泛化** | overparameterized 应该 overfit，但实际不 overfit（双下降）| benign overfitting（Bartlett/Long）；implicit regularization；NTK | [实分析](mit-math-courses/18_100B_real_analysis) + [概率](mit-math-courses/18_175_probability) + 随机矩阵 |
+| **深度学习的几何** | loss landscape 的形状决定优化与泛化，但高维不可视 | information geometry；natural gradient；mode connectivity | [黎曼几何] + [优化](stanford-math-courses/cme364A_convex_optimization) |
 | **大模型的复杂性** | Transformer 表达力 vs 计算效率的根本权衡 | circuit complexity；TC⁰ 与 Transformer；length generalization | [逻辑/复杂性的数学化] |
-| **概率编程的语义** | measure theory 不可计算 | measure theory 的可计算化；quasi-Borel spaces | [测度论](../harvard-math-courses/math114_measure_integration/) |
+| **概率编程的语义** | measure theory 不可计算 | measure theory 的可计算化；quasi-Borel spaces | [测度论](harvard-math-courses/math114_measure_integration) |
 | **AI 系统形式化验证** | LLM 不可证明正确，但安全场景要求可证 | 神经符号闭环；Lean + LLM；Constitutional AI + 形式规则 | `work4ai/讲透形式化验证/` + `讲透神经符号/` |
-| **Scaling Laws 的数学** | Kaplan 2020 / Chinchilla 2022 经验律，但缺数学根基 | 统计力学视角；variance decomposition；macroscopic limits | [动力系统] + [概率](../mit-math-courses/18_175_probability/) |
+| **Scaling Laws 的数学** | Kaplan 2020 / Chinchilla 2022 经验律，但缺数学根基 | 统计力学视角；variance decomposition；macroscopic limits | [动力系统] + [概率](mit-math-courses/18_175_probability) |
 
 > 🎯 **元洞察**：ML 时代的数学瓶颈几乎都是"**高维 + 非凸 + 随机**"的组合——经典数学（凸分析、低维几何、确定性 ODE）不够用。**未来 10 年最重要的数学突破可能就发生在 ML 理论**。
 
@@ -72,9 +72,9 @@
 
 **操作**：问"这个概念在物理/工程/ML 里的对应是什么？"
 **例子**：
-- 梯度 $\nabla f$ → 物理"势能下降最快的方向" → ML "loss 下降方向"（[MIT 18.02](../mit-math-courses/18_02_multivariable_calculus/) notes.md）
-- Lebesgue 积分 → "按值域分桶"而不是"按定义域分桶"（[Harvard Math 114](../harvard-math-courses/math114_measure_integration/) notes.md）
-- 群 → "对称性的语言"（[Berkeley 113](../berkeley-math-courses/math113_abstract_algebra/) notes.md）
+- 梯度 $\nabla f$ → 物理"势能下降最快的方向" → ML "loss 下降方向"（[MIT 18.02](mit-math-courses/18_02_multivariable_calculus) notes.md）
+- Lebesgue 积分 → "按值域分桶"而不是"按定义域分桶"（[Harvard Math 114](harvard-math-courses/math114_measure_integration) notes.md）
+- 群 → "对称性的语言"（[Berkeley 113](berkeley-math-courses/math113_abstract_algebra) notes.md）
 
 ### 步骤 2：看历史（这个概念怎么诞生的）
 
@@ -86,30 +86,30 @@
 
 **操作**：问"什么情况会让这个定理失效？"
 **例子**：
-- ReLU 在 0 不可微，但 PyTorch 仍能反向传播（次梯度）—— 见 [MIT 18.100B](../mit-math-courses/18_100B_real_analysis/) notes.md
-- Cauchy 分布让 CLT 失效（重尾，方差无限）—— 见 [MIT 18.175](../mit-math-courses/18_175_probability/) notes.md
-- Dirichlet 函数 Riemann 不可积，但 Lebesgue 可积（=0）—— 见 [Harvard 114](../harvard-math-courses/math114_measure_integration/)
+- ReLU 在 0 不可微，但 PyTorch 仍能反向传播（次梯度）—— 见 [MIT 18.100B](mit-math-courses/18_100B_real_analysis) notes.md
+- Cauchy 分布让 CLT 失效（重尾，方差无限）—— 见 [MIT 18.175](mit-math-courses/18_175_probability) notes.md
+- Dirichlet 函数 Riemann 不可积，但 Lebesgue 可积（=0）—— 见 [Harvard 114](harvard-math-courses/math114_measure_integration)
 
 ### 步骤 4：简化（特殊 case、低维、线性化）
 
 **操作**：先解 2×2 矩阵、低维、线性近似，再上一般情形。
-**例子**：理解 SVD 前，先理解 2×2 矩阵 = "椭圆变形"（[MIT 18.06](../mit-math-courses/18_06_linear_algebra/) experiments/01_svd_demo.py）。
+**例子**：理解 SVD 前，先理解 2×2 矩阵 = "椭圆变形"（[MIT 18.06](mit-math-courses/18_06_linear_algebra) experiments/01_svd_demo.py）。
 
 ### 步骤 5：公理化（重新建地基，去掉多余假设）
 
 **操作**：问"这个定理最少需要哪些假设？"
-**例子**：Kolmogorov 1933 给概率论公理化——去掉"频率派 vs 贝叶斯派"的争论，只用 3 条公理（[MIT 18.175](../mit-math-courses/18_175_probability/)）。
+**例子**：Kolmogorov 1933 给概率论公理化——去掉"频率派 vs 贝叶斯派"的争论，只用 3 条公理（[MIT 18.175](mit-math-courses/18_175_probability)）。
 
 ### 步骤 6：换语言（几何化/代数化/分析化）
 
 **操作**：同一个对象用 3 种语言描述，选最容易的。
-**例子**：矩阵 → 线性变换（几何）→ 算子（分析）—— Strang vs Axler vs Halmos 三本线代书就是 3 种语言（见 [CROSS_SCHOOL_INSIGHTS.md](../CROSS_SCHOOL_INSIGHTS.md) §2.1）。
+**例子**：矩阵 → 线性变换（几何）→ 算子（分析）—— Strang vs Axler vs Halmos 三本线代书就是 3 种语言（见 [CROSS_SCHOOL_INSIGHTS.md](CROSS_SCHOOL_INSIGHTS.md) §2.1）。
 
 ### 步骤 7：数值实验（用代码验证直觉）
 
 **操作**：写 10-30 行 numpy，可视化/数值验证定理。
 **资源**：`top-math-courses/` 各课 `experiments/` 目录（共 28 个 .py）。
-**例子**：CLT 数值验证——采样 10000 次样本均值，看是否趋正态（[MIT 18.175](../mit-math-courses/18_175_probability/) experiments/）。
+**例子**：CLT 数值验证——采样 10000 次样本均值，看是否趋正态（[MIT 18.175](mit-math-courses/18_175_probability) experiments/）。
 
 ### 步骤 8：读原始论文（不是教科书）
 
@@ -121,7 +121,7 @@
 
 **操作**：问"这个问题有什么对称性？对称性 = 结构 = 解的约束"。
 **例子**：
-- CNN = 平移对称（群 $\mathbb{Z}^d$ 上的卷积）—— [Berkeley 113](../berkeley-math-courses/math113_abstract_algebra/) notes.md
+- CNN = 平移对称（群 $\mathbb{Z}^d$ 上的卷积）—— [Berkeley 113](berkeley-math-courses/math113_abstract_algebra) notes.md
 - AlphaFold = SE(3) 等变（3D 旋转 + 平移对称）
 - LoRA = 低秩对称（参数空间的几何）
 

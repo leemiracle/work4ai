@@ -61,12 +61,14 @@
 
 ## 🔗 理论锚点（§12-15 横向打通）
 
+> 横向总纲：本单元在 [`激活大语言模型能力-总结.md`](../激活大语言模型能力-总结.md) 中担任**机制显微镜**层——induction head / SAE / attribution graphs 验证各层激活的真实性，feature steering 本身是 L1 白盒激活手段。
+
 > 本系列讲"为什么模型这样做"的工程方法；这门课揭示**AI 自评的数学边界**：
 > 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §12.2 CMU 15-251 GITCS | [`gitcs.py`](../cmu-cs-projects/topic12-theory/gitcs.py) | 对角线/自指暗线（Cantor→Gödel→Turing→Lawvere）——任何形式系统不能证明自己的一致性，对应**AI 不能完美解释/评估自己**（constitutional AI / self-rewarding LM 的理论边界）|
+| §12.2 CMU 15-251 GITCS | [`gitcs.py`](../top-cs-projects/cmu-cs-projects/topic12-theory/gitcs.py) | 对角线/自指暗线（Cantor→Gödel→Turing→Lawvere）——任何形式系统不能证明自己的一致性，对应**AI 不能完美解释/评估自己**（constitutional AI / self-rewarding LM 的理论边界）|
 
 ---
 
@@ -75,7 +77,7 @@
 
 ## 🎭 欺骗动力学视角：AI 纪的识谎学
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 

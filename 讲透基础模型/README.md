@@ -2,7 +2,7 @@
 
 > 用「直觉 → 数学 → 代码跑通 → 不足 → 应用」的方式，把 Foundation Model 从第一性原理讲透。不写广度综述（那到处都是），只往**底层和本质**钻。每一篇配一个能跑出反直觉结论的 Python 实验。
 
-**7 篇主线 + 1 篇数学地基，全部完成。** 从"为什么预测下一个词能产生智能"一路讲到"怎么又快又省地部署"。
+**7 篇主线 + 1 篇数学地基，全部完成**（另有 advanced/ 博士层 4 篇 + 枢纽笔记，见下）。从"为什么预测下一个词能产生智能"一路讲到"怎么又快又省地部署"。
 
 ---
 
@@ -53,6 +53,17 @@
 | | `experiments/05_sft_dpo.py` ✅ | SFT vs DPO 偏好优化 | |
 | 06 | `06-推理优化.md` | 大模型怎么又快又省地跑？ | KV Cache FLOPs 减 51x；INT8 误差 1%（省4x显存），INT4 17.5%（省8x） |
 | | `experiments/06_inference.py` ✅ | KV Cache FLOPs；量化；蒸馏 | |
+
+### 进阶与辅助（博士层）
+
+| 文件 | 核心问题 |
+|---|---|
+| [`advanced/00-论文阅读清单.md`](advanced/00-论文阅读清单.md) | 这条线的关键论文与阅读顺序 |
+| [`advanced/01-ScalingLaw-严格证明.md`](advanced/01-ScalingLaw-严格证明.md) | 幂律从哪来？（02 的博士版） |
+| [`advanced/02-涌现的争论.md`](advanced/02-涌现的争论.md) | Wei vs Schaeffer：涌现是真相变还是度量幻觉？（03 的博士版对辩） |
+| [`advanced/03-开放问题与研究方向.md`](advanced/03-开放问题与研究方向.md) | 这条线的未解之谜 |
+| [`01-讲透笔记-算法经验版.md`](01-讲透笔记-算法经验版.md) | 本系列算法经验索引 |
+| [`HISTORY.md`](HISTORY.md) | 领域编年与系列复盘 |
 
 ---
 
@@ -105,12 +116,11 @@ python3 -u math/entropy_demo.py             # 信息论地基
 
 ---
 
-
 ---
 
 ## 🎭 欺骗动力学视角：scaling law 可预测性
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 
@@ -121,3 +131,14 @@ python3 -u math/entropy_demo.py             # 信息论地基
 ### 一句话
 
 > scaling law 之所以是基础模型研究的基石，因为它把「模型会不会骗我们」变成了可量化预测。
+
+---
+
+🔗 **交叉链接**：Stanford CS336 论文精读 · Scaling Laws 三代演进（Kaplan/Chinchilla/过训练，10 篇），见 [`讲透公开课/06-CS336论文精读/D-Scaling-Laws.md`](../讲透公开课/06-CS336论文精读/D-Scaling-Laws.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments/)。
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透模型可能性/`](../讲透模型可能性/)**：基础模型讲 Transformer 为什么赢，模型可能性讲谁可能赢下一个十年
+- **[`讲透LLM/`](../讲透LLM/README.md)**：本系列是 LLM 的"训练侧地基"；LLM 整合枢纽把 00-06 放进完整生命周期（pretrain→SFT→RL→deploy）
+- **[`讲透Prompt/`](../讲透Prompt/README.md)**：03 涌现（ICL/CoT）的"使用侧"在讲透Prompt——能力如何被激活（总纲：[`激活LLM能力-5W3H`](../讲透Prompt/激活LLM能力-5W3H分析.md)）
+- **[`讲透多模态/`](../讲透多模态/README.md)**：HISTORY 的跨模态同质化叙事 ↔ 多模态四代演化（CLIP→LLaVA→原生多模态）

@@ -66,7 +66,7 @@ graph LR
 | 章节 | 文档 | 核心问题 | 实验 |
 |------|------|---------|------|
 | 00 | **00-开场与心态.md** | 为什么要学、攻黑盒哲学、合法边界、ROI 矩阵 | — |
-| 01 | 01-准备层-解包与资产.md | APK 解包、assets 抽取、JADX-GPT 配置 | `01_unpack_apk` |
+| 01 | [01-准备层-解包与资产抽取.md](01-准备层-解包与资产抽取.md) | APK 解包、assets 抽取、JADX-GPT 配置 | `01_unpack_apk` |
 | 02 | 02-静态分析-DEX反编译.md | smali / class_data / annotation / String table xref | `02_dex_parse` |
 | 03 | **03-二进制格式逆向.md ★** | FlatBuffer vtable walker / marisa-trie / AC 自动机 | `03_flatbuffer_walker` `06_marisa_loader` |
 | 04 | 04-动态插桩-Frida.md | Java.perform / Interceptor / Stalker / Waydroid | `04_frida_template` |
@@ -195,7 +195,7 @@ cd 讲透AI系统逆向工程/experiments && bash run_all.sh    # 一键跑通�
 
 ## 🎭 欺骗动力学视角：系统黑箱
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 

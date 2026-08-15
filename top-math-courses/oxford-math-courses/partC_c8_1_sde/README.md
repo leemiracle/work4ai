@@ -28,7 +28,7 @@
 ## 参考资源
 - Karatzas & Shreve, *Brownian Motion and Stochastic Calculus* (Springer)
 - Øksendal, *Stochastic Differential Equations* (Springer)
-- UT Austin 对照：[M 387D Stochastic Calculus](../../ut-austin-math-courses/math_ga_2902_stochastic_calculus/)
+- UT Austin 对照：M 387D Stochastic Calculus（待写/未落盘）
 
 ---
 

@@ -28,7 +28,7 @@
 - Quarteroni, *Numerical Mathematics* (2nd ed, Springer)
 - Trefethen & Bau, *Numerical Linear Algebra*
 - MIT 对照：[18.085 CSE](../../mit-math-courses/18_085_computational_science/)
-- UT Austin 对照：[M 383E](../../ut-austin-math-courses/math_ga_2010_numerical_methods_I/)
+- UT Austin 对照：M 383E（待写/未落盘）
 
 📌 **下一步**：→ [401-3651 Numerical Solution of SDEs](../e401_3651_numerical_sde/)
 

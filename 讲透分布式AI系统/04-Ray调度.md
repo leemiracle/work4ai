@@ -91,13 +91,13 @@ Plasma 默认占 30% 系统内存。**放大 batch 或大模型参数时**，obj
 
 Ray Train **不是 Megatron / DeepSpeed 的替代品**——它是**编排层**，底层模型并行仍由 FSDP / Megatron 实现。Ray 负责启停 worker、汇总指标。混淆两者会写出极烂的训练代码。
 
-## 四、和 [分布式 03](./03-TP与PP.md) / [05](./05-推理分布式.md) 的关系
+## 四、和 [分布式 03](./03-TP与PP.md) / 05（待写/未落盘） 的关系
 
 | 层 | 谁负责 |
 |----|--------|
 | 模型并行（TP/PP/ZeRO）| Megatron / DeepSpeed / PyTorch FSDP |
 | **任务调度 + actor 编排** | **Ray**（本章）|
-| 推理服务（batching / KV cache）| vLLM / SGLang（[05](./05-推理分布式.md)）|
+| 推理服务（batching / KV cache）| vLLM / SGLang（05（待写/未落盘））|
 
 三者叠加：Ray Serve 调度多个 vLLM 副本，每个副本内部跑自己的 PagedAttention——**Ray 不管 KV Cache，vLLM 不管路由**。
 
@@ -113,4 +113,4 @@ Ray Train **不是 Megatron / DeepSpeed 的替代品**——它是**编排层**�
 
 > 🎯 **一句话**：Ray = 分布式 Python 的三原语（Task / Actor / Object）——**不替代训练框架，是它们的胶水层**，是 RLHF / 多模型推理 / 超参搜索场景的事实标准。
 
-📌 **下一步**：[05 推理分布式](./05-推理分布式vLLM-SGLang.md)（vLLM/SGLang TP+EP），或 [06 通信优化](./06-通信优化.md)（NCCL + 计算通信重叠）。
+📌 **下一步**：05 推理分布式（待写/未落盘）（vLLM/SGLang TP+EP），或 [06 通信优化](./06-通信优化.md)（NCCL + 计算通信重叠）。

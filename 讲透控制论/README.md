@@ -136,16 +136,15 @@ python3 -u experiments/07_agent_cybernetics.py  # Reflexion 控制论
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §13.4 CMU 15-414（André Platzer）| [`diff_dyn_logic.py`](../cmu-cs-projects/topic12-theory/diff_dyn_logic.py) | differential dynamic logic (dL) + Lie 导数 + barrier certificate——**barrier certificate = 连续版循环不变式**（离散 Hoare 找 I 使 I∧B→wp(body,I)；连续 dL 找 B 使 B=0→L_f(B)≥0）|
+| §13.4 CMU 15-414（André Platzer）| [`diff_dyn_logic.py`](../top-cs-projects/cmu-cs-projects/topic12-theory/diff_dyn_logic.py) | differential dynamic logic (dL) + Lie 导数 + barrier certificate——**barrier certificate = 连续版循环不变式**（离散 Hoare 找 I 使 I∧B→wp(body,I)；连续 dL 找 B 使 B=0→L_f(B)≥0）|
 
 ---
-
 
 ---
 
 ## 🎭 欺骗动力学视角：鲁棒控制 = 假设信道有诈
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 
@@ -156,3 +155,7 @@ python3 -u experiments/07_agent_cybernetics.py  # Reflexion 控制论
 ### 一句话
 
 > 把控制论的「误差」推广到「被欺骗量」，鲁棒控制本质就是「假设测量信道里有诈」。
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透复杂系统/`](../讲透复杂系统/)**：复杂系统是控制论的「多体版」：从单回路反馈到涌现失稳

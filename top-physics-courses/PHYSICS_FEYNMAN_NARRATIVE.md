@@ -92,9 +92,9 @@ $$\dot{q} = \frac{\partial H}{\partial p}, \quad \dot{p} = -\frac{\partial H}{\p
 这三个形式（牛顿/拉格朗日/哈密顿）完全等价，但**哈密顿形式直接通向量子力学**（薛定谔方程就是把哈密顿量"量子化"）——这就是衔接。
 
 ### 💻 代码
-- [Berkeley demo: 谐振子 Euler vs Verlet 对比](../berkeley-physics/physics_demos.py) —— 看 Euler 法能量发散而 Verlet 守恒
-- [Caltech demo: 开普勒第二定律数值验证](../caltech-physics/physics_demos.py) —— 等面积定律
-- [MIT demo: 陀螺进动](../mit-physics/physics_demos.py) —— 刚体动力学
+- [Berkeley demo: 谐振子 Euler vs Verlet 对比](berkeley-physics/physics_demos.py) —— 看 Euler 法能量发散而 Verlet 守恒
+- [Caltech demo: 开普勒第二定律数值验证](caltech-physics/physics_demos.py) —— 等面积定律
+- [MIT demo: 陀螺进动](mit-physics/physics_demos.py) —— 刚体动力学
 
 ### 🤯 反直觉发现
 1. ** Foucault 摆**：在剑桥（纬度 52°），摆旋转一圈不是 24 小时而是 **31.9 小时**——因为只有地球自转的"垂直分量"起作用。
@@ -378,15 +378,15 @@ $$G_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}$$
 
 | 本文章节 | 对应项目主题 | 可运行 demo |
 |---------|------------|------------|
-| 第 1 章 经典力学 | topic01-mechanics | [Berkeley](../berkeley-physics/physics_demos.py) [Caltech](../caltech-physics/physics_demos.py) [MIT](../mit-physics/physics_demos.py) |
-| 第 2 章 电磁学 | topic02-electromagnetism | [Cambridge](../cambridge-physics/physics_demos.py) [Oxford](../oxford-physics/physics_demos.py) |
-| 第 3 章 热统 | topic04-statistical | [Caltech Ising](../caltech-physics/physics_demos.py) [ETH Ising](../eth-physics/physics_demos.py) |
-| 第 4 章 狭义相对论 | topic01/08 | [Stanford 科里奥利](../stanford-physics/physics_demos.py) |
-| 第 5 章 量子 | topic03-quantum | [MIT 波包演化](../mit-physics/physics_demos.py) [Oxford 轨道](../oxford-physics/physics_demos.py) |
-| 第 6 章 广义相对论 | topic08-gr-cosmology | [Princeton 引力红移](../princeton-physics/physics_demos.py) |
-| 第 7 章 量子场论 | topic07-particle-nuclear | [Stanford SLAC](../stanford-physics/physics_demos.py) |
-| 第 8 章 凝聚态 | topic06-solid-state | [ETH London 方程](../eth-physics/physics_demos.py) [Tokyo BCS](../tokyo-physics/physics_demos.py) |
-| 第 9 章 宇宙学 | topic08-gr-cosmology | [Tokyo IPMU](../tokyo-physics/physics_demos.py) |
+| 第 1 章 经典力学 | topic01-mechanics | [Berkeley](berkeley-physics/physics_demos.py) [Caltech](caltech-physics/physics_demos.py) [MIT](mit-physics/physics_demos.py) |
+| 第 2 章 电磁学 | topic02-electromagnetism | [Cambridge](cambridge-physics/physics_demos.py) [Oxford](oxford-physics/physics_demos.py) |
+| 第 3 章 热统 | topic04-statistical | [Caltech Ising](caltech-physics/physics_demos.py) [ETH Ising](eth-physics/physics_demos.py) |
+| 第 4 章 狭义相对论 | topic01/08 | [Stanford 科里奥利](stanford-physics/physics_demos.py) |
+| 第 5 章 量子 | topic03-quantum | [MIT 波包演化](mit-physics/physics_demos.py) [Oxford 轨道](oxford-physics/physics_demos.py) |
+| 第 6 章 广义相对论 | topic08-gr-cosmology | [Princeton 引力红移](princeton-physics/physics_demos.py) |
+| 第 7 章 量子场论 | topic07-particle-nuclear | [Stanford SLAC](stanford-physics/physics_demos.py) |
+| 第 8 章 凝聚态 | topic06-solid-state | [ETH London 方程](eth-physics/physics_demos.py) [Tokyo BCS](tokyo-physics/physics_demos.py) |
+| 第 9 章 宇宙学 | topic08-gr-cosmology | [Tokyo IPMU](tokyo-physics/physics_demos.py) |
 
 ---
 

@@ -48,7 +48,7 @@
 
 - **前置**：[18.06 线性代数](../18_06_linear_algebra/)（矩阵/线性变换）
 - **本课**：群 / 环 / 域 / 群作用 / 表示论入门——抽象代数的根基
-- **后续**：[Harvard Math 122](../../harvard-math-courses/math122_algebra/)（Dummit-Foote 体系）/ [Princeton MAT 345](../../princeton-math-courses/mat345_algebra/)
+- **后续**：[Harvard Math 122](../../harvard-math-courses/math122_algebra_I)（Dummit-Foote 体系）/ [Princeton MAT 345](../../princeton-math-courses/mat345_algebra_I)
 
 ---
 

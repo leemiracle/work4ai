@@ -86,7 +86,7 @@ $$f \text{ Riemann 可积} \iff \inf_P U(f, P) = \sup_P L(f, P)$$
 
 ---
 
-📌 **下一步**：读 [`06-无穷级数.md`](06-无穷级数.md)（待写）。跑 `experiments/05_integration.py`。
+📌 **下一步**：读 `06-无穷级数.md`（待写/未落盘）（待写）。跑 `experiments/05_integration.py`。
 
 ## ✍️ 练习
 

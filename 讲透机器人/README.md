@@ -1,4 +1,4 @@
----
+﻿---
 card_id: ROB-00
 title: "讲透机器人：从控制论到具身智能"
 universe: 讲透机器人
@@ -81,7 +81,9 @@ Hans Moravec 1988 年提出一个反直觉的观察：
 - **`讲透世界模型/`**：机器人需要世界模型（model-based RL、VLA 的「世界」）
 - **`讲透CV/` `讲透多模态/`**：VLA = 视觉 + 语言 + 动作
 - **`讲透学习型Agent/`**：模仿学习/RL 是 robot learning 的核心
-- **`复杂系统学-处理work4ai.md`**：机器人 sim-to-real = 复杂系统鲁棒性
+- **`复杂系统迭代work4ai.md`**：机器人 sim-to-real = 复杂系统鲁棒性
+
+
 
 ## 📖 推荐入门路径（中国可访问）
 

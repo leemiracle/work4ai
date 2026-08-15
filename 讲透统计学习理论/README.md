@@ -67,16 +67,15 @@
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §12.1 Princeton COS 511/512（Elad Hazan）| [`theory.py`](../princeton-cs-projects/topic9-ml-theory/theory.py) | PAC + VC 维 + Rademacher + Multiplicative Weights（regret ≤ O(√(T·ln N))）+ SGD 收敛速率（凸 vs 强凸）—— Hazan 是《Introduction to Online Convex Optimization》作者 |
+| §12.1 Princeton COS 511/512（Elad Hazan）| [`theory.py`](../top-cs-projects/princeton-cs-projects/topic9-ml-theory/theory.py) | PAC + VC 维 + Rademacher + Multiplicative Weights（regret ≤ O(√(T·ln N))）+ SGD 收敛速率（凸 vs 强凸）—— Hazan 是《Introduction to Online Convex Optimization》作者 |
 
 ---
-
 
 ---
 
 ## 🎭 欺骗动力学视角：显著性欺骗
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 
@@ -87,3 +86,7 @@
 ### 一句话
 
 > 统计学习理论是反「实验碰巧显著」的数学装置。
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透因果推断/`](../讲透因果推断/)**：i.i.d. 假设崩塌之后：因果结构是 SLT 的出口

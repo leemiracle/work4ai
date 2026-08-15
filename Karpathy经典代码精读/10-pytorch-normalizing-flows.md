@@ -2,7 +2,7 @@
 
 > **Andrej Karpathy · pytorch-normalizing-flows**（917★）。Normalizing Flows（NF）教学实现——`flows.py` 294 行 + `spline_flows.py` 253 + `made.py` 97。覆盖 NICE / RealNVP / MAF / IAF / Glow 全家族。**精确密度估计**的生成模型，和 [VQ-VAE](./05-deep-vector-quantization-VQVAE.md) 同属生成模型但思路完全不同。
 >
-> 源码：[`repos/pytorch-normalizing-flows/nflib/flows.py`](./repos/pytorch-normalizing-flows/nflib/flows.py) ｜ 论文：NICE/RealNVP/MAF/Glow（文件头 L1-34 列全谱系）
+> 源码：``repos/pytorch-normalizing-flows/nflib/flows.py`` ｜ 论文：NICE/RealNVP/MAF/Glow（文件头 L1-34 列全谱系）
 
 ---
 
@@ -201,4 +201,4 @@ MAF 用 MADE 当条件器，而 MADE 的 mask 和 [GPT causal attention](./06-mi
 
 ---
 
-> **源码**：[`repos/pytorch-normalizing-flows/nflib/flows.py`](./repos/pytorch-normalizing-flows/nflib/flows.py)（294 行）｜ [`spline_flows.py`](./repos/pytorch-normalizing-flows/nflib/spline_flows.py)（253 行）｜ [`made.py`](./repos/pytorch-normalizing-flows/nflib/made.py)（97 行，复用 pytorch-made）
+> **源码**：``repos/pytorch-normalizing-flows/nflib/flows.py``（294 行）｜ ``spline_flows.py``（253 行）｜ ``made.py``（97 行，复用 pytorch-made）

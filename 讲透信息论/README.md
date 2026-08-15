@@ -138,16 +138,15 @@ python3 -u experiments/07_attention_info.py      # 信息论视角看 attention
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §12.3 Cambridge Part II Info Theory | [`info_theory.py`](../cambridge-cs-projects/topic12-info/info_theory.py) | Shannon 熵 + Huffman 最优前缀码 + LZ77 通用压缩 + BSC 信道容量 + (7,4) 汉明码纠错 |
+| §12.3 Cambridge Part II Info Theory | [`info_theory.py`](../top-cs-projects/cambridge-cs-projects/topic12-info/info_theory.py) | Shannon 熵 + Huffman 最优前缀码 + LZ77 通用压缩 + BSC 信道容量 + (7,4) 汉明码纠错 |
 
 ---
-
 
 ---
 
 ## 🎭 欺骗动力学视角：密码学 = 反欺骗的终极形态
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 
@@ -158,3 +157,7 @@ python3 -u experiments/07_attention_info.py      # 信息论视角看 attention
 ### 一句话
 
 > 信息论是反欺骗的数学地基：通道编码防错，密码学防骗，二者同源。
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透高维概率/`](../讲透高维概率/)**：集中不等式=熵压缩的概率面；率失真与维数诅咒互为对偶

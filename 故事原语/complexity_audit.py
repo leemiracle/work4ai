@@ -22,6 +22,7 @@ complexity_audit.py — 把 work4ai 当复杂系统，实测 8 个健康指标�
 """
 import os, re, sys, math, json, subprocess, random
 from pathlib import Path
+from urllib.parse import unquote
 from collections import defaultdict, Counter
 from datetime import datetime
 
@@ -49,8 +50,8 @@ def resolve_link(src_file, link, root):
     """解析 markdown 链接为目标文件相对路径. 返回 None 表示外部/无效."""
     if link.startswith(('http://', 'https://', 'mailto:', '#')):
         return None
-    # 去掉锚点
-    link = link.split('#')[0].split(' ')[0]
+    # 去掉锚点 + URL 解码（%20 空格等）
+    link = unquote(link.split('#')[0].split(' ')[0])
     if not link: return None
     # 相对路径解析
     src_dir = Path(src_file).parent
@@ -58,7 +59,7 @@ def resolve_link(src_file, link, root):
     try:
         root_resolved = Path(root).resolve()
         rel = str(target.relative_to(root_resolved))
-        return rel
+        return rel if Path(target).exists() else None
     except (ValueError, FileNotFoundError):
         return None
 

@@ -81,7 +81,7 @@
 - **数学**：[`讲透公开课/02`](../讲透公开课/02-数理计算机神课清单.md) 的 Stat 110（概率/MDP）
 - **实战**：[`讲透微调`](../讲透微调/) 的 RLHF/DPO 部分
 - **源码**：[`讲透公开课/03`](<../讲透公开课/03-AI Infra 源码导读清单.md>) 的 T5（verl/AReaL/Miles，RL 后端）
-- **跨校代码**：[`berkeley-cs-projects/topic7-rl/deep_rl.py`](../berkeley-cs-projects/topic7-rl/deep_rl.py)（CS285 SAC/PPO numpy 实现）
+- **跨校代码**：[`berkeley-cs-projects/topic7-rl/deep_rl.py`](../top-cs-projects/berkeley-cs-projects/topic7-rl/deep_rl.py)（CS285 SAC/PPO numpy 实现）
 - **前沿追踪**：[`高效AI前沿-全行业热点地图`](../高效AI前沿-全行业热点地图.md)（2026-08-10）+ [`高效AI前沿-2025-2026顶会精选`](../高效AI前沿-2025-2026顶会精选.md)
 - **信息源**：[`前沿与媒体/02-后训练信息源专题`](../前沿与媒体/02-后训练信息源专题.md)（RLHF/DPO/GRPO 完整信息源 + verl/OpenRLHF + 一手研究者）
 - **内部视角**：[`访谈及其他/张小珺访谈精读/第140集-姚顺宇`](../访谈及其他/张小珺访谈精读/)（Anthropic Horizon RL 团队 10-11 人 + Gemini 3 Deep Think）
@@ -104,13 +104,15 @@
 
 ## 🔗 理论锚点（§12-15 横向打通）
 
+> 横向总纲：本单元在 [`激活大语言模型能力-总结.md`](../激活大语言模型能力-总结.md) 中给出 L2 层最重要修正——**RLVR 是显影器不是发现器**（pass@k 反转四连证据），蒸馏才是扩边界通道。
+
 > 本系列讲"MDP/PPO/RLHF/GRPO"的算法与工程；这两门课把 RL 的**安全边界**和**对齐数学**公理化：
 > 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §13.4 CMU 15-414（Platzer）| [`diff_dyn_logic.py`](../cmu-cs-projects/topic12-theory/diff_dyn_logic.py) | barrier certificate——机器人 RL（§06 RL+系统软件）的安全证明：连续版循环不变式 |
-| §15.3 Stanford CS329T（Percy Liang）| [`pluralistic_safety.py`](../stanford-cs-projects/topic3-safety/pluralistic_safety.py) | pluralistic alignment + preference aggregation——§03 RLHF/DPO "对齐谁的偏好"的数学 |
+| §13.4 CMU 15-414（Platzer）| [`diff_dyn_logic.py`](../top-cs-projects/cmu-cs-projects/topic12-theory/diff_dyn_logic.py) | barrier certificate——机器人 RL（§06 RL+系统软件）的安全证明：连续版循环不变式 |
+| §15.3 Stanford CS329T（Percy Liang）| [`pluralistic_safety.py`](../top-cs-projects/stanford-cs-projects/topic3-safety/pluralistic_safety.py) | pluralistic alignment + preference aggregation——§03 RLHF/DPO "对齐谁的偏好"的数学 |
 
 ---
 
@@ -119,7 +121,7 @@
 
 ## 🎭 欺骗动力学视角：reward 被 policy 骗
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 
@@ -130,3 +132,8 @@
 ### 一句话
 
 > RL 的核心难题不是「如何学得快」，而是「如何别学歪」——反欺骗是 RL 的第一问题。
+
+
+---
+
+🔗 **交叉链接**：Stanford CS336 论文精读 · 对齐与后训练（PPO/RLHF/DPO/GRPO/R1，8 篇），见 [`讲透公开课/06-CS336论文精读/H-对齐与后训练.md`](../讲透公开课/06-CS336论文精读/H-对齐与后训练.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments/)。

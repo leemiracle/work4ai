@@ -51,7 +51,7 @@ induction + apply    →   + simp / ring / nlinarith / 推荐 tactic
 |---|------|------|------|
 | 00 | [`00-为什么用Lean做数学.md`](00-为什么用Lean做数学.md) | 范式变革 + 你的迁移路径 | ✅ |
 | 01 | [`01-NaturalNumberGame讲透.md`](01-NaturalNumberGame讲透.md) | 从 Peano 公理证明 2+2=4，tactic 实战 | ✅ |
-| 02 | [`02-类型论最小入门.md`](02-类型论最小入门.md) | 只讲数学需要的依赖类型论（Prop/Type/宇宙）| 📝 计划 |
+| 02 | [`02-类型论最小入门.md`](02-11-合集.md) | 只讲数学需要的依赖类型论（Prop/Type/宇宙）| 📝 计划 |
 | 03 | `03-Mathlib导航.md` | Mathlib 是什么、怎么读源码、命名约定 | 📝 计划 |
 | 04 | `04-数学tactic速查.md` | `ring/nlinarith/simp/decide/norm_num/mfwd` 等 | 📝 计划 |
 | 05 | `05-在Lean里做集合论.md` | Halmos 朴素集合论的 Lean 翻译 | 📝 计划 |
@@ -180,7 +180,7 @@ code 01_exercises.lean
 
 ## 🎭 欺骗动力学视角：形式化数学 = 反证明欺骗
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 

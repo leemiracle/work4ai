@@ -478,7 +478,7 @@ Stanford 校长 Marc Tessier-Laville 说：
 - 形式化 ≠ 浪费时间，是**深理解的工具**
 
 **在哪学**：
-- [`LEAN_MATH_TRACK.md`](LEAN_MATH_TRACK_TRACK.md) §六：Scholze liquid tensor experiment
+- [`LEAN_MATH_TRACK.md`](LEAN_MATH_TRACK.md) §六：Scholze liquid tensor experiment
 - Scholze 的 perfectoid spaces lecture notes（波恩大学）
 - Condensed Mathematics 的 YouTube 讲座（Scholze 在 CRM 2022）
 

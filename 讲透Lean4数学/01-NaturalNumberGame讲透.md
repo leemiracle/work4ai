@@ -433,7 +433,7 @@ python3 -u experiments/01_peano_python.py
 📌 **下一步**：
 - 完成本章 ✍️ 练习
 - 去 Buzzard 的 NNG4 完整版玩（至少完成 Tutorial + Addition World）
-- 读 [`02-类型论最小入门.md`](02-类型论最小入门.md)（待写）
+- 读 [`02-类型论最小入门.md`](02-11-合集.md)（待写）
 
 ## ✍️ 练习
 

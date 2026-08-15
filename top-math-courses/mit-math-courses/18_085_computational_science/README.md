@@ -39,9 +39,9 @@
 - **节奏**：每周 4-5 小时，10-12 周完成
 - **Strang 风格**：直觉先行，证明够用即可
 - **重点**：Fourier / Laplacian / FEM（这三个在 ML 里出现频率最高）
-- **配合**：[UT Austin M 383E Numerical Methods I](../../ut-austin-math-courses/math_ga_2010_numerical_methods_I/)（更现代的数值线代）
+- **配合**：UT Austin M 383E Numerical Methods I（待写/未落盘）（更现代的数值线代）
 
-📌 **下一步**：→ [18.701 代数 I](../18_701_algebra_I/) 或 [UT Austin M 383E](../../ut-austin-math-courses/math_ga_2010_numerical_methods_I/)
+📌 **下一步**：→ [18.701 代数 I](../18_701_algebra_I/) 或 UT Austin M 383E（待写/未落盘）
 
 ---
 

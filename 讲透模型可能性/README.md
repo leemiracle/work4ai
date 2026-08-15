@@ -162,3 +162,12 @@ python3 -u experiments/03_rwkv.py                    # RWKV
 ---
 
 📌 **下一步**：从 [00-为什么Transformer不是终点.md](00-为什么Transformer不是终点.md) 开始，看实验如何量化 Transformer 的 O(n²) 瓶颈；或跳 [01-StateSpaceModels.md](01-StateSpaceModels.md) 看 Mamba 怎么做到 O(n)；或直奔 [16-未来展望.md](16-未来展望.md) 看推理时计算与 AGI 路径。
+
+---
+
+📜 **本宇宙编辑史**：[`HISTORY.md`](HISTORY.md)
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透AI历史/`](../讲透AI历史/)**：候选架构名录是历史视角的「未来推演」素材
+

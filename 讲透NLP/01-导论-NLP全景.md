@@ -147,7 +147,7 @@ python3 -u experiments/01_nlp_overview.py
 
 ## 📌 下一步
 
-- 进入 NLP 第一个具体方法：[`02-词与token-编辑距离.md`](./02-词与token-编辑距离.md)（怎么定义"词"、怎么做最简单的字符串比较）
+- 进入 NLP 第一个具体方法：`02-词与token-编辑距离.md`（待写/未落盘）（怎么定义"词"、怎么做最简单的字符串比较）
 - 想看统计派地基：[`03-N元语法语言模型.md`](./03-N元语法语言模型.md)
 - 想直接跳神经时代：[`06-神经网络基础.md`](./06-神经网络基础.md) → [`08-Transformer.md`](./08-Transformer.md)
 
@@ -161,4 +161,4 @@ python3 -u experiments/01_nlp_overview.py
 
 ---
 
-> 配套实验：[`experiments/01_nlp_overview.py`](./experiments/01_nlp_overview.py)。姊妹章节：[`00-开场.md`](./00-开场.md)（学习路径）、[`02-词与token-编辑距离.md`](./02-词与token-编辑距离.md)（下一个具体方法）。
+> 配套实验：[`experiments/01_nlp_overview.py`](./experiments/01_nlp_overview.py)。姊妹章节：[`00-开场.md`](./00-开场.md)（学习路径）、`02-词与token-编辑距离.md`（待写/未落盘）（下一个具体方法）。

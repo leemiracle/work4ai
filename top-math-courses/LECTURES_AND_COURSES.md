@@ -4,7 +4,7 @@
 >
 > 所有标注：免费 = 在线免费 PDF/视频；⭐ = 强烈推荐；梯队表示"和费曼/Tong 同等地位"的程度。
 >
-> 配套：[`TEXTBOOK_LIBRARY.md`](TEXTBOOK_LIBRARY.md)（教材库，本档是**讲义+视频**层）+ [`VIDEO_COURSES.md`](VIDEO_COURSES.md)（待写，纯视频索引）。
+> 配套：[`TEXTBOOK_LIBRARY.md`](TEXTBOOK_LIBRARY.md)（教材库，本档是**讲义+视频**层）+ `VIDEO_COURSES.md`（待写/未落盘）（待写，纯视频索引）。
 
 ---
 

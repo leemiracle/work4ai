@@ -88,3 +88,12 @@ experiments/
 3. **flash-attention hopper 源码** — 读真实 CUDA SM90 实现
 4. **vLLM 源码** — 读 PagedAttention 的真实分页寻址 + continuous batching
 5. **贡献开源** — 给 flash-attention / vLLM 提 PR (ezyang 路线)
+
+---
+
+🔗 **交叉链接**：Stanford CS336 论文精读 · 分布式训练与 MFU 工程（6 篇），见 [`讲透公开课/06-CS336论文精读/F-分布式训练.md`](../讲透公开课/06-CS336论文精读/F-分布式训练.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments/)。
+
+## 🔗 与其他宇宙的连接
+
+- **[`讲透分布式AI系统/`](../讲透分布式AI系统/)**：往上走一层：DDP/FSDP/ZeRO 把单卡 kernel 编成集群交响
+

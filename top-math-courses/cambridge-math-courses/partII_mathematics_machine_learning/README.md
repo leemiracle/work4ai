@@ -42,7 +42,7 @@
 - **必备先修**：[Part II Probability and Measure](../partII_probability_measure/)
 - **MIT 对照**：MIT 18.175 + 9.520（统计学习理论课）
 
-📌 **下一步**：→ [Part II Numerical Analysis](../partII_numerical_analysis/) 或 [Stanford CME 364A](../../ut-austin-math-courses/ds_ga_1014_convex_optimization_data_science/)
+📌 **下一步**：→ [Part II Numerical Analysis](../partII_numerical_analysis/) 或 Stanford CME 364A（待写/未落盘）
 
 ---
 

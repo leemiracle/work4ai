@@ -253,7 +253,7 @@ top-art-courses/
 
 ## 11. AI for Art：你的弯道超车主题
 
-> 艺术的「AI 原生」弯道超车 = 物理版的 `ai_for_physics/`。详见 [`ai_for_art/ai_for_art.md`](ai_for_art/ai_for_art.md) + [`讲透AIfor各学科/艺术`](../讲透AIfor各学科/艺术/)。
+> 艺术的「AI 原生」弯道超车 = 物理版的 `ai_for_physics/`。详见 `ai_for_art/ai_for_art.md`（待写/未落盘） + [`讲透AIfor各学科/艺术`](../讲透AIfor各学科/艺术/)。
 
 **6 大子方向**：
 
@@ -337,3 +337,22 @@ graph TD
 - ✅ 本 README + [`ai_for_art/art_demos.py`](ai_for_art/art_demos.py) + [`CROSS_INDEX_WITH_WORK4AI.md`](CROSS_INDEX_WITH_WORK4AI.md) + [`RESOURCES/00_accessibility_guide_cn.md`](RESOURCES/00_accessibility_guide_cn.md) = 样板四件套
 - 🚧 **阶段 1**：10 校 `SCHOOL.md`（中国 6 校优先，webfetch 央美/国美/清美官网 + 中国大学MOOC 核实课程）
 - 📝 需要你确认：① 选校（中国 6 + 国际 4）是否满意？ ② 优先做哪校/哪个主题？ ③ 是否现在启动阶段 1？
+
+---
+
+## 📁 学校目录索引（2026-08-15 补挂 · 阶段 1 已完成）
+
+> 上文「🚧 阶段 1」实际已完成（中国 6 校（央美/国美/清美/曲师大/山工艺/山艺）+ 国际 5 校（RCA/RISD/佛罗伦萨美院/ENSBA/CAA）），共 10 校落盘——此前未在此 README 记账，按[复杂系统审计](../复杂系统迭代work4ai.md)补挂：
+
+| 子目录 | 入口 |
+|---|---|
+| [`bfa-art-courses/`](bfa-art-courses/) | [`SCHOOL.md`](bfa-art-courses/SCHOOL.md) |
+| [`caa-art-courses/`](caa-art-courses/) | [`SCHOOL.md`](caa-art-courses/SCHOOL.md) |
+| [`cad-art-courses/`](cad-art-courses/) | [`SCHOOL.md`](cad-art-courses/SCHOOL.md) |
+| [`cafa-art-courses/`](cafa-art-courses/) | [`SCHOOL.md`](cafa-art-courses/SCHOOL.md) |
+| [`ccom-art-courses/`](ccom-art-courses/) | [`SCHOOL.md`](ccom-art-courses/SCHOOL.md) |
+| [`ensba-art-courses/`](ensba-art-courses/) | [`SCHOOL.md`](ensba-art-courses/SCHOOL.md) |
+| [`florence-art-courses/`](florence-art-courses/) | [`SCHOOL.md`](florence-art-courses/SCHOOL.md) |
+| [`rca-art-courses/`](rca-art-courses/) | [`SCHOOL.md`](rca-art-courses/SCHOOL.md) |
+| [`risd-art-courses/`](risd-art-courses/) | [`SCHOOL.md`](risd-art-courses/SCHOOL.md) |
+| [`tsinghua-art-courses/`](tsinghua-art-courses/) | [`SCHOOL.md`](tsinghua-art-courses/SCHOOL.md) |

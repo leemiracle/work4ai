@@ -81,7 +81,7 @@ $$
 
 ## 📌 下一步
 
-[02-数据增强深挖](02-数据增强.md)（待补）/ [03-Model Collapse](03-ModelCollapse.md)（已有）。
+[02-数据增强深挖](02-数据增强.md)（待补）/ [03-Model Collapse](03-Model-Collapse.md)（已有）。
 
 ## ✍️ 练习
 
