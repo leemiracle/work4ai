@@ -115,7 +115,7 @@ vLLM 的设计哲学：**把 KV Cache 管理从模型推理中解耦**——模�
 
 ## 📌 下一步
 
-[03-Continuous Batching深入](03-ContinuousBatching.md)（待补）｜ [04-推理优化全景](04-推理优化全景.md)（待补：投机解码/量化/并行）。
+03-Continuous Batching深入（待写）（待补）｜ 04-推理优化全景（待写）（待补：投机解码/量化/并行）。
 
 ## ✍️ 练习
 
