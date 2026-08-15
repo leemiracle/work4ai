@@ -26,11 +26,11 @@ P0 入门 ─→ P1 Search ─→ P2 Multiagent ─→ P3 RL ─→ P4 Bayes/HMM
 | Project | 主题 | 核心算法 | autograder questions | 难度 | 项目内连接 |
 |---------|------|---------|---------------------|------|----------|
 | P0 | Python + Autograder | — | — | ⭐ | — |
-| **P1** | **Search** | DFS / BFS / UCS / A* + 启发式设计 | 8 | ⭐⭐ | [UNIFIED_ROADMAP L09](../../top-cs-projects/UNIFIED_ROADMAP.md) |
-| **P2** | **Multiagent** | Minimax + α-β / Expectimax / Eval Fn | 5 | ⭐⭐⭐ | [讲透RL/02 策略评估函数的雏形](../../讲透RL/02-策略梯度与PPO.md) |
-| **P3** | **Reinforcement Learning** | Value Iteration / Q-Learning / Approximate Q | 8 | ⭐⭐⭐⭐ | [讲透RL/01 DQN + 08 §4 收敛性](../../讲透RL/08-Actor-Critic-SAC-ModelBased-OfflineRL.md) |
-| **P4** | **Bayes Nets & HMMs** | 因子推理 / Forward Algo / Particle Filter | 6 | ⭐⭐⭐ | [讲透概率图模型](../../讲透概率图模型/) |
-| **P5** | **Machine Learning** | Perceptron / NN（反向传播）/ RNN | 6 | ⭐⭐⭐⭐ | [讲透PyTorch](../../讲透PyTorch/) + [讲透Transformer](../../讲透Transformer/) |
+| **P1** | **Search** | DFS / BFS / UCS / A* + 启发式设计 | 8 | ⭐⭐ | [UNIFIED_ROADMAP L09](../../UNIFIED_ROADMAP.md) |
+| **P2** | **Multiagent** | Minimax + α-β / Expectimax / Eval Fn | 5 | ⭐⭐⭐ | [讲透RL/02 策略评估函数的雏形](../../../讲透RL/02-策略梯度与PPO.md) |
+| **P3** | **Reinforcement Learning** | Value Iteration / Q-Learning / Approximate Q | 8 | ⭐⭐⭐⭐ | [讲透RL/01 DQN + 08 §4 收敛性](../../../讲透RL/08-Actor-Critic-SAC-ModelBased-OfflineRL.md) |
+| **P4** | **Bayes Nets & HMMs** | 因子推理 / Forward Algo / Particle Filter | 6 | ⭐⭐⭐ | [讲透概率图模型](../../../讲透概率图模型/) |
+| **P5** | **Machine Learning** | Perceptron / NN（反向传播）/ RNN | 6 | ⭐⭐⭐⭐ | [讲透PyTorch](../../../讲透PyTorch/) + [讲透Transformer](../../../讲透Transformer/) |
 
 ---
 
@@ -112,8 +112,8 @@ A*  path length: 5  actions: ['E','E','E','E','E']
 ```
 
 ### 🔗 项目内连接
-- 经典 AI 总览：[`top-cs-projects/UNIFIED_ROADMAP.md`](../../top-cs-projects/UNIFIED_ROADMAP.md) L09（Berkeley CS 188）
-- 跨校洞察：[`top-cs-projects/CROSS_SCHOOL_INSIGHTS.md`](../../top-cs-projects/CROSS_SCHOOL_INSIGHTS.md) §8「搜索 vs 学习」
+- 经典 AI 总览：[`top-cs-projects/UNIFIED_ROADMAP.md`](../../UNIFIED_ROADMAP.md) L09（Berkeley CS 188）
+- 跨校洞察：[`top-cs-projects/CROSS_SCHOOL_INSIGHTS.md`](../../CROSS_SCHOOL_INSIGHTS.md) §8「搜索 vs 学习」
 
 ---
 
@@ -192,8 +192,8 @@ Expectimax value: 4.0  （g1_val=mean(-5,3)=-1, g2_val=mean(10,-2)=4, root=max(-
 ```
 
 ### 🔗 项目内连接
-- 评估函数的雏形 → [`讲透RL/02`](../../讲透RL/02-策略梯度与PPO.md) 的 advantage function（P2 自定义 eval = RL 的 reward shaping 早期形式）
-- 搜索 vs 学习 → [`top-cs-projects/CROSS_SCHOOL_INSIGHTS.md`](../../top-cs-projects/CROSS_SCHOOL_INSIGHTS.md) §8
+- 评估函数的雏形 → [`讲透RL/02`](../../../讲透RL/02-策略梯度与PPO.md) 的 advantage function（P2 自定义 eval = RL 的 reward shaping 早期形式）
+- 搜索 vs 学习 → [`top-cs-projects/CROSS_SCHOOL_INSIGHTS.md`](../../CROSS_SCHOOL_INSIGHTS.md) §8
 
 ---
 
@@ -215,7 +215,7 @@ $$
 V_{k+1}(s) = \max_a \sum_{s'} P(s'|s,a) \left[ R(s,a,s') + \gamma V_k(s') \right]
 $$
 
-→ 必收敛到 $V^*$（[`讲透RL/08` §4 Banach 压缩映射定理](../../讲透RL/08-Actor-Critic-SAC-ModelBased-OfflineRL.md)）。
+→ 必收敛到 $V^*$（[`讲透RL/08` §4 Banach 压缩映射定理](../../../讲透RL/08-Actor-Critic-SAC-ModelBased-OfflineRL.md)）。
 
 ### 3.3 Q-Learning（off-policy）
 
@@ -223,7 +223,7 @@ $$
 Q(s, a) \leftarrow Q(s, a) + \alpha \left[ r + \gamma \max_{a'} Q(s', a') - Q(s, a) \right]
 $$
 
-**核心：replay buffer 不强制**（CS188 不教 experience replay，那是 DQN 的事 → [`讲透RL/01`](../../讲透RL/01-Q-Learning与DQN.md)）。
+**核心：replay buffer 不强制**（CS188 不教 experience replay，那是 DQN 的事 → [`讲透RL/01`](../../../讲透RL/01-Q-Learning与DQN.md)）。
 
 ### 3.4 Approximate Q-Learning：通往深度 RL 的桥
 
@@ -239,7 +239,7 @@ $$
 w_i \leftarrow w_i + \alpha \left[ r + \gamma \max_{a'} Q(s', a') - Q(s, a) \right] \cdot \phi_i(s, a)
 $$
 
-**直觉**：这就是 [讲透RL/02 的策略方法](../../讲透RL/02-策略梯度与PPO.md) 的前身——features = 早期神经网络的特征工程版本。**Q-Learning + 神经网络 = DQN**（[01 篇](../../讲透RL/01-Q-Learning与DQN.md)）。
+**直觉**：这就是 [讲透RL/02 的策略方法](../../../讲透RL/02-策略梯度与PPO.md) 的前身——features = 早期神经网络的特征工程版本。**Q-Learning + 神经网络 = DQN**（[01 篇](../../../讲透RL/01-Q-Learning与DQN.md)）。
 
 ### 3.5 autograder 拆解（8 questions）
 
@@ -269,9 +269,9 @@ Q-Learning 2000 ep:
 ```
 
 ### 🔗 项目内连接
-- 收敛性证明 → [`讲透RL/08` §4 Banach + deadly triad](../../讲透RL/08-Actor-Critic-SAC-ModelBased-OfflineRL.md#§4-收敛性证明cs234-的硬通货)
-- DQN = Approximate Q + 神经网络 → [`讲透RL/01`](../../讲透RL/01-Q-Learning与DQN.md)
-- 完整 RL 演化 → [`讲透RL/` 全套](../../讲透RL/)
+- 收敛性证明 → [`讲透RL/08` §4 Banach + deadly triad](../../../讲透RL/08-Actor-Critic-SAC-ModelBased-OfflineRL.md#§4-收敛性证明cs234-的硬通货)
+- DQN = Approximate Q + 神经网络 → [`讲透RL/01`](../../../讲透RL/01-Q-Learning与DQN.md)
+- 完整 RL 演化 → [`讲透RL/` 全套](../../../讲透RL/)
 
 ---
 
@@ -333,8 +333,8 @@ Forward algorithm (obs = [U, U, ¬U]):
 ```
 
 ### 🔗 项目内连接
-- 概率图模型全貌 → [`讲透概率图模型`](../../讲透概率图模型/)
-- 贝叶斯思维 → [`top-cs-projects/CROSS_SCHOOL_INSIGHTS.md`](../../top-cs-projects/CROSS_SCHOOL_INSIGHTS.md) §5「贝叶斯思维的 5 个跃迁」
+- 概率图模型全貌 → [`讲透概率图模型`](../../../讲透概率图模型/)
+- 贝叶斯思维 → [`top-cs-projects/CROSS_SCHOOL_INSIGHTS.md`](../../CROSS_SCHOOL_INSIGHTS.md) §5「贝叶斯思维的 5 个跃迁」
 
 ---
 
@@ -360,7 +360,7 @@ $$
 
 ### 5.3 反向传播：链式法则的工业实现
 
-[讲透PyTorch 的反向传播](../../讲透PyTorch/) 完整讲，这里给核心：
+[讲透PyTorch 的反向传播](../../../讲透PyTorch/) 完整讲，这里给核心：
 
 ```
 forward:  z = W·x + b;  a = ReLU(z);  L = loss(a, y)
@@ -375,7 +375,7 @@ $$
 h_t = \tanh(W_{xh} \cdot x_t + W_{hh} \cdot h_{t-1} + b_h)
 $$
 
-→ 输出 $h_T$（最后隐藏状态）做分类。**这就是 LSTM/GRU/Transformer 的雏形**（[讲透Transformer](../../讲透Transformer/)）。
+→ 输出 $h_T$（最后隐藏状态）做分类。**这就是 LSTM/GRU/Transformer 的雏形**（[讲透Transformer](../../../讲透Transformer/)）。
 
 ### 5.5 autograder 拆解（6 questions）
 
@@ -398,9 +398,9 @@ Perceptron 学 AND：6 iter 收敛
 ```
 
 ### 🔗 项目内连接
-- 反向传播全解 → [`讲透PyTorch/`](../../讲透PyTorch/) + [`top-cs-projects/INSIGHTS_FULL_PICTURE.md`](../../top-cs-projects/INSIGHTS_FULL_PICTURE.md) 洞察 5
-- RNN → Transformer 演化 → [`讲透Transformer/`](../../讲透Transformer/)
-- 监督学习总览 → [`top-cs-projects/UNIFIED_ROADMAP.md`](../../top-cs-projects/UNIFIED_ROADMAP.md) L10/L11
+- 反向传播全解 → [`讲透PyTorch/`](../../../讲透PyTorch/) + [`top-cs-projects/INSIGHTS_FULL_PICTURE.md`](../../INSIGHTS_FULL_PICTURE.md) 洞察 5
+- RNN → Transformer 演化 → [`讲透Transformer/`](../../../讲透Transformer/)
+- 监督学习总览 → [`top-cs-projects/UNIFIED_ROADMAP.md`](../../UNIFIED_ROADMAP.md) L10/L11
 
 ---
 
@@ -411,11 +411,11 @@ Perceptron 学 AND：6 iter 收敛
 | 你的目标 | 必做的迭代 |
 |---------|---------|
 | **AI 入门完整 1 轮** | P0 → P1 → P2 → P3 → P4 → P5（全套）|
-| **想懂 RLHF/DeepSeek** | P3（RL 地基）→ [`讲透RL/02 PPO`](../../讲透RL/02-策略梯度与PPO.md) → [`讲透RL/03 RLHF/DPO/GRPO`](../../讲透RL/03-RLHF-DPO-GRPO.md) |
-| **想搞机器人/具身** | P1（搜索）+ P3（RL）→ [`讲透RL/08 SAC+Model-Based`](../../讲透RL/08-Actor-Critic-SAC-ModelBased-OfflineRL.md) |
-| **想搞 LLM** | P1（搜索 = reasoning 的雏形）+ P5（NN）→ [`讲透Transformer/`](../../讲透Transformer/) |
-| **想搞 CV** | P5（NN）+ [`讲透PyTorch/`](../../讲透PyTorch/) → [`cv-learning`](../../cs61a-learning/) |
-| **想搞 NLP** | P5（RNN）+ [`讲透Transformer/`](../../讲透Transformer/) + [`讲透NLP/`](../../讲透NLP/) |
+| **想懂 RLHF/DeepSeek** | P3（RL 地基）→ [`讲透RL/02 PPO`](../../../讲透RL/02-策略梯度与PPO.md) → [`讲透RL/03 RLHF/DPO/GRPO`](../../../讲透RL/03-RLHF-DPO-GRPO.md) |
+| **想搞机器人/具身** | P1（搜索）+ P3（RL）→ [`讲透RL/08 SAC+Model-Based`](../../../讲透RL/08-Actor-Critic-SAC-ModelBased-OfflineRL.md) |
+| **想搞 LLM** | P1（搜索 = reasoning 的雏形）+ P5（NN）→ [`讲透Transformer/`](../../../讲透Transformer/) |
+| **想搞 CV** | P5（NN）+ [`讲透PyTorch/`](../../../讲透PyTorch/) → [`cv-learning`](../../cs61a-learning/) |
+| **想搞 NLP** | P5（RNN）+ [`讲透Transformer/`](../../../讲透Transformer/) + [`讲透NLP/`](../../../讲透NLP/) |
 
 ### 6.2 与项目内"经典 AI"主线的衔接
 
@@ -447,16 +447,16 @@ Perceptron 学 AND：6 iter 收敛
 - ** NSF 资助**：CAREER grant 0643742
 
 ### 🔗 项目内交叉引用
-- 元洞察：[`top-cs-projects/INSIGHTS_FULL_PICTURE.md`](../../top-cs-projects/INSIGHTS_FULL_PICTURE.md) 洞察 3「搜索是一切的根」
-- 跨校对比：[`top-cs-projects/CROSS_SCHOOL_INSIGHTS.md`](../../top-cs-projects/CROSS_SCHOOL_INSIGHTS.md) §8「搜索 vs 学习」+ §9「理论 vs 实战」
-- 学习路径：[`top-cs-projects/UNIFIED_ROADMAP.md`](../../top-cs-projects/UNIFIED_ROADMAP.md) L09「经典 AI」
+- 元洞察：[`top-cs-projects/INSIGHTS_FULL_PICTURE.md`](../../INSIGHTS_FULL_PICTURE.md) 洞察 3「搜索是一切的根」
+- 跨校对比：[`top-cs-projects/CROSS_SCHOOL_INSIGHTS.md`](../../CROSS_SCHOOL_INSIGHTS.md) §8「搜索 vs 学习」+ §9「理论 vs 实战」
+- 学习路径：[`top-cs-projects/UNIFIED_ROADMAP.md`](../../UNIFIED_ROADMAP.md) L09「经典 AI」
 - 现有教学版（不分迭代）：[`ai_pacman.py`](./ai_pacman.py)
 
 ---
 
-**完成日期**：2026-08-12  ·  **作者**：AI Mentor (ai-mentor)  ·  **配套**：[Berkeley 项目主页](../../berkeley-cs-projects/README.md) + [讲透RL 全系列](../../讲透RL/README.md)
+**完成日期**：2026-08-12  ·  **作者**：AI Mentor (ai-mentor)  ·  **配套**：[Berkeley 项目主页](../../berkeley-cs-projects/README.md) + [讲透RL 全系列](../../../讲透RL/README.md)
 
 📌 **下一步**建议：
 - 想真正动手做 CS188 autograder → 从 [Berkeley CS 188 FA23](https://inst.eecs.berkeley.edu/~cs188/fa23/)（SP26 下线，FA23 仍可下）拉 starter code
-- 想深入 RL（P3 之后）→ 直接进 [`讲透RL/`](../../讲透RL/) 8 章
+- 想深入 RL（P3 之后）→ 直接进 [`讲透RL/`](../../../讲透RL/) 8 章
 - 想深入博弈论（P2 之后）→ CS188 不深入，可补 Stanford CS 269I（算法博弈论）

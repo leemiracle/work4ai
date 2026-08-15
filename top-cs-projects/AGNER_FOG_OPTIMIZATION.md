@@ -7,7 +7,7 @@
 >
 > **来源**：[agner.org/optimize/](https://www.agner.org/optimize/)（Agner Fog 个人维护 25+ 年，x86 微架构优化的全球公认圣经，5 卷手册 + 4 个配套工具，**2026 年仍在每周级更新**）。
 >
-> **配套代码**：[`../cmu-cs-projects/topic2-systems/agner_optimization_demo.py`](../cmu-cs-projects/topic2-systems/agner_optimization_demo.py)（7 个可运行优化模式 demo）。
+> **配套代码**：[`./cmu-cs-projects/topic2-systems/agner_optimization_demo.py`](./cmu-cs-projects/topic2-systems/agner_optimization_demo.py)（7 个可运行优化模式 demo）。
 >
 > ⚠️ **前置条件**：Agner 手册明确说"not for beginners"。本文假设你已读完 CSAPP_HARDWARE_TRUTHS.md 的 8 个硬件真相。
 
@@ -87,7 +87,7 @@ cache-miss-rate > 10% → 内存瓶颈，先改数据布局
 branch-mispred-rate > 5% → 分支瓶颈，找难预测 if
 ```
 
-🧪 见 [`agner_optimization_demo.py`](../cmu-cs-projects/topic2-systems/agner_optimization_demo.py) §1 `diagnose_bottleneck` —— 给定一组 PMU 计数器，自动判定属于哪类瓶颈。
+🧪 见 [`agner_optimization_demo.py`](./cmu-cs-projects/topic2-systems/agner_optimization_demo.py) §1 `diagnose_bottleneck` —— 给定一组 PMU 计数器，自动判定属于哪类瓶颈。
 
 ---
 
@@ -631,8 +631,8 @@ likwid-perfctr -g L3_CACHE ./a.out
 
 | 本文档章节 | CSAPP 真相 | UNIFIED_ROADMAP | 项目代码 |
 |-----------|----------|----------------|---------|
-| 第 2 部分 10 原则 | 真相 1-8 综合 | L03 | [csapp.py](../cmu-cs-projects/topic2-systems/csapp.py) + [hardware_truths_demo.py](../cmu-cs-projects/topic2-systems/hardware_truths_demo.py) |
-| 第 3 部分 微架构 | 真相 1, 4 | L03 + L21 (MLSys) | [agner_optimization_demo.py](../cmu-cs-projects/topic2-systems/agner_optimization_demo.py) §2 |
+| 第 2 部分 10 原则 | 真相 1-8 综合 | L03 | [csapp.py](./cmu-cs-projects/topic2-systems/csapp.py) + [hardware_truths_demo.py](./cmu-cs-projects/topic2-systems/hardware_truths_demo.py) |
+| 第 3 部分 微架构 | 真相 1, 4 | L03 + L21 (MLSys) | [agner_optimization_demo.py](./cmu-cs-projects/topic2-systems/agner_optimization_demo.py) §2 |
 | 第 4 部分 指令表 | 真相 4, 8 | L03 | demo §5 |
 | 第 5 部分 SIMD | — | L11 + L14 (CV) | demo §4 |
 | 第 7 部分 浮点 | 真相 8 | L11 + L21 | demo §7 |
