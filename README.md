@@ -292,7 +292,7 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 
 ### 6f. Agent 编排案例：[`Agent编排案例/`](Agent编排案例/) ⭐ 2026-08-15 新增
 - GitHub `topic:orchestration & stars>10K` **全量 25 仓**速览（三代谱系：数据管道→AI 工作流→编码 agent 舰队）+ **oh-my-openagent（67.9k★）**与 **wshobson/agents（38.8k★）**双精读（ultrawork 纪律循环 / Team Mode / hash 锚定编辑 / 单源五 harness 市场 / plugin-eval 三层质量门）
-- **精化合入 opencode**：3 个原生技能已落地本机（`orchestration-ultrawork` 目标持久化+完成审计、`orchestration-hyperplan` 五敌计划评审、`orchestration-fleet` 并行舰队编排），零依赖零遥测；使用说明与可选整装路径见 [`Agent编排案例/04-opencode合入手册.md`](Agent编排案例/04-opencode合入手册.md)
+- **精化合入 opencode**：3 个原生技能已落地本机（`orchestration-ultrawork` 目标持久化+完成审计、`orchestration-hyperplan` 五敌计划评审、`orchestration-fleet` 并行舰队编排），零依赖零遥测；后续 4 个（12factor/dag/governance/statemachine）一并合入，7 skill 使用说明见 [`orchestration精华合入-总入口.md`](orchestration精华合入-总入口.md)，可选整装路径见 [`Agent编排案例/04-opencode合入手册.md`](Agent编排案例/04-opencode合入手册.md)
 
 ### 6g. Harness 精华合入 ⭐ 2026-08-15 新增
 - GitHub `topic:harness` 高星 37 仓（≥1K★）全量快照 + 20 仓 README 蒸馏：[`透视GitHub-Harness高星仓库全景.md`](透视GitHub-Harness高星仓库全景.md)（七赛道 + 概念卡：五子系统/四层栈/Anthropic 对照实验）+ [`harness精华笔记.md`](harness精华笔记.md) + [`harness精华合入-总入口.md`](harness精华合入-总入口.md)
