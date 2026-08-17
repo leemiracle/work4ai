@@ -157,11 +157,11 @@
 
 > 普林斯顿王梦迪团队，首个系统自演化 Agent 综述（多源交叉验证：arXiv html / 智源社区 / GitHub awesome 列表）。
 
-- **What 进化什么**：模型（Self-Rewarding/TextGrad/RAGEN）/ 上下文（Memory：Mem0、Agent Workflow Memory；Prompt：DSPy、PromptBreeder）/ 工具（Voyager、ToolGen）/ 架构（ADAS、GPTSwarm、Darwin Gödel Machine、AFlow）。
-- **When 何时进化**：**intra-test-time**（任务执行中：动态记忆调整行为/即时自修改/遇难题现学）vs **inter-test-time**（任务完成后：历史反馈提升未来——Reflexion 类反思只是这一档的一种）。
+- **What 进化什么**：模型（Self-Rewarding [2401.10020](https://arxiv.org/abs/2401.10020)、SCA、TextGrad、RAGEN [2504.20073](https://arxiv.org/abs/2504.20073)）/ 上下文（Memory：Mem0、Agent Workflow Memory；Prompt：DSPy、PromptBreeder）/ 工具（Voyager、ToolGen）/ 架构（ADAS、GPTSwarm、Darwin Gödel Machine、AFlow [2410.10762](https://arxiv.org/abs/2410.10762)）。
+- **When 何时进化**：**intra-test-time**（任务执行中：动态记忆调整行为/即时自修改/遇难题现学——Reflexion 类反思只是这一档的一种）vs **inter-test-time**（任务完成后：历史反馈提升未来——STaR/RAGEN/WebRL/DigiRL）。
 - **How 如何进化**：信号四类（文本反馈/内部奖励/外部奖励/隐性奖励）× 架构两类（单 agent / 多 agent 共进化）。
-- 挑战：灾难性遗忘 / 冷启动个性化 / 专业性vs泛化矛盾 / 多体共识依赖削弱独立推理 / 静态基准测不出长期适应性。
-- 连接：AG5"反思=经验回放"在 What/When/How 框架里定位为 {上下文-记忆, inter-test-time, 文本反馈}——一格之子集，框架给出全图。与 harness 镜 §六"元层在生长"（RSI/自改进是 2026 下半年最活跃方向）互证。
+- **挑战**：灾难性遗忘 / 冷启动个性化 / 专业性vs泛化矛盾 / 多体共识依赖削弱独立推理 / 静态基准测不出长期适应性。
+- 连接：AG5"反思=经验回放"在 What/When/How 框架里定位为 {上下文-记忆, inter-test-time, 文本反馈}——一格之子集，框架给出全图。与 harness 镜 §六"元层在生长"（RSI/自改进是 2026 下半年最活跃方向）互证。**✅ 2026-08-17 已实体化为 [`讲透Agent/05-自进化延伸`](./讲透Agent/05-自进化延伸.md)**（一级论文 7 篇全核实 + What/When/How mermaid 图 + 稳定性条件 + 三档落地）。
 
 ## §十 Agentic RL（arXiv:2509.02547）——从"会说"到"会做"的范式迁移
 
