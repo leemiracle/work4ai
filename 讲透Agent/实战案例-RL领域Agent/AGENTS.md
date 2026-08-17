@@ -3,7 +3,7 @@
 > 本文件是给"在本目录工作的任何 agent（人或 AI）"的指令边界。存在即 README "harness 四件套"承诺的第四件。
 
 ## 是什么
-`rl_agent.py`：讲透Agent × 讲透RL × 讲透Prompt 的可跑缝合器（v3.1 829+ 行纯标准库）。定位见 ../README.md——**不是生产级 RL 框架，是活教材**。
+`rl_agent.py`：讲透Agent × 讲透RL × 讲透Prompt 的可跑缝合器（v3.2 892 行纯标准库）。定位见 ../README.md——**不是生产级 RL 框架，是活教材**。
 
 ## 在此目录工作的规则
 1. **改代码前先跑** `python3 rl_agent.py demo`（基线 ~2.4s，战报 5/6——含 1 个设计内必失败任务）；改完必须重跑对比。

@@ -1,10 +1,12 @@
 # 实战案例：RL 领域 Agent（rl_agent v3）——项目知识全融合
 
 > **定位**（采纳多角色审查判词）：讲透Agent × 讲透RL × 讲透Prompt 的可跑缝合器——contextual bandit 内核 + prompt 先验 + **三进化环**（Q表/APO/**Ctx-APO**），30 秒在终端看见 ε-greedy、Reflexion、RLVR、reward hacking、以及 **context 栈本身被奖励信号进化** 的最小形态。
+> **v4 = 同日新增 [harness_rl/](./harness_rl/)**：RL agent 融合 [harness工程手册](../../工程化手册库/harness工程手册/README.md) 全部 12 章技术（六组件 E/T/C/S/L/V + 配置即动作空间的 bandit 内环 + AHE 编辑-预测-回滚外环），并**反哺迭代两类 harness**：v3.1 的 ctx_policy（RL 域靶）与自身 components/（自指靶）。实跑战报与设计卡见 [harness_rl/DESIGN.md](./harness_rl/DESIGN.md)（5 REVERT/2 COMMIT 的可证伪闭环全史）。
 > 宪法：纯标准库零依赖 · demo 1.8s · toy 简化处全部诚实标注。
 > v2 = 2026-08-17 五角色审查（[多角色审查报告](./多角色审查报告-RL领域Agent.md)）后大修版：P0×6/P1×13 全修。
 > v3 = 2026-08-17 同日增量：**融合 context 技术全集为可进化配置**（CtxPolicy 五维：检索深度/记忆预算/步数预算/路由/bookend）+ **第三进化环 Ctx-APO**（agent 迭代自己的 context 栈，MemAgent arXiv:2507.02259 思想 toy 版）+ **kb_curate**（实验结论固化回 kb，episodic→semantic，agent 迭代 RL 领域知识）。
 > v3.1 = 同日五角色二审（oracle/security/councillor/perf + 主审计）：修 P0×2（eval 隔离假/塑形退化→字典序）+ P1×6（CTX_F 读回生效/缓存同步失效/卡片投毒净化/ev_ref 截断漏固化/glm_ctx_apo 挂链/元数据）。审查发现记录于 [GLM-CtxAPO实验报告.md](./GLM-CtxAPO实验报告.md) §审查。
+> v3.2 = 同日路线图落地：**debate 双 agent 对抗验证**（P 提案 bandit × C 规则挑战，映射 #31）。
 
 ---
 
@@ -64,7 +66,7 @@ graph TD
 
 **三进化环**：Q 表（What 轴 procedural）+ APO（prompt 文本）+ **Ctx-APO（context 栈配置）**——同一 RLVR 奖励信号驱动三层自改；kb_curate 让领域知识本身也随运行增长（第四条慢环）。
 
-## 三、技术映射表（30 项，全部名实相符 ✅ 审查后逐项核验）
+## 三、技术映射表（31 项，全部名实相符 ✅ 审查后逐项核验）
 
 | # | 技术 | 落点（可验证） | 出处 |
 |---|------|--------------|------|
@@ -98,6 +100,7 @@ graph TD
 | 28 | bookend 位置技术 | `ctx.bookend`：关键约束在决策段重申（lost-in-middle 对策） | prompt工程手册 06 |
 | 29 | **Ctx-APO 环 ⭐⭐** | `ctx-apo`：变异 CtxPolicy→RLVR+成本塑形→贪心保留；demo 实测 v0 0.92→记忆关闭 0.93→检索收紧 0.94（toy 真实 Pareto） | MemAgent×GEPA 精神交集 |
 | 30 | **kb_curate 知识固化** | 实验成功→结论卡写 `memory/kb_generated/`→下轮 kb_search 命中（实测第二轮第一击命中）——episodic→semantic | 讲透Agent/04 |
+| 31 | **debate 双 agent 对抗验证** | `debate`：P 提案（rank 选择=bandit）vs C 挑战（引用真伪+行质量）；demo 实测 3 轮涌现——P 被击倒后学会弃标题行改提实质行（Q[rank0]0.35→Q[rank1]0.76）——挑战从系统触发器变独立角色 | 讲透Agent/06·多智能体 |
 
 ## 四、三层讲透（宪法合规·v2 诚实版）
 
@@ -122,7 +125,7 @@ graph TD
 
 ## 六、路线图（feature_list.json 同步；不在映射表——审查教训：TODO 不算融合）
 
-n-step 轨迹级 credit / mcts_planner / debate 双 agent / arxiv_verify 联网核实 / RLHF-RM toy。
+~~debate 双 agent~~ ✅ v3.2 已落地（映射 #31）。待做：n-step 轨迹级 credit / mcts_planner / arxiv_verify 联网核实 / RLHF-RM toy / debate 的 LLM 版挑战者。
 
 ---
 v3：2026-08-17 · context 融合 + Ctx-APO + kb_curate（MemAgent arXiv:2507.02259 思想）· v2 审查闭环见 [多角色审查报告](./多角色审查报告-RL领域Agent.md) · 姊妹案例：[Open-AutoGLM](../实战案例-Open-AutoGLM手机Agent/)（读生产项目）、[DeepSeek Harness](../Agent框架案例/deepseek-harness插件化框架/)（读工业框架）、**本案例**（自己写一个）
