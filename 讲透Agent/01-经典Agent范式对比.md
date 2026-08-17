@@ -327,3 +327,9 @@ Plan-Execute 做骨架  +  Reflexion 兜底重试  +  ReAct 应对意外
 ## 📌 下一步
 
 下一篇 **02-工具调用工程** 把"工具"这件事彻底讲透：从 Function Calling 的 JSON Schema、到工具描述质量对选择正确率的影响、到 MCP（Model Context Protocol）这个 2024 起的新标准——它是 Anthropic 推动的"工具调用 USB-C"，正在统一各家 Agent 框架的工具协议。
+
+---
+
+## 🔗 外部精华
+
+→ 三范式在 2024 后的融合形态：**AgentKit**（arXiv:2404.11483）把 ReAct/Plan-Execute/Reflexion 变成同一张动态 DAG 上的不同节点编排——范式不是互斥选项，是节点编排模式。详见 [PaperAgent精华合入-总入口 §三](../PaperAgent精华合入-总入口.md)。
