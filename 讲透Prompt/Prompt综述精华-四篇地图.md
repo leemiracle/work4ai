@@ -93,20 +93,42 @@ VLM 特有：空间标注 prompt $[I,T,R_1..R_m; x]$（bbox/marker/mask/多边�
 | 01-Few-shot与ICL | Report Few-shot 族（示例选择/排序敏感）| Sahoo 应用表：哪些任务 few-shot 增益最大 |
 | 02-CoT思维链 | Report Thought Generation 族 | — |
 | 03-结构化输出 | Report 模板技术 | — |
-| 04-上下文工程与评估 | APO 评估准则层 | **加 APO 视角：评估 = 优化目标函数，评测好才能优化好** |
+| 04-上下文工程与评估 | APO 评估准则层 | 已加"评估的下一站是自动优化"参考节 |
 | 05-SelfConsistency | Report **Ensembling 族**（非 CoT 族）| 分类归属修正 |
 | 06-TreeofThoughts | Thought Generation 的搜索扩展 | PromptAgent 用 MCTS 优化 prompt = ToT 思想反哺 APO |
 | 07-ReAct | Report 工具使用相关技术 | APE 综述 frontier：agent-oriented prompt design 是未开垦地 |
 | 08-Prompt安全 | iScience 对抗防御章 | SOS：安全分纳入多目标优化 |
-| 总纲 5W3H（22 手段）| Report 58 技术 | 22↔58 映射可作为总纲附录候选 |
+| **09-Prompt自动优化** ✅ 已立项 | **APO 双篇全量落地**（2502.11560 形式化 + 2502.16923 5-part + 方法谱系表 + 决策树 + 实验 09_apo.py 四铁证）| 地图 §三的实体化 |
+| 总纲 5W3H（22 手段）| Report 58 技术 | 完整映射见下表 |
+
+### 22 手段 ↔ Report 六族 完整映射表
+
+| 总纲族（按激活力度）| 手段 # | Report 归属 | 备注 |
+|---|---|---|---|
+| A 思维链家族 | 1-2 | Thought Generation | CoT 主干 |
+| A 思维链家族 | 3-4 | **Ensembling**（非 CoT）| SC/USC 是采样投票——归属修正点 |
+| B 思维结构 | 5-6 | Thought Generation（搜索扩展）| ToT/GoT 超出线性 CoT |
+| B 思维结构 | 7-8 | **Decomposition** | L2M/Plan-and-Solve 是任务拆分不是推理链 |
+| C 反思与自改 | 9-11 | Self-Criticism | Reflexion/Self-Refine/Self-Critique |
+| D 推理+行动 | 12-13 | 工具使用组合（Report 边缘）| ReAct 是 CoT×工具的组合技术 |
+| E Persona | 14 | Role Prompting（指令模板子层）| 不在六族顶层 |
+| E Persona | 15 | Multi-Agent Prompting | 多 agent 辩论类 |
+| F 情绪触发 | 16-17 | 指令措辞类（实证弱）| Report 收录但证据级别低 |
+| G 格式约束 | 18 | Self-Criticism（验证后答）| — |
+| G 格式约束 | 19 | **超出 Report 范围** | 约束解码在解码层不在 prompt 层（03 章承接）|
+| H 外部增强 | 20 | **超出 Report 范围** | RAG 在检索层（讲透RAG 承接）|
+| H 外部增强 | 21 | Self-Criticism 扩展 | Constitutional AI 循环 |
+| H 外部增强 | 22 | **超出 Report 范围** | APO 爆发在 Report(2024-06) 之后 → **09 章承接** |
+
+映射揭示的结构：总纲 22 手段中 **19 个落在 Report 六族内**，3 个越界（RAG/约束解码/APO）恰好对应"prompt 层之外的三层"（检索层/解码层/优化层）——总纲比 Report 走得更宽，Report 比总纲分得更细。
 
 ---
 
 ## 五、差距分析与下一步
 
-1. **本系列缺 APO 章**：四篇综述带来的最大增量是"自动优化"层。建议二选一：并入 04（扩为"上下文工程-评估-自动优化"）或立 09-Prompt自动优化（素材已齐：3.1 形式化 + 3.2 工程谱系 + 工具链案例）。
+1. ~~**本系列缺 APO 章**~~ ✅ **已解决（2026-08-17）**：[09-Prompt自动优化.md](./09-Prompt自动优化.md) 立项落盘——五幕全展开（直觉/数学/方法谱系速查表/决策树/四坑/三步落地）+ 实验 [09_apo.py](./experiments/09_apo.py) 四铁证（梯度 93.4% vs 随机 70.5%；差种子+好算子 40/50 反超好种子+差算子；一轮 49%→96.5%；上界 96.5%≠100%）。22↔58 映射表也已补全（§四）。
 2. **根 README 的讲透Prompt 条目**无需动（系列完整度未变）。
-3. 实验机会：APO 最小可跑实验候选——用纯标准库实现 ProTeGi 式"文本梯度"循环（模拟 LLM 反馈的 toy 版），验证"迭代改写 vs 随机搜索"的收敛差——反直觉假说：**好种子+差算子 不如 差种子+好算子**。
+3. ~~实验机会~~ ✅ 已跑：ProTeGi 式文本梯度 toy 版实跑验证——"好种子+差算子 不如 差种子+好算子"**成立**（40/50 反超）。反直觉发现的幕后：第一版玩具特征库只有 3 个（随机 6 轮必然撞满，差异不可见），加入 6 个干扰项后才拉开——**"搜索空间里干扰项的存在才是方向信息值钱的前提"**，这本身是 APO 的一个更深的注脚。
 
 ---
 生成：2026-08-17 · arXiv 核实：2406.06608 v6 / 2402.07927 v2 / 2502.11560 / 2502.16923（EMNLP 2025 main）全 ✅
