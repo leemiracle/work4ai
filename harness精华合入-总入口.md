@@ -4,6 +4,7 @@
 > 精化产物：**1 个新 opencode skill**（`harness-engineering`），安装于 `~/.config/opencode/skills/`，opencode 启动时自动加载。
 > 本文档是使用说明；蒸馏细节见 [harness精华笔记](./harness精华笔记.md)。
 > 学术线（2026-08-17 新增）：四篇 harness 综述 + LLM Ensemble + 领域 Harnessing 的合并解析与 NFL 分析见 [harness三综述合并解析](./harness三综述合并解析.md)（引用全部一手核实，修复原拆解 8 处错误，明细在 [.research/harness-survey/引用核实报告.md](./.research/harness-survey/引用核实报告.md)）。
+> 工程线（2026-08-17 新增）：操作手册见 [工程化手册库/harness工程手册](./工程化手册库/harness工程手册/)（README+12 章：六组件/上下文参数表/验证即证据/生命周期/多模型/自动进化闭环/最小实现——本页与合并解析是它的素材底座）。
 
 ## 一、仓库 → skill 映射
 
