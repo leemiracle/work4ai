@@ -18,8 +18,9 @@
 | **04** | [记忆机制](./04-记忆机制.md) | short-term / long-term / RAG memory / summary buffer |
 | **05** | [自进化延伸](./05-自进化延伸.md) | What/When/How 三维分类（arXiv:2507.21046）；Reflexion→Self-Rewarding→ADAS/AFlow→RAGEN→EvoAgentX 谱系；自改稳定性三条件 |
 | **实战** | [Open-AutoGLM 手机 Agent](./实战案例-Open-AutoGLM手机Agent/) | 真实端到端 Agent 案例 |
-| **实战** | [DeepSeek Harness 框架](../Agent框架案例/deepseek-harness插件化框架/) | 工业级 agent harness："一切皆插件"+ 信任平面源码解剖 |
-| **实战** | [opencode 自成长改造](../Agent框架案例/opencode自成长改造/) | hermes×ECC 蓝图：把本地 opencode 改造成自成长 Agent（闭环学习环实操） |
+| **实战** | [DeepSeek Harness 框架](./Agent框架案例/deepseek-harness插件化框架/) | 工业级 agent harness："一切皆插件"+ 信任平面源码解剖 |
+| **实战** | [opencode 自成长改造](./Agent框架案例/opencode自成长改造/) | hermes×ECC 蓝图：把本地 opencode 改造成自成长 Agent（闭环学习环实操） |
+| **实战** | [RL 领域 Agent](./实战案例-RL领域Agent/) | ★自建可跑：contextual bandit 内核+四层记忆+Reflexion+**APO prompt 进化环**（716 行纯标准库，24 项技术映射经五角色审查核验）|
 
 ---
 
@@ -44,7 +45,7 @@
 - **基座**：[`讲透LLM/`](../讲透LLM/)（生命周期）
 - **架构参考**：[`Agent架构模式参考/`](../Agent架构模式参考/)（生产架构模式）
 - **记忆案例**：[`Agent记忆系统案例/`](../Agent记忆系统案例/)（MemGPT/Letta 等）
-- **框架案例**：[`Agent框架案例/deepseek-harness插件化框架/`](../Agent框架案例/deepseek-harness插件化框架/)（DeepSeek 官方 harness，loop/日志/沙箱/接缝源码级笔记）
+- **框架案例**：[`Agent框架案例/deepseek-harness插件化框架/`](./Agent框架案例/deepseek-harness插件化框架/)（DeepSeek 官方 harness，loop/日志/沙箱/接缝源码级笔记）
 - **Prompt 工程**：[`讲透Prompt/03`](../讲透Prompt/03-结构化输出与函数调用.md)（function calling）
 - **外部论文流**：[`PaperAgent精华合入-总入口`](../PaperAgent精华合入-总入口.md)（PaperAgent 公众号 15 主题精华：Agent/RAG/记忆/工具学习/RL×LLM/自演化/**Agentic RL/Deep Research/Vibe Coding/AI4Research/世界模型×具身**；讲透Agent 01-04 章+RL/代码生成/RAG 系列各有对应合入条目）
 - **应用形态**：[`讲透DeepResearch/`](../讲透DeepResearch/README.md)（Deep Research = Agent 循环 × 检索 × 综合成文的产品级汇流；讲透Agent 的 01 循环 + 02 工具 + 04 记忆在该系列组装成调研工作流）
