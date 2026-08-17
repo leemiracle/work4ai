@@ -15,8 +15,8 @@
 | ├─ Extract the Gold | ✅ 页面摘要全核实 | ⚠️ **结论修正**：上下文重置**不省总能耗**，但稳定消耗曲线/削峰 |
 | **PET 可复现性危机**（Vaugrante et al., TMLR 2025）| ✅ | 7 模型 × 6 技术 × 5 基准复现：**几乎全部技术无统计显著增益** |
 | **推理进步的真相**（McGinness & Baumgartner, 2505.19676/2509.12645）| ✅ | 2023→2024 推理提升主要来自**隐藏系统提示/自动 CoT 训练**；2025 思考模型才真正近满分 |
-| ACM TOSEM 2025"高级模型还需要 PE 吗" | ⚠️ 未核实到原文 | 方向被 2506.05614 的 o3-mini 异常 + McGinness 部分支持，具体结论引用前需验 |
-| MDPI 2025 SE-PE 系统综述（42 篇）| ⚠️ 未核实到原文 | 存疑留观 |
+| **"高级模型还需要 PE 吗？"** [arXiv:2411.02093](https://arxiv.org/abs/2411.02093) | ✅（2026-08-17 二次核实）| **推理模型内置推理降低复杂 prompt 收益，zero-shot 常更优**；执行反馈/精确任务指导仍有效——TOSEM 线（用户称刊于 ACM TOSEM 2025）|
+| **MDPI 2025 SE-PE 系统综述** [mdpi.com/2673-2688/6/9/206](https://www.mdpi.com/2673-2688/6/9/206) | ✅（2026-08-17 二次核实）| 42 篇 SLR + 共被引网络：**四大簇**（手工 crafting / RAG / CoT / 自动调优）；提出模块化 PE 框架（human-in-the-loop + 自动优化 + 版本控制）|
 | Prompt-SE 其余 4 篇（Novice/Goal Extraction/Commit 分类/TDD Governance）| ⚠️ 标题来自转述 | 研讨会真实存在，4 篇标题待 conf 页逐篇核 |
 
 ---
@@ -76,6 +76,15 @@
 - 模型越新，简单 prompt 越接近复杂 prompt（自动 CoT 内化）——**复杂技巧的半衰期在缩短**，zero-shot 基线的重要性在上升（与本系列阅读顺序"先 zero-shot"一致）。
 - 这不是"prompt 工程已死"：结构化指导/示例选择/输出 Schema（03 章）/上下文工程（04 章）仍是实证稳健的；死的是**玄学技巧**。
 
+### 4.1 定量锚点：TOSEM 线论文的三组数字（arXiv:2411.02093 ✅）
+
+- **GPT-4o 代码生成**：zero-shot 90.4% → AgentCoder 96.3%（非推理模型仍吃 PE，但增益收窄）。
+- **o1-mini**：zero-shot 就 93.9%，PE 技巧**零或负增益**——推理模型的内置 CoT 吞掉了 prompt 技巧的空间。
+- **CoT 步长分析**（300 样本实测）：o1-mini 内置 CoT ≥5 步的问题上比 GPT-4o 好 16.67%，<5 步只好 2.89%——**推理模型的溢价集中在真正需要多步推理的问题**；代码摘要这类无需推理的任务，推理模型无优势还更贵。
+- 实操结论：任务不需复杂推理 → 非推理模型 + 好基线 prompt；需要多步推理 → 推理模型 + zero-shot，别堆技巧，省下的预算投给执行反馈（测试/lint）。
+
+**二批补充发现**（同轮核实挖到）：GEPA（Agrawal 2025，反思式 prompt 进化可胜 RL）与 EvoAgentX（arXiv:2507.03616，把 TextGrad/AFlow/MIPRO 整合进 agent 工作流进化）——APO 正在从"单 prompt 优化"走向"多 agent 管线优化"，与 [09 章](./09-Prompt自动优化.md) 的 frontier 判断（agent-oriented prompt design 是未开垦地）互证。
+
 ---
 
 ## 五、与项目的挂点
@@ -92,10 +101,11 @@
 
 | 线索 | 动作 |
 |---|---|
-| ACM TOSEM"高级模型还需要 PE 吗" | 拿到确切标题/DOI 后核实合入 §四 |
-| MDPI 42 篇 SLR | 同上；若核实则补 SE 全生命周期映射表 |
-| Prompt-SE 其余 4 篇 | 需要时逐篇 webfetch conf.researchr.org 详情页 |
+| ~~ACM TOSEM"高级模型还需要 PE 吗"~~ | ✅ 已核实（arXiv:2411.02093，见 §一/§4.1）；期刊版本（TOSEM 2025）页码待查但不影响引用 |
+| ~~MDPI 42 篇 SLR~~ | ✅ 已核实（mdpi.com/2673-2688/6/9/206，见 §一）；"SDLC 全阶段"为转述说法，实测以四簇结构为准 |
+| Prompt-SE 其余 4 篇（Novice/Goal Extraction/Commit 分类/TDD Governance）| ⚠️ 标题来自转述；需要时逐篇 webfetch conf.researchr.org 详情页 |
 | EMSE 特刊（2027-03 截稿）| 长线观察：Prompt-SE 扩展版论文会含增量实验 |
+| GEPA（反思式 prompt 进化胜 RL）| 二批新发现，若深挖 APO frontier 则核实全文 |
 
 ---
 生成：2026-08-17 · 核实：conf.researchr.org（Prompt-SE 2026 两篇摘要页）+ arXiv 2506.05614 / 2505.19676 / 2509.12645 + TMLR 2025 ✅ · TOSEM/MDPI/4 篇标题 ⚠️ 转述待核
