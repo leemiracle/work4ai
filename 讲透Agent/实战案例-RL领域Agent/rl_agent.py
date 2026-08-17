@@ -772,6 +772,42 @@ def ctx_apo_run(tasks, iters=3, verbose=True):
     return cur, best_key[0], history
 
 # ============================================================
+# v3.2: debate 双 agent —— 对抗验证（路线图落地；← 讲透Agent/06·多智能体）
+# 与 reflect 的区别：挑战从"系统触发器"变成"独立角色的动作"（多智能体的前提）。
+# P(提案者)：从 kb top-k 选一条 claim——rank 选择本身是 bandit（对抗奖励塑形选择偏好）；
+# C(挑战者)：①verify_citation 引用真实性 ②行质量（标题行/过短行=无信息量证据）；
+# 裁判（规则）：claim 存活 ⟺ 引用真实 且 行有实质内容。P 在压力下学会"引实质行而非标题行"。
+# 诚实声明：C 目前是规则（真实 LLM 版走 LLMBrain.ask_react 路线）；judge 是规则非模型评分。
+# ============================================================
+DEBATE_Q = {}   # (state, rank) → Q：v3.2 局部 Q 表（与工具 Q 表分离——不同动作空间）
+
+def debate(task, rng, verbose=True):
+    """对抗验证 toy：P 提案受 C 挑战塑形。返回 (verdict, reward_p, reward_c)。"""
+    state = classify_state(task)
+    hits = kb_search(task, DEFAULT_PROMPT, topk=ACTIVE_CTX.topk)
+    if not hits:
+        if verbose: P(f"  [debate] P 无证据可提案（放弃）")
+        return "no_evidence", 0.0, 0.0
+    row = DEBATE_Q.setdefault(state, {})
+    ranks = list(range(len(hits)))
+    rank = rng.choice(ranks) if rng.random() < EPSILON else \
+        max(ranks, key=lambda r: row.get(r, Q_INIT))               # P：bandit 选 rank
+    claim = hits[rank]
+    def line_strong(h):                                             # C 的行质量判据
+        t = h[2].strip()
+        return len(t) >= 20 and not t.startswith("#") and not t.endswith(("：", ":"))  # markdown 标题行/悬空冒号行=弱证据
+    real, strong = verify_citation(claim[1]), line_strong(claim)
+    survived = real and strong
+    r_p = 1.0 if survived else 0.0
+    row[rank] = row.get(rank, Q_INIT) + ALPHA * (r_p - row.get(rank, Q_INIT))   # P 学习：被击倒的 rank 掉 Q
+    if verbose:
+        P(f"  [P] 提案 rank{rank}: {claim[1]}「{claim[2][:46]}」")
+        P(f"  [C] 挑战: 引用{'✓真' if real else '✗假'} · 行质量{'✓实质' if strong else '✗标题/过短'}")
+        P(f"  [裁判] {'P 存活' if survived else 'C 挑战成功'}（Q[rank{rank}]→{row[rank]:.2f}）")
+    return ("P" if survived else "C"), r_p, 0.0 if survived else 1.0
+
+
+# ============================================================
 # demo / chat / CLI
 # ============================================================
 DEMO_TASKS = [
@@ -801,6 +837,9 @@ def demo():
     P("─" * 60)
     P("[Self-Consistency] 概念题 3 次采样投票:")
     solve_sc(DEMO_TASKS[0][0], brain, n=3)
+    P("\n[Debate] v3.2 双 agent 对抗验证（P 提案 vs C 挑战，同一题三轮——Q 学习应偏向实质行）:")
+    for i in range(3):
+        debate(DEMO_TASKS[0][0], rng)
     P("\n[APO] 用 RL agent 迭代自己的 prompt（ProTeGi 式，RLVR 评估）:")
     cur, score, hist = apo_run([t for t, _ in DEMO_TASKS[:5]], iters=3)
     P(f"  最优 prompt: {cur.spec()} → reward {score:.2f}")
@@ -835,6 +874,10 @@ if __name__ == "__main__":
     elif argv[0] == "ctx-apo":                                          # v3: context 栈自指进化
         harness_init(); _, s, h = ctx_apo_run([t for t, _ in DEMO_TASKS[:5]], iters=int(argv[1]) if len(argv) > 1 and argv[1].isdigit() else 3)
         P(f"final score={s:.2f} history={[(x['v'], x['spec'], x['score']) for x in h]}")
+    elif argv[0] == "debate":                                           # v3.2: 双 agent 对抗验证
+        harness_init()
+        for t in (argv[1:], ["什么是 Q-learning 的探索与利用？"])[len(argv) < 2]:
+            debate(" ".join(t) if isinstance(t, list) else t, random.Random(7))
     elif argv[0] == "audit" and len(argv) > 1:
         txt = open(argv[-1], encoding="utf-8").read() if argv[-1].endswith((".txt", ".md")) else " ".join(argv[1:])
         checks, score, tip = PromptLayer.audit(txt)
