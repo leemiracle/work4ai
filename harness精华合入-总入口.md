@@ -3,6 +3,7 @@
 > 来源：[GitHub topics/harness](https://github.com/topics/harness) 高星 37 仓（≥1K★，全量快照见 [透视GitHub-Harness高星仓库全景.md](./透视GitHub-Harness高星仓库全景.md)）。
 > 精化产物：**1 个新 opencode skill**（`harness-engineering`），安装于 `~/.config/opencode/skills/`，opencode 启动时自动加载。
 > 本文档是使用说明；蒸馏细节见 [harness精华笔记](./harness精华笔记.md)。
+> 学术线（2026-08-17 新增）：四篇 harness 综述 + LLM Ensemble + 领域 Harnessing 的合并解析与 NFL 分析见 [harness三综述合并解析](./harness三综述合并解析.md)（引用全部一手核实，修复原拆解 8 处错误，明细在 [.research/harness-survey/引用核实报告.md](./.research/harness-survey/引用核实报告.md)）。
 
 ## 一、仓库 → skill 映射
 

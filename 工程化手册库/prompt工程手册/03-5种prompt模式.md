@@ -204,6 +204,8 @@ response = model.invoke(messages, tools=tools)
 
 **定义**：失败 → 反思 → 重试。
 
+> **桥**：GEPA 把这个循环自动化到了 prompt 层面——失败（黄金集挂题）→ 反思（reflection LM）→ 重试（重写 prompt）。详见 [`11-自动化优化闭环`](11-自动化优化闭环-六步流水线.md) 的"与 03-Reflexion 的桥"一节。
+
 **模板**：
 ```
 Attempt N:
