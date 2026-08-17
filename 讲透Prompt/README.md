@@ -36,6 +36,7 @@
 | 08 | `08-Prompt安全.md` | 注入/越狱/上下文污染——激活的反面：防模型被骗 | (概念) |
 | **⭐ 总纲** | [`激活LLM能力-5W3H分析.md`](激活LLM能力-5W3H分析.md) | **22 个激活手段 5W3H 全解**（What/Why/How/效果/成本 + 决策树 + 9 陷阱 + 黄金组合）；四层谱系横向总结见 [`../激活大语言模型能力-总结.md`](../激活大语言模型能力-总结.md) | (文献) |
 | 枢纽 | `00-讲透笔记-算法经验枢纽.md` | 跨单元算法经验索引 | — |
+| **地图** | [`Prompt综述精华-四篇地图.md`](Prompt综述精华-四篇地图.md) | **四篇高影响力综述核实蒸馏**（The Prompt Report 2406.06608：33 术语/58 技术六族分类；APO 双综述：优化理论形式化 + AWS 5-part 工程框架）+ 全系列章节映射 | — |
 | **实战** | [`../Agent框架案例/prompt工程工具链/`](../Agent框架案例/prompt工程工具链/README.md) | 六仓蓝图（optimizer/promptfoo/ragas/opik/promptflow/leaks）→ opencode `/optimize` `/ptest` `/evalrag` 工具链 | ✅ |
 
 ## 五大核心洞见
