@@ -65,6 +65,7 @@ updated: 2026-08-13
 - 与 **`讲透群体智能/`**：协作讲**显式编排**（有中心），swarm 讲**涌现自组织**（无中心）。两者是光谱两端。
 - 与 **`讲透代码生成/`**：并行多 agent coding 的核心是 **file ownership**（避免冲突）。
 - 与 **`故事原语/``03-五原语统一表`**：协作本身就是「多个 Agent 共同推进一张故事卡图」。
+- 外部论文流：[PaperAgent精华合入-总入口](../PaperAgent精华合入-总入口.md)——Agentic AI 概念分界（arXiv:2505.10468，单体/多体五维对比）+ Self-Evolving Agents 综述（arXiv:2507.21046，多 agent 共进化是 What/When/How 框架的开放前沿）。
 
 ## 💡 核心洞察
 

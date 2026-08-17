@@ -45,6 +45,7 @@
 - **记忆案例**：[`Agent记忆系统案例/`](../Agent记忆系统案例/)（MemGPT/Letta 等）
 - **框架案例**：[`Agent框架案例/deepseek-harness插件化框架/`](../Agent框架案例/deepseek-harness插件化框架/)（DeepSeek 官方 harness，loop/日志/沙箱/接缝源码级笔记）
 - **Prompt 工程**：[`讲透Prompt/03`](../讲透Prompt/03-结构化输出与函数调用.md)（function calling）
+- **外部论文流**：[`PaperAgent精华合入-总入口`](../PaperAgent精华合入-总入口.md)（PaperAgent 公众号论文精华：Agent/RAG/记忆/工具学习/RL×LLM/自演化，01-04 章各有一条对应合入条目）
 
 ---
 
