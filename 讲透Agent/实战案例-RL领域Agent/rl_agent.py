@@ -99,6 +99,8 @@ def append_progress(task, chain, reward):                             # ← secu
 
 def harness_init():                                                   # ← harness 五子系统
     os.makedirs(MEMORY, exist_ok=True)
+    global ACTIVE_CTX
+    ACTIVE_CTX = load_ctx()                                           # v3.1 P1（oracle）：CTX_F 读回生效（进化成果不再孤儿）
     if not os.path.exists(FEATURE_F):
         json.dump({"features": [
             {"id": "F1", "name": "kb_search(语义缓存+预算)", "status": "done"},
@@ -180,6 +182,15 @@ class CtxPolicy:
                 "max_steps": self.max_steps, "route": self.route, "bookend": self.bookend}
 
 DEFAULT_CTX = CtxPolicy()                                               # v3 默认 = v2 行为（topk=4 即原 hits[:4]）
+ACTIVE_CTX = DEFAULT_CTX                                                # v3.1：harness_init 从 CTX_F 读回进化成果
+
+def load_ctx():                                                         # v3.1 P1（oracle）：CTX_F 只写不读=孤儿产物——读回生效
+    spec = load_json(CTX_F, None)
+    if isinstance(spec, dict):
+        return CtxPolicy(**{k: spec.get(k, d) for k, d in
+                            [("topk", 4), ("recall_max", 2), ("max_steps", MAX_STEPS),
+                             ("route", True), ("bookend", True)]})
+    return DEFAULT_CTX
 
 # ---------------- 状态特征（多触发→mixed；demo 四态全覆盖） ----------------
 def classify_state(task):
@@ -523,18 +534,21 @@ def kb_curate(ev_ref, task):                                            # v3: ep
     path = os.path.join(KBGEN_DIR, f"exp_{name}_结论卡.md")
     if os.path.exists(path): return None                                # 幂等
     with open(path, "w", encoding="utf-8") as f:
+        safe_task = re.sub(r"[\n\r#>*`\\\[\]{}|]+", " ", strip_ansi(task))[:50]   # v3.1 P1（security）：净化换行/markdown 防卡片投毒
         f.write(f"# 实验结论卡：{name}（agent 自生成）\n\n"
-                f"- 由任务「{strip_ansi(task)[:50]}」触发，run_experiment 真跑产出\n"
+                f"- 由任务「{safe_task}」触发，run_experiment 真跑产出\n"
                 f"- 生成时间：{time.strftime('%Y-%m-%d %H:%M')}\n"
                 f"- 意义：episodic 经验固化为 semantic 知识（讲透Agent/04 记忆四层的层间流动）\n"
+                f"- ⚠️ 自产证据（本文件由 agent 写入，非人工审校）——引用时注意自我污染风险\n"
                 f"- 复验：python3 rl_agent.py --task \"跑一个 {name} 实验\"\n")
     _KB_CACHE["sig"] = None                                             # 失效缓存，下轮检索可见
+    _SEARCH_CACHE.clear()                                               # v3.1 P1（oracle）：查询缓存同步失效
     return path
 
 def solve(task, brain, rng, prompt=DEFAULT_PROMPT, ctx=None, verbose=True):
     """ReAct 主循环。RLVR 反短路：experiment 态必须 run_experiment 真跑过才算成功（← oracle P1）。
     v3: ctx(CtxPolicy) 驱动 步数预算/动作路由/记忆预算/bookend——context 栈成为 policy 的一部分（MemAgent 思想 toy 版）。"""
-    ctx = ctx or DEFAULT_CTX
+    ctx = ctx or ACTIVE_CTX
     state = classify_state(task)
     if verbose: P(f"◆ 任务: {task}\n  [Thought] 状态={state}（prompt 模式={prompt.mode}｜ctx={ctx.spec()}）")
     ok, obs = brain.act("recall", task, prompt, ctx)                    # 反思前置（记忆注入，不计证据）
@@ -558,9 +572,6 @@ def solve(task, brain, rng, prompt=DEFAULT_PROMPT, ctx=None, verbose=True):
     # 信用分配（γ=0 诚实 bandit）：证据工具得 r_task；试而不成得 0；未试不动（← oracle P1 修复）
     for t in set(chain):
         brain.update(state, t, r_task if (t == evidence_tool and got_evidence) else 0.0)
-    dry = not brain.persist                                             # v3.1 P0 修复（oracle）：eval 隔离——persist=False 时
-    if not dry:                                                         # kb_curate/reflect/append_progress 全部 no-op（防跨变体 KB 漂移+磁盘污染）
-        pass
     if verbose and got_evidence:
         tmpl = prompt.answer_template()
         P(f"  [Final·{prompt.mode}] " + tmpl.format(evi=str(evidence_obs)[:300],
@@ -572,15 +583,16 @@ def solve(task, brain, rng, prompt=DEFAULT_PROMPT, ctx=None, verbose=True):
         lesson = (f"「{task[:36]}」失败于{chain}；state={state}；"
                   + ("experiment 任务必须 run_experiment（检索命中不算完成）" if state == "experiment"
                      else "kb 未命中——换实义词或先查教训"))
-        msg = reflect(task, state, chain, lesson)
+        msg = "[eval] 教训不落盘（评估隔离）" if not brain.persist else reflect(task, state, chain, lesson)
         if verbose: P(f"  [Reflexion] {msg}")
-    brain.flush(); append_progress(task, chain, r_task)
-    ev_txt = str(evidence_obs)[:400] if evidence_obs else ""
-    m = re.search(r"[\w/\-\u4e00-\u9fff.]+\.md:\d+", ev_txt)
+    if brain.persist: brain.flush(); append_progress(task, chain, r_task)   # v3.1 P0（oracle）：评估期不写台账
+    full_obs = str(evidence_obs) if evidence_obs else ""                # v3.1 P1：判据用完整 obs（防 [:400] 截掉"耗时"漏固化）
+    ev_txt = full_obs[:400]
+    m = re.search(r"[\w/\-\u4e00-\u9fff.]+\.md:\d+", full_obs)
     if m: ev_ref = m.group()                                           # 证据=引用（文件:行号）
-    elif "耗时" in ev_txt: ev_ref = "exp:" + next((n for n in EXPERIMENTS if n in ev_txt.lower()), "?")  # 证据=实验
+    elif "耗时" in full_obs: ev_ref = "exp:" + next((n for n in EXPERIMENTS if n in full_obs.lower()), "?")  # 证据=实验
     else: ev_ref = "无证据"
-    new_card = kb_curate(ev_ref, task)                                  # v3: 实验结论固化（成功才固化——RLVR 门控）
+    new_card = kb_curate(ev_ref, task) if brain.persist else None      # v3.1 P0（oracle）：评估期不落卡（防跨变体 KB 漂移）
     if new_card and verbose: P(f"  [Curate] 实验结论固化为知识卡: {os.path.basename(new_card)}")
     return {"task": task, "state": state, "chain": chain, "reward": r_task, "evidence": ev_ref}
 
@@ -724,8 +736,10 @@ CTX_OPS = {  # context 变异算子池（手册12 四药方的运行时形态 + 
 }
 def ctx_apo_run(tasks, iters=3, verbose=True):
     """Context-APO：eval(RLVR+成本塑形) → 变异 CtxPolicy → 保留最优。
-    塑形 = mean(reward) − 0.02×steps − 0.005×(topk+recall_max)——context 成本项让"少检索少记忆但同分"可分辨
-    （多目标 Pareto：reward 优先，成本做 tie-breaker ← 奖励五分类⑤）。fresh brain 隔离 ctx 变量。"""
+    v3.1 P0 修复（oracle）：**字典序比较**——(mean_reward, -成本) 元组序，reward 优先、平局才比成本。
+    旧版混合分 score=r−0.02·steps−0.005·topk 允许"省成本盖过掉分"（toy 上 recall 不入策略 → 关记忆零代价
+    → 0.92→0.94 实为 2×0.01 纯成本分，是塑形退化的活体）。字典序后：reward 不降才允许省成本（Pareto 语义）。
+    fresh brain（persist=False）+ v3.1 eval 隔离（无落盘副作用）。"""
     import io, contextlib
     def eval_ctx(cx):
         b = RLBrain(persist=False)
@@ -734,25 +748,28 @@ def ctx_apo_run(tasks, iters=3, verbose=True):
             with contextlib.redirect_stdout(io.StringIO()):
                 r = solve(t, b, random.Random(7), ctx=cx)
             rs.append(r["reward"]); steps.append(len(r["chain"]))
-        return st.mean(rs) - 0.02 * st.mean(steps) - 0.005 * (cx.topk + cx.recall_max)
-    cur, best_score = DEFAULT_CTX, None
-    best_score = eval_ctx(cur)
-    if verbose: P(f"  [Ctx-APO] v0 基线 score={best_score:.2f} spec={cur.spec()}")
-    history = [{"v": 0, "spec": cur.spec(), "score": best_score}]
+        reward = st.mean(rs)
+        cost = 0.02 * st.mean(steps) + 0.005 * (cx.topk + cx.recall_max)
+        return (reward, -cost), reward, cost                            # 元组序=字典序比较键
+    cur = DEFAULT_CTX
+    best_key, best_reward, _ = eval_ctx(cur)
+    if verbose: P(f"  [Ctx-APO] v0 基线 reward={best_reward:.2f} spec={cur.spec()}")
+    history = [{"v": 0, "spec": cur.spec(), "reward": best_reward, "cost": -best_key[1]}]
     for it in range(iters):
         cands = {name: op(cur) for name, op in CTX_OPS.items()}
-        scored = sorted(((eval_ctx(cx), name, cx) for name, cx in cands.items()), reverse=True)
-        top_score, top_name, top_cx = scored[0]
-        if top_score > best_score:
-            best_score, cur = top_score, top_cx
-            if verbose: P(f"  [Ctx-APO v{it+1}] 采纳「{top_name}」 score {best_score:.2f}")
+        scored = sorted((eval_ctx(cx) + (name, cx) for name, cx in cands.items()), reverse=True)
+        top_key, top_reward, top_cost, top_name, top_cx = scored[0]
+        if top_key > best_key:                                          # 字典序：reward 高者胜；平局比成本
+            best_key, cur = top_key, top_cx
+            if verbose: P(f"  [Ctx-APO v{it+1}] 采纳「{top_name}」 reward={top_reward:.2f} cost={top_cost:.2f}（reward 不降才省成本）")
         else:
-            if verbose: P(f"  [Ctx-APO v{it+1}] 无改进（最优变体 {top_name} {top_score:.2f} ≤ {best_score:.2f}），保留 v{it}")
+            if verbose: P(f"  [Ctx-APO v{it+1}] 无改进（最优变体 {top_name} reward={top_reward:.2f}），保留 v{it}")
             break
-        history.append({"v": it + 1, "spec": cur.spec(), "score": best_score})
-    log = load_json(CTXLOG_F, []); log.append({"t": time.strftime("%m-%d %H:%M"), "history": history})
+        history.append({"v": it + 1, "spec": cur.spec(), "reward": top_reward, "cost": top_cost})
+    log = load_json(CTXLOG_F, []); log.append({"t": time.strftime("%m-%d %H:%M"), "lexicographic": True, "history": history})
     save_json(CTXLOG_F, log[-100:]); save_json(CTX_F, cur.spec())
-    return cur, best_score, history
+    global ACTIVE_CTX; ACTIVE_CTX = cur                                # 本进程立即生效
+    return cur, best_key[0], history
 
 # ============================================================
 # demo / chat / CLI
