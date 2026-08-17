@@ -1,0 +1,17 @@
+description: "RCF最优prompt vs 朴素基线 × glm-5/glm-4.7（手册05章工具栈评估）"
+prompts:
+  - id: rcf
+    label: "RCF三组件(角色+CoT+契约)"
+
+providers:
+  - id: "python:/tmp/opencode/pf-eval/glm_provider.py:rcf_glm5"
+    label: "glm-5 + RCF"
+  - id: "python:/tmp/opencode/pf-eval/glm_provider.py:base_glm5"
+    label: "glm-5 朴素基线"
+  - id: "python:/tmp/opencode/pf-eval/glm_provider.py:rcf_glm47"
+    label: "glm-4.7 + RCF"
+
+tests: dataset.json
+
+evaluateOptions:
+  maxConcurrency: 4

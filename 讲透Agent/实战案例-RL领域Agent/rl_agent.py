@@ -40,6 +40,8 @@ ROOT   = os.path.dirname(os.path.dirname(HERE))
 MEMORY = os.path.join(HERE, "memory")
 QTABLE_F, LESSONS_F = os.path.join(MEMORY, "qtable.json"), os.path.join(MEMORY, "lessons.json")
 PROMPTS_F, APOLOG_F = os.path.join(MEMORY, "prompts.json"), os.path.join(MEMORY, "apo_log.json")
+CTX_F, CTXLOG_F = os.path.join(MEMORY, "ctx_policy.json"), os.path.join(MEMORY, "ctx_apo_log.json")  # v3: context 自指环
+KBGEN_DIR = os.path.join(MEMORY, "kb_generated")                       # v3: 实验结论卡（episodic→semantic 固化）
 PROGRESS_F, FEATURE_F = os.path.join(HERE, "progress.md"), os.path.join(HERE, "feature_list.json")
 
 KB_DIRS  = ["讲透RL", "讲透Agent", "讲透Prompt", "讲透DeepResearch"]   # v2: +Prompt/DR，去冗余 experiments
@@ -156,6 +158,29 @@ class PromptLayer:
 
 DEFAULT_PROMPT = PromptLayer(mode="CoT")                                # v0 种子 prompt
 
+# ---------------- v3: CtxPolicy —— context 技术栈的显式配置向量（Context-APO 的变异对象） ----------------
+# 思想出处：MemAgent(arXiv:2507.02259) 证明"context 管理是 policy 的一部分，由奖励学出"；
+# 本 toy 用黑盒进化（CTX-APO）而非端到端 GRPO 训练——与手册11章方案对决结论一致（A 冷启动/B 巡航，本环是 A 形态）。
+# 每个 field 对应一种 context 技术，均可独立变异并影响 reward/步数/检索量（手册12章四药方的运行时形态）。
+class CtxPolicy:
+    """context 配置 = 第三个可进化层（Q表=procedural，APO=prompt，Ctx-APO=context 栈）。"""
+    def __init__(self, topk=4, recall_max=2, max_steps=MAX_STEPS, route=True, bookend=True):
+        self.topk = max(1, int(topk))          # 检索深度（RAG top-K ← 手册10 #19）
+        self.recall_max = max(0, int(recall_max))  # lessons 注入条数（episodic 记忆预算）
+        self.max_steps = max(2, int(max_steps))    # 步数预算（context 长度的代理）
+        self.route = bool(route)                   # 按态裁剪动作集（路由 ← 手册12 病4）
+        self.bookend = bool(bookend)               # 关键约束头尾重申（lost-in-middle 对策 ← 手册06）
+    ROUTE_CUT = {"experiment": {"paper_locate"},   # 实验态不需要论文定位
+                 "concept": {"run_experiment"},    # 概念态不需要跑实验
+                 "paper": set(), "mixed": set()}
+    def route_cut(self, state):
+        return frozenset(self.ROUTE_CUT.get(state, set())) if self.route else frozenset()
+    def spec(self):
+        return {"topk": self.topk, "recall_max": self.recall_max,
+                "max_steps": self.max_steps, "route": self.route, "bookend": self.bookend}
+
+DEFAULT_CTX = CtxPolicy()                                               # v3 默认 = v2 行为（topk=4 即原 hits[:4]）
+
 # ---------------- 状态特征（多触发→mixed；demo 四态全覆盖） ----------------
 def classify_state(task):
     t = task.lower()
@@ -180,6 +205,8 @@ def _build_kb():                                                        # 每进
     for f in KB_FILES:
         p = os.path.join(ROOT, f)
         if os.path.exists(p): paths.append(p)
+    for fn in sorted(os.listdir(KBGEN_DIR)) if os.path.isdir(KBGEN_DIR) else []:   # v3: 实验结论卡（显式加扫，不放宽自指排除）
+        if fn.endswith(".md"): paths.append(os.path.join(KBGEN_DIR, fn))
     sig = [(p, os.path.getmtime(p)) for p in sorted(paths)][:KB_MAX_FILES]
     if sig == _KB_CACHE["sig"]: return _KB_CACHE["files"]
     parsed, errs = [], 0
@@ -192,10 +219,13 @@ def _build_kb():                                                        # 每进
     _KB_CACHE = {"sig": sig, "files": parsed}
     return parsed
 
+_SEARCH_CACHE = {}                                                     # v3 perf: APO/Ctx-APO 重复评估同任务→查询记忆化
 def kb_search(query, prompt=DEFAULT_PROMPT, topk=5):
     keys = [k for k in re.split(r"[\s,，?？]+", query)
             if len(k) >= 2 and k not in prompt.stopwords]
-    if not keys: keys = [query[:4]] if len(query) >= 2 else ["强化学习"]
+    if not keys: keys = [query[:4]] if len(query) >= 4 else ["强化学习"]
+    ck = (tuple(sorted(set(keys))), topk)
+    if ck in _SEARCH_CACHE: return _SEARCH_CACHE[ck]
     hits, files = [], _build_kb()
     for rel, lines in files:
         for i, line in enumerate(lines, 1):
@@ -204,7 +234,8 @@ def kb_search(query, prompt=DEFAULT_PROMPT, topk=5):
             if score >= 1:
                 hits.append((score, f"{rel}:{i}", line.strip()[:120]))
     hits.sort(key=lambda x: -x[0])
-    return hits[:topk]
+    _SEARCH_CACHE[ck] = hits[:topk]
+    return _SEARCH_CACHE[ck]
 
 def verify_citation(ref):                                               # 引用回查（grounding ← security P1-1 输出侧）
     try:
@@ -433,7 +464,7 @@ def reflect(task, state, chain, reason):
     save_json(LESSONS_F, lessons[-200:])
     return f"[reflect] 教训写入 episodic 记忆(第{len(lessons)}条): {reason[:80]}"
 
-def recall(state, query=""):
+def recall(state, query="", maxn=2):                                    # v3: maxn 由 CtxPolicy 控制（记忆预算）
     lessons = load_lessons()
     qset = {w for w in re.split(r"[\s,，?？]+", query) if len(w) >= 2}
     scored = []
@@ -441,9 +472,10 @@ def recall(state, query=""):
         lset = set(re.split(r"[\s,，?？]+", l["task"])) | set(re.split(r"[\s,，?？]+", l["lesson"]))
         overlap = len(qset & lset) + (3 if l["state"] == state else 0)  # 词级匹配（← perf P2 单字符噪声修复）
         if overlap >= 3: scored.append((overlap, l))
+    if maxn <= 0: return "[recall] 记忆预算 0（CtxPolicy 关闭注入）"
     if not scored: return "[recall] 无相关历史教训（冷启动正常）"
     scored.sort(key=lambda x: -x[0])
-    return "[recall] 历史教训:\n  " + "\n  ".join(f"· {l['lesson'][:90]}" for _, l in scored[:2])
+    return "[recall] 历史教训:\n  " + "\n  ".join(f"· {l['lesson'][:90]}" for _, l in scored[:maxn])
 
 # ============================================================
 # RLBrain：Q-learning 工具策略（γ=0 bandit，诚实信用分配）
@@ -467,30 +499,51 @@ class RLBrain:
     def flush(self):
         if self.dirty and self.persist: save_json(QTABLE_F, self.Q)   # ← perf P2：solve 末统一落盘
         self.dirty = False
-    def act(self, tool, task, prompt=DEFAULT_PROMPT):
+    def act(self, tool, task, prompt=DEFAULT_PROMPT, ctx=None):
+        ctx = ctx or DEFAULT_CTX
         if tool == "kb_search":
-            hits = kb_search(task, prompt)
+            hits = kb_search(task, prompt, topk=ctx.topk)              # v3: 检索深度=配置而非硬编码
             if not hits: return False, "[kb_search] 无命中（换关键词或先 recall）"
-            return True, "\n".join(f"  {f}「{l}」" for _, f, l in hits[:4])
+            return True, "\n".join(f"  {f}「{l}」" for _, f, l in hits)
         if tool == "run_experiment":
             name = next((n for n in EXPERIMENTS if n in task.lower()), None)
             if name is None:                                            # ← 防"默认实验"假成功（乱码任务不该跑 gridworld 拿分）
                 return False, ("[run_experiment] 任务未指明实验名（可选: " + "/".join(sorted(EXPERIMENTS)) + "）")
             return run_experiment(name)
         if tool == "paper_locate": return paper_locate(task)
-        if tool == "recall": return False, recall(classify_state(task), task)   # 记忆不算证据（← P0 修复）
+        if tool == "recall": return False, recall(classify_state(task), task, maxn=ctx.recall_max)  # 记忆不算证据（← P0 修复）
         return False, f"[error] 未知工具 {tool}"
 
-def solve(task, brain, rng, prompt=DEFAULT_PROMPT, verbose=True):
-    """ReAct 主循环。RLVR 反短路：experiment 态必须 run_experiment 真跑过才算成功（← oracle P1）。"""
+def kb_curate(ev_ref, task):                                            # v3: episodic→semantic 固化（RL 领域知识自迭代）
+    """实验成功 → 结论写成 kb 知识卡（幂等），下次 kb_search 可检索到自产证据。"""
+    if not (isinstance(ev_ref, str) and ev_ref.startswith("exp:")): return None
+    name = ev_ref[4:]
+    if name not in EXPERIMENTS: return None
+    os.makedirs(KBGEN_DIR, exist_ok=True)
+    path = os.path.join(KBGEN_DIR, f"exp_{name}_结论卡.md")
+    if os.path.exists(path): return None                                # 幂等
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(f"# 实验结论卡：{name}（agent 自生成）\n\n"
+                f"- 由任务「{strip_ansi(task)[:50]}」触发，run_experiment 真跑产出\n"
+                f"- 生成时间：{time.strftime('%Y-%m-%d %H:%M')}\n"
+                f"- 意义：episodic 经验固化为 semantic 知识（讲透Agent/04 记忆四层的层间流动）\n"
+                f"- 复验：python3 rl_agent.py --task \"跑一个 {name} 实验\"\n")
+    _KB_CACHE["sig"] = None                                             # 失效缓存，下轮检索可见
+    return path
+
+def solve(task, brain, rng, prompt=DEFAULT_PROMPT, ctx=None, verbose=True):
+    """ReAct 主循环。RLVR 反短路：experiment 态必须 run_experiment 真跑过才算成功（← oracle P1）。
+    v3: ctx(CtxPolicy) 驱动 步数预算/动作路由/记忆预算/bookend——context 栈成为 policy 的一部分（MemAgent 思想 toy 版）。"""
+    ctx = ctx or DEFAULT_CTX
     state = classify_state(task)
-    if verbose: P(f"◆ 任务: {task}\n  [Thought] 状态={state}（prompt 模式={prompt.mode}）")
-    ok, obs = brain.act("recall", task, prompt)                         # 反思前置（记忆注入，不计证据）
+    if verbose: P(f"◆ 任务: {task}\n  [Thought] 状态={state}（prompt 模式={prompt.mode}｜ctx={ctx.spec()}）")
+    ok, obs = brain.act("recall", task, prompt, ctx)                    # 反思前置（记忆注入，不计证据）
     if "教训" in obs and verbose: P(f"  {obs}")
     got_evidence, evidence_obs, evidence_tool, chain, failed = False, None, None, [], set()
-    for step in range(MAX_STEPS):
-        tool = brain.pick(state, rng, prompt, exclude=failed)          # 失败工具本局排除（防死磕）
-        ok, obs = brain.act(tool, task, prompt)
+    cut = ctx.route_cut(state)                                          # v3: 路由裁剪（手册12 病4：单次只带该态需要的动作）
+    for step in range(ctx.max_steps):                                   # v3: 步数预算=配置（context 长度代理）
+        tool = brain.pick(state, rng, prompt, exclude=failed | cut)     # 失败工具本局排除（防死磕）+ 路由裁剪
+        ok, obs = brain.act(tool, task, prompt, ctx)
         chain.append(tool)
         if verbose: P(f"  [Act {step+1}] {tool} → {str(obs)[:160]}")
         if ok:
@@ -499,10 +552,15 @@ def solve(task, brain, rng, prompt=DEFAULT_PROMPT, verbose=True):
             if tool == "run_experiment": break
         else:
             failed.add(tool)                                           # 试而不成 → 记 0 并排除
+    if ctx.bookend and verbose and state == "experiment":               # v3: bookend——关键约束在决策段重申（手册06 lost-in-middle 对策）
+        P("  [Bookend] 重申：experiment 态成功判据 = run_experiment 真跑（检索命中不算完成）")
     r_task = 1.0 if (got_evidence and (state != "experiment" or "run_experiment" in chain)) else 0.0
     # 信用分配（γ=0 诚实 bandit）：证据工具得 r_task；试而不成得 0；未试不动（← oracle P1 修复）
     for t in set(chain):
         brain.update(state, t, r_task if (t == evidence_tool and got_evidence) else 0.0)
+    dry = not brain.persist                                             # v3.1 P0 修复（oracle）：eval 隔离——persist=False 时
+    if not dry:                                                         # kb_curate/reflect/append_progress 全部 no-op（防跨变体 KB 漂移+磁盘污染）
+        pass
     if verbose and got_evidence:
         tmpl = prompt.answer_template()
         P(f"  [Final·{prompt.mode}] " + tmpl.format(evi=str(evidence_obs)[:300],
@@ -522,6 +580,8 @@ def solve(task, brain, rng, prompt=DEFAULT_PROMPT, verbose=True):
     if m: ev_ref = m.group()                                           # 证据=引用（文件:行号）
     elif "耗时" in ev_txt: ev_ref = "exp:" + next((n for n in EXPERIMENTS if n in ev_txt.lower()), "?")  # 证据=实验
     else: ev_ref = "无证据"
+    new_card = kb_curate(ev_ref, task)                                  # v3: 实验结论固化（成功才固化——RLVR 门控）
+    if new_card and verbose: P(f"  [Curate] 实验结论固化为知识卡: {os.path.basename(new_card)}")
     return {"task": task, "state": state, "chain": chain, "reward": r_task, "evidence": ev_ref}
 
 def solve_sc(task, brain, n=3):                                        # Self-Consistency（← P0-1 修复：真实现）
@@ -647,6 +707,54 @@ def apo_run(tasks, iters=3, verbose=True):
     return cur, best_score, history
 
 # ============================================================
+# v3: Context-APO —— 用 RL agent 迭代自己的 context 技术栈（第三进化环）
+# 思想：MemAgent(arXiv:2507.02259) 把 memory 管理变成 RL 优化的 policy；GEPA/arXiv:2507.19457 证明
+# 反思式进化可逼近 RL 效果。本环 = 两者精神的 toy 交集：变异 CtxPolicy 配置向量，RLVR+成本塑形评估，贪心保留。
+# 诚实声明：toy 任务上 context 收益的上限有限（铁律：玩具看不出量化损失，同理真 lost-in-middle 需长上下文）；
+# 这里可见的收益 = 步数/检索量/记忆预算的 Pareto 改进，长上下文收益需真 LLM 场景（glm_apo 式）才能显影。
+# ============================================================
+CTX_OPS = {  # context 变异算子池（手册12 四药方的运行时形态 + 手册06 位置技术）
+    "检索收紧 topk4→2":     lambda c: CtxPolicy(2, c.recall_max, c.max_steps, c.route, c.bookend),   # 病2：例子/检索堆积
+    "检索放宽 topk→5":      lambda c: CtxPolicy(5, c.recall_max, c.max_steps, c.route, c.bookend),
+    "记忆预算翻倍":         lambda c: CtxPolicy(c.topk, min(4, c.recall_max * 2 or 1), c.max_steps, c.route, c.bookend),
+    "记忆关闭":             lambda c: CtxPolicy(c.topk, 0, c.max_steps, c.route, c.bookend),         # 消融：episodic 价值
+    "步数预算收紧 6→4":     lambda c: CtxPolicy(c.topk, c.recall_max, 4, c.route, c.bookend),        # 病1：冗余动作
+    "关闭路由":             lambda c: CtxPolicy(c.topk, c.recall_max, c.max_steps, False, c.bookend), # 消融：路由价值
+    "关闭 bookend":         lambda c: CtxPolicy(c.topk, c.recall_max, c.max_steps, c.route, False),  # 消融：位置技术
+}
+def ctx_apo_run(tasks, iters=3, verbose=True):
+    """Context-APO：eval(RLVR+成本塑形) → 变异 CtxPolicy → 保留最优。
+    塑形 = mean(reward) − 0.02×steps − 0.005×(topk+recall_max)——context 成本项让"少检索少记忆但同分"可分辨
+    （多目标 Pareto：reward 优先，成本做 tie-breaker ← 奖励五分类⑤）。fresh brain 隔离 ctx 变量。"""
+    import io, contextlib
+    def eval_ctx(cx):
+        b = RLBrain(persist=False)
+        rs, steps = [], []
+        for t in tasks:
+            with contextlib.redirect_stdout(io.StringIO()):
+                r = solve(t, b, random.Random(7), ctx=cx)
+            rs.append(r["reward"]); steps.append(len(r["chain"]))
+        return st.mean(rs) - 0.02 * st.mean(steps) - 0.005 * (cx.topk + cx.recall_max)
+    cur, best_score = DEFAULT_CTX, None
+    best_score = eval_ctx(cur)
+    if verbose: P(f"  [Ctx-APO] v0 基线 score={best_score:.2f} spec={cur.spec()}")
+    history = [{"v": 0, "spec": cur.spec(), "score": best_score}]
+    for it in range(iters):
+        cands = {name: op(cur) for name, op in CTX_OPS.items()}
+        scored = sorted(((eval_ctx(cx), name, cx) for name, cx in cands.items()), reverse=True)
+        top_score, top_name, top_cx = scored[0]
+        if top_score > best_score:
+            best_score, cur = top_score, top_cx
+            if verbose: P(f"  [Ctx-APO v{it+1}] 采纳「{top_name}」 score {best_score:.2f}")
+        else:
+            if verbose: P(f"  [Ctx-APO v{it+1}] 无改进（最优变体 {top_name} {top_score:.2f} ≤ {best_score:.2f}），保留 v{it}")
+            break
+        history.append({"v": it + 1, "spec": cur.spec(), "score": best_score})
+    log = load_json(CTXLOG_F, []); log.append({"t": time.strftime("%m-%d %H:%M"), "history": history})
+    save_json(CTXLOG_F, log[-100:]); save_json(CTX_F, cur.spec())
+    return cur, best_score, history
+
+# ============================================================
 # demo / chat / CLI
 # ============================================================
 DEMO_TASKS = [
@@ -678,7 +786,10 @@ def demo():
     solve_sc(DEMO_TASKS[0][0], brain, n=3)
     P("\n[APO] 用 RL agent 迭代自己的 prompt（ProTeGi 式，RLVR 评估）:")
     cur, score, hist = apo_run([t for t, _ in DEMO_TASKS[:5]], iters=3)
-    P(f"  最优 prompt: {cur.spec()} → reward {score:.2f}（历史: {[(h['v'], h['score']) for h in hist]}）")
+    P(f"  最优 prompt: {cur.spec()} → reward {score:.2f}")
+    P("\n[Ctx-APO] v3 ★ 用 RL agent 迭代自己的 context 栈（MemAgent 思想 toy 版，RLVR+成本塑形）:")
+    ctx_cur, ctx_score, ctx_hist = ctx_apo_run([t for t, _ in DEMO_TASKS[:3]], iters=2)  # demo 减载保 <10s 宪法
+    P(f"  最优 ctx: {ctx_cur.spec()} → score {ctx_score:.2f}（context 栈也被奖励信号进化了）")
     P(f"\n[Q表] {json.dumps(brain.Q, ensure_ascii=False)}")
     P(f"[战报] {sum(r['reward'] for r in stats)}/{len(stats)}（含 1 个设计内必失败）")
     P(f"[Safety] API调用 0/{MAX_API_CALLS}｜原子写✓｜记忆校验✓｜引用可回查✓")
@@ -704,6 +815,9 @@ if __name__ == "__main__":
     elif argv[0] == "apo":
         harness_init(); _, s, h = apo_run([t for t, _ in DEMO_TASKS[:5]], iters=int(argv[1] or argv[-1]) if len(argv) > 1 else 3)
         P(f"final reward={s:.2f} history={[(x['v'], x['score']) for x in h]}")
+    elif argv[0] == "ctx-apo":                                          # v3: context 栈自指进化
+        harness_init(); _, s, h = ctx_apo_run([t for t, _ in DEMO_TASKS[:5]], iters=int(argv[1]) if len(argv) > 1 and argv[1].isdigit() else 3)
+        P(f"final score={s:.2f} history={[(x['v'], x['spec'], x['score']) for x in h]}")
     elif argv[0] == "audit" and len(argv) > 1:
         txt = open(argv[-1], encoding="utf-8").read() if argv[-1].endswith((".txt", ".md")) else " ".join(argv[1:])
         checks, score, tip = PromptLayer.audit(txt)

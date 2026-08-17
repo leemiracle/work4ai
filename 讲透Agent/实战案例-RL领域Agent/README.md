@@ -1,8 +1,9 @@
-# 实战案例：RL 领域 Agent（rl_agent v2）——项目知识全融合
+# 实战案例：RL 领域 Agent（rl_agent v3）——项目知识全融合
 
-> **定位**（采纳多角色审查判词）：讲透Agent × 讲透RL × 讲透Prompt 的 **716 行可跑缝合器**——contextual bandit 内核 + prompt 先验 + APO 进化环，30 秒在终端看见 ε-greedy、Reflexion、RLVR、reward hacking 的最小形态（以及它们如何被修掉）。
-> 宪法：纯标准库零依赖 · demo 4.7s · toy 简化处全部诚实标注。
+> **定位**（采纳多角色审查判词）：讲透Agent × 讲透RL × 讲透Prompt 的可跑缝合器——contextual bandit 内核 + prompt 先验 + **三进化环**（Q表/APO/**Ctx-APO**），30 秒在终端看见 ε-greedy、Reflexion、RLVR、reward hacking、以及 **context 栈本身被奖励信号进化** 的最小形态。
+> 宪法：纯标准库零依赖 · demo 1.8s · toy 简化处全部诚实标注。
 > v2 = 2026-08-17 五角色审查（[多角色审查报告](./多角色审查报告-RL领域Agent.md)）后大修版：P0×6/P1×13 全修。
+> v3 = 2026-08-17 同日增量：**融合 context 技术全集为可进化配置**（CtxPolicy 五维：检索深度/记忆预算/步数预算/路由/bookend）+ **第三进化环 Ctx-APO**（agent 迭代自己的 context 栈，MemAgent arXiv:2507.02259 思想 toy 版）+ **kb_curate**（实验结论固化回 kb，episodic→semantic，agent 迭代 RL 领域知识）。
 
 ---
 
@@ -13,6 +14,7 @@ python3 rl_agent.py demo                    # 全景演示（无需任何 key，
 python3 rl_agent.py --task "什么是探索-利用？"      # 单任务
 python3 rl_agent.py --task "跑一个 grpo 实验" --sc 3   # Self-Consistency 三次采样投票
 python3 rl_agent.py apo                     # ★ RL agent 迭代自己的 prompt
+python3 rl_agent.py ctx-apo                 # ★★ v3: RL agent 迭代自己的 context 栈（第三进化环）
 python3 rl_agent.py audit --text "你是...专家..."     # ROIF-CSE 拆解任意 prompt
 python3 rl_agent.py chat                    # 交互模式
 
@@ -24,11 +26,16 @@ export RL_AGENT_BASE_URL="https://api.xxx.com/v1" RL_AGENT_MODEL="glm-4.7"
 python3 glm_apo.py            # 探索：8臂×3轮（24 次调用）
 python3 glm_apo_finals.py     # 决赛：最优臂 vs 朴素基线 16 题配对
 # 成果见 GLM-APO实验报告.md：最优 prompt(RCF三组件) 16/16 vs 基线 14/16
+
+# ★ 6 维度评估（手册04章标准）+ promptfoo 工具栈（手册05章）
+python3 glm_apo_eval6.py                      # 稳健/迁移/可控/安全 补测（41 调用）
+cd pf-eval && promptfoo eval -c promptfooconfig.yaml   # 三臂跨模型矩阵（36 请求）
+# 结论见 RCF-prompt-6维度评估报告.md：26/30 可上线；RCF 思考成本=基线2倍(刻意权衡)
 ```
 
 harness 四件套：`AGENTS.md`（行为契约，已提交）+ 首次运行自动生成 `progress.md`/`feature_list.json`/`memory/`（运行产物，`.gitignore` 挡住不进 git）。
 
-## 二、架构（v2：4 动作 + reflect 系统触发器 + 双进化环）
+## 二、架构（v3：4 动作 + CtxPolicy 五维 context 配置 + 三进化环）
 
 ```mermaid
 graph TD
@@ -36,21 +43,25 @@ graph TD
     S --> B{大脑}
     B -->|默认| R[RLBrain: ε-greedy over Q + prompt 先验]
     B -->|有 key| L[LLMBrain: 真 ReAct 循环<br/>JSON 协议·LLM 无执行权]
-    R --> A4[4 动作: kb_search / run_experiment / paper_locate / recall]
-    L --> A4
+    R --> CTX[CtxPolicy v3: topk检索深度 / recall_max记忆预算<br/>max_steps步数 / route路由裁剪 / bookend 位置]
+    L --> CTX
+    CTX --> A4[4 动作: kb_search / run_experiment / paper_locate / recall]
     A4 --> O[Observation]
-    O -->|≤6 步| B
+    O -->|≤ctx.max_steps 步| B
     O -->|失败| RF[reflect ⚡系统触发器<br/>不在动作空间——Reflexion 语义精髓]
     RF --> E1[lessons.json → recall 下轮注入]
     O --> RW[RLVR 奖励: experiment 态必须真跑实验]
     RW --> E2[qtable.json: procedural 进化]
-    RW --> APO[APO 环 ⭐: 文本梯度→变异 prompt→RLVR 评估→贪心保留]
+    RW --> APO[APO 环 ⭐: 文本梯度→变异 prompt→评估→贪心保留]
+    RW --> CTXA[Ctx-APO 环 ⭐⭐ v3: 变异 CtxPolicy→RLVR+成本塑形→贪心保留<br/>MemAgent 思想: context 管理是 policy 的一部分]
     APO -->|tool_prior/停用词/mode| R
+    CTXA -->|topk/recall_max/route/bookend| CTX
+    O -->|实验成功| KU[kb_curate v3: 结论固化知识卡→可被 kb_search 检索<br/>episodic→semantic 层间流动]
 ```
 
-**双进化环**：Q 表进化（What 轴 procedural 层）+ prompt 进化（APO，inter-test-time）——同一奖励信号驱动两层自改。
+**三进化环**：Q 表（What 轴 procedural）+ APO（prompt 文本）+ **Ctx-APO（context 栈配置）**——同一 RLVR 奖励信号驱动三层自改；kb_curate 让领域知识本身也随运行增长（第四条慢环）。
 
-## 三、技术映射表（24 项，全部名实相符 ✅ 审查后逐项核验）
+## 三、技术映射表（30 项，全部名实相符 ✅ 审查后逐项核验）
 
 | # | 技术 | 落点（可验证） | 出处 |
 |---|------|--------------|------|
@@ -78,6 +89,12 @@ graph TD
 | 22 | Self-Consistency | `--sc N`：多 seed 采样→证据引用投票（平票诚实标注）| 讲透Prompt/05 |
 | 23 | **APO 文本梯度** | `apo`：失败分析→变异（mode/先验/停用词）→RLVR 评估→贪心保留；demo 实测 v0 0.96→v1 0.98 | 讲透Prompt/09·ProTeGi |
 | 24 | harness 五子系统+安全件 | AGENTS.md/progress/feature_list + 原子写/记忆校验/API 熔断/注入边界/引用回查/ANSI 剥离 | harness精华合入 |
+| 25 | **context 管理=policy（MemAgent 思想）** | CtxPolicy 五维配置（topk/recall_max/max_steps/route/bookend）进决策路径 | MemAgent arXiv:2507.02259 |
+| 26 | RAG top-K 配置化 | `kb_search(topk=ctx.topk)`：检索深度是被优化的超参而非硬编码 | prompt工程手册 10 #19 |
+| 27 | 路由裁剪（按态激活动作子集） | `ctx.route_cut(state)`：experiment 态禁 paper_locate 等 | prompt工程手册 12 病4 |
+| 28 | bookend 位置技术 | `ctx.bookend`：关键约束在决策段重申（lost-in-middle 对策） | prompt工程手册 06 |
+| 29 | **Ctx-APO 环 ⭐⭐** | `ctx-apo`：变异 CtxPolicy→RLVR+成本塑形→贪心保留；demo 实测 v0 0.92→记忆关闭 0.93→检索收紧 0.94（toy 真实 Pareto） | MemAgent×GEPA 精神交集 |
+| 30 | **kb_curate 知识固化** | 实验成功→结论卡写 `memory/kb_generated/`→下轮 kb_search 命中（实测第二轮第一击命中）——episodic→semantic | 讲透Agent/04 |
 
 ## 四、三层讲透（宪法合规·v2 诚实版）
 
@@ -85,7 +102,9 @@ graph TD
 
 **数学层**：$\pi(a|s)=\arg\max_a [Q(s,a) + \text{prior}_\text{prompt}(s,a)]$（ε=0.2）；$Q \leftarrow Q + \alpha(r - Q)$，γ=0（**只更新已试工具**：证据工具得 r_task，试而不成得 0——诚实信用分配）。GRPO 优势 $(r-\bar{r}_{group})/(\sigma+\epsilon)$，乘法 clip 近似 PPO 目标（**简化版，缺重要性采样**——诚实标注）。
 
-**代码层**：716 行，行内锚点 `← 讲透X/NN`（审查抽查密度~10 个/百行，准确率修复后 100%）。
+**代码层**：829 行（v2 716 + v3 增量 113），行内锚点 `← 讲透X/NN`（61 个，审查抽查准确率 100%）。
+
+**v3 诚实声明**：toy 上 context 技术的收益上限有限（玩具看不出量化损失，同理真 lost-in-middle 需长上下文）——Ctx-APO 可见的是步数/检索量/记忆预算的 Pareto 改进；端到端 GRPO 训练（MemAgent 原版）本机跑不了，Ctx-APO 是其黑盒进化退化形态，与[手册11 方案对决](../../工程化手册库/prompt工程手册/11-自动化优化闭环-六步流水线.md)结论一致（A 冷启动/B 巡航）。真 LLM 上的 context 优化走 `glm_apo` 式路径。
 
 ## 五、内置 toy 实验 ×6（全部秒级 + 实测输出）
 
@@ -103,4 +122,4 @@ graph TD
 n-step 轨迹级 credit / mcts_planner / debate 双 agent / arxiv_verify 联网核实 / RLHF-RM toy。
 
 ---
-v2：2026-08-17 · 审查闭环见 [多角色审查报告](./多角色审查报告-RL领域Agent.md) · 姊妹案例：[Open-AutoGLM](../实战案例-Open-AutoGLM手机Agent/)（读生产项目）、[DeepSeek Harness](../Agent框架案例/deepseek-harness插件化框架/)（读工业框架）、**本案例**（自己写一个）
+v3：2026-08-17 · context 融合 + Ctx-APO + kb_curate（MemAgent arXiv:2507.02259 思想）· v2 审查闭环见 [多角色审查报告](./多角色审查报告-RL领域Agent.md) · 姊妹案例：[Open-AutoGLM](../实战案例-Open-AutoGLM手机Agent/)（读生产项目）、[DeepSeek Harness](../Agent框架案例/deepseek-harness插件化框架/)（读工业框架）、**本案例**（自己写一个）
