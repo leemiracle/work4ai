@@ -23,6 +23,7 @@
 | 11 | **SafetyAlignment** | [`SafetyAlignment手册/`](SafetyAlignment手册/) | 安全对齐：红队 / 护栏 / 拒答策略 |
 | 12 | **Tokenization** | [`Tokenization工程手册/`](Tokenization工程手册/) | 分词：BPE / 词表设计 / 多语言 |
 | 13 | **VectorDB** | [`VectorDB工程手册/`](VectorDB工程手册/) | 向量库：索引（HNSW/IVF）/ 混合检索 / 选型 |
+| 14 | **harness** | [`harness工程手册/`](harness工程手册/) | Harness 工程：六组件 E/T/C/S/L/V / 上下文参数表 / 验证即证据 / 自动进化闭环（完整版 13 文件，底座=[37仓蒸馏](../harness精华合入-总入口.md)+[三综述合并解析](../harness三综述合并解析.md)）|
 
 ---
 
