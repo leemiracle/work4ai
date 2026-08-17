@@ -141,13 +141,16 @@ VLM 特有：空间标注 prompt $[I,T,R_1..R_m; x]$（bbox/marker/mask/多边�
 
 代码锚点：OPRO→[google-deepmind/opro](https://github.com/google-deepmind/opro)；ProTeGi→[microsoft/LMOps/prompt_optimization](https://github.com/microsoft/LMOps)；DSPy/MIPRO→[stanfordnlp/dspy](https://github.com/stanfordnlp/dspy)；TextGrad→[zou-group/textgrad](https://github.com/zou-group/textgrad)。
 
-### 5.2 谱系的"下一跳"（二批核实时从引用网络挖到，留观）
+### 5.2 谱系的"下一跳"（✅ 2026-08-17 三批核实转正）
 
-| 论文 | 方向 | 留观理由 |
+| 论文 | 方向 | 状态 |
 |---|---|---|
-| GEPA（Agrawal 2025）| 反思式 prompt 进化，声称胜 RL | APO frontier，若做 09 章扩展则核实 |
-| EvoAgentX [2507.03616](https://arxiv.org/abs/2507.03616) | TextGrad/AFlow/MIPRO 整合进 agent 工作流进化（GAIA +20%）| APO×多 Agent 汇流——与讲透Agent 自演化（arXiv:2507.21046 What 轴）对接 |
-| Promptbreeder | 自指涉 prompt 进化（父 prompt 进化出子 prompt 的变异提示）| 进化范式深水区 |
+| EvoAgentX [2507.03616](https://arxiv.org/abs/2507.03616) v2 | TextGrad/AFlow/MIPRO 整合进 agent 工作流进化（五层架构；HotPotQA +7.44%/MBPP +10%/MATH +10%/**GAIA +20%**）| ✅ abs 页核实——已实体化为 [讲透Agent/05-自进化延伸](../讲透Agent/05-自进化延伸.md) §4 |
+| Self-Rewarding LM [2401.10020](https://arxiv.org/abs/2401.10020) | 自评自奖驱动迭代 DPO——权重层自进化开山 | ✅ 双源核实（同样入 05 章 §4）|
+| RAGEN [2504.20073](https://arxiv.org/abs/2504.20073) | 多轮交互=MDP 的 RL 自进化；Echo Trajectory 分析 | ✅ 双源核实 |
+| ADAS [2408.08435](https://arxiv.org/abs/2408.08435) / AFlow [2410.10762](https://arxiv.org/abs/2410.10762) | 架构层：设计=搜索问题（图灵完备空间 / MCTS+可复用算子，自动工作流超人写）| ✅ 双源核实（2507.21046 综述正文确认其"突破"地位）|
+| GEPA（Agrawal 2025）| 反思式 prompt 进化胜 RL | ⚠️ 留观（单源）|
+| Promptbreeder | 自指涉 prompt 进化 | ⚠️ 留观（在 2507.21046 What-Prompt 轴有收录）|
 
 ### 5.3 SE 实证线论文（详见 [Prompt-SE实证线](./Prompt-SE实证线-软件工程.md)）
 

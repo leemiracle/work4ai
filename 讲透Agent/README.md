@@ -16,6 +16,7 @@
 | **02** | [工具调用工程](./02-工具调用工程.md) | function calling / tool description / error handling |
 | **03** | [规划与搜索](./03-规划与搜索.md) | MCTS / BFS / DFS / 长程任务分解 |
 | **04** | [记忆机制](./04-记忆机制.md) | short-term / long-term / RAG memory / summary buffer |
+| **05** | [自进化延伸](./05-自进化延伸.md) | What/When/How 三维分类（arXiv:2507.21046）；Reflexion→Self-Rewarding→ADAS/AFlow→RAGEN→EvoAgentX 谱系；自改稳定性三条件 |
 | **实战** | [Open-AutoGLM 手机 Agent](./实战案例-Open-AutoGLM手机Agent/) | 真实端到端 Agent 案例 |
 | **实战** | [DeepSeek Harness 框架](../Agent框架案例/deepseek-harness插件化框架/) | 工业级 agent harness："一切皆插件"+ 信任平面源码解剖 |
 | **实战** | [opencode 自成长改造](../Agent框架案例/opencode自成长改造/) | hermes×ECC 蓝图：把本地 opencode 改造成自成长 Agent（闭环学习环实操） |
