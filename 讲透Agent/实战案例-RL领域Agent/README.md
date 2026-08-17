@@ -4,13 +4,14 @@
 > 宪法：纯标准库零依赖 · demo 1.8s · toy 简化处全部诚实标注。
 > v2 = 2026-08-17 五角色审查（[多角色审查报告](./多角色审查报告-RL领域Agent.md)）后大修版：P0×6/P1×13 全修。
 > v3 = 2026-08-17 同日增量：**融合 context 技术全集为可进化配置**（CtxPolicy 五维：检索深度/记忆预算/步数预算/路由/bookend）+ **第三进化环 Ctx-APO**（agent 迭代自己的 context 栈，MemAgent arXiv:2507.02259 思想 toy 版）+ **kb_curate**（实验结论固化回 kb，episodic→semantic，agent 迭代 RL 领域知识）。
+> v3.1 = 同日五角色二审（oracle/security/councillor/perf + 主审计）：修 P0×2（eval 隔离假/塑形退化→字典序）+ P1×6（CTX_F 读回生效/缓存同步失效/卡片投毒净化/ev_ref 截断漏固化/glm_ctx_apo 挂链/元数据）。审查发现记录于 [GLM-CtxAPO实验报告.md](./GLM-CtxAPO实验报告.md) §审查。
 
 ---
 
 ## 一、快速开始
 
 ```bash
-python3 rl_agent.py demo                    # 全景演示（无需任何 key，4.7s）
+python3 rl_agent.py demo                    # 全景演示（无需任何 key，~2.4s）
 python3 rl_agent.py --task "什么是探索-利用？"      # 单任务
 python3 rl_agent.py --task "跑一个 grpo 实验" --sc 3   # Self-Consistency 三次采样投票
 python3 rl_agent.py apo                     # ★ RL agent 迭代自己的 prompt
@@ -25,7 +26,9 @@ export RL_AGENT_BASE_URL="https://api.xxx.com/v1" RL_AGENT_MODEL="glm-4.7"
 # ★ 真 GLM-5 上的 APO（UCB bandit 迭代提示词，凭证自动读 opencode 配置）
 python3 glm_apo.py            # 探索：8臂×3轮（24 次调用）
 python3 glm_apo_finals.py     # 决赛：最优臂 vs 朴素基线 16 题配对
-# 成果见 GLM-APO实验报告.md：最优 prompt(RCF三组件) 16/16 vs 基线 14/16
+python3 glm_apo_eval6.py      # 手册04章 6 维度评估最优 prompt
+python3 glm_ctx_apo.py        # ★★ v3: context 臂（few-shot/bookend/分隔符）在 RCF 最优底座上的增益实验（24 次）
+# 成果见 GLM-APO实验报告.md + GLM-CtxAPO实验报告.md
 
 # ★ 6 维度评估（手册04章标准）+ promptfoo 工具栈（手册05章）
 python3 glm_apo_eval6.py                      # 稳健/迁移/可控/安全 补测（41 调用）
