@@ -39,4 +39,4 @@
 3. AWorld-RL RODS 的"奖励方差边界探测"可进 prompt 手册 11 章的方案 B 增补
 
 ---
-生成：2026-08-17 · 目录挂网：讲透Agent/README 实战行（待补）
+生成：2026-08-17 · 挂网：[讲透Agent/README](../讲透Agent/README.md) 配套生态"工业生态对照"行 · 本地克隆 `~/ai/`（更新：`git -C <repo> pull` 或删后重浅克隆）
