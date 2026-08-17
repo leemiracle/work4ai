@@ -7,6 +7,7 @@
 > v3 = 2026-08-17 同日增量：**融合 context 技术全集为可进化配置**（CtxPolicy 五维：检索深度/记忆预算/步数预算/路由/bookend）+ **第三进化环 Ctx-APO**（agent 迭代自己的 context 栈，MemAgent arXiv:2507.02259 思想 toy 版）+ **kb_curate**（实验结论固化回 kb，episodic→semantic，agent 迭代 RL 领域知识）。
 > v3.1 = 同日五角色二审（oracle/security/councillor/perf + 主审计）：修 P0×2（eval 隔离假/塑形退化→字典序）+ P1×6（CTX_F 读回生效/缓存同步失效/卡片投毒净化/ev_ref 截断漏固化/glm_ctx_apo 挂链/元数据）。审查发现记录于 [GLM-CtxAPO实验报告.md](./GLM-CtxAPO实验报告.md) §审查。
 > v3.2 = 同日路线图落地：**debate 双 agent 对抗验证**（P 提案 bandit × C 规则挑战，映射 #31）。
+> v3.3 = 同日 **verl/verl_tool 三层集成**（映射 #32）：任务环境接入 verl_tool 协议（L1 本地实测）+ exp_grpo vs verl GRPO 读码对照（L2）+ GPU 配方（L3 待卡）。
 
 ---
 
@@ -19,6 +20,12 @@ python3 rl_agent.py --task "跑一个 grpo 实验" --sc 3   # Self-Consistency �
 python3 rl_agent.py apo                     # ★ RL agent 迭代自己的 prompt
 python3 rl_agent.py ctx-apo                 # ★★ v3: RL agent 迭代自己的 context 栈（第三进化环）
 python3 rl_agent.py audit --text "你是...专家..."     # ROIF-CSE 拆解任意 prompt
+
+# ★★ verl/verl_tool 三层集成（v3.3）：rl_agent 任务环境 → GRPO 训练（A/B 引擎同环境）
+bash verl_bridge/install_tool.sh            # symlink 进 verl_tool + 注册验证（本地可跑）
+python3 verl_bridge/test_rl_agent_tool.py   # 14 项协议测试（零 GPU）
+python3 verl_bridge/make_dataset.py         # 24 题四态 parquet
+bash verl_bridge/train_grpo_gpu.sh          # GPU 机配方（Qwen2.5-1.5B+GRPO，本机无卡未实跑）
 python3 rl_agent.py chat                    # 交互模式
 
 # 接真 LLM（OpenAI 兼容，强制 https + 24 次调用熔断 + 注入边界）
@@ -101,6 +108,7 @@ graph TD
 | 29 | **Ctx-APO 环 ⭐⭐** | `ctx-apo`：变异 CtxPolicy→RLVR+成本塑形→贪心保留；demo 实测 v0 0.92→记忆关闭 0.93→检索收紧 0.94（toy 真实 Pareto） | MemAgent×GEPA 精神交集 |
 | 30 | **kb_curate 知识固化** | 实验成功→结论卡写 `memory/kb_generated/`→下轮 kb_search 命中（实测第二轮第一击命中）——episodic→semantic | 讲透Agent/04 |
 | 31 | **debate 双 agent 对抗验证** | `debate`：P 提案（rank 选择=bandit）vs C 挑战（引用真伪+行质量）；demo 实测 3 轮涌现——P 被击倒后学会弃标题行改提实质行（Q[rank0]0.35→Q[rank1]0.76）——挑战从系统触发器变独立角色 | 讲透Agent/06·多智能体 |
+| 32 | **verl/verl_tool 集成**（三层） | [`verl_bridge/`](./verl_bridge/)：L1 环境接入（4 动作 tag 协议+RLVR 外部判分，14 项协议测试过+官方 get_tool_cls 注册验证）/ L2 exp_grpo vs verl GRPO 读码对照（Dr.GRPO 开关同源）/ L3 GPU 配方（Qwen2.5-1.5B+GRPO，本机无卡待跑）——同一任务环境，A/B 两种进化引擎 | verl core_algos.py:268 |
 
 ## 四、三层讲透（宪法合规·v2 诚实版）
 
@@ -125,7 +133,7 @@ graph TD
 
 ## 六、路线图（feature_list.json 同步；不在映射表——审查教训：TODO 不算融合）
 
-~~debate 双 agent~~ ✅ v3.2 已落地（映射 #31）。待做：n-step 轨迹级 credit / mcts_planner / arxiv_verify 联网核实 / RLHF-RM toy / debate 的 LLM 版挑战者。
+~~debate 双 agent~~ ✅ v3.2 已落地（映射 #31）；**verl/verl_tool 集成** ✅ v3.3 已落地 L1+L2（映射 #32，L3 待 GPU 机）。待做：n-step 轨迹级 credit / mcts_planner / arxiv_verify 联网核实 / RLHF-RM toy / debate 的 LLM 版挑战者。
 
 ---
 v3：2026-08-17 · context 融合 + Ctx-APO + kb_curate（MemAgent arXiv:2507.02259 思想）· v2 审查闭环见 [多角色审查报告](./多角色审查报告-RL领域Agent.md) · 姊妹案例：[Open-AutoGLM](../实战案例-Open-AutoGLM手机Agent/)（读生产项目）、[DeepSeek Harness](../Agent框架案例/deepseek-harness插件化框架/)（读工业框架）、**本案例**（自己写一个）
