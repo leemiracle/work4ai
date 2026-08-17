@@ -53,6 +53,8 @@ def log_safe(t): return math.log(max(t, 2))                           # ← orac
 
 # ---------------- 持久化：原子写 + schema 校验（← security P1-2/P2-5） ----------------
 def save_json(f, obj):                                                # tmp + rename 原子写
+    d = os.path.dirname(f)
+    if d: os.makedirs(d, exist_ok=True)                               # ← 评估场景目录可能不存在
     tmp = f + ".tmp"
     with open(tmp, "w", encoding="utf-8") as fh:
         json.dump(obj, fh, ensure_ascii=False, indent=1)
