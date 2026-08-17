@@ -68,6 +68,7 @@ updated: 2026-08-13
 - 与 **`讲透多Agent协作/`**：并行多 agent coding 需要 file ownership（见 `05`）。
 - 与 **`讲透上下文缓存/`**：coding agent 的瓶颈往往是 context（Augment 60 万 token 的意义）。
 - 外部论文流：[PaperAgent精华合入-总入口 §十三](../PaperAgent精华合入-总入口.md)——92 页 Vibe Coding 综述：五类开发模式（UAM/ICCM/PDM/TDM/CEM = 人的参与度坐标系）+ 四级反馈回路（编译 RLCF +45% / 运行 TDD / 人类 ClarifyGPT / 自反思 Reflexion +11%——与本项目"迭代即熵泵"洞察互证）+ Agent-as-a-Job。
+- 实证证据：[讲透Prompt/Prompt-SE实证线](../讲透Prompt/Prompt-SE实证线-软件工程.md)——14 技术×10 SE 任务×4 模型：ES-KNN 示例选择最稳（↔CEM 模式）、Role Prompting 性价比、换模型必须重测 prompt（o3-mini 异常）、代码任务 prompt 压缩省 8k+ token/prompt；TDD Governance 论文（Prompt-SE 2026）↔TDM 模式的学术对应。
 
 ## 💡 核心洞察
 
