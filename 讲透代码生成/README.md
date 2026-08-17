@@ -67,6 +67,7 @@ updated: 2026-08-13
 - 与 **`Karpathy经典代码精读/`**（已有）：那边读别人的代码，这边让 AI 写代码。
 - 与 **`讲透多Agent协作/`**：并行多 agent coding 需要 file ownership（见 `05`）。
 - 与 **`讲透上下文缓存/`**：coding agent 的瓶颈往往是 context（Augment 60 万 token 的意义）。
+- 外部论文流：[PaperAgent精华合入-总入口 §十三](../PaperAgent精华合入-总入口.md)——92 页 Vibe Coding 综述：五类开发模式（UAM/ICCM/PDM/TDM/CEM = 人的参与度坐标系）+ 四级反馈回路（编译 RLCF +45% / 运行 TDD / 人类 ClarifyGPT / 自反思 Reflexion +11%——与本项目"迭代即熵泵"洞察互证）+ Agent-as-a-Job。
 
 ## 💡 核心洞察
 

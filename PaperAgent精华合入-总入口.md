@@ -16,6 +16,13 @@
 | 6 | 记忆 ×3 | Memory Sharing（arXiv:2404.09982）/ 记忆机制综述（3来源2形式3操作）/ 记忆系统复盘 3 类 6 操作（arXiv:2505.00675） | 本笔记 §六 + `讲透Agent/04` + `讲透Agent/Agent记忆系统案例/` |
 | 7 | RAG×Agent ×3 | ERAGent（arXiv:2405.06683）/ Golden-Retriever（arXiv:2408.00798）/ LlamaIndex"RAG 的尽头是 Agent" | 本笔记 §七 + `讲透RAG/03-高级架构` |
 | 8 | RL×LLM / 自演化 | 2 篇 152 页 RL+LLM 综述（RLVR 演进/大推理模型）/ Self-Evolving Agents 综述（arXiv:2507.21046） | 本笔记 §八§九 + `讲透RL/05、07` + `讲透多Agent协作/` |
+| 9 | **Agentic RL**（阅读量 Top1: 3080） | 从 LLM-RL 到 Agentic RL 全新范式（arXiv:2509.02547，100 页 16 机构） | 本笔记 §十 + `讲透RL/07` |
+| 10 | **Deep Research 系统**（2524 阅读） | 80 种 Deep Research 系统综述（arXiv:2506.12594，95 页，浙大） | 本笔记 §十一——**项目空白主题观察哨** |
+| 11 | Agentic 框架 | Agentic 框架方法到场景综述（arXiv:2508.17692） | 本笔记 §十二 + `讲透Agent/01` + `讲透多Agent协作/` |
+| 12 | **Vibe Coding**（1466 阅读） | 92 页 Vibe Coding 全面综述（中科院计算所&杜克） | 本笔记 §十三 + `讲透代码生成/` |
+| 13 | **AI4Research**（968 阅读） | 120 页 AI4Research 系统综述（arXiv:2507.01903） | 本笔记 §十四——研究工作流参考（与用户 AI×Math 路线相关） |
+| 14 | RAG×推理 | 54 种 RAG-推理协同综述（RAR/ReAR 双向） | 本笔记 §十五 + `讲透RAG/03` |
+| 15 | **世界模型×具身**（2026-01） | WM×VLA/VLN 三大架构范式综述（TechRxiv） | 本笔记 §十六——**补 `讲透RL/07` World Model 待核缺口** |
 
 **不合入**（理由）：
 - 具体厂商产品发布类（如"快手 Keye-VL"）：产品新闻非方法，留给 `前沿与媒体/` 专题清单；
@@ -156,21 +163,93 @@
 - 挑战：灾难性遗忘 / 冷启动个性化 / 专业性vs泛化矛盾 / 多体共识依赖削弱独立推理 / 静态基准测不出长期适应性。
 - 连接：AG5"反思=经验回放"在 What/When/How 框架里定位为 {上下文-记忆, inter-test-time, 文本反馈}——一格之子集，框架给出全图。与 harness 镜 §六"元层在生长"（RSI/自改进是 2026 下半年最活跃方向）互证。
 
-## §十 横向综合：PaperAgent 镜的四条观察
+## §十 Agentic RL（arXiv:2509.02547）——从"会说"到"会做"的范式迁移
 
-1. **选材即信号**：日更选题高度集中在"Agent 组件的论文化"（记忆/工具/规划/RAG/RL），与项目讲透系列的章节划分惊人一致——产业中文圈与本项目对 Agent 知识坐标系的收敛共识。
-2. **"综述的综述"价值最高**：工具四阶段、记忆 3×6、RLVR 奖励五分类、自演化 What/When/How——分类学条目是唯一值得跨时间保留的内容（具体 SOTA 数字半年即过期）。
-3. **反思的坐标化**：Reflexion 在三篇综述里有三种定位（计划组件之一 / inter-test-time 进化 / RAG 补层）——同一机制在不同分类轴下位置不同，项目 AG1/AG5 的区分得到外部印证。
-4. **与 harness 镜互补**：PaperAgent 讲"模型怎么变聪明"（算法），harness 讲"环境怎么变可靠"（工程）——Agent = Model + Harness 公式两侧的文献流。
+> 100 页综述，牛津/上海AI Lab/NUS 等 16 机构，公众号阅读量 Top1（3080）。开源清单：github.com/xhyumiracle/Awesome-AgenticLLM-RL-Papers
+
+- **范式迁移**：PBRFT（偏好微调，退化单步 MDP：单 prompt→一次性输出→立即终止）→ Agentic RL（标准 POMDP，T>1）。动作空间 A = A_text ∪ A_action（既可说话也可调工具）；奖励从"答得好不好"扩到"做得对不对"（时序反馈）。一句话：**PBRFT 让模型更会一次地说，Agentic RL 让模型更会长程地做**。
+- **RL 点亮六大能力**：Planning（MCTS 外搜/策略梯度内优化，LATS）/ Tool Use（ReAct 模仿 → TIR 奖励驱动，ToolRL/ReTool）/ **Memory（静态 RAG → RL 决定何时写/删/查，Memory-R1/MemAgent——记忆操作本身成为可学习策略）** / Self-Improvement（自生成 critique→在线 DPO/GRPO，R-Zero/Absolute Zero）/ Reasoning（过程奖励塑形长链，R1/o1）/ Perception（视觉/音频/3D 统一 GRPO，Vision-R1）。
+- **十大战场**：Search&Research（Search-R1 四特殊 token：think/search/result/answer，不对搜索结果算损失）/ Code（函数级→仓库级 SWE-bench，DeepSWE/SWE-RL）/ Math（形式化双轨：DeepSeek-Prover/Leanabell）/ GUI（静态截图→真机在线，UI-TARS）/ Vision / Embodied（VLA+轨迹级奖励，VLN-R1 时间衰减奖励）/ Multi-Agent（去中心化训练&自博弈，MAGRPO/SPIRAL）。
+- **资源**：50+ 环境基准 + 15 个 RL 框架（OpenRLHF/trlX/EasyR1/AgentFly/AWorld）。
+- 演化叙事：o1(2024-09)→R1(2025-01, GRPO+可验证规则奖励)——**RL 应用从"对齐目标"扩展到"能力提升目标"**的转折点。
+- 连接：`讲透RL/07` 的 2026 全景主轴；AG3 记忆层级 × Memory-R1 = "记忆操作 RL 化"；与 §九 Self-Evolving（what/when/how）互为犄角——本篇按"能力维度"切，§九按"进化维度"切。
+
+## §十一 80 种 Deep Research 系统（arXiv:2506.12594）——项目空白主题观察哨
+
+> 95 页，浙大，2524 阅读。Deep Research = LLM + 高级检索 + 自主推理，自动化科研工作流。80+ 商业/开源实现（OpenAI/Gemini/Perplexity 及开源替代）。
+
+- **四维分层分类**：①基础模型与推理引擎（百万上下文/情景缓冲区/层次化压缩/CoT-ToT-图推理）②工具利用与环境交互（16000+ API 集成/多模态内容处理）③任务规划与执行控制（目标分解/执行跟踪/自适应细化/多 agent 协调）④知识综合与输出生成（结构化报告/证据整合/交互式呈现）。
+- **四种实现架构**：单体（中心推理引擎，OpenAI DR——一致性高但并行弱）/ 流水线（顺序阶段，n8n——可复现但复杂推理弱）/ 多智能体（专门化角色，smolagents/OWL——并行强但一致性难）/ 混合（分层组织，Perplexity/Camel-AI——最灵活最复杂）。
+- 伦理挑战：信息准确性/隐私/知识产权/可访问性。未来方向：高级推理架构/多模态集成/领域专业化/人机协作/生态标准化。
+- **判断**：Deep Research 是 2025-2026 Agent 落地最成功的形态之一（OpenAI/Gemini/Perplexity 均已产品化），项目讲透系列暂无此主题——本条目作为观察哨，若深挖可立"讲透DeepResearch"新系列（候选：调研→选题→实验→写作的全流程自动化）。
+
+## §十二 Agentic 框架：方法到场景（arXiv:2508.17692）——三级 taxonomy × 四大战场
+
+- **统一语言**：通用符号 + 通用算法——任何 Agentic 推理框架都可视作同一形式化的实例（跨框架可比性的基础）。
+- **三级递进 taxonomy**（能力逐级叠加）：①单智能体（怎么自己想得更好：角色扮演/CoT/自我精炼）②工具 based（怎么调外部资源：API/插件/中间件 × 选择 × 并行）③多智能体（怎么组队：中央 MetaGPT/分布式 MADebate/层级 ChatDev）。
+- **四大应用战场**（每格都是"子领域×代理技巧×代表工作"）：科学发现（数学**多 agent Lean4 证明** MA-LoT/ProverAgent / 天文光谱假设流水线 / 地学 GIS+MCTS / 生化分子设计 ChemCrow）/ 医疗（多科会诊辩论 MedAgents / 可进化医院 Agent Hospital）/ 软件工程（多角色 TDD AgentCoder / 模拟软件公司 SOP）/ 社会经济模拟（Generative Agents / SocioVerse 千万用户 / 股票仿真 FinRobot）。
+- 连接：三级 taxonomy 与 `讲透Agent/00` 公式（单体）→ `讲透Agent/02`（工具）→ `讲透多Agent协作/`（多体）的系列结构完全同构——项目章节划分再次获得外部印证。**数学多 agent Lean4 证明**与用户 Lean4 路线直接相关。
+
+## §十三 Vibe Coding（92 页综述）——AI 原生开发范式分类学
+
+> 中科院计算所&杜克，1466 阅读。Vibe Coding = 以"氛围/结果"为导向：人只写提示，AI 端到端生成，"感觉"对就收货。
+
+- **四大技术板块**：Code LLM（CodeLlama/DeepSeek-Coder/StarCoder2）× Coding Agent（OpenHands/MetaGPT/SWE-agent）× 开发环境（沙箱 Docker+K8s/Cursor/分布式编排）× 反馈机制（四级）。
+- **五类开发模式**（人的参与度递减）：UAM 无约束自动化（原型，只看结果）/ ICCM 对话协作（人 review 每轮）/ PDM 规划驱动（先设计文档再编码）/ TDM 测试驱动（人写测试→AI 过测）/ CEM 上下文增强（RAG 检索大仓规范）。可组合：PDM+TDM 保架构+质量；ICCM+CEM 维护遗留代码。
+- **四级反馈回路**（错误越早暴露越便宜）：编译（RLCF 把 gcc 报错当奖励，+45% 通过率）→ 运行（TDD 单测自评）→ 人类（ClarifyGPT 主动提问消歧义）→ 自反思（Reflexion 语言强化学习，HumanEval +11%）。
+- 后训练趋势：**可验证奖励替代人类偏好**——代码能跑通就是 1，跑不通就是 0（与 §八 RLVR 规则奖励同源）。
+- 沙箱四级隔离：容器/系统调用过滤（gVisor）/硬件（Intel PKRU）/语言级（WASM）；CI/CD → Agent-as-a-Job（Agent 提 PR→自动单测+安全扫描→人类仲裁——与 harness 镜"验证即证据"公理互证）。
+- 连接：`讲透代码生成/05-应用-Agent化代码工作流` 的学术总纲；五模式给"人的参与度"提供了命名坐标系。
+
+## §十四 AI4Research（arXiv:2507.01903，120 页）——科研全流程 AI 化五领域
+
+> 与 AI4Science 的分界：AI4Science 解具体科学问题（材料/药物/基因），AI4Research 覆盖研究方法论与学术基础设施（文献/写作/评审）——LLM 强后两者趋合，AI4Science 工具正成为 AI4Research 系统的可调用组件。
+
+- **五领域**：①科学理解（文本/表格/图表）②学术调查（语义引导/图引导/LLM 增强检索；路线图绘制 HiReview 多层树/章节级相关工作/文档级综述 AutoSurvey）③**科学发现**（Idea 挖掘：内部知识/外部信号/团队讨论三源 × 新颖性评估 × 理论分析：主张形式化/证据收集/**定理证明** × 实验设计管理 × 全自动发现）④学术写作（准备/撰写/完成三阶段 + 全自动：AI Scientist/Agent Laboratory 带模拟评审反馈环）⑤同行评审（预评审 desk-review/审稿人匹配 → 评审中意见生成/meta-review → 评审后影响力分析）。
+- 连接：**与用户"应用数学研究型工程师"路线直接相关**——Idea 挖掘/定理证明/实验设计正是研究循环的骨架；Lean4 定理证明在 ③ 有专节（与 §十二 数学战场互证）；`research-companion` skill 的论文地图。
+
+## §十五 54 种 RAG-推理协同——双向增强分类学
+
+- **双向协同**：RAR 推理增强检索（多步推理动态提升检索质量：按需检索/隐含查询逻辑推断/中间推理递归重构查询）× ReAR 检索增强推理（迭代上下文敏感检索补知识缺口，数学证明中间步需要特定定理/引理——**与 §十四 定理证明互补**）。
+- **两种工作流**：预定义（固定架构顺序执行，可重复可预测，牺牲适应性）vs 动态（LLM 中心自主推理，实时监控推理状态动态触发检索/生成/验证）。
+- **三类实现**：Prompt-based（CoT/特殊 token 预测[Web-search]/搜索驱动推理/图上推理/外部求解器）→ Tuning-based → RL-based（动态奖励平衡知识检索与逻辑推理——测试时扩展繁荣后成为主流）。
+- **成本与过度思考风险**：计算非线性增长/隐性 token 膨胀/检索效率边际下降；解法：限制推理链长度（ReaRAG）/两阶段过滤/RL+蒸馏动态惩罚冗余步骤（R1 奖励函数惩罚重复验证）。
+- 连接：`讲透RAG/03-高级架构` 的 Agentic RAG 的学术超集（54 种技术全景）；"过度思考"是 2025-2026 推理模型的共性病，与 `讲透RL/05` 的 RLVR 极限讨论呼应。
+
+## §十六 世界模型×具身智能（2026-01）——三大架构范式
+
+> PaperAgent 判断 2026 新风向：Agent（2025 最火）→ 世界模型×具身（Agentic AI 落地物理世界）。WM = AI 对物理环境的内部模拟与预测——不只"看到"现在，更要"想象"未来。
+
+- **四把斧头**：样本效率（想象 rollout 替代昂贵真机交互）/ 长程推理（显式状态转移支持 MPC/MCTS）/ 安全（先脑内试玩再真机）/ 主动规划（被动反应→预见未来）。
+- **三大架构范式**：①模块化（WM 与 Policy 独立分工：迭代模拟器 DayDreamer 闭环梯度 vs 候选评估器 NWM 100 条轨迹开环排序）②顺序化（WM 先自回归生成未来目标→轻量策略条件执行：跨本体迁移友好但开环脆弱需可行性检查器）③统一化（预测+控制揉进一个端到端网络：GR-1/GR-2 自回归 next-token / 扩散 UWM / 语言即状态 NavCoT——性能最高但黑箱+训练不稳）。
+- 选型口诀：**要白盒→模块化；要迁移→顺序化；要性能→统一化**。
+- 产业共识（WAIC 2026 圆桌交叉验证）：世界模型不是"预测下一张画面"而是"预测世界的下一个状态"；必须与 Action 绑定（Action-State 联合建模）；最大瓶颈是**真实物理交互数据**（视频只给几何视觉信息，缺力/触觉/摩擦；具身操作或需千万小时级数据）；仅靠世界模型不够——需本体/数据/模型/场景/商业化飞轮。
+- 连接：**正好补 `讲透RL/07` §6 World Model 待核缺口**（2026-08-12 版诚实标注"联网局限未能补充"）；与 Agentic RL 十大战场的 Embodied 战（§十）衔接。
+
+## §十七 横向综合：PaperAgent 镜的双批观察
+
+**第一批（8 主题）**：
+1. **选材即信号**：日更选题与项目讲透系列章节划分收敛一致。
+2. **"综述的综述"价值最高**：分类学条目跨时间保值，SOTA 数字半年过期。
+3. **反思的坐标化**：Reflexion 在不同分类轴下位置不同，AG1/AG5 区分获外部印证。
+4. **与 harness 镜互补**：算法内容 vs 环境工程，`Agent = Model + Harness` 两侧文献流。
+
+**第二批（7 篇，主页拉取）**：
+5. **阅读量即需求信号**：Agentic RL（3080）> Deep Research（2524）> Vibe Coding（1466）> AI4Research（968）——**训练范式升级、科研自动化、AI 原生开发**是中文产业圈三大刚需主题，全部是"综述型"文章，再次验证观察 2。
+6. **形式化是共同底座**：Agentic RL 用 POMDP 七元组、Deep Research 用四维分类、WM 用三范式——2025-2026 综述的标准姿势是"先给形式化框架再填内容"，与项目"直觉→数学"宪法同频。
+7. **记忆×RL 是交叉热点**：Memory-R1/MemAgent（RL 学记忆操作）同时出现在 Agentic RL 六能力与 Self-Evolving What 轴——记忆从"工程组件"升级为"可学习策略"，是 AG3 的 2026 延伸。
+8. **Lean4 出现在两个战场**：Agentic RL 的 Math 形式化双轨 + Agentic 框架的多 agent Lean4 证明——形式化数学×Agent 是用户稀缺组合的又一外部证据。
 
 ## 四、后续候选（留观）
 
 | 线索 | 留观理由 |
 |---|---|
-| "动手设计 AI Agents（编排、记忆、插件、workflow、协作）" | 疑似工程合集文，若与 Agent架构模式参考/ 重叠则只挂链接 |
-| "DeepSeek R1 + Agent 的下半场" | 推理模型×Agent 是 2026 热点，等 `讲透Agent` 补推理章节时合入 |
-| "Agent 到多模态 Agent 再到多模态 Multi-Agents（1.2 万字）" | 多模态×多体，归 `讲透多Agent协作/` 或 `讲透多模态/`，待定位 |
-| 快手 Keye-VL-1.5-8B 等产品发布 | 厂商产品类，留给 `前沿与媒体/18-自动驾驶与具身机器人专题` 跟踪 |
+| "Deep Research 80 系统" → 若深挖 | **项目空白主题**：调研→选题→实验→写作全流程自动化，可立"讲透DeepResearch"新系列（见 §十一） |
+| "大模型 Agentic 框架到应用" 四大战场细节 | 数学多 agent Lean4 证明（MA-LoT/ProverAgent）值得单独深读，与用户 Lean4 路线交叉 |
+| "GLM-4.7 Coding / Doubao-Seed-Code / 303 页 AI Code 综述" | 模型产品类+大综述，留给 `前沿与媒体/06-AI编程工具专题` 跟踪；AI Code 综述若要合入走 `讲透代码生成/` |
+| "扣子空间+MCP 科研伙伴 / Trae+MCP 搭 PaperAgent" | MCP 实操案例，与 `讲透Agent/02` MCP 节相关，实操细节价值中等留观 |
+| 快手 Keye-VL-1.5-8B / GLM-4.5V / 字节图像 AI 等产品发布 | 厂商产品类，留给 `前沿与媒体/` 对应专题清单 |
 
 ---
-生成：2026-08-17 · 对齐 [harness精华合入-总入口](./harness精华合入-总入口.md) 的体例 · 抓取快照：websearch 摘要 + 火山引擎同步站全文（微信原文反爬未直读）
+生成：2026-08-17 · 对齐 [harness精华合入-总入口](./harness精华合入-总入口.md) 的体例
+抓取快照：**第一批** websearch 摘要 + 火山引擎同步站全文（微信原文反爬未直读）；**第二批**（§十–§十七）火山引擎作者主页 20 篇文章清单拉取 + 高价值 7 篇全文（arXiv ID 均摘自文内链接，其中 2509.02547/2506.12594/2507.01903/2508.17692 经多源交叉；世界模型综述为 TechRxiv DOI 10.36227/techrxiv.176531987，未做 abs 二次复核，引用前先核）
