@@ -244,7 +244,7 @@
 
 | 线索 | 留观理由 |
 |---|---|
-| "Deep Research 80 系统" → 若深挖 | **项目空白主题**：调研→选题→实验→写作全流程自动化，可立"讲透DeepResearch"新系列（见 §十一） |
+| ~~"Deep Research 80 系统" → 若深挖~~ | ✅ 已立项 [`讲透DeepResearch/`](./讲透DeepResearch/README.md)（2026-08-17，见 §十一），后续增补走该系列 |
 | "大模型 Agentic 框架到应用" 四大战场细节 | 数学多 agent Lean4 证明（MA-LoT/ProverAgent）值得单独深读，与用户 Lean4 路线交叉 |
 | "GLM-4.7 Coding / Doubao-Seed-Code / 303 页 AI Code 综述" | 模型产品类+大综述，留给 `前沿与媒体/06-AI编程工具专题` 跟踪；AI Code 综述若要合入走 `讲透代码生成/` |
 | "扣子空间+MCP 科研伙伴 / Trae+MCP 搭 PaperAgent" | MCP 实操案例，与 `讲透Agent/02` MCP 节相关，实操细节价值中等留观 |
