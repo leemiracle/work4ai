@@ -19,6 +19,11 @@ python3 rl_agent.py chat                    # 交互模式
 # 接真 LLM（OpenAI 兼容，强制 https + 24 次调用熔断 + 注入边界）
 read -s RL_AGENT_API_KEY && export RL_AGENT_API_KEY   # read -s 防 key 进 shell history
 export RL_AGENT_BASE_URL="https://api.xxx.com/v1" RL_AGENT_MODEL="glm-4.7"
+
+# ★ 真 GLM-5 上的 APO（UCB bandit 迭代提示词，凭证自动读 opencode 配置）
+python3 glm_apo.py            # 探索：8臂×3轮（24 次调用）
+python3 glm_apo_finals.py     # 决赛：最优臂 vs 朴素基线 16 题配对
+# 成果见 GLM-APO实验报告.md：最优 prompt(RCF三组件) 16/16 vs 基线 14/16
 ```
 
 harness 四件套：`AGENTS.md`（行为契约，已提交）+ 首次运行自动生成 `progress.md`/`feature_list.json`/`memory/`（运行产物，`.gitignore` 挡住不进 git）。
