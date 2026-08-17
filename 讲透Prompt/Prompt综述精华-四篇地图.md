@@ -124,7 +124,44 @@ VLM 特有：空间标注 prompt $[I,T,R_1..R_m; x]$（bbox/marker/mask/多边�
 
 ---
 
-## 五、差距分析与下一步
+## 五、一级论文索引（综述引用的核心论文，arXiv 逐个核实 ✅ 2026-08-17）
+
+> 综述是地图，这是地图标注的城池。核实方法：arXiv abs 页 / 官方 repo / 权威综述参考文献交叉（APE 的 ID 取自 OPRO ICLR 2024 论文参考文献原文）。
+
+### 5.1 APO 方法谱系（六方法 + 位置）
+
+| 论文 | arXiv | 发表 | 机构 | 核心贡献 | 在四范式中的位置 |
+|---|---|---|---|---|---|
+| APE（Zhou et al. 2022）| [2211.01910](https://arxiv.org/abs/2211.01910) | ICLR 2023 | UofT/MS 等 | LLM 反向诱导指令；几百样本够用 | FM as optimizer（起点）|
+| ProTeGi（Pryzant et al.）| [2305.03495](https://arxiv.org/abs/2305.03495) | **EMNLP 2023** | Microsoft | 文本梯度 + Beam Search | 梯度（离散近似）|
+| OPRO（Yang et al.）| [2309.03409](https://arxiv.org/abs/2309.03409) | **ICLR 2024** | Google DeepMind | 轨迹优化；GSM8K +8% / BBH +50% vs 人写 | FM as optimizer |
+| DSPy（Khattab et al.）| [2310.03714](https://arxiv.org/abs/2310.03714) | **ICLR 2024** | Stanford | 声明式编译框架 | 编译器（统一外壳）|
+| MIPRO（Opsahl-Ong et al.）| [2406.11695](https://arxiv.org/abs/2406.11695) | **EMNLP 2024** | Stanford | 贝叶斯代理联合搜指令+示例 | FM + 搜索混合 |
+| TextGrad（Yuksekgonul et al.）| [2406.07496](https://arxiv.org/abs/2406.07496) | **NeurIPS 2024** | Stanford | 文本自动微分；GPT-4o GPQA 51%→55% | 梯度（泛化）|
+
+代码锚点：OPRO→[google-deepmind/opro](https://github.com/google-deepmind/opro)；ProTeGi→[microsoft/LMOps/prompt_optimization](https://github.com/microsoft/LMOps)；DSPy/MIPRO→[stanfordnlp/dspy](https://github.com/stanfordnlp/dspy)；TextGrad→[zou-group/textgrad](https://github.com/zou-group/textgrad)。
+
+### 5.2 谱系的"下一跳"（二批核实时从引用网络挖到，留观）
+
+| 论文 | 方向 | 留观理由 |
+|---|---|---|
+| GEPA（Agrawal 2025）| 反思式 prompt 进化，声称胜 RL | APO frontier，若做 09 章扩展则核实 |
+| EvoAgentX [2507.03616](https://arxiv.org/abs/2507.03616) | TextGrad/AFlow/MIPRO 整合进 agent 工作流进化（GAIA +20%）| APO×多 Agent 汇流——与讲透Agent 自演化（arXiv:2507.21046 What 轴）对接 |
+| Promptbreeder | 自指涉 prompt 进化（父 prompt 进化出子 prompt 的变异提示）| 进化范式深水区 |
+
+### 5.3 SE 实证线论文（详见 [Prompt-SE实证线](./Prompt-SE实证线-软件工程.md)）
+
+| 论文 | 锚点 | 状态 |
+|---|---|---|
+| Which Prompting Technique Should I Use? | [2506.05614](https://arxiv.org/abs/2506.05614) | ✅ 14 技术×10 SE 任务×4 模型 |
+| Do Advanced LMs Eliminate the Need for PE? | [2411.02093](https://arxiv.org/abs/2411.02093) | ✅ 推理模型 zero-shot 常更优（GPT-4o 90.4→96.3 vs o1-mini 93.9 零提升）|
+| MDPI SE-PE SLR（42 篇）| [mdpi 6(9):206](https://www.mdpi.com/2673-2688/6/9/206) | ✅ 四簇：手工/RAG/CoT/自动调优 |
+| PET 可复现性危机（Vaugrante et al.）| TMLR 2025 | ✅ 6 技术×7 模型几乎全无显著增益 |
+| 推理进步真相（McGinness & Baumgartner）| [2505.19676](https://arxiv.org/abs/2505.19676) / [2509.12645](https://arxiv.org/abs/2509.12645) | ✅ 隐藏 CoT 解释 2023→2024 提升 |
+
+---
+
+## 六、差距分析与下一步
 
 1. ~~**本系列缺 APO 章**~~ ✅ **已解决（2026-08-17）**：[09-Prompt自动优化.md](./09-Prompt自动优化.md) 立项落盘——五幕全展开（直觉/数学/方法谱系速查表/决策树/四坑/三步落地）+ 实验 [09_apo.py](./experiments/09_apo.py) 四铁证（梯度 93.4% vs 随机 70.5%；差种子+好算子 40/50 反超好种子+差算子；一轮 49%→96.5%；上界 96.5%≠100%）。22↔58 映射表也已补全（§四）。
 2. **根 README 的讲透Prompt 条目**无需动（系列完整度未变）。
