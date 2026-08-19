@@ -73,6 +73,8 @@ MCP工程手册        = 工具协议；本手册 T 组件的消费端
 
 **活案例**：[讲透Agent/实战案例-RL领域Agent/harness_rl](../../讲透Agent/实战案例-RL领域Agent/harness_rl/DESIGN.md)（v4）——手册 12 章技术的全融合实跑：配置即动作空间的 bandit 内环 + AHE 外环双靶迭代（自身 harness + RL 域 harness），manifest 记录 5 REVERT/2 COMMIT 的可证伪闭环全史。
 
+**活案例·插件化**：[deepseek-kernel-harness](../../deepseek-kernel-harness/README.md)（v0.1，2026-08-18）——DeepSeek 引擎 + Linux kernel 领域插件：12 章骨架的 kernel 特化宿主 + 验证金字塔 L1-L4（checkpatch/sparse/build/boot）+ **02 章 #65-66 三种结构病的 graph 层落地**（goodhart_guards 反 gaming / global_conflicts 治盲区 / patch_queue 治并行冲突），`--self-test` 零依赖全绿。
+
 ---
 
 ## ⚠️ 三个最重要反直觉
