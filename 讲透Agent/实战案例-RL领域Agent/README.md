@@ -8,6 +8,7 @@
 > v3.1 = 同日五角色二审（oracle/security/councillor/perf + 主审计）：修 P0×2（eval 隔离假/塑形退化→字典序）+ P1×6（CTX_F 读回生效/缓存同步失效/卡片投毒净化/ev_ref 截断漏固化/glm_ctx_apo 挂链/元数据）。审查发现记录于 [GLM-CtxAPO实验报告.md](./GLM-CtxAPO实验报告.md) §审查。
 > v3.2 = 同日路线图落地：**debate 双 agent 对抗验证**（P 提案 bandit × C 规则挑战，映射 #31）。
 > v3.3 = 同日 **verl/verl_tool 三层集成**（映射 #32）：任务环境接入 verl_tool 协议（L1 本地实测）+ exp_grpo vs verl GRPO 读码对照（L2）+ GPU 配方（L3 待卡）。
+> v5 = 2026-08-19 **逆向激活工程 rae**（[逆向激活工程/](./逆向激活工程/)）：把两条观察规律形式化为**激活层谱**（Prompt→Skills→Context→LoRA→参数：越近自然语言越易解释越随机，越近参数越确定越难改），然后**逆向**——以参数态工件为能力参照物，RL 搜索等效软层工件。旗舰 exp2：多模态 LoRA（模拟直通）→ skill（glm-5.3+UCB1 实跑 51 调用/175s），裸模型 0% 证实能力缺失，skill 路线决赛 **100% 追平** LoRA 模拟且查询仅 14 tok/题，自动生成符合开放标准的 `generated_SKILL.md`；exp1 层谱定律 toy 验证（含反直觉铁证：RAG 确定性 100% 但组合泛化任务准确率仅 55%——确定≠准确）。
 
 ---
 
@@ -20,6 +21,10 @@ python3 rl_agent.py --task "跑一个 grpo 实验" --sc 3   # Self-Consistency �
 python3 rl_agent.py apo                     # ★ RL agent 迭代自己的 prompt
 python3 rl_agent.py ctx-apo                 # ★★ v3: RL agent 迭代自己的 context 栈（第三进化环）
 python3 rl_agent.py audit --text "你是...专家..."     # ROIF-CSE 拆解任意 prompt
+
+# ★★★ v5 逆向激活工程（多模态 LoRA→skill 逆向生成，glm-5.3 实跑 ~3min）
+python3 逆向激活工程/experiments/exp1_layer_tradeoff.py           # 层谱定律 toy（零 API 秒级）
+python3 逆向激活工程/experiments/exp2_multimodal_skill_rev.py     # 旗舰（--dry 自检不调 API）
 
 # ★★ verl/verl_tool 三层集成（v3.3）：rl_agent 任务环境 → GRPO 训练（A/B 引擎同环境）
 bash verl_bridge/install_tool.sh            # symlink 进 verl_tool + 注册验证（本地可跑）
