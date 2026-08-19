@@ -264,9 +264,10 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 ### 6. 产业架构参考：[`Agent架构模式参考/`](Agent架构模式参考/)
 - 基于五类 AI Agent 产品形态（IDE-A/IDE-B/桌面Agent/CLI-TUI框架/多渠道网关）的脱敏架构调研：全景+对比+创新对决+选型决策树 ⭐ 2026-08（**已完全脱敏**，不指向任何商业产品）
 
-### 6a. Agent 框架案例：[`Agent框架案例/deepseek-harness插件化框架/`](Agent框架案例/deepseek-harness插件化框架/)
+### 6a. Agent 框架案例：[`讲透Agent/Agent框架案例/deepseek-harness插件化框架/`](讲透Agent/Agent框架案例/deepseek-harness插件化框架/)
 - DeepSeek 官方开源 agent harness（dsh，219 插件包）源码级解剖：核心运行时（turn/step 状态机、事件日志）/ 能力接缝 + 插件机制全景 / 信任平面（沙箱+审批+供应链）/ 装配与外部接口 / DeepWiki 对照增补 / dsh-plugin 生态分析（star>66 全 59 仓库），12 篇笔记全部行号可验 ⭐ 2026-08
 - 反欺骗切面另见 [`欺骗动力学-AI纪实验包.md`](欺骗动力学-AI纪实验包.md) 实验 5
+- MCP 生态观测锚点：[`讲透Agent/Agent框架案例/MCP协议生态全景/`](讲透Agent/Agent框架案例/MCP协议生态全景/)——github.com/topics/mcp（64,438 仓）知识集成：双口径生态统计（top41 六赛道 + awesome 3,371 条收录对账）/ **2026-07-28 规范无状态化重构**（删 initialize 握手/session/ping，弃用 Sampling/Roots/Logging，MRTR 模式）/ 官方 org 与 SDK v2 格局（Registry 诞生、FastMCP 独立版）/ 项目内 MCP 知识互链网（手册/用例库/案例卡 10+ 处织网）⭐ 2026-08
 
 ### 6b. Agent 上下文案例：[`Agent上下文案例/`](Agent上下文案例/)
 - 给 Agent 的代码智能（code intelligence for agents）领域全景：**六条技术路线**（无索引检索 / 词法符号索引 / 预构建代码知识图谱 / LSP 实时语义 / 嵌入向量 / LLM 蒸馏地图）+ 全项目速查（codegraph 66.4k★ · graphify 106k★ · Serena 28k★ · code-index-mcp · Aider repo map · Greptile · Cursor/Sourcegraph · Joern/CodeQL/Glean/Kythe/Stack Graphs 血统层）+ 领域演进时间线 + 选型决策树 ⭐ 2026-08
