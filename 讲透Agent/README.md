@@ -20,6 +20,7 @@
 | **实战** | [Open-AutoGLM 手机 Agent](./实战案例-Open-AutoGLM手机Agent/) | 真实端到端 Agent 案例 |
 | **实战** | [DeepSeek Harness 框架](./Agent框架案例/deepseek-harness插件化框架/) | 工业级 agent harness："一切皆插件"+ 信任平面源码解剖 |
 | **实战** | [opencode 自成长改造](./Agent框架案例/opencode自成长改造/) | hermes×ECC 蓝图：把本地 opencode 改造成自成长 Agent（闭环学习环实操） |
+| **实战** | [MCP 协议生态全景](./Agent框架案例/MCP协议生态全景/) | topics/mcp 64k 仓知识集成：生态六赛道 + **2026-07-28 规范无状态化重构** + SDK v2/Registry 格局 + 项目内 MCP 互链网 |
 | **实战** | [RL 领域 Agent](./实战案例-RL领域Agent/) | ★自建可跑：contextual bandit 内核+四层记忆+Reflexion+**三进化环**（Q表/APO/Ctx-APO context 栈）+kb_curate 知识固化+debate 双 agent（892 行纯标准库，31 项技术映射经两轮五角色审查核验）|
 
 ---
