@@ -27,9 +27,9 @@ updated: 2026-08-19
 
 | 篇 | 内容 | 何时查 |
 |---|---|---|
-| [`notes/01-链路总纲与实测仲裁.md`](notes/01-链路总纲与实测仲裁.md) | 十层链路图；**三家素材对账**（Kimi 报告 fine-tuning 错 67 倍等三处纠正）；68 topics 实测总表；六条结构洞察（规模断层/概念热topic冷/对齐三兄弟/产品名topic化） | 先读这篇——全景与纠错 |
+| [`notes/01-链路总纲与实测仲裁.md`](notes/01-链路总纲与实测仲裁.md) | 十层链路图；**三家素材对账**（Kimi 报告 fine-tuning 错 67 倍等三处纠正）；68 topics 实测总表 + **loop/graph 编排 16 topics 补测（8-20）**；八条结构洞察（规模断层/概念热topic冷/对齐三兄弟/产品名topic化/**机制隐形 loop 156 vs reflection 2,098**/**langgraph 11,327 代言 graph 范式 153:1**） | 先读这篇——全景与纠错 |
 | [`notes/02-交互与知识层Topics.md`](notes/02-交互与知识层Topics.md) | L1 Prompt（prompt-engineering 16k/system-prompts/dspy 范式迁移）+ L2 Context（context-engineering 2.7k/letta）+ L5 RAG（rag 41k 五层标签栈：embeddings→vecdb→rerank→rag→agentic-rag） | 写 prompt/搭 RAG/管上下文 |
-| [`notes/03-连接与能力层Topics.md`](notes/03-连接与能力层Topics.md) | L3 MCP 双名现象（mcp 64k vs modelcontextprotocol 663）+ L4 五个 agent 大词分工（ai-agents 74k/agentic-ai/autonomous/llm-agents/multi-agent）+ agent-skills>skills 收敛 | 选工具方案/agent 框架选型 |
+| [`notes/03-连接与能力层Topics.md`](notes/03-连接与能力层Topics.md) | L3 MCP 双名现象（mcp 64k vs modelcontextprotocol 663）+ L4 五个 agent 大词分工（ai-agents 74k/agentic-ai/autonomous/llm-agents/multi-agent）+ agent-skills>skills 收敛 + **执行机制补全：Loop 隐形家族与 Graph 编排产品代言家族（8-20 补测）** | 选工具方案/agent 框架选型/找 loop 与编排实现 |
 | [`notes/04-训练层Topics.md`](notes/04-训练层Topics.md) | L6 微调（lora 5k/peft 1.1k/unsloth 73k★）+ L7 对齐三兄弟（rlhf 778/grpo 522/dpo 441）+ L8 数据评测（synthetic-data 2.4k 最热） | 动微调/对齐/造数据 |
 | [`notes/05-模型与推理层Topics.md`](notes/05-模型与推理层Topics.md) | L9 推理三分格局（vllm 89k★/sglang/llama.cpp）+ L10 模型（llm 116k/transformers 单复数语义分野/reasoning-model 9 仓空壳）+ 横切 | 部署推理/选底座 |
 | [`notes/06-5W2H方法论详解.md`](notes/06-5W2H方法论详解.md) | 全链路 5W2H 总表 + 十层逐层 5W2H 速查 + 第一性原理（"固定权重如何获得新能力"）+ SWOT + 选型成本阶梯 | 方法论/写报告/做决策 |

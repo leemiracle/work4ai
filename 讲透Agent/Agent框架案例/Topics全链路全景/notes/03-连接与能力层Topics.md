@@ -1,4 +1,4 @@
-# 03 · 连接与能力层 Topics：MCP/Tools（L3）/ Skills/Agents（L4）
+# 03 · 连接与能力层 Topics：MCP/Tools（L3）/ Skills/Agents（L4 身份 + 执行机制）
 
 > 本层是项目内已深潜的两站，本篇做**索引层浓缩 + topics 使用背景**，不重复深潜内容。深潜篇：[`../../MCP协议生态全景/`](../../MCP协议生态全景/README.md)（64,438 仓全套分析）、[`../../Skills生态全景/`](../../Skills生态全景/README.md)（11,492 仓全套分析）。
 
@@ -46,6 +46,23 @@
 
 - **使用背景**：跨会话持久记忆（memU/EverOS/MemOS 一类），与 L2 `memory-management` 的区别：这里是**为 agent 设计的记忆系统**（纯度高），那里是通用内存管理。项目内活案例：`../../Agent记忆系统案例/mem0开源记忆层/`。
 
+### L4 执行机制补全：Loop（隐形家族）与 Graph 编排（产品代言家族）——2026-08-20 补测
+
+上面四个小节是 L4 的"身份形态"面；agent 还有"执行机制"面——**循环怎么转**（loop）与**流程怎么编**（graph orchestration），8-19 首测遗漏、8-20 补测（数字见 01 总纲 §3.1）。
+
+**Loop 家族——机制越基础，topic 越隐形**：
+
+- `agent-loop` 156 / `agentic-loop` 36 / `llm-loop` 0 / `prompt-loop` 1 / `self-correction` 91 / `reflection` **2,098**。
+- 悖论解读：loop 是一切 harness 的心脏（`LLM call → tool → observe → repeat`，harness工程手册 12 章骨架），但**没有大 topic 收纳它**——没有人给"人人都有"的机制打标签（同 `reasoning-model`=9）。反而循环的单个**环节**有名有姓：reflection（反思环节）2,098 是家族最大标签。
+- **检索建议**：找 loop 机制项目用**环节词**（reflection / self-correction）或**框架名**（langgraph 仓里的 loop 实现），概念词全失灵。配套工程视角：`../../harness工程手册/` 06 验证金字塔（loop 内的反馈约束）+ 13 行为定位章（在 loop 里定位行为）。
+
+**Graph 编排家族——范式被单一产品代言**：
+
+- `graph-engineering`（概念名）**74** vs `langgraph`（产品名）**11,327**——代言比 153:1；概念层补充：`agent-orchestration` 2,704 / `agentic-workflows` 1,374 / `llm-orchestration` 714 / `workflow-orchestration` 552 / `agent-workflow` 384；第二产品极 `autogen` 784。
+- 解读：图编排（state graph / DAG workflow / checkpoint 回放）在 topic 体系里被 LangGraph 一家代言——比 `vllm`/`inference`（0.55:1）极端两个数量级，说明"graph 即 LangGraph"已成社区心智默认。
+- 交叉：`graph-rag` 339（GraphRAG：图既是编排结构又是检索结构，横跨 L4/L5）。
+- **检索建议**：找图编排实现 → 直接 `langgraph`；要框架中立的综述 → `agent-orchestration` + `agentic-workflows` 双查；GraphRAG → `graph-rag` 并入 L5 RAG 检索组合。
+
 ## 连接层与能力层的分界（一句话）
 
 L3 给 agent **手**（动态工具，MCP 协议连接，进程级）；L4 给 agent **手册与人格**（静态程序性知识，SKILL.md 文件级）+ **自主性**（框架级）——"MCP=插座、Skills=手册"的比喻在本项目两篇深潜中已锚定，topics 数据再次验证：两个生态的标签几乎不重叠（打 mcp-server 的仓很少打 skills，反之亦然——工具与知识自觉分仓）。
@@ -58,6 +75,7 @@ L3 给 agent **手**（动态工具，MCP 协议连接，进程级）；L4 给 a
 
 ## refs
 - GitHub Search API 实测 2026-08-19；代表仓 star repos API 同日（langchain 144,515 / autogen 60,505 / crewAI 57,291 / awesome-mcp-servers 92,548 / github-mcp-server 32,347 / mcp-use 10,502 / mcp-for-beginners 17,018）
+- Loop/Graph 编排家族 16 topics 补测 2026-08-20（同法；crewai/self-refine 因 rate limit 未测成）；配套工程锚点 `../../harness工程手册/`（loop=harness 心脏）
 - 深潜互链：MCP协议生态全景/、Skills生态全景/（同为 2026-08-19 快照）
 
 *updated: 2026-08-19*
