@@ -43,6 +43,13 @@
 | 11 | [`自动进化闭环`](11-自动进化闭环.md) | 估 → 提取特征 → 优化 → 自动化（AHE 三观测性支柱）|
 | 12 | [`最小harness实现`](12-最小harness实现.md) | 200 行代码骨架 + 把 OpenCode 当活教材剖一遍 |
 
+### 🔵 地图与生态（2026-08-20 扩充，引用全核实）
+
+| # | 文件 | 解决什么 |
+|---|---|---|
+| 13 | [`行为定位与HarnessHandbook`](13-行为定位与HarnessHandbook.md) | "该去哪改"——行为地图（L1/L2/L3+BGPD），AHE 管"怎么改"的读路径搭档（arXiv:2607.13285）|
+| 14 | [`生态工具带2026`](14-生态工具带2026.md) | 现成轮子在哪——安全审计/可观测/调试/元进化家族/学习资源五条带 + 选型决策树 |
+
 ---
 
 ## 🚀 怎么用
@@ -56,6 +63,8 @@
 - agent 不可靠/提前宣布完成 → 直奔 [`10-体检`](10-体检清单与反模式.md)
 - 长任务跑一半失忆 → [`05-状态`](05-状态与记忆.md) + [`07-生命周期`](07-会话生命周期与交接.md)
 - 上下文爆炸 → [`04-参数表`](04-上下文管理参数表.md)
+- 不知道去哪改/改漏实现点 → [`13-行为定位`](13-行为定位与HarnessHandbook.md)
+- 要选安全/观测/调试/进化工具 → [`14-生态工具带`](14-生态工具带2026.md)
 
 ---
 
@@ -75,6 +84,8 @@ MCP工程手册        = 工具协议；本手册 T 组件的消费端
 
 **活案例·插件化**：[deepseek-kernel-harness](../../deepseek-kernel-harness/README.md)（v0.1，2026-08-18）——DeepSeek 引擎 + Linux kernel 领域插件：12 章骨架的 kernel 特化宿主 + 验证金字塔 L1-L4（checkpatch/sparse/build/boot）+ **02 章 #65-66 三种结构病的 graph 层落地**（goodhart_guards 反 gaming / global_conflicts 治盲区 / patch_queue 治并行冲突），`--self-test` 零依赖全绿。
 
+**活案例·五成员家族**（2026-08-20，[deepseek-rust-harness](../../deepseek-rust-harness/README.md) + [deepseek-rl-harness](../../deepseek-rl-harness/README.md) + [deepseek-llm-harness](../../deepseek-llm-harness/README.md) + [deepseek-agent-harness](../../deepseek-agent-harness/README.md)）——**插件化命题的完整验证：换领域 = 换 tools/ + governance/ + AGENTS.md + knowledge/，宿主与引擎方言层（8 引擎）零改动**。五成员 = 五种验证范式：rust（编译期）/ rl（学习方向：训练冒烟+同 seed 复现）/ llm（生成质量：三级降级冒烟，实测 Qwen2.5-0.5B NLL=4.96）/ agent（行为审计：轨迹 schema 校验 + authorize 自举红线）。kernel/rust/rl/llm/agent 五仓均已独立 git（github.com/leemiracle，MIT）。
+
 ---
 
 ## ⚠️ 三个最重要反直觉
@@ -90,5 +101,5 @@ AHE 消融实证：增益在 tools/middleware/长期记忆；**仅改 system pro
 
 ---
 
-**版本**：v1.0（2026-08-17）
+**版本**：v1.1（2026-08-20：+13 行为定位章 +14 生态工具带章，本轮新增引用 10 项全核实；v1.0 2026-08-17）
 **核心理念**：**模型是聪明的骑手，harness 是你修的路。你在车外设计路，而不是坐在车里打方向盘。**
