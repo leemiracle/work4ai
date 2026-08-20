@@ -1,0 +1,34 @@
+{
+  "id": "rl-dev",
+  "name": "RL Research Plugin",
+  "version": "0.1.0",
+  "description": "RL 领域插件：验证金字塔 L1-L4（lint→单测→训练冒烟→复现检查）+ graph 三病治理的 RL 特化（reward hacking=Goodhart / 环境与超参=盲区 / 实验目录=冲突热点）。素材底座：DeepWiki 抓取的 torchrl 40 + cleanrl 33 篇（knowledge/rl_knowledge.md 挂网）。",
+  "engine": {
+    "protocol": "openai-compatible（唯一协议；方言注册表覆盖差异）",
+    "registry": "engines/dialects.py",
+    "probe": "engine_probe.py",
+    "env": {
+      "KH_BASE_URL": "端点", "KH_API_KEY": "密钥", "KH_LOOP_MODEL": "工具循环模型",
+      "KH_THINKER_MODEL": "规划/审查模型", "KH_ENGINE": "显式引擎名"
+    },
+    "engines": ["zhipu✅", "deepseek", "dashscope", "moonshot", "openai", "anthropic", "gemini", "local(vllm/ollama)"],
+    "router": {"policy": "cascade：loop 快模型 + thinker 规划"}
+  },
+  "instructions": "AGENTS.md",
+  "mount_points": {
+    "E": {"bootstrap": "AGENTS.md 注入 system；state/progress.md 尾部注入首条 user（断点续传）"},
+    "T": {"tools_dir": "tools/", "extra_tools": ["rl_lint", "rl_test", "rl_smoke", "rl_repro", "graph_guard", "graph_conflict", "patch_queue_status"]},
+    "C": {"tool_result_cap": 16000, "compact_trigger": 0.8, "keep_recent": 20000},
+    "S": {"ledger": "state/patch_ledger.jsonl", "progress": "state/progress.md", "append_only": true},
+    "L": {"authorize_hook": "hooks/authorize.py", "fail_closed": true, "rl_redlines": "pip install 装环境 / wandb 上传 / 删结果文件"},
+    "V": {"pyramid": ["L1 lint", "L2 单测", "L3 训练冒烟（方向性断言）", "L4 复现（同seed两跑diff空）"], "gate": "governance 三查不过，补丁禁入队列"}
+  },
+  "governance": {
+    "goodhart": "governance/goodhart_guards.py（RL 形态：reward 伪造/eval 泄漏/预算自由停止）",
+    "blindspot": "governance/global_conflicts.py（环境版本/gym API/超参文件）",
+    "conflict": "governance/patch_queue.py（实验目录与结果文件）"
+  },
+  "env": {"RL_PROJECT": "实验代码根；未设则 CWD"},
+  "knowledge": "knowledge/rl_knowledge.md（算法族谱+选读路径+.research/deepwiki-rl 索引挂网）",
+  "self_test": "python3 rl_host.py --self-test"
+}
