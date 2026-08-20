@@ -40,4 +40,4 @@ grep -c "" packages/agent-core/src/agent-loop.ts   # 主循环规模
 - **PRISM 安全层**：OpenClaw 的零 Fork 运行时安全插件（arXiv:2603.11853，10 hooks×5 阶段）——[harness工程手册 14 章带一](../../../工程化手册库/harness工程手册/14-生态工具带2026.md)
 - 同为插件化 harness 的对照案例：[deepseek-harness插件化框架](../deepseek-harness插件化框架/README.md)（DeepSeek 官方 dsh，219 插件包）
 - 手册理论底座：[harness工程手册](../../../工程化手册库/harness工程手册/README.md)（六组件/42 挂点对照 03 章 L 组件）
-- 用例库横向谱系定位：见 [`实例/用例库/README.md`](../../../../实例/用例库/README.md)——openclaw 不在 279 快照内（created 2025-11-24，晚于快照），作为现象级增量案例
+- 用例库横向谱系定位：见 [`实例/用例库/README.md`](../../../实例/用例库/README.md)——openclaw 不在 279 快照内（created 2025-11-24，晚于快照），作为现象级增量案例
