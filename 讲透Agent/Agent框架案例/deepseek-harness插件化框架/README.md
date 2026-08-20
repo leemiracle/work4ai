@@ -49,6 +49,7 @@ $ sqlite3 .codegraph/codegraph.db "SELECT kind, COUNT(*) FROM edges GROUP BY kin
 ## 项目内交叉引用
 
 - **命名撞车澄清与本土实践**：本案例是 DeepSeek 官方 dsh；另有一组同姓的本土五成员实践 `work4ai/deepseek-{kernel,rust,rl,llm,agent}-harness`（借 dsh 插件化理念 + 本手册 12 章骨架的领域插件家族，见 [harness工程手册 README 活案例区](../../../工程化手册库/harness工程手册/README.md)）——读 dsh 笔记时勿混淆。
+- **同为"harness 即产品"的对照案例**：[`../openclaw/`](../openclaw/README.md)（38.7 万★个人助手，42 挂点插件面 vs dsh 219 插件包，2026-08-20 快照）——dsh 是编码 harness 的插件化，openclaw 是个人助手 harness 的插件化。
 - 欺骗动力学视角（反欺骗四机制解剖）：[`欺骗动力学-AI纪实验包.md`](../../欺骗动力学-AI纪实验包.md) 实验 5
 - Agent 记忆案例对照：[`Agent记忆系统案例/mem0开源记忆层`](../../Agent记忆系统案例/mem0开源记忆层/)
 - 讲透Agent 实战篇已收录本案例：[`讲透Agent/README.md`](../../讲透Agent/README.md)

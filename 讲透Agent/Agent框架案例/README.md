@@ -12,10 +12,13 @@
 | **MCP协议生态全景/** | github.com/topics/mcp（64,438 仓）知识集成：生态统计与六赛道（top41 + awesome 3,371 条双口径对账）/ **2026-07-28 规范无状态化重构**（删 initialize 握手/session/ping，弃用 Sampling/Roots/Logging，MRTR 模式）/ 官方 org 与 SDK v2 格局（Registry 诞生、FastMCP 独立版）/ 项目内 MCP 知识互链网（10+ 处散落资产织网），快照 2026-08-19 | 已完成 |
 | **Skills生态全景/** | github.com/topics/skills（11,492 仓）知识集成：**语义迁移铁证**（top500 中 79% 创建于 2025-10 后，"人类技能"→"Agent Skills"）/ 规范演进一手时间线（2025-10-16 发布 → 2025-12-18 开放标准 → 48h MS/OpenAI 跟进 → 2026-06 40+ 工具）+ SKILL.md 逐字段解剖 + progressive disclosure 三层预算 / 七赛道地图 + 20 张重点仓深读卡（anthropics 170,317★ 实测+topic 盲区证据、superpowers 273,749★、讯飞 skillhub）/ Skills vs MCP vs Plugins 三层分工与项目互链网，快照 2026-08-19 | 已完成 |
 | **Topics全链路全景/** | **全链路总纲**：Prompt→Context→MCP/Skills→微调/对齐→推理/模型 十层 GitHub topics 索引体系，68 个核心 topics 逐个 API 实测（2026-08-19，数据留档 data/）+ 三家素材对账仲裁（纠正 Kimi 报告 fine-tuning 错 67 倍/RAG 漏主 topic 45 倍/MCP 长短名差百倍）+ 每层使用背景/代表仓/批判 + 5W2H/第一性原理/SWOT/成本阶梯四方法收束；L3/L4 层由 MCP/Skills 两个深潜篇承载 | 已完成 |
+| **openclaw/** | 2026 现象级个人 AI 助手（**386,825★/9 个月**，HEAD `f612675284`，2026-08-20）源码级解剖：六组件实证（42 挂点/steering 原语/tool-call-repair 2900 行）/ 协议中枢与插件面（gateway-protocol 极简主义、模型=catalog 数据）/ 安全平面（四档权限/pairing 审批/net-policy fail-closed，PRISM 插件实地锚）/ **可借鉴与缺点清单**（按件拆借别整屋搬），5 篇笔记全部行号钉版 | 已完成 |
 
 ## 速查：什么问题查哪里
 
 - **harness 整体架构 / "一切皆插件"** → `deepseek-harness插件化框架/notes/00-overview/`
+- **个人助手 / 常驻 Gateway / steering 夺回控制权 / 工具调用修复** → `openclaw/notes/`
+- **42 挂点全景 / 会话权限四档 / SSRF 防火墙原语** → `openclaw/notes/02-六组件实证.md` 与 `04-安全平面.md`
 - **插件机制与能力接缝** → `notes/02-capability-seams/`
 - **沙箱/审批/供应链安全** → `notes/03-trust/`
 - **插件生态格局** → `notes/07-ecosystem/`
