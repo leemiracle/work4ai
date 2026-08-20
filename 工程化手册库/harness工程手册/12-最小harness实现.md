@@ -103,6 +103,30 @@ if __name__ == "__main__":
 
 **逐组件对照**：E=run() 三终止条件（03 章）｜T=TOOLS+exec_tool（校验/预算/导航式报错）｜C=maybe_compact+est_tokens（触发前 flush）｜S=Ledger（四文件之二，WRAP UP 追加式）｜L=authorize（fail-closed+审计行）｜V=run_verify（exit code 即证据）。约 150 行，六组件一个不少。
 
+### 骨架升级件（2026-08-20，源自 openclaw 案例拆借）
+
+骨架之上按需加两个"循环级原语"（都已在 [deepseek-agent-harness](../../deepseek-agent-harness/agent_host.py) 落地可抄）：
+
+**① steering（E 组件，人 > 任务完成度）**——约 20 行：
+
+```python
+def run(task, ..., steer=None):
+    for turn in range(max_turns):
+        if steer is not None and messages[-1]["role"] != "user":
+            interruption = steer()            # 每轮问一次：有插话吗？
+            if interruption:
+                messages.append({"role": "user", "content": f"[steering] {interruption}"})
+        ...
+        if not tool_calls:
+            if steer is not None and steer(): # 双重复查：有新插话不得自然结束
+                continue
+            return msg.content
+```
+
+语义来自 openclaw agent-loop.ts:512-517：运行中用户插话 → 注入消息流 → **消化完插话才准 agent_end**。不是 UI 层暂停键，是循环级原语。
+
+**② tool-call repair（T 组件修复层）**——把"模型以纯文本吐工具调用"升格为结构化再执行（三语法：JSON-ish / `<tool_call>` XML / named-bracket；后者必须带工具名白名单防代码噪音）。中小/开源模型命中率不低，丢弃 = 工具面失效。实现：[tools/tool_call_repair.py](../../deepseek-agent-harness/tools/tool_call_repair.py)（零依赖 + 6 用例自测）；工程先例：openclaw 2900 行独立包（[案例笔记 02](../../讲透Agent/Agent框架案例/openclaw/notes/02-六组件实证.md)）——repair 出的调用**同受 L 组件门禁**（升格 ≠ 免检）。
+
 ---
 
 ## 🎓 活教材：把 OpenCode 剖一遍（你正在被 harness 服务）
