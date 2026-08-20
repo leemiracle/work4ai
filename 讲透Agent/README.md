@@ -50,7 +50,7 @@
 - **Prompt 工程**：[`讲透Prompt/03`](../讲透Prompt/03-结构化输出与函数调用.md)（function calling）
 - **外部论文流**：[`PaperAgent精华合入-总入口`](../PaperAgent精华合入-总入口.md)（PaperAgent 公众号 15 主题精华：Agent/RAG/记忆/工具学习/RL×LLM/自演化/**Agentic RL/Deep Research/Vibe Coding/AI4Research/世界模型×具身**；讲透Agent 01-04 章+RL/代码生成/RAG 系列各有对应合入条目）
 - **应用形态**：[`讲透DeepResearch/`](../讲透DeepResearch/README.md)（Deep Research = Agent 循环 × 检索 × 综合成文的产品级汇流；讲透Agent 的 01 循环 + 02 工具 + 04 记忆在该系列组装成调研工作流）
-- **工业生态对照**：[`AgentRL生态深读/`](../AgentRL生态深读/README.md)（2026 六大开源 RL agent 框架深读：AgentGym-RL/Uni-Agent understand 三件套 + verl/verl-tool/AWorld-RL/SkyRL 深读卡——rl_agent "教学前置层"定位的工业对照组；含 ScalingInter-RL 24 行增量铁证与 Uni-Agent Gateway 零侵入轨迹收集机制）
+- **工业生态对照**：[`AgentRL生态深读/`](../AgentRL生态深读/README.md)（2026 八大开源 RL 项目深读：AgentGym-RL/Uni-Agent understand 三件套 + verl/verl-tool/AWorld-RL/SkyRL 深读卡 + torchrl/cleanrl 双管线[卡+三件套]——rl_agent "教学前置层"定位的工业对照组；torchrl=组件化工业库 ↔ cleanrl=单文件教学库构成"怎么写 RL 代码"的纵向参考系）
 
 ---
 
