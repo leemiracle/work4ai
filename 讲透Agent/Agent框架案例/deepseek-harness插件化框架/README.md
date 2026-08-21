@@ -3,8 +3,8 @@
 > 一句话定位：**DeepSeek 官方开源的 agent harness——"一切皆插件"架构的工业级实现，219 个插件包，把 loop/日志/工具/沙箱/审批全部做成可替换的 Cordis 插件。**
 >
 > 上游：https://github.com/deepseek-ai/deepseek-harness （MIT）
-> 本地克隆：`C:\workspace\deepseek-harness`（bash 路径 `/c/workspace/deepseek-harness`）
-> 笔记钉版 HEAD：`47f943859b`（2026-08-13，developer preview v0.1.0-rc.5，**无兼容性承诺**）
+> 本地克隆：`~/ai/agent/awesome-agents/repos/deepseek-harness`（2026-08-20 自 Windows workspace 迁入）
+> 笔记钉版 HEAD：`141eb6fef8`（2026-08-19，v0.1.0-rc.8，**无兼容性承诺**；旧基线 47f943859b=rc.5，2026-08-13，笔记 00-09 初版行号基于 rc.5，rc.6-8 增量见 10-incremental 分册）
 >
 > 本案例组织方式参照 [`Agent记忆系统案例/mem0开源记忆层`](../../Agent记忆系统案例/mem0开源记忆层/) 的分层笔记约定。
 
@@ -28,20 +28,22 @@
 | 7 | [03-trust/01-信任平面与反欺骗](notes/03-trust/01-信任平面与反欺骗.md) | 沙箱/审批/网络栅栏/供应链，反欺骗的架构落地 |
 | 8 | [04-assembly/01-启动装配与Web](notes/04-assembly/01-启动装配与Web.md) | profile/bundle 分层、Web 双半架构、Typert RPC |
 | 9 | [04-assembly/02-SDK-ACP-Python](notes/04-assembly/02-SDK-ACP-Python.md) | JSON-RPC SDK、ACP、Python 单文件运行时 |
-| 10 | [06-deepwiki/01-DeepWiki对照与增补](notes/06-deepwiki/01-DeepWiki对照与增补.md) | DeepWiki 10 章映射 + 增补事实（构建面/测试基建/UI/i18n/glossary） + 错误记录 |
+| 10 | [06-deepwiki/01-DeepWiki对照与增补](notes/06-deepwiki/01-DeepWiki对照与增补.md) | DeepWiki 10 章映射 + 增补事实（构建面/测试基建/UI/i18n/glossary） + 错误记录；[02-全量归档](notes/06-deepwiki/02-全量归档与刷新对照.md) + [wiki/ 39 页全文](notes/06-deepwiki/wiki/README.md)（2026-08-20/`141eb6fe` 快照）+ [上游 Cordis wiki 21 页](notes/06-deepwiki/wiki-cordis-upstream/README.md) |
 | 11 | [07-ecosystem/01-dsh-plugin生态分析](notes/07-ecosystem/01-dsh-plugin生态分析.md) | dsh-plugin topic star>66 全部 59 仓库分类与六大赛道 |
 | 12 | [05-lessons/01-设计决策与可借鉴](notes/05-lessons/01-设计决策与可借鉴.md) | 15 条可迁移决策、与同类对比、已知局限 |
 | 13 | [08-graph-analysis/01-模块依赖图与工程全景](notes/08-graph-analysis/01-模块依赖图与工程全景.md) | graphify 工具链、219 包依赖分层规律、质量门禁闭环 |
 | 14 | [09-codegraph-forensics/01-符号级代码图谱与枢纽分析](notes/09-codegraph-forensics/01-符号级代码图谱与枢纽分析.md) | codegraph.db 取证：35K 符号/226K 边、hub 全是类型契约、跨包引用流 |
 | 15 | [09-codegraph-forensics/02-源码级机制取证](notes/09-codegraph-forensics/02-源码级机制取证.md) | 五机制 file:line 锚点：相位机/inbox/surface/五事件管线/stream seam/cordis 内核 |
 | 16 | [09-codegraph-forensics/03-工程节奏与谱系定位](notes/09-codegraph-forensics/03-工程节奏与谱系定位.md) | 65 天 12289 commit、1372 Agent Notes、vs LangChain/Mastra/opencode |
+| 17 | [10-incremental/01-rc8增量与AgentNotes](notes/10-incremental/01-rc8增量与AgentNotes.md) | rc.5→rc.8 六百 commit 考古、Agent Notes ADR 宪法、context/compaction/session 深读、无记忆系统哲学；附录：端侧/Android 定位澄清（官方支持=零，价值在架构移植） |
 
 ## 审计总命令
 
 ```bash
-$ cd /c/workspace/deepseek-harness
+$ cd ~/ai/agent/awesome-agents/repos/deepseek-harness
 $ ls -d packages/*/*/ | wc -l          # 219 个插件包
-$ git log -1 --format=%h               # 笔记钉版 47f943859b（若漂移，行号需重验）
+$ git log -1 --format=%h               # 笔记钉版 141eb6fef8（rc.8；若漂移，行号需重验）
+$ git log --oneline 47f943859b..HEAD | wc -l   # rc.5→rc.8 增量 647 commits
 $ cat AGENTS.md | head -5              # 项目自述：一切皆插件
 $ sqlite3 .codegraph/codegraph.db "SELECT kind, COUNT(*) FROM edges GROUP BY kind;"   # 符号图边分布（09笔记）
 ```
@@ -49,7 +51,7 @@ $ sqlite3 .codegraph/codegraph.db "SELECT kind, COUNT(*) FROM edges GROUP BY kin
 ## 项目内交叉引用
 
 - **命名撞车澄清与本土实践**：本案例是 DeepSeek 官方 dsh；另有一组同姓的本土五成员实践 `work4ai/deepseek-{kernel,rust,rl,llm,agent}-harness`（借 dsh 插件化理念 + 本手册 12 章骨架的领域插件家族，见 [harness工程手册 README 活案例区](../../../工程化手册库/harness工程手册/README.md)）——读 dsh 笔记时勿混淆。
-- **同为"harness 即产品"的对照案例**：[`../openclaw/`](../openclaw/README.md)（38.7 万★个人助手，42 挂点插件面 vs dsh 219 插件包，2026-08-20 快照）——dsh 是编码 harness 的插件化，openclaw 是个人助手 harness 的插件化。
+- **同为"harness 即产品"的对照案例**：[`../openclaw/`](../openclaw/README.md)（38.7 万★个人助手，42 挂点插件面 vs dsh 219 插件包，2026-08-20 快照）——dsh 是编码 harness 的插件化，openclaw 是个人助手 harness 的插件化。**双案例系统对照**：[`../openclaw-vs-dsh对照卡.md`](../openclaw-vs-dsh对照卡.md)（记忆/上下文/压缩/子代理/决策制度五维两极对照，2026-08-21）
 - 欺骗动力学视角（反欺骗四机制解剖）：[`欺骗动力学-AI纪实验包.md`](../../欺骗动力学-AI纪实验包.md) 实验 5
 - Agent 记忆案例对照：[`Agent记忆系统案例/mem0开源记忆层`](../../Agent记忆系统案例/mem0开源记忆层/)
 - 讲透Agent 实战篇已收录本案例：[`讲透Agent/README.md`](../../讲透Agent/README.md)
