@@ -24,6 +24,10 @@
 | 3 | [03-协议中枢与插件面](notes/03-协议中枢与插件面.md) | gateway-protocol 为什么极简、42 挂点全表、插件契约 |
 | 4 | [04-安全平面](notes/04-安全平面.md) | 四档权限/pairing 审批/net-policy fail-closed/与 PRISM 的关系 |
 | 5 | [05-工程文化与可借鉴](notes/05-工程文化与可借鉴.md) | AGENTS.md 电报体、Repair Doctrine、可迁移决策清单 |
+| 6 | [06-memory体系深读](notes/06-memory体系深读.md) | ~165K 行记忆子系统：五层架构/溯源安全/dreaming/双车道召回/文档vs代码三差异 |
+| 7 | [07-记忆数据管线](notes/07-记忆数据管线.md) | 数据视角：7 条采集入口/三层清洗/逐行溯源打标/切块嵌入索引/召回信号回流/生命周期 |
+| 8 | [08-context工程深读](notes/08-context工程深读.md) | 每轮看什么：缓存边界分层系统提示/四路压缩+纯代码审计 pruning/引擎插件化+outbox 幂等/steering 人>任务 |
+| 9 | [09-端侧与本地大模型](notes/09-端侧与本地大模型.md) | 瘦网关拓扑/三本地路径对比(ollama native/llama-cpp托管/lmstudio)/GBNF工具清洗/16GiB门槛/node推理外设/默认gemma-E4B+八层小模型补强 |
 
 ## 审计总命令
 
@@ -39,5 +43,7 @@ grep -c "" packages/agent-core/src/agent-loop.ts   # 主循环规模
 
 - **PRISM 安全层**：OpenClaw 的零 Fork 运行时安全插件（arXiv:2603.11853，10 hooks×5 阶段）——[harness工程手册 14 章带一](../../../工程化手册库/harness工程手册/14-生态工具带2026.md)
 - 同为插件化 harness 的对照案例：[deepseek-harness插件化框架](../deepseek-harness插件化框架/README.md)（DeepSeek 官方 dsh，219 插件包）
+- 净室重写路线对照（三极第三案）：[claw-code](../claw-code/README.md)（Claude Code 泄露后净室重写，agent 自管治理标本，2026-08-20 入库）
+- **双案例系统对照**：[openclaw-vs-dsh对照卡](../openclaw-vs-dsh对照卡.md)（vs DeepSeek 官方 dsh：记忆治理系统 vs "工作区即记忆"、safeguard 审计 vs 事务不变量、竞品即子代理，2026-08-21）
 - 手册理论底座：[harness工程手册](../../../工程化手册库/harness工程手册/README.md)（六组件/42 挂点对照 03 章 L 组件）
 - 用例库横向谱系定位：见 [`实例/用例库/README.md`](../../../实例/用例库/README.md)——openclaw 不在 279 快照内（created 2025-11-24，晚于快照），作为现象级增量案例
