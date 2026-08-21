@@ -15,7 +15,7 @@ burke:
     - "总入口: ../透视GitHub-DeepSeek开源全景.md（36 仓清单+七大洞察）"
     - "底稿: ../.research/deepseek/notes/{A..G}-*.md（文件:行号 级证据，~225KB）"
     - "本地克隆: ../.tools/deepseek-repos/（gitignored）"
-    - "dsh 专读: ../Agent框架案例/deepseek-harness插件化框架/（12 篇行号钉版）"
+    - "dsh 专读: ../讲透Agent/Agent框架案例/deepseek-harness插件化框架/（17 篇行号钉版 + DeepWiki 39 页全量归档）"
 updated: 2026-08-15
 ---
 
