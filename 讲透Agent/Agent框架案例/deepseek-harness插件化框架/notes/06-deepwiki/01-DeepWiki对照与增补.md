@@ -1,6 +1,7 @@
 # 01 · DeepWiki 对照与增补
 
-> 来源：https://deepwiki.com/deepseek-ai/deepseek-harness （Devon 自动生成 wiki，索引于 2026-08-13，commit `47f94385`——与本案例笔记钉版一致）
+> 来源：https://deepwiki.com/deepseek-ai/deepseek-harness （DeepWiki/Devin 自动生成 wiki，索引于 2026-08-13，commit `47f94385`——与本案例首版笔记钉版一致）
+> **2026-08-21 更新**：wiki 已刷新至 2026-08-20 / `141eb6fe`（rc.8）快照，39 页全量归档在 [wiki/](wiki/)，新旧差异与本篇 §4 错误的逐条复核见 [02-全量归档与刷新对照.md](02-全量归档与刷新对照.md)。
 > 本篇定位：① DeepWiki 10 章 → 本案例笔记的映射；② DeepWiki 提供、而本案例首版笔记未覆盖的**增补事实**；③ DeepWiki 的错误/缺口记录。
 
 ## 1. 章节映射
