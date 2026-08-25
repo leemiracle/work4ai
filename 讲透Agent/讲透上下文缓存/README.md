@@ -76,7 +76,7 @@ Transformer 推理的核心成本：
 
 ## 🔗 与其他宇宙
 
-- **[`讲透KV Cache/`](../讲透KV Cache/)**：底层机制见 KV Cache 宇宙（PagedAttention/RadixAttention 的数据结构层）
+- **[`讲透模型/讲透KV Cache/`](../../讲透模型/讲透KV Cache/README.md)**：底层机制见 KV Cache 宇宙（PagedAttention/RadixAttention 的数据结构层）。其 [08 章「KV Cache 不是一次性的」](../../讲透模型/讲透KV Cache/08-KV%20Cache不是一次性：可编辑可组合的笔记.md)（2026-08-25 新增）是本宇宙的机制侧深钻：可编辑/可组合"笔记"五动词谱系 + Qwen2.5-0.5B 三组实测——本卡讲"缓存经济学"，08 章讲"缓存可操作性"，同一范式的两面
 - 与 **`讲透记忆/`**：缓存是「无语义复用」，记忆是「有语义复用」。
 - 与 **`讲透代码生成/`**：coding agent 的瓶颈往往是 context 管理（Augment 的意义）。
 - 与 **`故事原语/02-熵论辩证`**：缓存是「把已算好的有序状态保留下来」=典型的负熵注入。
