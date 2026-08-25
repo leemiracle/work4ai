@@ -26,7 +26,8 @@
 | **实践** | [实践阶梯 · 端侧事实记忆 Agent](./实践阶梯/) | ★L1→L5 上手动手单元：CPU-only Qwen2.5-0.5B 事实抽取+记忆+意图识别；**34 条任务集×5 版消融**（few-shot 治塌缩 32→0、反馈重试净负、受限 generation 65% 完胜 scoring 27%）；评估环否决 3 个自己的设计断言——「上手/设计/衡量」三缺口的实操答案 |
 | **参考** | [AI-Agents-in-Depth 全书深读卡](./AI-Agents-in-Depth全书深读卡.md) | 306页 2026 教科书逐章知识点+核验（✓互锁15+/△转引30/⚠自引8+/✗偏差1：Mem0 v3数字）；与项目14资产对账表——**评估方法论(Ch7)与多Agent失败模式学(Ch10)为最大增量** |
 | **实战** | [性能优化 Agent](./实战案例-性能优化Agent/) | GPU/CPU/Linux 设备性能优化 Agent 设计蓝图：**2025-2026 四线全景**（AKO4X/KernelAgent/KernelArc/SemaTune/LumOS/SchedCP/AgentKernelArena 一手实证）+ 三大遗留缺口速答（上手三级跳 T0-T2 / 取舍四问×guard 分工 / 三层指标+reward hacking 博弈档案 14.5% 作弊率）|
-| **实战** | [Prover 数学 Agent](./实战案例-Prover数学Agent/) | ★内网 DCU 实测：DeepSeek-Prover-V2-7B 逆向蒸馏**十条规律**（子目标分解=难度在跨度/RZPD 策展/一致性奖励/专家迭代/小模型技能枝）→ 三件套（oprover-math skill 全局已装 + prover_harness.py 递归闭环 + 官方 prompt 双模式）+ 海光 DCU 三坑实录 |
+| **实战** | [Prover 数学 Agent](./实战案例-Prover数学Agent/) | ★内网 DCU 实测：DeepSeek-Prover-V2-7B 逆向蒸馏**十条规律**（子目标分解=难度在跨度/RZPD 策展/一致性奖励/专家迭代/小模型技能枝）→ 三件套（oprover-math skill 全局已装 + prover_harness.py 递归闭环 + 官方 prompt 双模式）+ DCU 三坑实录 |
+| **讲透** | [讲透 Skills](./讲透Skills/) | ★2026-08-25 新建：Agent Skills 全景知识站（00-09 + 实验室三实验全跑通：E1 触发评测 zero-shot 2/10→few-shot 4/10 欠触发铁证 / E2 渐进披露省 93.1% + CC 1% 预算下 128K 窗口仅装 5 个 / E3 本机 117 目录扫出 2 真 C4 bug）+ 官方规范/skill-creator 485 行一手拆解 + **六线研究地图**（MCE 2601.21557/SkillRL/MemSkill/Memento-Skills/skill smells 实证/SkillNet 全核实）+ 数学五型 skill 类型学×MATH_LOOP_ENGINE 挂网 |
 
 ---
 
@@ -59,6 +60,8 @@
 - **外部论文流**：[`PaperAgent精华合入-总入口`](./PaperAgent精华合入-总入口.md)（PaperAgent 公众号 15 主题精华：Agent/RAG/记忆/工具学习/RL×LLM/自演化/**Agentic RL/Deep Research/Vibe Coding/AI4Research/世界模型×具身**；讲透Agent 01-04 章+RL/代码生成/RAG 系列各有对应合入条目）
 - **应用形态**：[`讲透DeepResearch/`](./讲透DeepResearch/README.md)（Deep Research = Agent 循环 × 检索 × 综合成文的产品级汇流；讲透Agent 的 01 循环 + 02 工具 + 04 记忆在该系列组装成调研工作流）
 - **工业生态对照**：[`AgentRL生态深读/`](./AgentRL生态深读/README.md)（2026 八大开源 RL 项目深读：AgentGym-RL/Uni-Agent understand 三件套 + verl/verl-tool/AWorld-RL/SkyRL 深读卡 + torchrl/cleanrl 双管线[卡+三件套]——rl_agent "教学前置层"定位的工业对照组；torchrl=组件化工业库 ↔ cleanrl=单文件教学库构成"怎么写 RL 代码"的纵向参考系）
+- **运行环境深读**：[`omarchy-深读/`](./omarchy-深读/README.md)（2026-08-25 新增：DeepWiki 39 子页全量归档 + omarchy-quattro v4 分叉 10 页 docs/ 产出——**第一个把 AI coding agent 当系统组件设计的桌面**：agent 选择/无值守启动/用量采集/崩溃诊断全系统命令化，"agent 运行环境"维度的活教材）
+- **学习循环上游**：[`top-math-courses/MATH_LOOP_ENGINE.md`](../top-math-courses/MATH_LOOP_ENGINE.md)（数学循环引擎：七阶段 理论→计划→实践→观察→反思→理论'→深挖 × BFS 63 类知识森林——Prover 数学 Agent 的"子目标分解+验证闭环"在**人类学习侧**的同构操作系统；agent 工具=@oracle/@fixer，reward=五类验证信号，expert iteration=蒸馏三件套）
 
 ---
 
