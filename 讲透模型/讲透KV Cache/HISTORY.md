@@ -4,7 +4,7 @@
 >
 > **博士级标准**：不是"年份+论文+指标"的维基百科年代史，是**思想史**（history of ideas）——为什么 KV Cache 从一个不值得一提的实现细节，长成了 2024-2026 推理优化的**第一战场**？为什么 PagedAttention 是 OS 思想在 AI 最优雅的一次移植？为什么连续两次范式级创新（continuous batching 出自韩国/中国学界，MLA 出自 DeepSeek）都来自非西方中心？KV Cache 的"战场重心"从算力（2020）转移到显存（2023）再转移到架构（2024），这条演化轨迹有多少是必然、多少是偶然？
 >
-> 配套：[`讲透AI历史`](../讲透AI历史/)（AI 史方法论）· [`讲透KV Cache/00`](00-为什么KV Cache是推理的生命线.md)（技术实现入口）· [`讲透Transformer/HISTORY`](../讲透Transformer/HISTORY.md)（上游架构思想史）
+> 配套：[`讲透AI历史`](../../讲透AI历史/)（AI 史方法论）· [`讲透KV Cache/00`](00-为什么KV Cache是推理的生命线.md)（技术实现入口）· [`讲透Transformer/HISTORY`](../讲透Transformer/HISTORY.md)（上游架构思想史）
 
 ---
 
@@ -580,7 +580,7 @@ BitNet 把权重量化到 1.58-bit（ternary）成功了。KV Cache 的 1.58-bit
 | [04-MLA深挖](04-MLA深挖.md) | DeepSeek怎么把KV压缩10-90x | §5 的技术细节 |
 | [05-KV Cache量化](05-KVCache量化.md) | FP8/INT4/1.58-bit的代价与收益 | §6 的技术细节 |
 | [讲透Transformer/HISTORY](../讲透Transformer/HISTORY.md) | Transformer架构思想史 | 上游——§1-2的架构背景 |
-| [讲透AI历史](../讲透AI历史/) | AI思想史方法论 | 方法论框架 |
+| [讲透AI历史](../../讲透AI历史/) | AI思想史方法论 | 方法论框架 |
 
 ### 14.2 关键论文（按本文档章节排序）
 
@@ -673,5 +673,15 @@ BitNet 把权重量化到 1.58-bit（ternary）成功了。KV Cache 的 1.58-bit
 > 📌 **下一步**
 > 1. **进入 [00-为什么KV Cache是推理的生命线](00-为什么KV Cache是推理的生命线.md)**：从思想史转到技术实现
 > 2. **对照 [讲透Transformer/HISTORY](../讲透Transformer/HISTORY.md)**：上游架构史，理解 attention 怎么来的
-> 3. **读 [讲透AI历史/00-为什么学AI历史](../讲透AI历史/00-为什么学AI历史.md)**：思想史方法论
+> 3. **读 [讲透AI历史/00-为什么学AI历史](../../讲透AI历史/00-为什么学AI历史.md)**：思想史方法论
 > 4. **思考开放问题**（§13）：选一个做深入研究——每个都是博士论文级方向
+
+---
+
+## 16. 第四次范式转移的萌芽：KV Cache 作为可编辑、可组合的"笔记"（2026-08-25 增补）
+
+前十五章的历史止于"KV Cache 是被优化的对象"（分页/压缩/量化）。2024-2026 出现了身份翻转：**KV Cache 本身成为被管理的数据结构**——可跨请求复用（RadixAttention/Mooncake）、可模块化拼接（Block-Attention/CacheBlend/EPIC/CacheSlide）、可推理时编辑（KV Cache Steering/KVEraser/笔记论文 2606.17107）、可归档为长期记忆（LongMem/infLLM/Memory3/MemGPT）。arXiv:2606.17107 给出统一机制解释：prefill 即记笔记，字段条件的结论会写入下游 token 的 K/V（字段自身 KV 贡献 <1%），由此推出勘误式编辑与 RoPE 重定位拼接两种原语。
+
+**历史意义**：这是 §13 开放问题"下一次范式转移是什么"的第一个严肃候选答案——不是线性注意力取代 KV，而是 KV 从"缓存"升格为"可编程记忆"。思想史脉络：OS 分页（PagedAttention）→ OS 虚存（MemGPT）→ 编译/链接（EPIC 的 compile-link 二步）→ **笔记本隐喻（2606.17107）**——AI 系统又一次从计算机科学史里借隐喻，且越来越抽象。
+
+对应新增章节：[08-KV Cache不是一次性的](08-KV%20Cache不是一次性的：可编辑可组合的笔记.md)（含 Qwen2.5-0.5B 三组实测：复用等价 8.39e-05、盲拼接边界与幻觉、字段编辑在 0.5B 反转——规模边界的教学样本）。
