@@ -21,6 +21,13 @@
 
 - 读 `.agent/MEMORY.md` + `.agent/USER.md`（自成长记忆，见全局协议）
 - 长任务先查 `.research/`（research 流水线工作区，断点续传）
+- **涉及远程计算（13 节点）**：一律走 `remote/` 脚本（见 `remote/README.md`），禁现场拼 ssh 长命令；环境事实先读 `.agent/remote13.env` 档案段
+
+## 远程操作铁律（13 节点 / 沐曦 MACA，2026-08-26 起）
+
+- 计算环境已从 18 节点（DCU）迁至 **13 节点**：vllm-metax 镜像 + 2×C500；资产库 `/mnt/200/lwz/aiz-work`（**只读**，含 Prover 模型/lean）
+- 宿主机写删仅限 `/root/luowz`；不改裸机配置（systemctl/包管理/网络）；docker 只碰 `luowz-*` 容器（共享机！）
+- 护栏在 `remote/guard.sh` 自动执行；越权须 `GUARD_FORCE=1` 并留痕理由；长输出走 200 行截断省 token
 
 ## 项目红线
 

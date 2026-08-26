@@ -302,6 +302,9 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 - GitHub `topic:harness` 高星 37 仓（≥1K★）全量快照 + 20 仓 README 蒸馏：[`透视GitHub-Harness高星仓库全景.md`](透视GitHub-Harness高星仓库全景.md)（七赛道 + 概念卡：五子系统/四层栈/Anthropic 对照实验）+ [`harness精华笔记.md`](harness精华笔记.md) + [`harness精华合入-总入口.md`](harness精华合入-总入口.md)
 - **精化合入 opencode**：1 个新技能 `harness-engineering`（五子系统检查单 + 会话生命周期仪式 + 6 团队架构模式），与 `orchestration-*` 互补——**编排管流程，harness 管环境**
 
+### 6h. 远程计算操作台：[`remote/`](remote/README.md) ⭐ 2026-08-26 新增
+- 13 节点（沐曦 MACA，2×C500）远程执行规约与脚本群：**三层安全护栏**（写删仅限 `/root/luowz` · 不改裸机 · docker 只碰 `luowz-*` 共享机防误伤）+ 省 token 规约（禁现场拼 ssh 长命令 / 环境档案一次探测多次复用 / 输出 200 行截中）+ aiz-work 资产库只读挂载（Prover 模型 31G + lean 4.21）。vLLM 起停/巡检/同步全脚本化
+
 ### 7. 端侧 AI 参考：[`端侧AI架构参考.md`](端侧AI架构参考.md)
 - 端侧 AI 系统的 11 功能域 + 5 大部署模式 + memory/搜索架构 + 可迁移性分析 ⭐ 2026-08（**已完全脱敏**，不含任何厂商/SDK/类名/逆向证据）
 
