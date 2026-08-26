@@ -40,21 +40,21 @@ Anthropic 的原话："Context engineering is the natural progression of prompt 
 | # | 章节 | 核心实验 | 状态 |
 |---|------|---------|------|
 | 00 | 开场白：从 Prompt 到 Context——同一门实验科学的升维 | — | ✅ |
-| 01 | 上下文窗口解剖学：token 都花在哪 | E1 窗口构成实测 ✅ | ✅（内容暂嵌 00 章+E1，待扩独立章） |
-| 02 | 位置效应：放进去 ≠ 用得上 | E2 双模型 24 格全满=零结果 ✅ | ✅ |
-| 03 | ★ Context Rot：越长越蠢的实证 | E3 干扰×长度崩塌+模型依赖 ✅ | ✅ |
-| 04 | 组装：检索、结构化与渐进披露 | E4 schema 组装消融 | ⬜（E1 渐进披露段已覆盖一半） |
-| 05 | ★ Compaction：压缩的艺术与三种失败 | E5 F1/F2/F3+幻觉实测 ✅ | ✅ |
-| 06 | ★ Compaction 的数学：通信复杂度下场 | E6 Bloom vs LLM 摘要 ✅ | ✅ |
-| 07 | 记忆：窗口之外的持久化 | E7 笔记接力对决 compaction ✅ | ✅ |
-| 08 | Sub-agent：上下文隔离与蒸馏率 | E8 长输出→摘要的 QA 保持 | ⬜ |
-| 09 | Token 经济学：一次 compaction $13 的算术 | 成本模型计算 | ⬜ |
-| 10 | ★ 前沿 2025-2026：ACE/ACON/Scroll/理论化 | 文献综述（素材已核实） | ⬜（papers.md 已就绪） |
-| 11 | ★ 活案例：本仓库自己的上下文工程 | 现场分析 | ⬜（素材已在 papers.md §六） |
-| 12 | 不足与展望：批判收尾 | — | ⬜ |
+| 01 | [上下文窗口解剖学：token 都花在哪](01-窗口解剖学.md) | E1 窗口构成实测 ✅ query 占比 1%/渐进披露省 78% | ✅ |
+| 02 | [位置效应：放进去 ≠ 用得上](02-位置效应.md) | E2 双模型 24 格全满=零结果 ✅ | ✅ |
+| 03 | [★ Context Rot：越长越蠢的实证](03-ContextRot.md) | E3 干扰×长度崩塌+模型依赖 ✅ | ✅ |
+| 04 | [组装：检索、结构化与渐进披露](04-组装.md) | E4 组装消融 ✅ 日期锚救 glm(0→4/4)不救 Qwen(全 0)；schema 救 Qwen 字段(0→6/6) | ✅ |
+| 05 | [★ Compaction：压缩的艺术与三种失败](05-Compaction.md) | E5 F1/F2/F3+幻觉实测 ✅ | ✅ |
+| 06 | [★ Compaction 的数学：通信复杂度下场](06-Compaction的数学.md) | E6 Bloom vs LLM 摘要 ✅ 97.9% | ✅ |
+| 07 | [记忆：窗口之外的持久化](07-记忆.md) | E7 笔记接力对决 compaction ✅ 91.7%>83.3% | ✅ |
+| 08 | [Sub-agent：上下文隔离与蒸馏率](08-SubAgent上下文隔离与蒸馏率.md) | E8 蒸馏悬崖 ✅ 抽取 1/2→67%/1/5→17% | ✅ |
+| 09 | [Token 经济学：一次 compaction $13 的算术](09-Token经济学.md) | 成本模型三算术 ✅ | ✅ |
+| 10 | [★ 前沿 2025-2026：ACE/ACON/Scroll/理论化](10-前沿2025-2026.md) | 六线综述（papers.md §一§二§五） | ✅ |
+| 11 | [★ 活案例：本仓库自己的上下文工程](11-活案例-本仓库的上下文工程.md) | 现场分析（AGENTS/memory/RESUME/skills） | ✅ |
+| 12 | [不足与展望：批判收尾](12-不足与批判收尾.md) | E1-E8 负面结果总账 | ✅ |
 
 ★ = 用户重点主题（Context Rot / Compaction 及其数学 / 前沿 / 活案例）。
-**诚实状态（2026-08-26 晚）**：E1/E2/E3/E5/E6/E7 六实验全跑通落盘（json+png），00/02/03/05/06/07 六章写完嵌实测数字。余：E4/E8 两实验 + 01/04/08/09/10/11/12 七章。断点见 `RESUME-0826.md`。
+**诚实状态（2026-08-26 收官）**：E1-E8 八实验全跑通（json+png），00-12 十三章全写完嵌实测数字，篇目表物理链接化。断点档案见 `RESUME-0826.md`。
 
 ## 实验环境（与讲透Prompt 同一基座，真实可复现）
 
@@ -75,8 +75,9 @@ Anthropic 的原话："Context engineering is the natural progression of prompt 
 
 - 上游：`../讲透Prompt/`（Ch01 参数与 Ch02 few-shot 是本单元 Ch02 位置效应的实验基座）
 - 下游：`../讲透Agent/`（harness 把 context 当资源管理）、`../讲透Agent/讲透Skills/`（E2 渐进披露=本单元 Ch04 活证据）、`../讲透KV Cache/`（窗口之外的机器级"记忆"）
-- 终章：`../讲透Loop/`（三部曲收官：跨 run 的控制结构——state file = 窗口外记忆的循环版，2026-08-26 建）
 - 横向：`../top-math-courses/MATH_LOOP_ENGINE.md`（E6 是 reward=机器可验证的范例）、`../讲透信息论/`（压缩与信息损失的物理学）
+- **运行环境层（2026-08-26 新建）：`../讲透Harness/`**——工程四部曲收官（Prompt→Context→Loop→Harness）：C 组件（上下文管理）在该单元被放进带验证与账本的运行循环做消融；其 E3 崩溃恢复=compaction/memory 之外的第三条逃生通道（状态账本）的实测
+- **系统层（2026-08-26）：`../讲透Graph/`**——五环谱系（Prompt→Context→Harness→Loop→Graph）收口环："决定什么进窗口的越来越是图"。同构证据：Graph E3 bi-temporal（作废不删除）与本章 E7 的时间戳/弃权教训；Graph E2 拓扑税与本章 Ch09 的 O(N²) 历史税是同一平方律的两侧
 
 ## 来源与核实
 

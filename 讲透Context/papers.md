@@ -48,6 +48,8 @@
 | 来源 | 标题/内容 | 核实 | 关键结论 |
 |------|----------|------|---------|
 | arXiv 2608.21690 | Scroll: Context as an Environment（2026-08） | ✅一手（arxiv html 摘要全文） | 会话=可执行 Session Environment：append-only Event Log + 持久 Python kernel；**eviction ≠ 删除**（地址锚定可回溯）；LOCA256K 超最佳系统 37.4pp |
+| arXiv 2604.11462 | ContextCurator: Active Context Curation via RL（2026-04-13 提交） | ✅一手（2026-08-26 本会话 webfetch abs 页核实，供 Ch10 线 3） | 7B RL 策略模型专门剪噪保"推理锚"，配冻结大模型；WebArena 36.4→41.2% 且省 8.8% token；7B 策展能力≈GPT-4o |
+| arXiv 2605.30785 | AdaCoM: Learning Agent-Compatible Context Management（2026-05-29 提交） | ✅一手（2026-08-26 本会话 webfetch abs 页核实，供 Ch10 线 3） | 外部 LLM 学会管理冻结 agent 的上下文（RL 端到端）；发现 **Fidelity-Reliability 权衡**：强 agent 吃高保真、弱 agent 需激进压缩——与 E4"组件价值依赖模型能力"互证 |
 | preprints 202605.2065 | Context Compression for LLM Agents: Survey（2026-05-29） | ✅一手（preprints 页摘要） | 三维分类：压什么/怎么压/谁触发；失败三型 **F1 压缩前决策错 / F2 压缩中信息损失 / F3 压缩后访问失败**（Ch05 直接采用） |
 
 ## 六、本仓库活案例（Ch11 现成证据，零成本）
