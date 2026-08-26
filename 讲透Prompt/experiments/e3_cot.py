@@ -10,11 +10,15 @@ E3 CoT 实验：思维链四条件对比（指南 techniques/cot + Kojima zero-s
   c) few-direct ：少样本，示例只给答案（无推理）
   d) few-cot    ：少样本，示例含完整推理链（指南 odd-numbers 格式）
 模型：Qwen2.5-0.5B(本地) / glm-4-flash(API)
-题目：指南经典题（奇数和/妹妹年龄）+ 8 道自造可验算算术应用题
-产出：results/e3_cot.json + e3_cot.png
+
+2026-08-26 改双通道模式（本地 CPU 跑 CoT 单次 123s，全量 40min+ 超时教训）：
+  python3 e3_cot.py api     # 仅 API 通道，4条件×10题，~3min
+  python3 e3_cot.py local   # 仅本地通道；E3_LITE=1（默认）→ 6题+CoT 64token，后台跑 ~9min
+  python3 e3_cot.py merge   # 合并两通道 → e3_cot.json + e3_cot.png
+产出：results/e3_cot_api.json / e3_cot_local.json / e3_cot.json(+png)
 """
-from common import local_qwen, glm, save
-import re, time
+from common import local_qwen, glm, save, load
+import re, time, sys, os
 
 TASKS = [  # (题目, 答案)
     ("这组数中的奇数加起来是偶数：15、32、5、13、82、7、1。对还是错？", "错"),
@@ -49,7 +53,6 @@ def parse_answer(out):
     out = out.strip()
     m = re.findall(r"答案[是为：:]*\s*(\d+|对|错|True|False)", out)
     if m: return m[-1]
-    if re.search(r"(对还是错)", ""): pass
     nums = re.findall(r"-?\d+(?:\.\d+)?", out)
     if "还是错" in out or "对还是错" in out: return None
     return nums[-1] if nums else None
@@ -73,38 +76,66 @@ def build(cond, q):
         return FEWSHOT_COT + f"Q：{q}\n推理："
 
 CONDS = ["zero-direct", "zero-cot", "few-direct", "few-cot"]
-res = {"meta": {"tasks": len(TASKS)}, "acc": {}, "errors": {}}
+MODE = sys.argv[1] if len(sys.argv) > 1 else "api"
+LITE = os.environ.get("E3_LITE", "1") == "1"
 
-for cond in CONDS:
-    acc_l = acc_g = 0; errs = []
-    for q, gold in TASKS:
-        # 本地
-        out_l = local_qwen(build(cond, q), max_new_tokens=256 if "cot" in cond else 16,
-                           temperature=0.0)
-        pl = parse_answer(out_l); ok_l = correct(pl, gold); acc_l += ok_l
-        if not ok_l: errs.append(("qwen", q[:14], gold, pl, out_l[-60:].replace("\n", " ")))
-        # API
-        r = glm("glm-4-flash", build(cond, q),
-                max_tokens=512 if "cot" in cond else 16, temperature=0.1)
-        pg = parse_answer(r["content"]); ok_g = correct(pg, gold); acc_g += ok_g
-        if not ok_g: errs.append(("glm", q[:14], gold, pg, r["content"][-60:].replace("\n", " ")))
-        time.sleep(0.2)
-    res["acc"][cond] = {"qwen": acc_l / len(TASKS), "glm4flash": acc_g / len(TASKS)}
-    res["errors"][cond] = errs[:6]
-    print(f"  {cond:12s}: Qwen-0.5B {acc_l/len(TASKS):.0%} | glm-4-flash {acc_g/len(TASKS):.0%}")
+# ---------- API 通道 ----------
+if MODE == "api":
+    res = {"meta": {"tasks": len(TASKS), "channel": "glm-4-flash"}, "acc": {}, "errors": {}}
+    for cond in CONDS:
+        acc_g = 0; errs = []
+        for q, gold in TASKS:
+            r = glm("glm-4-flash", build(cond, q),
+                    max_tokens=512 if "cot" in cond else 16, temperature=0.1)
+            pg = parse_answer(r["content"]); ok_g = correct(pg, gold); acc_g += ok_g
+            if not ok_g: errs.append(("glm", q[:14], gold, pg, r["content"][-60:].replace("\n", " ")))
+            print(f"  [{cond} {time.strftime('%H:%M:%S')}] {q[:12]}… glm={ok_g}({pg})", flush=True)
+            time.sleep(0.2)
+        res["acc"][cond] = {"glm4flash": acc_g / len(TASKS)}
+        res["errors"][cond] = errs[:6]
+        print(f"== {cond:12s}: glm-4-flash {acc_g/len(TASKS):.0%}", flush=True)
+    save("e3_cot_api", res)
 
-save("e3_cot", res)
+# ---------- 本地通道（默认 LITE：6 题 + CoT 64 token，供后台跑） ----------
+elif MODE == "local":
+    tasks = TASKS[:6] if LITE else TASKS
+    cot_tok = 64 if LITE else 256
+    res = {"meta": {"tasks": len(tasks), "channel": "qwen-0.5B", "lite": LITE,
+                    "note": "lite=6题+64token，CoT截断风险已知"}, "acc": {}, "errors": {}}
+    for cond in CONDS:
+        acc_l = 0; errs = []
+        for q, gold in tasks:
+            t0 = time.time()
+            out_l = local_qwen(build(cond, q), max_new_tokens=cot_tok if "cot" in cond else 16,
+                               temperature=0.0)
+            pl = parse_answer(out_l); ok_l = correct(pl, gold); acc_l += ok_l
+            if not ok_l: errs.append(("qwen", q[:14], gold, pl, out_l[-60:].replace("\n", " ")))
+            print(f"  [{cond} {time.strftime('%H:%M:%S')}] {q[:12]}… {time.time()-t0:.0f}s qwen={ok_l}({pl})", flush=True)
+        res["acc"][cond] = {"qwen": acc_l / len(tasks)}
+        res["errors"][cond] = errs[:6]
+        print(f"== {cond:12s}: Qwen-0.5B {acc_l/len(tasks):.0%}", flush=True)
+    save("e3_cot_local", res)
 
-# ---- 可视化 ----
-import matplotlib
-matplotlib.use("Agg"); import matplotlib.pyplot as plt
-plt.rcParams["font.family"] = "Noto Sans CJK SC"
-fig, ax = plt.subplots(figsize=(7.5, 4))
-x = range(len(CONDS)); w = 0.35
-ax.bar([i - w/2 for i in x], [res["acc"][c]["qwen"] for c in CONDS], w, label="Qwen2.5-0.5B", color="#4C72B0")
-ax.bar([i + w/2 for i in x], [res["acc"][c]["glm4flash"] for c in CONDS], w, label="glm-4-flash", color="#55A868")
-ax.set_xticks(list(x)); ax.set_xticklabels(["零样本\n直答", "零样本\n+一步步思考", "少样本\n直答", "少样本\nCoT"])
-ax.set_ylabel("10题准确率"); ax.set_ylim(0, 1.1); ax.legend()
-ax.set_title("E3 CoT 四条件对比：思维链何时有效？"); ax.grid(axis="y", alpha=0.3)
-plt.tight_layout(); plt.savefig("results/e3_cot.png", dpi=130)
-print("[saved] results/e3_cot.png")
+# ---------- 合并 ----------
+elif MODE == "merge":
+    api = load("e3_cot_api"); loc = load("e3_cot_local")
+    res = {"meta": {"api": api["meta"], "local": loc["meta"]}, "acc": {}, "errors": {}}
+    for cond in CONDS:
+        res["acc"][cond] = {**loc["acc"].get(cond, {}), **api["acc"].get(cond, {})}
+        res["errors"][cond] = loc["errors"].get(cond, [])[:3] + api["errors"].get(cond, [])[:3]
+    save("e3_cot", res)
+
+    import matplotlib
+    matplotlib.use("Agg"); import matplotlib.pyplot as plt
+    plt.rcParams["font.family"] = "Noto Sans CJK SC"
+    fig, ax = plt.subplots(figsize=(7.5, 4))
+    x = range(len(CONDS)); w = 0.35
+    ax.bar([i - w/2 for i in x], [res["acc"][c].get("qwen", 0) for c in CONDS], w, label="Qwen2.5-0.5B(6题lite)", color="#4C72B0")
+    ax.bar([i + w/2 for i in x], [res["acc"][c].get("glm4flash", 0) for c in CONDS], w, label="glm-4-flash(10题)", color="#55A868")
+    ax.set_xticks(list(x)); ax.set_xticklabels(["零样本\n直答", "零样本\n+一步步思考", "少样本\n直答", "少样本\nCoT"])
+    ax.set_ylabel("准确率"); ax.set_ylim(0, 1.1); ax.legend()
+    ax.set_title("E3 CoT 四条件对比：思维链何时有效？"); ax.grid(axis="y", alpha=0.3)
+    plt.tight_layout(); plt.savefig("results/e3_cot.png", dpi=130)
+    print("[saved] results/e3_cot.png")
+else:
+    print("用法: python3 e3_cot.py [api|local|merge]")

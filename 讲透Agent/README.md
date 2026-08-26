@@ -2,7 +2,7 @@
 
 > **Agent = LLM + 工具 + 循环**。从单次 LLM 调用的"闭眼猜"升级为"感知→推理→行动→反馈"的闭环。本系列从 ReAct 地基讲到规划/记忆/工具调用/实战案例，覆盖 2024-2026 Agent 工程全栈。
 >
-> 配套：[`讲透LLM/`](../讲透模型/讲透LLM/)（基座）+ [`讲透Prompt/03`](./讲透Prompt/03-结构化输出与函数调用.md)（function calling）+ [`讲透RL/`](../讲透模型/讲透RL/)（Agent RL）+ [`Agent架构模式参考/`](./Agent架构模式参考/)（生产架构）+ [`Agent记忆系统案例/`](./Agent记忆系统案例/)（memory 落地）
+> 配套：[`讲透LLM/`](../讲透模型/讲透LLM/)（基座）+ [`讲透Prompt/03`](./讲透Prompt/03-结构化输出与函数调用.md)（function calling）+ [`讲透Prompt/`](../讲透Prompt/)（**教程系列**：11 个实验讲透 CoT/PAL/ToT/ReAct/注入攻防/模型适配/OPRO，2026-08-26 完成）+ [`讲透RL/`](../讲透模型/讲透RL/)（Agent RL）+ [`Agent架构模式参考/`](./Agent架构模式参考/)（生产架构）+ [`Agent记忆系统案例/`](./Agent记忆系统案例/)（memory 落地）
 
 ---
 
@@ -28,6 +28,8 @@
 | **实战** | [性能优化 Agent](./实战案例-性能优化Agent/) | GPU/CPU/Linux 设备性能优化 Agent 设计蓝图：**2025-2026 四线全景**（AKO4X/KernelAgent/KernelArc/SemaTune/LumOS/SchedCP/AgentKernelArena 一手实证）+ 三大遗留缺口速答（上手三级跳 T0-T2 / 取舍四问×guard 分工 / 三层指标+reward hacking 博弈档案 14.5% 作弊率）|
 | **实战** | [Prover 数学 Agent](./实战案例-Prover数学Agent/) | ★内网 DCU 实测：DeepSeek-Prover-V2-7B 逆向蒸馏**十条规律**（子目标分解=难度在跨度/RZPD 策展/一致性奖励/专家迭代/小模型技能枝）→ 三件套（oprover-math skill 全局已装 + prover_harness.py 递归闭环 + 官方 prompt 双模式）+ DCU 三坑实录 |
 | **讲透** | [讲透 Skills](./讲透Skills/) | ★2026-08-25 新建：Agent Skills 全景知识站（00-09 + 实验室三实验全跑通：E1 触发评测 zero-shot 2/10→few-shot 4/10 欠触发铁证 / E2 渐进披露省 93.1% + CC 1% 预算下 128K 窗口仅装 5 个 / E3 本机 117 目录扫出 2 真 C4 bug）+ 官方规范/skill-creator 485 行一手拆解 + **六线研究地图**（MCE 2601.21557/SkillRL/MemSkill/Memento-Skills/skill smells 实证/SkillNet 全核实）+ 数学五型 skill 类型学×MATH_LOOP_ENGINE 挂网 |
+| **讲透** | [讲透 Loop](../讲透Loop/)（仓库根） | ★2026-08-26 新建：三部曲终章（Prompt→Context→**Loop**），2026-06 命名新学科。四层堆栈定位 + 循环规格五件套（2607.00038）+ 0.59% 采用率实证（2608.21884）+ E1-E3 模拟器全跑通：**自评停止 87% 早停 / 漏检率被轮数放大 / 卡死场景"好验证器+无上限"最贵（155k tok）**。MATH_LOOP_ENGINE = 本单元 Ch10 活案例 |
+| **讲透** | [讲透 Harness](../讲透Harness/)（仓库根） | ★2026-08-26 新建：工程四部曲运行环境层收官（Prompt→Context→Loop→**Harness**）。E1-E3 全跑通：**naive 幻觉式完成 FCR=true（自称6/6实际4/6）vs 最小harness 结构性FCR=0** / 验证器三级消融（V0自评漏报全在"看起来合理"处、成本阶梯 V1≈0ms<V2≈3ms<<V0≈3862ms）/ 崩溃恢复（无账本=100%幻觉恢复，账本=可读但弱模型解析仍1/3出错=harness dependence 本地版）。**Harness-Bench 2605.27922 一手核实**（106任务×6harness×8模型，同模型池差23.8分）+ 论述命名映射表（Meta/Self/Evo-Harness→AHE/Trellis/讲透Loop E4，绝不虚构引用）。与 harness工程手册（操作层）/三综述（文献层）构成三层栈 |
 
 ---
 
