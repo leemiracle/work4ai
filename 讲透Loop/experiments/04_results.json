@@ -1,0 +1,213 @@
+{
+  "params": {
+    "tasks": [
+      {
+        "W": 8,
+        "p": 0.35,
+        "type": "normal"
+      },
+      {
+        "W": 8,
+        "p": 0.35,
+        "type": "normal"
+      },
+      {
+        "W": 8,
+        "p": 0.35,
+        "type": "normal"
+      },
+      {
+        "W": 8,
+        "p": 0.35,
+        "type": "normal"
+      },
+      {
+        "W": 8,
+        "p": 0.35,
+        "type": "normal"
+      },
+      {
+        "W": 8,
+        "p": 0.35,
+        "type": "normal"
+      },
+      {
+        "W": 8,
+        "p": 0.35,
+        "type": "normal"
+      },
+      {
+        "W": 8,
+        "p": 0.35,
+        "type": "normal"
+      },
+      {
+        "W": 8,
+        "p": 0.05,
+        "type": "hard"
+      },
+      {
+        "W": 8,
+        "p": 0.05,
+        "type": "hard"
+      },
+      {
+        "W": 8,
+        "p": 0.05,
+        "type": "hard"
+      },
+      {
+        "W": 8,
+        "p": 0.05,
+        "type": "hard"
+      }
+    ],
+    "p_claim_done": 0.95,
+    "p_claim_idle": 0.1,
+    "p_leak": 0.01,
+    "c_per_turn": 2000,
+    "K_default": 8,
+    "cap_default": 60,
+    "reps": 400,
+    "max_gens": 5,
+    "seed": 42
+  },
+  "phase_A": {
+    "history": [
+      {
+        "gen": "A0",
+        "config": {
+          "stop": "self",
+          "K_stall": null,
+          "cap": null
+        },
+        "true_success": 7.979166666666666,
+        "claimed": 100.0,
+        "premature": 92.02083333333333,
+        "stalled": 0.0,
+        "exhausted": 0.0,
+        "stalled_normal": 0.0,
+        "tokens_mean": 18481.666666666668,
+        "tokens_p95": 48000.0,
+        "max_turns": 64,
+        "productivity_claimed": 5.410767427180088
+      },
+      {
+        "gen": "A1",
+        "config": {
+          "stop": "machine",
+          "K_stall": 8,
+          "cap": null
+        },
+        "true_success": 42.8125,
+        "claimed": 57.3125,
+        "premature": 14.499999999999998,
+        "stalled": 42.6875,
+        "exhausted": 0.0,
+        "stalled_normal": 19.0625,
+        "tokens_mean": 30341.25,
+        "tokens_p95": 54000.0,
+        "max_turns": 41,
+        "productivity_claimed": 1.8889300869278622
+      },
+      {
+        "gen": "A2",
+        "config": {
+          "stop": "machine",
+          "K_stall": 14,
+          "cap": null
+        },
+        "true_success": 53.29166666666667,
+        "claimed": 72.54166666666667,
+        "premature": 19.25,
+        "stalled": 27.458333333333336,
+        "exhausted": 0.0,
+        "stalled_normal": 1.28125,
+        "tokens_mean": 39399.583333333336,
+        "tokens_p95": 68000.0,
+        "max_turns": 70,
+        "productivity_claimed": 1.8411785234615428,
+        "converged": true
+      }
+    ],
+    "patch_log": [
+      {
+        "gen": "A0→A1",
+        "patches": [
+          {
+            "key": "stop",
+            "val": "machine",
+            "reason": "早停率 92%>15%：自评虚报在循环里复利，升验证阶梯"
+          },
+          {
+            "key": "K_stall",
+            "val": 8,
+            "reason": "最长 64 轮无止损：卡死任务在等漏检出口（1/p_leak=100 轮），装熔断"
+          }
+        ]
+      },
+      {
+        "gen": "A1→A2",
+        "patches": [
+          {
+            "key": "K_stall",
+            "val": 14,
+            "reason": "熔断过敏：总熔断 43% 里正常任务被误杀 19%>8%，K→14 放宽"
+          }
+        ]
+      }
+    ]
+  },
+  "phase_B": {
+    "history": [
+      {
+        "gen": "B0",
+        "config": {
+          "stop": "machine",
+          "K_stall": 14,
+          "cap": null
+        },
+        "true_success": 52.87500000000001,
+        "claimed": 72.33333333333333,
+        "premature": 19.458333333333332,
+        "stalled": 27.666666666666668,
+        "exhausted": 0.0,
+        "stalled_normal": 1.4375,
+        "tokens_mean": 39296.666666666664,
+        "tokens_p95": 68000.0,
+        "max_turns": 68,
+        "productivity_claimed": 1.8406989566545082
+      },
+      {
+        "gen": "B1",
+        "config": {
+          "stop": "self",
+          "K_stall": 14,
+          "cap": null
+        },
+        "true_success": 8.645833333333334,
+        "claimed": 100.0,
+        "premature": 91.35416666666667,
+        "stalled": 0.0,
+        "exhausted": 0.0,
+        "stalled_normal": 0.0,
+        "tokens_mean": 18561.25,
+        "tokens_p95": 48000.0,
+        "max_turns": 74,
+        "productivity_claimed": 5.387568186409859
+      }
+    ],
+    "patch_log": [
+      {
+        "gen": "B0→B1",
+        "patches": [
+          {
+            "key": "stop",
+            "val": "self",
+            "reason": "验证调用不产生 claimed 增益，纯 token 成本（当前产出率 1.841%/k tok）"
+          }
+        ]
+      }
+    ]
+  }
+}

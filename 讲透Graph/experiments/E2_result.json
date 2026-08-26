@@ -1,0 +1,86 @@
+{
+  "experiment": "E2 topology cost simulation",
+  "type": "成本模型模拟（非 LLM 实验；参数见文件头）",
+  "params": {
+    "N": 6,
+    "SYS": 500,
+    "OUT_STEP": 400,
+    "PAYLOAD": 300,
+    "SUMMARY": 100,
+    "VERIFY_PASS": 0.85
+  },
+  "A_linear": {
+    "per_step_inputs": [
+      800,
+      1200,
+      1600,
+      2000,
+      2400,
+      2800
+    ],
+    "total_tokens": 13200,
+    "rounds": 6,
+    "steps": [
+      {
+        "step": 1,
+        "input_tokens": 800,
+        "output_tokens": 400
+      },
+      {
+        "step": 2,
+        "input_tokens": 1200,
+        "output_tokens": 400
+      },
+      {
+        "step": 3,
+        "input_tokens": 1600,
+        "output_tokens": 400
+      },
+      {
+        "step": 4,
+        "input_tokens": 2000,
+        "output_tokens": 400
+      },
+      {
+        "step": 5,
+        "input_tokens": 2400,
+        "output_tokens": 400
+      },
+      {
+        "step": 6,
+        "input_tokens": 2800,
+        "output_tokens": 400
+      }
+    ]
+  },
+  "B_fanout_join": {
+    "worker_input": 800,
+    "total_tokens": 6700,
+    "rounds": 2
+  },
+  "C_dag_verify": {
+    "expected_tries_per_branch": 1.176,
+    "total_tokens": 9417,
+    "rounds": 2.4,
+    "all_pass_once": 0.3771
+  },
+  "comparison": {
+    "A_线性loop": {
+      "total_tokens": 13200,
+      "rounds": 6,
+      "growth": "O(N²)——历史越背越重"
+    },
+    "B_并行fanout_join": {
+      "total_tokens": 6700,
+      "rounds": 2,
+      "growth": "O(N)——worker 无历史包袱"
+    },
+    "C_DAG+验证门+重试": {
+      "total_tokens": 9417,
+      "rounds": 2.4,
+      "growth": "B×期望重试(1/p=1.18)"
+    }
+  },
+  "saving_B_vs_A": "49%",
+  "png": "E2_topology.png"
+}

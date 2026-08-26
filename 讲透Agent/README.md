@@ -30,6 +30,8 @@
 | **讲透** | [讲透 Skills](./讲透Skills/) | ★2026-08-25 新建：Agent Skills 全景知识站（00-09 + 实验室三实验全跑通：E1 触发评测 zero-shot 2/10→few-shot 4/10 欠触发铁证 / E2 渐进披露省 93.1% + CC 1% 预算下 128K 窗口仅装 5 个 / E3 本机 117 目录扫出 2 真 C4 bug）+ 官方规范/skill-creator 485 行一手拆解 + **六线研究地图**（MCE 2601.21557/SkillRL/MemSkill/Memento-Skills/skill smells 实证/SkillNet 全核实）+ 数学五型 skill 类型学×MATH_LOOP_ENGINE 挂网 |
 | **讲透** | [讲透 Loop](../讲透Loop/)（仓库根） | ★2026-08-26 新建：三部曲终章（Prompt→Context→**Loop**），2026-06 命名新学科。四层堆栈定位 + 循环规格五件套（2607.00038）+ 0.59% 采用率实证（2608.21884）+ E1-E3 模拟器全跑通：**自评停止 87% 早停 / 漏检率被轮数放大 / 卡死场景"好验证器+无上限"最贵（155k tok）**。MATH_LOOP_ENGINE = 本单元 Ch10 活案例 |
 | **讲透** | [讲透 Harness](../讲透Harness/)（仓库根） | ★2026-08-26 新建：工程四部曲运行环境层收官（Prompt→Context→Loop→**Harness**）。E1-E3 全跑通：**naive 幻觉式完成 FCR=true（自称6/6实际4/6）vs 最小harness 结构性FCR=0** / 验证器三级消融（V0自评漏报全在"看起来合理"处、成本阶梯 V1≈0ms<V2≈3ms<<V0≈3862ms）/ 崩溃恢复（无账本=100%幻觉恢复，账本=可读但弱模型解析仍1/3出错=harness dependence 本地版）。**Harness-Bench 2605.27922 一手核实**（106任务×6harness×8模型，同模型池差23.8分）+ 论述命名映射表（Meta/Self/Evo-Harness→AHE/Trellis/讲透Loop E4，绝不虚构引用）。与 harness工程手册（操作层）/三综述（文献层）构成三层栈 |
+| **讲透** | [讲透 Context](../讲透Context/)（仓库根） | ★2026-08-26 收官：E1-E8 八实验全跑通。**E6 Bloom 97.9% 完胜 glm 超预算摘要**（通信复杂度 Thm 3 本地复现）/ E7 自由笔记 91.7%>结构化模板 83.3%（丢字段诱发幻觉）/ E8 蒸馏悬崖（抽取式 1/2→67%、1/5→17%、1/10→0%）/ E4 日期锚 0→4/4（schema 给结构给不了时间）。六线前沿综述（ACE/ACON/Scroll/2608.01326）+ 本仓活案例 |
+| **讲透** | [讲透 Graph](../讲透Graph/)（仓库根） | ★2026-08-26 新建：五环谱系收口环（Prompt→Context→Harness→Loop→**Graph**，arXiv 2608.21156 综述一手核实）。双分支=Execution Graph（环非 DAG）+ Context Graph（typed edges/bi-temporal/作废不删除）；E1-E6 全跑通：**类型边 5/5 vs 相似度 0/5 / 图税 6×/每跳乘法灾难 p=0.9 十跳剩 35% / 本仓 proto-graph 实测 3058 节点真孤儿 831**（治理债坐标） |
 
 ---
 
