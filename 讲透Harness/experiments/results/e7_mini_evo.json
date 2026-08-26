@@ -1,0 +1,62 @@
+{
+ "meta": {
+  "model": "Qwen2.5-0.5B (local CPU, temp=0, seed 固定)",
+  "note": "贪心搜索与 held-out 用同模型同 seed——差异全部来自 harness 配置",
+  "date": "2026-08-26"
+ },
+ "search_log": [
+  {
+   "step": "baseline",
+   "cfg": [
+    1,
+    "raw"
+   ],
+   "score": 0.75
+  },
+  {
+   "step": "scan-retries",
+   "cfg": [
+    0,
+    "raw"
+   ],
+   "score": 0.5
+  },
+  {
+   "step": "scan-retries",
+   "cfg": [
+    2,
+    "raw"
+   ],
+   "score": 0.75
+  },
+  {
+   "step": "scan-feedback",
+   "cfg": [
+    1,
+    "guided"
+   ],
+   "score": 0.75
+  }
+ ],
+ "chosen_cfg": [
+  1,
+  "raw"
+ ],
+ "train": {
+  "baseline": 0.75,
+  "chosen": 0.75
+ },
+ "heldout": {
+  "baseline": 1.0,
+  "chosen": 1.0
+ },
+ "gap": 0.0,
+ "readout": {
+  "train": "baseline 75% → chosen 75%（贪心扫全空间 retries{0,1,2}×fb{raw,guided}，无一打赢默认 (1,raw)）",
+  "heldout": "chosen 4/4=100% vs baseline 4/4=100%（chosen==baseline，gap=0 恒等）",
+  "真实读数": "①搜索零收益：17 次调用证明\"默认就好\"——小任务池上 harness 超参搜索的成本>收益，AHE 需要全基准池×10轮才有意义；②train 75% vs held-out 100%：任务难度方差（t4 slugify 难/t5-t8 易）主导，配置效应被淹没——样本远小于效应量；③gap=0 是恒等式（chosen=baseline）而非\"迁移成功\"——本实验的真实结论是：这个规模的搜索根本产生不了可迁移的信号",
+  "对照": "AHE 同家族非单调（medium+2.3/high+7.3/xhigh+2.3，2604.25850）+ 跨基准冻结迁移验证——都是大样本+大预算才有的现象",
+  "方法论": "负结果也是结果：搜索型 harness 优化（Meta/Evo-Harness 论述）在 6-8 任务尺度上是伪命题——先攒私有回归集（exercises#11），再谈进化"
+ },
+ "wall_s": 4137.3
+}
