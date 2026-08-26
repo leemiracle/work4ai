@@ -44,6 +44,7 @@ Prompt 工程是零基础上手 AI 的第一课，但市面教程止步于"技�
 - 上游：`讲透Agent/`（harness 把 prompt 当代码管理）、`讲透NLP/`（Ch22 词典分类 = prompt 的对照面）、`prompt工程手册（工程化手册库）`（本单元的理论深化版）
 - 下游：`讲透Agent/实战案例-Prover数学Agent/`（Ch11 Lean prompt 直接复用其 harness）
 - 横向：`top-math-courses/MATH_LOOP_ENGINE.md`（数学实验循环）、`讲透模型/`（模型宇宙）
+- **姊妹篇（2026-08-26 新建）：`../讲透Context/`**——升维到整个窗口的信息设计学（compaction/memory/sub-agent/Context Rot/Bloom filter 对决），其 Ch02 位置效应以本单元 E1/E2 为实验基座
 
 ## 来源与核实
 

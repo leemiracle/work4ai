@@ -138,6 +138,8 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 | **讲透Transformer** | Self-Attention → 位置编码 → MoE → 推理优化 |
 | **讲透微调** | LoRA → PEFT → QLoRA → 数据 → 失败 → 实战 |
 | **讲透Prompt** | 条件概率 → ICL → CoT → 结构化输出 |
+| **讲透Context** | 窗口解剖 → 位置效应 → Context Rot → compaction（含通信复杂度数学：Bloom vs LLM 摘要对决）→ memory → sub-agent 🌱 2026-08-26 新建（E1/E6 已跑通） |
+| **讲透Graph** | 五环谱系收口（Prompt→Context→Harness→Loop→**Graph**）：Execution Graph + Context Graph 双图、typed edges、bi-temporal 记忆、per-hop 精度乘法灾难、ontology engineering；活案例=本仓 proto-graph 实测 🌱 2026-08-26 新建（E5/E6 已跑通） |
 | **讲透RAG** | 检索数学 → 工程 → 高级架构 → 评估 |
 | **讲透PyTorch** | Tensor → Autograd(**含反传数学本质VJP/m≪n/O(N)**) → 训练(**含损失函数/优化器/故障**) → compile → 内核精读(**含mutation边界/反传未来**) → 生态 ⭐ 已吸收原反传/损失/优化器三系列 |
 | **讲透GPU与系统级** | FlashAttention → vLLM → 量化 → CUDA |
