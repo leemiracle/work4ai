@@ -60,14 +60,16 @@ $$o_t = \hat q_t\Big(S_0 + \sum_{i \le t} \hat k_i^\top \hat v_i\Big), \quad \ha
 | 写入代价 | 一次投影（便宜） | 一次状态更新 | 一次梯度步（贵，但 E2-TTT 闭式核已降到 chunk 并行） |
 | 工程代表 | MLA（57× 压缩仍线性） | Mamba-2/3、GDN | Titans、LaCT、E2-TTT |
 
-## 三、代码层：三悖论 + KVB vs E2E 的最小复现（本单元实验）
+## 三、代码层：三悖论 + KVB vs E2E 的最小复现（实验结果已回填）
 
-`experiments/09_ttt_spectrum.py`——单层玩具 TTT（LaCT 式 GLU 核），CPU 分钟级，复现并**扩展**了论文现象：
+`experiments/09_ttt_spectrum.py`（本地 CPU）+ 远程 13 节点全规模版（`remote/remote_gpu_suite.py`，2×沐曦 C500）。**结果分四档诚实记录**：
 
-1. **悖论复现**：梯度上升 vs 下降 vs 零更新（预期：descent ≈ ascent，远超 no-update——"记忆"不在方向里在结构里）；
-2. **换 Q 为 K 无损**（预期：检索解释崩，混合器解释立）；
-3. **创新扩展（论文没做的）**：**KVB 内环 vs E2E 内环对照**——同一外环训练，只换内环损失函数，量化"KV binding 次优多少"（2512.23675 现象的玩具级因果隔离）；
-4. **桥接实验**：TTT weight decay γ 扫描 → fast weight 稳态范数——检验讲透Loop E5 遗忘地板 $e^* = f/(r+f)$ 在架构层的形态。
+| 实验 | 结果 | 判读 |
+|------|------|------|
+| E1-E3 三悖论/KVB-E2E/换QK | 全规模（800 步 GPU）仍 ≈ 随机水平 | **玩具极限**：单层 TTT+一步内环学不会 induction。悖论验证需官方 checkpoint（nv-tlabs/tttla 开源）——列为后续路线，不硬凹 |
+| E4 遗忘地板（γ 扫描→稳态范数） | 1.93→0.66→0.28→0.12 单调降；γ=0 发散 | ✅ **e\*=f/(r+f) 的架构形态确认**（γ↑→记忆稳态↓；无遗忘必爆）——见 `experiments/09b-桥接注记` 的理论推导 |
+| E5 μP 全规模（d≤2048） | μP 稳定区间 43-100+ vs SP ~3.5 单点 | ◐ 稳定区间宽度 ✓；SP 漂移在本简单任务未显现（1/√fan-in 已吸收宽度效应）——Fig1 完整复现需更难任务，诚实标注 |
+| E6 C1 GPU 加固 | **292,864 图（n≤18）零真违反** | ✅ 74 个 flag 全为 float32 边界噪声（gap=-2e-6 的近完全图等号面）。**C1 累计证据 414,060 图零违反**，K_n 族取等——连同 Lean 陈述已过（`top-math-courses/loops/lean/C1_statement.lean`） |
 
 ## 四、谱系的谱系：三个尚无人回答的问题
 

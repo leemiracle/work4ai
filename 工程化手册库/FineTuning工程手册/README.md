@@ -37,6 +37,7 @@ Preference Alignment           — 学"什么是对的"
 - **方法**：标准交叉熵 loss
 - **作用**：教模型"**怎么回答**"（格式/风格/指令遵循）
 - **工具**：TRL SFTTrainer
+- **深读**：[`讲透微调/SFT全景综合-2026-08`](../../讲透模型/讲透微调/SFT全景综合-2026-08.md)——数据工程/超参机械理由/LoRA 入侵维度/推理时代 SFT×RL 分工/Agent 轨迹 SFT 的工程级收口
 
 ### DPO（Direct Preference Optimization, 2023）
 - **数据**：(prompt, chosen_response, rejected_response)

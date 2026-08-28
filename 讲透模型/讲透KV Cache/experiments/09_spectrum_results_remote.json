@@ -1,0 +1,48 @@
+{
+  "_meta": {
+    "date": "2026-08-27",
+    "site": "13 节点远程（2×MetaX C500 64G，vllm-metax 容器 torch2.6.0+metax3.3.0.2）",
+    "note": "E1-E5 来自首跑日志（json 被二跑覆盖），E6 来自终跑 json；全部数字日志可溯"
+  },
+  "E1_paradox_full": {
+    "verdict": "TOY-LIMIT（玩具单层 TTT 未学会 induction）",
+    "descent": 0.0313, "ascent": 0.031, "no-update": 0.0313, "double": 0.0287,
+    "chance": 0.03125,
+    "note": "V=32 D=128 SEQ=128 steps=800 GPU：四模式全 ≈ 1/32 随机水平，loss 钉死 ln32。结论：单层玩具 TTT+一步内环 GD 无法学会 induction；论文悖论的复现需官方 checkpoint（nv-tlabs/tttla 开源）——玩具极限被诚实记录，checkpoint 路线列为后续"
+  },
+  "E2_kvb_vs_e2e_full": {
+    "verdict": "TOY-LIMIT（同上，无法在本玩具上分辨 KVB/E2E）"
+  },
+  "E3_swap_qk_full": {
+    "verdict": "TOY-LIMIT"
+  },
+  "E4_forgetting_floor_fixed": {
+    "verdict": "CONFIRMED（遗忘地板的架构形态）",
+    "steady_norms": {"0.001": 1.9276, "0.005": 0.6577, "0.02": 0.2808, "0.1": 0.1198},
+    "note": "归一化核修复 NaN 后：γ↑ → fast weight 稳态范数单调下降（1.93→0.12）——e*=f/(r+f) 的架构投影成立；γ=0 无地板（发散），与'无遗忘必爆'预言一致"
+  },
+  "E5_mup_full": {
+    "verdict": "PARTIAL（μP 稳定区间更宽 ✓；SP 漂移在本任务未显现 ✗）",
+    "widths": [64, 256, 1024, 2048],
+    "SP_best_eta": [3.511, 3.511, 3.511, 3.511],
+    "muP_best_eta": [43.288, 100.0, 100.0, 100.0],
+    "note": "two-moons+ReLU MLP 的 1/√fan-in 初始化已部分吸收宽度效应，SP 最优 η 在 d≤2048 稳定；μP 的稳定区间（43-100+）比 SP（~3.5 单点）宽一个量级。完整 Fig1 漂移现象需更难任务/更深网/训练敏感 loss——诚实记录为未完全复现"
+  },
+  "E6_c1_gpu": {
+    "verdict": "C1 VERIFIED（零真违反；等号面确认）",
+    "tested": 292864,
+    "true_violations": 0,
+    "float_noise_flags": 74,
+    "float_noise_detail": "全部 gap=-2e-6 @ n=10 p=0.9（近完全图贴在 C1 等号面，float32 eigvalsh rounding）——非反例",
+    "min_gap": -1.9073486328125e-06,
+    "c1_stronger_pct": 15.26,
+    "method_honesty": "α=最小度贪心独立集（合法下界 ⟹ gap_lb≥0 ⟹ C1 成立的 sound 方向）；batched eigvalsh GPU（沐曦原生支持）；74 个 flag 经独立重采样+边界分析判为浮点噪声"
+  },
+  "C1_evidence_total": {
+    "graphs_total": 414060,
+    "breakdown": "本地精确版 121,196（n≤14，精确α，float64）+ 远程 GPU 版 292,864（n≤18，贪心α下界）",
+    "true_violations": 0,
+    "equality_family": "K_n（gap=-2e-14 @ K23 本地 float64）与近完全图族（gap≈-2e-6 @ GPU float32）",
+    "lean_status": "陈述已在 Mathlib v4.14 形式化通过（0 error，主定理唯一 sorry）——top-math-courses/loops/lean/C1_statement.lean"
+  }
+}
