@@ -143,6 +143,7 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 | **讲透RAG** | 检索数学 → 工程 → 高级架构 → 评估 |
 | **讲透PyTorch** | Tensor → Autograd(**含反传数学本质VJP/m≪n/O(N)**) → 训练(**含损失函数/优化器/故障**) → compile → 内核精读(**含mutation边界/反传未来**) → 生态 ⭐ 已吸收原反传/损失/优化器三系列 |
 | **讲透GPU与系统级** | FlashAttention → vLLM → 量化 → CUDA |
+| **讲透高性能计算** | HPC 是 AI 的物理层：Amdahl → Roofline → 缓存 → SIMD → 集合通信 → 混合精度（00-10 章 + MLSys 2019-2026 全 448 篇锚点库 + 🎓resources 9 课程中心 + 📝blogs 四源博客体系）⭐ 2026-09-02 建成 |
 | **讲透复用权重** | 迁移学习 → PEFT → 蒸馏 → 持续学习 |
 | **讲透泛化** | 隐式正则 → 平坦极小值 → 双层下降 |
 | **讲透生成模型** | AR → VAE → GAN → Flow → Diffusion → Score |
