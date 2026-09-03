@@ -5,6 +5,10 @@
 > 谱系依据：arXiv 2608.21156（2026-08-21，35 位作者大联盟）官方分层：**Prompt 引出能力 → Context 管理信息 → Harness 组织工具 → Loop 持续反思 → Graph 组织系统**。
 > 本章证据标准：每个知识点配一个真实可跑实验（`experiments/`），arXiv ID 一律 webfetch 核实（见 `papers.md`）。
 
+## 互链
+
+> 图的第一性原理（图论/谱/GNN/WL/马尔可夫）见 [`讲透图`](../../讲透图/README.md)——本单元是「系统之图」象限，与「数学·学习·状态之图」互补。
+
 ## 为什么要有这个单元
 
 "Graph Engineering" 这个词 2026-07-18 才在 X 上被引爆（Peter Steinberger："Are we still talking loops or did we shift to graphs yet?"），**12 天内**走完 术语引爆（07-18）→ LangChain 回应（07-22）→ 独立文章（07-24）→ 形式化定义 preprint（07-30）→ 生产 playbook（07-31）→ 双图论批判（08-13）→ 学术综述（08-21）全程。但架构本身已有三年积累（LangGraph 65M+/月下载、Graphiti 20k★）。
