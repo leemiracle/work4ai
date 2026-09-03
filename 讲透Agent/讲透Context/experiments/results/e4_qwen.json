@@ -1,0 +1,209 @@
+{
+ "meta": {
+  "model": "Qwen2.5-0.5B",
+  "date": "2026-08-26",
+  "note": "前6题（含全部日期型）"
+ },
+ "configs": {
+  "C0_裸指令": [
+   {
+    "q": "上周哪些订单退款了",
+    "raw": "{\n  \"query\": {\n    \"type\": \"order\",\n    \"dateRange\": {\n      \"startDate\": \"lastWeek\"\n    },\n    \"filters\": [\n      {\n        \"field\": \"status\",\n        \"operator\": \"==\",\n        \"value\": \"refunded\"\n      }\n    ]\n  }\n}",
+    "json_ok": true,
+    "query_ok": false,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "今年二季度的活跃用户数",
+    "raw": "{\n  \"query\": {\n    \"type\": \"search\",\n    \"params\": {\n      \"q\": \"今年二季度 活跃用户数\"\n    }\n  }\n}",
+    "json_ok": true,
+    "query_ok": false,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "3月1日到3月15日之间关闭的bug",
+    "raw": "{\n  \"query\": {\n    \"dateRange\": [\n      {\n        \"start\": \"2023-03-01\",\n        \"end\": \"2023-03-15\"\n      }\n    ],\n    \"statusFilter\": \"closed\"\n  },\n  \"type\": \"Bug\",\n  \"category\": \"Software\",\n  \"severity\": \"High\",\n  \"resolutionDate\": \"2023-03-15\"\n}",
+    "json_ok": true,
+    "query_ok": false,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "客户acme最近的合同",
+    "raw": "{\n  \"query\": {\n    \"type\": \"contract\",\n    \"date\": \"recent\"\n  }\n}",
+    "json_ok": true,
+    "query_ok": false,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "张伟负责的、状态是进行中的项目",
+    "raw": "{\n  \"query\": {\n    \"type\": \"project\",\n    \"status\": \"in_progress\",\n    \"owner\": \"张伟\"\n  }\n}",
+    "json_ok": true,
+    "query_ok": false,
+    "date_resolved": null,
+    "date_correct": null
+   },
+   {
+    "q": "按创建时间倒序排列所有高优先级工单",
+    "raw": "{\n  \"sql\": \"SELECT * FROM 工单 ORDER BY 创建时间 DESC\"\n}",
+    "json_ok": true,
+    "query_ok": false,
+    "date_resolved": null,
+    "date_correct": null
+   }
+  ],
+  "C1_+schema": [
+   {
+    "q": "上周哪些订单退款了",
+    "raw": "{\n  \"query\": \"上周哪些订单退款了\",\n  \"filters\": {},\n  \"date_range\": {},\n  \"fields\": [],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "今年二季度的活跃用户数",
+    "raw": "{\n  \"query\": \"今年二季度的活跃用户数\",\n  \"filters\": {},\n  \"date_range\": {},\n  \"fields\": [],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "3月1日到3月15日之间关闭的bug",
+    "raw": "{\n  \"query\": \"关闭于3月1日至3月15日期间的bug\",\n  \"filters\": {},\n  \"date_range\": {\n    \"start\": \"2023-03-01\"\n  },\n  \"fields\": [\n    \"title\",\n    \"author\",\n    \"body\"\n  ],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "客户acme最近的合同",
+    "raw": "{\n  \"query\": \"客户 acme 最近的合同\",\n  \"filters\": {},\n  \"date_range\": {},\n  \"fields\": [],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "张伟负责的、状态是进行中的项目",
+    "raw": "{\n  \"query\": \"张伟\",\n  \"filters\": {},\n  \"date_range\": {},\n  \"fields\": [],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": null,
+    "date_correct": null
+   },
+   {
+    "q": "按创建时间倒序排列所有高优先级工单",
+    "raw": "{\n  \"query\": \"高优先级工单\",\n  \"filters\": {},\n  \"date_range\": {},\n  \"fields\": [],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": null,
+    "date_correct": null
+   }
+  ],
+  "C2_+日期注入": [
+   {
+    "q": "上周哪些订单退款了",
+    "raw": "{\n  \"query\": \"上周\",\n  \"filters\": {},\n  \"date_range\": {\n    \"start\": \"2026-07-31\"\n  },\n  \"fields\": [\n    \"order_id\"\n  ],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "今年二季度的活跃用户数",
+    "raw": "{\n  \"query\": \"今年二季度的活跃用户数\",\n  \"filters\": {},\n  \"date_range\": {\n    \"start\": \"2026-04-01\"\n  },\n  \"fields\": [],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "3月1日到3月15日之间关闭的bug",
+    "raw": "{\n  \"query\": \"关闭的 bug\",\n  \"filters\": {},\n  \"date_range\": {\n    \"start\": \"2026-03-15\"\n  },\n  \"fields\": [],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "客户acme最近的合同",
+    "raw": "{\n  \"query\": \"客户 acme 最近的合同\",\n  \"filters\": {},\n  \"date_range\": {\n    \"start\": \"2026-07-31\"\n  },\n  \"fields\": [],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "张伟负责的、状态是进行中的项目",
+    "raw": "{\n  \"query\": \"张伟\",\n  \"filters\": {},\n  \"date_range\": {\n    \"start\": \"2026-07-31\"\n  },\n  \"fields\": [],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": null,
+    "date_correct": null
+   },
+   {
+    "q": "按创建时间倒序排列所有高优先级工单",
+    "raw": "{\n  \"query\": \"\",\n  \"filters\": {},\n  \"date_range\": {\n    \"start\": \"2026-07-31\",\n    \"end\": \"2026-08-25\"\n  },\n  \"fields\": [],\n  \"sort\": {}\n}",
+    "json_ok": true,
+    "query_ok": false,
+    "date_resolved": null,
+    "date_correct": null
+   }
+  ],
+  "C3_+示例": [
+   {
+    "q": "上周哪些订单退款了",
+    "raw": "{\"query\":\"订单\",\"filters\":{\"status\":\"refunded\"},\"date_range\":{},\"sort\":{}}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "今年二季度的活跃用户数",
+    "raw": "{\"query\":\"活跃用户数\",\"filters\":{},\"date_range\":{},\"sort\":{}}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "3月1日到3月15日之间关闭的bug",
+    "raw": "{\"query\":\"关闭的bug\",\"filters\":{\"closed\":\"true\"},\"date_range\":{{\"start\":\"2026-03-15\",\"end\":\"2026-03-19\"}},\"sort\":{{\"field\":\"created_at\",\"order\":\"desc\"}}}",
+    "json_ok": false,
+    "query_ok": false,
+    "date_resolved": null,
+    "date_correct": null
+   },
+   {
+    "q": "客户acme最近的合同",
+    "raw": "{\"query\":\"合同\",\"filters\":{\"assignee\":\"acme\"},\"date_range\":{},\"sort\":{}}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": false,
+    "date_correct": null
+   },
+   {
+    "q": "张伟负责的、状态是进行中的项目",
+    "raw": "{\"query\":\"项目\",\"filters\":{\"assignee\":\"张伟\",\"status\":\"正在进行\"},\"date_range\":{},\"sort\":{}}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": null,
+    "date_correct": null
+   },
+   {
+    "q": "按创建时间倒序排列所有高优先级工单",
+    "raw": "{\"query\":\"高优先级工单\",\"filters\":{\"priority\":\"high\"},\"sort\":{\"field\":\"created\",\"order\":\"desc\"}}",
+    "json_ok": true,
+    "query_ok": true,
+    "date_resolved": null,
+    "date_correct": null
+   }
+  ]
+ }
+}
