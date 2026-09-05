@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """讲透博弈论实验 3：扩展式博弈——蜈蚣 SPE、QRE λ 扫描与最后通牒实验室。
-E1 手写 EFG 文本建 n=6 蜈蚣（pygambit 16.7.0 的 Game.new_tree() 只读、Node 无 append——EFG 文本 + read_efg 是唯一建模通道）→ enumpure_solve 求纯 NE（唯一 = 节点 1 即 take，收益 (4,1)），与手推逆向归纳逐节点对拍 | E2 QRE：pygambit.qre.logit_solve_lambda 扫 λ∈[0.1,100]（21 点）记录"第一个 take 的节点"前移曲线，并用手写 numpy 不动点递归全程对拍（预期 maxdiff < 1e-9） | E3 最后通牒模拟：responder 拒绝 iff offer < θ（θ~U[0,4]，Fehr-Schmidt 不公平厌恶的单参数门槛投影），知情提议人最优出价 o*=5（蛋糕 50%）vs SPE 0 对照打印
+E1 手写 EFG 文本建 n=6 蜈蚣（pygambit 16.7.0 的 Game.new_tree() 只读、Node 无 append——EFG 文本 + read_efg 是唯一建模通道）→ enumpure_solve 求纯 NE（唯一 = 节点 1 即 take，收益 (4,1)），与手推逆向归纳逐节点对拍 | E2 QRE：pygambit.qre.logit_solve_lambda 扫 λ∈[0.1,100]（21 点）记录"第一个 take 的节点"前移曲线，并用手写 numpy 不动点递归全程对拍（预期 maxdiff < 1e-9） | E3 最后通牒模拟：responder 拒绝 iff offer < θ（θ~U[0,4]，Fehr-Schmidt 不公平厌恶的单参数门槛投影），知情提议人最优出价 o*=4（蛋糕 40%）vs SPE 0 对照打印
 产出：extensive.png + centipede6.efg（EFG 模板，lab04 复用同一建模范式）"""
 import matplotlib
 matplotlib.use("Agg")
