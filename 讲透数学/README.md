@@ -88,8 +88,8 @@ graph TD
 
 ## 三、三阶段学习路径（对齐 top-math-courses）
 
-配套路线图：[`../../top-math-courses/UNIFIED_ROADMAP.md`](../../top-math-courses/UNIFIED_ROADMAP.md) ·
-Lean 并行轨：[`../../top-math-courses/LEAN_MATH_TRACK.md`](../../top-math-courses/LEAN_MATH_TRACK.md)
+配套路线图：[`../top-math-courses/UNIFIED_ROADMAP.md`](../top-math-courses/UNIFIED_ROADMAP.md) ·
+Lean 并行轨：[`../top-math-courses/LEAN_MATH_TRACK.md`](../top-math-courses/LEAN_MATH_TRACK.md)
 
 **阶段 0 · 桥（数学自评 0 起点）**
 
