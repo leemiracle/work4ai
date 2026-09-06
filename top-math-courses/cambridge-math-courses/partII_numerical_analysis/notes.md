@@ -112,7 +112,7 @@ for kappa in [10, 100, 1000]:
 ---
 
 ## 交叉引用
-- [Cambridge Part IB NA](../partIB_numerical_analysis/) — ODE/插值基础
-- [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/) — 线代数值深入
-- [MIT 18.085](../../mit-math-courses/18_085_computational_science/) — 差分/FEM 应用
-- [ETH 401-2611](../../eth-math-courses/e401_2611_numerical_methods_cse/) — CSE 视角
+- [Cambridge Part IB NA](../partIB_numerical_analysis) — ODE/插值基础
+- [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra) — 线代数值深入
+- [MIT 18.085](../../mit-math-courses/18_085_computational_science) — 差分/FEM 应用
+- [ETH 401-2611](../../eth-math-courses/e401_2611_numerical_methods_cse) — CSE 视角

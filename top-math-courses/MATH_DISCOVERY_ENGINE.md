@@ -142,7 +142,7 @@ $$\text{发现引擎价值} = \underbrace{\text{生成多样性}}_{\text{模型�
 
 ## 挂网
 
-- 上游：[MATH_LOOP_ENGINE.md](MATH_LOOP_ENGINE.md)（学习循环——本引擎的 L1-L4 内件）、[../讲透Loop/](../讲透Loop/)（循环设计学——外循环规格与守卫）
+- 上游：[MATH_LOOP_ENGINE.md](MATH_LOOP_ENGINE.md)（学习循环——本引擎的 L1-L4 内件）、[../讲透Loop/](../讲透Loop)（循环设计学——外循环规格与守卫）
 - **总纲**：[BIDIRECTIONAL_FLYWHEEL.md](BIDIRECTIONAL_FLYWHEEL.md)（本引擎=飞轮的 AI→Math 环；引擎自举台账在总纲 §三）
 - 下游：loops/experiments/（试点实验线）、Prover harness（T2 攻坚手）
 - 更新协议：每档试点点火/收官刷新 §五 §六；先例表新条目必须先过 papers 纪律（ID 现场核实）

@@ -267,4 +267,4 @@ $$S_{CS} = \frac{k}{4\pi}\int d^3x\, \epsilon^{\mu\nu\rho}\, a_\mu\, \partial_\n
 ---
 
 **完成日期**：2026-08-13（深化版 v2，从 135 行扩到 ~310 行）
-**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

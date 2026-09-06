@@ -49,7 +49,7 @@ Relevant source files
 
 This page describes the overall architecture of the vLLM v1 inference engine: its layered components, how they communicate, and how a request flows from API submission through GPU execution and back to the caller. Detailed documentation for each component is provided in the child pages listed below.
 
-For configuration of these components at startup, see [Configuration and Initialization](/vllm-project/vllm/2-configuration-and-initialization). For details on how model inference is executed on the GPU, see [Model Execution on GPU](/vllm-project/vllm/4-model-execution-on-gpu). For the HTTP serving layer built on top of this engine, see [Serving APIs](/vllm-project/vllm/6-serving-apis).
+For configuration of these components at startup, see [Configuration and Initialization](../../../../vllm-project/vllm/2-configuration-and-initialization). For details on how model inference is executed on the GPU, see [Model Execution on GPU](../../../../vllm-project/vllm/4-model-execution-on-gpu). For the HTTP serving layer built on top of this engine, see [Serving APIs](../../../../vllm-project/vllm/6-serving-apis).
 
 * * *
 
@@ -59,13 +59,13 @@ vLLM's v1 engine is organized into a multi-process, multi-layer architecture des
 
 Layer| Purpose| Key Classes| Detailed Coverage  
 ---|---|---|---  
-**Client API**|  Accept and return requests| `LLM`, `AsyncLLM`, `EngineCoreClient`| [EngineCore and Client APIs](/vllm-project/vllm/3.1-enginecore-and-client-apis)  
-**Engine Core**|  Schedule, execute, coordinate| `EngineCore`, `EngineCoreProc`, `EngineCoreClient`| [EngineCore and Client APIs](/vllm-project/vllm/3.1-enginecore-and-client-apis)  
-**Request Management**|  Track request lifecycle and state| `Request`, `RequestStatus`, `EngineCoreRequest`| [Request Lifecycle and State Management](/vllm-project/vllm/3.2-request-lifecycle-and-state-management)  
-**Scheduler**|  Batch requests, allocate resources| `Scheduler`, `RequestQueue`| [Scheduler and Resource Allocation](/vllm-project/vllm/3.3-scheduler-and-resource-allocation)  
-**KV Cache**|  Manage GPU memory for KV cache| `KVCacheManager`, `BlockPool`, `SingleTypeKVCacheManager`| [KV Cache Management and Prefix Caching](/vllm-project/vllm/3.4-kv-cache-management-and-prefix-caching)  
-**I/O Processing**|  Tokenization, detokenization| `InputProcessor`, `OutputProcessor`| [Input and Output Processing](/vllm-project/vllm/3.5-input-and-output-processing)  
-**Observability**|  Metrics, logging, monitoring| `SchedulerStats`, `KVCacheMetricsCollector`| [Metrics and Observability](/vllm-project/vllm/3.6-metrics-and-observability)  
+**Client API**|  Accept and return requests| `LLM`, `AsyncLLM`, `EngineCoreClient`| [EngineCore and Client APIs](../../../../vllm-project/vllm/3.1-enginecore-and-client-apis)  
+**Engine Core**|  Schedule, execute, coordinate| `EngineCore`, `EngineCoreProc`, `EngineCoreClient`| [EngineCore and Client APIs](../../../../vllm-project/vllm/3.1-enginecore-and-client-apis)  
+**Request Management**|  Track request lifecycle and state| `Request`, `RequestStatus`, `EngineCoreRequest`| [Request Lifecycle and State Management](../../../../vllm-project/vllm/3.2-request-lifecycle-and-state-management)  
+**Scheduler**|  Batch requests, allocate resources| `Scheduler`, `RequestQueue`| [Scheduler and Resource Allocation](../../../../vllm-project/vllm/3.3-scheduler-and-resource-allocation)  
+**KV Cache**|  Manage GPU memory for KV cache| `KVCacheManager`, `BlockPool`, `SingleTypeKVCacheManager`| [KV Cache Management and Prefix Caching](../../../../vllm-project/vllm/3.4-kv-cache-management-and-prefix-caching)  
+**I/O Processing**|  Tokenization, detokenization| `InputProcessor`, `OutputProcessor`| [Input and Output Processing](../../../../vllm-project/vllm/3.5-input-and-output-processing)  
+**Observability**|  Metrics, logging, monitoring| `SchedulerStats`, `KVCacheMetricsCollector`| [Metrics and Observability](../../../../vllm-project/vllm/3.6-metrics-and-observability)  
   
 ### Process Architecture
 
@@ -137,13 +137,13 @@ Sources: [vllm/v1/engine/core.py105-170](https://github.com/vllm-project/vllm/bl
 
 `Scheduler` manages request queues and KV cache allocation [vllm/v1/core/sched/scheduler.py73-84](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L73-L84) It maintains priority queues for `waiting` and `running` requests [vllm/v1/core/sched/scheduler.py49-53](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L49-L53) The `schedule()` method produces a `SchedulerOutput` specifying token budgets and KV block assignments [vllm/v1/core/sched/output.py47-48](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/output.py#L47-L48)
 
-For details, see [Scheduler and Resource Allocation](/vllm-project/vllm/3.3-scheduler-and-resource-allocation).
+For details, see [Scheduler and Resource Allocation](../../../../vllm-project/vllm/3.3-scheduler-and-resource-allocation).
 
 ### `KVCacheManager`
 
 `KVCacheManager` manages physical GPU blocks [vllm/v1/core/kv_cache_manager.py118-135](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_manager.py#L118-L135) It coordinates multiple `SingleTypeKVCacheManager` instances [vllm/v1/core/single_type_kv_cache_manager.py36-55](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/single_type_kv_cache_manager.py#L36-L55) It uses a `BlockPool` for raw block accounting and prefix caching [vllm/v1/core/block_pool.py15](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/block_pool.py#L15-L15)
 
-For details, see [KV Cache Management and Prefix Caching](/vllm-project/vllm/3.4-kv-cache-management-and-prefix-caching).
+For details, see [KV Cache Management and Prefix Caching](../../../../vllm-project/vllm/3.4-kv-cache-management-and-prefix-caching).
 
 **Scheduler and KV Cache data flow:**
 
@@ -159,7 +159,7 @@ Sources: [vllm/v1/core/sched/scheduler.py73-170](https://github.com/vllm-project
 
 `Request` is the internal state container [vllm/v1/request.py64-65](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/request.py#L64-L65) It tracks generated tokens, computed token counts, and KV block hashes. Its lifecycle is managed via `RequestStatus`, transitioning from `WAITING` to `RUNNING` and eventually `FINISHED_STOPPED` or other terminal states [vllm/v1/request.py27-41](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/request.py#L27-L41)
 
-For details, see [Request Lifecycle and State Management](/vllm-project/vllm/3.2-request-lifecycle-and-state-management).
+For details, see [Request Lifecycle and State Management](../../../../vllm-project/vllm/3.2-request-lifecycle-and-state-management).
 
 ### End-to-End Request Flow
 
@@ -196,6 +196,6 @@ Component| Class| Purpose
 **Multimodal Receiver**| `mm_receiver_cache`| Manages multimodal input data receiving and caching [vllm/v1/engine/core.py181-183](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L181-L183)  
 **KV Transfer**| `KVConnectorFactory`| Handles KV cache migration for disaggregated or distributed serving [vllm/v1/core/sched/scheduler.py149-153](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L149-L153)  
   
-For details on metrics and observability, see [Metrics and Observability](/vllm-project/vllm/3.6-metrics-and-observability).
+For details on metrics and observability, see [Metrics and Observability](../../../../vllm-project/vllm/3.6-metrics-and-observability).
 
 Sources: [vllm/v1/engine/core.py146-183](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L146-L183) [vllm/v1/core/sched/scheduler.py134-153](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L134-L153)

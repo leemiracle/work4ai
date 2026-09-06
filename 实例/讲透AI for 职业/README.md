@@ -149,8 +149,8 @@ python3 -u experiments/00_profession_analyzer.py    # 职业任务自动化评�
 
 ## 与其他系列的关系
 
-- [`../讲透AI应用全景/`](../讲透AI应用全景/)：前者按"领域"分（AI4Science/Math/Code），本系列按"职业"分。
-- [`../讲透Prompt/`](../讲透Prompt/)：本系列每个职业会引用具体的 prompt 模板。
+- [`../讲透AI应用全景/`](../讲透AI应用全景)：前者按"领域"分（AI4Science/Math/Code），本系列按"职业"分。
+- [`../讲透Prompt/`](../讲透Prompt)：本系列每个职业会引用具体的 prompt 模板。
 
 ---
 

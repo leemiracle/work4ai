@@ -3,7 +3,7 @@
 > **教材**：Stanford 自编讲义（Custom）
 > **范围**：本笔记聚焦**多变量微积分部分**（第 4-7 单元）。线代部分见其他笔记
 > **特色**：线代 + 多变量并行讲授，SVD 与梯度优化有机融合
-> **对照**：多变量部分 ≈ [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus/)
+> **对照**：多变量部分 ≈ [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus)
 
 ---
 

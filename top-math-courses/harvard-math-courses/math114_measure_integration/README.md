@@ -25,7 +25,7 @@
 ## 参考资源
 - Folland, *Real Analysis* (2nd ed, Wiley)
 - Rudin, *Real and Complex Analysis*
-- MIT 对照：[MIT 18.125 Measure and Integration](../../mit-math-courses/)
+- MIT 对照：[MIT 18.125 Measure and Integration](../../mit-math-courses)
 
 ## 📍 在数学全景中的位置
 
@@ -117,4 +117,4 @@ Song et al. 的 score-based diffusion model（2021 起）在 2024-2026 获得了
 
 ---
 
-📌 **下一步**：→ [Harvard Math 122 Algebra I](../math122_algebra_I/)
+📌 **下一步**：→ [Harvard Math 122 Algebra I](../math122_algebra_I)

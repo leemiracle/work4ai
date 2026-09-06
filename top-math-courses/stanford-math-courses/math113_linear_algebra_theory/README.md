@@ -24,7 +24,7 @@
 
 ## 参考资源
 - Axler, *Linear Algebra Done Right* (4th ed, 2023, 免费 PDF)
-- Berkeley 对照：[Math 110](../../berkeley-math-courses/math110_linear_algebra/)
+- Berkeley 对照：[Math 110](../../berkeley-math-courses/math110_linear_algebra)
 
 ---
 
@@ -81,4 +81,4 @@ MATH 51 (应用线代) ──▶  MATH 113 理论线代 (Axler+Strang) ──┬
 3. **低秩微调（LoRA/QLoRA）的谱理论基础（2023-2026）**
    - LoRA（[arXiv:2106.09685](https://arxiv.org/abs/2106.09685)）与 QLoRA（[arXiv:2305.14314](https://arxiv.org/abs/2305.14314)）的低秩更新依赖"权重增量的有效秩低"。谱定理 + 奇异值理论是证明"小秩够用"的数学根基。
 
-📌 **下一步**：→ [MATH 115 Real Variable](../math115_real_variable/)
+📌 **下一步**：→ [MATH 115 Real Variable](../math115_real_variable)

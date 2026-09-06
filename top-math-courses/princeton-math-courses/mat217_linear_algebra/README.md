@@ -31,7 +31,7 @@
 - **教材**：Axler, *Linear Algebra Done Right* (4th ed, Springer, 2023) — 开放获取 PDF
 - **替代教材**：Hoffman & Kunze, *Linear Algebra*（更老但经典）
 - **替代教材**：Halmos, *Finite-Dimensional Vector Spaces*（Princeton 教材）
-- **Berkeley 对照**：[Berkeley Math 110](../../berkeley-math-courses/math110_linear_algebra/)（同样用 Axler）
+- **Berkeley 对照**：[Berkeley Math 110](../../berkeley-math-courses/math110_linear_algebra)（同样用 Axler）
 
 ## 学习建议
 - **节奏**：每周 6-8 小时，12-14 周
@@ -90,4 +90,4 @@ MAT 215 荣誉实分析 ──▶  MAT 217 荣誉线代 (Hoffman&Kunze/Axler) �
 3. **低秩微调 LoRA/QLoRA 的谱理论（2023-2026）**
    - LoRA（[arXiv:2106.09685](https://arxiv.org/abs/2106.09685)）与 QLoRA（[arXiv:2305.14314](https://arxiv.org/abs/2305.14314)）：低秩更新 $W_0+BA$ 的有效性，需要 MAT 217 的奇异值/不变子空间理论来严格表述"有效秩"。
 
-📌 **下一步**：→ [MAT 300 多变量分析 I](../mat300_multivariable_analysis/)
+📌 **下一步**：→ [MAT 300 多变量分析 I](../mat300_multivariable_analysis)

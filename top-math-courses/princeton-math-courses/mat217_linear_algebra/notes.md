@@ -147,7 +147,7 @@ print(f"惯性 (正特征值数): 合同前 {np.sum(eig_before>0)}, 合同后 {n
 
 ## 第 4 层：不足层
 
-1. **纯数学导向**：无 PCA/SVD 的工程实现（见 [MIT 18.06](../../mit-math-courses/18_06_linear_algebra/) / [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)）。
+1. **纯数学导向**：无 PCA/SVD 的工程实现（见 [MIT 18.06](../../mit-math-courses/18_06_linear_algebra) / [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra)）。
 2. **Jordan 数值不稳定**：理论完美但计算上几乎不可用（用 Schur 替代）。
 3. **有限维为主**：泛函（无限维）需另学。
 4. **不覆盖随机/张量**：LoRA 统计理论、tensor 分解需额外课程。

@@ -312,7 +312,7 @@ export function createExceptionFromResponse(...) { ... }
 | 想看 | 去哪 |
 |------|------|
 | TS 19 个 LLM / 12 个 embedder / 27 个 vector store | [`02-providers-and-types.md`](./02-providers-and-types.md) |
-| Python SDK 同位置 | [`../01-py-sdk-core/`](../01-py-sdk-core/) |
+| Python SDK 同位置 | [`../01-py-sdk-core/`](../01-py-sdk-core) |
 | 双模式对比 | [`../00-overview/05-two-modes.md`](../00-overview/05-two-modes.md) |
 
 ---

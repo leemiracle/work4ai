@@ -314,4 +314,4 @@ $$M(T) \propto (T_c - T)^{1/2} \quad (\text{Landau 预言临界指数 } \beta = 
 ---
 
 **完成日期：2026-08-13（深化版 v2）**
-**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

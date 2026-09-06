@@ -234,7 +234,7 @@ SGD 找的不是任意最小值，而是**低范数/平坦**最小值。理论�
 ## 五、推荐路径
 
 1. **Shalev-Shwartz & Ben-David** 前 6 章：PAC + VC 维 + Rademacher → **核心**
-2. **Boyd 凸优化**（[Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization/)）配合：凸学习理论
+2. **Boyd 凸优化**（[Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization)）配合：凸学习理论
 3. **前沿**：Belkin 双下降论文 ([1812.11118](https://arxiv.org/abs/1812.11118) ✅) → NTK → PAC-Bayes
 4. ⚠️ 深度学习泛化理论仍在快速发展中，没有标准教材
 

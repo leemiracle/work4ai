@@ -217,7 +217,7 @@ Bigram 的 `logits[idx]` 查表，和 N-gram 的 `count(prev,w)/count(prev)` 数
 | MLP / Bengio 2003 | [`讲透NLP/06-神经网络基础`](../讲透NLP/06-神经网络基础.md) |
 | RNN/GRU 串行 + 门控 | [`讲透NLP/13-RNN与LSTM`](../讲透NLP/13-RNN与LSTM.md) |
 | Transformer / attention | [`讲透NLP/08-Transformer`](../讲透NLP/08-Transformer.md) / [minGPT 精读](./06-minGPT-minimal-GPT.md) |
-| CausalBoW → attention | [`讲透Transformer`](../讲透Transformer/)（attention 本质）|
+| CausalBoW → attention | [`讲透Transformer`](../讲透Transformer)（attention 本质）|
 
 **阅读路径**：这是 NLP 语言模型最好的"从零到 Transformer"路径——读 makemore 源码跑 6 种模型 → 对应读讲透NLP 各章（03 N-gram / 06 NN / 13 RNN / 08 Transformer）。
 

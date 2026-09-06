@@ -52,7 +52,7 @@ $\kappa = 10^4$ 时：GD 需 $\sim 10^4$ 步，Nesterov 只需 $\sim 100$ 步—
 
 **部分有**。非凸 $L$-平滑的 lower bound：找 $\epsilon$-驻点需 $\Omega(1/\epsilon^2)$ 步（Cartis-Gould-Toint 2010）。但找全局最优是 NP-hard。
 
-实际中 SGD 找到的不是全局最优而是"宽局部最小"（flat minima），泛化更好——这与损失景观（loss landscape）的随机矩阵理论有关，见 [Oxford C7.1](../../oxford-math-courses/partC_c7_1_random_matrix_theory/)。⚠️ 具体结果跟踪最新理论。
+实际中 SGD 找到的不是全局最优而是"宽局部最小"（flat minima），泛化更好——这与损失景观（loss landscape）的随机矩阵理论有关，见 [Oxford C7.1](../../oxford-math-courses/partC_c7_1_random_matrix_theory)。⚠️ 具体结果跟踪最新理论。
 </details>
 
 ---

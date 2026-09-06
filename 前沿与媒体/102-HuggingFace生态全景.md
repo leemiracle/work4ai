@@ -65,7 +65,7 @@
 |---|---|---|---|
 | **transformers** (163k) 🐍 | 模型定义框架。`AutoModel.from_pretrained()` / `AutoTokenizer` / `Trainer` | [`讲透Transformer/11-HuggingFace源码对照`](../讲透Transformer/11-HuggingFace源码对照.md)（专章对照 modeling_llama/mixtral/deepseek_v3）、`13-Tokenizer`、[`讲透微调/06-实战`](../讲透微调/06-实战.md)、`讲透NLP/10-BERT` | ✅✅ (29 文件) |
 | **pytorch-image-models** (timm) (37k) 🐍 | 最大 PyTorch 视觉 backbone 集（ResNet/ViT/ConvNeXt/Swin...）| 讲透基础模型(CV backbone)、讲透AIfor各学科-计算机视觉 | ❌ **缺口** |
-| **diffusers** (34k) 🐍 | 扩散模型工具箱（SD/FLUX/视频/音频）。`DiffusionPipeline.from_pretrained()` | [`讲透生成模型`](../讲透生成模型/)、[`讲透PyTorch/09-生态全景`](../讲透PyTorch/09-PyTorch生态全景.md)、[`07-AI创意生成专题`](./07-AI创意生成专题.md) | ✅ (6) |
+| **diffusers** (34k) 🐍 | 扩散模型工具箱（SD/FLUX/视频/音频）。`DiffusionPipeline.from_pretrained()` | [`讲透生成模型`](../讲透生成模型)、[`讲透PyTorch/09-生态全景`](../讲透PyTorch/09-PyTorch生态全景.md)、[`07-AI创意生成专题`](./07-AI创意生成专题.md) | ✅ (6) |
 | **candle** (21k) 🦀 | Rust 极简 ML 框架（服务器侧推理，无 Python 依赖）| 讲透GPU与系统级(推理引擎对比) | ✅ 浅 (1) |
 | **sentence-transformers** (19k) 🐍 | SBERT 嵌入/检索/rerank。`SentenceTransformer('BAAI/bge-small-zh')` | [`讲透RAG/README`](../讲透RAG/README.md)、`讲透NLP/11-RAG`、`讲透Agent/04-记忆机制` | ✅ (3) |
 | **transformers.js** (16k) 📜 | 浏览器/Node.js 跑 transformers（ONNX/WASM）| （端侧推理，未来讲透AIfor职业-前端）| ❌ 缺口 |
@@ -77,7 +77,7 @@
 
 | 仓库 (stars) | 是什么 · 核心 API | 对接 work4ai | 覆盖 |
 |---|---|---|---|
-| **open-r1** (26k) 🐍 | DeepSeek-R1 的**全开源复现**（GRPO+verifiable reward）| [`讲透RL/03-RLHF-DPO-GRPO`](../讲透RL/)、讲透微调 | ❌ **重要缺口** |
+| **open-r1** (26k) 🐍 | DeepSeek-R1 的**全开源复现**（GRPO+verifiable reward）| [`讲透RL/03-RLHF-DPO-GRPO`](../讲透RL)、讲透微调 | ❌ **重要缺口** |
 | **peft** (22k) 🐍 | LoRA/QLoRA/Prefix-Tuning 等。`LoraConfig` / `get_peft_model()` | [`02-后训练信息源专题`](./02-后训练信息源专题.md)（PT-B5 专节）、`讲透微调/06-实战` | ✅✅ (22) |
 | **trl** (19k) 🐍 | "post-train foundation models"。`SFTTrainer` / `GRPOTrainer` / `DPOTrainer` | [`02-后训练`](./02-后训练信息源专题.md)（PT-B6 专节 + 2026-08 实时动态）、`讲透微调/06` | ✅✅ (5) |
 | **accelerate** (10k) 🐍 | 统一分布式/混合精度/FSDP/DeepSpeed。`Accelerator` | [`讲透PyTorch/09-生态全景`](../讲透PyTorch/09-PyTorch生态全景.md)、`讲透微调/06` | ✅✅ (5) |
@@ -105,7 +105,7 @@
 | 仓库 (stars) | 是什么 · 核心 API | 对接 work4ai | 覆盖 |
 |---|---|---|---|
 | **datasets** (22k) 🐍 | 数据集中心。`load_dataset()` / `Dataset.map()` | 讲透PyTorch/09、讲透NLP | ✅ (2) |
-| **datatrove** (3.3k) 🐍 | 平台无关数据处理流水线（预训练数据清洗）| [`讲透数据`](../讲透数据/) | ✅ 浅 (1) |
+| **datatrove** (3.3k) 🐍 | 平台无关数据处理流水线（预训练数据清洗）| [`讲透数据`](../讲透数据) | ✅ 浅 (1) |
 | **lighteval** (2.5k) 🐍 | LLM 全后端评测工具包 | 讲透数据/评测、ml-experiment | ✅ 浅 (1) |
 | **evaluate** (2.5k) 🐍 | 评测指标库（accuracy/BLEU/ROUGE...）| 讲透数据/评测 | ❌ 缺口 |
 | **evaluation-guidebook** (2.1k) 📓 | LLM 评测实践+理论（Open LLM Leaderboard 经验）| 讲透数据/评测 | ❌ 缺口 |
@@ -117,7 +117,7 @@
 
 | 仓库 (stars) | 是什么 · 核心 API | 对接 work4ai | 覆盖 |
 |---|---|---|---|
-| **agents-course** (31k) 📓 | HF 官方 Agent 课程（ReAct/CodeAgent/MCP）| [`讲透Agent`](../讲透Agent/)、讲透公开课 | ❌ **重要缺口** |
+| **agents-course** (31k) 📓 | HF 官方 Agent 课程（ReAct/CodeAgent/MCP）| [`讲透Agent`](../讲透Agent)、讲透公开课 | ❌ **重要缺口** |
 | **smolagents** (29k) 🐍 | "用代码思考"的极简 Agent 库。`CodeAgent` / `ToolCallingAgent` | [`讲透Agent/02-工具调用工程 §5.5`](../讲透Agent/02-工具调用工程.md)（code action 专节）| ✅✅ (深度) |
 | **skills** (11k) 🐍 | 给 Agent 装上 HF 生态能力 | 讲透Agent(工具调用) | ✅ 浅 (2) |
 | **ml-intern** (11k) 🐍 | 开源 ML 工程师 Agent（读论文/训模型/发布）| 讲透Agent(AutoML agent 案例) | ❌ 缺口 |
@@ -130,11 +130,11 @@
 
 | 仓库 (stars) | 是什么 | 对接 work4ai | 覆盖 |
 |---|---|---|---|
-| **deep-rl-class** (5k) 📓 | HF 深度强化学习课 | [`讲透RL`](../讲透RL/)、讲透公开课 | ❌ **缺口** |
+| **deep-rl-class** (5k) 📓 | HF 深度强化学习课 | [`讲透RL`](../讲透RL)、讲透公开课 | ❌ **缺口** |
 | **notebooks** (4.6k) 📓 | HF 库官方 notebook 集 | 讲透公开课 | ❌ |
-| **diffusion-models-class** (4.4k) 📓 | 扩散模型课 | [`讲透生成模型`](../讲透生成模型/)、讲透公开课 | ❌ 缺口 |
+| **diffusion-models-class** (4.4k) 📓 | 扩散模型课 | [`讲透生成模型`](../讲透生成模型)、讲透公开课 | ❌ 缺口 |
 | **cookbook** (2.7k) 📓 | 开源 AI cookbook（RAG/agent/评估）| 讲透RAG/讲透Agent | ❌ |
-| **mcp-course** (910) 📓 | Model Context Protocol 课 | [`讲透Agent`](../讲透Agent/)（MCP 章节）| ❌ 缺口 |
+| **mcp-course** (910) 📓 | Model Context Protocol 课 | [`讲透Agent`](../讲透Agent)（MCP 章节）| ❌ 缺口 |
 
 ### 域 7 · 机器人/具身（10 库，27k★）
 
@@ -229,10 +229,10 @@
 | 缺口库 | stars | 该补在哪 | 为什么重要 |
 |---|---:|---|---|
 | **lerobot** | 27k | 未来**讲透具身** | HF 在具身智能的旗舰，端到端机器人学习事实标准；work4ai 完全空白 |
-| **open-r1** | 26k | [`讲透RL/03`](../讲透RL/) + 讲透微调 | DeepSeek-R1 全开源复现，GRPO+verifiable reward 的最佳实战参考；讲透RL 不能没有它 |
-| **agents-course** | 31k | [`讲透Agent`](../讲透Agent/) + 讲透公开课 | HF 官方 Agent 课（ReAct/CodeAgent/MCP 全覆盖），stars 比 smolagents 还高；讲透Agent 应作为权威延伸 |
+| **open-r1** | 26k | [`讲透RL/03`](../讲透RL) + 讲透微调 | DeepSeek-R1 全开源复现，GRPO+verifiable reward 的最佳实战参考；讲透RL 不能没有它 |
+| **agents-course** | 31k | [`讲透Agent`](../讲透Agent) + 讲透公开课 | HF 官方 Agent 课（ReAct/CodeAgent/MCP 全覆盖），stars 比 smolagents 还高；讲透Agent 应作为权威延伸 |
 | **smolagents**（深化）| 29k | [`讲透Agent/02 §5.5`](../讲透Agent/02-工具调用工程.md) | ✅ **已完成（2026-08-10）**：在 02 篇新增 §5.5「范式跃迁：从 JSON Tool-Call 到 Code Action」专节（直觉/机制/论文证据 2402.01030+2411.01747/CodeAgent vs ToolCallingAgent 对比/选型表），横评表加 Action 形态行，总结升级为五维度 |
-| **optimum-quanto** | 1.1k | [`讲透GPU与系统级`](../讲透GPU与系统级/) | HF 官方量化库（int2/4/8/fp8），讲透GPU 量化章节缺它；量化是小模型看不出损失的典型场景（见用户记忆铁律10）|
+| **optimum-quanto** | 1.1k | [`讲透GPU与系统级`](../讲透GPU与系统级) | HF 官方量化库（int2/4/8/fp8），讲透GPU 量化章节缺它；量化是小模型看不出损失的典型场景（见用户记忆铁律10）|
 
 ### 🟡 P1（中星 + 有对接点，建议补）
 

@@ -57,7 +57,7 @@ CNN 的大核卷积可用 FFT 加速：$\text{conv}(a,b) = \text{IFFT}(\text{FFT
 
 $u(x, T)$（$T$ 大）→ 常数（"均匀化"），对应扩散模型的纯噪声。反向过程 = 求反向热方程（不适定问题，需 score 正则化）。
 
-详见 [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/) 和 [Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde/)。
+详见 [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde) 和 [Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde)。
 </details>
 
 ### Q1.6（开放）

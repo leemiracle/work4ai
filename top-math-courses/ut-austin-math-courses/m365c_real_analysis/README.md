@@ -29,7 +29,7 @@
 ## 参考资源
 - Rudin, *Principles of Mathematical Analysis* (3rd, McGraw-Hill, 1976) ISBN 978-0070542358
 - Lomeli 讲义: [ma.utexas.edu/users/lomeli/m365c](http://www.ma.utexas.edu/users/lomeli/m365c)
-- MIT 对照：[MIT 18.100B](../../mit-math-courses/18_100B_real_analysis/)
+- MIT 对照：[MIT 18.100B](../../mit-math-courses/18_100B_real_analysis)
 
 ## 学习建议
 - **先修 M 361K**（Bartle & Sherbert）再上 365C（Rudin）——官方推荐
@@ -64,4 +64,4 @@ M 361K (Bartle)       →   UT Austin M 365C       →   M 381C 研究生
 
 ---
 
-📌 **下一步**：→ [M 361K Introduction to Real Analysis (Bartle)](../m365c_real_analysis/) 或 [M 381C 研究生 Real Analysis](../m381c_real_analysis_graduate/)
+📌 **下一步**：→ [M 361K Introduction to Real Analysis (Bartle)](.) 或 [M 381C 研究生 Real Analysis](../m381c_real_analysis_graduate)

@@ -7,7 +7,7 @@
 
 四文件（AGENTS.md / feature_list.json / progress.md / init 脚本）**不是给运行时的端侧 agent 用的**，是给**开发这个 agent 的 AI 编码会话**（opencode 等）用的。它的作用对象是"开发过程"这个元任务。
 
-本单元落盘：[agent-harness/](./agent-harness/)
+本单元落盘：[agent-harness/](./agent-harness)
 
 | 文件 | 作用 | 本项目内容 |
 |---|---|---|

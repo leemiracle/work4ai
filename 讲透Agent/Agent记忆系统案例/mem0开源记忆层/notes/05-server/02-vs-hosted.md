@@ -238,4 +238,4 @@ Server 是相对新的（auth 系统在 README "Note" 提到"Self-hosted auth is
 
 ---
 
-📌 **下一步** → [`../06-cli-python/`](../06-cli-python/) Python CLI。
+📌 **下一步** → [`../06-cli-python/`](../06-cli-python) Python CLI。

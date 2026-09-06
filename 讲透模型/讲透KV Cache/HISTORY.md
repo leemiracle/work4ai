@@ -4,7 +4,7 @@
 >
 > **博士级标准**：不是"年份+论文+指标"的维基百科年代史，是**思想史**（history of ideas）——为什么 KV Cache 从一个不值得一提的实现细节，长成了 2024-2026 推理优化的**第一战场**？为什么 PagedAttention 是 OS 思想在 AI 最优雅的一次移植？为什么连续两次范式级创新（continuous batching 出自韩国/中国学界，MLA 出自 DeepSeek）都来自非西方中心？KV Cache 的"战场重心"从算力（2020）转移到显存（2023）再转移到架构（2024），这条演化轨迹有多少是必然、多少是偶然？
 >
-> 配套：[`讲透AI历史`](../../讲透AI历史/)（AI 史方法论）· [`讲透KV Cache/00`](00-为什么KV Cache是推理的生命线.md)（技术实现入口）· [`讲透Transformer/HISTORY`](../讲透Transformer/HISTORY.md)（上游架构思想史）
+> 配套：[`讲透AI历史`](../../讲透AI历史)（AI 史方法论）· [`讲透KV Cache/00`](00-为什么KV Cache是推理的生命线.md)（技术实现入口）· [`讲透Transformer/HISTORY`](../讲透Transformer/HISTORY.md)（上游架构思想史）
 
 ---
 
@@ -580,7 +580,7 @@ BitNet 把权重量化到 1.58-bit（ternary）成功了。KV Cache 的 1.58-bit
 | [04-MLA深挖](04-MLA深挖.md) | DeepSeek怎么把KV压缩10-90x | §5 的技术细节 |
 | [05-KV Cache量化](05-KVCache量化.md) | FP8/INT4/1.58-bit的代价与收益 | §6 的技术细节 |
 | [讲透Transformer/HISTORY](../讲透Transformer/HISTORY.md) | Transformer架构思想史 | 上游——§1-2的架构背景 |
-| [讲透AI历史](../../讲透AI历史/) | AI思想史方法论 | 方法论框架 |
+| [讲透AI历史](../../讲透AI历史) | AI思想史方法论 | 方法论框架 |
 
 ### 14.2 关键论文（按本文档章节排序）
 

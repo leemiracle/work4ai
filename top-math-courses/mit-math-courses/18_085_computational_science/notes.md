@@ -152,7 +152,7 @@ print(f"FFT 卷积误差: {np.max(np.abs(conv_direct - conv_fft[:len(conv_direct
 2. **FFT → CNN 卷积加速**
 3. **Krylov → attention 线性近似**
 4. **泊松方程 → 图半监督学习**（Zhu-Ghahramani-Lafferty 2003）
-5. **热方程 → diffusion model 的 PDE 根基**，见 [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/) 和 [Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde/)
+5. **热方程 → diffusion model 的 PDE 根基**，见 [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde) 和 [Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde)
 
 ---
 
@@ -183,5 +183,5 @@ print(f"FFT 卷积误差: {np.max(np.abs(conv_direct - conv_fft[:len(conv_direct
 
 - **讲透 GNN**：第 4 章（图拉普拉斯）+ 谱聚类
 - **讲透 CNN**：第 5 章（FFT = 卷积加速）
-- **讲透 diffusion**：第 3 章（热方程离散化）→ [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/)
-- **讲透 attention 加速**：第 7 章（Krylov）→ [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)
+- **讲透 diffusion**：第 3 章（热方程离散化）→ [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde)
+- **讲透 attention 加速**：第 7 章（Krylov）→ [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra)

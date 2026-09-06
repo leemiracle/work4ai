@@ -81,4 +81,4 @@ Berkeley 110 ◀──(同等深度)── Princeton 217 ◀──(同样严格)
 3. **低秩微调 LoRA/QLoRA（2023-2026）**
    - LoRA（[arXiv:2106.09685](https://arxiv.org/abs/2106.09685)）与 QLoRA（[arXiv:2305.14314](https://arxiv.org/abs/2305.14314)）的低秩更新理论根基 = Part IB 的奇异值/谱定理。
 
-📌 **下一步**：→ [Part IB Analysis and Topology](../partIB_analysis_topology/)
+📌 **下一步**：→ [Part IB Analysis and Topology](../partIB_analysis_topology)

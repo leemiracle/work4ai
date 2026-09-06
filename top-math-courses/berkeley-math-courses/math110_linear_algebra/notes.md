@@ -196,7 +196,7 @@ print(f"dim(domain)={7} = rank({rank}) + nullity({nullity})")  # 7 = 7
 
 ## 第 4 层：不足层（Axler 的局限）
 
-1. **不覆盖数值方面**：Axler 证明存在性，但不讲"如何数值稳定地计算 SVD/特征值"（那是 Trefethen & Bau 的领域，见 [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)）。
+1. **不覆盖数值方面**：Axler 证明存在性，但不讲"如何数值稳定地计算 SVD/特征值"（那是 Trefethen & Bau 的领域，见 [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra)）。
 2. **谱分解只对正规矩阵有效**：非正规矩阵（如一般的非对称矩阵）不能正交对角化，只能 Jordan 化。Axler 在 Ch 8-9 处理，但不如 Hoffman & Kunze 详尽。
 3. **侧重有限维**：LADR 几乎不碰无限维（泛函分析），想要 Hilbert 空间理论需另学（MIT 18.102, Lax）。
 4. **应用导向弱**：没有 PCA、最小二乘的工程实现（这些在 18.06 / CME 364A 里）。

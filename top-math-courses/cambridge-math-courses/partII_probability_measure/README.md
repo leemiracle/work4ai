@@ -47,9 +47,9 @@ Oxford Part A A8 ────┘     Martingales* (本课)                → di
                                                                 → MCMC 贝叶斯推断
 ```
 
-- **前置**：[Part IA Probability](../partIA_probability/) + [Part IB Analysis & Topology](../partIB_analysis_topology/)（Lebesgue 积分入门）
+- **前置**：[Part IA Probability](../partIA_probability) + [Part IB Analysis & Topology](../partIB_analysis_topology)（Lebesgue 积分入门）
 - **本课**：Williams 式测度论概率——从 σ-代数到 SLLN/CLT 的严格证明 + 鞅论
-- **后续**：[Part II Mathematics of Machine Learning](../partII_mathematics_machine_learning/)（ML 理论）、Oxford Part C SDE（扩散模型）
+- **后续**：[Part II Mathematics of Machine Learning](../partII_mathematics_machine_learning)（ML 理论）、Oxford Part C SDE（扩散模型）
 
 ---
 
@@ -85,4 +85,4 @@ Oxford Part A A8 ────┘     Martingales* (本课)                → di
    - 核心：**交换排列不变性**（exchangeability）是 i.i.d. 的推广，覆盖率保证用遍历定理
    - **与本课关联**：exchangeability + De Finetti 定理（无穷可交换序列 = 条件 i.i.d.）
 
-📌 **下一步**：→ [Part II Mathematics of Machine Learning](../partII_mathematics_machine_learning/)
+📌 **下一步**：→ [Part II Mathematics of Machine Learning](../partII_mathematics_machine_learning)

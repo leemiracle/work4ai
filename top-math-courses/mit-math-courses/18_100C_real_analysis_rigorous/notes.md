@@ -14,7 +14,7 @@
 
 ## 💻 代码层（numpy 验证）
 
-见 [`experiments/`](./experiments/) 目录的可运行脚本。
+见 [`experiments/`](./experiments) 目录的可运行脚本。
 
 ## ⚠️ 不足层（局限与边界）
 
@@ -26,5 +26,5 @@
 
 ---
 
-> 📌 **注**：本 notes.md 为模板自动生成。建议结合课程教材和 [`experiments/`](./experiments/) 深化。
-> 配套：[`exercises.md`](./exercises.md) | [`experiments/`](./experiments/) | [README.md](./README.md)
+> 📌 **注**：本 notes.md 为模板自动生成。建议结合课程教材和 [`experiments/`](./experiments) 深化。
+> 配套：[`exercises.md`](./exercises.md) | [`experiments/`](./experiments) | [README.md](./README.md)

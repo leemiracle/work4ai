@@ -1,6 +1,6 @@
 # 🎓 世界顶级教育学知识库 · 全景实战（2026 版）
 
-> **对标**：[`top-physics-courses/`](../top-physics-courses/) 与 [`top-math-courses/`](../top-math-courses/) 的姐妹库。物理/数学建好了"自然科学地基"，本库补上"**人如何学习、如何教**"这块——它是整个 `work4ai` 项目"AI 讲透系列"最该有却被忽略的元学科。
+> **对标**：[`top-physics-courses/`](../top-physics-courses) 与 [`top-math-courses/`](../top-math-courses) 的姐妹库。物理/数学建好了"自然科学地基"，本库补上"**人如何学习、如何教**"这块——它是整个 `work4ai` 项目"AI 讲透系列"最该有却被忽略的元学科。
 >
 > **第一性问题**：AI 的本质是**让机器学习**；教育的本质是**让人学习**。两者是同一个"学习"问题的两端。不懂学习科学，做不好 AI 导师；不懂 AI，做不好 21 世纪教育。本库把它们**焊死在一起**。
 
@@ -35,7 +35,7 @@
 ▶ **[THINKERS_BIOGRAPHIES.md](THINKERS_BIOGRAPHIES.md)** — 教育思想家列传：12 位（孔子 / 夸美纽斯 / 卢梭 / 裴斯泰洛齐 / 赫尔巴特 / 蒙台梭利 / 杜威 / 皮亚杰 / 维果茨基 / 斯金纳 / 布鲁纳 / 布鲁姆）。
 
 ### 🔬 想钻进"学习是怎么发生的"（学习科学）
-▶ **[LEARNING_THEORIES/](LEARNING_THEORIES/)** — 学习理论五范式：
+▶ **[LEARNING_THEORIES/](LEARNING_THEORIES)** — 学习理论五范式：
 - [01_behaviorism.md](LEARNING_THEORIES/01_behaviorism.md) 行为主义（巴甫洛夫/桑代克/斯金纳/班杜拉）
 - [02_cognitivism.md](LEARNING_THEORIES/02_cognitivism.md) 认知主义（皮亚杰/布鲁纳/奥苏贝尔/加涅）
 - [03_constructivism.md](LEARNING_THEORIES/03_constructivism.md) 建构主义（维果茨基/ZPD/社会建构）
@@ -46,11 +46,11 @@
 ▶ **[NEUROEDUCATION/README.md](NEUROEDUCATION/README.md)** — 脑可塑性 / 敏感期 / 工作记忆 / 间隔效应 / 测试效应 / 多巴胺奖励 → 教学设计的神经依据。**这是与 AI 学习（梯度下降）最深度的类比源**。
 
 ### 📊 想懂评估（怎么知道"学会了"）
-▶ **[ASSESSMENT/](ASSESSMENT/)** — Bloom 分类法 / 形成性 vs 总结性 / 项目反应理论 IRT / PISA-TIMSS。
+▶ **[ASSESSMENT/](ASSESSMENT)** — Bloom 分类法 / 形成性 vs 总结性 / 项目反应理论 IRT / PISA-TIMSS。
 
 ### 🤖 想做 AI 教育（本库与项目主线的接口）
-▶ **[ai_for_education/](ai_for_education/)** — ITS / 自适应学习 / Bloom 2 Sigma / 教育大模型 / 自动批改。**这是 work4ai 的本职**。
-▶ 协同 [`讲透AIfor各学科/教育/`](../讲透AIfor各学科/教育/)（已有 AI for Ed 前沿）。
+▶ **[ai_for_education/](ai_for_education)** — ITS / 自适应学习 / Bloom 2 Sigma / 教育大模型 / 自动批改。**这是 work4ai 的本职**。
+▶ 协同 [`讲透AIfor各学科/教育/`](../讲透AIfor各学科/教育)（已有 AI for Ed 前沿）。
 
 ### 🎯 想成为顶级教育研究者
 ▶ **[EXPERT_PATH_2026.md](EXPERT_PATH_2026.md)** + **[EXPERT_BENCHMARKS.md](EXPERT_BENCHMARKS.md)** + **[READING_SCHEDULE.md](READING_SCHEDULE.md)**。
@@ -118,14 +118,14 @@ top-education-courses/
 
 | 关联库 | 关系 |
 |---|---|
-| [`讲透AIfor各学科/教育/`](../讲透AIfor各学科/教育/) | AI for Education 前沿（已有，互补）|
-| [`讲透RL/`](../讲透RL/) | **学习 = RL**，RL 是教育学的数学语言 |
-| [`讲透Prompt/`](../讲透Prompt/) | AI 导师 = 长程 prompt 工程 |
-| [`讲透基础模型/`](../讲透基础模型/) | 大模型预训练 vs 人类儿童学习（两种学习论）|
-| [`费曼学习法/`](../费曼学习法/) | F1-F4 质量门 = 教育学的"学会"判据 |
-| [`故事化学习法/`](../故事化学习法/) | 叙事记忆 >> 语义记忆 |
-| [`top-math-courses/`](../top-math-courses/) / [`top-physics-courses/`](../top-physics-courses/) | 姐妹库（自然科学地基）|
+| [`讲透AIfor各学科/教育/`](../讲透AIfor各学科/教育) | AI for Education 前沿（已有，互补）|
+| [`讲透RL/`](../讲透RL) | **学习 = RL**，RL 是教育学的数学语言 |
+| [`讲透Prompt/`](../讲透Prompt) | AI 导师 = 长程 prompt 工程 |
+| [`讲透基础模型/`](../讲透基础模型) | 大模型预训练 vs 人类儿童学习（两种学习论）|
+| [`费曼学习法/`](../费曼学习法) | F1-F4 质量门 = 教育学的"学会"判据 |
+| [`故事化学习法/`](../故事化学习法) | 叙事记忆 >> 语义记忆 |
+| [`top-math-courses/`](../top-math-courses) / [`top-physics-courses/`](../top-physics-courses) | 姐妹库（自然科学地基）|
 
 ---
 
-> 📌 **下一步**：先读 [EDUCATION_FEYNMAN_NARRATIVE.md](EDUCATION_FEYNMAN_NARRATIVE.md) 建立主线直觉，再按 [UNIFIED_ROADMAP.md](UNIFIED_ROADMAP.md) 逐课深入。做 AI 教育产品的人，直奔 [ai_for_education/](ai_for_education/)。
+> 📌 **下一步**：先读 [EDUCATION_FEYNMAN_NARRATIVE.md](EDUCATION_FEYNMAN_NARRATIVE.md) 建立主线直觉，再按 [UNIFIED_ROADMAP.md](UNIFIED_ROADMAP.md) 逐课深入。做 AI 教育产品的人，直奔 [ai_for_education/](ai_for_education)。

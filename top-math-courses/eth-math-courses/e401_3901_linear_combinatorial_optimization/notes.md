@@ -177,6 +177,6 @@ def max_flow_bfs(capacity, s, t):
 
 ## 与 work4ai 讲透系列的交叉
 
-- **讲透 LP 对偶** → SVM 对偶推导（[CME 364A](../../stanford-math-courses/cme364A_convex_optimization/)）
+- **讲透 LP 对偶** → SVM 对偶推导（[CME 364A](../../stanford-math-courses/cme364A_convex_optimization)）
 - **讲透图算法**：最大流 → 图分割 / GNN
 - **讲透组合优化 + ML**：GNN 辅助 ILP（2024 前沿）

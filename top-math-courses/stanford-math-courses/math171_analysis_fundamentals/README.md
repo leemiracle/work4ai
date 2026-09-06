@@ -24,7 +24,7 @@
 ## 参考资源
 - Rudin, *Principles of Mathematical Analysis*
 - Pugh, *Real Mathematical Analysis*（更直观）
-- MIT 对照：[18.100B](../../mit-math-courses/18_100B_real_analysis/)
+- MIT 对照：[18.100B](../../mit-math-courses/18_100B_real_analysis)
 
 ## 📍 在数学全景中的位置
 
@@ -55,4 +55,4 @@ MATH 115 实分析        →   Stanford MATH 171      →   MATH 230A 概率
 
 ---
 
-📌 **下一步**：→ [MATH 230A Probability Theory](../math230A_probability_theory/)
+📌 **下一步**：→ [MATH 230A Probability Theory](../math230A_probability_theory)

@@ -317,10 +317,10 @@ console.log(results);
 
 | 想看 | 去哪 |
 |------|------|
-| Python SDK 详情 | [`../01-py-sdk-core/`](../01-py-sdk-core/) |
+| Python SDK 详情 | [`../01-py-sdk-core/`](../01-py-sdk-core) |
 | Hosted client | [`01-structure.md`](./01-structure.md) §4 |
 | 双模式 | [`../00-overview/05-two-modes.md`](../00-overview/05-two-modes.md) |
 
 ---
 
-📌 **下一步** → [`../05-server/`](../05-server/) FastAPI 自托管 server。
+📌 **下一步** → [`../05-server/`](../05-server) FastAPI 自托管 server。

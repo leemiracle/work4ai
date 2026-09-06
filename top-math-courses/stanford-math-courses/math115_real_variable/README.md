@@ -20,7 +20,7 @@
 
 ## 与 ML 的关联
 - 实分析入门训练
-- 与 [Princeton MAT 215](../../princeton-math-courses/mat215_analysis/) 同类
+- 与 [Princeton MAT 215](../../princeton-math-courses/mat215_analysis) 同类
 
 ## 📍 在数学全景中的位置
 
@@ -50,4 +50,4 @@ MATH 51 微积分        →   Stanford MATH 115      →   MATH 171 分析
 
 ---
 
-📌 **下一步**：→ [MATH 171 Analysis](../math171_analysis_fundamentals/)
+📌 **下一步**：→ [MATH 171 Analysis](../math171_analysis_fundamentals)

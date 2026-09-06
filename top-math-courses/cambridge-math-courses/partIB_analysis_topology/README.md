@@ -22,7 +22,7 @@
 
 ## 与 ML 的关联
 - 紧致性 → 泛函分析预备
-- 学完后：能读泛函分析（[Part II Linear Analysis](../)）
+- 学完后：能读泛函分析（[Part II Linear Analysis](..)）
 
 ## 参考资源
 - Sutherland, *Introduction to Metric and Topological Spaces* (OUP) ★
@@ -57,4 +57,4 @@ Part IA Analysis I     →   Cambridge Part IB       →   Part II Linear Analys
 
 ---
 
-📌 **下一步**：→ [Part IB Markov Chains](../partIB_markov_chains/)
+📌 **下一步**：→ [Part IB Markov Chains](../partIB_markov_chains)

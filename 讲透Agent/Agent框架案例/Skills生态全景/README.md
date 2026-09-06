@@ -20,7 +20,7 @@ refs:
 updated: 2026-08-19
 ```
 
-> 一句话定位：**github.com/topics/skills（11,492 仓）的知识集成**——Agent Skills 规范的演进与解剖、生态七赛道地图、20 张重点仓库深读卡、与项目内 MCP/harness/prompt 手册知识的互链网。姊妹篇：[`../MCP协议生态全景/`](../MCP协议生态全景/)（topics/mcp 64,438 仓）；**总纲**：[`../Topics全链路全景/`](../Topics全链路全景/README.md)（十层 topics 索引体系，本目录是其 L4 层深潜样本）。
+> 一句话定位：**github.com/topics/skills（11,492 仓）的知识集成**——Agent Skills 规范的演进与解剖、生态七赛道地图、20 张重点仓库深读卡、与项目内 MCP/harness/prompt 手册知识的互链网。姊妹篇：[`../MCP协议生态全景/`](../MCP协议生态全景)（topics/mcp 64,438 仓）；**总纲**：[`../Topics全链路全景/`](../Topics全链路全景/README.md)（十层 topics 索引体系，本目录是其 L4 层深潜样本）。
 
 ## 四篇导读
 

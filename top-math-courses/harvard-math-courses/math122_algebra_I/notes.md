@@ -10,7 +10,7 @@
 
 > **代数的本质 = 发现不同数学对象共享的结构。** 群 = 对称性的语言。
 
-Harvard 122 与 [MIT 18.701](../../mit-math-courses/18_701_algebra_I/)（Artin）和 [Berkeley 113](../../berkeley-math-courses/math113_abstract_algebra/) 内容高度重叠。核心差异：**Dummit-Foote 更系统全面**（900+ 页，涵盖群/环/域/模/Galois），Artin 更几何直觉（矩阵群视角）。
+Harvard 122 与 [MIT 18.701](../../mit-math-courses/18_701_algebra_I)（Artin）和 [Berkeley 113](../../berkeley-math-courses/math113_abstract_algebra) 内容高度重叠。核心差异：**Dummit-Foote 更系统全面**（900+ 页，涵盖群/环/域/模/Galois），Artin 更几何直觉（矩阵群视角）。
 
 本笔记聚焦 Dummit-Foote 的**独特重点**，公共内容参见 Berkeley 113 notes.md。
 
@@ -68,4 +68,4 @@ Dummit-Foote 独有的详细模论（很多本科课跳过）：
 3. **DF Part III**（模论 10-12 章）→ 选读（Jordan 标准形理论）
 4. **DF Part IV**（Galois 13-14 章）→ 跳过（除非做数论/代数几何）
 
-> **关键建议**：不要从头读 900 页。读群论后直接转 [Berkeley 113](../../berkeley-math-courses/math113_abstract_algebra/) 的 ML 应用视角 + 表示论。
+> **关键建议**：不要从头读 900 页。读群论后直接转 [Berkeley 113](../../berkeley-math-courses/math113_abstract_algebra) 的 ML 应用视角 + 表示论。

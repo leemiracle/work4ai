@@ -16,10 +16,10 @@ M 383C 是 UT Austin 应用数学研究生核心课，覆盖面极广：**量纲
 
 | 主题 | 详细笔记在哪 |
 |---|---|
-| PDE | [Princeton MAT 322](../../princeton-math-courses/mat322_pde/) |
-| 复分析 | [Berkeley 185](../../berkeley-math-courses/math185_complex_analysis/) |
-| 数值线代 | [M 383E Trefethen](../../ut-austin-math-courses/m383e_numerical_linear_algebra/) |
-| 凸优化 | [Stanford CME 364A Boyd](../../stanford-math-courses/cme364A_convex_optimization/) |
+| PDE | [Princeton MAT 322](../../princeton-math-courses/mat322_pde) |
+| 复分析 | [Berkeley 185](../../berkeley-math-courses/math185_complex_analysis) |
+| 数值线代 | [M 383E Trefethen](../m383e_numerical_linear_algebra) |
+| 凸优化 | [Stanford CME 364A Boyd](../../stanford-math-courses/cme364A_convex_optimization) |
 
 本课独特覆盖：**量纲分析、渐近展开、变分法**——这些在其他课中很少系统讲解。
 
@@ -71,7 +71,7 @@ $$\frac{\partial L}{\partial y} - \frac{d}{dx}\frac{\partial L}{\partial y'} = 0
 
 ### 1.6 Green 函数
 
-参见 [Princeton MAT 322 PDE notes.md](../../princeton-math-courses/mat322_pde/) §1.7。
+参见 [Princeton MAT 322 PDE notes.md](../../princeton-math-courses/mat322_pde) §1.7。
 
 点源响应函数 → 任意源的解 = Green 函数卷积。
 
@@ -163,4 +163,4 @@ GAN 的纳什均衡稳定性分析使用动力系统的分岔理论工具。
 1. **Logan** 第 1-3 章：量纲分析 + 渐近方法 + 微扰论 → **本课独特价值**
 2. **第 4-5 章**：变分法 + 特征函数 → 与 PDE/优化交叉
 3. **Bender-Orszag**：渐近方法的经典参考（WKB、最速下降法等）
-4. **交叉**：[Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde/) + [Berkeley 185 复分析](../../berkeley-math-courses/math185_complex_analysis/)
+4. **交叉**：[Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde) + [Berkeley 185 复分析](../../berkeley-math-courses/math185_complex_analysis)

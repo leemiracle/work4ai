@@ -174,4 +174,4 @@ graph TB
 ## 🔗 与其他宇宙的连接
 
 - **[`激活大语言模型能力-总结.md`](../激活大语言模型能力-总结.md)**：本单元担任 **S 结构前提层**——非线性是 L0 涌现的前提（线性坍缩 4 万倍实验），SwiGLU 门控是"按需激活"在 FFN 内的最早形态
-- **[`讲透Transformer/`](../讲透Transformer/)**：SwiGLU 是现代 Transformer 的标配——激活函数宇宙的终章写在 attention 里
+- **[`讲透Transformer/`](../讲透Transformer)**：SwiGLU 是现代 Transformer 的标配——激活函数宇宙的终章写在 attention 里

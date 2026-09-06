@@ -307,4 +307,4 @@ $$\mathcal{L} = -\frac{1}{4}F^a_{\mu\nu}F^{a\mu\nu}, \quad F^a_{\mu\nu} = \parti
 ---
 
 **完成日期**：2026-08-13（深化版 v2，从 142 行扩到 ~310 行）
-**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

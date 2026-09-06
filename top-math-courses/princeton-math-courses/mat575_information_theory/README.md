@@ -47,7 +47,7 @@ MAT 514 概率 ──→  MAT 575 信息论 ──→  VAE ELBO / cross-entropy 
                                        DPO (隐式 KL 约束)
 ```
 
-- **前置**：[MAT 514 概率](../mat514_probability/)（概率公理、期望、收敛定理）
+- **前置**：[MAT 514 概率](../mat514_probability)（概率公理、期望、收敛定理）
 - **本课**：Shannon 熵、互信息、KL 散度、信道编码定理、率失真理论
 - **后续**：ML 中的信息论方法（信息瓶颈、表示学习 InfoNCE、信息论泛化界）
 
@@ -91,4 +91,4 @@ MAT 514 概率 ──→  MAT 575 信息论 ──→  VAE ELBO / cross-entropy 
    - PAC-Bayes 的信息论推广：$R(h) \leq \hat{R}(h) + \sqrt{\frac{\text{KL}(Q\|P) + \ln(2\sqrt{n}/\delta)}{2n}}$
    - **与本课关联**：Pinsker 不等式 $\text{TV}(P,Q) \leq \sqrt{\text{KL}(P\|Q)/2}$ 连接 KL 与泛化
 
-📌 **下一步**：→ [Berkeley Math 218](../../berkeley-math-courses/math218_probability_graduate/) 或 [MIT 18.175](../../mit-math-courses/18_175_probability/)
+📌 **下一步**：→ [Berkeley Math 218](../../berkeley-math-courses/math218_probability_graduate) 或 [MIT 18.175](../../mit-math-courses/18_175_probability)

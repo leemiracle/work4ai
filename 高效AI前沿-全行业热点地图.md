@@ -53,7 +53,7 @@
 > 🎯 **Brown 的战略洞察**：inference compute 被严重低估——今天 $1M 的能力明年可能 $100。**安全评估必须 project test-time compute**（dedicated state actor 可花 $10M 推理）。test-time 是"窥探未来的窗口"。
 
 ### 对接 work4ai
-[`讲透RL/05(RLVR极限)`](讲透RL/) + [`讲透基础模型`](讲透基础模型/)（inference scaling）
+[`讲透RL/05(RLVR极限)`](讲透RL) + [`讲透基础模型`](讲透基础模型)（inference scaling）
 
 ---
 
@@ -90,7 +90,7 @@
 - **2-bit 出现**（AngelSlim / Apple AFM）——极端压缩，需 QAT 保质量
 
 ### 对接 work4ai
-[`端侧AI架构参考`](端侧AI架构参考.md) + [`讲透GPU与系统级`](讲透GPU与系统级/)（量化）
+[`端侧AI架构参考`](端侧AI架构参考.md) + [`讲透GPU与系统级`](讲透GPU与系统级)（量化）
 
 ---
 
@@ -104,7 +104,7 @@
 | **Qwen3.6** | Gated DeltaNet | 用 Gated DeltaNet 替代部分 attention |
 | **Mamba-3** | — | 状态空间模型持续演进 |
 
-> 🎯 **趋势**：纯 Transformer 在退场——2026 的新模型越来越多用 **hybrid（attention + 线性复杂度层）** 平衡"长上下文效率"和"attention 表达力"。对接 [`讲透基础模型`](讲透基础模型/)（架构）。
+> 🎯 **趋势**：纯 Transformer 在退场——2026 的新模型越来越多用 **hybrid（attention + 线性复杂度层）** 平衡"长上下文效率"和"attention 表达力"。对接 [`讲透基础模型`](讲透基础模型)（架构）。
 
 ---
 
@@ -117,7 +117,7 @@
 - **Spec-RL / FastGRPO**：用 speculative decoding 加速 rollout 生成
 - **FlashRL / QeRL**：低精度/量化 rollout
 
-> 🎯 **核心矛盾**：RLVR 需要大量 rollout（贵）↔ 训练信号稀疏（很多 rollout 全对/全错，弱信号）。2026 的工作都在"**用更少 rollout 提取更强信号**"。对接 [`讲透RL/03-06`](讲透RL/)。
+> 🎯 **核心矛盾**：RLVR 需要大量 rollout（贵）↔ 训练信号稀疏（很多 rollout 全对/全错，弱信号）。2026 的工作都在"**用更少 rollout 提取更强信号**"。对接 [`讲透RL/03-06`](讲透RL)。
 
 ---
 
@@ -131,7 +131,7 @@
 - **DeepSeek MLA**（Multi-Latent Attention）：MoE + 低秩 KV 压缩
 
 ### 对接 work4ai
-[`讲透Transformer`](讲透Transformer/)（MoE）+ [`讲透GPU与系统级`](讲透GPU与系统级/)（EP）
+[`讲透Transformer`](讲透Transformer)（MoE）+ [`讲透GPU与系统级`](讲透GPU与系统级)（EP）
 
 ---
 
@@ -159,11 +159,11 @@ RLVR 是 reasoning model 的引擎，但 rollout 太贵。2026 的工作（ARRoL
 | 热点 | work4ai 深度版 |
 |---|---|
 | 推理优化（稀疏/PD分离/KV压缩）| [`高效AI前沿-2025-2026顶会精选`](高效AI前沿-2025-2026顶会精选.md)（C，12 篇深读）|
-| test-time compute scaling | [`讲透RL/05(RLVR极限)`](讲透RL/) + [`讲透基础模型`](讲透基础模型/) |
-| 端侧 LLM | [`端侧AI架构参考`](端侧AI架构参考.md) + [`讲透GPU与系统级`](讲透GPU与系统级/)（量化）|
-| hybrid 架构 | [`讲透基础模型`](讲透基础模型/)（架构）|
-| agent RL 加速 | [`讲透RL/03-06`](讲透RL/)（GRPO/RLVR）|
-| MoE 高效化 | [`讲透Transformer`](讲透Transformer/)（MoE）|
+| test-time compute scaling | [`讲透RL/05(RLVR极限)`](讲透RL) + [`讲透基础模型`](讲透基础模型) |
+| 端侧 LLM | [`端侧AI架构参考`](端侧AI架构参考.md) + [`讲透GPU与系统级`](讲透GPU与系统级)（量化）|
+| hybrid 架构 | [`讲透基础模型`](讲透基础模型)（架构）|
+| agent RL 加速 | [`讲透RL/03-06`](讲透RL)（GRPO/RLVR）|
+| MoE 高效化 | [`讲透Transformer`](讲透Transformer)（MoE）|
 
 **阅读路径**：本篇（广度趋势）→ [`C 顶会精选`](高效AI前沿-2025-2026顶会精选.md)（深度论文）→ [`HAN Lab 地图`](高效AI研究参考-MITHANLab.md)（单实验室纵深）→ 对应讲透系列钻原理。四份高效 AI 参考形成完整图景。
 

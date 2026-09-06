@@ -2,7 +2,7 @@
 
 > **教材**：Stewart, *Multivariable Calculus*
 > **定位**：Berkeley 工学院标准多变量微积分。梯度/Jacobian/Hessian 是深度学习的优化语言
-> **对照**：与 [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus/) 内容等价，Stewart 更偏计算
+> **对照**：与 [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus) 内容等价，Stewart 更偏计算
 
 ---
 

@@ -29,7 +29,7 @@
 - Durrett, *Probability: Theory and Examples* (5th, 免费 PDF)
 - Billingsley, *Probability and Measure*
 - Williams, *Probability with Martingales*
-- MIT 对照：[MIT 18.175](../../mit-math-courses/18_175_probability/)
+- MIT 对照：[MIT 18.175](../../mit-math-courses/18_175_probability)
 
 ## 学习建议
 - **节奏**：每周 6-8 小时，14-16 周
@@ -47,8 +47,8 @@ M 365C 实分析 ──┴──→  (Durrett: σ-代数/收敛/LLN/CLT/鞅/Brow
                       UT Probability Prelim 第一学期                       Brownian → 扩散模型 SDE
 ```
 
-- **前置**：[M 365C 实分析](../m365c_real_analysis/)（Lebesgue 积分、$L^p$ 空间）+ [M 362K 概率](../m362K_probability/)（应用概率直觉）+ 线代
-- **本课**：UT Austin Probability Prelim 第一学期——测度论概率空间、四种收敛、SLLN/CLT、条件期望、鞅（停时/可选停时/收敛）、Brownian motion 入门（与 [MIT 18.175](../../mit-math-courses/18_175_probability/) 同级金课）
+- **前置**：[M 365C 实分析](../m365c_real_analysis)（Lebesgue 积分、$L^p$ 空间）+ [M 362K 概率](../m362K_probability)（应用概率直觉）+ 线代
+- **本课**：UT Austin Probability Prelim 第一学期——测度论概率空间、四种收敛、SLLN/CLT、条件期望、鞅（停时/可选停时/收敛）、Brownian motion 入门（与 [MIT 18.175](../../mit-math-courses/18_175_probability) 同级金课）
 - **后续**：UT Probability Prelim 第二学期（随机过程 / 数学统计）→ ML 理论论文（Bartlett / Belkin / Mohri）
 
 ---
@@ -87,4 +87,4 @@ M 365C 实分析 ──┴──→  (Durrett: σ-代数/收敛/LLN/CLT/鞅/Brow
    - Russo & Zou (2016), Xu & Raginsky (2017)：$|E[R(W)]-E[\hat{R}(W,S)]|\leq\sqrt{2\sigma^2 I(W;S)/n}$（⚠️ 具体常数以原文为准）
    - **与本课关联**：KL 散度 + Pinsker 不等式 + 鞅方法 → PAC-Bayes 的信息论推广
 
-📌 **下一步**：→ 进入 [前沿专题](../../) 或回到 [UT Austin SCHOOL.md](../SCHOOL.md)
+📌 **下一步**：→ 进入 [前沿专题](../..) 或回到 [UT Austin SCHOOL.md](../SCHOOL.md)

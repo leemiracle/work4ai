@@ -116,14 +116,14 @@ print("验证: f(0.5,0.5)=0.25, 约束 0.5+0.5=1 ✓ (活跃)")
 |---|---|
 | **单纯形法最坏指数复杂度** | Klee-Minty 反例 $2^n$ 步（实际中很少触发）|
 | **KKT 对非凸只是必要条件** | 深度学习非凸，KKT 不保证全局最优 |
-| **整数变量不凸** | ILP 需分支定界 + 凸松弛，见 [ETH 401-3901](../../eth-math-courses/e401_3901_linear_combinatorial_optimization/) |
+| **整数变量不凸** | ILP 需分支定界 + 凸松弛，见 [ETH 401-3901](../../eth-math-courses/e401_3901_linear_combinatorial_optimization) |
 | **LP 的内点法 vs 单纯形法** | 大规模 LP 用内点法（多项式时间），但单纯形法实际更快 |
 
 ---
 
 ## 🔬 应用层
 
-1. **SVM = 凸 QP + KKT** → [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization/) 完整推导
+1. **SVM = 凸 QP + KKT** → [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization) 完整推导
 2. **LP 用于资源分配、运输、排班**
 3. **LP 松弛 + rounding → 近似算法**（聚类、设施选址）
 4. **Lasso = QP**：$\ell_1$ 正则化 → 稀疏解
@@ -153,6 +153,6 @@ print("验证: f(0.5,0.5)=0.25, 约束 0.5+0.5=1 ✓ (活跃)")
 
 ## 与 work4ai 讲透系列的交叉
 
-- **讲透 SVM**：KKT 第 4 节 → [CME 364A](../../stanford-math-courses/cme364A_convex_optimization/) SVM 完整推导
+- **讲透 SVM**：KKT 第 4 节 → [CME 364A](../../stanford-math-courses/cme364A_convex_optimization) SVM 完整推导
 - **讲透 LP 对偶**：第 3 节 → 博弈论 / 经济学
 - **讲透正则化**：QP 第 5 节 → Lasso / Ridge

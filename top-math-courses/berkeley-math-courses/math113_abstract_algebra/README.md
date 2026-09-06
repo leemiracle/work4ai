@@ -47,11 +47,11 @@
  AlphaFold     椭圆曲线签名    代数簇
 ```
 
-- **前置**：[MATH 110 线代](../math110_linear_algebra/)（矩阵/线性变换）
+- **前置**：[MATH 110 线代](../math110_linear_algebra)（矩阵/线性变换）
 - **本课**：群 → 群作用 → 环 → 域 → Galois 入门
 - **后续/交叉**：
-  - [MIT 18.701 Artin](../../mit-math-courses/18_701_algebra_I/)（Artin 体系，矩阵群视角）
-  - [Harvard Math 122](../../harvard-math-courses/math122_algebra_I/)（Dummit-Foote 对照）
+  - [MIT 18.701 Artin](../../mit-math-courses/18_701_algebra_I)（Artin 体系，矩阵群视角）
+  - [Harvard Math 122](../../harvard-math-courses/math122_algebra_I)（Dummit-Foote 对照）
   - **表示论**（ML 等变网络的真正基础）
 
 ---
@@ -92,4 +92,4 @@ RSA：$(\mathbb{Z}/n\mathbb{Z})^\times$ 群 + Fermat 小定理。椭圆曲线：
 
 ---
 
-📌 **下一步**：→ [MATH 185 Complex Analysis](../math185_complex_analysis/) 或 [MIT 18.701](../../mit-math-courses/18_701_algebra_I/)
+📌 **下一步**：→ [MATH 185 Complex Analysis](../math185_complex_analysis) 或 [MIT 18.701](../../mit-math-courses/18_701_algebra_I)

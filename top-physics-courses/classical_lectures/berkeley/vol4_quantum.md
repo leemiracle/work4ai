@@ -289,4 +289,4 @@ $$T \approx e^{-2\kappa a}, \quad \kappa = \frac{\sqrt{2m(V_0 - E)}}{\hbar}$$
 ---
 
 **完成日期**：2026-08-13（深化版 v2，从 79 行扩到 ~290 行）
-**配套**：[berkeley/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[berkeley/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

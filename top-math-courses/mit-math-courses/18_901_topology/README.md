@@ -39,6 +39,6 @@
 - **节奏**：每周 4-6 小时，14 周完成
 - **重点**：第 1-7 章（点集拓扑）；第 9-12 章可选
 - **跳过**：Tychonoff 定理的完整证明（用即可）
-- **配合**：[Cambridge Part IB Analysis and Topology](../../cambridge-math-courses/partIB_analysis_topology/)
+- **配合**：[Cambridge Part IB Analysis and Topology](../../cambridge-math-courses/partIB_analysis_topology)
 
-📌 **下一步**：→ 进入 [研究生序列](../../) 或 [前沿专题](../../)
+📌 **下一步**：→ 进入 [研究生序列](../..) 或 [前沿专题](../..)

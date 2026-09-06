@@ -26,7 +26,7 @@
 
 ### 1.1 数值线性代数回顾
 
-参见 [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)（Trefethen & Bau）。核心：
+参见 [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra)（Trefethen & Bau）。核心：
 - LU/QR/Cholesky 分解
 - SVD 与低秩近似
 - 迭代法（CG, GMRES）→ 大规模稀疏系统
@@ -147,4 +147,4 @@ GAN 的谱归一化约束 Lipschitz 常数——与数值分析中的算子范�
 1. **Quarteroni** 第 1-5 章：插值 + 积分 + ODE → **核心**
 2. **第 7-8 章**：FEM/FDM → **ETH CSE 核心**
 3. **第 10 章**：谱方法 + FFT → 高精度方法
-4. **交叉**：[UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)（数值线代）+ [Princeton MAT 322](../../princeton-math-courses/mat322_pde/)（PDE 理论）
+4. **交叉**：[UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra)（数值线代）+ [Princeton MAT 322](../../princeton-math-courses/mat322_pde)（PDE 理论）

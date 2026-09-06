@@ -102,7 +102,7 @@ lean-sorry-hunter/
 
 > ### ✅ 三个蓝图已建成并实测（2026-08-25，同日）
 >
-> 三个 skill 已真实落地在 [`.opencode/skills/`](../../../.opencode/skills/)（项目级，opencode 自动发现）：
+> 三个 skill 已真实落地在 [`.opencode/skills/`](../../../.opencode/skills)（项目级，opencode 自动发现）：
 >
 > | skill | 验证证据 |
 > |---|---|

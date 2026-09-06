@@ -44,7 +44,7 @@
 - **节奏**：每周 4-6 小时，14-16 周完成
 - **Rudin 难度**：第一遍建议配 Pugh 或 Mattuck 视频对照
 - **重点**：第 1-7 章（核心）；第 10-11 章可选
-- **配合**：[Berkeley Math 104 用 Ross 教材](../../berkeley-math-courses/math104_analysis/)（更易入门）
+- **配合**：[Berkeley Math 104 用 Ross 教材](../../berkeley-math-courses/math104_analysis)（更易入门）
 
 ## 📍 在数学全景中的位置
 
@@ -141,4 +141,4 @@ Belkin et al. 的 double descent 现象（2019 起）在 2024-2025 获得了更�
 
 ---
 
-📌 **下一步**：→ [18.175 概率论](../18_175_probability/) 或 [18.701 代数 I](../18_701_algebra_I/)
+📌 **下一步**：→ [18.175 概率论](../18_175_probability) 或 [18.701 代数 I](../18_701_algebra_I)

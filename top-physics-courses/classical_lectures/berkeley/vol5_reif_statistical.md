@@ -337,4 +337,4 @@ $$\Xi = \sum_{N=0}^{\infty} \sum_i e^{-\beta(E_{Ni} - \mu N)} = \sum_{N=0}^{\inf
 ---
 
 **完成日期**：2026-08-13（深化版 v2，从 137 行扩到 ~330 行）
-**配套**：[berkeley/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[berkeley/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

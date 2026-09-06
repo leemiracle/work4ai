@@ -151,10 +151,10 @@ $P(x) = \prod_k P(x_k | x_{<k})$ 的"分解顺序"不唯一（可以从左到右
 
 | 本精读讲透的 | work4ai 深度版 |
 |---|---|
-| mask 实现自回归 | [`讲透Transformer`](../讲透Transformer/)（causal attention mask）|
-| 自回归分解 $P(x)=\prod P(x_k\|x_{<k})$ | [`讲透基础模型`](../讲透基础模型/)（NTP 就是自回归）|
-| MADE → Transformer attention | [`讲透生成模型`](../讲透生成模型/)（AR 模型谱系：MADE→PixelCNN→GPT）|
-| mask × weight 的工程实现 | [`讲透PyTorch`](../讲透PyTorch/)（自定义 Layer）|
+| mask 实现自回归 | [`讲透Transformer`](../讲透Transformer)（causal attention mask）|
+| 自回归分解 $P(x)=\prod P(x_k\|x_{<k})$ | [`讲透基础模型`](../讲透基础模型)（NTP 就是自回归）|
+| MADE → Transformer attention | [`讲透生成模型`](../讲透生成模型)（AR 模型谱系：MADE→PixelCNN→GPT）|
+| mask × weight 的工程实现 | [`讲透PyTorch`](../讲透PyTorch)（自定义 Layer）|
 
 **阅读路径**：读 [讲透生成模型] 搞懂自回归分解 → 读本精读看 mask 怎么实现一次前向 → 读 [讲透Transformer] 看 attention mask 的现代版。
 

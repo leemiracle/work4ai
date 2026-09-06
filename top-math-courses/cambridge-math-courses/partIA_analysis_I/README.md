@@ -52,4 +52,4 @@ A-Level / STEP        →   Cambridge Part IA       →   Part IB Analysis II
 
 ---
 
-📌 **下一步**：→ [Part IA Probability](../partIA_probability/)
+📌 **下一步**：→ [Part IA Probability](../partIA_probability)

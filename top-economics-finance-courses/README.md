@@ -1,6 +1,6 @@
 # 💰 世界 Top 经济金融院校 · 全课程实战（2026 完整版）
 
-> **一句话定位**：仿照 [`top-physics-courses/`](../top-physics-courses/) 与 [`top-math-courses/`](../top-math-courses/) 的方法论，把全球 10 所经济金融顶尖名校（经济系 + 商学院 + 金融工程）的核心课程，用**费曼学习法**还原为可理解、可运行、可衔接的知识体系。
+> **一句话定位**：仿照 [`top-physics-courses/`](../top-physics-courses) 与 [`top-math-courses/`](../top-math-courses) 的方法论，把全球 10 所经济金融顶尖名校（经济系 + 商学院 + 金融工程）的核心课程，用**费曼学习法**还原为可理解、可运行、可衔接的知识体系。
 >
 > **与 `top-physics/math-courses` 的关系**：物理版教"自然规律怎么用实验证伪"，数学版教"轮子背后的几何/代数/分析"。**经济金融版教的是一类全新的对象——「会反过来研究你的人」**。这决定了它的方法论与纯理科有本质差异（见 §根本张力）。
 
@@ -94,7 +94,7 @@
 - **NYU Stern**（Courant 协作 + Volatility Institute，Derman/Taleb 传统）
 - **Baruch MFE**（业界就业率顶级）
 - **LSE**（伦敦金融城门户，计量经济 + 金融强校）
-- **ETH Zürich**（量化金融 / MTEC，与 [`top-math-courses`](../top-math-courses/) 联动）
+- **ETH Zürich**（量化金融 / MTEC，与 [`top-math-courses`](../top-math-courses) 联动）
 
 > 📌 **课程编号一手核实铁律**：上表课程编号（如 MIT 14.xxx、Harvard ECON、Yale ECON、Cambridge ECON/Paper B）**必须在阶段 1 用 webfetch 学校官网 / academic guide 一手核实**，不凭记忆。详见 §铁律。
 
@@ -128,7 +128,7 @@
 | **⑦ 市场微观结构与行为金融** | 市场有效，**因为**人无效 | 有效 vs 行为（Grossman-Stiglitz）| Berkeley Haas / Oxford OMI | 订单簿/前景理论 |
 | **⑧ 风险管理与量化交易** ⭐ | **活着比赚钱重要** | 收益 vs 尾部风险 | Oxford OMI / CMU MSCF | **VaR/CVaR/回测/因子** |
 
-> ⭐ **第 8 主题 = 你的弯道超车主题**（呼应 [`top-physics-courses/ai_for_physics/`](../top-physics-courses/ai_for_physics/)）。它直接对接 opencode 的 [`quantitative-trading-backtesting-frameworks`](file://~/.config/opencode/skills/quantitative-trading-backtesting-frameworks) 与 [`quantitative-trading-risk-metrics-calculation`](file://~/.config/opencode/skills/quantitative-trading-risk-metrics-calculation) 两个 skill。**可跑 demo 见 [`ai_for_finance/finance_demos.py`](ai_for_finance/finance_demos.py)**。
+> ⭐ **第 8 主题 = 你的弯道超车主题**（呼应 [`top-physics-courses/ai_for_physics/`](../top-physics-courses/ai_for_physics)）。它直接对接 opencode 的 [`quantitative-trading-backtesting-frameworks`](file:/~/.config/opencode/skills/quantitative-trading-backtesting-frameworks) 与 [`quantitative-trading-risk-metrics-calculation`](file:/~/.config/opencode/skills/quantitative-trading-risk-metrics-calculation) 两个 skill。**可跑 demo 见 [`ai_for_finance/finance_demos.py`](ai_for_finance/finance_demos.py)**。
 
 ---
 
@@ -306,13 +306,13 @@ graph TD
 
 | 子目录 | 入口 |
 |---|---|
-| [`berkeley-econ-finance/`](berkeley-econ-finance/) | [`SCHOOL.md`](berkeley-econ-finance/SCHOOL.md) |
-| [`cambridge-econ-finance/`](cambridge-econ-finance/) | [`SCHOOL.md`](cambridge-econ-finance/SCHOOL.md) |
-| [`chicago-econ-finance/`](chicago-econ-finance/) | [`SCHOOL.md`](chicago-econ-finance/SCHOOL.md) |
-| [`harvard-econ-finance/`](harvard-econ-finance/) | [`SCHOOL.md`](harvard-econ-finance/SCHOOL.md) |
-| [`mit-econ-finance/`](mit-econ-finance/) | [`SCHOOL.md`](mit-econ-finance/SCHOOL.md) |
-| [`oxford-econ-finance/`](oxford-econ-finance/) | [`SCHOOL.md`](oxford-econ-finance/SCHOOL.md) |
-| [`princeton-econ-finance/`](princeton-econ-finance/) | [`SCHOOL.md`](princeton-econ-finance/SCHOOL.md) |
-| [`stanford-econ-finance/`](stanford-econ-finance/) | [`SCHOOL.md`](stanford-econ-finance/SCHOOL.md) |
-| [`wharton-econ-finance/`](wharton-econ-finance/) | [`SCHOOL.md`](wharton-econ-finance/SCHOOL.md) |
-| [`yale-econ-finance/`](yale-econ-finance/) | [`SCHOOL.md`](yale-econ-finance/SCHOOL.md) |
+| [`berkeley-econ-finance/`](berkeley-econ-finance) | [`SCHOOL.md`](berkeley-econ-finance/SCHOOL.md) |
+| [`cambridge-econ-finance/`](cambridge-econ-finance) | [`SCHOOL.md`](cambridge-econ-finance/SCHOOL.md) |
+| [`chicago-econ-finance/`](chicago-econ-finance) | [`SCHOOL.md`](chicago-econ-finance/SCHOOL.md) |
+| [`harvard-econ-finance/`](harvard-econ-finance) | [`SCHOOL.md`](harvard-econ-finance/SCHOOL.md) |
+| [`mit-econ-finance/`](mit-econ-finance) | [`SCHOOL.md`](mit-econ-finance/SCHOOL.md) |
+| [`oxford-econ-finance/`](oxford-econ-finance) | [`SCHOOL.md`](oxford-econ-finance/SCHOOL.md) |
+| [`princeton-econ-finance/`](princeton-econ-finance) | [`SCHOOL.md`](princeton-econ-finance/SCHOOL.md) |
+| [`stanford-econ-finance/`](stanford-econ-finance) | [`SCHOOL.md`](stanford-econ-finance/SCHOOL.md) |
+| [`wharton-econ-finance/`](wharton-econ-finance) | [`SCHOOL.md`](wharton-econ-finance/SCHOOL.md) |
+| [`yale-econ-finance/`](yale-econ-finance) | [`SCHOOL.md`](yale-econ-finance/SCHOOL.md) |

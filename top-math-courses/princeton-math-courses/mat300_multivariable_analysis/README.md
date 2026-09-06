@@ -63,4 +63,4 @@ MAT 215 单变量分析     →   Princeton MAT 300       →   MAT 322 PDE
 
 ---
 
-📌 **下一步**：→ [MAT 322 PDE](../mat322_pde/) 或 [MAT 345 Algebra I](../mat345_algebra_I/)
+📌 **下一步**：→ [MAT 322 PDE](../mat322_pde) 或 [MAT 345 Algebra I](../mat345_algebra_I)

@@ -48,9 +48,9 @@ Cambridge Part II ────────┘                              集�
                                                         鞅论 / RL 理论
 ```
 
-- **前置**：[MATH 104 分析](../math104_analysis/) + [MATH 105](../) + [Stat 134](../stat134_probability/) 或 [MIT 18.175](../../mit-math-courses/18_175_probability/)
+- **前置**：[MATH 104 分析](../math104_analysis) + [MATH 105](..) + [Stat 134](../stat134_probability) 或 [MIT 18.175](../../mit-math-courses/18_175_probability)
 - **本课**：Peres / Sly / Mossel 学派的招牌——集中不等式、鞅论、Brownian motion、随机过程
-- **后续**：随机过程专题、[Part II Mathematics of ML](../../cambridge-math-courses/partII_mathematics_machine_learning/)（ML 理论）
+- **后续**：随机过程专题、[Part II Mathematics of ML](../../cambridge-math-courses/partII_mathematics_machine_learning)（ML 理论）
 
 ---
 
@@ -86,4 +86,4 @@ Cambridge Part II ────────┘                              集�
    - PAC-Bayes 的信息论推广：KL$(Q\|P)$ → 互信息
    - **与本课关联**：集中不等式 + Pinsker 不等式 → 泛化界的桥梁
 
-📌 **下一步**：→ [MATH 202A Topology & Analysis graduate](../math202A_topology_analysis/)
+📌 **下一步**：→ [MATH 202A Topology & Analysis graduate](../math202A_topology_analysis)

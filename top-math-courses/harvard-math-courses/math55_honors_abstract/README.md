@@ -21,7 +21,7 @@
 ## 参考资源
 - 历年教学大纲
 - [Math 55 课程网页](https://www.math.harvard.edu/~elkies/M55a.02/)
-- 替代：[Math 25](../math25_honors_multivariable/)（同难度，更友好）
+- 替代：[Math 25](../math25_honors_multivariable)（同难度，更友好）
 
 ## 学习建议
 - **不建议自学**——除非确认自己是数学天才
@@ -83,4 +83,4 @@ Math 55 线代部分直接 ML 关联少（纯数学导向），但其**数学成
 3. **机制可解释性的线性代数（2024-2026）**
    - Anthropic 等用 SVD/特征分解/子空间投影"解剖" transformer 的内部计算。55a 训练的抽象能力是做这类研究的前提。
 
-📌 **下一步**：→ [Harvard Math 112](../math112_real_analysis/)（标准实分析）
+📌 **下一步**：→ [Harvard Math 112](../math112_real_analysis)（标准实分析）

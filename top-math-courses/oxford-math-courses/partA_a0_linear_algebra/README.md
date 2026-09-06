@@ -72,4 +72,4 @@ Berkeley 110 ◀──(同等深度)── Princeton 217 ◀──(同样抽象)
 3. **低秩微调 LoRA/QLoRA 的谱理论（2023-2026）**
    - LoRA（[arXiv:2106.09685](https://arxiv.org/abs/2106.09685)）与 QLoRA（[arXiv:2305.14314](https://arxiv.org/abs/2305.14314)）的低秩更新，根基是 A0 的谱理论 + 奇异值。
 
-📌 **下一步**：→ [Part A A8 Probability](../partA_a8_probability/)
+📌 **下一步**：→ [Part A A8 Probability](../partA_a8_probability)

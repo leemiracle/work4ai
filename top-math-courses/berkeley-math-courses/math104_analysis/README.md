@@ -26,7 +26,7 @@
 ## 参考资源
 - Ross, *Elementary Analysis* (2nd ed, Springer) ISBN 978-1461462705
 - 替代：Pugh, *Real Mathematical Analysis*
-- MIT 对照：[18.100A](../../mit-math-courses/18_100B_real_analysis/)
+- MIT 对照：[18.100A](../../mit-math-courses/18_100B_real_analysis)
 
 ## 学习建议
 - **强烈推荐先于 110 学**：但 Berkeley 建议先 110（因为 110 是更友好的 proof 入门）
@@ -67,4 +67,4 @@ $L(\theta_{k+1}) \approx L(\theta_k) + \nabla L^T (-\eta \nabla L) + \frac{\eta^
 
 ---
 
-📌 **下一步**：→ [MATH 110 Linear Algebra](../math110_linear_algebra/)
+📌 **下一步**：→ [MATH 110 Linear Algebra](../math110_linear_algebra)

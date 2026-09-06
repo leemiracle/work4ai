@@ -267,4 +267,4 @@ zapier push  # 部署到 Zapier（需 ZAPIER_DEPLOY_KEY）
 
 ---
 
-📌 **下一步** → [`../09-skills/`](../09-skills/) 6 个 skill。
+📌 **下一步** → [`../09-skills/`](../09-skills) 6 个 skill。

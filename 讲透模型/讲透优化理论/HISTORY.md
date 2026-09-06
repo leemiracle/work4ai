@@ -4,7 +4,7 @@
 >
 > **博士级标准**：不是"年份+人物+事件"的维基百科（那是浅薄年代史），是**思想史**（history of ideas）——为什么某个思想在某个时代兴起？为什么被忽视？为什么以意想不到的方式复兴？当前的"现状"有多少是历史偶然？
 >
-> 配套：[`讲透AI历史`](../讲透AI历史/)（AI 思想史方法论）+ [`top-math-courses/HISTORY_OF_IDEAS`](../top-math-courses/HISTORY_OF_IDEAS.md)（数学思想史）+ [`00-优化理论是什么`](./00-优化理论是什么.md)（技术导论）
+> 配套：[`讲透AI历史`](../讲透AI历史)（AI 思想史方法论）+ [`top-math-courses/HISTORY_OF_IDEAS`](../top-math-courses/HISTORY_OF_IDEAS.md)（数学思想史）+ [`00-优化理论是什么`](./00-优化理论是什么.md)（技术导论）
 
 ---
 
@@ -666,7 +666,7 @@ Reddi et al. 2018 证明 Adam 可能不收敛，提出 AMSGrad 修正。但 AMSG
 1. **读 Boyd & Vandenberghe** 《Convex Optimization》前言 + 第 1 章——感受凸优化的统一框架
 2. **读 Nesterov 1983 原始论文**——理解加速梯度的"预判-纠偏"机制
 3. **读 Reddi et al. 2018**——理解 Adam 为什么"理论上不收敛"
-4. **对照 [`讲透AI历史`](../讲透AI历史/)**——AI 史和优化史的交叉点：反向传播、SGD、深度学习
+4. **对照 [`讲透AI历史`](../讲透AI历史)**——AI 史和优化史的交叉点：反向传播、SGD、深度学习
 5. **做实验**：用 PyTorch 实现 SGD vs Momentum vs Adam，在同一个非凸损失面上比较收敛轨迹
 6. **追前沿**：2024-2026 的新优化器（Muon / Sophia / Lion）能否取代 Adam？
 

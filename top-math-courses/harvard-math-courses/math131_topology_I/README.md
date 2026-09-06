@@ -24,7 +24,7 @@
 ## 参考资源
 - Munkres, *Topology* (2nd ed)
 - Hatcher, *Algebraic Topology*（免费 PDF，进阶）
-- MIT 对照：[MIT 18.901](../../mit-math-courses/18_901_topology/)
+- MIT 对照：[MIT 18.901](../../mit-math-courses/18_901_topology)
 
 ## 📍 在数学全景中的位置
 
@@ -55,4 +55,4 @@ Math 112 实分析        →   Harvard Math 131        →   Math 134 微分拓
 
 ---
 
-📌 **下一步**：→ [Harvard Math 154 Number Theory](../math154_number_theory/)
+📌 **下一步**：→ [Harvard Math 154 Number Theory](../math154_number_theory)

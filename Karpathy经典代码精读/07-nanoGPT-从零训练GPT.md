@@ -208,10 +208,10 @@ minGPT 和 nanoGPT **架构完全一样**，但 nanoGPT 训练快 3-5 倍。差�
 
 | 本精读讲透的 | work4ai 深度版 |
 |---|---|
-| Flash Attention 原理 | [`讲透GPU与系统级`](../讲透GPU与系统级/)（FlashAttention 专题）|
-| Weight Tying | [`讲透基础模型`](../讲透基础模型/)（embedding 共享）|
-| 训练优化（fused/dim-decay/vocab-pad）| [`讲透PyTorch`](../讲透PyTorch/)(torch.compile) / [`讲透GPU与系统级`](../讲透GPU与系统级/) |
-| MFU 估算 | [`讲透GPU与系统级`](../讲透GPU与系统级/)（FLOPS 利用率）|
+| Flash Attention 原理 | [`讲透GPU与系统级`](../讲透GPU与系统级)（FlashAttention 专题）|
+| Weight Tying | [`讲透基础模型`](../讲透基础模型)（embedding 共享）|
+| 训练优化（fused/dim-decay/vocab-pad）| [`讲透PyTorch`](../讲透PyTorch)(torch.compile) / [`讲透GPU与系统级`](../讲透GPU与系统级) |
+| MFU 估算 | [`讲透GPU与系统级`](../讲透GPU与系统级)（FLOPS 利用率）|
 
 **阅读路径**：先读 [minGPT 精读](./06-minGPT-minimal-GPT.md) 懂架构 → 读本篇看工程优化 → 读 [build-nanogpt](./08-build-nanogpt-从零搭GPT2.md)（下一篇，Karpathy 2h 视频逐行写 nanoGPT）。
 

@@ -28,13 +28,13 @@
 - 工程师线代基础
 - 学完后：能从矩阵视角理解神经网络权重
 
-📌 **下一步**：→ [MATH 104 Analysis](../math104_analysis/) 或 [MATH 110 Linear Algebra 严格版](../math110_linear_algebra/)
+📌 **下一步**：→ [MATH 104 Analysis](../math104_analysis) 或 [MATH 110 Linear Algebra 严格版](../math110_linear_algebra)
 
 ---
 
 ## 📍 在数学全景中的位置
 
-MATH 54 是 Berkeley 工学院的"线代 + ODE 一锅炖"组合课。前置 MATH 53；本笔记**只聚焦 ODE 部分**（第 7-10 单元），线代部分归其他 agent 管理。ODE 部分覆盖一阶/二阶 ODE、线性系统、Laplace 变换——与 [MIT 18.03](../../mit-math-courses/18_03_differential_equations/) 内容重叠但更紧凑。学完后能理解 Neural ODE、RNN 稳定性、扩散模型的 SDE 基础。
+MATH 54 是 Berkeley 工学院的"线代 + ODE 一锅炖"组合课。前置 MATH 53；本笔记**只聚焦 ODE 部分**（第 7-10 单元），线代部分归其他 agent 管理。ODE 部分覆盖一阶/二阶 ODE、线性系统、Laplace 变换——与 [MIT 18.03](../../mit-math-courses/18_03_differential_equations) 内容重叠但更紧凑。学完后能理解 Neural ODE、RNN 稳定性、扩散模型的 SDE 基础。
 
 ## 🔬 理论联系实际（ODE 部分）
 

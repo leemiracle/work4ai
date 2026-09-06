@@ -26,12 +26,12 @@
 ## 参考资源
 - **教材**：Artin, *Algebra* (2nd ed, 2017)
 - **替代**：Dummit & Foote, *Abstract Algebra*
-- **MIT 对照**：[MIT 18.701](../../mit-math-courses/18_701_algebra_I/)
+- **MIT 对照**：[MIT 18.701](../../mit-math-courses/18_701_algebra_I)
 
 ## 学习建议
 - 每周 5-7 小时，12-14 周
 
-📌 **下一步**：→ [MAT 429 Topology](../mat429_topology/) 或 [MAT 514 Probability](../mat514_probability/)
+📌 **下一步**：→ [MAT 429 Topology](../mat429_topology) 或 [MAT 514 Probability](../mat514_probability)
 
 ---
 
@@ -39,7 +39,7 @@
 
 - **前置**：线性代数 + MAT 215 分析（证明能力）
 - **本课**：Artin 体系 → 矩阵群 → 群作用 → 表示论入门（与 MIT 18.701 同源）
-- **交叉**：[MIT 18.701 Artin](../../mit-math-courses/18_701_algebra_I/) + [Berkeley 113](../../berkeley-math-courses/math113_abstract_algebra/)
+- **交叉**：[MIT 18.701 Artin](../../mit-math-courses/18_701_algebra_I) + [Berkeley 113](../../berkeley-math-courses/math113_abstract_algebra)
 
 ## 🔬 理论联系实际
 1. **矩阵群 → 表示论**：群的线性表示 = 深度学习的等变层基础

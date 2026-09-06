@@ -220,9 +220,9 @@ CLIP 之后，视觉基础模型井喷：**DINO / MAE（2021-2022，自监督视
 
 2024-2026，基础模型正沿三条线合流，每条都可能引发下一次范式转移：
 
-**① Agent：基础模型从"回答者"变"行动者"**。基础模型开始调用工具、浏览网页、写代码、操作系统（Claude Computer Use、AutoGPT、Devin）。核心问题：**基础模型能否成为可靠的序贯决策者？** 这把基础模型与强化学习（[`讲透RL/`](../讲透RL/)）和 Agent 架构（[`讲透Agent/`](../讲透Agent/)）深度绑定。
+**① Agent：基础模型从"回答者"变"行动者"**。基础模型开始调用工具、浏览网页、写代码、操作系统（Claude Computer Use、AutoGPT、Devin）。核心问题：**基础模型能否成为可靠的序贯决策者？** 这把基础模型与强化学习（[`讲透RL/`](../讲透RL)）和 Agent 架构（[`讲透Agent/`](../讲透Agent)）深度绑定。
 
-**② World Model：基础模型理解物理世界**。LeCun 的 JEPA（预测抽象表征，不预测像素）vs OpenAI 的 Sora（预测像素，赌涌现）vs DeepMind 的 Genie/Dreamer（RL 世界模型）。三条路线对"什么是世界模型"有根本分歧。详见 [`讲透AI应用全景/`](../讲透AI应用全景/)。
+**② World Model：基础模型理解物理世界**。LeCun 的 JEPA（预测抽象表征，不预测像素）vs OpenAI 的 Sora（预测像素，赌涌现）vs DeepMind 的 Genie/Dreamer（RL 世界模型）。三条路线对"什么是世界模型"有根本分歧。详见 [`讲透AI应用全景/`](../讲透AI应用全景)。
 
 **③ Reasoning Scaling：推理时计算成为新维度**。OpenAI o1（2024-09）、DeepSeek R1（2025-01）把 scaling 的主战场从训练（参数 + 数据）转向推理（test-time compute）。详见 [`讲透LLM/HISTORY.md §8`](../讲透LLM/HISTORY.md)。
 
@@ -451,7 +451,7 @@ BERT 的 Masked LM 适合理解任务，但**天然不适合生成**——因为
 
 ---
 
-**完成日期**：2026-08-14 · **配套**：[讲透基础模型 README](./README.md) + [`讲透LLM/HISTORY.md`](../讲透LLM/HISTORY.md) + [`讲透AI历史`](../讲透AI历史/) + [`讲透科学的现代性`](../讲透科学的现代性/)
+**完成日期**：2026-08-14 · **配套**：[讲透基础模型 README](./README.md) + [`讲透LLM/HISTORY.md`](../讲透LLM/HISTORY.md) + [`讲透AI历史`](../讲透AI历史) + [`讲透科学的现代性`](../讲透科学的现代性)
 
 ---
 

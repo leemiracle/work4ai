@@ -24,7 +24,7 @@
 ## 与 ML 的关联
 - **本科应用概率的最佳入门**
 - 学完后：能读应用 ML 论文
-- 进阶：[Math 218 / MIT 18.175](../math218_probability_graduate/)（测度论版）
+- 进阶：[Math 218 / MIT 18.175](../math218_probability_graduate)（测度论版）
 
 ## 参考资源
 - Pitman, *Probability* (Springer)
@@ -47,9 +47,9 @@ MATH 54 线代ODE          ↑                              ↓
                     （无测度论，直觉优先）            Cambridge Part II (Williams)
 ```
 
-- **前置**：[MATH 53](../math53_multivariable/) + [MATH 54](../math54_linear_alg_ode/)
+- **前置**：[MATH 53](../math53_multivariable) + [MATH 54](../math54_linear_alg_ode)
 - **本课**：Pitman 式概率——条件概率、Bayes 定理、常见分布、LLN、CLT、母函数（**无测度论，直觉极佳**）
-- **后续**：[MIT 18.175](../../mit-math-courses/18_175_probability/) 或 [Math 218](../math218_probability_graduate/)（测度论版）
+- **后续**：[MIT 18.175](../../mit-math-courses/18_175_probability) 或 [Math 218](../math218_probability_graduate)（测度论版）
 
 ---
 
@@ -85,4 +85,4 @@ MATH 54 线代ODE          ↑                              ↓
    - 2024-2025 进展：do-calculus（Pearl）需要条件概率的精确理解
    - **与本课关联**：Bayes 定理 + 条件独立性 → 因果图 (DAG) 的概率语义
 
-📌 **下一步**：→ [MATH 218 Probability Theory graduate](../math218_probability_graduate/)
+📌 **下一步**：→ [MATH 218 Probability Theory graduate](../math218_probability_graduate)

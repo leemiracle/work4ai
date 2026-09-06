@@ -26,7 +26,7 @@
 - Iserles, *A First Course in NDE* (2nd ed, CUP)
 - Trefethen & Bau, *Numerical Linear Algebra*
 
-📌 **下一步**：→ [Part II Probability and Measure](../partII_probability_measure/) 或 [Part II Numerical Analysis](../partII_numerical_analysis/)
+📌 **下一步**：→ [Part II Probability and Measure](../partII_probability_measure) 或 [Part II Numerical Analysis](../partII_numerical_analysis)
 
 ---
 
@@ -34,7 +34,7 @@
 
 - **前置**：Part IA Analysis I + Part IB Linear Algebra
 - **本课**：插值 / 求积 / ODE 收敛性证明——**严格数值分析**
-- **后续**：[Cambridge Part II NA](../partII_numerical_analysis/)（Krylov/谱方法）/ [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)（数值线代）
+- **后续**：[Cambridge Part II NA](../partII_numerical_analysis)（Krylov/谱方法）/ [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra)（数值线代）
 
 ---
 

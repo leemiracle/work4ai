@@ -20,7 +20,7 @@
 8. Brownian motion 入门
 
 ## 与 ML 的关联（**ML 理论核心**）
-- 与 [MIT 18.175](../../mit-math-courses/18_175_probability/) 同类
+- 与 [MIT 18.175](../../mit-math-courses/18_175_probability) 同类
 - 学完后：能读所有 ML 理论论文
 
 ## 参考资源
@@ -40,7 +40,7 @@ Stat 116 ──→  Math 230A (概率论 I) → 230B (随机过程) → 230C (�
                     SLLN + CLT + 鞅                                Brownian motion
 ```
 
-- **前置**：[MATH 171 分析](../math171_analysis_fundamentals/) 或同等实分析
+- **前置**：[MATH 171 分析](../math171_analysis_fundamentals) 或同等实分析
 - **本课**：Stanford 概率论 3 学期序列第 1 学期——概率空间、收敛模式、SLLN、CLT、鞅
 - **后续**：Math 230B（随机过程：Brownian motion, Itô 积分, SDE）→ 扩散模型理论
 
@@ -76,4 +76,4 @@ Stat 116 ──→  Math 230A (概率论 I) → 230B (随机过程) → 230C (�
    - 宽网络的训练动态 ≈ 核回归，核的随机性用概率论分析
    - **与本课关联**：CLT → 宽网络参数的渐近正态性
 
-📌 **下一步**：→ [CME 364A Convex Optimization](../cme364A_convex_optimization/)
+📌 **下一步**：→ [CME 364A Convex Optimization](../cme364A_convex_optimization)

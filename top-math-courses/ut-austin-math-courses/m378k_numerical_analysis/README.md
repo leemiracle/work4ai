@@ -25,7 +25,7 @@
 - Burden & Faires, *Numerical Analysis* (10th)
 - Sauer, *Numerical Analysis*
 
-📌 **下一步**：→ [M 383E Numerical Linear Algebra graduate](../m383e_numerical_linear_algebra/)
+📌 **下一步**：→ [M 383E Numerical Linear Algebra graduate](../m383e_numerical_linear_algebra)
 
 ---
 
@@ -33,7 +33,7 @@
 
 - **前置**：线性代数 + 微积分 + 编程
 - **本课**：Burden-Faires 体系 → 求根 + 插值 + 积分 + ODE + 线性系统（本科级 NA）
-- **后续**：[M 383E Trefethen & Bau](../m383e_numerical_linear_algebra/)（研究生级，招牌课）
+- **后续**：[M 383E Trefethen & Bau](../m383e_numerical_linear_algebra)（研究生级，招牌课）
 
 ## 🔬 理论联系实际
 1. **条件数 → 训练数值稳定性**：大 $\kappa$ → 梯度消失/爆炸

@@ -20,7 +20,7 @@
 8. **Strong Law, CLT**
 
 ## 与 ML 的关联（**ML 理论核心**）
-- 与 [Cambridge Part II Probability and Measure](../../cambridge-math-courses/partII_probability_measure/) 同类
+- 与 [Cambridge Part II Probability and Measure](../../cambridge-math-courses/partII_probability_measure) 同类
 - 学完后：能读 ML 理论论文
 
 ## 参考资源
@@ -40,9 +40,9 @@ Part A A8 ──→  Part B B8.1 (Williams 测度论) ──→  Part C C8.1 (SD
                     SLLN + CLT 严格证明           反向 SDE / Score matching
 ```
 
-- **前置**：[Part A A8 Probability](../partA_a8_probability/) + [Part A 分析]
+- **前置**：[Part A A8 Probability](../partA_a8_probability) + [Part A 分析]
 - **本课**：Williams 式测度论概率——σ-代数、Lebesgue 积分、鞅论、SLLN/CLT 严格证明
-- **后续**：[Part C C8.1 SDE](../partC_c8_1_sde/)（扩散模型理论基础）
+- **后续**：[Part C C8.1 SDE](../partC_c8_1_sde)（扩散模型理论基础）
 
 ---
 
@@ -57,7 +57,7 @@ Part A A8 ──→  Part B B8.1 (Williams 测度论) ──→  Part C C8.1 (SD
 | **Doob 分解** | 联机学习 | $X_n = M_n + A_n$（鞅 + 可料） |
 | **Azuma-Hoeffding** | regret bound | $P(|M_n-M_0|\geq t) \leq 2e^{-t^2/(2\sum c_i^2)}$ |
 
-**核心洞察**：Oxford B8.1 与 [Cambridge Part II](../../cambridge-math-courses/partII_probability_measure/) 使用同一本教材（Williams），但 Oxford 的视角更偏向**随机过程分析**，为 Part C SDE 课程做准备。
+**核心洞察**：Oxford B8.1 与 [Cambridge Part II](../../cambridge-math-courses/partII_probability_measure) 使用同一本教材（Williams），但 Oxford 的视角更偏向**随机过程分析**，为 Part C SDE 课程做准备。
 
 ---
 
@@ -75,4 +75,4 @@ Part A A8 ──→  Part B B8.1 (Williams 测度论) ──→  Part C C8.1 (SD
    - 鞅方法分析 Markov 链的混合时间
    - **与本课关联**：B8.1 的鞅收敛定理
 
-📌 **下一步**：→ [Part C C7.1 Random Matrix Theory](../partC_c7_1_random_matrix_theory/) 或 [Part C C8.1 SDE](../partC_c8_1_sde/)
+📌 **下一步**：→ [Part C C7.1 Random Matrix Theory](../partC_c7_1_random_matrix_theory) 或 [Part C C8.1 SDE](../partC_c8_1_sde)

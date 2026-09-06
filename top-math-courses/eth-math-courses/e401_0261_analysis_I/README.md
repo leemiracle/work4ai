@@ -33,4 +33,4 @@
 ## 与 ML 的关联
 - 标准分析入门
 
-📌 **下一步**：→ [401-1261 Probability and Statistics](../e401_1261_probability_statistics/)
+📌 **下一步**：→ [401-1261 Probability and Statistics](../e401_1261_probability_statistics)

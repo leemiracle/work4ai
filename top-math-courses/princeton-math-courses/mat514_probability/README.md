@@ -24,7 +24,7 @@
 
 ## 参考资源
 - **教材**：Durrett, *Probability: Theory and Examples* (5th ed, 免费 PDF)
-- **MIT 对照**：[MIT 18.175](../../mit-math-courses/18_175_probability/)
+- **MIT 对照**：[MIT 18.175](../../mit-math-courses/18_175_probability)
 
 ---
 
@@ -39,9 +39,9 @@ MAT 215 分析 ──→  MAT 514 概率 ──→  MAT 575 信息论 (Cover & T
                     SLLN + CLT + 鞅       VAE / diffusion / RLHF
 ```
 
-- **前置**：[MAT 215 分析](../mat215_analysis/)（实分析，Lebesgue 积分）
+- **前置**：[MAT 215 分析](../mat215_analysis)（实分析，Lebesgue 积分）
 - **本课**：测度论概率——概率空间、收敛模式、SLLN、CLT、鞅；**为 MAT 575 信息论打基础**
-- **后续**：[MAT 575 信息论](../mat575_information_theory/)（熵、KL 散度、信道编码）
+- **后续**：[MAT 575 信息论](../mat575_information_theory)（熵、KL 散度、信道编码）
 
 ---
 
@@ -74,4 +74,4 @@ MAT 215 分析 ──→  MAT 514 概率 ──→  MAT 575 信息论 (Cover & T
    - exchangeability 的严格定义需要测度论
    - **与本课关联**：De Finetti 定理（无穷可交换序列 = 条件 i.i.d.）
 
-📌 **下一步**：→ [MAT 575 Information Theory](../mat575_information_theory/)
+📌 **下一步**：→ [MAT 575 Information Theory](../mat575_information_theory)

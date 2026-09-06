@@ -236,7 +236,7 @@ hierarchical JEPA——多层抽象（低层像素 → 高层概念）。
 
 **Q5**：LeCun 说"像素生成 doomed"——但 Sora 看起来很 work。LeCun 的论据成立吗？给出至少 2 个反例。
 
-**Q6**：JEPA 的 latent 不可视——怎么评估它真的学到了 world model？这和 [`讲透可解释性`](../../讲透可解释性/) 是同一个问题吗？
+**Q6**：JEPA 的 latent 不可视——怎么评估它真的学到了 world model？这和 [`讲透可解释性`](../../讲透可解释性) 是同一个问题吗？
 
 **Q7**：VICReg vs BYOL vs SimSiam——在 JEPA 上哪个最好？为什么？
 

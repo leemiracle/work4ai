@@ -59,12 +59,12 @@
         └──► 数值线代 (Trefethen & Bau): Hessian 求逆, 条件数
 ```
 
-- **前置**：[MIT 18.06 线代](../../mit-math-courses/18_06_linear_algebra/)（正定矩阵）+ 多变量微积分（梯度/Hessian）
+- **前置**：[MIT 18.06 线代](../../mit-math-courses/18_06_linear_algebra)（正定矩阵）+ 多变量微积分（梯度/Hessian）
 - **本课**：凸集 → 凸函数 → 凸问题 → 对偶/KKT → 算法（GD/Newton/IPM）
 - **后续**：
   - 非凸优化（深度学习）：Adam/Lion，损失非凸
-  - [Cambridge Part II ML](../../cambridge-math-courses/partII_mathematics_machine_learning/)：凸优化的统计学习理论视角
-  - [ETH 401-3901 组合优化](../../eth-math-courses/e401_3901_linear_combinatorial_optimization/)：整数规划的凸松弛
+  - [Cambridge Part II ML](../../cambridge-math-courses/partII_mathematics_machine_learning)：凸优化的统计学习理论视角
+  - [ETH 401-3901 组合优化](../../eth-math-courses/e401_3901_linear_combinatorial_optimization)：整数规划的凸松弛
 
 ---
 
@@ -107,4 +107,4 @@ logistic loss 凸，消除了 RLHF 的 reward model + PPO 两阶段非凸性。
 
 ---
 
-📌 **下一步**：→ [CME 108 Scientific Computing](../cme108_scientific_computing/) 或 [ETH 401-3904 Convex Optimization](../../eth-math-courses/e401_3904_convex_optimization/)
+📌 **下一步**：→ [CME 108 Scientific Computing](../cme108_scientific_computing) 或 [ETH 401-3904 Convex Optimization](../../eth-math-courses/e401_3904_convex_optimization)

@@ -10,20 +10,20 @@
 
 | # | 手册 | 目录 | 用途 |
 |---|---|---|---|
-| 1 | **RAG** | [`RAG工程手册/`](RAG工程手册/) | 检索增强生成：chunk / 向量库 / 检索质量 |
-| 2 | **MCP** | [`MCP工程手册/`](MCP工程手册/) | Model Context Protocol：给 LLM 写工具 |
-| 3 | **Agents** | [`Agents工程手册/`](Agents工程手册/) | 智能体：工具调用 / 规划 / 记忆 |
-| 4 | **Inference** | [`Inference工程手册/`](Inference工程手册/) | 推理服务：vLLM / SGLang / 部署 |
-| 5 | **Context Engineering** | [`ContextEngineering手册/`](ContextEngineering手册/) | 上下文工程：长 context / KV cache |
-| 6 | **Quantization** | [`Quantization工程手册/`](Quantization工程手册/) | 量化：int8 / int4 / NVFP4 |
-| 7 | **知识图谱** | [`知识图谱工程手册/`](知识图谱工程手册/) | Knowledge Graph：Obsidian / Zettelkasten |
-| 8 | **Embedding** | [`Embedding工程手册/`](Embedding工程手册/) | 嵌入：编码器选型 / 微调 / 评测 |
-| 9 | **FineTuning** | [`FineTuning工程手册/`](FineTuning工程手册/) | 微调：SFT / 全参 vs PEFT / 数据配比 |
-| 10 | **LoRA** | [`LoRA工程手册/`](LoRA工程手册/) | LoRA：秩选择 / 目标模块 / [多视角深层分析](LoRA工程手册/02-多视角深层分析.md) |
-| 11 | **SafetyAlignment** | [`SafetyAlignment手册/`](SafetyAlignment手册/) | 安全对齐：红队 / 护栏 / 拒答策略 |
-| 12 | **Tokenization** | [`Tokenization工程手册/`](Tokenization工程手册/) | 分词：BPE / 词表设计 / 多语言 |
-| 13 | **VectorDB** | [`VectorDB工程手册/`](VectorDB工程手册/) | 向量库：索引（HNSW/IVF）/ 混合检索 / 选型 |
-| 14 | **harness** | [`harness工程手册/`](harness工程手册/) | Harness 工程：六组件 E/T/C/S/L/V / 上下文参数表 / 验证即证据 / 自动进化闭环（完整版 13 文件，底座=[37仓蒸馏](../harness精华合入-总入口.md)+[三综述合并解析](../harness三综述合并解析.md)）|
+| 1 | **RAG** | [`RAG工程手册/`](RAG工程手册) | 检索增强生成：chunk / 向量库 / 检索质量 |
+| 2 | **MCP** | [`MCP工程手册/`](MCP工程手册) | Model Context Protocol：给 LLM 写工具 |
+| 3 | **Agents** | [`Agents工程手册/`](Agents工程手册) | 智能体：工具调用 / 规划 / 记忆 |
+| 4 | **Inference** | [`Inference工程手册/`](Inference工程手册) | 推理服务：vLLM / SGLang / 部署 |
+| 5 | **Context Engineering** | [`ContextEngineering手册/`](ContextEngineering手册) | 上下文工程：长 context / KV cache |
+| 6 | **Quantization** | [`Quantization工程手册/`](Quantization工程手册) | 量化：int8 / int4 / NVFP4 |
+| 7 | **知识图谱** | [`知识图谱工程手册/`](知识图谱工程手册) | Knowledge Graph：Obsidian / Zettelkasten |
+| 8 | **Embedding** | [`Embedding工程手册/`](Embedding工程手册) | 嵌入：编码器选型 / 微调 / 评测 |
+| 9 | **FineTuning** | [`FineTuning工程手册/`](FineTuning工程手册) | 微调：SFT / 全参 vs PEFT / 数据配比 |
+| 10 | **LoRA** | [`LoRA工程手册/`](LoRA工程手册) | LoRA：秩选择 / 目标模块 / [多视角深层分析](LoRA工程手册/02-多视角深层分析.md) |
+| 11 | **SafetyAlignment** | [`SafetyAlignment手册/`](SafetyAlignment手册) | 安全对齐：红队 / 护栏 / 拒答策略 |
+| 12 | **Tokenization** | [`Tokenization工程手册/`](Tokenization工程手册) | 分词：BPE / 词表设计 / 多语言 |
+| 13 | **VectorDB** | [`VectorDB工程手册/`](VectorDB工程手册) | 向量库：索引（HNSW/IVF）/ 混合检索 / 选型 |
+| 14 | **harness** | [`harness工程手册/`](harness工程手册) | Harness 工程：六组件 E/T/C/S/L/V / 上下文参数表 / 验证即证据 / 自动进化闭环（完整版 13 文件，底座=[37仓蒸馏](../harness精华合入-总入口.md)+[三综述合并解析](../harness三综述合并解析.md)）|
 
 ---
 

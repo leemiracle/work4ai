@@ -72,4 +72,4 @@ A-Level Further Maths ──▶  Prelims M1 线代 (Cameron)  ──┬──▶
 3. **Oxford Part C 随机矩阵（C7.1）→ LLM 权重谱分析（2024-2026）**
    - Prelims M1 打的基础，最终通向用 Marchenko-Pastur 律分析 LLM 权重的奇异值分布。
 
-📌 **下一步**：→ [Prelims M2 Analysis](../prelims_m2_analysis/)
+📌 **下一步**：→ [Prelims M2 Analysis](../prelims_m2_analysis)

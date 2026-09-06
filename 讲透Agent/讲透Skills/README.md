@@ -20,8 +20,8 @@
 | 07 | [`07-自动优化-从skill-creator到MCE.md`](07-自动优化-从skill-creator到MCE.md) | ★ 官方 skill-creator / trigger eval 优化 / MCE 学术前沿三层工具栈 | ✅ |
 | 08 | [`08-研究前沿-2025-2026论文地图.md`](08-研究前沿-2025-2026论文地图.md) | ★ MCE / Agent Harness Engineering Survey / context rot 实证 | ✅ |
 | 09 | [`09-数学领域应用-skills×数学循环引擎.md`](09-数学领域应用-skills×数学循环引擎.md) | ★ 把 skills 用在 Lean4/PINN/OEIS 验证等数学工作流上 | ✅ |
-| 🧪 | [`experiments/`](experiments/) | 实验室：可跑脚本 + 结果 JSON | 🔬 |
-| 🛠 | [`.opencode/skills/`](../../../.opencode/skills/) | 09 章三蓝图**已建成**（basel-problem/lean-sorry-hunter/math-loop-driver，E3 全绿+脚本实测） | ✅ |
+| 🧪 | [`experiments/`](experiments) | 实验室：可跑脚本 + 结果 JSON | 🔬 |
+| 🛠 | [`.opencode/skills/`](../../../.opencode/skills) | 09 章三蓝图**已建成**（basel-problem/lean-sorry-hunter/math-loop-driver，E3 全绿+脚本实测） | ✅ |
 
 **★ = 用户五问的直接落点**：①遍历+实验（05）②模型适配（06）③自动优化工具（07）④最新研究（08）⑤数学应用（09）。
 
@@ -90,7 +90,7 @@
 |---|---|
 | [`../Agent框架案例/Skills生态全景/`](../Agent框架案例/Skills生态全景/README.md) | 生态侧深读：11,492 仓统计、七赛道、20 张仓卡、SKILL.md 规范演进（2026-08-19 快照） |
 | [`../../工程化手册库/skills工程手册/`](../../工程化手册库/skills工程手册/README.md) | 工程侧方法论：现有 skills 审计、7 步写法、6 维评价、跨 skill 协作 |
-| [`../Agent上下文案例/graphify知识图谱skill/`](../Agent上下文案例/graphify知识图谱skill/) | 本地 graphify 案例仓 |
+| [`../Agent上下文案例/graphify知识图谱skill/`](../Agent上下文案例/graphify知识图谱skill) | 本地 graphify 案例仓 |
 | [`../讲透Prompt/`](../讲透Prompt/README.md) | prompt → skill 的演化前史（skills 是"可版本控制的 prompt 包"） |
 | 本机 `~/.config/opencode/skills/`（38 个 AI 类） | 活体样本：本站实验的实测对象 |
 | [`../../top-math-courses/MATH_LOOP_ENGINE.md`](../../top-math-courses/MATH_LOOP_ENGINE.md) | 09 章的数学应用落点（数学循环引擎） |

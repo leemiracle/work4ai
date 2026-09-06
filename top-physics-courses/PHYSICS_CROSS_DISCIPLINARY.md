@@ -461,7 +461,7 @@ $$\text{性价比} = \frac{\text{影响力} \times \text{成功概率}}{\text{�
 | Bekenstein→黑洞 | [MIT 广义相对论](mit-physics) |
 | Bardeen→晶体管 | [Berkeley 凝聚态](berkeley-physics) |
 | Feynman→量子计算 | [Caltech/Oxford 量子信息](caltech-physics) |
-| 爱因斯坦/格罗斯曼→GR | [所有学校的 GR 课](../) |
+| 爱因斯坦/格罗斯曼→GR | [所有学校的 GR 课](..) |
 | Thouless→拓扑 | [Princeton/Cambridge 凝聚态](princeton-physics) |
 
 ---

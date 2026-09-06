@@ -50,9 +50,9 @@
    (扩散模型核心)                (MCMC / SGLD)
 ```
 
-- **前置**：概率论 + [Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde/)
+- **前置**：概率论 + [Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde)
 - **本课**：布朗运动 → Itô 积分 → Itô 引理 → SDE → Fokker-Planck → Girsanov → 反向 SDE
-- **后续/交叉**：[ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/)（数值实现 + 扩散模型实验）
+- **后续/交叉**：[ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde)（数值实现 + 扩散模型实验）
 
 ---
 
@@ -92,4 +92,4 @@ Radon-Nikodym 导数给出 ELBO 的精确表达式。
 
 ---
 
-📌 **下一步**：→ [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/)（数值实现）或 [Cambridge Part II ML](../../cambridge-math-courses/partII_mathematics_machine_learning/)
+📌 **下一步**：→ [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde)（数值实现）或 [Cambridge Part II ML](../../cambridge-math-courses/partII_mathematics_machine_learning)

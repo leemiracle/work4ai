@@ -45,4 +45,4 @@ A-Level / MAT         →   Oxford Prelims M2       →   Part A Analysis
 
 ---
 
-📌 **下一步**：→ [Part A A0 Linear Algebra](../partA_a0_linear_algebra/)
+📌 **下一步**：→ [Part A A0 Linear Algebra](../partA_a0_linear_algebra)

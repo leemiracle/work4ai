@@ -190,4 +190,4 @@ python -m benchmarks.beam.run \
 
 ---
 
-📌 **下一步** → [`../99-appendix/`](../99-appendix/) 术语表 + 数据流汇总。
+📌 **下一步** → [`../99-appendix/`](../99-appendix) 术语表 + 数据流汇总。

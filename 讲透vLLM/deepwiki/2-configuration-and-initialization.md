@@ -85,9 +85,9 @@ This document describes vLLM's configuration and initialization system, covering
 
 **For related topics, see:**
 
-  * Engine architecture and request processing: [Engine Architecture](/vllm-project/vllm/3-engine-architecture)
-  * Distributed execution configuration: [Parallelism Strategies](/vllm-project/vllm/9.1-parallelism-strategies)
-  * Compilation configuration details: [Compilation Configuration and Optimization Levels](/vllm-project/vllm/2.4-compilation-configuration-and-optimization-levels)
+  * Engine architecture and request processing: [Engine Architecture](../../../../vllm-project/vllm/3-engine-architecture)
+  * Distributed execution configuration: [Parallelism Strategies](../../../../vllm-project/vllm/9.1-parallelism-strategies)
+  * Compilation configuration details: [Compilation Configuration and Optimization Levels](../../../../vllm-project/vllm/2.4-compilation-configuration-and-optimization-levels)
 
 * * *
 
@@ -229,7 +229,7 @@ vLLM's configuration system provides a flexible, type-safe way to specify engine
 
 **For details, see:**
 
-  * [Argument Parsing and EngineArgs](/vllm-project/vllm/2.1-argument-parsing-and-engineargs) — Explain EngineArgs, AsyncEngineArgs, CLI argument parsing, and the conversion to configuration objects.
-  * [VllmConfig and Specialized Configuration Objects](/vllm-project/vllm/2.2-vllmconfig-and-specialized-configuration-objects) — Document VllmConfig structure, ModelConfig, ParallelConfig, CacheConfig, SchedulerConfig, and their relationships.
-  * [Environment Variables System](/vllm-project/vllm/2.3-environment-variables-system) — Document all VLLM_* environment variables and their effects on system behavior.
-  * [Compilation Configuration and Optimization Levels](/vllm-project/vllm/2.4-compilation-configuration-and-optimization-levels) — Explain CompilationConfig, optimization levels (O0-O3), torch.compile integration, CUDA graph modes, and the vLLM IR op framework.
+  * [Argument Parsing and EngineArgs](../../../../vllm-project/vllm/2.1-argument-parsing-and-engineargs) — Explain EngineArgs, AsyncEngineArgs, CLI argument parsing, and the conversion to configuration objects.
+  * [VllmConfig and Specialized Configuration Objects](../../../../vllm-project/vllm/2.2-vllmconfig-and-specialized-configuration-objects) — Document VllmConfig structure, ModelConfig, ParallelConfig, CacheConfig, SchedulerConfig, and their relationships.
+  * [Environment Variables System](../../../../vllm-project/vllm/2.3-environment-variables-system) — Document all VLLM_* environment variables and their effects on system behavior.
+  * [Compilation Configuration and Optimization Levels](../../../../vllm-project/vllm/2.4-compilation-configuration-and-optimization-levels) — Explain CompilationConfig, optimization levels (O0-O3), torch.compile integration, CUDA graph modes, and the vLLM IR op framework.

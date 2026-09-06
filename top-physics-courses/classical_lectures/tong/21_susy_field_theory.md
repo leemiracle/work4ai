@@ -303,4 +303,4 @@ $$\mathcal{L}_{\text{soft}} = -m^2|\phi|^2 - (AW + \text{h.c.}) - \frac{1}{2}M\l
 ---
 
 **完成日期**：2026-08-13（深化版 v2）
-**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

@@ -28,12 +28,12 @@
 ## 参考资源
 - **教材**：Strauss, *Partial Differential Equations* (Wiley)
 - **进阶教材**：Evans, *Partial Differential Equations* (Springer, 2010)
-- **UT Austin 对照**：[MATH-GA 2451 PDE](../../ut-austin-math-courses/)（应用版）
+- **UT Austin 对照**：[MATH-GA 2451 PDE](../../ut-austin-math-courses)（应用版）
 
 ## 学习建议
 - **节奏**：每周 4-5 小时，12 周
 
-📌 **下一步**：→ [MAT 345 Algebra I](../mat345_algebra_I/)
+📌 **下一步**：→ [MAT 345 Algebra I](../mat345_algebra_I)
 
 ---
 
@@ -58,9 +58,9 @@
  随机 PDE / SDE → Langevin 采样
 ```
 
-- **前置**：多元微积分 + [MIT 18.03 ODE](../../mit-math-courses/18_03_differential_equations/)
+- **前置**：多元微积分 + [MIT 18.03 ODE](../../mit-math-courses/18_03_differential_equations)
 - **本课**：热/波/Laplace 三大 PDE + 分离变量 + Fourier 级数 + 最大值原理
-- **后续/交叉**：[ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/)（随机 PDE → 扩散模型）
+- **后续/交叉**：[ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde)（随机 PDE → 扩散模型）
 
 ---
 
@@ -99,4 +99,4 @@ $$\mathcal{L} = \|u_\theta - u_{\text{data}}\|^2 + \lambda\|u_t - \Delta u_\thet
 
 ---
 
-📌 **下一步**：→ [MAT 345 Algebra I](../mat345_algebra_I/) 或 [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/)
+📌 **下一步**：→ [MAT 345 Algebra I](../mat345_algebra_I) 或 [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde)

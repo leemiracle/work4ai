@@ -28,4 +28,4 @@
 - Norris, *Markov Chains* (CUP)
 - Past Tripos papers
 
-📌 **下一步**：→ [Part IB Optimisation](../partIB_optimisation/)
+📌 **下一步**：→ [Part IB Optimisation](../partIB_optimisation)

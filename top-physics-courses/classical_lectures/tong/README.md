@@ -90,7 +90,7 @@
 → 16 Kinetic Theory
 → 11 Mathematical Biology
 ```
-然后跳到 [ai_for_physics/](../../ai_for_physics/)。
+然后跳到 [ai_for_physics/](../../ai_for_physics)。
 
 ---
 

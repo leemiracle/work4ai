@@ -65,4 +65,4 @@ Math 104+110+113+185 →   Berkeley Math 202A      →   Math 202B 继续
 
 ---
 
-📌 **下一步**：→ 进入 [Cambridge](../../cambridge-math-courses/) 或 [UT Austin](../../ut-austin-math-courses/)
+📌 **下一步**：→ 进入 [Cambridge](../../cambridge-math-courses) 或 [UT Austin](../../ut-austin-math-courses)

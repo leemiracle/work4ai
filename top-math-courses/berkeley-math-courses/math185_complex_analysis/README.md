@@ -28,13 +28,13 @@
 ## 参考资源
 - Gamelin, *Complex Analysis* (Springer)
 - Brown & Churchill, *Complex Variables and Applications*
-- MIT 对照：[18.112 Functions of a Complex Variable](../../mit-math-courses/)
+- MIT 对照：[18.112 Functions of a Complex Variable](../../mit-math-courses)
 
 ---
 
 ## 📍 在数学全景中的位置
 
-- **前置**：[MATH 104 分析](../math104_analysis/)（实分析的严格基础）
+- **前置**：[MATH 104 分析](../math104_analysis)（实分析的严格基础）
 - **本课**：全纯函数 → Cauchy 定理 → 留数定理 → 共形映射 → 积分计算
 - **后续/交叉**：概率论（特征函数）+ 信号处理（Z 变换）+ 调和分析
 
@@ -73,4 +73,4 @@ $$\phi_X(t) = \mathbb{E}[e^{itX}] \Rightarrow \text{唯一确定分布}$$
 
 ---
 
-📌 **下一步**：→ [STAT 134 Probability](../stat134_probability/)
+📌 **下一步**：→ [STAT 134 Probability](../stat134_probability)

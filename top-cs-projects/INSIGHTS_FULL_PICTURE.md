@@ -415,7 +415,7 @@ RL 的本质一句话：**让 agent 通过与环境交互的奖励信号，自�
 3. **Berkeley CS 285 Lecture 1-10**（Levine，YouTube 全公开，全球 RL 学习者事实入口）：PG → TRPO/PPO → Actor-Critic → SAC
 4. **CS 285 Lecture 11-20**：model-based RL / world model / offline RL / imitation learning
 5. **跟论文**：Schulman PPO (2017)、Haarnoja SAC (2018)、Hafner DreamerV3 (2023)、Kumar CQL (2020)、Chi Diffusion Policy (2023)
-6. **跟实现**：[`讲透RL/`](../讲透RL/) 目录——00 MDP → 01 DQN → 02 PG/PPO → 03 RLHF/DPO/GRPO → 04 形式证明 → 05 RLVR → 06 RL 与系统软件
+6. **跟实现**：[`讲透RL/`](../讲透RL) 目录——00 MDP → 01 DQN → 02 PG/PPO → 03 RLHF/DPO/GRPO → 04 形式证明 → 05 RLVR → 06 RL 与系统软件
 
 ### ✅ 通过测试
 - [ ] 能从 Bellman 算子的 γ-压缩性推出价值迭代的收敛性（压缩映射定理）。
@@ -439,7 +439,7 @@ RL 的本质一句话：**让 agent 通过与环境交互的奖励信号，自�
 - **想做 LLM 对齐**：CS 285 基础 + RLHF / DPO / GRPO 论文（[`讲透RL/03-RLHF-DPO-GRPO.md`](../讲透RL/03-RLHF-DPO-GRPO.md)）
 
 ### 🔗 对应课程
-UNIFIED_ROADMAP **L13**（Berkeley CS 285）+ **L09**（Berkeley CS 188 经典 AI）。详见 [`讲透RL/`](../讲透RL/) 全套笔记。
+UNIFIED_ROADMAP **L13**（Berkeley CS 285）+ **L09**（Berkeley CS 188 经典 AI）。详见 [`讲透RL/`](../讲透RL) 全套笔记。
 
 > 🆕 **CS285/CS234 核心硬通货**：DDPG→TD3→**SAC 严格推导** + PETS/MBPO/Dreamer + CQL/AWAC + **Bellman 收敛证明 + deadly triad 实证** → [`讲透RL/08-Actor-Critic-SAC-ModelBased-OfflineRL.md`](../讲透RL/08-Actor-Critic-SAC-ModelBased-OfflineRL.md)（含 [3 个跑通的代码验证](../讲透RL/experiments/08_bellman_and_deadly_triad.py)）。
 
@@ -491,7 +491,7 @@ UNIFIED_ROADMAP **L13**（Berkeley CS 285）+ **L09**（Berkeley CS 188 经典 A
 | 8 类型=命题 | L17 | [oxford topic12 pl_fp] |
 | 9 信息论 | L16 | [cambridge topic11 info_theory] |
 | 10 因果 | L18 | [eth topic8 causality] |
-| 11 决策=搜索+学习 | L13 / L09 | ⭐ [`讲透RL/`](../讲透RL/) 全套笔记 + [berkeley topic7 deep_rl] |
+| 11 决策=搜索+学习 | L13 / L09 | ⭐ [`讲透RL/`](../讲透RL) 全套笔记 + [berkeley topic7 deep_rl] |
 
 ---
 

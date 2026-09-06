@@ -32,9 +32,9 @@ Prelims M2 分析 ─────────↗                              �
                                                    Part C C8.1 (SDE → 扩散模型)
 ```
 
-- **前置**：[Prelims M1 线性代数](../prelims_m1_linear_algebra/) + [Prelims M2 分析](../prelims_m2_analysis/)
+- **前置**：[Prelims M1 线性代数](../prelims_m1_linear_algebra) + [Prelims M2 分析](../prelims_m2_analysis)
 - **本课**：Grimmett & Stirzaker 风格——条件概率、常见分布、母函数、LLN/CLT、**Markov 链**
-- **后续**：[Part B B8.1 Probability, Measure and Martingales](../partB_b8_1_probability_measure_martingales/)（Williams 测度论版）
+- **后续**：[Part B B8.1 Probability, Measure and Martingales](../partB_b8_1_probability_measure_martingales)（Williams 测度论版）
 
 ---
 
@@ -67,4 +67,4 @@ Prelims M2 分析 ─────────↗                              �
    - 网页排名 = 随机游走的平稳分布
    - **与本课关联**：Markov 链 + 遍历定理
 
-📌 **下一步**：→ [Part A A12 Numerical Analysis](../partA_a12_numerical_analysis/)
+📌 **下一步**：→ [Part A A12 Numerical Analysis](../partA_a12_numerical_analysis)

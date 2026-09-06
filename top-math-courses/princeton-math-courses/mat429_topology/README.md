@@ -25,7 +25,7 @@
 ## 参考资源
 - **教材**：Munkres, *Topology* (2nd ed)
 - **进阶**：Hatcher, *Algebraic Topology*（免费 PDF）
-- **MIT 对照**：[MIT 18.901](../../mit-math-courses/18_901_topology/)
+- **MIT 对照**：[MIT 18.901](../../mit-math-courses/18_901_topology)
 
 ## 📍 在数学全景中的位置
 
@@ -56,4 +56,4 @@ MAT 215/300 分析      →   Princeton MAT 429       →   MAT 514 概率
 
 ---
 
-📌 **下一步**：→ [MAT 514 Probability](../mat514_probability/)
+📌 **下一步**：→ [MAT 514 Probability](../mat514_probability)

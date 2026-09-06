@@ -27,10 +27,10 @@
 ## 参考资源
 - Quarteroni, *Numerical Mathematics* (2nd ed, Springer)
 - Trefethen & Bau, *Numerical Linear Algebra*
-- MIT 对照：[18.085 CSE](../../mit-math-courses/18_085_computational_science/)
+- MIT 对照：[18.085 CSE](../../mit-math-courses/18_085_computational_science)
 - UT Austin 对照：M 383E（待写/未落盘）
 
-📌 **下一步**：→ [401-3651 Numerical Solution of SDEs](../e401_3651_numerical_sde/)
+📌 **下一步**：→ [401-3651 Numerical Solution of SDEs](../e401_3651_numerical_sde)
 
 ---
 
@@ -38,7 +38,7 @@
 
 - **前置**：线性代数 + 多元微积分 + 编程能力
 - **本课**：插值 → 数值积分 → ODE/PDE 数值解 → FEM/FDM → 谱方法
-- **交叉**：[UT Austin M 383E Trefethen](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)（数值线代）+ [Princeton MAT 322](../../princeton-math-courses/mat322_pde/)（PDE 理论）
+- **交叉**：[UT Austin M 383E Trefethen](../../ut-austin-math-courses/m383e_numerical_linear_algebra)（数值线代）+ [Princeton MAT 322](../../princeton-math-courses/mat322_pde)（PDE 理论）
 
 ## 🔬 理论联系实际
 1. **FEM → PINN / Neural Operators**：PDE 数值方法启发用 NN 解 PDE（Fourier Neural Operator [2010.08895](https://arxiv.org/abs/2010.08895) ✅）

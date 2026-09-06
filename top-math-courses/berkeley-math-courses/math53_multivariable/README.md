@@ -23,7 +23,7 @@
 - 梯度 / 偏导 / Jacobian 的基础
 - 学完后：能读 PyTorch backward 文档
 
-📌 **下一步**：→ [MATH 54 Linear Algebra & ODE](../math54_linear_alg_ode/)
+📌 **下一步**：→ [MATH 54 Linear Algebra & ODE](../math54_linear_alg_ode)
 
 ---
 

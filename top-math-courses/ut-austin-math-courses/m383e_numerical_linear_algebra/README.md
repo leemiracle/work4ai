@@ -31,21 +31,21 @@
 - **Trefethen & Bau, *Numerical Linear Algebra*** (SIAM, 1997) ★
 - Demmel, *Applied Numerical Linear Algebra* (SIAM)
 - Quarteroni, *Numerical Mathematics* (Springer)
-- MIT 对照：[MIT 18.335J](../../mit-math-courses/)
+- MIT 对照：[MIT 18.335J](../../mit-math-courses)
 
 ## 学习建议
 - **Trefethen & Bau 是 ML 工程师的最佳数值入门书**（361 页）
 - **节奏**：每周 5-7 小时，12-14 周
 
-📌 **下一步**：→ [M 385C Theory of Probability](../m385c_theory_of_probability/)
+📌 **下一步**：→ [M 385C Theory of Probability](../m385c_theory_of_probability)
 
 ---
 
 ## 📍 在数学全景中的位置
 
-- **前置**：[M 341 / M 340L 线性代数](../m340l_linear_algebra/)
+- **前置**：[M 341 / M 340L 线性代数](../m340l_linear_algebra)
 - **本课**：QR / SVD / 条件数 / Krylov 子空间 / 迭代法——**数值线代核心**
-- **后续**：[MIT 18.085 CSE](../../mit-math-courses/18_085_computational_science/)（应用）/ [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/)（随机数值）
+- **后续**：[MIT 18.085 CSE](../../mit-math-courses/18_085_computational_science)（应用）/ [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde)（随机数值）
 
 ---
 

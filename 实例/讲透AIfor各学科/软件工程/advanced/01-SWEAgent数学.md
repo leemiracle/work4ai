@@ -46,7 +46,7 @@ Thought → Action → Observation → Thought → ...
 
 - 大仓库 > 100K tokens
 - **RAG over codebase**
-- 详见 [`讲透RAG`](../../../讲透RAG/)
+- 详见 [`讲透RAG`](../../../讲透RAG)
 
 ### 3.2 错误累积
 

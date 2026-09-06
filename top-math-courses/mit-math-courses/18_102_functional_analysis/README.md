@@ -30,9 +30,9 @@
 ## 学习建议
 - 配合 [`notes.md`](./notes.md)（费曼三层笔记）
 - 做 [`exercises.md`](./exercises.md) 习题
-- 跑 [`experiments/`](./experiments/) 验证定理
+- 跑 [`experiments/`](./experiments) 验证定理
 
-📌 **下一步**：→ 见同校其他课程目录，或回到 [`../`](../)
+📌 **下一步**：→ 见同校其他课程目录，或回到 [`../`](..)
 
 ---
 > 📝 **本 README 由 expand_courses.py 自动生成**（2026-08-13），部分教材/大纲待核实后细化（标 ⚠️）。

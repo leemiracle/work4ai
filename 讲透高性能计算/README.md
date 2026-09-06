@@ -4,8 +4,8 @@
 >
 > **三系列分层**（互不重叠）：
 > - **本系列（物理层）**：为什么快不起来——定律、数学、数值格式
-> - [`讲透GPU与系统级`](../讲透GPU与系统级/)（kernel 层）：怎么写得快——FlashAttention/CUDA/Triton/vLLM
-> - [`讲透分布式AI系统`](../讲透分布式AI系统/)（策略层）：怎么切模型——DDP/ZeRO/TP/PP/Ray
+> - [`讲透GPU与系统级`](../讲透GPU与系统级)（kernel 层）：怎么写得快——FlashAttention/CUDA/Triton/vLLM
+> - [`讲透分布式AI系统`](../讲透分布式AI系统)（策略层）：怎么切模型——DDP/ZeRO/TP/PP/Ray
 
 ---
 
@@ -36,15 +36,15 @@
 - **想读懂 MLSys 论文**：00 → 本科兴趣章 → 对着 [`mlsys-papers/主题地图`](./mlsys-papers/README.md) 按主题切片读
 - **想优化自己代码**：03 → 04 → 09（缓存 + 向量化 + profiling 是 CPU 侧三板斧），工具书 [`resources/perf-book`](./resources/perf-book.md)、方法论 [`blogs/`](./blogs/README.md)
 - **想系统上课**：[`resources/courses/`](./resources/courses/README.md) 课程矩阵 + 四条学习路径（AI 工程师 / kernel 工程师 / 国产硬件 / 推理优化）
-- **做大模型训练/推理**：06 → 07，然后进 [`讲透分布式AI系统`](../讲透分布式AI系统/) 与 [`讲透GPU与系统级`](../讲透GPU与系统级/)
+- **做大模型训练/推理**：06 → 07，然后进 [`讲透分布式AI系统`](../讲透分布式AI系统) 与 [`讲透GPU与系统级`](../讲透GPU与系统级)
 
 ## 实验环境声明
 
 - 本系列全部实验**纯 CPU 可跑**（本机 ARM Linux 验证），零 GPU 依赖——HPC 的定律在玩具规模即可复现
-- 实验脚本：[`experiments/`](./experiments/)（每篇配 png）；练习：[`exercises/EXERCISES.md`](./exercises/EXERCISES.md)
+- 实验脚本：[`experiments/`](./experiments)（每篇配 png）；练习：[`exercises/EXERCISES.md`](./exercises/EXERCISES.md)
 - 远程 13 节点（2×C500 / MACA）作为上机延伸：见 `remote/` 脚本群
 
-> 🔗 数学优化与性能优化之桥见 [`讲透优化`](../讲透优化/README.md)（其 26 章为两系列方法论合流点）。
+> 🔗 数学优化与性能优化之桥见 [`讲透优化`](../讲透数学/讲透优化/README.md)（其 26 章为两系列方法论合流点）。
 
 ## 📚 MLSys 论文库（本系列实证锚点）
 
@@ -54,6 +54,6 @@
 
 🔗 交叉链接：[`高效AI前沿-2025-2026顶会精选.md`](../高效AI前沿-2025-2026顶会精选.md)（MLSys 2025-26 推理方向精选）· [`前沿与媒体/12-AI硬件与算力专题.md`](../前沿与媒体/12-AI硬件与算力专题.md)
 
-🔗 理论锚点：Amdahl/Roofline 的形式化边界 ↔ [`讲透复杂系统`](../讲透复杂系统/)（约束与瓶颈的普适数学）；能耗批判 ↔ 复杂系统四视角之热力学视角
+🔗 理论锚点：Amdahl/Roofline 的形式化边界 ↔ [`讲透复杂系统`](../讲透复杂系统)（约束与瓶颈的普适数学）；能耗批判 ↔ 复杂系统四视角之热力学视角
 
 > 🔗 **源码深读专区（2026-09-03 补）**：本系列讲物理层定律，源码级延伸见 `../讲透PyTorch源码/`（DeepWiki 80 页+KG 4730 节点）与 `../讲透vLLM/`（64 页+11615 节点）；统一组织轴=四层编译管线（Python→算子图→算子→硬件指令），总索引 `/data/usershare/ai/hpc-agent/docs/FOUR-LAYER-PIPELINE.md`。

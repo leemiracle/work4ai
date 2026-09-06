@@ -165,7 +165,7 @@ $$dx = -\frac{1}{2}\beta(t) x\, dt + \sqrt{\beta(t)}\, dW_t$$
 
 这是热方程的**随机版本**（加入布朗运动 $dW_t$）。数据分布被逐步"加热"（加噪）直到变成纯高斯。
 
-反向过程（生成）= **逆向热流**——从噪声恢复数据。详见 [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/) 和 [Oxford C8.1 SDE](../../oxford-math-courses/partC_c8_1_sde/)。
+反向过程（生成）= **逆向热流**——从噪声恢复数据。详见 [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde) 和 [Oxford C8.1 SDE](../../oxford-math-courses/partC_c8_1_sde)。
 
 ### 3.2 分数匹配 = 对数密度的梯度
 
@@ -212,7 +212,7 @@ $$\mathcal{L} = \|u_\theta - u_{data}\|^2 + \lambda\|u_t - \Delta u_\theta\|^2$$
 1. **Strauss 第 1-5 章**：三大 PDE + 分离变量 + Fourier 级数 → **核心**
 2. **Strauss 第 7 章**：最大值原理 → **理解扩散模型的关键**
 3. **跳过**：高阶 Sobolev 空间理论（除非做 PINN）
-4. **交叉**：[ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/)（随机版热方程 → 扩散模型）
+4. **交叉**：[ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde)（随机版热方程 → 扩散模型）
 
 ---
 

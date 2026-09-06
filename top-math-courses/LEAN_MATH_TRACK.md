@@ -90,7 +90,7 @@ de Bruijn factor < 1 的世界（Tao 预测未来 5-10 年）：
 - 体会"数学是构造性"的——每个定理都是一个程序
 - 重新理解你小学就会的加法（用 Peano 公理）
 
-**配合**：见 [`../讲透Lean4数学/01-NaturalNumberGame讲透.md`](../讲透Lean4数学/01-NaturalNumberGame讲透.md)（本批新建）。
+**配合**：见 [`../讲透Lean4数学/01-NaturalNumberGame讲透.md`](../讲透数学/讲透Lean4数学/01-NaturalNumberGame讲透.md)（本批新建）。
 
 #### 2.1.2 The Mechanization of Mathematics（在线教程）
 
@@ -427,8 +427,8 @@ https://leanprover.github.io/theorem_proving_in_lean4/ # TPIL 4 官方教程
 |-----------|------|
 | 数学研究方法论（解题 / 阅读 / 写作）| [`RESEARCH_METHODOLOGY.md`](RESEARCH_METHODOLOGY.md) |
 | 30 课数学主路径 | [`UNIFIED_ROADMAP.md`](UNIFIED_ROADMAP.md) |
-| 学 Lean 的讲透系列 | [`../讲透Lean4数学/`](../讲透Lean4数学/)（本批新建）|
-| 学实分析的讲透系列（配 Lean）| [`../讲透实分析/`](../讲透实分析/)（本批新建）|
+| 学 Lean 的讲透系列 | [`../讲透Lean4数学/`](../讲透数学/讲透Lean4数学)（本批新建）|
+| 学实分析的讲透系列（配 Lean）| [`../讲透实分析/`](../讲透数学/讲透实分析)（本批新建）|
 | 数学 ↔ ML 工程映射 | [`CROSS_INDEX_WITH_WORK4AI.md`](CROSS_INDEX_WITH_WORK4AI.md) |
 | 数学前沿论文 | [`LATEST_RESEARCH.md`](LATEST_RESEARCH.md) |
 

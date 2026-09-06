@@ -1,7 +1,7 @@
 # UT Austin M 408C · 章节笔记
 
 > **教材**：Stewart, *Calculus: Early Transcendentals*
-> **定位**：UT Austin 标准微积分序列第一学期。与 [MIT 18.01](../../mit-math-courses/18_01_calculus/) 对等
+> **定位**：UT Austin 标准微积分序列第一学期。与 [MIT 18.01](../../mit-math-courses/18_01_calculus) 对等
 > **重点**：极限 → 导数 → 积分，为 ML 的梯度优化打基础
 
 ---

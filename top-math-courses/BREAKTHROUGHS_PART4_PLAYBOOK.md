@@ -160,11 +160,11 @@
 
 | 本系列章节 | 配套的 work4ai 资源 |
 |----------|-------------------|
-| Part I-II（分支瓶颈）| [`讲透AI历史/`](../讲透AI历史/)（数学史）|
-| Part III（跨学科）| [`讲透AI应用全景/`](../讲透AI应用全景/)（AI4Math / AI4Science）|
+| Part I-II（分支瓶颈）| [`讲透AI历史/`](../讲透AI历史)（数学史）|
+| Part III（跨学科）| [`讲透AI应用全景/`](../讲透AI应用全景)（AI4Math / AI4Science）|
 | Part III 元模式 | [`CROSS_SCHOOL_INSIGHTS.md`](./CROSS_SCHOOL_INSIGHTS.md) §九 15 元洞察 |
 | Part D（当下瓶颈）| [`LATEST_RESEARCH.md`](./LATEST_RESEARCH.md)（2024-2026 ML 理论前沿）|
-| Part D.2.3 Lean+AI | [`讲透形式化验证/`](../讲透形式化验证/) + [`讲透神经符号/`](../讲透神经符号/) + [`讲透RL/04`](../讲透RL/04-RL与形式证明.md) |
+| Part D.2.3 Lean+AI | [`讲透形式化验证/`](../讲透形式化验证) + [`讲透神经符号/`](../讲透神经符号) + [`讲透RL/04`](../讲透RL/04-RL与形式证明.md) |
 | Part E playbook | [`FEYNMAN_TEACHING_GUIDE.md`](./FEYNMAN_TEACHING_GUIDE.md)（费曼教学法）|
 | Part F ML × 数学 | [`THEORY_TO_PRACTICE.md`](./THEORY_TO_PRACTICE.md)（理论联系实际）|
 

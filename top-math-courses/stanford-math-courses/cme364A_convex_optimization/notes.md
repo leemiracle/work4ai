@@ -289,7 +289,7 @@ plt.savefig('newton_vs_gd.png', dpi=100); plt.show()
 | **强凸假设脆弱** | 实际问题常仅凸不强凸，收敛速率从线性退化为次线性 |
 | **SGD 方差** | $O(1/\sqrt{k})$ 收敛慢，需 mini-batch / variance reduction (SVRG, SAGA) |
 | **条件数 $\kappa$ 大时收敛慢** | GD 收敛速率依赖 $\kappa = L/m$，病态问题需预条件 |
-| **整数约束不凸** | 组合优化需松弛 + 分支定界，见 [ETH 401-3901](../../eth-math-courses/e401_3901_linear_combinatorial_optimization/) |
+| **整数约束不凸** | 组合优化需松弛 + 分支定界，见 [ETH 401-3901](../../eth-math-courses/e401_3901_linear_combinatorial_optimization) |
 
 ---
 

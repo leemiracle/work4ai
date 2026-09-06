@@ -56,7 +56,7 @@ $A = \text{diag}(10^6, 1)$ 的条件数是多少？解 $Ax = b$ 时最多损失�
 
 $\kappa(A) = 10^6/1 = 10^6$。约损失 $\log_{10}(10^6) = 6$ 位有效数字（双精度有 ~16 位，剩 ~10 位）。
 
-**ML 关联**：Hessian 病态导致梯度下降震荡——见 [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization/) 条件数实验。
+**ML 关联**：Hessian 病态导致梯度下降震荡——见 [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization) 条件数实验。
 </details>
 
 ### Q2.2（中等）

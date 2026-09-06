@@ -309,7 +309,7 @@ Weierstrass 的路——亲手发明 ε-δ。
 | [`HISTORY_AND_TASTE.md`](HISTORY_AND_TASTE.md) | 传记天然故事化 |
 | [`HISTORY_OF_IDEAS.md`](HISTORY_OF_IDEAS.md) | 12 次变革 = 12 个故事弧 |
 | [`RESEARCH_METHODOLOGY.md`](RESEARCH_METHODOLOGY.md) | Polya 四步法配例题故事 |
-| [`../讲透实分析/`](../讲透实分析/) | 每章开头加故事段（见 §六）|
+| [`../讲透实分析/`](../讲透数学/讲透实分析) | 每章开头加故事段（见 §六）|
 
 ---
 

@@ -8,14 +8,14 @@
 
 | 项目 | 规模 | 深读方式 | 产物 | 一句话定位 |
 |---|---|---|---|---|
-| [AgentGym-RL](./agentgym-rl/) | 17M(+127M submodule) | understand 三件套 | 图谱+onboarding+explain | 最接近"成熟版我们"：环境/agent/训练解耦（ICLR 2026 Oral）|
-| [Uni-Agent](./uni-agent/) | 8.3M | understand 三件套 | 图谱+onboarding+explain | 任意 harness 接进 RL（理念最近）|
+| [AgentGym-RL](./agentgym-rl) | 17M(+127M submodule) | understand 三件套 | 图谱+onboarding+explain | 最接近"成熟版我们"：环境/agent/训练解耦（ICLR 2026 Oral）|
+| [Uni-Agent](./uni-agent) | 8.3M | understand 三件套 | 图谱+onboarding+explain | 任意 harness 接进 RL（理念最近）|
 | [verl](./verl-深读卡.md) | 18M | deepwiki 90+子页+卡 | 深读卡 | 训练底座（HybridFlow EuroSys 2025）|
 | [verl-tool](./verl-tool-深读卡.md) | 24M | deepwiki 50+子页+卡 | 深读卡 | Tool-as-Environment（TMLR 2026，<200行 agent loop）|
 | [AWorld-RL](./AWorld-RL-深读卡.md) | 184M | deepwiki 25子页+卡 | 深读卡 | 数据闭环五子系统（RODS/EnvTuning ICLR 2026）|
 | [SkyRL](./SkyRL-深读卡.md) | 51M | 本地深读（deepwiki 无索引）| 深读卡 | 全栈 RL 库 + skyrl-gym Gymnasium 环境库 |
-| [torchrl](./torchrl/) + [深读卡](./torchrl-深读卡.md) | 43M | **双管线**：deepwiki 40子页 + understand 三件套 | 卡+图谱+onboarding+explain | PyTorch 官方组件化 RL 全家桶（TensorDict 中心架构，含 LLM 后训练 GRPO）（2026-08-20 入库）|
-| [cleanrl](./cleanrl/) + [深读卡](./cleanrl-深读卡.md) | 179M | **双管线**：deepwiki 33子页 + understand 三件套 | 卡+图谱+onboarding+explain | 单文件 DRL 算法博物馆：可读性压倒一切（deepwiki 索引与本地 commit fe8d8a0 完全同步）（2026-08-20 入库）|
+| [torchrl](./torchrl) + [深读卡](./torchrl-深读卡.md) | 43M | **双管线**：deepwiki 40子页 + understand 三件套 | 卡+图谱+onboarding+explain | PyTorch 官方组件化 RL 全家桶（TensorDict 中心架构，含 LLM 后训练 GRPO）（2026-08-20 入库）|
+| [cleanrl](./cleanrl) + [深读卡](./cleanrl-深读卡.md) | 179M | **双管线**：deepwiki 33子页 + understand 三件套 | 卡+图谱+onboarding+explain | 单文件 DRL 算法博物馆：可读性压倒一切（deepwiki 索引与本地 commit fe8d8a0 完全同步）（2026-08-20 入库）|
 
 规模为浅克隆实测；代码文件数：verl 750 / verl-tool 872 / skyrl 663 / AWorld-RL 415 / uni-agent 148 / AgentGym-RL 核心增量~30 / torchrl 核心 434（全仓 816，图谱含根配置 474）/ cleanrl 全仓 206（核心算法 37 脚本）。
 
@@ -35,8 +35,8 @@ torchrl 与 cleanrl 构成生态的**纵向参考系**：同一个 PPO/DQN/SAC�
 ## 三、与本项目资产的互链
 
 - 差距分析：[../讲透Agent/实战案例-RL领域Agent/成熟度差距分析-vs2026生态.md](../讲透Agent/实战案例-RL领域Agent/成熟度差距分析-vs2026生态.md)（6 项核心差距 ↔ 本目录 6 项目逐一对位）
-- toy 对照：[../讲透Agent/实战案例-RL领域Agent/](../讲透Agent/实战案例-RL领域Agent/)（rl_agent/skill_agent——"教学前置层"定位）
-- 算法理论：[../讲透RL/](../讲透RL/)（verl core_algos.py 是 02-03 章算法的工业实现；**cleanrl 单文件是 01/02/08 章算法的最小可读实现，torchrl 是组件化工业实现**——三档对照：cleanrl 读→torchrl 组→verl 训 LLM）
+- toy 对照：[../讲透Agent/实战案例-RL领域Agent/](../讲透Agent/实战案例-RL领域Agent)（rl_agent/skill_agent——"教学前置层"定位）
+- 算法理论：[../讲透RL/](../讲透RL)（verl core_algos.py 是 02-03 章算法的工业实现；**cleanrl 单文件是 01/02/08 章算法的最小可读实现，torchrl 是组件化工业实现**——三档对照：cleanrl 读→torchrl 组→verl 训 LLM）
 - harness 镜：[../harness精华合入-总入口.md](../harness精华合入-总入口.md)（Harbor/验证即证据 ↔ SkyRL 集成）
 
 ## 四、下一步候选

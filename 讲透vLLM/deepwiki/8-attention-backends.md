@@ -48,7 +48,7 @@ Relevant source files
 
 Attention backends are pluggable components that implement the core attention computation in vLLM's inference engine. Each backend provides optimized kernels for different hardware platforms, attention patterns, and data types. This page documents the attention backend architecture, available backends, and selection mechanisms.
 
-For information about the overall model execution flow, see [Model Execution on GPU](/vllm-project/vllm/4-model-execution-on-gpu). For KV cache management, see [KV Cache Management and Prefix Caching](/vllm-project/vllm/3.4-kv-cache-management-and-prefix-caching).
+For information about the overall model execution flow, see [Model Execution on GPU](../../../../vllm-project/vllm/4-model-execution-on-gpu). For KV cache management, see [KV Cache Management and Prefix Caching](../../../../vllm-project/vllm/3.4-kv-cache-management-and-prefix-caching).
 
 ## Architecture Overview
 
@@ -86,7 +86,7 @@ FlashInfer is a primary backend for NVIDIA GPUs, providing optimized paged atten
   * **FP8/NVFP4 KV Cache:** Supports FP8 and NVFP4 quantized KV caches with dequantization via Triton kernels like `_trtllm_prefill_attn_kvfp8_dequant` [vllm/v1/attention/backends/flashinfer.py156-212](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flashinfer.py#L156-L212)
   * **Cascade Attention:** Efficiently handles prefix caching using `MultiLevelCascadeAttentionWrapper` [vllm/v1/attention/backends/flashinfer.py17-18](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flashinfer.py#L17-L18)
 
-For details, see [FlashAttention and FlashInfer](/vllm-project/vllm/8.2-flashattention-and-flashinfer).
+For details, see [FlashAttention and FlashInfer](../../../../vllm-project/vllm/8.2-flashattention-and-flashinfer).
 
 **Sources:** [vllm/v1/attention/backends/flashinfer.py12-215](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flashinfer.py#L12-L215) [vllm/utils/flashinfer.py42-48](https://github.com/vllm-project/vllm/blob/185cada3/vllm/utils/flashinfer.py#L42-L48)
 
@@ -100,7 +100,7 @@ The FlashAttention backend provides a standard implementation using `flash_attn_
   * **SM90/SM100 Logic:** Includes specialized logic for SM90 FA3 and SM100 FA4 FP8 KV block sizes [vllm/v1/attention/backends/flash_attn.py189-207](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flash_attn.py#L189-L207)
   * **DCP Support:** Integrates with Decode Context Parallelism via `run_split_fa2_dcp_context_attention` [vllm/v1/attention/backends/flash_attn.py68-73](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flash_attn.py#L68-L73)
 
-For details, see [FlashAttention and FlashInfer](/vllm-project/vllm/8.2-flashattention-and-flashinfer).
+For details, see [FlashAttention and FlashInfer](../../../../vllm-project/vllm/8.2-flashattention-and-flashinfer).
 
 **Sources:** [vllm/v1/attention/backends/flash_attn.py78-208](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flash_attn.py#L78-L208) [vllm/v1/attention/backends/fa_utils.py26-32](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/fa_utils.py#L26-L32)
 
@@ -128,7 +128,7 @@ For AMD GPUs, vLLM provides optimized backends using AITER ops.
   * **Gather Cache:** Implements Triton-based `cp_mha_gather_cache_kernel` to handle paged KV cache access on ROCm [vllm/v1/attention/backends/rocm_aiter_fa.py48-152](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/rocm_aiter_fa.py#L48-L152)
   * **Platform Detection:** AITER is supported on ROCm platforms with CDNA 3 (gfx942) or better [vllm/_aiter_ops.py150-153](https://github.com/vllm-project/vllm/blob/185cada3/vllm/_aiter_ops.py#L150-L153)
 
-For details, see [ROCm and Platform-Specific Attention](/vllm-project/vllm/8.4-rocm-and-platform-specific-attention).
+For details, see [ROCm and Platform-Specific Attention](../../../../vllm-project/vllm/8.4-rocm-and-platform-specific-attention).
 
 **Sources:** [vllm/v1/attention/backends/rocm_aiter_unified_attn.py29-145](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/rocm_aiter_unified_attn.py#L29-L145) [vllm/v1/attention/backends/rocm_aiter_fa.py36-152](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/rocm_aiter_fa.py#L36-L152) [vllm/_aiter_ops.py150-154](https://github.com/vllm-project/vllm/blob/185cada3/vllm/_aiter_ops.py#L150-L154)
 
@@ -142,7 +142,7 @@ MLA is a specialized attention mechanism used in models like DeepSeek. MLA uses 
   * **Sparse MLA:** Used for DeepSeek V4, selected via `FLASHMLA_SPARSE_DSV4` or `FLASHINFER_MLA_SPARSE_DSV4` [docs/design/attention_backends.md167-176](https://github.com/vllm-project/vllm/blob/185cada3/docs/design/attention_backends.md?plain=1#L167-L176)
   * **Chunked Prefill:** Mitigates memory usage during prefill by chunking computation with respect to existing context [vllm/model_executor/layers/attention/mla_attention.py121-148](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/attention/mla_attention.py#L121-L148)
 
-For details, see [MLA and Specialized Attention](/vllm-project/vllm/8.3-mla-and-specialized-attention).
+For details, see [MLA and Specialized Attention](../../../../vllm-project/vllm/8.3-mla-and-specialized-attention).
 
 **Sources:** [vllm/model_executor/layers/attention/mla_attention.py8-148](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/attention/mla_attention.py#L8-L148) [docs/design/attention_backends.md141-176](https://github.com/vllm-project/vllm/blob/185cada3/docs/design/attention_backends.md?plain=1#L141-L176)
 
@@ -162,7 +162,7 @@ Selection is performed by analyzing:
   * **Model Config:** Parameters like head size and attention type (Decoder, Encoder, etc.) [vllm/v1/attention/backends/flash_attn.py117-124](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flash_attn.py#L117-L124)
   * **Quantization:** Support for FP8, INT8, or NVFP4 KV caches varies by backend [vllm/v1/attention/backends/flashinfer.py34-38](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flashinfer.py#L34-L38) [vllm/v1/attention/backends/flash_attn.py150-157](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flash_attn.py#L150-L157)
 
-For details, see [Attention Backend Selection](/vllm-project/vllm/8.1-attention-backend-selection).
+For details, see [Attention Backend Selection](../../../../vllm-project/vllm/8.1-attention-backend-selection).
 
 **Sources:** [vllm/v1/attention/backends/flash_attn.py78-208](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flash_attn.py#L78-L208) [docs/design/attention_backends.md78-95](https://github.com/vllm-project/vllm/blob/185cada3/docs/design/attention_backends.md?plain=1#L78-L95)
 

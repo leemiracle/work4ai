@@ -26,7 +26,7 @@
 ## 参考资源
 - Folland, *Real Analysis* (2nd, Wiley)
 - Rudin, *Real and Complex Analysis* (3rd)
-- MIT 对照：[MIT 18.125](../../mit-math-courses/)
+- MIT 对照：[MIT 18.125](../../mit-math-courses)
 
 ## 📍 在数学全景中的位置
 
@@ -58,4 +58,4 @@ M 365C (Rudin)        →   UT Austin M 381C       →   M 382C 泛函分析
 
 ---
 
-📌 **下一步**：→ [M 383C Methods of Applied Mathematics](../m383c_applied_mathematics/)
+📌 **下一步**：→ [M 383C Methods of Applied Mathematics](../m383c_applied_mathematics)

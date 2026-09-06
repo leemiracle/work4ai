@@ -128,6 +128,6 @@
 
 ## 关键引用
 
-- 详见 [`人类学/advanced`](../../人类学/advanced/) / [`历史学/advanced`](../../历史学/advanced/)
+- 详见 [`人类学/advanced`](../../人类学/advanced) / [`历史学/advanced`](../../历史学/advanced)
 - Chase 2011 / Evans 2013 / Parcak 2017
 - UNESCO 世界遗产报告

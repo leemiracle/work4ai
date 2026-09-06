@@ -200,4 +200,4 @@ $$C_V \propto T^3 \quad (T \ll \Theta_D)$$
 ---
 
 **完成日期**：2026-08-13（深化版 v2）
-**配套**：[landau/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[landau/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

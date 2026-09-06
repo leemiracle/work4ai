@@ -24,12 +24,12 @@
 ## 与 ML 的关联
 - 概率论的"直觉版本"（无测度）
 - 学完后：能读应用 ML 论文
-- 进阶：[MATH 230A](../math230A_probability_theory/)（测度论版）
+- 进阶：[MATH 230A](../math230A_probability_theory)（测度论版）
 
 ## 参考资源
 - Bertsekas & Tsitsiklis, *Introduction to Probability* (2nd ed)
 - Ross, *A First Course in Probability*
-- Berkeley 对照：[Stat 134](../../berkeley-math-courses/stat134_probability/)
+- Berkeley 对照：[Stat 134](../../berkeley-math-courses/stat134_probability)
 
 ---
 
@@ -44,9 +44,9 @@ MATH 51 ──→  Stanford Stat 116 ──→  Stanford Math 230A (研究生测
               母函数 + Markov 链
 ```
 
-- **前置**：[MATH 51](../math51_linear_multivariable/) + 一点编程
+- **前置**：[MATH 51](../math51_linear_multivariable) + 一点编程
 - **本课**：Ross / Bertsekas 风格——条件概率、常见分布、母函数、Poisson 过程、Markov 链入门
-- **后续**：[Math 230A](../math230A_probability_theory/)（研究生测度论版）
+- **后续**：[Math 230A](../math230A_probability_theory)（研究生测度论版）
 
 ---
 
@@ -83,4 +83,4 @@ MATH 51 ──→  Stanford Stat 116 ──→  Stanford Math 230A (研究生测
    - 2024 进展：Poisson 到达 + SGD 的收敛分析
    - **与本课关联**：Poisson 过程的独立增量性 → 在线梯度计算的独立性
 
-📌 **下一步**：→ 进入 [Berkeley 数学](../../berkeley-math-courses/)
+📌 **下一步**：→ 进入 [Berkeley 数学](../../berkeley-math-courses)

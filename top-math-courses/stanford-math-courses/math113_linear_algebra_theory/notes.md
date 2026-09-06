@@ -140,7 +140,7 @@ print(f"特征值: {eigvals}, 特征向量矩阵秩: {np.linalg.matrix_rank(eigv
 
 ## 第 4 层：不足层
 
-1. **Jordan 形式数值不稳定**：微小扰动可改变 Jordan 结构，实际计算用 Schur 分解（上三角）替代（见 [M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)）。
+1. **Jordan 形式数值不稳定**：微小扰动可改变 Jordan 结构，实际计算用 Schur 分解（上三角）替代（见 [M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra)）。
 2. **实矩阵的 Jordan 可能含复数**：需实 Jordan 形式（$2\times2$ 块）处理复特征值对。
 3. **不覆盖随机矩阵 / 张量**：LoRA 的统计理论、tensor decomposition 需额外课程。
 

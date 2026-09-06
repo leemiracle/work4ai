@@ -42,15 +42,15 @@
 
 | # | 学校 | 院系 | 项目路径 | 主题 | .py 文件 | 代码行数 | 招牌特色 |
 |---|------|------|---------|-----|---------|---------|---------|
-| 0 | **Stanford** | CS Department | [`./stanford-cs-projects/`](./stanford-cs-projects/) | 13 | 34 | 9,338 | LLM/Alignment/Agent（CS329H/Z/K）|
-| 1 | **CMU** | SCS | [`./cmu-cs-projects/`](./cmu-cs-projects/) | 12 | 22 | 5,655 | CSAPP / PGM / PAVL DBMS / NLP |
-| 2 | **MIT** | EECS / CSAIL | [`./mit-cs-projects/`](./mit-cs-projects/) | 12 | 22 | 5,779 | 6.824/828/858 + Tedrake Underactuated |
-| 3 | **UC Berkeley** | EECS | [`./berkeley-cs-projects/`](./berkeley-cs-projects/) | 12 | 22 | 6,403 | CS 61A SICP-Py / CS 188 Pacman / CS 285 RL |
-| 4 | **Princeton** | COS | [`./princeton-cs-projects/`](./princeton-cs-projects/) | 12 | 22 | 6,532 | Sedgewick Algos / COS 511 ML Theory / Fairness |
-| 5 | **Cambridge** | Computer Lab (Tripos) | [`./cambridge-cs-projects/`](./cambridge-cs-projects/) | 12 | 22 | 6,115 | Tripos 四年体系 / Hoare Logic / Compiler / Info Theory |
-| 6 | **Oxford** | CS Department | [`./oxford-cs-projects/`](./oxford-cs-projects/) | 12 | 22 | 7,502 | Categories/Proofs / Automated Reasoning / KR |
-| 7 | **ETH Zürich** | Informatik | [`./eth-cs-projects/`](./eth-cs-projects/) | 12 | 22 | 5,923 | Formal Methods / Paxos / Causality (Peters) / Krause |
-| 8 | **Toronto** | DCS | [`./toronto-cs-projects/`](./toronto-cs-projects/) | 12 | 22 | 7,320 | CSC 413 Deep / CSC 2547H Generative / Hinton 母校 |
+| 0 | **Stanford** | CS Department | [`./stanford-cs-projects/`](./stanford-cs-projects) | 13 | 34 | 9,338 | LLM/Alignment/Agent（CS329H/Z/K）|
+| 1 | **CMU** | SCS | [`./cmu-cs-projects/`](./cmu-cs-projects) | 12 | 22 | 5,655 | CSAPP / PGM / PAVL DBMS / NLP |
+| 2 | **MIT** | EECS / CSAIL | [`./mit-cs-projects/`](./mit-cs-projects) | 12 | 22 | 5,779 | 6.824/828/858 + Tedrake Underactuated |
+| 3 | **UC Berkeley** | EECS | [`./berkeley-cs-projects/`](./berkeley-cs-projects) | 12 | 22 | 6,403 | CS 61A SICP-Py / CS 188 Pacman / CS 285 RL |
+| 4 | **Princeton** | COS | [`./princeton-cs-projects/`](./princeton-cs-projects) | 12 | 22 | 6,532 | Sedgewick Algos / COS 511 ML Theory / Fairness |
+| 5 | **Cambridge** | Computer Lab (Tripos) | [`./cambridge-cs-projects/`](./cambridge-cs-projects) | 12 | 22 | 6,115 | Tripos 四年体系 / Hoare Logic / Compiler / Info Theory |
+| 6 | **Oxford** | CS Department | [`./oxford-cs-projects/`](./oxford-cs-projects) | 12 | 22 | 7,502 | Categories/Proofs / Automated Reasoning / KR |
+| 7 | **ETH Zürich** | Informatik | [`./eth-cs-projects/`](./eth-cs-projects) | 12 | 22 | 5,923 | Formal Methods / Paxos / Causality (Peters) / Krause |
+| 8 | **Toronto** | DCS | [`./toronto-cs-projects/`](./toronto-cs-projects) | 12 | 22 | 7,320 | CSC 413 Deep / CSC 2547H Generative / Hinton 母校 |
 | | **合计** | | | **109** | **210** | **60,567** | |
 
 每校另含：6-7 个 `core/` 共享基础设施文件（llm.py / rag.py / tools.py / react.py / eval.py / hybrid_search.py / __init__.py）+ `supplementary/` 三个文件（undergrad/grad/micro，每文件覆盖 8-10 门课）。
@@ -59,8 +59,8 @@
 
 | 库 | 定位 | 入口 |
 |---|------|------|
-| [`cs224n/`](./cs224n/) | Stanford CS224N（Winter 2026）教学简化版：A1-A4 作业 + mini-GPT-2 前向推理 | [`cs224n/README.md`](./cs224n/README.md) |
-| [`cs61a-learning/`](./cs61a-learning/) | Berkeley CS 61A 逐周学习笔记：week01 10 个 .py（lecture/hw/lab/hog 项目，2796 行）+ 2 篇周记 | 见 `week01/` 与 `notes/` |
+| [`cs224n/`](./cs224n) | Stanford CS224N（Winter 2026）教学简化版：A1-A4 作业 + mini-GPT-2 前向推理 | [`cs224n/README.md`](./cs224n/README.md) |
+| [`cs61a-learning/`](./cs61a-learning) | Berkeley CS 61A 逐周学习笔记：week01 10 个 .py（lecture/hw/lab/hog 项目，2796 行）+ 2 篇周记 | 见 `week01/` 与 `notes/` |
 
 ---
 

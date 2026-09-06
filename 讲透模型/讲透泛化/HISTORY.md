@@ -491,7 +491,7 @@ double descent 的发现者 Belkin 的背景是**核方法和流形学习**—�
 | [03-双层下降](./03-双层下降.md) | 过参数化为何良性——实验复现 double descent |
 | [04-架构归纳偏置与显式正则](./04-架构归纳偏置与显式正则.md) | CNN/Transformer 编码任务结构 + 正则化手段全集 |
 | [05-批判与未解](./05-批判与未解.md) | 我们还没真正理解泛化——诚实面对理论边界 |
-| [experiments/](./experiments/) | 5 个 Python 实验全部 bash 可跑 |
+| [experiments/](./experiments) | 5 个 Python 实验全部 bash 可跑 |
 
 ### 跨系列
 

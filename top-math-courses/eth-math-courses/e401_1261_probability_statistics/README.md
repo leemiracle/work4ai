@@ -32,9 +32,9 @@ Analysis I ──→  401-1261 Prob & Stats (本科) ──→  401-4651 Numeric
                                             401-3904 Convex Optimization
 ```
 
-- **前置**：[Analysis I](../e401_0261_analysis_I/) + [线性代数](../e401_0131_linear_algebra/)
+- **前置**：[Analysis I](../e401_0261_analysis_I) + [线性代数](../e401_0131_linear_algebra)
 - **本课**：Klenke 式欧洲严格概率统计——概率论 + **统计推断（假设检验）**
-- **后续**：[401-2611 Numerical Methods](../e401_2611_numerical_methods_cse/) → [401-3651 Numerical SDE](../e401_3651_numerical_sde/)
+- **后续**：[401-2611 Numerical Methods](../e401_2611_numerical_methods_cse) → [401-3651 Numerical SDE](../e401_3651_numerical_sde)
 
 ---
 
@@ -67,4 +67,4 @@ Analysis I ──→  401-1261 Prob & Stats (本科) ──→  401-4651 Numeric
    - DP-SGD 的噪声校准需要概率统计基础
    - **与本课关联**：假设检验 + 隐私 budget
 
-📌 **下一步**：→ [401-2611 Numerical Methods for CSE](../e401_2611_numerical_methods_cse/)
+📌 **下一步**：→ [401-2611 Numerical Methods for CSE](../e401_2611_numerical_methods_cse)

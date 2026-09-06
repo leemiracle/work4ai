@@ -20,7 +20,7 @@
 - SVM 推导
 - 学完后：能读 Boyd *Convex Optimization*
 
-📌 **下一步**：→ [Part IB Numerical Analysis](../partIB_numerical_analysis/)
+📌 **下一步**：→ [Part IB Numerical Analysis](../partIB_numerical_analysis)
 
 ---
 
@@ -28,13 +28,13 @@
 
 - **前置**：线代 + 多变量微积分
 - **本课**：LP / 单纯形法 / KKT / 对偶 → 凸优化入门
-- **后续**：[Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization/)（凸优化完整版）/ [ETH 401-3901](../../eth-math-courses/e401_3901_linear_combinatorial_optimization/)（整数规划）
+- **后续**：[Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization)（凸优化完整版）/ [ETH 401-3901](../../eth-math-courses/e401_3901_linear_combinatorial_optimization)（整数规划）
 
 ---
 
 ## 🔬 理论联系实际
 
-1. **SVM = 凸 QP + KKT** → [CME 364A](../../stanford-math-courses/cme364A_convex_optimization/) 完整推导
+1. **SVM = 凸 QP + KKT** → [CME 364A](../../stanford-math-courses/cme364A_convex_optimization) 完整推导
 2. **LP 对偶 → 零和博弈 Nash 均衡**（von Neumann minimax）
 3. **Lasso 稀疏性 = $\ell_1$ KKT 软阈值**
 4. **LP 松弛 + rounding → 近似算法**（聚类）

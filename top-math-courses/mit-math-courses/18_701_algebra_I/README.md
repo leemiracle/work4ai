@@ -40,13 +40,13 @@
 - **重点**：群论与群作用（在 ML 中最多出现）
 - **跳过**：纯数论部分（除非你做密码学）
 
-📌 **下一步**：→ [18.901 拓扑](../18_901_topology/) 或 [Berkeley Math 113](../../berkeley-math-courses/math113_abstract_algebra/)
+📌 **下一步**：→ [18.901 拓扑](../18_901_topology) 或 [Berkeley Math 113](../../berkeley-math-courses/math113_abstract_algebra)
 
 ---
 
 ## 📍 在数学全景中的位置
 
-- **前置**：[18.06 线性代数](../18_06_linear_algebra/)（矩阵/线性变换）
+- **前置**：[18.06 线性代数](../18_06_linear_algebra)（矩阵/线性变换）
 - **本课**：群 / 环 / 域 / 群作用 / 表示论入门——抽象代数的根基
 - **后续**：[Harvard Math 122](../../harvard-math-courses/math122_algebra_I)（Dummit-Foote 体系）/ [Princeton MAT 345](../../princeton-math-courses/mat345_algebra_I)
 

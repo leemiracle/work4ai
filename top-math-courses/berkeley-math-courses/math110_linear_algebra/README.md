@@ -30,14 +30,14 @@
 ## 参考资源
 - **教材（免费 PDF）**：[axler.net/LADR.html](https://axler.net/LADR.html)
 - 视频：Axler 自录的 *Linear Algebra Done Right* 解说
-- Princeton 对照：[MAT 217](../../princeton-math-courses/mat217_linear_algebra/)（同难度）
-- MIT 对照：[MIT 18.700](../../mit-math-courses/)
+- Princeton 对照：[MAT 217](../../princeton-math-courses/mat217_linear_algebra)（同难度）
+- MIT 对照：[MIT 18.700](../../mit-math-courses)
 
 ## 学习建议
 - **节奏**：每周 5-7 小时，12-14 周
 - **配合 MIT 18.06**：MIT 教直觉，Berkeley 110 教证明
 
-📌 **下一步**：→ [MATH 113 Abstract Algebra](../math113_abstract_algebra/) 或 [MATH 185 Complex Analysis](../math185_complex_analysis/)
+📌 **下一步**：→ [MATH 113 Abstract Algebra](../math113_abstract_algebra) 或 [MATH 185 Complex Analysis](../math185_complex_analysis)
 
 ---
 
@@ -104,4 +104,4 @@ Axler 风格看似纯数学，但每个定理都是 ML 的隐形骨架：
 3. **不变子空间与持续学习（Continual Learning, 2024-2026）**
    - 避免灾难性遗忘的最新方法：为新任务在权重空间找一组**正交子空间**，使新学习不干扰旧知识。这正是 Axler 的"正交直和分解 $V=U\oplus U^\perp$"的直接工程化。⚠️ 该方向理论（子空间如何随训练漂移）仍在发展。
 
-📌 **下一步**：→ [MATH 113 Abstract Algebra](../math113_abstract_algebra/) 或 [MATH 185 Complex Analysis](../math185_complex_analysis/)
+📌 **下一步**：→ [MATH 113 Abstract Algebra](../math113_abstract_algebra) 或 [MATH 185 Complex Analysis](../math185_complex_analysis)

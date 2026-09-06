@@ -1,7 +1,7 @@
 # UT Austin M 427L · 章节笔记
 
 > **教材**：Colley, *Vector Calculus*；或 Stewart 多变量部分
-> **定位**：UT Austin 向量微积分。与 [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus/) / [Berkeley MATH 53](../../berkeley-math-courses/math53_multivariable/) 对等
+> **定位**：UT Austin 向量微积分。与 [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus) / [Berkeley MATH 53](../../berkeley-math-courses/math53_multivariable) 对等
 > **重点**：梯度/Jacobian/Hessian + 三大定理，连接 ML 优化
 
 ---

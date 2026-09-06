@@ -196,7 +196,7 @@ def forward_diffusion(x0, T=100):
 # 这就是热方程的离散化: 数据 → 噪声
 ```
 
-完整实验见 [ETH 401-3651 SDE experiments](../../eth-math-courses/e401_3651_numerical_sde/experiments/)（本课与其互补，ETH 更偏数值，Oxford 更偏理论）。
+完整实验见 [ETH 401-3651 SDE experiments](../../eth-math-courses/e401_3651_numerical_sde/experiments)（本课与其互补，ETH 更偏数值，Oxford 更偏理论）。
 
 ---
 
@@ -252,7 +252,7 @@ VAE 和扩散模型的 ELBO 可以从 SDE 视角推导——Girsanov 定理给�
 1. **Oksendal 第 2-5 章**：布朗运动 + Itô 积分 + Itô 引理 + SDE → **核心**
 2. **Oksendal 第 8 章**：Fokker-Planck / Kolmogorov 方程 → **理解扩散模型的关键**
 3. **跳过**：最优停时、滤波理论（除非做量化金融）
-4. **交叉**：[ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/)（数值实现）+ [Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde/)（确定性 PDE 对照）
+4. **交叉**：[ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde)（数值实现）+ [Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde)（确定性 PDE 对照）
 
 ---
 

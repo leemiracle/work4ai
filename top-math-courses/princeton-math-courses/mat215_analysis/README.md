@@ -31,7 +31,7 @@
 - **教材**：Rudin, *Principles of Mathematical Analysis* (McGraw-Hill)
 - **替代教材**：Pugh, *Real Mathematical Analysis*（更直观）
 - **替代教材**：Tao, *Analysis I*（更友好）
-- **MIT 对照**：[MIT 18.100B](../../mit-math-courses/18_100B_real_analysis/)
+- **MIT 对照**：[MIT 18.100B](../../mit-math-courses/18_100B_real_analysis)
 
 ## 学习建议
 - **节奏**：每周 6-8 小时，12-14 周（比 MIT 18.100B 难度更高）
@@ -126,4 +126,4 @@ Diffusion model 的前向过程 $dx_t = -\frac{1}{2}x_t \, dt + dW_t$ 的分析�
 
 ---
 
-📌 **下一步**：→ [MAT 217 Honors Linear Algebra](../mat217_linear_algebra/)
+📌 **下一步**：→ [MAT 217 Honors Linear Algebra](../mat217_linear_algebra)

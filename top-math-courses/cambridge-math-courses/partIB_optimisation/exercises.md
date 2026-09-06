@@ -31,7 +31,7 @@
 弱对偶：对任意原可行 $x$ 和对偶可行 $y$，$b^Ty \leq c^Tx$。
 证明：$b^Ty \leq (Ax)^Ty = x^T(A^Ty) \leq x^Tc = c^Tx$（用 $Ax \geq b$, $A^Ty \leq c$, $x,y \geq 0$）。
 
-**ML 关联**：SVM 对偶 = QP 对偶，见 [CME 364A](../../stanford-math-courses/cme364A_convex_optimization/)。
+**ML 关联**：SVM 对偶 = QP 对偶，见 [CME 364A](../../stanford-math-courses/cme364A_convex_optimization)。
 </details>
 
 ### Q1.3（中等）
@@ -80,7 +80,7 @@ Lasso: $\min \frac{1}{2n}\|Xw-y\|^2 + \lambda\|w\|_1$。$\ell_1$ 范数 $|w_i|$ 
 
 KKT（次梯度版）：$\frac1n X_i^T(Xw-y) + \lambda g_i = 0$。若 $|\frac1n X_i^T(Xw-y)| < \lambda$，则 $w_i = 0$（次梯度 $g_i$ 吸收梯度）→ **自动稀疏**。而 $\ell_2$ 正则的 Ridge 不行（$w_i$ 只是缩小不到 0）。
 
-详见 [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization/)。
+详见 [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization)。
 </details>
 
 ### Q2.4（开放）
@@ -102,5 +102,5 @@ DPO 如何用凸优化"绕过"RLHF 的非凸性？
 
 RLHF = RL（PPO）+ reward model，两阶段非凸。DPO（[2305.18290](https://arxiv.org/abs/2305.18290)）用 Bradley-Terry 模型把偏好建模凸化：$\mathcal{L} = -\log\sigma(\beta(\Delta_w - \Delta_l))$，logistic loss 对 $\Delta$ 凸。
 
-但仍需 SGD 训练神经网络，所以只是"部分凸化"。详见 [CME 364A](../../stanford-math-courses/cme364A_convex_optimization/) notes.md 应用层。
+但仍需 SGD 训练神经网络，所以只是"部分凸化"。详见 [CME 364A](../../stanford-math-courses/cme364A_convex_optimization) notes.md 应用层。
 </details>

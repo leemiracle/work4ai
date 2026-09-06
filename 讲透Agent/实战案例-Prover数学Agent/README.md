@@ -123,7 +123,7 @@ decompose（建筑师：API 大模型/glm-5.3 或本地）
 
 ## 五、融合挂网
 
-- [讲透Lean4数学/README](../../讲透Lean4数学/README.md)：加"Prover 数学 Agent 实战"条目（NNG 学习者 → Prover 工具使用者 → harness 造物主三级跳）
+- [讲透Lean4数学/README](../../讲透数学/讲透Lean4数学/README.md)：加"Prover 数学 Agent 实战"条目（NNG 学习者 → Prover 工具使用者 → harness 造物主三级跳）
 - [top-math-courses/AI_FOR_MATH_TOOLS.md](../../top-math-courses/AI_FOR_MATH_TOOLS.md)：AlphaProof/LeanCopilot 条目旁加 DeepSeek-Prover-V2 条目（十条规律+本地部署）
 - skill `oprover-math` 全局可用（opencode 自动加载）
 - 方法论互链：与 [实战案例-性能优化Agent](../实战案例-性能优化Agent/README.md) 的 guard/裁判哲学互认（R3/R5 与双测协议同构）

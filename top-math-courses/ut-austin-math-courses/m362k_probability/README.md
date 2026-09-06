@@ -34,9 +34,9 @@ M 408D 微积分 ──→  M 362K 概率 I (本科应用) ──→  M 385C 概
 M 325K 离散数学 ──↗   (Ross, 无测度论)            (Durrett, σ-代数/鞅)             鞅 → RL / 扩散模型
 ```
 
-- **前置**：[M 408D 微积分](../m408c_calculus/)（积分、级数）+ [M 325K 离散数学](../)（组合计数、证明入门）
+- **前置**：[M 408D 微积分](../m408c_calculus)（积分、级数）+ [M 325K 离散数学](..)（组合计数、证明入门）
 - **本课**：本科应用概率——组合计数、概率公理、条件概率/Bayes、离散+连续随机变量、联合分布、期望方差、母函数、LLN/CLT、Markov 链入门（**无测度论，计算导向**）
-- **后续**：[M 385C 概率论（研究生）](../m385c_theory_of_probability/)（测度论版）→ ML 理论（集中不等式、鞅、扩散模型 SDE）
+- **后续**：[M 385C 概率论（研究生）](../m385c_theory_of_probability)（测度论版）→ ML 理论（集中不等式、鞅、扩散模型 SDE）
 
 ---
 
@@ -72,4 +72,4 @@ M 325K 离散数学 ──↗   (Ross, 无测度论)            (Durrett, σ-代
    - do-calculus（Pearl）= 条件概率的精确操作；2024 年因果 + 大模型成为热点
    - **与本课关联**：M 362K 的条件概率 / Bayes / 条件独立性是 do-calculus 的全部概率基础
 
-📌 **下一步**：→ [M 378K Numerical Analysis](../m378k_numerical_analysis/) 或 [M 385C Theory of Probability graduate](../m385c_theory_of_probability/)
+📌 **下一步**：→ [M 378K Numerical Analysis](../m378k_numerical_analysis) 或 [M 385C Theory of Probability graduate](../m385c_theory_of_probability)

@@ -2,7 +2,7 @@
 
 > **教材**：Lay, Lay, McDonald, *Linear Algebra and Its Applications*（ODE 部分用配套补充材料）
 > **范围**：本笔记**只覆盖 ODE 部分**（第 7-10 单元）。线代部分见其他笔记
-> **对照**：ODE 内容与 [MIT 18.03](../../mit-math-courses/18_03_differential_equations/) 等价但更紧凑
+> **对照**：ODE 内容与 [MIT 18.03](../../mit-math-courses/18_03_differential_equations) 等价但更紧凑
 
 ---
 

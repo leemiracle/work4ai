@@ -2448,7 +2448,7 @@ Expected: 矩阵 + `results/metrics.json`
 ```markdown
 ## 配套工具
 
-- [`omega-guard/`](../omega-guard/) —— ω-自动机 tool-call guardrail（三值监控 + enforce 拦截 +
+- [`omega-guard/`](../omega-guard) —— ω-自动机 tool-call guardrail（三值监控 + enforce 拦截 +
   2-token HD 判定 + 故障注入参考 agent 指标）。设计文档：
   `docs/superpowers/specs/2026-09-06-omega-guard-design.md`。与 01 章"Lean4 作为 RL 奖励
   验证器"同一主题的工程侧延伸：把 ω-regular 性质从证明助手带进 agent 运行时。

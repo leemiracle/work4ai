@@ -35,8 +35,8 @@
 ## 学习建议
 - **节奏**：每周 5-7 小时，14-16 周完成
 - **核心**：第 1-7 章（标准 ML 理论用的概率工具）
-- **配合**：[Berkeley Stat 134](../../berkeley-math-courses/stat134_probability/)（先学应用版再上 18.175）
-- **进阶**：[Berkeley Math 218 随机过程](../../berkeley-math-courses/math218_probability_graduate/)
+- **配合**：[Berkeley Stat 134](../../berkeley-math-courses/stat134_probability)（先学应用版再上 18.175）
+- **进阶**：[Berkeley Math 218 随机过程](../../berkeley-math-courses/math218_probability_graduate)
 
 ---
 
@@ -54,9 +54,9 @@ Cambridge Part IA ─┘    Princeton MAT 514      Princeton MAT 575（信息论
                         UT Austin M 385C
 ```
 
-- **前置**：[MIT 18.100 实分析](../18_100B_real_analysis/)（Lebesgue 积分、$L^p$ 空间）+ 本科概率（[Stat 134](../../berkeley-math-courses/stat134_probability/) 或 [Stat 116](../../stanford-math-courses/stat116_probability_theory)）
+- **前置**：[MIT 18.100 实分析](../18_100B_real_analysis)（Lebesgue 积分、$L^p$ 空间）+ 本科概率（[Stat 134](../../berkeley-math-courses/stat134_probability) 或 [Stat 116](../../stanford-math-courses/stat116_probability_theory)）
 - **本课**：从概率公理到 SLLN + CLT + 鞅，建立 ML 理论的分析语言
-- **后续**：随机过程（[Math 218](../../berkeley-math-courses/math218_probability_graduate/) Brownian motion → 扩散模型 SDE）、信息论（[MAT 575](../../princeton-math-courses/mat575_information_theory/)）
+- **后续**：随机过程（[Math 218](../../berkeley-math-courses/math218_probability_graduate) Brownian motion → 扩散模型 SDE）、信息论（[MAT 575](../../princeton-math-courses/mat575_information_theory)）
 
 ---
 
@@ -94,4 +94,4 @@ Cambridge Part IA ─┘    Princeton MAT 514      Princeton MAT 575（信息论
    - Russo & Zou (2016), Xu & Raginsky (2017): $|E[R(W)] - E[\hat{R}(W,S)]| \leq \sqrt{2\sigma^2 I(W;S)/n}$
    - **与本课关联**：KL 散度 + Pinsker 不等式 + 鞅方法 → PAC-Bayes 的信息论推广
 
-📌 **下一步**：→ [18.085 计算科学与工程](../18_085_computational_science/) 或 [18.901 拓扑](../18_901_topology/)
+📌 **下一步**：→ [18.085 计算科学与工程](../18_085_computational_science) 或 [18.901 拓扑](../18_901_topology)

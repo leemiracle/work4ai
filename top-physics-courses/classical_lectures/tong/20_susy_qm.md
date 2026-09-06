@@ -271,4 +271,4 @@ $$\partial_\mu j_5^\mu = \frac{g^2}{16\pi^2}\text{tr}(F\tilde{F})$$
 ---
 
 **完成日期**：2026-08-13（深化版 v2）
-**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

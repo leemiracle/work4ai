@@ -147,10 +147,10 @@ R1 一发布，**开源圈震动**——**首次有开源模型接近 o1**。
 ## 🛠️ 我该深挖什么
 
 ### work4ai 系列
-- [`../讲透Lean4数学/`](../讲透Lean4数学/)：Lean 4 入门 + 数学应用
-- [`../讲透实分析/`](../讲透实分析/)：Tao Analysis I Lean companion
-- [`../讲透RL/05 RLVR极限`](../讲透RL/)：RLVR 深度
-- [`../讲透神经符号/`](../讲透神经符号/)：LLM + Lean 闭环
+- [`../讲透Lean4数学/`](../讲透数学/讲透Lean4数学)：Lean 4 入门 + 数学应用
+- [`../讲透实分析/`](../讲透数学/讲透实分析)：Tao Analysis I Lean companion
+- [`../讲透RL/05 RLVR极限`](../讲透RL)：RLVR 深度
+- [`../讲透神经符号/`](../讲透神经符号)：LLM + Lean 闭环
 
 ### 必读
 - **OpenAI 2024 "Learning to Reason with LLMs"**（o1 blog）

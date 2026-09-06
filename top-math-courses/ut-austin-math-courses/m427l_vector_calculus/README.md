@@ -19,13 +19,13 @@
 - 梯度 / Jacobian / 多元 Taylor
 - 学完后：能推导反向传播
 
-📌 **下一步**：→ [M 340L Linear Algebra](../m340l_linear_algebra/)
+📌 **下一步**：→ [M 340L Linear Algebra](../m340l_linear_algebra)
 
 ---
 
 ## 📍 在数学全景中的位置
 
-M 427L 是 UT Austin 的多变量/向量微积分课，定位与 [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus/) / [Berkeley MATH 53](../../berkeley-math-courses/math53_multivariable/) 对等。前置 M 408D（单变量微积分序列）；本课把单变量推广到多变量——偏导 → 梯度 → Jacobian → 重积分 → 三大定理（Green/Stokes/Divergence）。对 ML 从业者，核心收获是**梯度 = 优化方向**、**Jacobian = 反向传播**、**Hessian = 收敛分析**。
+M 427L 是 UT Austin 的多变量/向量微积分课，定位与 [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus) / [Berkeley MATH 53](../../berkeley-math-courses/math53_multivariable) 对等。前置 M 408D（单变量微积分序列）；本课把单变量推广到多变量——偏导 → 梯度 → Jacobian → 重积分 → 三大定理（Green/Stokes/Divergence）。对 ML 从业者，核心收获是**梯度 = 优化方向**、**Jacobian = 反向传播**、**Hessian = 收敛分析**。
 
 ## 🔬 理论联系实际
 

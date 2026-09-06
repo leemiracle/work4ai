@@ -3,8 +3,8 @@
 > 来源：[GitHub topics/harness](https://github.com/topics/harness) 高星 37 仓（≥1K★，全量快照见 [透视GitHub-Harness高星仓库全景.md](./透视GitHub-Harness高星仓库全景.md)）。
 > 精化产物：**1 个新 opencode skill**（`harness-engineering`），安装于 `~/.config/opencode/skills/`，opencode 启动时自动加载。
 > 本文档是使用说明；蒸馏细节见 [harness精华笔记](./harness精华笔记.md)。
-> 学术线（2026-08-17 新增）：四篇 harness 综述 + LLM Ensemble + 领域 Harnessing 的合并解析与 NFL 分析见 [harness三综述合并解析](./harness三综述合并解析.md)（引用全部一手核实，修复原拆解 8 处错误，明细在 [.research/harness-survey/引用核实报告.md](./.research/harness-survey/引用核实报告.md)）。
-> 工程线（2026-08-17 新增）：操作手册见 [工程化手册库/harness工程手册](./工程化手册库/harness工程手册/)（README+12 章：六组件/上下文参数表/验证即证据/生命周期/多模型/自动进化闭环/最小实现——本页与合并解析是它的素材底座）。
+> 学术线（2026-08-17 新增）：四篇 harness 综述 + LLM Ensemble + 领域 Harnessing 的合并解析与 NFL 分析见 [harness三综述合并解析](./harness三综述合并解析.md)（引用全部一手核实，修复原拆解 8 处错误，明细在 [.research/harness-survey/引用核实报告.md](.research/harness-survey/引用核实报告.md)）。
+> 工程线（2026-08-17 新增）：操作手册见 [工程化手册库/harness工程手册](./工程化手册库/harness工程手册)（README+12 章：六组件/上下文参数表/验证即证据/生命周期/多模型/自动进化闭环/最小实现——本页与合并解析是它的素材底座）。
 
 ## 一、仓库 → skill 映射
 
@@ -51,7 +51,7 @@
 
 ## 四、后续候选（不合入但留观）
 
-**教学落点（2026-08-26 新增）**：[讲透Harness](../讲透Harness/)（仓库根）——本页与合并解析、工程手册的**实验科学层**：E1-E3 本地实测（幻觉式完成 FCR / 验证器三级 / 崩溃恢复）+ Harness-Bench 一手核实 + 论述命名映射表。四层消费链：37 仓全景（生态）→ 本页（蒸馏）→ 工程手册（操作）→ 讲透Harness（实验）。
+**教学落点（2026-08-26 新增）**：[讲透Harness](../讲透Harness)（仓库根）——本页与合并解析、工程手册的**实验科学层**：E1-E3 本地实测（幻觉式完成 FCR / 验证器三级 / 崩溃恢复）+ Harness-Bench 一手核实 + 论述命名映射表。四层消费链：37 仓全景（生态）→ 本页（蒸馏）→ 工程手册（操作）→ 讲透Harness（实验）。
 
 | 仓库 | ★ | 留观理由 |
 |---|---|---|

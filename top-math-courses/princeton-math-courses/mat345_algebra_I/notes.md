@@ -2,7 +2,7 @@
 
 > **教材**：Artin, *Algebra* (2nd ed) — Princeton 使用 Artin 体系
 > **参考**：[math.princeton.edu](https://www.math.princeton.edu/)；Dummit-Foote 对照
-> **定位**：与 [MIT 18.701](../../mit-math-courses/18_701_algebra_I/)（同为 Artin 体系）和 [Harvard 122](../../harvard-math-courses/math122_algebra_I/)（DF 体系）高度重叠
+> **定位**：与 [MIT 18.701](../../mit-math-courses/18_701_algebra_I)（同为 Artin 体系）和 [Harvard 122](../../harvard-math-courses/math122_algebra_I)（DF 体系）高度重叠
 
 ---
 
@@ -57,4 +57,4 @@ Princeton 数论极强（Andrew Wiles 证明 Fermat 大定理的工作就在 Pri
 1. **Artin 第 1-7 章**：矩阵群 + 群论基础 + 群作用 → **核心**
 2. **Artin 第 8-9 章**：线性群 + 群表示 → **ML 方向重点**
 3. **跳过**：第 15-16 章 Galois 理论（除非做数论）
-4. **交叉**：[MIT 18.701](../../mit-math-courses/18_701_algebra_I/)（Artin 原版视频课）
+4. **交叉**：[MIT 18.701](../../mit-math-courses/18_701_algebra_I)（Artin 原版视频课）

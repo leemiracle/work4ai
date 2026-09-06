@@ -22,9 +22,9 @@
 
 ## 参考资源
 - Artin, *Algebra* (2nd ed, Pearson, 2017)
-- MIT 对照：[MIT 18.701 Algebra I](../../mit-math-courses/18_701_algebra_I/)
+- MIT 对照：[MIT 18.701 Algebra I](../../mit-math-courses/18_701_algebra_I)
 
-📌 **下一步**：→ [Harvard Math 131 Topology I](../math131_topology_I/)
+📌 **下一步**：→ [Harvard Math 131 Topology I](../math131_topology_I)
 
 ---
 
@@ -32,7 +32,7 @@
 
 - **前置**：线性代数 + 证明能力
 - **本课**：Dummit-Foote 体系 → 群/环/域/模/Galois（最全面的本科代数教材）
-- **交叉**：[MIT 18.701](../../mit-math-courses/18_701_algebra_I/)（Artin 体系）+ [Berkeley 113](../../berkeley-math-courses/math113_abstract_algebra/)（ML 应用视角）
+- **交叉**：[MIT 18.701](../../mit-math-courses/18_701_algebra_I)（Artin 体系）+ [Berkeley 113](../../berkeley-math-courses/math113_abstract_algebra)（ML 应用视角）
 
 ## 🔬 理论联系实际
 1. **群作用 → 等变神经网络**：G-CNN, SE(3)-Transformer, AlphaFold

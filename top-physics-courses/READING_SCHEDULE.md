@@ -1,6 +1,6 @@
 # 12 / 24 / 36 月可执行周历 — 把所有资源串起来
 
-> **为什么写这个**：[EXPERT_PATH_2026.md](EXPERT_PATH_2026.md) 给了战略，[RESOURCES/](RESOURCES/) 给了资源，但没有"这周该做什么"。本文档把所有东西串成**可勾选的周历**。
+> **为什么写这个**：[EXPERT_PATH_2026.md](EXPERT_PATH_2026.md) 给了战略，[RESOURCES/](RESOURCES) 给了资源，但没有"这周该做什么"。本文档把所有东西串成**可勾选的周历**。
 >
 > **假设**：每周 10-20h（与你 human 记忆一致），物理从零开始，但已有 work4ai 的 AI 能力和 top-math-courses 的数学资源。
 
@@ -250,4 +250,4 @@
 ---
 
 **完成日期**：2026-08-13
-**配套**：[EXPERT_PATH_2026.md](EXPERT_PATH_2026.md) + 全部 [RESOURCES/](RESOURCES/) + [ai_for_physics/](ai_for_physics/) + [EXPERT_BENCHMARKS.md](EXPERT_BENCHMARKS.md)
+**配套**：[EXPERT_PATH_2026.md](EXPERT_PATH_2026.md) + 全部 [RESOURCES/](RESOURCES) + [ai_for_physics/](ai_for_physics) + [EXPERT_BENCHMARKS.md](EXPERT_BENCHMARKS.md)

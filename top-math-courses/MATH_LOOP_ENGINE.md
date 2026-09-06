@@ -34,7 +34,7 @@ AlphaProof = LLM 提议 + Lean 验证 + RL(专家迭代)         → IMO 银牌
 你的循环  = 你+AI 提议 + 多级验证器 + 反思迭代            → 数学家
 ```
 
-同构点：**验证信号驱动的一切学习都是这个循环**。它同时是科学方法（假设→实验→分析→理论）、OODA、Kolb 经验学习圈、RL episode。你的关键约束——**计划阶段必须分解到"实验代码/现有工具能完成"的粒度**——正是 AlphaProof 的 subgoal decomposition，也已在 [实战案例-Prover数学Agent](../讲透Agent/实战案例-Prover数学Agent/) 的 harness 里跑通（DeepSeek-Prover-V2 分解→子目标→lake 验证闭环）。
+同构点：**验证信号驱动的一切学习都是这个循环**。它同时是科学方法（假设→实验→分析→理论）、OODA、Kolb 经验学习圈、RL episode。你的关键约束——**计划阶段必须分解到"实验代码/现有工具能完成"的粒度**——正是 AlphaProof 的 subgoal decomposition，也已在 [实战案例-Prover数学Agent](../讲透Agent/实战案例-Prover数学Agent) 的 harness 里跑通（DeepSeek-Prover-V2 分解→子目标→lake 验证闭环）。
 
 ---
 
@@ -247,7 +247,7 @@ updated: YYYY-MM-DD
 | PRACTICE_LAB / AI_FOR_MATH_TOOLS | 做/用 的细节层 | 双向引用 |
 | 实战案例-Prover数学Agent | L4 层实例（子目标分解=laboratory） | 本文档 §〇 |
 | 讲透X 系列 | 高流量节点的 DFS 产物 | §一 深挖层定义 |
-| [讲透Loop](../讲透Loop/) | 引擎的学科化名字：七阶段循环 = loop specification 五件套的 goal loop 实例；五类 reward = 验证阶梯顶层配置 | README Ch10 活案例（2026-08-26 挂网） |
+| [讲透Loop](../讲透Loop) | 引擎的学科化名字：七阶段循环 = loop specification 五件套的 goal loop 实例；五类 reward = 验证阶梯顶层配置 | README Ch10 活案例（2026-08-26 挂网） |
 | [MATH_DISCOVERY_ENGINE](MATH_DISCOVERY_ENGINE.md) | 引擎的研究升级：学习循环 → 三轴组合爆炸发现循环（模型×手段×森林，T1 已点火） | §十 + 自身文档 §五 §六 |
 
 ---
@@ -255,7 +255,7 @@ updated: YYYY-MM-DD
 ## HISTORY
 
 - 2026-08-25 建立：五生成规则 + 63 类地图 + Wave 计划 + 30 锚点卡骨架 + 仪表盘。首批 verified 循环：Catalan（组合）、Basel（分析/数论）、PINN-Poisson（PDE，复用已有实验）。知识森林结构决策：多父 DAG + 深挖树 + 循环地被（证据：Mathlib DAG 深度 84 / 跨命名空间边 50.9%）。
-- 2026-08-25 **Wave 0 全部点火完成**（同日）：卡1 数理逻辑（穷举 8/8 + SymPy + Lean `wave0_not_or`）、卡2 集合论（2^n→A000079 + Cantor 对角 512/512 + Russell 16/16）、卡3 自然数归纳（Nicomachus 三通道 + A000537 + Lean `zero_ne_succ`/`add_assoc`）。Lean 产物 = [loops/lean/](loops/lean/)（lean4 v4.21.0 lake 包，本地 build 0 sorry）。仪表盘 6/30 卡 · 4/63 类 · reward 四类非零。诚实修正一条：卡3 float 误差预判 1e-12 → 实测 1e-14（随机游走），观察以数据为准。
+- 2026-08-25 **Wave 0 全部点火完成**（同日）：卡1 数理逻辑（穷举 8/8 + SymPy + Lean `wave0_not_or`）、卡2 集合论（2^n→A000079 + Cantor 对角 512/512 + Russell 16/16）、卡3 自然数归纳（Nicomachus 三通道 + A000537 + Lean `zero_ne_succ`/`add_assoc`）。Lean 产物 = [loops/lean/](loops/lean)（lean4 v4.21.0 lake 包，本地 build 0 sorry）。仪表盘 6/30 卡 · 4/63 类 · reward 四类非零。诚实修正一条：卡3 float 误差预判 1e-12 → 实测 1e-14（随机游走），观察以数据为准。
 - 2026-08-25 **Wave 1 全部点火完成**（母结构六卡）：卡5 S₃ 穷举子群+Lagrange+陪集（SymPy 无 subgroups() API→纯手写反而更优）；卡6 手写 MGS-QR 3.5e-16+SVD 秩一致+有效秩边缘观察；卡7 划分格 225 对 sup/inf+格公理 3375 组+A000110；卡8 穷举 29 拓扑/T0 19——**OEIS ID 纠错：A001930(unlabeled)→A000798(labeled)，T0 数=A001035(labeled posets，有限 T0↔偏序的 OEIS 亲证)**；卡9 Cantor (2/3)^30 精确+MC 0.67σ+2^30 区间爆内存教训；卡10 LLN/CLT——**KS 离散化陷阱**（n=100 假阳性拒绝=D 的台阶下界，改三尺度实验反而更强验证 CLT）。仪表盘 12/30 卡 · 9/63 类 · 生成规则复述首测通过。
 - 2026-08-25 **Wave 2 全部点火完成**（分析主干五新卡+PINN 既有）：卡11 RK4 周期误差 4.4e-16+van der Pol 斜率 3.998——**超收敛发现**（谐振子斜率 5.02=相位误差相消；"先定步数再定步长"铁律）；卡13 三围道 <1e-10+精度墙观察（dps=30 止步 1e-12=参数化振荡，留数定理=计算复杂度降维）；卡14 谱定理重构 2.2e-15——**λ_min 下溢观察**（正定核真尾部 1e-1400 低于机器精度，"正定"浮点读法 λ>−tol；紧性正确指标=λ₁ 收敛+可见区衰减率）；卡15 SymPy 符号推导 K=1 与 cos u/(2+cos u)+Gauss-Bonnet 球 4π 误差 0/环面 1.4e-15；卡16 摆线偏差 2.2e-8+时间最优+Adam/GD=1/9——**三次修正实录**（Beltrami 符号错爆 1e23/竖直切线奇异/水平基线对数发散=慢启动物理）。仪表盘 17/30 卡 · 19/63 类。
 - 2026-08-25 **skills 化接口确立**：[`讲透Agent/讲透Skills/09`](../讲透Agent/讲透Skills/09-数学领域应用-skills×数学循环引擎.md) 定义了引擎的 skill 形态（数学五型：方法论/领域战术/工具链/验证/元循环）+ 数学版自动优化循环（五类 reward 全自动判分 → 轨迹蒸馏 → 战术字典进化——SkillRL/MCE 思想的数学域落地）。Wave 1+ 的锚点轨迹将作为进化循环的原始素材。

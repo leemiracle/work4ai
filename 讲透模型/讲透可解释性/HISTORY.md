@@ -844,7 +844,7 @@ SAE 能找到的特征空间有多大？是否有根本性局限——某些类�
 | [04-Attribution与梯度方法](./04-Attribution与梯度方法.md) | Attribution 的失败史 |
 | [05-Scaling-Monosemanticity与激活导向](./05-Scaling-Monosemanticity与激活导向.md) | 2024 前沿 |
 | [06-应用安全审计与幻觉debug](./06-应用安全审计与幻觉debug.md) | 工程应用 |
-| [讲透AI历史](../讲透AI历史/) | AI 大历史背景 |
+| [讲透AI历史](../讲透AI历史) | AI 大历史背景 |
 | [讲透科学的现代性/03](../讲透科学的现代性/03-AI时代的科学哲学.md) | "AI 发现的规律算科学理解吗" |
 
 ---

@@ -1,7 +1,7 @@
 # ETH 401-3904 · 费曼三层讲透：凸优化（ETH 版）
 
 > **教材**：Boyd & Vandenberghe, *Convex Optimization* ★；Bubeck, *Convex Optimization: Algorithms and Complexity* (2015)
-> **关联**：与 [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization/) 同类，ETH 版更侧重算法复杂度理论
+> **关联**：与 [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization) 同类，ETH 版更侧重算法复杂度理论
 
 > 本课的核心数学（凸集/凸函数/KKT/对偶/算法）与 Stanford CME 364A 完全一致，详见 [CME 364A notes.md](../../stanford-math-courses/cme364A_convex_optimization/notes.md)。本笔记聚焦 **ETH 特色：算法复杂度理论（Bubeck 视角）**。
 
@@ -107,7 +107,7 @@ traj_nes = nesterov_accelerated_grad(grad_f, x0, L, n_iter=100)
 1. **Nesterov 加速 → PyTorch `SGD(momentum, nesterov=True)`**
 2. **Adam 的收敛保证（Reddi 2018 AMSGrad 修复，[1804.04825](https://arxiv.org/abs/1804.04825) ✅）**
 3. **分布式优化的通信复杂度下界**
-4. **RLHF 的凸化（DPO）**：见 [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization/)
+4. **RLHF 的凸化（DPO）**：见 [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization)
 
 ---
 

@@ -122,8 +122,8 @@ Sora 把 DiT 从图像推广到视频：
 模型可能性的核心 4 章（01 SSM / 02 Linear Attn / 03 RWKV / 06 混合 / 07 DiT）到此补全。回顾本系列要传达的：**Transformer 不是终点，但替代者（SSM/Linear/RWKV）和混合（Jamba）各有所长，最终可能是"混合 + 场景选型"的格局**。
 
 继续：
-- [`../讲透生成模型/`](../讲透生成模型/)：diffusion 的数学（DDPM/DDIM/Karras）
-- [`../讲透Transformer/`](../讲透Transformer/)：被挑战的主流
+- [`../讲透生成模型/`](../讲透生成模型)：diffusion 的数学（DDPM/DDIM/Karras）
+- [`../讲透Transformer/`](../讲透Transformer)：被挑战的主流
 - [16-未来展望](16-未来展望.md)：推理时计算（o1 范式）/ 混合格局 / AGI——本系列的收官章
 
 ## ✍️ 练习

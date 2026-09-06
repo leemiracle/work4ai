@@ -39,10 +39,10 @@
 
 ## 学习建议
 - **节奏**：每周 6-8 小时，10-12 周
-- **必备先修**：[Part II Probability and Measure](../partII_probability_measure/)
+- **必备先修**：[Part II Probability and Measure](../partII_probability_measure)
 - **MIT 对照**：MIT 18.175 + 9.520（统计学习理论课）
 
-📌 **下一步**：→ [Part II Numerical Analysis](../partII_numerical_analysis/) 或 Stanford CME 364A（待写/未落盘）
+📌 **下一步**：→ [Part II Numerical Analysis](../partII_numerical_analysis) 或 Stanford CME 364A（待写/未落盘）
 
 ---
 
@@ -67,9 +67,9 @@
   深度学习泛化谜题 (双下降, NTK, PAC-Bayes)
 ```
 
-- **前置**：[Part II Probability and Measure](../partII_probability_measure/) + [Stanford CME 364A 凸优化](../../stanford-math-courses/cme364A_convex_optimization/)
+- **前置**：[Part II Probability and Measure](../partII_probability_measure) + [Stanford CME 364A 凸优化](../../stanford-math-courses/cme364A_convex_optimization)
 - **本课**：ERM → 浓度不等式 → VC 维 → Rademacher → 凸学习 → SGD → 神经网络
-- **后续/交叉**：[Oxford C7.1 随机矩阵](../../oxford-math-courses/partC_c7_1_random_matrix_theory/)（高维统计 → 泛化）
+- **后续/交叉**：[Oxford C7.1 随机矩阵](../../oxford-math-courses/partC_c7_1_random_matrix_theory)（高维统计 → 泛化）
 
 ---
 
@@ -109,4 +109,4 @@ $$L \leq \hat{L} + \sqrt{\frac{\mathrm{KL}(Q\|P) + \log(2\sqrt{n}/\delta)}{2n}}$
 
 ---
 
-📌 **下一步**：→ [Part II Numerical Analysis](../partII_numerical_analysis/) 或 [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization/)
+📌 **下一步**：→ [Part II Numerical Analysis](../partII_numerical_analysis) 或 [Stanford CME 364A](../../stanford-math-courses/cme364A_convex_optimization)

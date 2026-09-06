@@ -669,8 +669,8 @@ R1 论文（2025.01）详细披露了"纯 RL 产生推理能力"的方法。如�
 | [02-模型动物园与工具链](02-模型动物园与工具链.md) | HuggingFace/vLLM/Ollama 工具链 | 本目录 |
 | [09-缩放的科学](09-缩放的科学.md) | Scaling laws 深度分析 | 本目录 |
 | [`experiments/01_family_timeline.py`](experiments/01_family_timeline.py) | 量化"新瓶装旧酒"比例 | 本目录 |
-| [`讲透AI历史`](../讲透AI历史/) | 更宏观的 AI 思想史 | work4ai 根 |
-| [`讲透基础模型`](../讲透基础模型/) | Foundation Model 深度 | work4ai 根 |
+| [`讲透AI历史`](../讲透AI历史) | 更宏观的 AI 思想史 | work4ai 根 |
+| [`讲透基础模型`](../讲透基础模型) | Foundation Model 深度 | work4ai 根 |
 
 ### 15.2 外部资源
 

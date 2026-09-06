@@ -27,13 +27,13 @@
 - Stanford Canvas 课程页面（需注册）
 - 配合：3Blue1Brown 线代本质
 
-📌 **下一步**：→ [MATH 113 Linear Algebra Theory](../math113_linear_algebra_theory/)（严格版）
+📌 **下一步**：→ [MATH 113 Linear Algebra Theory](../math113_linear_algebra_theory)（严格版）
 
 ---
 
 ## 📍 在数学全景中的位置（多变量部分）
 
-MATH 51 是 Stanford 工学院/CS 系的核心数学课——把**线代和多变量微积分并行**讲授。前置单变量微积分；本笔记聚焦**多变量微积分部分**（第 4-7 单元：多元微分/梯度/优化/积分）。线代部分归其他 agent。多变量部分与 [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus/) / [Berkeley MATH 53](../../berkeley-math-courses/math53_multivariable/) 内容等价。MATH 51 的特色是把线代（SVD/PCA）与多变量（梯度优化）**有机融合**，第 8 单元直接讲 SVD 在数据降维中的应用。
+MATH 51 是 Stanford 工学院/CS 系的核心数学课——把**线代和多变量微积分并行**讲授。前置单变量微积分；本笔记聚焦**多变量微积分部分**（第 4-7 单元：多元微分/梯度/优化/积分）。线代部分归其他 agent。多变量部分与 [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus) / [Berkeley MATH 53](../../berkeley-math-courses/math53_multivariable) 内容等价。MATH 51 的特色是把线代（SVD/PCA）与多变量（梯度优化）**有机融合**，第 8 单元直接讲 SVD 在数据降维中的应用。
 
 ## 🔬 理论联系实际（多变量部分）
 

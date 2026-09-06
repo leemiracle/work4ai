@@ -141,9 +141,9 @@ Ilya Sutskever（OpenAI 首席科学家，2024 离职创 SSI）后来说：
 ## 🛠️ 我该深挖什么
 
 ### work4ai 系列
-- [`../讲透LLM/`](../讲透LLM/)：LLM 全栈
-- [`../讲透基础模型/`](../讲透基础模型/)：NTP / 规模律 / 涌现 / 对齐（含博士级 advanced）
-- [`../讲透Prompt/`](../讲透Prompt/)：ICL / CoT / 结构化输出
+- [`../讲透LLM/`](../讲透LLM)：LLM 全栈
+- [`../讲透基础模型/`](../讲透基础模型)：NTP / 规模律 / 涌现 / 对齐（含博士级 advanced）
+- [`../讲透Prompt/`](../讲透Prompt)：ICL / CoT / 结构化输出
 
 ### 必读
 - **Radford et al. 2018 "Improving Language Understanding by Generative Pre-Training"**（GPT-1）

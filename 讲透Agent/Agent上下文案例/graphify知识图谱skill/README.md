@@ -48,5 +48,5 @@ Available versions: 0.9.42, 0.9.41, ..., 0.1.1   # 200+ 版本，0.4.x 起要求
 - 领域全景（六路线 + 速查表）：[`../README.md`](../README.md)
 - 直接对照案例：[`codegraph代码知识图谱`](../codegraph代码知识图谱/README.md)（MCP 常驻 vs skill 按需；纯代码图 vs 多模态语料；Rust vs Python）
 - 知识图谱手册接口：[`工程化手册库/知识图谱工程手册`](../../工程化手册库/知识图谱工程手册/README.md)——graphify 可导出 Obsidian vault（`to_obsidian`），正是该手册"个人知识图谱"工作流的外部供给端
-- 记忆层对照：[`Agent记忆系统案例/mem0开源记忆层`](../../Agent记忆系统案例/mem0开源记忆层/)——graphify 的 LOCOMO 基准直接以 mem0 为对照系，`save-result/reflect` 是会话内工作记忆的另一种实现
+- 记忆层对照：[`Agent记忆系统案例/mem0开源记忆层`](../../Agent记忆系统案例/mem0开源记忆层)——graphify 的 LOCOMO 基准直接以 mem0 为对照系，`save-result/reflect` 是会话内工作记忆的另一种实现
 - 欺骗动力学接口：置信标签（EXTRACTED/INFERRED）是"证据分级"的工业实现，见 [`欺骗动力学-AI纪实验包.md`](../../欺骗动力学-AI纪实验包.md) D1 验证维度

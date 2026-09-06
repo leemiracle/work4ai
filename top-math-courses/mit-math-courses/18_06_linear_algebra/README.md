@@ -40,7 +40,7 @@
 - **节奏**：每周 3-4 小时，10-12 周完成
 - **重点**：第 1-7 章（前 7 章已覆盖本科线代的核心）
 - **配合**：[3Blue1Brown *Essence of Linear Algebra*](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)（视觉直觉）
-- **进阶**：学完后读 [Axler *Linear Algebra Done Right*](../../berkeley-math-courses/math110_linear_algebra/) 做严格化
+- **进阶**：学完后读 [Axler *Linear Algebra Done Right*](../../berkeley-math-courses/math110_linear_algebra) 做严格化
 
 ---
 
@@ -104,10 +104,10 @@
 
 2. **随机矩阵理论（RMT）解释 LLM 权重谱（2024-2025）**
    - 用 **Marchenko-Pastur 定律**分析预训练权重的奇异值分布：去噪后的"信号"奇异值 vs 噪声奇异值的分界，可用 MP 律的边缘 $\sigma_\pm = (1\pm\sqrt{c})$ 来判定。→ 这解释了为什么 LoRA 用很小的秩 $r$ 就够：大部分奇异值是"噪声"。
-   - Oxford 的 [Part C C7.1 Random Matrix Theory](../../oxford-math-courses/partC_c7_1_random_matrix_theory/) 正是这条线的数学基础。
+   - Oxford 的 [Part C C7.1 Random Matrix Theory](../../oxford-math-courses/partC_c7_1_random_matrix_theory) 正是这条线的数学基础。
 
 3. **Tensor Decomposition（张量分解）超越矩阵 SVD（2024-2026）**
    - 多模态/长序列建模需要处理 $>2$ 阶张量。**Tucker 分解**和 **CP 分解**是 SVD 的高阶推广：$\mathcal{X}\approx\mathcal{G}\times_1 U_1 \times_2 U_2 \cdots \times_N U_N$。
    - 应用：高效 Transformer（用张量分解压缩注意力头）、持续学习（用正交子空间避免灾难性遗忘）。⚠️ 该方向理论仍在快速演化，部分收敛性证明尚未完善。
 
-📌 **下一步**：→ [18.03 微分方程](../18_03_differential_equations/) 或直接 [18.100B 实分析](../18_100B_real_analysis/)
+📌 **下一步**：→ [18.03 微分方程](../18_03_differential_equations) 或直接 [18.100B 实分析](../18_100B_real_analysis)

@@ -22,7 +22,7 @@
 10. Applications
 
 ## 与 ML 的关联
-- 与 [MIT 18.06](../../mit-math-courses/18_06_linear_algebra/) 同类（Strang 教材）
+- 与 [MIT 18.06](../../mit-math-courses/18_06_linear_algebra) 同类（Strang 教材）
 
 ---
 
@@ -78,4 +78,4 @@ MIT 18.06 (Strang) ◀──(同教材)── UT Austin M 340L ◀──(同难�
 3. **ETH 数值线代（401-2611）→ 大规模 SVD 算法（2024-2026）**
    - 随机化 SVD、流式 SVD 用于超大规模推荐系统/LLM 权重分析。
 
-📌 **下一步**：→ [401-0261 Analysis I](../e401_0261_analysis_I/)
+📌 **下一步**：→ [401-0261 Analysis I](../e401_0261_analysis_I)

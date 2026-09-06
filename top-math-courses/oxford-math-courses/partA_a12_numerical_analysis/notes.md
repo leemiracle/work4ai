@@ -118,5 +118,5 @@ for i in range(10):
 ## 四、推荐路径
 
 1. **Süli-Mayers 第 1-7 章**：误差 + 插值 + 积分 + 求根 + ODE → **核心**
-2. **第 8-9 章**：数值线代 → 参考 [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)
-3. **交叉**：[Cambridge Part IB NA](../../cambridge-math-courses/partIB_numerical_analysis/)（类似难度，不同组织）
+2. **第 8-9 章**：数值线代 → 参考 [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra)
+3. **交叉**：[Cambridge Part IB NA](../../cambridge-math-courses/partIB_numerical_analysis)（类似难度，不同组织）

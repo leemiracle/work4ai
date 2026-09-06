@@ -314,4 +314,4 @@ $$B = \frac{\mu_0 I}{2\pi r} = \frac{(4\pi\times10^{-7})(10)}{2\pi \times 0.01} 
 ---
 
 **完成日期**：2026-08-13（深化版 v2，从 122 行扩到 ~320 行）
-**配套**：[berkeley/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[berkeley/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

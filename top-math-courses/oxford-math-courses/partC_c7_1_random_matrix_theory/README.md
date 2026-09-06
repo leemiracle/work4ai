@@ -51,9 +51,9 @@
    (BBP相变, PCA检测)              (权重谱 → 泛化, 初始化)
 ```
 
-- **前置**：[Oxford Part A 线代](../partA_a0_linear_algebra/)（特征值/谱分解）+ 概率论（CLT/大数律）
+- **前置**：[Oxford Part A 线代](../partA_a0_linear_algebra)（特征值/谱分解）+ 概率论（CLT/大数律）
 - **本课**：Wigner 半圆律 → MP 律 → Tracy-Widom → BBP 相变 → 自由概率 → 普适性
-- **后续/交叉**：[Oxford Part C C8.1 SDE](../partC_c8_1_sde/) | [Cambridge Part II ML](../../cambridge-math-courses/partII_mathematics_machine_learning/)
+- **后续/交叉**：[Oxford Part C C8.1 SDE](../partC_c8_1_sde) | [Cambridge Part II ML](../../cambridge-math-courses/partII_mathematics_machine_learning)
 
 ---
 
@@ -92,4 +92,4 @@ $\gamma = p/n \gg 1$ 时大量零特征值 = 插值空间，解释"过拟合反�
 
 ---
 
-📌 **下一步**：→ [Part C C8.1 SDE](../partC_c8_1_sde/)
+📌 **下一步**：→ [Part C C8.1 SDE](../partC_c8_1_sde)

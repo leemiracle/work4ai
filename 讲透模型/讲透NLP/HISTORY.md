@@ -652,7 +652,7 @@ NLP 的思想传播高度依赖教材——三个时代的教材塑造了三代 
 - **NLP 任务全览** → [17 POS/NER](./17-序列标注-POS与NER.md) → [18 CFG/Parsing](./18-上下文无关文法与成分句法分析.md) → [20 IE/SRL](./20-信息抽取与语义角色.md) → [24 篇章与对话](./24-篇章与对话.md)
 - **LLM 思想史** → [`讲透LLM/HISTORY`](../讲透LLM/HISTORY.md)
 - **Transformer 架构史** → [`讲透Transformer/HISTORY`](../讲透Transformer/HISTORY.md)
-- **AI 通史** → [`讲透AI历史`](../讲透AI历史/)
+- **AI 通史** → [`讲透AI历史`](../讲透AI历史)
 - **范式转移库恩分析** → [`讲透AI历史/advanced/01`](../讲透AI历史/advanced/01-范式转移的库恩分析.md)
 
 ### 13.3 经典教材
@@ -707,7 +707,7 @@ NLP 的思想传播高度依赖教材——三个时代的教材塑造了三代 
 2. **对照 [`讲透LLM/HISTORY`](../讲透LLM/HISTORY.md)**：把 NLP 任务史和 LLM 模型史放在一起看——两者交叉但不重复。
 3. **读 [03 N-gram LM](./03-N元语法语言模型.md) → [17 POS/NER](./17-序列标注-POS与NER.md) → [24 篇章与对话](./24-篇章与对话.md)**：沿着任务层走一遍——语音→形态→句法→语义→语用。
 4. **思考开放问题**（§12）：选一个做深入研究——"LLM 真正理解语言了吗"是 NLP 版的终极问题。
-5. **和 [`讲透AI历史`](../讲透AI历史/) 对照**：NLP 思想史是 AI 通史在语言维度的纵深。
+5. **和 [`讲透AI历史`](../讲透AI历史) 对照**：NLP 思想史是 AI 通史在语言维度的纵深。
 
 ---
 
@@ -721,4 +721,4 @@ NLP 的思想传播高度依赖教材——三个时代的教材塑造了三代 
 
 ---
 
-**完成日期**：2026-08-14 · **配套**：[讲透NLP README](./README.md) + [`讲透LLM/HISTORY`](../讲透LLM/HISTORY.md) + [`讲透Transformer/HISTORY`](../讲透Transformer/HISTORY.md) + [`讲透AI历史`](../讲透AI历史/) + [`讲透科学的现代性`](../讲透科学的现代性/)
+**完成日期**：2026-08-14 · **配套**：[讲透NLP README](./README.md) + [`讲透LLM/HISTORY`](../讲透LLM/HISTORY.md) + [`讲透Transformer/HISTORY`](../讲透Transformer/HISTORY.md) + [`讲透AI历史`](../讲透AI历史) + [`讲透科学的现代性`](../讲透科学的现代性)

@@ -23,7 +23,7 @@
 ## 参考资源
 - Rudin, *Principles of Mathematical Analysis*
 - Pugh, *Real Mathematical Analysis*（更友好）
-- MIT 对照：[MIT 18.100B](../../mit-math-courses/18_100B_real_analysis/)
+- MIT 对照：[MIT 18.100B](../../mit-math-courses/18_100B_real_analysis)
 
 ## 📍 在数学全景中的位置
 
@@ -53,4 +53,4 @@ Math 23a/b 证明       →   (Rudin/Pugh 度量空间)         Math 131 拓扑
 
 ---
 
-📌 **下一步**：→ [Harvard Math 114 Measure](../math114_measure_integration/)
+📌 **下一步**：→ [Harvard Math 114 Measure](../math114_measure_integration)

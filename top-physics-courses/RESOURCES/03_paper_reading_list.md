@@ -202,4 +202,4 @@ Nobel Prize 官网所有讲座**免费**（文字+视频）。强烈推荐：
 ---
 
 **完成日期**：2026-08-13
-**配套**：[04_research_training.md](04_research_training.md) + [EXPERT_PATH_2026.md](../EXPERT_PATH_2026.md) + [ai_for_physics/](../ai_for_physics/)
+**配套**：[04_research_training.md](04_research_training.md) + [EXPERT_PATH_2026.md](../EXPERT_PATH_2026.md) + [ai_for_physics/](../ai_for_physics)

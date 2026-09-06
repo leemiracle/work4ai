@@ -175,8 +175,8 @@ interp 圈的中心问题：
 ## 🛠️ 我该深挖什么
 
 ### work4ai 系列
-- [`../讲透可解释性/`](../讲透可解释性/)：interp 入门 + probing + SAE
-- [`../讲透NLP/Ch09§8`](../讲透NLP/)：你做过的 refusal direction 实验
+- [`../讲透可解释性/`](../讲透可解释性)：interp 入门 + probing + SAE
+- [`../讲透NLP/Ch09§8`](../讲透NLP)：你做过的 refusal direction 实验
 - [`../故事化学习法/04-Mech-Interp侦探故事`](../故事化学习法/04-Mech-Interp侦探故事.md)：侦探小说版本
 - [`../顶级专家资源库/05-方向深选-Mechanistic-Interpretability`](../顶级专家资源库/05-方向深选-Mechanistic-Interpretability.md)：方向资源
 

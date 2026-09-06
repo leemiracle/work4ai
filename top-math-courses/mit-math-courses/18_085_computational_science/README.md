@@ -41,15 +41,15 @@
 - **重点**：Fourier / Laplacian / FEM（这三个在 ML 里出现频率最高）
 - **配合**：UT Austin M 383E Numerical Methods I（待写/未落盘）（更现代的数值线代）
 
-📌 **下一步**：→ [18.701 代数 I](../18_701_algebra_I/) 或 UT Austin M 383E（待写/未落盘）
+📌 **下一步**：→ [18.701 代数 I](../18_701_algebra_I) 或 UT Austin M 383E（待写/未落盘）
 
 ---
 
 ## 📍 在数学全景中的位置
 
-- **前置**：[MIT 18.06 线代](../18_06_linear_algebra/)（四子空间、SVD）
+- **前置**：[MIT 18.06 线代](../18_06_linear_algebra)（四子空间、SVD）
 - **本课**：用线代统一应用数学——**差分 → 矩阵 → PDE / FFT / FEM / 图拉普拉斯**
-- **后续**：[UT Austin M 383E 数值线代](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)（Trefethen & Bau）/ [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde/)（diffusion）
+- **后续**：[UT Austin M 383E 数值线代](../../ut-austin-math-courses/m383e_numerical_linear_algebra)（Trefethen & Bau）/ [ETH 401-3651 SDE](../../eth-math-courses/e401_3651_numerical_sde)（diffusion）
 
 ---
 
@@ -58,8 +58,8 @@
 1. **图拉普拉斯 $L = D - A$ → 谱聚类、GNN 正则化**
 2. **FFT → CNN 卷积加速**（conv = IFFT(FFT·FFT)）
 3. **泊松方程离散化 → 图半监督学习**
-4. **热方程 → diffusion model 的 PDE 根基**（→ [ETH 401-3651](../../eth-math-courses/e401_3651_numerical_sde/)）
-5. **Krylov 子空间 → attention 线性近似**（→ [M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)）
+4. **热方程 → diffusion model 的 PDE 根基**（→ [ETH 401-3651](../../eth-math-courses/e401_3651_numerical_sde)）
+5. **Krylov 子空间 → attention 线性近似**（→ [M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra)）
 
 ---
 

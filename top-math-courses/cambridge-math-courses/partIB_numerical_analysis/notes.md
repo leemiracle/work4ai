@@ -14,7 +14,7 @@
 | **RK 方法阶条件** | "用 Taylor 展开匹配更高阶项"——Butcher 树 |
 | **收束阶** | "$p$ 阶方法 = 误差 $O(h^p)$"——halving $h$ 减小误差 $2^p$ 倍 |
 
-> **一句话总结**：Cambridge IB NA = **"数值方法 + 严格证明"**。与 [M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/) 的线代部分互补，本课侧重**插值/求积/ODE 的严格误差分析**。
+> **一句话总结**：Cambridge IB NA = **"数值方法 + 严格证明"**。与 [M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra) 的线代部分互补，本课侧重**插值/求积/ODE 的严格误差分析**。
 
 ---
 
@@ -103,6 +103,6 @@ z = np.linspace(-4, 2, 500)
 ---
 
 ## 交叉引用
-- [Cambridge Part II NA](../../cambridge-math-courses/partII_numerical_analysis/) — 高级续集（Krylov/谱方法）
-- [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/) — 线代数值方法
-- [Stanford CME 108](../../stanford-math-courses/cme108_scientific_computing/) — 类似覆盖面
+- [Cambridge Part II NA](../partII_numerical_analysis) — 高级续集（Krylov/谱方法）
+- [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra) — 线代数值方法
+- [Stanford CME 108](../../stanford-math-courses/cme108_scientific_computing) — 类似覆盖面

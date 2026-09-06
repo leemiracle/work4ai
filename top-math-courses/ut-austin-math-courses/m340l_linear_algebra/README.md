@@ -73,4 +73,4 @@ MIT 18.06 (Strang) ◀──(同难度)── ETH 401-0131 ◀──(同应用�
 3. **数值线代（M 383E 后续）→ 大规模 SVD/随机化算法（2024-2026）**
    - 推荐系统、LLM 权重分析需要的超大规模 SVD，由 M 383E 的随机化算法实现。
 
-📌 **下一步**：→ [M 341 理论版](../m340l_linear_algebra/) 或 [M 365C Real Analysis](../m365c_real_analysis/)
+📌 **下一步**：→ [M 341 理论版](.) 或 [M 365C Real Analysis](../m365c_real_analysis)

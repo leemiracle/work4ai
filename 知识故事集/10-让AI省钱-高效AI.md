@@ -149,10 +149,10 @@ Apple Intelligence（2024 WWDC）：
 
 ### work4ai 系列
 - [`../讲透KV Cache/`](../讲透KV Cache/)：KV cache 完整原理 + 优化
-- [`../讲透GPU与系统级/`](../讲透GPU与系统级/)：FlashAttention + vLLM + 量化 + CUDA
-- [`../讲透复用权重/`](../讲透复用权重/)：迁移学习 + PEFT + LoRA + QLoRA + 蒸馏 + 持续学习
-- [`../讲透微调/`](../讲透微调/)：LoRA / PEFT / QLoRA 实战
-- [`../讲透分布式AI系统/`](../讲透分布式AI系统/)：DDP / FSDP / ZeRO / TP
+- [`../讲透GPU与系统级/`](../讲透GPU与系统级)：FlashAttention + vLLM + 量化 + CUDA
+- [`../讲透复用权重/`](../讲透复用权重)：迁移学习 + PEFT + LoRA + QLoRA + 蒸馏 + 持续学习
+- [`../讲透微调/`](../讲透微调)：LoRA / PEFT / QLoRA 实战
+- [`../讲透分布式AI系统/`](../讲透分布式AI系统)：DDP / FSDP / ZeRO / TP
 
 ### 必读
 - **Dao et al. 2022 "FlashAttention: Fast and Memory-Efficient Exact Attention"**

@@ -2,7 +2,7 @@
 
 > **教材**：Durrett, *Probability: Theory and Examples* (5th ed, Cambridge, 2019) — **免费 PDF**
 > **一手核实**：services.math.duke.edu/~rtd/PTE/PTE5_011119.pdf + UT Austin Probability Prelim 大纲
-> **定位**：研究生测度论概率；UT Probability Prelim 第一学期（与 [MIT 18.175](../../mit-math-courses/18_175_probability/) 同级金课）
+> **定位**：研究生测度论概率；UT Probability Prelim 第一学期（与 [MIT 18.175](../../mit-math-courses/18_175_probability) 同级金课）
 
 ---
 

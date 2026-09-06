@@ -384,4 +384,4 @@ my_physics_project/
 ---
 
 **完成日期**：2026-08-13
-**配套**：[01_mathematics.md](01_mathematics.md) + [ai_for_physics/](../ai_for_physics/) + [EXPERT_PATH_2026.md](../EXPERT_PATH_2026.md)
+**配套**：[01_mathematics.md](01_mathematics.md) + [ai_for_physics/](../ai_for_physics) + [EXPERT_PATH_2026.md](../EXPERT_PATH_2026.md)

@@ -28,18 +28,18 @@
 ## 参考资源
 - Quarteroni, *Numerical Mathematics*
 - Heath, *Scientific Computing*
-- MIT 对照：[MIT 18.085](../../mit-math-courses/18_085_computational_science/)
+- MIT 对照：[MIT 18.085](../../mit-math-courses/18_085_computational_science)
 - UT Austin 对照：M 383E（待写/未落盘）
 
-📌 **下一步**：→ [STAT 116 Probability Theory](../stat116_probability_theory/)
+📌 **下一步**：→ [STAT 116 Probability Theory](../stat116_probability_theory)
 
 ---
 
 ## 📍 在数学全景中的位置
 
-- **前置**：[Math 51 线代 + 多变量](../math51_linear_multivariable/)
+- **前置**：[Math 51 线代 + 多变量](../math51_linear_multivariable)
 - **本课**：误差分析 / 插值 / 数值积分 / ODE 求解 / 稀疏矩阵——**工程计算基础**
-- **后续**：[CME 364A 凸优化](../cme364A_convex_optimization/) / [UT Austin M 383E 数值线代](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)（线代深入）
+- **后续**：[CME 364A 凸优化](../cme364A_convex_optimization) / [UT Austin M 383E 数值线代](../../ut-austin-math-courses/m383e_numerical_linear_algebra)（线代深入）
 
 ---
 

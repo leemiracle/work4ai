@@ -105,7 +105,7 @@ GPT-4 / Gemini 的 128k-2M 上下文窗口让人以为"塞进去就行"，但：
    ↓ 失败则重规划
 ```
 
-这就是 **ReAct / Plan-and-Execute** 范式在 IDE 的落地。详见 [`讲透Agent`](../讲透Agent/)。
+这就是 **ReAct / Plan-and-Execute** 范式在 IDE 的落地。详见 [`讲透Agent`](../讲透Agent)。
 
 ---
 

@@ -45,14 +45,14 @@ graph TD
 
 ## 目录索引
 
-### 🏛 [00-overview](./00-overview/) — 项目全景（必读）
+### 🏛 [00-overview](./00-overview) — 项目全景（必读）
 - [`01-repo-layout.md`](./00-overview/01-repo-layout.md) — Polyglot monorepo 的目录布局与设计动机
 - [`02-architecture.md`](./00-overview/02-architecture.md) — 整体架构图、双模式（OSS vs Hosted）、组件分层
 - [`03-build-system.md`](./00-overview/03-build-system.md) — Hatch + pnpm + tsup + Docker 构建链
 - [`04-cicd.md`](./00-overview/04-cicd.md) — CI Gate 单入口编排 + Release Router 单入口发布
 - [`05-two-modes.md`](./00-overview/05-two-modes.md) — OSS 自托管 vs Platform 托管的 API 同构哲学
 
-### 🧠 [01-py-sdk-core](./01-py-sdk-core/) — Python SDK 核心（最重要）
+### 🧠 [01-py-sdk-core](./01-py-sdk-core) — Python SDK 核心（最重要）
 - [`01-memory-base.md`](./01-py-sdk-core/01-memory-base.md) — `MemoryBase` 抽象基类（63 行但极关键）
 - [`02-memory-main.md`](./01-py-sdk-core/02-memory-main.md) — `Memory` 类（3851 行核心引擎）
 - [`03-storage.md`](./01-py-sdk-core/03-storage.md) — SQLiteManager（变更历史）
@@ -62,7 +62,7 @@ graph TD
 - [`07-search-pipeline.md`](./01-py-sdk-core/07-search-pipeline.md) — ⭐ `search()` 多信号融合（semantic + BM25 + entity）
 - [`08-update-delete.md`](./01-py-sdk-core/08-update-delete.md) — `update()` / `delete()` / `delete_all()` / `history()`
 
-### 🔌 [02-py-sdk-providers](./02-py-sdk-providers/) — Provider 抽象体系
+### 🔌 [02-py-sdk-providers](./02-py-sdk-providers) — Provider 抽象体系
 - [`01-base-pattern.md`](./02-py-sdk-providers/01-base-pattern.md) — ⭐ 5 类 `base.py` 的统一设计模式
 - [`02-llms.md`](./02-py-sdk-providers/02-llms.md) — 21 个 LLM provider
 - [`03-embeddings.md`](./02-py-sdk-providers/03-embeddings.md) — 15 个 embedding provider
@@ -72,36 +72,36 @@ graph TD
 - [`07-factory.md`](./02-py-sdk-providers/07-factory.md) — ⭐ `Factory` 工厂模式与 `Provider` 注册机制
 - [`08-utils.md`](./02-py-sdk-providers/08-utils.md) — entity_extraction / scoring / lemmatization / factory
 
-### 🌐 [03-py-sdk-client](./03-py-sdk-client/) — Hosted Platform Client
+### 🌐 [03-py-sdk-client](./03-py-sdk-client) — Hosted Platform Client
 - [`01-client.md`](./03-py-sdk-client/01-client.md) — `MemoryClient` / `AsyncMemoryClient`
 - [`02-proxy.md`](./03-py-sdk-client/02-proxy.md) — HTTP proxy 机制
 - [`03-telemetry.md`](./03-py-sdk-client/03-telemetry.md) — 遥测、privacy、secret redaction
 
-### 📘 [04-ts-sdk](./04-ts-sdk/) — TypeScript SDK
+### 📘 [04-ts-sdk](./04-ts-sdk) — TypeScript SDK
 - [`01-structure.md`](./04-ts-sdk/01-structure.md) — `mem0-ts` 整体结构 + client + oss 概览
 - [`02-providers-and-types.md`](./04-ts-sdk/02-providers-and-types.md) — TS 侧 providers 对照 Python 版 + 类型系统
 
-### 🖥 [05-server](./05-server/) — FastAPI 自托管
+### 🖥 [05-server](./05-server) — FastAPI 自托管
 - [`01-architecture.md`](./05-server/01-architecture.md) — 架构 + Endpoints + Docker Compose + 数据模型
 - [`02-vs-hosted.md`](./05-server/02-vs-hosted.md) — Server vs Library vs Platform 三模式对比
 
-### ⌨️ [06-cli-python](./06-cli-python/) — Python CLI (Typer)
+### ⌨️ [06-cli-python](./06-cli-python) — Python CLI (Typer)
 - [`01-entry-and-commands.md`](./06-cli-python/01-entry-and-commands.md) — 入口与命令树
 
-### ⌨️ [07-cli-node](./07-cli-node/) — Node CLI (Commander)
+### ⌨️ [07-cli-node](./07-cli-node) — Node CLI (Commander)
 - [`01-entry-and-commands.md`](./07-cli-node/01-entry-and-commands.md) — 入口与命令树
 
-### 🔗 [08-integrations](./08-integrations/) — 集成（6 个）
+### 🔗 [08-integrations](./08-integrations) — 集成（6 个）
 - [`01-mem0-plugin.md`](./08-integrations/01-mem0-plugin.md) — ⭐ MCP server（最大,5 编辑器）
 - [`02-other-integrations.md`](./08-integrations/02-other-integrations.md) — OpenClaw / Pi / Vercel AI / n8n / Zapier
 
-### 🎓 [09-skills](./09-skills/) — Skill 体系
+### 🎓 [09-skills](./09-skills) — Skill 体系
 - [`01-skills-overview.md`](./09-skills/01-skills-overview.md) — Reference vs Pipeline skill 分类
 
-### 🧪 [10-examples-eval](./10-examples-eval/) — 示例与评估
+### 🧪 [10-examples-eval](./10-examples-eval) — 示例与评估
 - [`01-examples-and-eval.md`](./10-examples-eval/01-examples-and-eval.md) — examples/ 选读 + memory-benchmarks
 
-### 📚 [99-appendix](./99-appendix/) — 附录
+### 📚 [99-appendix](./99-appendix) — 附录
 - [`index.md`](./99-appendix/index.md) — 术语表 + 数据流图汇总 + 阅读顺序建议
 
 ---

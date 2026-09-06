@@ -28,7 +28,7 @@ Relevant source files
 
 The **vLLM Production Stack** provides a reference implementation for deploying vLLM inference engines at production scale on Kubernetes. This document introduces the system architecture, core components, deployment options, and key capabilities. It serves as the entry point for understanding how the stack orchestrates distributed model serving, request routing, KV cache management, and observability.
 
-For detailed deployment instructions, see [Getting Started](/vllm-project/production-stack/3-getting-started), [Helm Chart Deployment](/vllm-project/production-stack/4-helm-chart-deployment), or [Kubernetes Operator](/vllm-project/production-stack/10-kubernetes-operator). For router-specific details, see [vLLM Router](/vllm-project/production-stack/5-vllm-router). For caching and optimization, see [Caching and Optimization](/vllm-project/production-stack/6-caching-and-optimization).
+For detailed deployment instructions, see [Getting Started](../../../../../vllm-project/production-stack/3-getting-started), [Helm Chart Deployment](../../../../../vllm-project/production-stack/4-helm-chart-deployment), or [Kubernetes Operator](../../../../../vllm-project/production-stack/10-kubernetes-operator). For router-specific details, see [vLLM Router](../../../../../vllm-project/production-stack/5-vllm-router). For caching and optimization, see [Caching and Optimization](../../../../../vllm-project/production-stack/6-caching-and-optimization).
 
 **Sources:** [README.md20-27](https://github.com/vllm-project/production-stack/blob/99ab33ab/README.md?plain=1#L20-L27) [helm/README.md1-9](https://github.com/vllm-project/production-stack/blob/99ab33ab/helm/README.md?plain=1#L1-L9)
 
@@ -86,7 +86,7 @@ The chart generates resources using standard Kubernetes manifests:
 
 The Operator approach uses Kubernetes Custom Resources that are reconciled by controller processes. This enables declarative management with automatic reconciliation, health monitoring, and update handling through Kubernetes-native patterns.
 
-For details on CRD-based deployment, see [Kubernetes Operator](/vllm-project/production-stack/10-kubernetes-operator).
+For details on CRD-based deployment, see [Kubernetes Operator](../../../../../vllm-project/production-stack/10-kubernetes-operator).
 
 **Sources:** [README.md58-88](https://github.com/vllm-project/production-stack/blob/99ab33ab/README.md?plain=1#L58-L88) [docs/source/deployment/index.rst1-26](https://github.com/vllm-project/production-stack/blob/99ab33ab/docs/source/deployment/index.rst#L1-L26)
 
@@ -360,12 +360,12 @@ All probes use HTTP GET on `/health` endpoint at port 8000. Configuration at [he
 
 ## Next Steps
 
-  * For step-by-step deployment guide, see [Getting Started](/vllm-project/production-stack/3-getting-started) and [Minimal Installation](/vllm-project/production-stack/3.2-minimal-installation)
-  * For complete configuration reference, see [Helm Chart Deployment](/vllm-project/production-stack/4-helm-chart-deployment) and [Values Reference](/vllm-project/production-stack/4.1-values-reference)
-  * For router architecture and routing algorithms, see [vLLM Router](/vllm-project/production-stack/5-vllm-router)
-  * For cache optimization strategies, see [Caching and Optimization](/vllm-project/production-stack/6-caching-and-optimization)
-  * For production monitoring setup, see [Observability](/vllm-project/production-stack/7-observability)
-  * For advanced features like LoRA and disaggregated inference, see [Advanced Features](/vllm-project/production-stack/8-advanced-features)
-  * For operator-based deployment, see [Kubernetes Operator](/vllm-project/production-stack/10-kubernetes-operator)
+  * For step-by-step deployment guide, see [Getting Started](../../../../../vllm-project/production-stack/3-getting-started) and [Minimal Installation](../../../../../vllm-project/production-stack/3.2-minimal-installation)
+  * For complete configuration reference, see [Helm Chart Deployment](../../../../../vllm-project/production-stack/4-helm-chart-deployment) and [Values Reference](../../../../../vllm-project/production-stack/4.1-values-reference)
+  * For router architecture and routing algorithms, see [vLLM Router](../../../../../vllm-project/production-stack/5-vllm-router)
+  * For cache optimization strategies, see [Caching and Optimization](../../../../../vllm-project/production-stack/6-caching-and-optimization)
+  * For production monitoring setup, see [Observability](../../../../../vllm-project/production-stack/7-observability)
+  * For advanced features like LoRA and disaggregated inference, see [Advanced Features](../../../../../vllm-project/production-stack/8-advanced-features)
+  * For operator-based deployment, see [Kubernetes Operator](../../../../../vllm-project/production-stack/10-kubernetes-operator)
 
 **Sources:** [README.md28-37](https://github.com/vllm-project/production-stack/blob/99ab33ab/README.md?plain=1#L28-L37) [tutorials/README.md1-40](https://github.com/vllm-project/production-stack/blob/99ab33ab/tutorials/README.md?plain=1#L1-L40)

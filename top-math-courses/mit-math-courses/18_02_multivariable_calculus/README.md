@@ -35,7 +35,7 @@
 - **重点**：偏导 + 梯度 + 链式法则（ML 必备）
 - **跳过**：Green/Stokes/Divergence 三大定理（高阶几何用得到）
 
-📌 **下一步**：→ [18.06 线性代数](../18_06_linear_algebra/) 或 [18.03 微分方程](../18_03_differential_equations/)
+📌 **下一步**：→ [18.06 线性代数](../18_06_linear_algebra) 或 [18.03 微分方程](../18_03_differential_equations)
 
 ---
 

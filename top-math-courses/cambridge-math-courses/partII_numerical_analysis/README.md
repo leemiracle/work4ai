@@ -26,4 +26,4 @@
 - Iserles, *A First Course in NDE* (CUP)
 - Trefethen, *Approximation Theory and Approximation Practice*
 
-📌 **下一步**：→ 进入 [Oxford](../../oxford-math-courses/)
+📌 **下一步**：→ 进入 [Oxford](../../oxford-math-courses)

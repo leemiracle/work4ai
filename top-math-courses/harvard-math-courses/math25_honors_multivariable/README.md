@@ -25,9 +25,9 @@
 ## 参考资源
 - Hubbard & Hubbard *Vector Calculus* (5th ed)
 - 替代：Munkres *Analysis on Manifolds*
-- MIT 对照：[MIT 18.100A](../../mit-math-courses/)（更易）
+- MIT 对照：[MIT 18.100A](../../mit-math-courses)（更易）
 
-📌 **下一步**：→ [Harvard Math 55](../math55_honors_abstract/)（更难版本）
+📌 **下一步**：→ [Harvard Math 55](../math55_honors_abstract)（更难版本）
 
 ---
 

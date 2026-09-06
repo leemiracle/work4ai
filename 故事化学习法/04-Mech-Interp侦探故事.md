@@ -97,7 +97,7 @@ Olah 不是 AI 出身，他是数学 + 物理背景。他的早期工作（CNN �
 ### 案件结论
 **induction heads 是 in-context learning 的电路基础**。
 
-> 📌 work4ai：[`../讲透可解释性/`](../讲透可解释性/)、[`../讲透Transformer/`](../讲透Transformer/)
+> 📌 work4ai：[`../讲透可解释性/`](../讲透可解释性)、[`../讲透Transformer/`](../讲透Transformer)
 
 ---
 
@@ -130,7 +130,7 @@ Olah 不是 AI 出身，他是数学 + 物理背景。他的早期工作（CNN �
 ### 案件结论
 **Refusal 是模型空间中的一个 direction**。可以用一根向量控制。
 
-> 📌 work4ai：[`../讲透NLP/Ch09§8.1`](../讲透NLP/)（你已做过 vocab=24 的实验）
+> 📌 work4ai：[`../讲透NLP/Ch09§8.1`](../讲透NLP)（你已做过 vocab=24 的实验）
 
 ---
 
@@ -161,7 +161,7 @@ Olah 不是 AI 出身，他是数学 + 物理背景。他的早期工作（CNN �
 
 2024 年 **Scaling Monosemanticity**（Templeton et al.）：在 Claude 3 上训 SAE，提取了**几亿个可解释特征**。
 
-> 📌 work4ai：[`../讲透可解释性/`](../讲透可解释性/)、[`../讲透基础模型/`](../讲透基础模型/)
+> 📌 work4ai：[`../讲透可解释性/`](../讲透可解释性)、[`../讲透基础模型/`](../讲透基础模型)
 
 ---
 

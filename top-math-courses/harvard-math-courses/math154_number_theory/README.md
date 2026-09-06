@@ -27,13 +27,13 @@
 - Niven-Zuckerman-Montgomery, *An Introduction to the Theory of Numbers* (5th ed)
 - 替代：Hardy & Wright, *An Introduction to the Theory of Numbers*
 
-📌 **下一步**：→ 进入 [Stanford 数学](../../stanford-math-courses/)
+📌 **下一步**：→ 进入 [Stanford 数学](../../stanford-math-courses)
 
 ---
 
 ## 📍 在数学全景中的位置
 
-- **前置**：基础证明能力 + [Berkeley 113 代数](../../berkeley-math-courses/math113_abstract_algebra/)（群/环结构）
+- **前置**：基础证明能力 + [Berkeley 113 代数](../../berkeley-math-courses/math113_abstract_algebra)（群/环结构）
 - **本课**：素数 → 同余 → CRT → RSA → 椭圆曲线 → 解析数论入门
 - **交叉**：密码学/安全工程 + 概率论（素数定理）
 

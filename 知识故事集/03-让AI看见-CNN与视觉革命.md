@@ -134,9 +134,9 @@ ViT 的核心信念：**数据可以替代先验**（足够大的 Transformer + 
 ## 🛠️ 我该深挖什么
 
 ### work4ai 系列
-- [`../讲透基础模型/`](../讲透基础模型/)：CNN → ViT 完整演进
-- [`../讲透Transformer/`](../讲透Transformer/)：ViT 用 transformer
-- [`../讲透泛化/`](../讲透泛化/)：为什么深层网络能泛化
+- [`../讲透基础模型/`](../讲透基础模型)：CNN → ViT 完整演进
+- [`../讲透Transformer/`](../讲透Transformer)：ViT 用 transformer
+- [`../讲透泛化/`](../讲透泛化)：为什么深层网络能泛化
 
 ### 必读
 - **LeCun et al. 1998 "Gradient-Based Learning Applied to Document Recognition"**（LeNet 圣经）

@@ -28,9 +28,9 @@
 ## 参考资源
 - Kloeden & Platen, *Numerical Solution of SDEs* (Springer, 1992)
 - Higham, *An Algorithmic Introduction to Numerical Simulation of SDE* (SIAM Review, 2001) — 入门小册子
-- 配合：[Oxford C8.1 SDE](../../oxford-math-courses/partC_c8_1_sde/)
+- 配合：[Oxford C8.1 SDE](../../oxford-math-courses/partC_c8_1_sde)
 
-📌 **下一步**：→ [401-3901 Linear & Combinatorial Optimization](../e401_3901_linear_combinatorial_optimization/)
+📌 **下一步**：→ [401-3901 Linear & Combinatorial Optimization](../e401_3901_linear_combinatorial_optimization)
 
 ---
 
@@ -51,7 +51,7 @@ Itô 积分 / Itô 公式 (Oxford C8.1, UT Austin 387D)
         └──► 金融数学 (Black-Scholes, Monte Carlo 定价)
 ```
 
-- **前置**：[Oxford C8.1 SDE](../../oxford-math-courses/partC_c8_1_sde/)（Itô 微积分）
+- **前置**：[Oxford C8.1 SDE](../../oxford-math-courses/partC_c8_1_sde)（Itô 微积分）
 - **本课**：SDE 的数值离散化 + 收敛分析
 - **后续**：扩散模型工程、MLMC 加速、反向 SDE
 

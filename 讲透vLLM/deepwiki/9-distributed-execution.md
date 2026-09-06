@@ -46,7 +46,7 @@ Relevant source files
   * [vllm/v1/worker/gpu_worker.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_worker.py)
   * [vllm/v1/worker/worker_base.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/worker_base.py)
 
-This document describes vLLM's distributed execution capabilities, covering parallelism strategies (Tensor, Pipeline, Data, Expert, Context), communication infrastructure, and multi-process engine management. For model loading and weight distribution, see [Model Support and Registration](/vllm-project/vllm/5-model-support-and-registration). For attention-specific distributed features like disaggregated serving, see [KV Cache Transfer and Disaggregated Serving](/vllm-project/vllm/9.4-kv-cache-transfer-and-disaggregated-serving).
+This document describes vLLM's distributed execution capabilities, covering parallelism strategies (Tensor, Pipeline, Data, Expert, Context), communication infrastructure, and multi-process engine management. For model loading and weight distribution, see [Model Support and Registration](../../../../vllm-project/vllm/5-model-support-and-registration). For attention-specific distributed features like disaggregated serving, see [KV Cache Transfer and Disaggregated Serving](../../../../vllm-project/vllm/9.4-kv-cache-transfer-and-disaggregated-serving).
 
 * * *
 
@@ -64,7 +64,7 @@ Strategy| Abbreviation| Purpose| Configuration| Typical Use Case
   
 The total world size for model execution is generally `TP × PP × PCP` (where PCP is Prefill Context Parallelism) [vllm/v1/executor/multiproc_executor.py125-131](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/executor/multiproc_executor.py#L125-L131) vLLM also introduces specialized parallelisms like `prefill_context_parallel_size` for scaling long-context prefill [vllm/config/parallel.py126-128](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py#L126-L128) Data parallelism can be further categorized into global or local configurations, with support for hybrid and external load balancing [vllm/config/parallel.py129-162](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py#L129-L162)
 
-For details, see [Parallelism Strategies](/vllm-project/vllm/9.1-parallelism-strategies).
+For details, see [Parallelism Strategies](../../../../vllm-project/vllm/9.1-parallelism-strategies).
 
 **Sources:** [vllm/config/parallel.py119-174](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py#L119-L174) [vllm/distributed/parallel_state.py8-24](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/parallel_state.py#L8-L24) [vllm/v1/executor/multiproc_executor.py125-131](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/executor/multiproc_executor.py#L125-L131)
 
@@ -94,7 +94,7 @@ For specialized MoE communication, vLLM supports multiple `all2all` backends inc
 
 Title: "Distributed Group Management and Operations"
 
-For details, see [Communication Infrastructure](/vllm-project/vllm/9.2-communication-infrastructure).
+For details, see [Communication Infrastructure](../../../../vllm-project/vllm/9.2-communication-infrastructure).
 
 **Sources:** [vllm/v1/worker/gpu_worker.py23-27](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_worker.py#L23-L27) [vllm/config/parallel.py42-55](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py#L42-L55) [vllm/distributed/parallel_state.py152-197](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/parallel_state.py#L152-L197)
 
@@ -114,7 +114,7 @@ vLLM provides several executor backends depending on the environment and paralle
 
 The `ParallelConfig` defines the `distributed_executor_backend` which can be `"ray"`, `"mp"`, `"uni"`, or `"external_launcher"` [vllm/config/parallel.py37](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py#L37-L37)
 
-For details, see [Multi-Process Engine Management](/vllm-project/vllm/9.3-multi-process-engine-management).
+For details, see [Multi-Process Engine Management](../../../../vllm-project/vllm/9.3-multi-process-engine-management).
 
 **Sources:** [vllm/config/parallel.py37](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py#L37-L37) [vllm/v1/executor/multiproc_executor.py111-167](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/executor/multiproc_executor.py#L111-L167) [vllm/v1/executor/ray_executor.py64-110](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/executor/ray_executor.py#L64-L110) [vllm/v1/executor/uniproc_executor.py51-75](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/executor/uniproc_executor.py#L51-L75)
 
@@ -128,7 +128,7 @@ vLLM supports disaggregated serving (prefill-decode separation) by transferring 
 
 The system supports infrastructure for moving KV cache data using `KVConnector`. This enables "prefill" nodes to compute the cache and "decode" nodes to consume it. The `ensure_kv_transfer_initialized` function sets up the required distributed groups [vllm/v1/worker/gpu_worker.py33-38](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_worker.py#L33-L38) `MultiprocExecutor` utilizes `KVOutputAggregator` to manage distributed output collection when connectors are active [vllm/v1/executor/multiproc_executor.py33](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/executor/multiproc_executor.py#L33-L33)
 
-For details, see [KV Cache Transfer and Disaggregated Serving](/vllm-project/vllm/9.4-kv-cache-transfer-and-disaggregated-serving).
+For details, see [KV Cache Transfer and Disaggregated Serving](../../../../vllm-project/vllm/9.4-kv-cache-transfer-and-disaggregated-serving).
 
 **Sources:** [vllm/v1/worker/gpu_worker.py33-38](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_worker.py#L33-L38) [vllm/v1/executor/multiproc_executor.py33](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/executor/multiproc_executor.py#L33-L33) [vllm/v1/executor/abstract.py113-114](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/executor/abstract.py#L113-L114)
 
@@ -144,6 +144,6 @@ The `EplbModelState` tracks expert load using token counts per expert [vllm/dist
 
 Title: "MoE Expert Parallelism and EPLB"
 
-For details, see [Parallelism Strategies](/vllm-project/vllm/9.1-parallelism-strategies).
+For details, see [Parallelism Strategies](../../../../vllm-project/vllm/9.1-parallelism-strategies).
 
 **Sources:** [vllm/config/parallel.py59-115](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py#L59-L115) [vllm/distributed/eplb/eplb_state.py6-170](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/eplb/eplb_state.py#L6-L170) [vllm/distributed/eplb/rebalance_execute.py3-61](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/eplb/rebalance_execute.py#L3-L61)

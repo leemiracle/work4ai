@@ -2,7 +2,7 @@
 
 > **教材**：Hubbard & Hubbard, *Vector Calculus, Linear Algebra, and Differential Forms* (5th ed)；配 Rudin *Principles of Mathematical Analysis* 第 1-7 章
 > **定位**：Math 55 的"友好版"——严格证明导向的多变量分析 + 线代 + 微分形式
-> **对照**：比 [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus/) 严格得多，强调 Inverse/Implicit Function Theorem
+> **对照**：比 [MIT 18.02](../../mit-math-courses/18_02_multivariable_calculus) 严格得多，强调 Inverse/Implicit Function Theorem
 
 ---
 

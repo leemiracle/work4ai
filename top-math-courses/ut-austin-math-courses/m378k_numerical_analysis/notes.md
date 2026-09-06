@@ -10,7 +10,7 @@
 
 > **数值分析 = 用有限的计算机资源，近似求解连续数学问题。**
 
-M 378K 是本科数值分析入门课，覆盖面广但深度适中。与 [Oxford Part A A12](../../oxford-math-courses/partA_a12_numerical_analysis/) 和 [Cambridge Part IB NA](../../cambridge-math-courses/partIB_numerical_analysis/) 同级。研究生级深度参见 [M 383E Trefethen & Bau](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)。
+M 378K 是本科数值分析入门课，覆盖面广但深度适中。与 [Oxford Part A A12](../../oxford-math-courses/partA_a12_numerical_analysis) 和 [Cambridge Part IB NA](../../cambridge-math-courses/partIB_numerical_analysis) 同级。研究生级深度参见 [M 383E Trefethen & Bau](../m383e_numerical_linear_algebra)。
 
 ---
 
@@ -33,7 +33,7 @@ M 378K 是本科数值分析入门课，覆盖面广但深度适中。与 [Oxfor
 
 ### 1.3 插值与逼近
 
-- **Lagrange/Newton 插值** → 参见 [Oxford A12](../../oxford-math-courses/partA_a12_numerical_analysis/)
+- **Lagrange/Newton 插值** → 参见 [Oxford A12](../../oxford-math-courses/partA_a12_numerical_analysis)
 - **Hermite 插值**：同时匹配函数值和导数
 - **三次样条**：分段三次多项式，$C^2$ 连续
 
@@ -56,7 +56,7 @@ M 378K 是本科数值分析入门课，覆盖面广但深度适中。与 [Oxfor
 
 - **高斯消元 + 部分选主元** → LU 分解
 - **Cholesky 分解**：对称正定矩阵
-- **条件数** → 参见 [Oxford A12](../../oxford-math-courses/partA_a12_numerical_analysis/)
+- **条件数** → 参见 [Oxford A12](../../oxford-math-courses/partA_a12_numerical_analysis)
 
 ### 1.7 迭代法
 
@@ -119,7 +119,7 @@ print(f"解 = {x}, 迭代次数 = {iters}")
 
 ## 三、与 ML 的联系
 
-参见 [Oxford A12 notes.md §3](../../oxford-math-courses/partA_a12_numerical_analysis/)。核心要点：
+参见 [Oxford A12 notes.md §3](../../oxford-math-courses/partA_a12_numerical_analysis)。核心要点：
 - 条件数 → 训练数值稳定性
 - Newton 法 → 牛顿型优化
 - 迭代法 → 大规模优化
@@ -131,5 +131,5 @@ print(f"解 = {x}, 迭代次数 = {iters}")
 
 1. **Burden-Faires 第 1-6 章**：误差 + 求根 + 插值 + 积分 + ODE → **核心**
 2. **第 7 章**：直接法解线性系统 → 基础
-3. **进阶**：[M 383E Trefethen & Bau](../../ut-austin-math-courses/m383e_numerical_linear_algebra/)（数值线代招牌课）
-4. **交叉**：[ETH 401-2611 CSE NA](../../eth-math-courses/e401_2611_numerical_methods_cse/)（PDE 方向）
+3. **进阶**：[M 383E Trefethen & Bau](../m383e_numerical_linear_algebra)（数值线代招牌课）
+4. **交叉**：[ETH 401-2611 CSE NA](../../eth-math-courses/e401_2611_numerical_methods_cse)（PDE 方向）

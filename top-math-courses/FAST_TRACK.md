@@ -172,6 +172,6 @@ Cambridge Tripos 的官方 synopses + Past Tripos papers 是公开的，比买�
 ---
 
 📌 **下一步**：
-- 开始第 1 课 → [MIT 18.06](mit-math-courses/18_06_linear_algebra/)（待建子目录）
+- 开始第 1 课 → [MIT 18.06](mit-math-courses/18_06_linear_algebra)（待建子目录）
 - 想看 30 课完整路径 → [UNIFIED_ROADMAP.md](UNIFIED_ROADMAP.md)
 - 想看 9 校对比 → [CROSS_SCHOOL_INSIGHTS.md](CROSS_SCHOOL_INSIGHTS.md)

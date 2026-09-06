@@ -38,9 +38,9 @@ Part IB Analysis ──────────────↗                  
                                                     Part II Probability & Measure (Williams)
 ```
 
-- **前置**：[Part IA Analysis I](../partIA_analysis_I/)（基础微积分 rigor）
+- **前置**：[Part IA Analysis I](../partIA_analysis_I)（基础微积分 rigor）
 - **本课**：Cambridge 大一概率——条件概率、Bayes、常见分布、母函数、LLN、CLT（**无测度论，Cambridge 式严格**）
-- **后续**：[Part IB Markov Chains](../partIB_markov_chains/) → [Part II Probability and Measure](../partII_probability_measure/)（Williams 测度论版）
+- **后续**：[Part IB Markov Chains](../partIB_markov_chains) → [Part II Probability and Measure](../partII_probability_measure)（Williams 测度论版）
 
 ---
 
@@ -73,4 +73,4 @@ Part IB Analysis ──────────────↗                  
    - do-calculus（Pearl）= 条件概率的精确操作
    - **与本课关联**：Bayes 定理 + 条件独立性
 
-📌 **下一步**：→ [Part IB Markov Chains](../partIB_markov_chains/) 或 [Part IB Linear Algebra](../partIB_linear_algebra/)
+📌 **下一步**：→ [Part IB Markov Chains](../partIB_markov_chains) 或 [Part IB Linear Algebra](../partIB_linear_algebra)

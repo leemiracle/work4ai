@@ -54,10 +54,10 @@ This document introduces AIBrix, a cloud-native infrastructure for deploying and
 
 For detailed information about specific subsystems:
 
-  * Gateway routing and load balancing → [Gateway System](/vllm-project/aibrix/3-gateway-system)
-  * Kubernetes controllers and lifecycle management → [Controller System](/vllm-project/aibrix/4-controller-system)
-  * Python services and runtime components → [Python Runtime and Services](/vllm-project/aibrix/5-python-runtime-and-services)
-  * Deployment and operations → [Deployment and Operations](/vllm-project/aibrix/6-deployment-and-operations)
+  * Gateway routing and load balancing → [Gateway System](../../../../../vllm-project/aibrix/3-gateway-system)
+  * Kubernetes controllers and lifecycle management → [Controller System](../../../../../vllm-project/aibrix/4-controller-system)
+  * Python services and runtime components → [Python Runtime and Services](../../../../../vllm-project/aibrix/5-python-runtime-and-services)
+  * Deployment and operations → [Deployment and Operations](../../../../../vllm-project/aibrix/6-deployment-and-operations)
 
 **Sources:** [README.md1-90](https://github.com/vllm-project/aibrix/blob/e9866a6f/README.md?plain=1#L1-L90) [docs/source/index.rst1-83](https://github.com/vllm-project/aibrix/blob/e9866a6f/docs/source/index.rst#L1-L83)
 

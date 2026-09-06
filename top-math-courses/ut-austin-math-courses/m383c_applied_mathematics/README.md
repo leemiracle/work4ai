@@ -44,21 +44,21 @@
 - Reed & Simon, *Methods of Modern Mathematical Physics* Vol 1
 - **Koch 讲义**：[web.ma.utexas.edu/users/koch/M383C](https://web.ma.utexas.edu/users/koch/M383C/)（UT Austin 公开）
 - Lax, *Functional Analysis* (Wiley)
-- MIT 对照：[MIT 18.102](../../mit-math-courses/)
+- MIT 对照：[MIT 18.102](../../mit-math-courses)
 
 ## 学习建议
 - **节奏**：每周 6-8 小时，14 周
 - **先修**：M 365C（Rudin）必须扎实
 
-📌 **下一步**：→ [M 383E Numerical Linear Algebra](../m383e_numerical_linear_algebra/) 或 [M 385C Theory of Probability](../m385c_theory_of_probability/)
+📌 **下一步**：→ [M 383E Numerical Linear Algebra](../m383e_numerical_linear_algebra) 或 [M 385C Theory of Probability](../m385c_theory_of_probability)
 
 ---
 
 ## 📍 在数学全景中的位置
 
-- **前置**：[M 365C 实分析](../m365c_real_analysis/) + ODE + 线性代数
+- **前置**：[M 365C 实分析](../m365c_real_analysis) + ODE + 线性代数
 - **本课**：应用数学工具箱 → 量纲分析 + 渐近方法 + 变分法 + 积分变换（研究生核心）
-- **交叉**：[Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde/) + [Berkeley 185 复分析](../../berkeley-math-courses/math185_complex_analysis/)
+- **交叉**：[Princeton MAT 322 PDE](../../princeton-math-courses/mat322_pde) + [Berkeley 185 复分析](../../berkeley-math-courses/math185_complex_analysis)
 
 ## 🔬 理论联系实际
 1. **变分法 → VAE/ELBO**：$\mathcal{L}_{\text{ELBO}}$ 是泛函，VAE 用变分法优化

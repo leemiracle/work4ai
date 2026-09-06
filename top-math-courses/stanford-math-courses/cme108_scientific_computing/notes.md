@@ -119,5 +119,5 @@ print(f"RK4 误差: {np.max(np.abs(sol[:,0] - np.cos(t))):.2e}")
 ---
 
 ## 交叉引用
-- [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra/) — 线代部分深入
-- [MIT 18.085](../../mit-math-courses/18_085_computational_science/) — 差分/PDE/FEM
+- [UT Austin M 383E](../../ut-austin-math-courses/m383e_numerical_linear_algebra) — 线代部分深入
+- [MIT 18.085](../../mit-math-courses/18_085_computational_science) — 差分/PDE/FEM

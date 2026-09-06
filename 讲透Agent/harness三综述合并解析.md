@@ -4,7 +4,7 @@
 > universe: 前沿与媒体 / harness 镜
 > burke: 场景=生产级 LLM 系统；主体=AI 工程师；能动=合并三线综述；行动=解析→落地→NFL 分析；目的=可执行的架构决策；张力=harness 收益巨大 vs 每个选择都有代价；弧线=从"模型决定论"到"系统决定论"再到"组合权衡论"
 > status: done
-> refs: 全部引用经一手核实，见 [.research/harness-survey/引用核实报告.md](./.research/harness-survey/引用核实报告.md)
+> refs: 全部引用经一手核实，见 [.research/harness-survey/引用核实报告.md](.research/harness-survey/引用核实报告.md)
 > updated: 2026-08-17
 > 来源：用户提供的"三篇综述拆解"（含 6 处错误，已全部修复——修复明细见引用核实报告 F1-F6）
 
@@ -360,7 +360,7 @@ AHE（arXiv:2604.25850）是 NFL 的现成实验证据：
 
 ## 四、互链
 
-- 引用核实全文：[.research/harness-survey/引用核实报告.md](./.research/harness-survey/引用核实报告.md)
+- 引用核实全文：[.research/harness-survey/引用核实报告.md](.research/harness-survey/引用核实报告.md)
 - harness 镜总入口：[harness精华合入-总入口.md](./harness精华合入-总入口.md)（37 仓蒸馏 + skill）
 - harness 蒸馏附录：[harness精华笔记.md](./harness精华笔记.md)（六公理：Agent=Model+Harness/五子系统/验证即证据/渐进披露/诚实边界/元层生长）
 - 教学落点：讲透模型宇宙 Part IV（17 能力地图/18 建与选/20 优化部署）——本文是其"多模型+harness"层的文献地基

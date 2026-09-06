@@ -280,4 +280,4 @@ $$\Gamma = \frac{\alpha^2 m_\pi^3}{64\pi^3 f_\pi^2} \approx 7.7 \text{ eV}$$
 ---
 
 **完成日期**：2026-08-13（深化版 v2）
-**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

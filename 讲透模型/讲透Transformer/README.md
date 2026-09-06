@@ -131,7 +131,7 @@ experiments/
 
 ---
 
-🔗 **交叉链接**：Stanford CS336 论文精读 · Transformer 架构组件（RoPE/SwiGLU/GQA/MLA 等 18 篇），见 [`讲透公开课/06-CS336论文精读/B-Transformer架构.md`](../讲透公开课/06-CS336论文精读/B-Transformer架构.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments/)。
+🔗 **交叉链接**：Stanford CS336 论文精读 · Transformer 架构组件（RoPE/SwiGLU/GQA/MLA 等 18 篇），见 [`讲透公开课/06-CS336论文精读/B-Transformer架构.md`](../讲透公开课/06-CS336论文精读/B-Transformer架构.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments)。
 
 ## 🔗 与其他宇宙的连接
 

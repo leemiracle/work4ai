@@ -67,7 +67,7 @@
 
 - **算法地基**：[`讲透RL/08`](../../讲透RL/08-Actor-Critic-SAC-ModelBased-OfflineRL.md)（SAC/Dreamer/Offline RL）
 - **能力建设**：[`讲透RL/09 §5.2`](../../讲透RL/09-工业实践与能力建设.md) 机器人方向入门路径 + 项目
-- **世界模型**：[`讲透世界模型/`](../../讲透世界模型/) 具身派（Genie/Dreamer）
+- **世界模型**：[`讲透世界模型/`](../../讲透世界模型) 具身派（Genie/Dreamer）
 - **规划**：[`讲透Agent/03`](../../讲透Agent/03-规划与搜索.md) 长程任务规划
 - **视觉基础**：[`讲透Transformer/10`](../../讲透Transformer/10-VisionTransformer与多模态.md) ViT/VLM
 

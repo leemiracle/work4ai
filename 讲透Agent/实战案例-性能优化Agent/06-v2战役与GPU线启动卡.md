@@ -2,7 +2,7 @@
 
 > **上一轮**：[05](./05-perfagent跑通实录.md)（v1，154 次评估）。本轮把 05§五 的全部下一步执行完：
 > re-baseline / pointer-key 军备竞赛 / heuristic 补遥测 / transformers 真负载 / T2 备料。
-> **产物**：[experiments/perfagent/](./experiments/perfagent/)（*-v2*.log、redteam_report.md v2、cards.json）
+> **产物**：[experiments/perfagent/](./experiments/perfagent)（*-v2*.log、redteam_report.md v2、cards.json）
 
 ---
 

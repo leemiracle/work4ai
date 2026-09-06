@@ -1,7 +1,7 @@
 # 04 · 全链路 PerfAgent 设计（perfagent 包）
 
 > **定位**：perfloop（03）是验证循环骨架的教具；**perfagent 是本单元的核心交付物**——一个可运行的 CPU/Linux 设备性能优化 Agent 全链路实现，GPU 线的扩展插槽已预留。
-> **代码**：[perfagent/](./perfagent/)（9 模块 ~700 行，除 numpy 零依赖）
+> **代码**：[perfagent/](./perfagent)（9 模块 ~700 行，除 numpy 零依赖）
 > **实测**：见 [05-campaign 实录](./05-perfagent跑通实录.md)（154 次评估，E1/E2/E3 三实验）
 
 ---
@@ -72,4 +72,4 @@
 
 ---
 
-生成：2026-08-24 · 上级 [README](./README.md) · 实测 [05](./05-perfagent跑通实录.md) · 代码 [perfagent/](./perfagent/)
+生成：2026-08-24 · 上级 [README](./README.md) · 实测 [05](./05-perfagent跑通实录.md) · 代码 [perfagent/](./perfagent)

@@ -77,7 +77,7 @@ graphify reflect   # 聚合 graphify-out/memory/ → reflections/LESSONS.md（�
                    # 之后 explain/query 输出会带 "Lesson:" 提示
 ```
 
-`--outcome dead_end|corrected` 意味着**失败也会沉淀**（哪条路走过没用）。这与 [`Agent记忆系统案例/mem0开源记忆层`](../../../Agent记忆系统案例/mem0开源记忆层/) 的检索式记忆构成第三条路线：dsh 重放日志（不检索）、mem0 向量检索（语义）、graphify 图叠加（结构化经验贴在图节点上）——**记忆贴着图走，经验有坐标**。
+`--outcome dead_end|corrected` 意味着**失败也会沉淀**（哪条路走过没用）。这与 [`Agent记忆系统案例/mem0开源记忆层`](../../../Agent记忆系统案例/mem0开源记忆层) 的检索式记忆构成第三条路线：dsh 重放日志（不检索）、mem0 向量检索（语义）、graphify 图叠加（结构化经验贴在图节点上）——**记忆贴着图走，经验有坐标**。
 
 ## 6. PR 工作流与全局图
 
