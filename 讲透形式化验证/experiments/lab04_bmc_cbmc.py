@@ -6,7 +6,7 @@
 手推锚点（章内§二）: SSA 展开 σ0→σ1→σ2→σ3，a0_σ3=0, a1_σ3=1, a2_σ3=2。
 """
 import argparse
-from z3 import Int, Solver, Not, And, unsat
+from z3 import Int, Solver, Not, unsat
 
 
 def bmc_check(prop_value):
@@ -37,7 +37,7 @@ def selftest():
 def native_cbmc():
     p = argparse.ArgumentParser(); p.add_argument("--native", action="store_true")
     if p.parse_args().native:
-        import subprocess, sys
+        import subprocess
         out = subprocess.run(["cbmc", "loop3.c", "--unwind", "3"],
                              capture_output=True, text=True)
         print(out.stdout[-2000:])

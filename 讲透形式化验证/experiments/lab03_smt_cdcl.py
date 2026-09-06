@@ -70,7 +70,8 @@ def cdcl_solve(clauses, n_vars, trace=None):
             if not trail:                   # 0 级冲突：无决策可撤 → UNSAT
                 return "UNSAT", learned
             d = trail.pop()
-            clause = [-d if assign[d] else d]   # 学习 (¬d)：决策取反（1UIP 的简化）
+            # 决策恒赋 True，此处直写取反
+            clause = [-d]                       # 学习 (¬d)：决策取反（1UIP 的简化）
             learned.append(clause)
             if trace is not None:
                 trace.append(("learn", clause))

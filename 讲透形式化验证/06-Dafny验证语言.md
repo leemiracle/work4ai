@@ -95,7 +95,7 @@ method BinarySearch(a: array<int>, key: int) returns (r: int)
 
 **墙一（界墙）** `0 ≤ lo ≤ hi ≤ n`：入口成立（0≤n 由数组定义白送）；保持靠中点引理——lo<hi 时**lo ≤ mid < hi**（下取整除法），于是 `lo := mid+1` 不冲破上界（mid+1≤hi）、`hi := mid` 不冲破下界（mid≥lo）。界墙还顺手保安全：`a[mid]` 的访问自动生成义务 `0 ≤ mid < a.Length`——**越界不是运行时崩溃，是验证期红叉**。若中点取上整 `(lo+hi+1)/2`，lo=hi−1 时 mid=hi，hi=n 时当场越界红——界墙不答应。
 
-**墙二（值墙）** `a[<lo] < key`、`key ≤ a[≥hi]`（"a[lo]≤key<a[hi]"的逐元素版）：二分的不变量是"key 若在数组里，只能藏在 [lo,hi) 这扇未搜区里"，左右墙就是搜过的两半的验收单。维护拿 then 分支走一遍：`lo := mid+1` 后要证 `∀k<mid+1: a[k]<key`——老左墙给 k<lo 的部分，分支条件给 k=mid，**中间那段 k∈[lo,mid) 呢？**靠 `requires` 的排序传递性：a[k] ≤ a[mid] < key——SMT 必须把排序量词实例化到 (k, mid) 上（03 章 E-matching 的 trigger 机制），链子才接得上。这是本例唯一非平凡的一步，也是"**排好序**"三个字在证明里的确切位置。else 分支对称（key ≤ a[mid] 传给右墙）。
+**墙二（值墙）** `a[<lo] < key`、`key ≤ a[≥hi]`（∀k<lo: a[k]<key ∧ ∀k≥hi: key≤a[k] 的速记）：二分的不变量是"key 若在数组里，只能藏在 [lo,hi) 这扇未搜区里"，左右墙就是搜过的两半的验收单。维护拿 then 分支走一遍：`lo := mid+1` 后要证 `∀k<mid+1: a[k]<key`——老左墙给 k<lo 的部分，分支条件给 k=mid，**中间那段 k∈[lo,mid) 呢？**靠 `requires` 的排序传递性：a[k] ≤ a[mid] < key——SMT 必须把排序量词实例化到 (k, mid) 上（03 章 E-matching 的 trigger 机制），链子才接得上。这是本例唯一非平凡的一步，也是"**排好序**"三个字在证明里的确切位置。else 分支对称（key ≤ a[mid] 传给右墙）。
 
 **出口与终止**：循环退出时 lo≥hi，与界墙合逼 lo=hi——左墙给 r 以左、右墙给 r 起右，三条 `ensures` 全落；`decreases hi−lo` 严格递减（mid<hi 保证 then 支至少 +1、hi:=mid 至少 −1）——终止性不是注释，是第四条义务。顺手一个工业彩蛋：C 里 `(lo+hi)/2` 的加法溢出让 JDK 的二分错了近十年（Bloch 2006："几乎所有人的二分都是错的"）；Dafny 的 `int` 是无界数学整数，加法不溢出，越界另有界墙把守——**两类经典 bug，各有各的守门人**。
 
@@ -137,7 +137,7 @@ max.dfy ──Dafny 解析/解引用/归纳数据类型──► Boogie（朴素
 ## 六、仪器
 
 - **Python 保底（本 lab）**：`python 讲透形式化验证/experiments/lab06_wp_dafny.py`——WP 三规则手推的机器版：max 后置两分支化简后 `check_valid` 得 unsat → VALID；strict 后置取反 sat，反模型原样打印（§二 输出即本 lab 输出）。仅依赖 z3。
-- **Dafny（zip 需 .NET，可选）**：[github.com/dafny-lang/dafny/releases](https://github.com/dafny-lang/dafny/releases) 下载 `dafny-x.x.x-x64-win.zip` → 装 **.NET SDK 8+**（`winget install Microsoft.DotNet.SDK.8`）→ 解压、把 `dafny` 目录加 PATH → 实跑：`dafny verify 讲透形式化验证/experiments/max.dfy`（4.x 前的老版本直接 `dafny max.dfy`），预期末行 `Dafny program verifier finished with 0 verified, 0 errors`。再把 ensures 改强成 `r > x` 跑一遍——错误落在 ensures 行、反例模型（x>y 一类）随之而来，就是 §二 Q' 的红叉现场。IDE 体验（§五 红球绿球）：VS Code 装 Dafny 官方扩展即得。
+- **Dafny（zip 需 .NET，可选）**：[github.com/dafny-lang/dafny/releases](https://github.com/dafny-lang/dafny/releases) 下载 `dafny-x.x.x-x64-win.zip` → 装 **.NET SDK 8+**（`winget install Microsoft.DotNet.SDK.8`）→ 解压、把 `dafny` 目录加 PATH → 实跑：`dafny verify 讲透形式化验证/experiments/max.dfy`（4.x 前的老版本直接 `dafny max.dfy`），预期末行 `Dafny program verifier finished with 1 verified, 0 errors`（单方法、老版横幅；Dafny 4.x 的 `dafny verify` 成功时静默退出——无横幅即成功）。再把 ensures 改强成 `r > x` 跑一遍——错误落在 ensures 行、反例模型（x>y 一类）随之而来，就是 §二 Q' 的红叉现场。IDE 体验（§五 红球绿球）：VS Code 装 Dafny 官方扩展即得。
 - 依赖与环境自检见 [`experiments/requirements.txt`](./experiments/requirements.txt) 与 [`env_check.py`](./experiments/env_check.py)（本 lab 仅用 z3）。
 
 ## 七、不足与边界

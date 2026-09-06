@@ -134,7 +134,7 @@ if (c == N) error();      // "无 error"对任何 k 都不 inductive
   ```
 
   预期：unwinding assertion PASS（循环恰 3 轮）、用户断言 VERIFICATION FAILED + 反例轨迹（三轮赋值 0/1/2，sum=3≠7）；把 7 改回 3 → VERIFICATION SUCCESSFUL。
-- **Python 保底（本 lab）**：`python 讲透形式化验证/experiments/lab04_bmc_cbmc.py`——z3 复现 §二 编码：==3 取反 UNSAT（成立）、==7 取反 SAT（违反，反例模型 0/1/2），与手推逐位一致。`--native` 开关额外调 cbmc 跑 loop3.c（默认跳过、装不通不阻塞；loop3.c 为相对路径，需在 experiments 目录下运行）。
+- **Python 保底（本 lab）**：`python 讲透形式化验证/experiments/lab04_bmc_cbmc.py`——z3 复现 §二 编码：==3 取反 UNSAT（成立）、==7 取反 SAT（违反，反例模型 0/1/2），与手推逐位一致。`--native` 开关额外调 cbmc 跑 loop3.c（默认跳过、装不通不阻塞；显式传 `--native` 而未装 cbmc 时会抛 FileNotFoundError，属预期；loop3.c 为相对路径，需在 experiments 目录下运行）。
 - 依赖与环境自检见 [`experiments/requirements.txt`](./experiments/requirements.txt) 与 [`env_check.py`](./experiments/env_check.py)（z3 已在清单）。
 
 ## 七、不足与边界
