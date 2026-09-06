@@ -36,7 +36,7 @@
 | # | 标题 | 状态 | 核心锚点 | 仪器 |
 |---|------|------|----------|------|
 | 10 | [重复博弈与无名定理：未来的阴影](./10-重复博弈与无名定理.md) | ✅ | 阶段博弈 vs 重复博弈（δ 折扣）、**无名定理**（个体理性可行收益 δ 够大皆 SPE）、grim trigger 合作条件手推 δ≥(T−R)/(T−P)=0.5、**TFT 四美德**（善良/报复/宽容/清晰，Axelrod 锦标赛）、声誉=单玩家未来阴影、无名定理的阴暗面（均衡集爆炸→连 50） | axelrod |
-| 11 | [演化博弈：策略的物种化](./11-演化博弈.md) | ✅ | 策略=物种/收益=适应度、复制动态 ẋᵢ=xᵢ(fᵢ−f̄)、**ESS 两条件**（入侵者严格劣势/持平则同伴对抗占优）、鹰鸽 ESS x*=v/c=0.5 手推、ESS ⊂ NE 精炼、RPS 无 ESS 极限环（连 15/17）、Moran 过程、**AI 连接**（数据生态=策略生态/RLHF 策略漂移） | numpy 欧拉积分 |
+| 11 | [演化博弈：策略的物种化](./11-演化博弈.md) | ✅ | 策略=物种/收益=适应度、复制动态 ẋᵢ=xᵢ(fᵢ−f̄)、**ESS 两条件**（入侵者严格劣势/持平则同伴对抗占优）、鹰鸽 ESS x*=v/c=0.5 手推、ESS ⊂ NE 精炼、RPS 无 ESS（中心型闭轨，连 15/17）、Moran 过程、**AI 连接**（数据生态=策略生态/RLHF 策略漂移） | numpy 欧拉积分 |
 | 12 | [合作博弈：分配的语法](./12-合作博弈.md) | ✅ | 联盟特征函数 v(S)、**Shapley 值** φᵢ=Σ ∣S∣!(n−∣S∣−1)!/n!·[v(S∪{i})−v(S)] + 四公理（有效/对称/哑元/可加）、三人投票 φ=(1/3,1/3,1/3)、机场跑道成本分摊、核（投票博弈核=空）、**Gale-Shapley 稳定匹配**（求婚方 DSIC）、市场设计（NRMP/择校/肾交换）、**SHAP=Shapley 的 ML 化身** | numpy 枚举 |
 
 ## 卷四 · 机制设计：反向博弈论（13-14）
@@ -77,7 +77,7 @@
 | `experiments/lab02_mixed_penalty.py` | 03/04/05 | 罚点球手算/nashpy/scipy.linprog 三路对拍（<1e−8）；Chiappori 2002 真实罚点球数据 vs 模型并排条形图（诚实标注简化）→ `mixed.png` |
 | `experiments/lab03_centipede_qre.py` | 06/07 | pygambit 建蜈蚣 n=6 解逆向归纳 SPE；logit QRE 的 λ∈[0.1,100] 扫描（take 节点前移曲线）；最后通牒不公平厌恶模拟 vs SPE 0 → `extensive.png` |
 | `experiments/lab04_bayes_auction.py` | 08/13 | FPSB b=v/2 蒙特卡洛 10⁵ 场（E[支付]=1/3 ✓）；四拍卖同分布收益等价四路 ≈1/3；钱包拍卖赢家诅咒（naive 利润显著为负 vs 理性调整 ≈0）→ `auction.png` |
-| `experiments/lab05_ipd_evolution.py` | 10/11 | axelrod 十策略 round-robin 锦标赛排名；Moran 过程 TFT 入侵 ALLD 固定概率；手写复制动态（鹰鸽三轨线收敛 x*=0.5 + RPS 极限环）→ `ipd_evo.png` |
+| `experiments/lab05_ipd_evolution.py` | 10/11 | axelrod 十策略 round-robin 锦标赛排名；Moran 过程 TFT 入侵 ALLD 固定概率；手写复制动态（鹰鸽三轨线收敛 x*=0.5 + RPS 中心型闭轨）→ `ipd_evo.png` |
 | `experiments/lab06_matching_shapley.py` | 12/14 | Shapley 四公理数值验证（三人投票 1/3+机场跑道枚举）；Gale-Shapley 4×4 稳定性检查（阻塞对=0）；谎报 DSIC 实验（求婚方 0 次改进 ✓）→ `coop.png` |
 | `experiments/lab07_learning_cfr.py` | 15/16 | FP 轨迹（PD 收敛 vs RPS 信念循环）；regret matching 平均遗憾 log-log（斜率 −1/2）；**手写 `KuhnCFR` 类** train(2×10⁵) 后博弈值 vs −1/18（±0.01 ✓）→ `learning.png` |
 | `wsl_labs/lab08_openspiel_cfr.py` | 16 | OpenSpiel 官方 `CFRSolver`/`CFRPlusSolver` 跑 Kuhn，与理论 −1/18、lab07 手写值**三方对拍**；exploitability 双对数收敛曲线 → `openspiel_cfr.png` |

@@ -33,7 +33,7 @@ print("E1 · axelrod 锦标赛：10 策略 round-robin（turns=200, repetitions=
 print("=" * 68)
 # 注意（已实测核实，axelrod 4.14）：results.scores[i] 与【玩家声明顺序】对齐，
 #   ranked_names 是按总分降序的另一张名字表——两者不能 zip（老教程常见错法）。
-#   每对手平均分 = mean(scores_i)/(turns·(N−1))；Tournament 默认无自对局（TFT 对 4 对手 499 分已手算核对）。
+#   每对手平均分 = mean(scores_i)/(turns·(N−1))；Tournament 默认无自对局（确定性配对手算核对：TFT vs Cooperator 600、vs Alternator 498、vs ALLD 199）。
 ROSTER = [  # (策略类, 善良?, 一句话性格)——善良 = 永不出手背叛（Axelrod 1980 的 nice）
     (axl.TitForTat,         True,  "以牙还牙：善良·报复·宽容·清晰"),
     (axl.Grudger,           True,  "一被背叛记仇到底：善良·报复·零宽容"),
