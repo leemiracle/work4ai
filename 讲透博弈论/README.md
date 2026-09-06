@@ -52,8 +52,8 @@
 |---|------|------|----------|------|
 | 15 | [博弈学习经典：均衡作为学习不动点](./15-博弈学习经典.md) | ✅ | fictitious play（对历史平均最优反应；零和/势博弈收敛，RPS 循环）、**no-regret 框架**（Hedge/指数权重 O(√T)——连讲透优化 25 同一数学两种方言）、遗憾匹配 RM、**平均遗憾→0 ⇒ 经验分布收敛到 CCE**（证明主脉）、NE ⊂ CE ⊂ CCE 层级、收敛性地图（引 17 非传递困境） | numpy |
 | 16 | [CFR 与扑克 AI：不完美信息的征服](./16-CFR与扑克AI.md) | ✅ | Kuhn 扑克（J/Q/K 各 1 筹码一轮下注）、**反事实价值与遗憾**（到达概率加权）、CFR 递归伪代码、Kuhn 均衡手推要点（博弈值 −1/18；J 以 1/3 诈唬-bet）、CFR+（交替更新）、**Libratus/Pluribus 脉络**、open_spiel 对拍（lab08） | 手写 KuhnCFR + OpenSpiel 对拍 |
-| 17 | [自博弈与多智能体 RL：左手互搏](./17-自博弈与多智能体RL.md) | ◆ | **MCTS**（UCB1 选择/扩展/模拟/回传）、**AlphaZero 三步闭环**（自博弈→训练→评估替换）、NFSP（最佳反应+FP 双流）、**PSRO**（策略人口+oracle 扩张）、**非传递性困境**（RPS 环/self-play 向新手投降/人口=演化回归）、非平稳性难题（对手在学→MDP 假设破产→连 50）、OpenSpiel 工具箱 | OpenSpiel（WSL） |
-| 18 | [博弈论与 LLM 对齐：智能的策略世界](./18-博弈论与LLM对齐.md) | ◆ | LLM 博弈能力（GTBench：完全信息强/不完美信息弱/不随机化）、multi-agent debate=议价博弈（发言=廉价磋商，收敛存疑）、self-play for LLM（SPIN/SPPO 生成器 vs 判别器）、**对齐=机制设计**（principal-agent/标注者激励/constitution=社会选择函数）、**algorithmic collusion**（定价算法自发串谋与监管）、诚实框：2026-09 快照 | 文献快照 |
+| 17 | [自博弈与多智能体 RL：左手互搏](./17-自博弈与多智能体RL.md) | ✅ | **MCTS**（UCB1 选择/扩展/模拟/回传）、**AlphaZero 三步闭环**（自博弈→训练→评估替换）、NFSP（最佳反应+FP 双流）、**PSRO**（策略人口+oracle 扩张）、**非传递性困境**（RPS 环/self-play 向新手投降/人口=演化回归）、非平稳性难题（对手在学→MDP 假设破产→连 50）、OpenSpiel 工具箱 | OpenSpiel（WSL） |
+| 18 | [博弈论与 LLM 对齐：智能的策略世界](./18-博弈论与LLM对齐.md) | ✅ | LLM 博弈能力（GTBench：完全信息强/不完美信息弱/不随机化）、multi-agent debate=议价博弈（发言=廉价磋商，收敛存疑）、self-play for LLM（SPIN/SPPO 生成器 vs 判别器）、**对齐=机制设计**（principal-agent/标注者激励/constitution=社会选择函数）、**algorithmic collusion**（定价算法自发串谋与监管）、诚实框：2026-09 快照 | 文献快照 |
 
 ## 收尾 · 批判与谦逊（1 篇）
 
@@ -106,4 +106,4 @@
 
 🔗 [`讲透优化`](../讲透优化/README.md)（同一知识森林的姊妹大陆：优化=没有对手的决策）· AI_MATH_FOREST 博弈域 · 三原型记号（PD T5R3P1S0/性别战争/鹰鸽 v2c4）为全系列与全部 lab 的统一语言，出自 [`00-开场`](./00-开场.md)。
 
-> **状态**：骨架已立——00-16/50 十八章 ✅（卷五上收官），WSL lab08（−1/18 三方对拍）/lab09（MCTS 棋力矩阵）已跑通全绿；卷五下 17-18 2 章 ◆ 与 ipd_arena/auction_house 2 个 CLI 按任务批次填充中；每章完成即在篇目表翻 ✅。
+> **状态**：**二十章正文全部 ✅**（00-18 + 50，五卷完整收官；卷五下 17 自博弈/18 LLM×博弈 + WSL lab08/lab09 全绿）；剩 ipd_arena/auction_house 2 个 CLI 与总验收官按任务批次填充中。

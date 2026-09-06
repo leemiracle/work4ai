@@ -118,14 +118,14 @@ vanilla CFR 的收敛是 O(1/√T)，Kuhn 上秒级到位，真实扑克远远�
 2. **收敛的是平均**：行为策略可以永久振荡（15 章 §五的树版）；工程上"部署哪个策略"是个真问题（Pluribus 部署蓝图+实时搜索的混合，不是裸平均）。
 3. **抽象误差**：真实扑克必须先做卡片聚类/动作桶化——抽象间隙是 Libratus 时代最大的误差源（实时子博弈求解正是为了在到达处抹掉它）。
 4. **多人/非零和的定理缺口**：两人零和有"可剥削度 → 0 ⟹ Nash"的闭环；多人博弈里 CFR 收敛到何物理论上并不干净——Pluribus 是工程胜利，不是定理（[50 章](./50-批判收尾.md)第四堵墙在多人博弈上更宽）。
-5. **均衡打法不剥削对手**：Nash 策略保证不被剥削，但也放弃了对非均衡对手的利润——对手建模/剥削（CFR + 开发者的 best-response 混合）是竞技 AI 的实务分支，也是 [17 章](./17-自博弈与多智能体RL.md) ◆ 人口方法（PSRO）的入口。
+5. **均衡打法不剥削对手**：Nash 策略保证不被剥削，但也放弃了对非均衡对手的利润——对手建模/剥削（CFR + 开发者的 best-response 混合）是竞技 AI 的实务分支，也是 [17 章](./17-自博弈与多智能体RL.md) 人口方法（PSRO）的入口。
 
 ---
 
 ✍️ 练习：① 算 P1 拿 Q 首动下注的期望（答：J 弃 +1、K 必跟 −2，各 1/2 → EV = −1/2 < check 的 −1/3——所以 Q 永远 check；注意 check 的 EV 依赖对手偷鸡率，−1/3 是均衡值）。② 验证 P2 拿 Q 面对 bet 的无差异给 P(J|bet) = 1/4（答：弃 = −1；跟 = 2p − 2(1−p) = 4p − 2，p = P(J|bet)；4p − 2 = −1 ⟺ p = 1/4——跟注的 pot odds：跟 1 追 3，诈唬占比恰 1/4 时跟注零期望）。③ 用 §四的表算 (Q, K) 这手牌 P1 的期望（答：P1 Q check，P2 K 必下注，P1 以 1/3+α 跟（−2）、2/3−α 弃（−1）→ EV = −4/3 − α ✓ 与枚举表一致）。④ 族端点检查：α = 0 时双方策略是什么？还是均衡吗？（答：P1 永远 check（J/K 都不下注）、面对偷鸡 Q 跟 1/3；P2 照旧 J 偷 1/3、K 必偷——P1 的 J 拿去下注恰打平（诈唬无差异在端点退化为弱占优），价值仍 −1/18：均衡族含端点。）⑤ 为什么两人零和里"平均策略 → Nash"而 15 章只敢说 CCE？（答：零和的可剥削度闭环：双方遗憾 → 0 ⟹ 每人对固定对手的增益 ≤ ε ⟹ 距 minimax ≤ 2ε（04 章 vN 定理的算法版）；一般和博弈无此结构，只有 CCE 保证——两章的定理各自停在各自能停的地方。）
 
-📌 下一步 → [17 自博弈与多智能体 RL](./17-自博弈与多智能体RL.md)（◆ 卷五待写）：CFR 需要知道全部规则才能走树——AlphaZero 们连规则都要自己学：MCTS + 神经网络的自博弈闭环、NFSP 的"最佳反应 + FP"双流、PSRO 的策略人口（15 章非传递性困境的药方），以及 RPS 环上"自博弈向新手投降"的名场面。
+📌 下一步 → [17 自博弈与多智能体 RL](./17-自博弈与多智能体RL.md)：CFR 需要知道全部规则才能走树——AlphaZero 们连规则都要自己学：MCTS + 神经网络的自博弈闭环、NFSP 的"最佳反应 + FP"双流、PSRO 的策略人口（15 章非传递性困境的药方），以及 RPS 环上"自博弈向新手投降"的名场面。
 
 ## 锚点
 
-Kuhn 1950 "Simplified Two-Person Poker"（本章果蝇与均衡族原典；Kuhn 同时是行为策略/完美回忆定理的作者——06 章伏笔的源头）/ Zinkevich-Bowling 2007 族与 Zinkevich et al. 2007 "Regret Minimization in Games with Incomplete Information"（CFR 原典）/ Tammelin 2014（CFR+）/ Neller-Lanctot 2013（Kuhn CFR 的教学实现——lab07 的对照文献）/ Brown-Sandholm 2017（Libratus：Science 2017/2018 "Superhuman AI for heads-up no-limit poker"）/ Moravčík et al. 2017（DeepStack）与 Brown-Sandholm 2019（Pluribus：Science，六人桌） / Bowling et al. 2015（Cepheus 限注德州"本质解"——CFR+ 的里程碑应用）/ Lanctot 2014（抽象与 MCCFR 谱系的学位论文）/ 06 章（信息集/行为策略/Kuhn 定理）/ 08 章（类型与贝叶斯——扑克的私有信息版）/ 15 章（遗憾匹配——CFR 的矩阵母体；平均哲学）/ 04 章（零和可剥削度闭环——练习⑤的理论根据）/ [17 章](./17-自博弈与多智能体RL.md)（◆ 待写：自博弈、人口与 PSRO）/ [50 章](./50-批判收尾.md)（第二堵墙的工程绕行；平均 vs 行为）/ lab07（E3 手写 KuhnCFR −1/18 全绿 + 均衡族三关系验尸）/ [`cli/kuhn_poker.py`](./cli/kuhn_poker.py)（可玩版：--demo 自赌 + 交互揭示 bot 混合策略）/ lab08（◆ 待写：OpenSpiel 官方 CFR/CFR+ 的三方对拍）。
+Kuhn 1950 "Simplified Two-Person Poker"（本章果蝇与均衡族原典；Kuhn 同时是行为策略/完美回忆定理的作者——06 章伏笔的源头）/ Zinkevich-Bowling 2007 族与 Zinkevich et al. 2007 "Regret Minimization in Games with Incomplete Information"（CFR 原典）/ Tammelin 2014（CFR+）/ Neller-Lanctot 2013（Kuhn CFR 的教学实现——lab07 的对照文献）/ Brown-Sandholm 2017（Libratus：Science 2017/2018 "Superhuman AI for heads-up no-limit poker"）/ Moravčík et al. 2017（DeepStack）与 Brown-Sandholm 2019（Pluribus：Science，六人桌） / Bowling et al. 2015（Cepheus 限注德州"本质解"——CFR+ 的里程碑应用）/ Lanctot 2014（抽象与 MCCFR 谱系的学位论文）/ 06 章（信息集/行为策略/Kuhn 定理）/ 08 章（类型与贝叶斯——扑克的私有信息版）/ 15 章（遗憾匹配——CFR 的矩阵母体；平均哲学）/ 04 章（零和可剥削度闭环——练习⑤的理论根据）/ [17 章](./17-自博弈与多智能体RL.md)（自博弈、人口与 PSRO）/ [50 章](./50-批判收尾.md)（第二堵墙的工程绕行；平均 vs 行为）/ lab07（E3 手写 KuhnCFR −1/18 全绿 + 均衡族三关系验尸）/ [`cli/kuhn_poker.py`](./cli/kuhn_poker.py)（可玩版：--demo 自赌 + 交互揭示 bot 混合策略）/ lab08（OpenSpiel 官方 CFR/CFR+ 的三方对拍——已实测，四方一致）。
