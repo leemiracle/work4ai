@@ -29,7 +29,7 @@
 | 03 | [SMT 求解：DPLL(T) 与 Z3/cvc5](./03-SMT求解与Z3cvc5.md) | ✅ | DPLL→CDCL（**冲突子句 UIP 分析手推**）→ T-传播/E-传播；Nelson-Oppen 理论组合（LRA×EUF 共享变量）；SMT-LIB 语法；Z3 架构（简化器/核心/理论插件）；cvc5 的证明输出；应用：符号执行、SMT 竞赛格局。【NP/coNP】 | z3 + cvc5（均 pip）+ 手写 mini-CDCL |
 | 04 | [有界模型检查：CBMC/ESBMC](./04-有界模型检查CBMC.md) | ✅ | 程序 k 步展开→SSA→断言取反→SMT，**反例=模型**；**3 行循环程序 k=2 展开编码手推**；k-induction 突破有界；CBMC 的 goto-IR/指针数组编码 vs ESBMC 的并发上下文界/多后端；不可判定问题的"有界"出路。【NP】 | cbmc.exe（Windows 官方包，可选）+ z3 复现编码 |
 | 05 | [抽象解释与 CPAchecker](./05-抽象解释与CPAchecker.md) | ✅ | 过近似：**符号函数的区间抽象跑 3 轮收敛不动点手推**；可靠≠完备（假报警）；CEGAR 闭环（反例→Craig 插值→谓词精化，**完整走一轮**）；CPA 可配置框架=域×迁移×合并；SV-COMP 赛场格局。【不可判定→可靠近似】 | 手写区间域解释器 + CPAchecker（Java，可选） |
-| 06 | [Dafny：验证感知语言](./06-Dafny验证语言.md) | ○ | 前置/后置/循环不变式；**WP 三规则手推**（赋值/顺序/if）；Boogie 中间层→Z3；**BinarySearch 中点不变式**；终止性度量；全自动（Dafny）vs 交互（Lean4）——卷零之桥。【不可判定→义务分解到 NP】 | z3 复现 WP 检查 + Dafny（zip 需 .NET，可选） |
+| 06 | [Dafny：验证感知语言](./06-Dafny验证语言.md) | ✅ | 前置/后置/循环不变式；**WP 三规则手推**（赋值/顺序/if）；Boogie 中间层→Z3；**BinarySearch 中点不变式**；终止性度量；全自动（Dafny）vs 交互（Lean4）——卷零之桥。【不可判定→义务分解到 NP】 | z3 复现 WP 检查 + Dafny（zip 需 .NET，可选） |
 
 ### 卷二 · PSPACE：让所有路径说话（07-09）
 
