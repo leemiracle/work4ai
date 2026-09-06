@@ -35,9 +35,9 @@
 
 | # | 标题 | 状态 | 核心锚点 | 仪器 |
 |---|------|------|----------|------|
-| 07 | [LTL 与 Spin：显式状态的工艺](./07-LTL与Spin.md) | ○ | LTL 语法（U/F/G 与五等价换算）；**F p 的 tableau 手推**；乘积 Büchi+nested-DFS（**双 DFS 手推环检测**）；on-the-fly、偏序归约、Never claim；Promela 建模互斥协议。【PSPACE-complete（公式长度）】 | 手写 nested-DFS + Spin（MinGW/WSL，可选） |
-| 08 | [TLA+：规约即数学](./08-TLA+与TLC.md) | ○ | 行为规约（状态=值，无对象）；PlusCal→TLA+ 翻译；**两阶段提交 PlusCal 死锁手推**；TLC 显式枚举+不变式+覆盖；TLAPS 证明层；AWS CACM 2015（S3/DynamoDB）案例；vs 07：规格语言×检查工艺正交。【模型检查 PSPACE；TLC=显式枚举】 | 手写 TLC 式 BFS + TLC jar（Java，可选） |
-| 09 | [Alloy：关系逻辑的小世界](./09-Alloy关系逻辑.md) | ○ | 一切皆关系（点乘/方盒/转置算子）；事实/断言/检查；**地址簿 alias 断言 scope=3 小反例手推**；Kodkod→SAT（回连 03 CDCL）；"小反例"哲学 vs 定理证明；轻量级 FM 定位。【有界=NP；无界不可判定】 | z3 关系编码对拍 + Alloy jar（Java，可选） |
+| 07 | [LTL 与 Spin：显式状态的工艺](./07-LTL与Spin.md) | ✅ | LTL 语法（U/F/G 与五等价换算）；**F p 的 tableau 手推**；乘积 Büchi+nested-DFS（**双 DFS 手推环检测**）；on-the-fly、偏序归约、Never claim；Promela 建模互斥协议。【PSPACE-complete（公式长度）】 | 手写 nested-DFS + Spin（MinGW/WSL，可选） |
+| 08 | [TLA+：规约即数学](./08-TLA+与TLC.md) | ✅ | 行为规约（状态=值，无对象）；PlusCal→TLA+ 翻译；**两阶段提交 PlusCal 死锁手推**；TLC 显式枚举+不变式+覆盖；TLAPS 证明层；AWS CACM 2015（S3/DynamoDB）案例；vs 07：规格语言×检查工艺正交。【模型检查 PSPACE；TLC=显式枚举】 | 手写 TLC 式 BFS + TLC jar（Java，可选） |
+| 09 | [Alloy：关系逻辑的小世界](./09-Alloy关系逻辑.md) | ✅ | 一切皆关系（点乘/方盒/转置算子）；事实/断言/检查；**地址簿 alias 断言 scope=3 小反例手推**；Kodkod→SAT（回连 03 CDCL）；"小反例"哲学 vs 定理证明；轻量级 FM 定位。【有界=NP；无界不可判定】 | z3 关系编码对拍 + Alloy jar（Java，可选） |
 
 ### 卷三 · P：概率定量（10-11）
 
