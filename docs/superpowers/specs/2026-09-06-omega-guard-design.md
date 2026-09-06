@@ -77,9 +77,12 @@ omega-guard/
     events.py             # ToolEvent + 谓词原语（tool/tool_in/tool_phase/arg_gt/...）
     automata.py           # 显式状态 parity 自动机（Büchi/co-Büchi 语法糖）
                           #   + 三值状态分类 + NondeterminismError
-    dsl.py                # never / every_eventually / within_k / at_most /
+    dsl.py                # never / always / eventually / every_eventually /
+                          #   within_k / at_most / at_least /
                           #   no_more_than_k_consecutive / requires_since /
-                          #   always / eventually / And / Or / Not
+                          #   And / Or
+                          #   （一般 Not 移至 v2：三值 pending 对偶性易错，
+                          #     对偶组合子已覆盖用例；Not 随 LTL 前端在自动机层做补）
     monitor.py            # Guardrail(spec, mode='observe'|'enforce')
                           #   .check(event) -> Allow|Deny(reason)   # enforce 拦截点
                           #   .observe(event) -> Verdict
@@ -107,7 +110,7 @@ omega-guard/
 | `at_most(p, k)` | 全会话 p 至多 k 次 | ✅（第 k+1 次即违规） |
 | `no_more_than_k_consecutive(p, k)` | p 不连续超 k 次 | ✅ |
 | `requires_since(p, since=r, req=q)` | G(自上次 r 以来的历史中无 q 则 ¬p) | ✅（p 出现且未见过 q 即违规） |
-| `And / Or / Not` | 三值合并（§3.4） | 随成员 |
+| `And / Or` | 三值合并（§3.4），BOTTOM 支配 / TOP 需全员 | 随成员 |
 
 **监控器异常策略**（生产铁律）：监控器抛异常绝不拖垮宿主——捕获、记 `INTERNAL_ERROR`、按性质配置 fail-open（默认，响亮记日志）/ fail-closed（硬安全性质可标）。
 
