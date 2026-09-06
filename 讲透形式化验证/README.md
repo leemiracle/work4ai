@@ -43,8 +43,8 @@
 
 | # | 标题 | 状态 | 核心锚点 | 仪器 |
 |---|------|------|----------|------|
-| 10 | [PRISM：概率模型检测](./10-PRISM概率模型检测.md) | ○ | DTMC/CTMC/MDP；PCTL 语法；**2 态 DTMC 的 P(F reach) 线性方程组手推**；MDP=max-min→LP/价值迭代（numpy 跑例）；**P≤p 的定量保证**；参数化模型与置信重构。【P】 | numpy 手推 + PRISM（Windows 安装包，可选） |
-| 11 | [Storm：高性能概率检查](./11-Storm与高性能概率检查.md) | ○ | 稀疏引擎 vs 符号引擎（**连 12：BDD/MTBDD**）；精确有理数 vs 浮点；JANI/PRISM 双前端；stormpy；PRISM 入门 vs Storm 上量的分工；1100 万状态案例叙事。【P（大输入的工程战）】 | scipy.sparse 价值迭代 + stormpy（WSL，可选） |
+| 10 | [PRISM：概率模型检测](./10-PRISM概率模型检测.md) | ✅ | DTMC/CTMC/MDP；PCTL 语法；**2 态 DTMC 的 P(F reach) 线性方程组手推**；MDP=max-min→LP/价值迭代（numpy 跑例）；**P≤p 的定量保证**；参数化模型与置信重构。【P】 | numpy 手推 + PRISM（Windows 安装包，可选） |
+| 11 | [Storm：高性能概率检查](./11-Storm与高性能概率检查.md) | ✅ | 稀疏引擎 vs 符号引擎（**连 12：BDD/MTBDD**）；精确有理数 vs 浮点；JANI/PRISM 双前端；stormpy；PRISM 入门 vs Storm 上量的分工；1100 万状态案例叙事。【P（大输入的工程战）】 | scipy.sparse 价值迭代 + stormpy（WSL，可选） |
 
 ### 卷四 · 引擎室：BDD/进程代数/自动机学习（12-14）
 
