@@ -20,17 +20,20 @@
 | # | 文件 | 对应五问 | 状态 |
 |---|------|---------|------|
 | 00 | [`00-体系结构.md`](00-体系结构.md) | Q1 整个体系结构：朴素爆雷 → ZFC 十公理逐条（挡住什么/买到什么）→ 宇宙 V 分层 → 四大分支地图 | ✅ |
-| 01 | `01-近五年创新.md` | Q2 2021-2026：Ultimate-L、Martin 猜想进展、Borel 归约、Lean/Mathlib 形式化浪潮、神经符号证明反向影响基础研究（写作期文献实查） | 📝 |
-| 02 | `02-语言特征.md` | Q3 表达（∈ 一阶语言、Δ₀/Σ₁ 层级）/ 逻辑（完备↔不完备的精确边界）/ 规范化（ZFC-NBG-MK、类型论替代、CZF 三路线） | 📝 |
-| 03 | `03-可构造与结构.md` | Q4 哥德尔 L 宇宙、L_α 层级、良基性、Mostowski 塌缩、L 中 CH 成立 | 📝 |
-| 04 | `04-集合论转代码.md` | Q5 力迫=迭代逼近算法观、Borel code、Mathlib Set/Ordinal API 实操、有限组合→SAT、不可机械化的边界 | 📝 |
+| 01 | [`01-近五年创新.md`](01-近五年创新.md) | Q2 2021-2026：MM⁺⁺⇒(\*) 公理合流、Goldberg UA（2024 Hausdorff）、Martin 猜想、Flypitch 形式化、神经符号距离评估（文献实查版） | ✅ |
+| 02 | [`02-语言特征.md`](02-语言特征.md) | Q3 表达（∈ 语言、Δ₀/Σ₁ 量词预算、绝对性）/ 逻辑（完备↔不完备、Skolem 悖论）/ 规范化（ZFC-NBG-MK-CZF-类型论五路线） | ✅ |
+| 03 | [`03-可构造与结构.md`](03-可构造与结构.md) | Q4 哥德尔 L 宇宙、Def 算子、凝聚引理、覆盖引理与 0#、Mostowski 塌缩、有限层 L_n=V_n 巧合 | ✅ |
+| 04 | [`04-集合论转代码.md`](04-集合论转代码.md) | Q5 六条机械化走廊（数据结构/类型/布尔值模型/Borel code/SAT/力迫迭代）+ 三层不可机械化边界 + core 版 Cantor 本地编译 | ✅ |
 
 ## 二、实验脚本（experiments/）
 
 | 文件 | 用途 | 状态 |
 |------|------|------|
-| `experiments/00_cantor_diagonal.py` | 对角论证生成器：|ℕ|=|ℚ| 枚举 + |ℕ|<|ℝ| 反实数构造 + Cantor 定理逃逸集 | ✅ |
+| `experiments/00_cantor_diagonal.py` | 对角论证生成器：\|ℕ\|=\|ℚ\| 枚举 + \|ℕ\|<\|ℝ\| 反实数构造 + Cantor 定理逃逸集 | ✅ |
 | `experiments/00_zfc_finite_model.py` | ZFC 公理的有限近似模型：逐条公理在 V_0..V_4 有限层成立/失效 + frozenset=正则公理的工程化身 | ✅ |
+| `experiments/02_delta0_evaluator.py` | Δ₀ 公式求值器：量词预算 lint + V₄/V₅ 双宇宙绝对性对照（无界量词真值翻转） | ✅ |
+| `experiments/03_constructible_L.py` | Def 算子有限实现（L_n=V_n 巧合）+ Mostowski 塌缩器（唯一性/重号粘合/自环拒绝） | ✅ |
+| `experiments/04_forcing_borel.py` | Borel code 解释器（半可判定现象）+ Cohen 式泛型构造（力迫=迭代对角化，12/12 逃逸） | ✅ |
 
 ## 三、前置要求
 
@@ -63,4 +66,5 @@ python3 -u experiments/00_cantor_diagonal.py
 python3 -u experiments/00_zfc_finite_model.py
 ```
 
-📌 **下一步**：读完 00 章后，02 章（语言特征）回答"这套语言到底能说什么"；急着想看前沿的可以直接催 01 章。
+📌 **下一步**：五章全发。读完 04 章后，动手路线：`experiments/` 五个实验按序跑；
+形式化路线进 [`../讲透Lean4数学/`](../讲透Lean4数学/)（04 章的 Cantor core 版是起点）。
