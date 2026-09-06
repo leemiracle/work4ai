@@ -80,8 +80,8 @@
 | `experiments/lab05_ipd_evolution.py` | 10/11 | axelrod 十策略 round-robin 锦标赛排名；Moran 过程 TFT 入侵 ALLD 固定概率；手写复制动态（鹰鸽三轨线收敛 x*=0.5 + RPS 中心型闭轨）→ `ipd_evo.png` |
 | `experiments/lab06_matching_shapley.py` | 12/14 | Shapley 四公理数值验证（三人投票 1/3+机场跑道枚举）；Gale-Shapley 4×4 稳定性检查（阻塞对=0）；谎报 DSIC 实验（求婚方 0 次改进 ✓）→ `coop.png` |
 | `experiments/lab07_learning_cfr.py` | 15/16 | FP 轨迹（PD 收敛 vs RPS 信念循环）；regret matching 平均遗憾 log-log（斜率 −1/2）；**手写 `KuhnCFR` 类** train(2×10⁵) 后博弈值 vs −1/18（±0.01 ✓）→ `learning.png` |
-| `wsl_labs/lab08_openspiel_cfr.py` | 16 | OpenSpiel 官方 `CFRSolver`/`CFRPlusSolver` 跑 Kuhn，与理论 −1/18、lab07 手写值**三方对拍**；exploitability 双对数收敛曲线 → `openspiel_cfr.png` |
-| `wsl_labs/lab09_selfplay_mcts.py` | 17 | 纯 python MCTS（UCB1+rollout）自博弈井字棋：0/10²/10³/10⁴ 模拟档互赛胜率矩阵（棋力单调↑）；AlphaZero 最小化说明 → `mcts_selfplay.png` |
+| `wsl_labs/lab08_openspiel_cfr.py` | 16 | OpenSpiel 官方 `CFRSolver`/`CFRPlusSolver` 跑 Kuhn 10⁵ 迭代，与理论 −1/18、lab07 手写值**三方对拍**（四方一致 ✓）；nash_conv（可剥削度）双对数：CFR+ 快约一个量级 → `openspiel_cfr.png` |
+| `wsl_labs/lab09_selfplay_mcts.py` | 17 | 纯 python MCTS（UCB1+rollout+**MCTS-Solver**）自博弈井字棋：0/10²/10³/10⁴ 模拟档互赛矩阵（高档不败 ✓/对随机 >0.70 ✓/和棋天花板 0.91 ✓）；AlphaZero 最小化说明（vanilla UCT 战术盲区实测 23%→13%）→ `mcts_selfplay.png` |
 | `cli/kuhn_poker.py` | 16 | 可玩 Kuhn 扑克：`--demo` CFR bot 自赌 500 手（P1 ≈ −1/18 ± 抽样）；交互模式人机对赌，bot 揭示真实混合策略与诈唬频率点评 |
 | `cli/ipd_arena.py` | 10 | 重复囚徒困境竞技场：`--demo` axelrod 十策略积分榜；交互人机对打（实时得分+策略性格点评：合作率/报复率） |
 | `cli/auction_house.py` | 08/13 | 三拍卖人机竞拍：`--demo` 均衡机器人自拍 2000 场（平均卖价 ≈ E[次高]≈60±2，n=4 U[0,100]）；交互揭示所有人估价与最优反应损失点评 |
@@ -106,4 +106,4 @@
 
 🔗 [`讲透优化`](../讲透优化/README.md)（同一知识森林的姊妹大陆：优化=没有对手的决策）· AI_MATH_FOREST 博弈域 · 三原型记号（PD T5R3P1S0/性别战争/鹰鸽 v2c4）为全系列与全部 lab 的统一语言，出自 [`00-开场`](./00-开场.md)。
 
-> **状态**：骨架已立——00-16/50 十八章 ✅（卷五上 15-16 完整收官：FP/no-regret→CCE/CFR 手推 Kuhn −1/18 + lab07 全绿 + kuhn_poker CLI），卷五下 17-18 2 章 ◆ + WSL lab08/09 与 2 个 CLI 按任务批次填充中；每章完成即在篇目表翻 ✅。
+> **状态**：骨架已立——00-16/50 十八章 ✅（卷五上收官），WSL lab08（−1/18 三方对拍）/lab09（MCTS 棋力矩阵）已跑通全绿；卷五下 17-18 2 章 ◆ 与 ipd_arena/auction_house 2 个 CLI 按任务批次填充中；每章完成即在篇目表翻 ✅。
