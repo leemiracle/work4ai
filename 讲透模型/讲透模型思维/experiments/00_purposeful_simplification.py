@@ -5,7 +5,7 @@
   B. 查表模型：9 次多项式                    （10 参数，不做任何结构假设）
 域内谁拟合得好？域外（外推）谁还活着？
 
-结论：查表模型把噪声也当信号背下来（域内误差更低），外推立刻爆炸；
+结论：域内两者都贴着噪声底（点数不够时，查表模型连噪声都背不全）；外推立刻爆炸；
       机理模型丢掉"每个点的噪声"，留住"振荡+衰减"的结构——这就是有目的的简化：
       目的（外推预测）决定哪些信息该丢。
 """
@@ -48,7 +48,7 @@ def mech_predict(t):
 poly = np.polynomial.Polynomial.fit(t_train, y_train, deg=9)
 
 print(f"[训练域 0-8]   拟合 RMSE：机理 = {rmse(mech_predict(t_train), y_train):.4f}   "
-      f"多项式 = {rmse(poly(t_train), y_train):.4f}   <- 查表背噪声，通常更低")
+      f"多项式 = {rmse(poly(t_train), y_train):.4f}   <- 域内分不出高下")
 print(f"[外推域 8-12]  预测 RMSE：机理 = {rmse(mech_predict(t_test), y_test):.4f}   "
       f"多项式 = {rmse(poly(t_test), y_test):.4f}   <- 外推见真章")
 print(f"机理模型找回结构参数：g = {g_hat:.2f}（真值 0.3）  w = {w_hat:.2f}（真值 2.0）")
