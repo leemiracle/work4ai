@@ -83,8 +83,8 @@
 | `wsl_labs/lab08_openspiel_cfr.py` | 16 | OpenSpiel 官方 `CFRSolver`/`CFRPlusSolver` 跑 Kuhn 10⁵ 迭代，与理论 −1/18、lab07 手写值**三方对拍**（四方一致 ✓）；nash_conv（可剥削度）双对数：CFR+ 快约一个量级 → `openspiel_cfr.png` |
 | `wsl_labs/lab09_selfplay_mcts.py` | 17 | 纯 python MCTS（UCB1+rollout+**MCTS-Solver**）自博弈井字棋：0/10²/10³/10⁴ 模拟档互赛矩阵（高档不败 ✓/对随机 >0.70 ✓/和棋天花板 0.91 ✓）；AlphaZero 最小化说明（vanilla UCT 战术盲区实测 23%→13%）→ `mcts_selfplay.png` |
 | `cli/kuhn_poker.py` | 16 | 可玩 Kuhn 扑克：`--demo` CFR bot 自赌 500 手（P1 ≈ −1/18 ± 抽样）；交互模式人机对赌，bot 揭示真实混合策略与诈唬频率点评 |
-| `cli/ipd_arena.py` | 10 | 重复囚徒困境竞技场：`--demo` axelrod 十策略积分榜；交互人机对打（实时得分+策略性格点评：合作率/报复率） |
-| `cli/auction_house.py` | 08/13 | 三拍卖人机竞拍：`--demo` 均衡机器人自拍 2000 场（平均卖价 ≈ E[次高]≈60±2，n=4 U[0,100]）；交互揭示所有人估价与最优反应损失点评 |
+| `cli/ipd_arena.py` | 10 | 重复囚徒困境竞技场：`--demo` axelrod 十策略积分榜（TFT 榜首 ✓；Cooperator 仅第 8——排名依赖参赛生态的诚实注脚）；交互人机对打（实时得分+对手上一手+TFT 四美德体检：合作率/报复率/宽容度） |
+| `cli/auction_house.py` | 08/13 | 三拍卖人机竞拍：`--demo` 均衡机器人自拍 2000 场（实测 60.1/61.0/61.0 全入 E[次高]=60±2 ✓，n=4 U[0,100]）；交互三拍卖逐场揭示全部估值出价+最优反应点评（二价高报净亏/低报丢单当场算账） |
 
 ## 运行环境
 
