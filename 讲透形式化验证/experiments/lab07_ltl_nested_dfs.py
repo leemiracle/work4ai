@@ -39,7 +39,6 @@ def nested_dfs(edges, label, init):
                     continue                     # 内层只在 ¬p 子图里走
                 if v == s:                       # 回到起点：环闭合
                     trace.append(("内层命中", s, path + [v]))
-                    stem = path[:path.index(s) + 1] if s in path else [s]
                     # 茎 = 从 init 到 s 的最短路（此处图小，直接沿发现序回溯）
                     stem = _stem_to(edges, label, init, s)
                     return True, (stem, path + [v]), trace

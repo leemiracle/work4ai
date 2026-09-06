@@ -22,7 +22,7 @@
 -- algorithm TwoPhase {
   variables rm1 = "W", rm2 = "W", tm = "COLLECT";
   macro RM_PREPARE(rm)   either rm := "A"  or  rm := "P"  end either;
-  process (TM = 0) { await rm1 ∈ {"P","A"} ∧ rm2 ∈ {"P","A"};
+  process (TM = 0) { await (rm1 = "P" ∧ rm2 = "P") ∨ (rm1 = "A" ∨ rm2 = "A");
                      tm := IF rm1 = "P" ∧ rm2 = "P" THEN "COMMIT" ELSE "ABORT" }
   process (RM1 = 1) { RM_PREPARE(rm1); await tm ≠ "COLLECT";
                       if tm = "COMMIT" then rm1 := "C" else rm1 := "A" }
@@ -30,7 +30,7 @@
 }
 ```
 
-`tlaplus` 翻译器把它展开成 TLA+ 的 Next 关系——**一堆析取的"动作"**（rm1 单方面弃权 ∨ rm1 投票 ∨ tm 决议 ∨ rm1 服从决议 ∨ ……）。lab08 的 `next_states` 就是这张动作表的 Python 直译（①单方面弃权 ②投票 ③全票 COMMIT ④见弃权 ABORT ⑤服从决议）。**动作是原子的、步与步任意交错**——并发语义一句话说清，这是 TLA+ 比伪代码更强的地方：交错语义不是隐含的，是写出来的数学。
+`tlaplus` 翻译器把它展开成 TLA+ 的 Next 关系——**一堆析取的"动作"**（rm1 单方面弃权 ∨ rm1 投票 ∨ tm 决议 ∨ rm1 服从决议 ∨ ……）。lab08 的 `next_states` 就是这张动作表的 Python 直译（①单方面弃权 ②投票 ③全票 COMMIT ④见弃权 ABORT ⑤服从决议）。TM 的 await 正是 ③④ 的守卫——全票到齐才 COMMIT，**见到任一 abort 即可不再等第二票**（eager-abort，真实 2PC 的合法变体；此口径下 TLC 严格枚举与 lab08 同得 18 态）。**动作是原子的、步与步任意交错**——并发语义一句话说清，这是 TLA+ 比伪代码更强的地方：交错语义不是隐含的，是写出来的数学。
 
 ## 三、TLC 工艺：枚举 + 不变式 + 死锁（先跑后写的手推账本）
 
@@ -49,7 +49,7 @@ E3 · 理论空间 48 态（4·4·3），完整模型只达 18——"行为是�
 
 ## 四、TLAPS：TLC 查有限、TLAPS 证无限
 
-TLC 只能枚举有穷状态空间（参数定了 2 台 RM 就是 18 态；换成 N 台、值域换成整数，TLC 直接出局）。**TLAPS**（TLA+ Proof System）是证明层：`THEOREM AtomicityInv ≜ ∀s ∈ States : Inv[s]` 配合交互式证明（Coq/Isabelle 风格的分层 OBVIGA……实为 SANY 解析 + 数学证明语言），机器查证明。**层级化验证**是 TLA+ 生态的独特风景：同一份规约，TLC 查玩具参数、TLAPS 证一般定理、精化映射（refinement）把实现规约接到抽象规约——查有限与证无限不是二选一，是两级火力。
+TLC 只能枚举有穷状态空间（参数定了 2 台 RM 就是 18 态；换成 N 台、值域换成整数，TLC 直接出局）。**TLAPS**（TLA+ Proof System）是证明层：`THEOREM AtomicityInv ≜ ∀s ∈ States : Inv[s]` 配合交互式证明——TLAPS 是证明管理器：将证明义务分发给后端证明器（Isabelle/SMT 等），机器查证明。**层级化验证**是 TLA+ 生态的独特风景：同一份规约，TLC 查玩具参数、TLAPS 证一般定理、精化映射（refinement）把实现规约接到抽象规约——查有限与证无限不是二选一，是两级火力。
 
 ## 五、AWS 战场：工业界最大规模的证词
 

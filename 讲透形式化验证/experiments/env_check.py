@@ -8,7 +8,7 @@ DEPS = {  # 模块名: (导入名, 一句话用途)
     "cvc5": ("cvc5", "SMT 求解器对拍（lab03）"),
     "dd": ("dd", "BDD 库（lab12）"),
     "automata-lib": ("automata", "自动机库（lab14）"),
-    "pyformlang": ("pyformlang", "形式语言库（lab13/14）"),
+    "pyformlang": ("pyformlang", "形式语言库（生态交叉用，lab 未直接 import）"),
     "numpy": ("numpy", "数值计算（lab05/10/11）"),
     "scipy": ("scipy", "稀疏矩阵（lab11）"),
 }

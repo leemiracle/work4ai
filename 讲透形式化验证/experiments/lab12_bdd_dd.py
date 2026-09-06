@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """lab12 · BDD：手写 ite + 变量序爆炸 + dd 库对拍（12 章 §二/§三）。
 公式族：f_n = (x1∧x2) ∨ (x3∧x4) ∨ … ∨ (x_{2n−1}∧x_{2n})。
-好序 [x1,x2,x3,x4,…]（配对相邻）→ 节点 O(n)；坏序 [x1,x3,…,x_{2n−1}, x2,x4,…]（配对分离）→ 节点 O(2^{n/2} 量级指数涨）。
+好序 [x1,x2,x3,x4,…]（配对相邻）→ 节点 O(n)；坏序 [x1,x3,…,x_{2n−1}, x2,x4,…]（配对分离）→ 节点 O(2^n 量级指数涨）。
 手推锚点（12 章 §三）：n=2 好序恰 5 个内点（x1,x2,x3,x4 各一 + 共享层——以实跑为准打印）；
 n=8 好序 ~2n 级、坏序数百+。教学版 TBDD：节点 = (var, lo, hi) 元组 + 唯一表 + 计算缓存，
 AND/OR 全归 ite（Shannon 展开）——CUDD 的两个核心不变量照进玩具。
@@ -136,7 +136,7 @@ for n in (2, 4, 6, 8):
     rows.append((n, c_good, d_good, c_bad, d_bad))
     print(f"{n:>3} | {c_good:>9} | {d_good:>7} | {c_bad:>9} | {d_bad:>7}")
 print("\n（两列同为从公式根可达的内点数口径；手写与 dd 逐格一致即对拍通过）")
-print("（坏序闭式 2^(n/2+2)−2：6/30/126/510 逐格核对 ✓；好序恰 2n 个内点）")
+print("（坏序闭式 2^(n+1)−2：6/30/126/510 逐格核对 ✓；好序恰 2n 个内点）")
 for n, c_good, d_good, c_bad, d_bad in rows:
     assert c_good == d_good and c_bad == d_bad, (n, c_good, d_good, c_bad, d_bad)
 print(f"→ E1 自检通过：四种规模手写与 dd 节点数全部一致；n=2 好序恰 {rows[0][1]} 个内点（章内 §三手推）")
