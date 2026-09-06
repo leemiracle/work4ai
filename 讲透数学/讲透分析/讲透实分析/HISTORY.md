@@ -622,9 +622,9 @@ Lean/Mathlib 正在形式化越来越多的实分析（包括 Lebesgue 测度和
 
 | 系列 | 关系 |
 |------|------|
-| [`讲透AI历史/`](../../讲透AI历史) | 方法论模板——本文的"思想史 vs 年代史""范式转移""反常识"框架直接来自该系列 |
-| [`top-math-courses/BREAKTHROUGHS_PART1_PURE_MATH.md`](../../top-math-courses/BREAKTHROUGHS_PART1_PURE_MATH.md) | §4 "分析"部分提供了 Lebesgue "反方向"洞察和 Cantor 悲剧的初始素材 |
-| [`top-math-courses/HISTORY_AND_TASTE.md`](../../top-math-courses/HISTORY_AND_TASTE.md) | 数学史阅读书单 |
+| [`讲透AI历史/`](../../../讲透AI历史) | 方法论模板——本文的"思想史 vs 年代史""范式转移""反常识"框架直接来自该系列 |
+| [`top-math-courses/BREAKTHROUGHS_PART1_PURE_MATH.md`](../../../top-math-courses/BREAKTHROUGHS_PART1_PURE_MATH.md) | §4 "分析"部分提供了 Lebesgue "反方向"洞察和 Cantor 悲剧的初始素材 |
+| [`top-math-courses/HISTORY_AND_TASTE.md`](../../../top-math-courses/HISTORY_AND_TASTE.md) | 数学史阅读书单 |
 | 本系列 [`00-实分析是什么.md`](00-实分析是什么.md) | 直觉入口——本文为其提供历史纵深 |
 | 本系列 [`01-实数构造.md`](01-实数构造.md) | Dedekind/Cantor 构造 ℝ 的技术细节 |
 | 本系列 [`05-Riemann积分.md`](05-Riemann积分.md) | Riemann 积分的技术细节——本文解释其历史地位 |

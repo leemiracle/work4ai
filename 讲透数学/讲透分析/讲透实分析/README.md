@@ -157,12 +157,12 @@
 
 | 系列 | 关系 |
 |------|------|
-| [`../讲透Lean4数学/`](../讲透Lean4数学) | **强配套**：本系列教数学，它教怎么形式化 |
-| [`../top-math-courses/UNIFIED_ROADMAP.md`](../../top-math-courses/UNIFIED_ROADMAP.md) | 路径规划（本系列对应 #8 MAT 215 + #11 18.100B + #16 18.125）|
-| [`../top-math-courses/LEAN_MATH_TRACK.md`](../../top-math-courses/LEAN_MATH_TRACK.md) | 学数学同时练 Lean（本系列是 #8 的执行）|
-| [`../讲透NLP/math/`](../../讲透NLP/math) | NLP 用到的实分析概念反查 |
-| [`../讲透优化理论/`](../../讲透优化理论) | 优化需要实分析（Lipschitz/凸函数）|
-| [`../讲透信息论/`](../讲透信息论) | 信息论的极限定理需要实分析 |
+| [`../讲透Lean4数学/`](../../讲透Lean4数学) | **强配套**：本系列教数学，它教怎么形式化 |
+| [`../top-math-courses/UNIFIED_ROADMAP.md`](../../../top-math-courses/UNIFIED_ROADMAP.md) | 路径规划（本系列对应 #8 MAT 215 + #11 18.100B + #16 18.125）|
+| [`../top-math-courses/LEAN_MATH_TRACK.md`](../../../top-math-courses/LEAN_MATH_TRACK.md) | 学数学同时练 Lean（本系列是 #8 的执行）|
+| [`../讲透NLP/math/`](../../../讲透NLP/math) | NLP 用到的实分析概念反查 |
+| [`../讲透优化理论/`](../../../讲透优化理论) | 优化需要实分析（Lipschitz/凸函数）|
+| [`../讲透信息论/`](../../讲透信息论) | 信息论的极限定理需要实分析 |
 
 ---
 
@@ -207,4 +207,4 @@ code Chapter9/limits.lean
 📌 **下一步**：
 - 数学自评 0 → 先读 [`00-实分析是什么.md`](00-实分析是什么.md) 建立直觉，再决定要不要先补 Spivak
 - 有基础 → 直接读 [`01-实数构造.md`](01-实数构造.md)
-- 配 [`../top-math-courses/LEAN_MATH_TRACK.md`](../../top-math-courses/LEAN_MATH_TRACK.md) 看 Tao companion 怎么用
+- 配 [`../top-math-courses/LEAN_MATH_TRACK.md`](../../../top-math-courses/LEAN_MATH_TRACK.md) 看 Tao companion 怎么用

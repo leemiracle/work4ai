@@ -626,8 +626,8 @@ Lean/Mathlib 正在形式化越来越多的分析学（Lebesgue 积分、Sobolev
 | 系列 | 关系 |
 |------|------|
 | [`讲透实分析/HISTORY.md`](../讲透实分析/HISTORY.md) | **直接姐妹篇**——测度论的思想史。本文的 §1（Fourier 分析"逼出"了 Riemann/Lebesgue 积分）与姐妹篇的 §2–§4（严格化→测度）无缝衔接 |
-| [`讲透AI历史/00-为什么学AI历史.md`](../../讲透AI历史/00-为什么学AI历史.md) | 方法论模板——"思想史 vs 年代史""范式转移""反常识"框架 |
-| [`top-math-courses/BREAKTHROUGHS_PART1_PURE_MATH.md`](../../top-math-courses/BREAKTHROUGHS_PART1_PURE_MATH.md) | §4"分析"部分提供了 Fourier/Cauchy/Riemann 的初始素材 |
+| [`讲透AI历史/00-为什么学AI历史.md`](../../../讲透AI历史/00-为什么学AI历史.md) | 方法论模板——"思想史 vs 年代史""范式转移""反常识"框架 |
+| [`top-math-courses/BREAKTHROUGHS_PART1_PURE_MATH.md`](../../../top-math-courses/BREAKTHROUGHS_PART1_PURE_MATH.md) | §4"分析"部分提供了 Fourier/Cauchy/Riemann 的初始素材 |
 | 本系列 [`00-分析进阶是什么.md`](00-分析进阶是什么.md) | 直觉入口——本文为其提供历史纵深 |
 | 本系列 [`01-08-合集.md`](01-08-合集.md) | 技术骨架——本文解释其历史地位和动机 |
 

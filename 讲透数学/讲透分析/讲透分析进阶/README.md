@@ -56,9 +56,9 @@
 ## 三、与 work4ai 联动
 
 - [`../讲透实分析/`](../讲透实分析) — 本系列的前置
-- [`../讲透高维概率/`](../讲透高维概率) — 用到 $L^p$ 空间
-- [`../讲透信息论/`](../讲透信息论) — Fourier 与信息论交叉
-- [`../top-math-courses/TEXTBOOK_LIBRARY.md`](../../top-math-courses/TEXTBOOK_LIBRARY.md) §一
+- [`../讲透高维概率/`](../../讲透高维概率) — 用到 $L^p$ 空间
+- [`../讲透信息论/`](../../讲透信息论) — Fourier 与信息论交叉
+- [`../top-math-courses/TEXTBOOK_LIBRARY.md`](../../../top-math-courses/TEXTBOOK_LIBRARY.md) §一
 
 ---
 
