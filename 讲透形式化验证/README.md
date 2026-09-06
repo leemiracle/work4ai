@@ -26,7 +26,7 @@
 
 | # | 标题 | 状态 | 核心锚点 | 仪器 |
 |---|------|------|----------|------|
-| 03 | [SMT 求解：DPLL(T) 与 Z3/cvc5](./03-SMT求解与Z3cvc5.md) | ○ | DPLL→CDCL（**冲突子句 UIP 分析手推**）→ T-传播/E-传播；Nelson-Oppen 理论组合（LRA×EUF 共享变量）；SMT-LIB 语法；Z3 架构（简化器/核心/理论插件）；cvc5 的证明输出；应用：符号执行、SMT 竞赛格局。【NP/coNP】 | z3 + cvc5（均 pip）+ 手写 mini-CDCL |
+| 03 | [SMT 求解：DPLL(T) 与 Z3/cvc5](./03-SMT求解与Z3cvc5.md) | ✅ | DPLL→CDCL（**冲突子句 UIP 分析手推**）→ T-传播/E-传播；Nelson-Oppen 理论组合（LRA×EUF 共享变量）；SMT-LIB 语法；Z3 架构（简化器/核心/理论插件）；cvc5 的证明输出；应用：符号执行、SMT 竞赛格局。【NP/coNP】 | z3 + cvc5（均 pip）+ 手写 mini-CDCL |
 | 04 | [有界模型检查：CBMC/ESBMC](./04-有界模型检查CBMC.md) | ○ | 程序 k 步展开→SSA→断言取反→SMT，**反例=模型**；**3 行循环程序 k=2 展开编码手推**；k-induction 突破有界；CBMC 的 goto-IR/指针数组编码 vs ESBMC 的并发上下文界/多后端；不可判定问题的"有界"出路。【NP】 | cbmc.exe（Windows 官方包，可选）+ z3 复现编码 |
 | 05 | [抽象解释与 CPAchecker](./05-抽象解释与CPAchecker.md) | ○ | 过近似：**符号函数的区间抽象跑 3 轮收敛不动点手推**；可靠≠完备（假报警）；CEGAR 闭环（反例→Craig 插值→谓词精化，**完整走一轮**）；CPA 可配置框架=域×迁移×合并；SV-COMP 赛场格局。【不可判定→可靠近似】 | 手写区间域解释器 + CPAchecker（Java，可选） |
 | 06 | [Dafny：验证感知语言](./06-Dafny验证语言.md) | ○ | 前置/后置/循环不变式；**WP 三规则手推**（赋值/顺序/if）；Boogie 中间层→Z3；**BinarySearch 中点不变式**；终止性度量；全自动（Dafny）vs 交互（Lean4）——卷零之桥。【不可判定→义务分解到 NP】 | z3 复现 WP 检查 + Dafny（zip 需 .NET，可选） |
@@ -50,9 +50,9 @@
 
 | # | 标题 | 状态 | 核心锚点 | 仪器 |
 |---|------|------|----------|------|
-| 12 | [BDD：状态爆炸的解药](./12-BDD与CUDD.md) | ○ | Shannon 展开/ite；**同一公式两种变量序节点数手推（n vs 2ⁿ）**；apply/restrict/∃量化；CUDD 架构（唯一表/计算缓存/互补边）；ZDD 一句；Sylvan 多核 work-stealing；dd 的 CUDD 绑定；**PRISM/Storm 符号引擎=CUDD 生态闭环**。【PSPACE 的符号化武器】 | dd（pip）+ 手写 ite 对拍 |
-| 13 | [进程代数与 mCRL2](./13-进程代数与mCRL2.md) | ○ | CCS 的前缀/选择/并行‖/限制；**两进程互模拟判定手推**；μ-演算=LTL∪CTL 公共超集（**NP∩coNP 未解之谜**——Zoo 活展品）；LPE 线性化；mCRL2 工具链 vs FDR/CSP。【交替不动点：NP∩coNP】 | 手写 CCS toy + pyformlang + mCRL2（Windows 包，可选） |
-| 14 | [自动机学习 L\*：从黑盒重建模型](./14-自动机学习Lstar.md) | ○ | Angluin L*：成员+等价查询、观察表闭合+一致；**(a\|b)\*ab 观察表演化手推**；MAT 模型；反例加列；W 方法测试上界一句；LearnLib/AutomataLib 架构；应用：协议逆向/legacy 系统。【多项式查询复杂度】 | 手写 L* + automata-lib 对拍 + pyformlang 交叉 |
+| 12 | [BDD：状态爆炸的解药](./12-BDD与CUDD.md) | ✅ | Shannon 展开/ite；**同一公式两种变量序节点数手推（n vs 2ⁿ）**；apply/restrict/∃量化；CUDD 架构（唯一表/计算缓存/互补边）；ZDD 一句；Sylvan 多核 work-stealing；dd 的 CUDD 绑定；**PRISM/Storm 符号引擎=CUDD 生态闭环**。【PSPACE 的符号化武器】 | dd（pip）+ 手写 ite 对拍 |
+| 13 | [进程代数与 mCRL2](./13-进程代数与mCRL2.md) | ✅ | CCS 的前缀/选择/并行‖/限制；**两进程互模拟判定手推**；μ-演算=LTL∪CTL 公共超集（**NP∩coNP 未解之谜**——Zoo 活展品）；LPE 线性化；mCRL2 工具链 vs FDR/CSP。【交替不动点：NP∩coNP】 | 手写 CCS toy + pyformlang + mCRL2（Windows 包，可选） |
+| 14 | [自动机学习 L\*：从黑盒重建模型](./14-自动机学习Lstar.md) | ✅ | Angluin L*：成员+等价查询、观察表闭合+一致；**(a\|b)\*ab 观察表演化手推**；MAT 模型；反例加列；W 方法测试上界一句；LearnLib/AutomataLib 架构；应用：协议逆向/legacy 系统。【多项式查询复杂度】 | 手写 L* + automata-lib 对拍 + pyformlang 交叉 |
 
 ### 收尾 · 复杂度动物园（50）
 
