@@ -348,6 +348,7 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 
 ### 11. CS 名校课程整合：`algorithms/` · `database-systems/` · `network-systems/` · `cs224n/` · `*-cs-projects/`
 > 把同一主题在多所名校的"不同讲法"整合成对比矩阵，快速建立完整能力。⭐ 2026-08
+> **学习规划层**：[`top-cs-projects/CS学习规划-课程地图.md`](top-cs-projects/CS学习规划-课程地图.md)——按 [csdiy·CS学习规划](https://csdiy.wiki/CS%E5%AD%A6%E4%B9%A0%E8%A7%84%E5%88%92/) 的 23 领域逐项映射到本仓库资源（讲透宇宙理论侧+九校库实战侧），缺口如实标注；配套 [`CS必学工具箱.md`](top-cs-projects/CS必学工具箱.md)（工具+环境+镜像加速）。⭐ 2026-09
 
 **跨校整合模块（按主题/课程，多源对比）：**
 
