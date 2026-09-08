@@ -1,0 +1,98 @@
+{{CZ-Letter-Menu|O}}
+
+===== <span id="o2p" style="color:red">OCL</span>: One-Counter Languages  =====
+
+The class of languages accepted by nondeterministic one-counter automata:
+finite automata equipped with one nonnegative counter that can be incremented,
+decremented, and tested for zero. Equivalently, OCL is the class accepted by
+pushdown automata with a singleton stack alphabet, plus a bottom marker.
+
+REG ⊊ OCL ⊊ CFL. As decision problems over strings, OCL ⊆ NL.
+
+Examples include {a^n b^n : n ≥ 0} and the one-parenthesis Dyck language.
+The two-parenthesis Dyck language is CFL but not OCL.
+
+Contains [[Complexity Zoo:D#DOCL|DOCL]] and [[Complexity Zoo:P#PB-OCL|PB-OCL]]. Contained in [[Complexity Zoo:C#CFL|CFL]] and [[Complexity Zoo:N#NL|NL]].
+
+----
+
+===== <span id="oip" style="color:red">OIP</span>: Oblivious IP =====
+[[Complexity Zoo:I#ip|IP]] where only the input size is known during the interaction with the prover, and after that interaction, the verifier gets the specific input.
+
+L is in OIP if there exists a randomized, polynomial time interrogator I which takes an input size and interacts with a prover to produce a witness, and polynomial time verifier V that takes an input and a witness so that
+<ol>
+<li>Given an input size n, there is prover so that I given n and interacting with the prover produces a witness w so that, for any input x of length n where x is in L, V accepts on x and w.</li>
+<li>For any x not in L of length n, for any prover interacting with I on input n gives a witness w' which V will reject with x and w' with probability at least 2/3.</li>
+</ol>
+
+OIP = [[Complexity Zoo:I#ip|IP]] &#8745; [[Complexity Zoo:P#ppoly|P/poly]] [[zooref#gm15|[GM15]]].
+
+----
+
+===== <span id="oma" style="color:red">OMA</span>: Oblivious MA =====
+The class of functions computable in randomized polynomial time with a shared, untrusted witness for each input size. The input-oblivious version of [[Complexity Zoo:M#ma|MA]].
+
+L is in OMA if there exists a randomized, polynomial time verifier V taking an input and a witness, so that:
+<ol>
+<li>There is a witness for each n of polynomial size, so that for any input of size n, if the input is is in L, then the verifier accepts on that input and the witness.</li>
+<li>If the input is not in L, then for any witness, the verifier rejects on that input with probability at least 1/2.</li>
+</ol>
+
+[[Complexity Zoo:N#np|NP]] is contained in OMA iff [[Complexity Zoo:N#np|NP]] is in [[Complexity Zoo:P#ppoly|P/poly]] [[zooref#fsw09|[FSW09]]].
+
+[[Complexity Zoo:E#exp|EXP]] is contained in [[Complexity Zoo:P#ppoly|P/poly]] iff [[Complexity Zoo:E#exp|EXP]] = OMA [[zooref#fsw09|[FSW09]]].
+
+[[Complexity Zoo:B#bpp|BPP]] is contained in OMA [[zooref#gm15|[GM15]]].
+
+Implicit in {{zcite|San07}} that OMA/1 (that is, OMA with 1 bit of trusted advice) does not have circuits of size <math>n^k</math> for any <math>k>0</math>.
+
+----
+
+===== <span id="onp" style="color:red">ONP</span>: Oblivious NP =====
+The class of functions computable in polynomial time with a shared, untrusted witness for each input size. The input-oblivious version of [[Complexity Zoo:N#np|NP]].
+
+L is in ONP if there exists a polynomial time verifier V taking an input and a witness, so that:
+
+<ol>
+<li>There is a witness for each n of polynomial size, so that for any input of size n, if the input is in L, then the verifier accepts on that input and the witness.</li>
+<li>If the input is not in L, then for any witness, the verifier rejects on that input.</li>
+</ol>
+
+Defined in [[zooref#fsw09|[FSW09]]], where it was shown [[Complexity Zoo:N#np|NP]] has size n<sup>k</sup> circuits for some constant k if and only if ONP/1 has size n<sup>j</sup> circuits for some constant j.
+
+ONP is contained in [[Complexity Zoo:P#ppoly|P/poly]] and [[Complexity Zoo:N#np|NP]] [[zooref#fsw09|[FSW09]]].
+
+ONP = [[Complexity Zoo:N#np|NP]] iff [[Complexity Zoo:N#np|NP]] is in [[Complexity Zoo:P#ppoly|P/poly]] [[zooref#fsw09|[FSW09]]].
+
+If [[Complexity Zoo:N#ne|NE]] is not [[Complexity Zoo:E#e|E]] then ONP is not [[Complexity Zoo:P#p|P]] [[zooref#gm15|[GM15]]].
+
+See also [[Complexity Zoo:Y#yp|YP]] for an input oblivious analogue of [[Complexity Zoo:N#npiconp|NP &#8745; coNP]].
+
+----
+
+===== <span id="optp" style="color:red">OptP</span>: Optimum Polynomial-Time =====
+The class of functions computable by taking the maximum (or minimum) of the output values over all accepting paths of an [[Complexity Zoo:N#np|NP]] machine. OptP[f(n)] restricts the size of the output to f(n) bits.
+
+Defined in [[zooref#kre88|[Kre88]]].
+
+Contrast with [[Complexity Zoo:F#fnp|FNP]].
+
+[[MaxSat]] that returns the number of satisfied clauses, [[Clicque]] that returns the size of the clique, [[Chromatic Number]] are OptP[log n]-complete.
+
+----
+
+===== <span id="o2p" style="color:red">O<sub>2</sub>P</span>: Second Level of the Oblivious Symmetric Hierarchy  =====
+The class of decision problems for which there is a polynomial-time predicate P such that, for each length n, there exists y* and z* of length poly(n) such that for all x of length n
+<ol>
+<li>If the answer is 'yes,' for all z, P(x,y*,z) is true.</li>
+<li>If the answer is 'no,' then for all y, P(x,y,z*) is false.</li>
+</ol>
+Note that this differs from [[Complexity Zoo:S#s2p|S<sub>2</sub>P]] in that the witnesses in each case must only depend on the length of the input, and not on the input itself. In particular, since the conditions imply that the answer is 'yes' iff P(x,y*,z*), the class O<sub>2</sub>P is included in [[Complexity Zoo:P#ppoly|P/poly]].
+
+Less formally, O<sub>2</sub>P is the class of one-round games in which a prover and a disprover submit simultaneous moves to a deterministic, polynomial-time referee, and furthermore, there is a single winning move the prover can make that works for all x of length n that are yes-instances, and there is a single winning move the disprover can make that works for all x of length n that are no-instances.
+
+Defined in [[zooref#cr06|[CR06]]], where it was shown (among other properties) that O<sub>2</sub>P is self-low, and that the Karp–Lipton collapse goes all the way down to O<sub>2</sub>P: if [[Complexity Zoo:N#np|NP]] is contained in [[Complexity Zoo:P#ppoly|P/poly]] then [[Complexity Zoo:P#ph|PH]] = O<sub>2</sub>P.
+
+Contains [[Complexity Zoo:O#onp|ONP]] and coONP [[zooref#gm15|[GM15]]].
+
+It follows [[zooref#glv24|[GLV24]]] from results of [[zooref#li23|[Li23]]] that for each ''k'', O<sub>2</sub>P contains a language that has circuit complexity at least ''n<sup>k</sup>''. (Previously, this was known for NP ∪ O<sub>2</sub>P based on [[zooref#cr06|[CR06]]].)
