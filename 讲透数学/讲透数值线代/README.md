@@ -48,8 +48,8 @@
 
 ## 三、与 work4ai 联动
 
-- [`../讲透优化理论/`](../../讲透优化理论) — 凸优化的数值实现
-- [`../讲透NLP/05-词嵌入.md`](../../讲透NLP/05-词嵌入-word2vec与GloVe.md) — SVD 在词嵌入
+- [`../讲透优化理论/`](../讲透优化) — 凸优化的数值实现
+- [`../讲透NLP/05-词嵌入.md`](../../讲透模型/讲透NLP/05-词嵌入-word2vec与GloVe.md) — SVD 在词嵌入
 - [`../top-math-courses/TEXTBOOK_LIBRARY.md`](../../top-math-courses/TEXTBOOK_LIBRARY.md) §七
 
 ---

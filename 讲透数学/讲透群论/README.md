@@ -65,5 +65,5 @@
 
 ## 🔗 与其他宇宙的连接
 
-- **[`讲透模型可能性/`](../../讲透模型可能性)**：Equivariant GNN 把群等变性直接做成归纳偏置（见 14-Equivariant与GNN）
+- **`讲透模型可能性/`**：Equivariant GNN 把群等变性直接做成归纳偏置（见 14-Equivariant与GNN）
 

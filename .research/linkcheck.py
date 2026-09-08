@@ -13,19 +13,31 @@ from pathlib import Path
 
 LINK_RE = re.compile(r'\[([^\]]*)\]\(([^)\s]+)\)')
 FENCE_RE = re.compile(r'^\s*(```|~~~)')
+MATH_INLINE_RE = re.compile(r'(\$[^$\n]+\$|\$\$.+?\$\$)')
 
 
 def extract_links(text: str):
-    """产出非代码围栏区的 (line_no, target) 链接。"""
+    """产出非代码围栏/非数学式区域的 (line_no, target) 链接。"""
     links = []
     in_fence = False
+    in_math = False  # 跨行 $$ 块状态
     for i, line in enumerate(text.splitlines(), 1):
         if FENCE_RE.match(line):
             in_fence = not in_fence
             continue
         if in_fence:
             continue
-        for _text, target in LINK_RE.findall(line):
+        if in_math:
+            if '$$' in line:  # 块结束
+                line = line.split('$$', 1)[1]
+                in_math = False
+            else:
+                continue
+        stripped = MATH_INLINE_RE.sub('', line)
+        if stripped.count('$$') % 2 == 1:  # 块开始且未闭合
+            in_math = True
+            stripped = stripped.split('$$', 1)[0]
+        for _text, target in LINK_RE.findall(stripped):
             links.append((i, target))
     return links
 

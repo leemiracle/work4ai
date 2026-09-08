@@ -4,7 +4,7 @@
 
 > **博士级标准**：这不是年份 + 人物 + 论文的年代史。这是**思想史**——为什么 VC 维 1971 年就被提出，却直到 2017 年才被宣告"无法解释深度学习"？为什么苏联数学领先西方十五年？为什么 Boosting 从一个纯理论问题变成了工业级算法？为什么神经网络理论在 Cybenko 1989 之后停滞了二十年？
 
-> 配套：[`讲透AI历史`](../../讲透AI历史)（AI 思想史）+ [`讲透泛化`](../../讲透泛化)（应用现象）+ [`top-math-courses/BREAKTHROUGHS_PART2_APPLIED_MATH`](../../top-math-courses/BREAKTHROUGHS_PART2_APPLIED_MATH.md)（数学突破史方法论）
+> 配套：[`讲透AI历史`](../../讲透AI历史)（AI 思想史）+ [`讲透泛化`](../../讲透模型/讲透泛化)（应用现象）+ [`top-math-courses/BREAKTHROUGHS_PART2_APPLIED_MATH`](../../top-math-courses/BREAKTHROUGHS_PART2_APPLIED_MATH.md)（数学突破史方法论）
 
 ---
 
@@ -641,10 +641,10 @@ Zhang-Bengio-Hardt-Recht-Wainwright (2017)
 ## 13. 开放问题
 
 1. **深度网络的有效复杂度怎么严格定义？** VC 维太大、Rademacher 仍松——目前最好的尝试是 PAC-Bayes 和谱范数界，但远未完善。
-2. **Scaling law 的物理解释？** 为什么 $\alpha \approx \beta \approx 0.3$？（[`讲透基础模型/advanced/01`](../../讲透基础模型/advanced/01-ScalingLaw-严格证明.md)）
+2. **Scaling law 的物理解释？** 为什么 $\alpha \approx \beta \approx 0.3$？（[`讲透基础模型/advanced/01`](../../讲透模型/讲透基础模型/advanced/01-ScalingLaw-严格证明.md)）
 3. **双层下降的统一理论？** 有多种解释（随机矩阵、核方法、隐式正则），但缺乏统一框架。
 4. **NTK 之外——特征学习理论？** NTK 只覆盖惰性训练（lazy training），真正的特征学习（feature learning）超出其范围。
-5. **涌现是统计学习现象吗？** 大模型的能力涌现是否有统计学习理论的解释？（[`讲透基础模型/advanced/02`](../../讲透基础模型/advanced/02-涌现的争论.md)）
+5. **涌现是统计学习现象吗？** 大模型的能力涌现是否有统计学习理论的解释？（[`讲透基础模型/advanced/02`](../../讲透模型/讲透基础模型/advanced/02-涌现的争论.md)）
 6. **"良性过拟合"的精确条件？** 什么时候过拟合是良性的（不损害泛化），什么时候是恶性的？
 7. **大模型的归纳偏置是什么？** Transformer 的归纳偏置（局部性、组合性、上下文学习）如何形式化？
 8. **AGI 有学习理论保证吗？** 如果 AGI 存在，它的泛化界应该是什么形式？
@@ -687,10 +687,10 @@ Zhang-Bengio-Hardt-Recht-Wainwright (2017)
 
 ### 14.3 配套系列
 
-- [`讲透泛化`](../../讲透泛化) —— 应用视角：过参数化为什么泛化
-- [`讲透优化理论`](../../讲透优化理论) —— 优化-泛化联系
+- [`讲透泛化`](../../讲透模型/讲透泛化) —— 应用视角：过参数化为什么泛化
+- [`讲透优化理论`](../讲透优化) —— 优化-泛化联系
 - [`讲透信息论`](../讲透信息论) —— 信息论与学习
-- [`讲透基础模型/advanced/01`](../../讲透基础模型/advanced/01-ScalingLaw-严格证明.md) —— Scaling Law 理论
+- [`讲透基础模型/advanced/01`](../../讲透模型/讲透基础模型/advanced/01-ScalingLaw-严格证明.md) —— Scaling Law 理论
 - [`讲透AI历史`](../../讲透AI历史) —— AI 整体思想史
 
 ---

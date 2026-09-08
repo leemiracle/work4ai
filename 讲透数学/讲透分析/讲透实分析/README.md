@@ -160,8 +160,8 @@
 | [`../讲透Lean4数学/`](../../讲透Lean4数学) | **强配套**：本系列教数学，它教怎么形式化 |
 | [`../top-math-courses/UNIFIED_ROADMAP.md`](../../../top-math-courses/UNIFIED_ROADMAP.md) | 路径规划（本系列对应 #8 MAT 215 + #11 18.100B + #16 18.125）|
 | [`../top-math-courses/LEAN_MATH_TRACK.md`](../../../top-math-courses/LEAN_MATH_TRACK.md) | 学数学同时练 Lean（本系列是 #8 的执行）|
-| [`../讲透NLP/math/`](../../../讲透NLP/math) | NLP 用到的实分析概念反查 |
-| [`../讲透优化理论/`](../../../讲透优化理论) | 优化需要实分析（Lipschitz/凸函数）|
+| `../讲透NLP/math/` | NLP 用到的实分析概念反查 |
+| `../讲透优化理论/` | 优化需要实分析（Lipschitz/凸函数）|
 | [`../讲透信息论/`](../../讲透信息论) | 信息论的极限定理需要实分析 |
 
 ---
