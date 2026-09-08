@@ -1,0 +1,61 @@
+# 讲透Transformers · DeepWiki 索引
+
+> 来源 https://deepwiki.com/huggingface/transformers · 55 页
+
+> ⚠️【2026-09-07 深研勘误】本索引基于教学期快照。transformers 5.17.0.dev0 @8ce59c1348（2026-09）要点更新：from_pretrained 已裂解为编排+八步链（device_map=仓内 fork 贪心非 accelerate 委托）；量化协议 28 项显式 dict 四段生命周期；编译入口=get_compiled_call（无独立 API，仅 decode 用）；**OffloadedCache 类已删**；组束搜/对比/DoLa 弃用外迁；**generation/continuous_batching/ 6083 行原生推理引擎**（分页 KV+chunked prefill+双 CUDA graph，零 vllm/sglang 依赖）。勘误全文见 hpc-agent 仓 docs/research/2026-09-07-transformers-deepread.md（勘误 6 条）。
+
+- [1-overview](deepwiki/1-overview.md) — Overview
+- [1.1-getting-started-and-installation](deepwiki/1.1-getting-started-and-installation.md) — Getting Started & Installation
+- [1.2-design-philosophy-and-v5-migration-guide](deepwiki/1.2-design-philosophy-and-v5-migration-guide.md) — Design Philosophy & V5 Migration Guide
+- [10-pipelines](deepwiki/10-pipelines.md) — Pipelines
+- [10.1-text-and-conversational-pipelines](deepwiki/10.1-text-and-conversational-pipelines.md) — Text & Conversational Pipelines
+- [10.2-vision-audio-and-multimodal-pipelines](deepwiki/10.2-vision-audio-and-multimodal-pipelines.md) — Vision, Audio & Multimodal Pipelines
+- [11-peft-and-parameter-efficient-fine-tuning](deepwiki/11-peft-and-parameter-efficient-fine-tuning.md) — PEFT & Parameter-Efficient Fine-Tuning
+- [12-model-export](deepwiki/12-model-export.md) — Model Export
+- [13-cli-and-serving](deepwiki/13-cli-and-serving.md) — CLI & Serving
+- [14-adding-new-models](deepwiki/14-adding-new-models.md) — Adding New Models
+- [14.1-modular-transformers-system](deepwiki/14.1-modular-transformers-system.md) — Modular Transformers System
+- [14.2-repository-consistency-and-documentation-checks](deepwiki/14.2-repository-consistency-and-documentation-checks.md) — Repository Consistency & Documentation Checks
+- [15-cicd-testing-and-infrastructure](deepwiki/15-cicd-testing-and-infrastructure.md) — CI/CD, Testing & Infrastructure
+- [15.1-circleci-pipeline-and-test-selection](deepwiki/15.1-circleci-pipeline-and-test-selection.md) — CircleCI Pipeline & Test Selection
+- [15.2-github-actions-workflows](deepwiki/15.2-github-actions-workflows.md) — GitHub Actions Workflows
+- [15.3-docker-images](deepwiki/15.3-docker-images.md) — Docker Images
+- [15.4-benchmarking-framework](deepwiki/15.4-benchmarking-framework.md) — Benchmarking Framework
+- [16-glossary](deepwiki/16-glossary.md) — Glossary
+- [2-core-architecture](deepwiki/2-core-architecture.md) — Core Architecture
+- [2.1-pretrainedmodel-and-pretrainedconfig](deepwiki/2.1-pretrainedmodel-and-pretrainedconfig.md) — PreTrainedModel & PreTrainedConfig
+- [2.2-auto-classes-and-lazy-loading-factory](deepwiki/2.2-auto-classes-and-lazy-loading-factory.md) — Auto Classes & Lazy-Loading Factory
+- [2.3-model-weight-loading-and-conversion](deepwiki/2.3-model-weight-loading-and-conversion.md) — Model Weight Loading & Conversion
+- [2.4-common-modeling-layers-and-utilities](deepwiki/2.4-common-modeling-layers-and-utilities.md) — Common Modeling Layers & Utilities
+- [3-model-architectures](deepwiki/3-model-architectures.md) — Model Architectures
+- [3.1-decoder-only-language-models-(llms)](deepwiki/3.1-decoder-only-language-models-(llms).md) — Decoder-Only Language Models (LLMs)
+- [3.2-mixture-of-experts-(moe)-models](deepwiki/3.2-mixture-of-experts-(moe)-models.md) — Mixture-of-Experts (MoE) Models
+- [3.3-state-space-and-hybrid-models](deepwiki/3.3-state-space-and-hybrid-models.md) — State Space & Hybrid Models
+- [3.4-encoder-decoder-and-sequence-to-sequence-models](deepwiki/3.4-encoder-decoder-and-sequence-to-sequence-models.md) — Encoder-Decoder & Sequence-to-Sequence Models
+- [3.5-vision-and-vision-language-models](deepwiki/3.5-vision-and-vision-language-models.md) — Vision & Vision-Language Models
+- [3.6-audio-and-speech-models](deepwiki/3.6-audio-and-speech-models.md) — Audio & Speech Models
+- [3.7-multimodal-omni-and-specialized-models](deepwiki/3.7-multimodal-omni-and-specialized-models.md) — Multimodal Omni & Specialized Models
+- [4-tokenization-and-input-processing](deepwiki/4-tokenization-and-input-processing.md) — Tokenization & Input Processing
+- [4.1-tokenizers](deepwiki/4.1-tokenizers.md) — Tokenizers
+- [4.2-image-video-and-audio-processors](deepwiki/4.2-image-video-and-audio-processors.md) — Image, Video & Audio Processors
+- [4.3-hub-integration-and-file-caching](deepwiki/4.3-hub-integration-and-file-caching.md) — Hub Integration & File Caching
+- [5-text-generation](deepwiki/5-text-generation.md) — Text Generation
+- [5.1-generationmixin-and-decoding-strategies](deepwiki/5.1-generationmixin-and-decoding-strategies.md) — GenerationMixin & Decoding Strategies
+- [5.2-kv-cache-implementations](deepwiki/5.2-kv-cache-implementations.md) — KV Cache Implementations
+- [5.3-logits-processors-stopping-criteria-and-watermarking](deepwiki/5.3-logits-processors-stopping-criteria-and-watermarking.md) — Logits Processors, Stopping Criteria & Watermarking
+- [5.4-continuous-batching](deepwiki/5.4-continuous-batching.md) — Continuous Batching
+- [6-training](deepwiki/6-training.md) — Training
+- [6.1-trainer-and-trainingarguments](deepwiki/6.1-trainer-and-trainingarguments.md) — Trainer & TrainingArguments
+- [6.2-callbacks-optimizers-and-schedulers](deepwiki/6.2-callbacks-optimizers-and-schedulers.md) — Callbacks, Optimizers & Schedulers
+- [6.3-data-collators-and-datasets](deepwiki/6.3-data-collators-and-datasets.md) — Data Collators & Datasets
+- [6.4-training-examples-and-scripts](deepwiki/6.4-training-examples-and-scripts.md) — Training Examples & Scripts
+- [7-quantization](deepwiki/7-quantization.md) — Quantization
+- [7.1-bitsandbytes-gptq-and-awq](deepwiki/7.1-bitsandbytes-gptq-and-awq.md) — BitsAndBytes, GPTQ & AWQ
+- [7.2-fp8-ggufggml-and-other-quantization-backends](deepwiki/7.2-fp8-ggufggml-and-other-quantization-backends.md) — FP8, GGUF/GGML & Other Quantization Backends
+- [8-distributed-and-parallel-inference](deepwiki/8-distributed-and-parallel-inference.md) — Distributed & Parallel Inference
+- [8.1-tensor-parallelism-and-expert-parallelism](deepwiki/8.1-tensor-parallelism-and-expert-parallelism.md) — Tensor Parallelism & Expert Parallelism
+- [8.2-deepspeed-and-fsdp-integration](deepwiki/8.2-deepspeed-and-fsdp-integration.md) — DeepSpeed & FSDP Integration
+- [8.3-accelerate-and-device-mapping](deepwiki/8.3-accelerate-and-device-mapping.md) — Accelerate & Device Mapping
+- [9-attention-backends-and-kernel-integration](deepwiki/9-attention-backends-and-kernel-integration.md) — Attention Backends & Kernel Integration
+- [9.1-flash-attention-sdpa-and-flexattention](deepwiki/9.1-flash-attention-sdpa-and-flexattention.md) — Flash Attention, SDPA & FlexAttention
+- [9.2-hub-kernels-and-custom-kernel-loading](deepwiki/9.2-hub-kernels-and-custom-kernel-loading.md) — Hub Kernels & Custom Kernel Loading
