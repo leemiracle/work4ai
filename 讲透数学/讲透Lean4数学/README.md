@@ -116,7 +116,7 @@ induction + apply    →   + simp / ring / nlinarith / 推荐 tactic
 | 系列 | 关系 |
 |------|------|
 | [`../讲透NLP/`](../../讲透NLP) | NLP 用数学，本系列做数学的严格证明层 |
-| [`../讲透实分析/`](../讲透实分析) | **强配套**：实分析教你数学，本系列教你把数学形式化 |
+| [`../讲透实分析/`](../讲透分析/讲透实分析) | **强配套**：实分析教你数学，本系列教你把数学形式化 |
 | [`../讲透信息论/`](../讲透信息论) | 信息论概念可在 Lean 形式化（Mathlib 有 `Probability/Information/`）|
 | [`../讲透优化理论/`](../../讲透优化理论) | 凸优化可在 Lean 形式化（Mathlib `Analysis/Convex/`）|
 | [`../top-math-courses/LEAN_MATH_TRACK.md`](../../top-math-courses/LEAN_MATH_TRACK.md) | 路径规划层（本系列是执行层）|

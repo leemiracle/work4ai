@@ -266,7 +266,7 @@ Month 3: 读 Dunham《Journey through Genius》+ 开始看 MIT 18.06 Strang 视�
 Month 1-2: 上面 B 路径
 Month 3-4: 读《Proofs from THE BOOK》前 5 章 + Stillwell《Math and Its History》前 5 章
 Month 5: 读 Courant & Robbins《What Is Mathematics?》全
-Month 6: 开始 [`../讲透实分析/`](../讲透数学/讲透实分析) 或 Spivak《Calculus》（转入严肃）
+Month 6: 开始 [`../讲透实分析/`](../讲透数学/讲透分析/讲透实分析) 或 Spivak《Calculus》（转入严肃）
 ```
 
 ### 8.4 路径 D：1 年品味培养（你的最优）

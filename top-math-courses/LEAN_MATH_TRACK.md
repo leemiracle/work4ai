@@ -428,7 +428,7 @@ https://leanprover.github.io/theorem_proving_in_lean4/ # TPIL 4 官方教程
 | 数学研究方法论（解题 / 阅读 / 写作）| [`RESEARCH_METHODOLOGY.md`](RESEARCH_METHODOLOGY.md) |
 | 30 课数学主路径 | [`UNIFIED_ROADMAP.md`](UNIFIED_ROADMAP.md) |
 | 学 Lean 的讲透系列 | [`../讲透Lean4数学/`](../讲透数学/讲透Lean4数学)（本批新建）|
-| 学实分析的讲透系列（配 Lean）| [`../讲透实分析/`](../讲透数学/讲透实分析)（本批新建）|
+| 学实分析的讲透系列（配 Lean）| [`../讲透实分析/`](../讲透数学/讲透分析/讲透实分析)（本批新建）|
 | 数学 ↔ ML 工程映射 | [`CROSS_INDEX_WITH_WORK4AI.md`](CROSS_INDEX_WITH_WORK4AI.md) |
 | 数学前沿论文 | [`LATEST_RESEARCH.md`](LATEST_RESEARCH.md) |
 

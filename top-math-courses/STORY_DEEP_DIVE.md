@@ -177,7 +177,7 @@
 **Open**：理解深度学习泛化；Tao 正在做的 PFR 类问题
 **学习路径**：
 - 数学：Tao《Analysis I》→ Tao《An Introduction to Measure Theory》→ Tao《Topics in Random Matrix Theory》
-- 形式化：[`LEAN_MATH_TRACK.md`](LEAN_MATH_TRACK.md) + [`../讲透实分析/`](../讲透数学/讲透实分析) + [`../讲透Lean4数学/`](../讲透数学/讲透Lean4数学)
+- 形式化：[`LEAN_MATH_TRACK.md`](LEAN_MATH_TRACK.md) + [`../讲透实分析/`](../讲透数学/讲透分析/讲透实分析) + [`../讲透Lean4数学/`](../讲透数学/讲透Lean4数学)
 - AI for math：[`AI_FOR_MATH_TOOLS.md`](AI_FOR_MATH_TOOLS.md)
 
 ---
@@ -339,7 +339,7 @@
 **强校**：Bonn（Scholze 母校）/ MPIM Bonn / IAS / Berkeley / ETH
 **Open**：Condensed Math 的完整公理化；analytic stacks；与 Langlands 的联系
 **学习路径**（**这是你的模板**）：
-1. 学 [`../讲透Lean4数学/`](../讲透数学/讲透Lean4数学) + [`../讲透实分析/`](../讲透数学/讲透实分析) 打基础
+1. 学 [`../讲透Lean4数学/`](../讲透数学/讲透Lean4数学) + [`../讲透实分析/`](../讲透数学/讲透分析/讲透实分析) 打基础
 2. 学 [`TEXTBOOK_LIBRARY.md`](TEXTBOOK_LIBRARY.md) §三：代数几何方向
 3. 读 Scholze perfectoid spaces lecture notes（Bonn）
 4. 跟 Condensed Math YouTube 讲座
