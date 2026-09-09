@@ -704,7 +704,7 @@ print(f"组合久期 = {w*1.899+(1-w)*16.374:.2f}年")  # 10.00 ✓
 | [`_philosophy-of-finance.md`](./_philosophy-of-finance.md) | 哲学 | 时间价值的代际正义——为什么我们用正利率贴现未来？ |
 | [`knowledge-graph/connections.md`](../../knowledge-graph/connections.md) | 网络 | §十 跨学科映射登记——久期↔质心、贴现↔衰减 |
 | [`02-formal-sciences/probability/`](../../02-formal-sciences/) | 数学基础 | 泊松过程（违约建模）、随机分析、最优化（免疫） |
-| [`fastisslow/`](../../../../fastisslow/) | 外部项目 | 债券投资实战——久期管理、曲线交易的实盘视角 |
+| `fastisslow/`（`../../../../fastisslow/`） | 外部项目 | 债券投资实战——久期管理、曲线交易的实盘视角 |
 
 ---
 

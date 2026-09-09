@@ -768,7 +768,7 @@ print(f"均值 {pnls.mean():+.4f}  标准差 {pnls.std():.4f}")
 | [`econophysics.md`](./econophysics.md) | 跨学科 | 伊藤引理↔朗之万方程、波动率↔温度、BSM PDE↔热传导方程（§9.2） |
 | [`02-formal-sciences/probability/`](../../02-formal-sciences/probability/) | 数学基础 | 布朗运动、鞅、伊藤微积分、测度变换——衍生品的数学语言 |
 | [`06-systems/feedback/`](../../06-systems/feedback/) | 跨学科 | Delta 对冲 = 负反馈闭环（§3.3）；模型同质化 = 正反馈（§8.2） |
-| [`fastisslow/`](../../../../fastisslow/) | 外部项目 | 投资哲学——期权作为"反脆弱"工具（Taleb）；做空与对冲的实战 |
+| `fastisslow/`（`../../../../fastisslow/`） | 外部项目 | 投资哲学——期权作为"反脆弱"工具（Taleb）；做空与对冲的实战 |
 
 ---
 

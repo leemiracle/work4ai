@@ -123,8 +123,8 @@
 
 ## 练习记录
 
-- [练习模板](../practices/reverse-thinking/template.md)
-- [练习示例](../practices/reverse-thinking/example.md)
+- 练习模板（`../practices/reverse-thinking/template.md`）
+- 练习示例（`../practices/reverse-thinking/example.md`）
 
 ---
 

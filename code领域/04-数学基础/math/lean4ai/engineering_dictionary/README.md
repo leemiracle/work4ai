@@ -19,7 +19,7 @@
 ## 模块结构
 
 ### 01. 机械工程 (Mechanical Engineering)
-📄 [mechanical_engineering.md](./01_mechanical_engineering.md)
+📄 mechanical_engineering.md（`./01_mechanical_engineering.md`）
 
 涵盖内容：
 - 力学与材料力学
@@ -32,7 +32,7 @@
 ---
 
 ### 02. 电子电气工程 (Electrical & Electronic Engineering)
-📄 [electrical_engineering.md](./02_electrical_engineering.md)
+📄 electrical_engineering.md（`./02_electrical_engineering.md`）
 
 涵盖内容：
 - 电路理论
@@ -45,7 +45,7 @@
 ---
 
 ### 03. 计算机科学与软件工程 (Computer Science & Software Engineering)
-📄 [computer_software_engineering.md](./03_computer_software_engineering.md)
+📄 computer_software_engineering.md（`./03_computer_software_engineering.md`）
 
 涵盖内容：
 - 数据结构与算法
@@ -60,7 +60,7 @@
 ---
 
 ### 04. 土木建筑工程 (Civil & Architectural Engineering)
-📄 [civil_architectural_engineering.md](./04_civil_architectural_engineering.md)
+📄 civil_architectural_engineering.md（`./04_civil_architectural_engineering.md`）
 
 涵盖内容：
 - 结构工程
@@ -74,7 +74,7 @@
 ---
 
 ### 05. 化学与材料工程 (Chemical & Materials Engineering)
-📄 [chemical_materials_engineering.md](./05_chemical_materials_engineering.md)
+📄 chemical_materials_engineering.md（`./05_chemical_materials_engineering.md`）
 
 涵盖内容：
 - 化学反应工程
@@ -87,7 +87,7 @@
 ---
 
 ### 06. 能源与环境工程 (Energy & Environmental Engineering)
-📄 [energy_environmental_engineering.md](./06_energy_environmental_engineering.md)
+📄 energy_environmental_engineering.md（`./06_energy_environmental_engineering.md`）
 
 涵盖内容：
 - 可再生能源
@@ -100,7 +100,7 @@
 ---
 
 ### 07. 航空航天工程 (Aerospace Engineering)
-📄 [aerospace_engineering.md](./07_aerospace_engineering.md)
+📄 aerospace_engineering.md（`./07_aerospace_engineering.md`）
 
 涵盖内容：
 - 空气动力学
@@ -112,7 +112,7 @@
 ---
 
 ### 08. 生物医学工程 (Biomedical Engineering)
-📄 [biomedical_engineering.md](./08_biomedical_engineering.md)
+📄 biomedical_engineering.md（`./08_biomedical_engineering.md`）
 
 涵盖内容：
 - 医疗器械
@@ -125,7 +125,7 @@
 ---
 
 ### 09. 工业工程与管理 (Industrial Engineering & Management)
-📄 [industrial_engineering.md](./09_industrial_engineering.md)
+📄 industrial_engineering.md（`./09_industrial_engineering.md`）
 
 涵盖内容：
 - 运筹学
@@ -138,7 +138,7 @@
 ---
 
 ### 10. 新兴工程领域 (Emerging Engineering Fields)
-📄 [emerging_fields.md](./10_emerging_fields.md)
+📄 emerging_fields.md（`./10_emerging_fields.md`）
 
 涵盖内容：
 - 量子工程
@@ -153,7 +153,7 @@
 ---
 
 ### 11. 基础数学与物理 (Engineering Mathematics & Physics)
-📄 [math_physics_fundamentals.md](./11_math_physics_fundamentals.md)
+📄 math_physics_fundamentals.md（`./11_math_physics_fundamentals.md`）
 
 涵盖内容：
 - 高等数学
@@ -166,7 +166,7 @@
 ---
 
 ### 12. 跨学科与前沿技术 (Interdisciplinary & Cutting-edge)
-📄 [interdisciplinary.md](./12_interdisciplinary.md)
+📄 interdisciplinary.md（`./12_interdisciplinary.md`）
 
 涵盖内容：
 - 可持续发展工程

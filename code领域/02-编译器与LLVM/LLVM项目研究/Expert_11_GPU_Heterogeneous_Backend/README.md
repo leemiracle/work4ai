@@ -568,7 +568,7 @@ Hexagon/VE/SystemZ/AMDGPU/NVPTX/LoongArch 都是单点后端。**单点后端的
 - [E04 中端 + MLIR 章节](../Expert_04_Middle_End_Opt/README.md)（MLIR 与 LLVM core 融合，断层②，本专家 §2.8 的背景）
 - [E08 AArch64](../Expert_08_AArch64_Backend/README.md)（飞腾 host CPU 后端，phytvm LLVM codegen 服务对象）
 - [改造蓝图_LLVM.md](../改造蓝图_LLVM.md) §5（断层①定义）、§3.2（E11 定位）
-- 飞腾项目 [E21 AI 算力定位](../../体系结构实验/Expert_21_AI_Compute_Positioning/README.md)（飞腾芯片层 AI 算力伤疤，与编译器层叠加）
+- 飞腾项目 E21 AI 算力定位（`../../体系结构实验/Expert_21_AI_Compute_Positioning/README.md`）（飞腾芯片层 AI 算力伤疤，与编译器层叠加）
 
 ### 外部
 - Khronos SPIR-V Registry（规范）

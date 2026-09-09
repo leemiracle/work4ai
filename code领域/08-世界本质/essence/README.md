@@ -216,7 +216,7 @@ projects/                  深度探索项目（每个 dive 持续数周）
 
 ### 单个主题的探索模板
 
-在任意学科目录下新建 `.md` 文件，套用 [`00-meta/concept-3layer.md`](./00-meta/concept-3layer.md) 模板：
+在任意学科目录下新建 `.md` 文件，套用 `00-meta/concept-3layer.md`（`./00-meta/concept-3layer.md`） 模板：
 
 1. **直觉层**：1 句话比喻 + 为什么需要它（先于公式）
 2. **数学层**：关键公式与推导主线，标注假设与边界

@@ -270,7 +270,7 @@ Samuelson/Olson 预言公共物品会供给不足。**LLVM 为什么不短缺？
 - [`Lenses/Lens_03_SupplyChain.md`](./Lens_03_SupplyChain.md) —— 后端养主依赖图。**Lens_03 的拓扑 + Lens_04 的动机 = 完整供应链经济图。**
 - [`Lenses/Lens_02_Christensen.md`](./Lens_02_Christensen.md) —— 颠覆式创新。**两者在 Cranelift 观察上共振，在"LLVM 是否还会被颠覆"上互补。**
 - [`Lenses/Lens_05_Antitrust.md`](./Lens_05_Antitrust.md)（待建）—— 反垄断。**Lens_04 判断"LLVM 已形成事实平台寡头"是 Lens_05 审查的前提。**
-- [`../体系结构实验/Lenses/Lens_04_Economist.md`](../体系结构实验/Lenses/Lens_04_Economist.md) —— 姊妹项目（飞腾芯片）经济学家透镜。**本项目 Lens_04 把飞腾侧的"网络效应锁死/CUDA 双边市场"结论移植到编译器平台经济学。**
+- `../体系结构实验/Lenses/Lens_04_Economist.md`（`../体系结构实验/Lenses/Lens_04_Economist.md`） —— 姊妹项目（飞腾芯片）经济学家透镜。**本项目 Lens_04 把飞腾侧的"网络效应锁死/CUDA 双边市场"结论移植到编译器平台经济学。**
 
 ---
 

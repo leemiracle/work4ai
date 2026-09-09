@@ -396,4 +396,4 @@ Redis 的回答：`aeCreateFileEvent(fd, AE_WRITABLE, ...)` —— 如果 write 
 ---
 
 *配套：[redis-eventloop-逐行拆解.md](redis-eventloop-逐行拆解.md) | [frp-tcp-proxy-核心设计拆解.md](frp-tcp-proxy-核心设计拆解.md)*
-*参照项目：[tinyproxy](projects/tinyproxy/) | [tinycache](projects/tinycache/) | [tinyhttpd](projects/tinyhttpd/)*
+*参照项目：tinyproxy（`projects/tinyproxy/`） | tinycache（`projects/tinycache/`） | tinyhttpd（`projects/tinyhttpd/`）*

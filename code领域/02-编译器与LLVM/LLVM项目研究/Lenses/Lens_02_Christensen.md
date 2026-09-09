@@ -171,7 +171,7 @@ Mojo 事实锚点：**2023-05-02 Modular 发布会**，Chris Lattner + Tim Davis
 
 ## § Christensen 方法论与资源（不只 LLVM，给所有用 Christensen 框架看技术项目的人）
 
-> 本章把 Lens_02 的 LLVM 分析上升为**任何技术项目都可复用的 Christensen 分析方法**。LLVM 是案例锚点，方法普适。通用编译器资源见 [`领域资源库_LLVM.md`](../领域资源库_LLVM.md)，Christensen 通用资源见飞腾项目 [`../体系结构实验/领域资源库.md`](../体系结构实验/领域资源库.md)。
+> 本章把 Lens_02 的 LLVM 分析上升为**任何技术项目都可复用的 Christensen 分析方法**。LLVM 是案例锚点，方法普适。通用编译器资源见 [`领域资源库_LLVM.md`](../领域资源库_LLVM.md)，Christensen 通用资源见飞腾项目 `../体系结构实验/领域资源库.md`（`../体系结构实验/领域资源库.md`）。
 
 ### 方法论一：Christensen 破坏式创新判别三步法
 

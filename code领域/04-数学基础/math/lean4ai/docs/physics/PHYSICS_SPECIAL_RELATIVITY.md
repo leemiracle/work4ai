@@ -865,7 +865,7 @@ LHC中质子能量：7 TeV
 ## 🔗 下一步学习
 
 - **[广义相对论](./PHYSICS_GENERAL_RELATIVITY.md)** - 引力的几何理论
-- **[量子场论](./PHYSICS_QFT.md)** - 相对论量子力学
+- **量子场论（`./PHYSICS_QFT.md`）** - 相对论量子力学
 - **[粒子物理](./PHYSICS_PARTICLE_PHYSICS.md)** - 高能物理
 
 ---

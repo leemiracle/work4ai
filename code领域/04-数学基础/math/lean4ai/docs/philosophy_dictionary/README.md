@@ -28,34 +28,34 @@
 |------|------|----------|------|
 | 01 | [形而上学](./01_metaphysics.md) | 本体论、存在论、实在论 | ✅ 完成 |
 | 02 | [认识论](./02_epistemology.md) | 知识论、真理理论、怀疑论 | ⏳ 待创建 |
-| 03 | [伦理学](./03_ethics.md) | 规范伦理学、元伦理学、应用伦理学 | ⏳ 待创建 |
-| 04 | [逻辑学](./04_logic.md) | 形式逻辑、模态逻辑、非形式逻辑 | ⏳ 待创建 |
-| 05 | [语言哲学](./05_philosophy_of_language.md) | 意义理论、指称理论、言语行为 | ⏳ 待创建 |
+| 03 | 伦理学（`./03_ethics.md`） | 规范伦理学、元伦理学、应用伦理学 | ⏳ 待创建 |
+| 04 | 逻辑学（`./04_logic.md`） | 形式逻辑、模态逻辑、非形式逻辑 | ⏳ 待创建 |
+| 05 | 语言哲学（`./05_philosophy_of_language.md`） | 意义理论、指称理论、言语行为 | ⏳ 待创建 |
 
 ### 第二部分：应用哲学
 
 | 模块 | 文件 | 核心内容 | 状态 |
 |------|------|----------|------|
-| 06 | [心灵哲学](./06_philosophy_of_mind.md) | 意识、心身问题、自由意志 | ⏳ 待创建 |
-| 07 | [科学哲学](./07_philosophy_of_science.md) | 科学方法、因果性、还原论 | ⏳ 待创建 |
-| 08 | [技术哲学](./08_philosophy_of_technology.md) | AI伦理、技术异化、数字哲学 | ⏳ 待创建 |
-| 09 | [政治哲学](./09_political_philosophy.md) | 正义理论、自由主义、民主理论 | ⏳ 待创建 |
-| 10 | [美学](./10_aesthetics.md) | 艺术哲学、审美经验、美学理论 | ⏳ 待创建 |
+| 06 | 心灵哲学（`./06_philosophy_of_mind.md`） | 意识、心身问题、自由意志 | ⏳ 待创建 |
+| 07 | 科学哲学（`./07_philosophy_of_science.md`） | 科学方法、因果性、还原论 | ⏳ 待创建 |
+| 08 | 技术哲学（`./08_philosophy_of_technology.md`） | AI伦理、技术异化、数字哲学 | ⏳ 待创建 |
+| 09 | 政治哲学（`./09_political_philosophy.md`） | 正义理论、自由主义、民主理论 | ⏳ 待创建 |
+| 10 | 美学（`./10_aesthetics.md`） | 艺术哲学、审美经验、美学理论 | ⏳ 待创建 |
 
 ### 第三部分：哲学传统
 
 | 模块 | 文件 | 核心内容 | 状态 |
 |------|------|----------|------|
-| 11 | [西方哲学史](./11_western_philosophy.md) | 古希腊到当代的哲学流派 | ⏳ 待创建 |
-| 12 | [中国哲学](./12_chinese_philosophy.md) | 儒释道、中国现代哲学 | ⏳ 待创建 |
-| 13 | [印度哲学](./13_indian_philosophy.md) | 佛教、印度教哲学、吠檀多 | ⏳ 待创建 |
+| 11 | 西方哲学史（`./11_western_philosophy.md`） | 古希腊到当代的哲学流派 | ⏳ 待创建 |
+| 12 | 中国哲学（`./12_chinese_philosophy.md`） | 儒释道、中国现代哲学 | ⏳ 待创建 |
+| 13 | 印度哲学（`./13_indian_philosophy.md`） | 佛教、印度教哲学、吠檀多 | ⏳ 待创建 |
 
 ### 第四部分：当代前沿
 
 | 模块 | 文件 | 核心内容 | 状态 |
 |------|------|----------|------|
-| 14 | [当代哲学](./14_contemporary_philosophy.md) | 2020-2026最新哲学议题 | ⏳ 待创建 |
-| 15 | [跨学科哲学](./15_interdisciplinary.md) | 认知科学、神经哲学、计算哲学 | ⏳ 待创建 |
+| 14 | 当代哲学（`./14_contemporary_philosophy.md`） | 2020-2026最新哲学议题 | ⏳ 待创建 |
+| 15 | 跨学科哲学（`./15_interdisciplinary.md`） | 认知科学、神经哲学、计算哲学 | ⏳ 待创建 |
 
 ---
 
@@ -65,18 +65,18 @@
 
 **存在与实在** → [形而上学](./01_metaphysics.md)
 **知识与真理** → [认识论](./02_epistemology.md)
-**善与恶** → [伦理学](./03_ethics.md)
-**思维与意识** → [心灵哲学](./06_philosophy_of_mind.md)
-**科学与方法** → [科学哲学](./07_philosophy_of_science.md)
-**语言与意义** → [语言哲学](./05_philosophy_of_language.md)
+**善与恶** → 伦理学（`./03_ethics.md`）
+**思维与意识** → 心灵哲学（`./06_philosophy_of_mind.md`）
+**科学与方法** → 科学哲学（`./07_philosophy_of_science.md`）
+**语言与意义** → 语言哲学（`./05_philosophy_of_language.md`）
 
 ### 按时代查找
 
-**古希腊** → [西方哲学史](./11_western_philosophy.md) 第一部分
-**中世纪** → [西方哲学史](./11_western_philosophy.md) 第二部分
-**近代** → [西方哲学史](./11_western_philosophy.md) 第三部分
-**当代** → [西方哲学史](./11_western_philosophy.md) 第四部分
-**中国** → [中国哲学](./12_chinese_philosophy.md)
+**古希腊** → 西方哲学史（`./11_western_philosophy.md`） 第一部分
+**中世纪** → 西方哲学史（`./11_western_philosophy.md`） 第二部分
+**近代** → 西方哲学史（`./11_western_philosophy.md`） 第三部分
+**当代** → 西方哲学史（`./11_western_philosophy.md`） 第四部分
+**中国** → 中国哲学（`./12_chinese_philosophy.md`）
 
 ---
 

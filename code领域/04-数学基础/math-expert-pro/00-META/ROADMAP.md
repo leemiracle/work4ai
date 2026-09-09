@@ -1,6 +1,6 @@
 # ROADMAP：6-8 年数学专家路径（多视角版）
 
-> 整合自旧 README + [`../../math-expert/notes/05-数学专家多年路径.md`](../../math-expert/notes/05-数学专家多年路径.md) + 三份多视角调研。
+> 整合自旧 README + `../../math-expert/notes/05-数学专家多年路径.md`（`../../math-expert/notes/05-数学专家多年路径.md`） + 三份多视角调研。
 > 本文件讲"学什么、何时学、怎么验收"。多视角架构怎么用见 [ARCHITECTURE.md](ARCHITECTURE.md)。
 
 > 🧰 **工具模块（14-18）**：除学习路径外，项目还有 5 个工具模块——[前沿追踪](../14-frontier/) / [应用案例库（12 个可跑脚本）](../15-applications/) / [基础统一](../16-foundations/) / [方向决策](../17-decision/) / [综合资源](../18-resources/)。一站式导航见 [MASTER-INDEX](MASTER-INDEX.md) ⭐。

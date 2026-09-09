@@ -2,7 +2,7 @@
 
 > **范式**：国产化战略家——从"自主可控"战略视角审视编译器国产化。
 > **核心 named concepts**：
-> - **"自主可控"叙事**（信创政策的核心诉求，飞腾项目 [E06](../../体系结构实验/Expert_06_Standards_Policy/README.md) §3 已铺底）
+> - **"自主可控"叙事**（信创政策的核心诉求，飞腾项目 E06（`../../体系结构实验/Expert_06_Standards_Policy/README.md`） §3 已铺底）
 > - **编译器自主可控三段论**：用 → fork → upstream → 自研
 > - **国产 CPU 厂商编译器战略矩阵**（飞腾 / 华为鲲鹏 / 华为昇腾 / 平头哥 / 龙芯 / 申威 / 海光）
 > - **ARM v9 不授中国的编译器后果**（飞腾被迫停留在 ARMv8.4 + 主线 LLVM 无 FTC86x 调度模型）
@@ -11,18 +11,18 @@
 > **为什么从业者看不见**：编译器工程师关心"LLVM 怎么用、Pass 怎么写、miscompile 怎么调"，不关心"在信创政策下 LLVM 该不该用 / 用了算不算自主 / fork 一份 LLVM 改个名能不能叫国产编译器"。前者是技术问题，后者是**战略与叙事问题**——而在中国国产化语境里，**叙事的强制力往往大于技术的优劣**。本透镜正是要把从业者刻意回避的"算不算自主"这个政治经济学问题摆到桌面上。
 >
 > **方法论锚点**：
-> - 飞腾项目 [Lens_07_VC](../../体系结构实验/Lenses/Lens_07_VC.md)（国产化投资视角）+ [Lens_01_Historian](../../体系结构实验/Lenses/Lens_01_Historian.md)（国产化战略的方法论基底）
+> - 飞腾项目 Lens_07_VC（`../../体系结构实验/Lenses/Lens_07_VC.md`）（国产化投资视角）+ Lens_01_Historian（`../../体系结构实验/Lenses/Lens_01_Historian.md`）（国产化战略的方法论基底）
 > - Chris Miller《Chip War》第 10 章"出口管制"——把芯片供应链武器化的地缘逻辑 `[书]`
 > - Bresnahan & Malerba (1999) 《Industry-level computing: 'Windows of opportunity' in the dynamics of computing industries》——半导体产业演化"机会窗口"，移植到编译器产业 `[论文]`
-> - 飞腾项目 [Expert_06](../../体系结构实验/Expert_06_Standards_Policy/README.md) 标准政策（信创政策内容）
-> - 飞腾项目 [Expert_22](../../体系结构实验/Expert_22_OpenSource_Ecosystem/README.md) 开源生态（RISC-V / 国产软件栈）
+> - 飞腾项目 Expert_06（`../../体系结构实验/Expert_06_Standards_Policy/README.md`） 标准政策（信创政策内容）
+> - 飞腾项目 Expert_22（`../../体系结构实验/Expert_22_OpenSource_Ecosystem/README.md`） 开源生态（RISC-V / 国产软件栈）
 > - Lee & Oh (2006) 《The political economy of standards: Linux and Windows》——后发国家如何利用开源标准对冲锁定 `[论文]`
 
 > **数字来源分级（全文统一）**：`[实测]` = 本项目 grep/diff LLVM monorepo；`[官方]` = 厂商一手（官网/产品页/白皮书/JD）；`[GitHub]` = 开源仓库 code/commit；`[Discourse]` = LLVM 官方论坛；`[社区]` = 中文社区/公众号；`[报道]` = 权威媒体；`[JD]` = 飞腾招聘 JD；`[推测-依据]` = 基于公开信息推断。所有外部链接访问日期：2026-07-07。
 
 > **⚠️ 边界硬切声明（与其他视角的责任划分）**：
-> - **国内信创政策/国密合规/《密码法》《关基条例》的法学分析**归飞腾项目 [E06](../../体系结构实验/Expert_06_Standards_Policy/README.md)；本透镜只消费其"信创是保护 niche、信创份额飞腾 10–15%"的结论，不重复法学推导。
-> - **国际地缘（ARM v9 不授中国的成因、出口管制机制、台海供应链）**归飞腾项目 [E19 Geostrategy](../../体系结构实验/Expert_19_Geostrategy/README.md)；本透镜把"v9 不授"作为**既成事实**消费，只评估其**编译器侧**的后果。
+> - **国内信创政策/国密合规/《密码法》《关基条例》的法学分析**归飞腾项目 E06（`../../体系结构实验/Expert_06_Standards_Policy/README.md`）；本透镜只消费其"信创是保护 niche、信创份额飞腾 10–15%"的结论，不重复法学推导。
+> - **国际地缘（ARM v9 不授中国的成因、出口管制机制、台海供应链）**归飞腾项目 E19 Geostrategy（`../../体系结构实验/Expert_19_Geostrategy/README.md`）；本透镜把"v9 不授"作为**既成事实**消费，只评估其**编译器侧**的后果。
 > - **飞腾固件/驱动合回 Linux/TF-A 主线的工程细节**归本项目 E18 Phytium Adaptation；本透镜只做"主线合入率作为国产化自主度指标"的宏观评估。
 > - **LLVM 供应链"谁养着哪个 Target 后端"**的全球公司化分析归本项目 [Lens_03 SupplyChain](Lens_03_SupplyChain.md)；本透镜聚焦**中国厂商**在 LLVM 供应链的位置。
 
@@ -91,7 +91,7 @@
 
 ### 1.4 ARM v9 不授中国的编译器命运（§2.4 展开）
 
-飞腾项目 [E21 AI Positioning](../../体系结构实验/Expert_21_AI_Positioning/README.md) 已写"无 BF16/I8MM/SVE 是 AI 战略伤疤"。本透镜补充**编译器侧**：主线 LLVM 会持续为 ARMv9 演进（SVE2/MTE/SME/FP8），飞腾停留在 ARMv8.4 意味着**主线 LLVM 的"未来红利"飞腾拿不到**——这不是性能问题，是"编译器技术债永续累积"的战略问题。
+飞腾项目 E21 AI Positioning（`../../体系结构实验/Expert_21_AI_Positioning/README.md`） 已写"无 BF16/I8MM/SVE 是 AI 战略伤疤"。本透镜补充**编译器侧**：主线 LLVM 会持续为 ARMv9 演进（SVE2/MTE/SME/FP8），飞腾停留在 ARMv8.4 意味着**主线 LLVM 的"未来红利"飞腾拿不到**——这不是性能问题，是"编译器技术债永续累积"的战略问题。
 
 ### 1.5 信创市场双轨制（§2.5 展开）
 
@@ -284,7 +284,7 @@
 > 1. **玄铁 C930**（2025-03 交付，首款国产服务器级 RISC-V CPU IP，3.4 GHz/15.2 SPECint2006/GHz = C920 的 2×，**TITAN 512-4096 位向量 + TPE 张量引擎 GEMM 96.8% + 8 TOPS INT8 Matrix**，平头哥**对外授权 IP**）`[官方-2025 RISC-V 中国峰会 贾昊䶮]`——**关键修正**：上文说"切到边缘 ISA"，但 C930 的 TPE/Matrix 让 RISC-V **首次有原生 AI 矩阵算力引擎**（飞腾 D3000M 无 BF16/Matrix），在 AI 维度上 RISC-V 已不"边缘"。且 C930 **对外授权 IP**（不像倚天 710 = ARM v9 + SVE2 自用 `[官方-阿里云]`），飞腾可买——**切轨路径从"自研 RISC-V 核"简化为"买 C930 IP 授权 + 适配"**。编译器侧：LLVM RISC-V 后端已有 15 套调度模型（含香山/SpacemiT 完整 upstream，本项目 Lens_03 §2.5.3 已证），编译器就绪度高于 OS/DB 层。
 > 2. **Ventana Veyron V3**（15-wide OoO@4.2 GHz，11+ SPECint2017 rate-1，24 TFLOPS/core FP8）`[官方-ventanamicro.com]`——**触发条件①已被满足**：上文说"RISC-V 服务器单核性能追平 Neoverse V2"是切轨前提，V3 的 11+ SPECint2017 rate-1 已接近 Neoverse-V2 区间（~40-45）。**但 Veyron V3 飞腾实体清单买不到**（美国公司）——V3 证明"RISC-V 性能上限够"，但飞腾能买的国产 C930 单核（3.4GHz/Cortex-A76 级）仍落后 V2 约 1.2-2×。
 >
-> **校准后的切轨判断**：原判"切到边缘 = 逆势"在**硬件层被削弱**（C930/V3 让 RISC-V 不再边缘），但在**生态层仍成立**——OS/DB/ISV 国产适配（麒麟/达梦/统信/中间件）仍落后 ARM 3-5 年，这是"边缘"的真含义。**切轨窗口从 2032-2035 可前移到 2030-2033**（C930 IP 可买 + 编译器已就绪缩短了硬件/编译器准备期），但"不会在 2030 前切换主产品线"的核心判断不变（沉没成本 + 信创重适配太重）。**预研路径更新**：飞腾最现实的 RISC-V 预研 = 买玄铁 C930 IP 授权（[Expert_22 §7.2 预研三路径](../../体系结构实验/Expert_22_OpenSource_Ecosystem/)），而非纯自研。深度数据见 [Expert_22 §2.1 七类核诚实定位表](../../体系结构实验/Expert_22_OpenSource_Ecosystem/) + [Lens_03 §节点③ ARM 替代方案](../../体系结构实验/Lenses/Lens_03_SupplyChain.md)。
+> **校准后的切轨判断**：原判"切到边缘 = 逆势"在**硬件层被削弱**（C930/V3 让 RISC-V 不再边缘），但在**生态层仍成立**——OS/DB/ISV 国产适配（麒麟/达梦/统信/中间件）仍落后 ARM 3-5 年，这是"边缘"的真含义。**切轨窗口从 2032-2035 可前移到 2030-2033**（C930 IP 可买 + 编译器已就绪缩短了硬件/编译器准备期），但"不会在 2030 前切换主产品线"的核心判断不变（沉没成本 + 信创重适配太重）。**预研路径更新**：飞腾最现实的 RISC-V 预研 = 买玄铁 C930 IP 授权（Expert_22 §7.2 预研三路径（`../../体系结构实验/Expert_22_OpenSource_Ecosystem/`）），而非纯自研。深度数据见 Expert_22 §2.1 七类核诚实定位表（`../../体系结构实验/Expert_22_OpenSource_Ecosystem/`） + Lens_03 §节点③ ARM 替代方案（`../../体系结构实验/Lenses/Lens_03_SupplyChain.md`）。
 
 ### 2.5 判断五：信创市场的"双轨制"——飞腾"用 LLVM"是否违背"信创"
 
@@ -394,7 +394,7 @@
 
 > **🔒 2026-07 校准（C930 让下注 5 的概率支撑更强）**：
 >
-> 下注 5 理由中的"RISC-V 服务器 2028–2032 成熟"已有实质进展：**玄铁 C930**（2025-03 交付，首款国产服务器级 RISC-V CPU IP，3.4 GHz/15.2 SPECint2006/GHz，**TITAN 向量 + TPE 张量引擎 GEMM 96.8% + 8 TOPS INT8 Matrix**，平头哥**对外授权 IP**）`[官方-2025 RISC-V 中国峰会]` 让飞腾启动 RISC-V 编译器栈有了具体硬件载体——**最现实路径不再是"自研核"，而是"买 C930 IP + 向主线 LLVM RISC-V 后端贡献飞腾版 C930 调度模型"**（重演平头哥/进迭时空的 upstream 路径，本项目 Lens_03 §2.5.2 已证中国 RISC-V 厂商在 LLVM 是"生产者"）。编译器侧准备期因此缩短（C930 有公开微架构文档 + LLVM RISC-V 后端已有 15 套调度模型可参照）。**Veyron V3**（15-wide@4.2GHz）证明性能上限够但飞腾买不到 `[官方-ventanamicro.com]`。**校准**：下注 5 概率 60-75% 维持甚至略升（路径更清晰），但"自研核"应修正为"买 IP + upstream 调度模型"。详见 [Expert_22 §7.2 预研三路径](../../体系结构实验/Expert_22_OpenSource_Ecosystem/)。
+> 下注 5 理由中的"RISC-V 服务器 2028–2032 成熟"已有实质进展：**玄铁 C930**（2025-03 交付，首款国产服务器级 RISC-V CPU IP，3.4 GHz/15.2 SPECint2006/GHz，**TITAN 向量 + TPE 张量引擎 GEMM 96.8% + 8 TOPS INT8 Matrix**，平头哥**对外授权 IP**）`[官方-2025 RISC-V 中国峰会]` 让飞腾启动 RISC-V 编译器栈有了具体硬件载体——**最现实路径不再是"自研核"，而是"买 C930 IP + 向主线 LLVM RISC-V 后端贡献飞腾版 C930 调度模型"**（重演平头哥/进迭时空的 upstream 路径，本项目 Lens_03 §2.5.2 已证中国 RISC-V 厂商在 LLVM 是"生产者"）。编译器侧准备期因此缩短（C930 有公开微架构文档 + LLVM RISC-V 后端已有 15 套调度模型可参照）。**Veyron V3**（15-wide@4.2GHz）证明性能上限够但飞腾买不到 `[官方-ventanamicro.com]`。**校准**：下注 5 概率 60-75% 维持甚至略升（路径更清晰），但"自研核"应修正为"买 IP + upstream 调度模型"。详见 Expert_22 §7.2 预研三路径（`../../体系结构实验/Expert_22_OpenSource_Ecosystem/`）。
 
 **证伪条件**：2032 前飞腾仍坚持 ARMv8.x 路线且未启动 RISC-V 编译器栈，或 ARM v9 解禁中国（极低概率）。
 
@@ -530,7 +530,7 @@
 **📜 中国信创政策（飞腾 E06 共享）**
 - 《密码法》《关基条例》原文（全国人大/国务院官网）
 - 信通院/赛迪 信创产业白皮书（年度）
-- 飞腾项目 [E06](../../体系结构实验/Expert_06_Standards_Policy/README.md) 标准政策专家视角
+- 飞腾项目 E06（`../../体系结构实验/Expert_06_Standards_Policy/README.md`） 标准政策专家视角
 
 ---
 

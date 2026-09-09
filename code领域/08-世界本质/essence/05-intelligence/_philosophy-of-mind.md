@@ -175,7 +175,7 @@
 ## 九、关联
 
 - 智能主目录：[`05-intelligence/`](./)
-- 哲学之根：[`00-philosophy/README.md`](../../00-philosophy/README.md)
-- 心智哲学子目录：[`00-philosophy/philosophy-of-mind/`](../../00-philosophy/philosophy-of-mind/)
+- 哲学之根：`00-philosophy/README.md`（`../../00-philosophy/README.md`）
+- 心智哲学子目录：`00-philosophy/philosophy-of-mind/`（`../../00-philosophy/philosophy-of-mind/`）
 - 形而上学：自由意志、同一性
 - 伦理学：AI 道德地位

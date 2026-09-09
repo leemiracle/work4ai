@@ -839,8 +839,8 @@ Sycamore：53量子比特
 ## 🔗 相关领域
 
 - **[量子力学](./PHYSICS_QUANTUM_MECHANICS.md)** - 量子计算的基础
-- **[凝聚态物理](./PHYSICS_CONDENSED_MATTER.md)** - 量子比特实现
-- **[量子场论](./PHYSICS_QFT.md)** - 理论基础
+- **凝聚态物理（`./PHYSICS_CONDENSED_MATTER.md`）** - 量子比特实现
+- **量子场论（`./PHYSICS_QFT.md`）** - 理论基础
 
 ---
 

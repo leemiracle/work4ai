@@ -146,7 +146,7 @@ docker-compose up -d
 
 ## 贡献指南
 
-欢迎贡献！请查看 [CONTRIBUTING.md](./CONTRIBUTING.md)
+欢迎贡献！请查看 CONTRIBUTING.md（`./CONTRIBUTING.md`）
 
 ## 许可证
 

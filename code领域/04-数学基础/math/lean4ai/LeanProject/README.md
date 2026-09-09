@@ -84,9 +84,9 @@ The template repository is organized as follows (listing the main folders and fi
         - [`update.yml`](.github/workflows/update.yml) is the dependency
         update workflow to be triggered manually by default. [It's not documented yet, but it will be soon.]
     - [`dependabot.yml`](.github/dependabot.yml) is the configuration file to automate CI dependency updates.
-- [`.vscode`](.vscode) contains Visual Studio Code configuration files
-    - [`extensions.json`](.vscode/extensions.json) recommends VS Code extensions for the project.
-    - [`settings.json`](.vscode/settings.json) defines the project-specific settings for VS Code.
+- `.vscode`（`.vscode`） contains Visual Studio Code configuration files
+    - `extensions.json`（`.vscode/extensions.json`） recommends VS Code extensions for the project.
+    - `settings.json`（`.vscode/settings.json`） defines the project-specific settings for VS Code.
 - [`Project`](Project) should contain the Lean code files.
     - [`Mathlib`](Project/Mathlib) should contain `.lean` files with declarations missing from the
     current version of Mathlib.

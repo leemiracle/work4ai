@@ -8,15 +8,15 @@
 
 | 模板 | 用途 | 评估维度 | 提升路径 | 练习方法 |
 |------|------|----------|----------|----------|
-| [metrics/problem-definition.md](./metrics/problem-definition.md) | 问题定义与选择能力 | 4个 | 4级 | 5种 |
-| [metrics/judgment.md](./metrics/judgment.md) | 判断与取舍能力 | 4个 | 4级 | 4种 |
-| [metrics/resource-integration.md](./metrics/resource-integration.md) | 资源整合能力 | 4个 | 4级 | 4种 |
-| [metrics/influence.md](./metrics/influence.md) | 影响力与沟通能力 | 4个 | 4级 | 4种 |
-| [metrics/abstract-modeling.md](./metrics/abstract-modeling.md) | 抽象建模能力 | 4个 | 4级 | 3种 |
-| [metrics/systems-thinking.md](./metrics/systems-thinking.md) | 系统级思维 | 4个 | 4级 | 3种 |
-| [metrics/decision-making.md](./metrics/decision-making.md) | 不确定性决策能力 | 4个 | 4级 | 3种 |
-| [metrics/technical-depth.md](./metrics/technical-depth.md) | 技术底层理解 | 4个 | 4级 | 3种 |
-| [metrics/migration.md](./metrics/migration.md) | 快速迁移能力 | 4个 | 4级 | 3种 |
+| metrics/problem-definition.md（`./metrics/problem-definition.md`） | 问题定义与选择能力 | 4个 | 4级 | 5种 |
+| metrics/judgment.md（`./metrics/judgment.md`） | 判断与取舍能力 | 4个 | 4级 | 4种 |
+| metrics/resource-integration.md（`./metrics/resource-integration.md`） | 资源整合能力 | 4个 | 4级 | 4种 |
+| metrics/influence.md（`./metrics/influence.md`） | 影响力与沟通能力 | 4个 | 4级 | 4种 |
+| metrics/abstract-modeling.md（`./metrics/abstract-modeling.md`） | 抽象建模能力 | 4个 | 4级 | 3种 |
+| metrics/systems-thinking.md（`./metrics/systems-thinking.md`） | 系统级思维 | 4个 | 4级 | 3种 |
+| metrics/decision-making.md（`./metrics/decision-making.md`） | 不确定性决策能力 | 4个 | 4级 | 3种 |
+| metrics/technical-depth.md（`./metrics/technical-depth.md`） | 技术底层理解 | 4个 | 4级 | 3种 |
+| metrics/migration.md（`./metrics/migration.md`） | 快速迁移能力 | 4个 | 4级 | 3种 |
 
 ---
 
@@ -25,7 +25,7 @@
 | 模板 | 用途 | 适用场景 |
 |------|------|----------|
 | [practices/template.md](./practices/template.md) | 通用练习记录 | 所有能力练习 |
-| [practices/method-template.md](./practices/method-template.md) | 认知方法练习 | 20+种认知方法练习 |
+| practices/method-template.md（`./practices/method-template.md`） | 认知方法练习 | 20+种认知方法练习 |
 
 ---
 
@@ -33,7 +33,7 @@
 
 | 模板 | 用途 | 频率 | 主要内容 |
 |------|------|------|----------|
-| [reviews/monthly/template.md](./reviews/monthly/template.md) | 月度复盘 | 每月 | 能力评估、练习统计、关键决策 |
+| reviews/monthly/template.md（`./reviews/monthly/template.md`） | 月度复盘 | 每月 | 能力评估、练习统计、关键决策 |
 | [reviews/quarterly/template.md](./reviews/quarterly/template.md) | 季度复盘 | 每季度 | 深度复盘、转型进度、长期规划 |
 
 ---
@@ -43,7 +43,7 @@
 | 模板 | 用途 | 主要功能 |
 |------|------|----------|
 | [learning-log/template.md](./learning-log/template.md) | 学习日志 | 费曼学习法记录、深度思考、行动计划 |
-| [projects/template.md](./projects/template.md) | 项目追踪 | 问题建模、系统分析、决策记录、进度追踪 |
+| projects/template.md（`./projects/template.md`） | 项目追踪 | 问题建模、系统分析、决策记录、进度追踪 |
 | [CHECKLIST.md](./CHECKLIST.md) | 日常检查 | 每日/每周/每月/每季度检查清单 |
 
 ---

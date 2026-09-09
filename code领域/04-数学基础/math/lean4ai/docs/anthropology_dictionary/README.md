@@ -27,35 +27,35 @@
 | 模块 | 文件 | 核心内容 | 状态 |
 |------|------|----------|------|
 | 01 | [社会文化人类学](./01_sociocultural_anthropology.md) | 文化、社会结构、亲属制度、仪式 | ✅ 完成 |
-| 02 | [体质/生物人类学](./biological_anthropology.md) | 人类进化、灵长类、法医人类学 | ⏳ 待创建 |
-| 03 | [考古学](./03_archaeology.md) | 物质文化、田野方法、史前史 | ⏳ 待创建 |
-| 04 | [语言人类学](./04_linguistic_anthropology.md) | 语言与文化、社会语言学、话语分析 | ⏳ 待创建 |
+| 02 | 体质/生物人类学（`./biological_anthropology.md`） | 人类进化、灵长类、法医人类学 | ⏳ 待创建 |
+| 03 | 考古学（`./03_archaeology.md`） | 物质文化、田野方法、史前史 | ⏳ 待创建 |
+| 04 | 语言人类学（`./04_linguistic_anthropology.md`） | 语言与文化、社会语言学、话语分析 | ⏳ 待创建 |
 
 ### 应用人类学
 
 | 模块 | 文件 | 核心内容 | 状态 |
 |------|------|----------|------|
-| 05 | [应用人类学](./05_applied_anthropology.md) | 发展人类学、企业人类学、公共政策 | ⏳ 待创建 |
-| 06 | [医学人类学](./06_medical_anthropology.md) | 疾病与文化、全球健康、生物伦理 | ⏳ 待创建 |
-| 07 | [视觉人类学](./07_visual_anthropology.md) | 影视人类学、摄影、数字媒体 | ⏳ 待创建 |
-| 08 | [法律人类学](./08_legal_anthropology.md) | 法律多元主义、人权、司法制度 | ⏳ 待创建 |
+| 05 | 应用人类学（`./05_applied_anthropology.md`） | 发展人类学、企业人类学、公共政策 | ⏳ 待创建 |
+| 06 | 医学人类学（`./06_medical_anthropology.md`） | 疾病与文化、全球健康、生物伦理 | ⏳ 待创建 |
+| 07 | 视觉人类学（`./07_visual_anthropology.md`） | 影视人类学、摄影、数字媒体 | ⏳ 待创建 |
+| 08 | 法律人类学（`./08_legal_anthropology.md`） | 法律多元主义、人权、司法制度 | ⏳ 待创建 |
 
 ### 专题人类学
 
 | 模块 | 文件 | 核心内容 | 状态 |
 |------|------|----------|------|
-| 09 | [政治人类学](./09_political_anthropology.md) | 权力、国家、社会运动 | ⏳ 待创建 |
-| 10 | [经济人类学](./10_economic_anthropology.md) | 礼物经济、交换、发展 | ⏳ 待创建 |
-| 11 | [宗教人类学](./11_anthropology_of_religion.md) | 仪式、神话、宇宙观 | ⏳ 待创建 |
-| 12 | [心理人类学](./12_psychological_anthropology.md) | 文化与人格、情感、认知 | ⏳ 待创建 |
+| 09 | 政治人类学（`./09_political_anthropology.md`） | 权力、国家、社会运动 | ⏳ 待创建 |
+| 10 | 经济人类学（`./10_economic_anthropology.md`） | 礼物经济、交换、发展 | ⏳ 待创建 |
+| 11 | 宗教人类学（`./11_anthropology_of_religion.md`） | 仪式、神话、宇宙观 | ⏳ 待创建 |
+| 12 | 心理人类学（`./12_psychological_anthropology.md`） | 文化与人格、情感、认知 | ⏳ 待创建 |
 
 ### 当代前沿
 
 | 模块 | 文件 | 核心内容 | 状态 |
 |------|------|----------|------|
-| 13 | [数字人类学](./13_digital_anthropology.md) | 社交媒体、虚拟社区、算法文化 | ⏳ 待创建 |
-| 14 | [环境人类学](./14_environmental_anthropology.md) | 气候变化、人地关系、生态知识 | ⏳ 待创建 |
-| 15 | [当代人类学理论](./15_contemporary_theory.md) | 2020-2026最新理论进展 | ⏳ 待创建 |
+| 13 | 数字人类学（`./13_digital_anthropology.md`） | 社交媒体、虚拟社区、算法文化 | ⏳ 待创建 |
+| 14 | 环境人类学（`./14_environmental_anthropology.md`） | 气候变化、人地关系、生态知识 | ⏳ 待创建 |
+| 15 | 当代人类学理论（`./15_contemporary_theory.md`） | 2020-2026最新理论进展 | ⏳ 待创建 |
 
 ---
 
@@ -64,19 +64,19 @@
 ### 按主题查找
 
 **文化与意义** → [社会文化人类学](./01_sociocultural_anthropology.md)
-**人类进化** → [体质人类学](./biological_anthropology.md)
-**古代社会** → [考古学](./03_archaeology.md)
-**语言与沟通** → [语言人类学](./04_linguistic_anthropology.md)
-**健康与疾病** → [医学人类学](./06_medical_anthropology.md)
-**当代问题** → [数字人类学](./13_digital_anthropology.md)
+**人类进化** → 体质人类学（`./biological_anthropology.md`）
+**古代社会** → 考古学（`./03_archaeology.md`）
+**语言与沟通** → 语言人类学（`./04_linguistic_anthropology.md`）
+**健康与疾病** → 医学人类学（`./06_medical_anthropology.md`）
+**当代问题** → 数字人类学（`./13_digital_anthropology.md`）
 
 ### 按问题查找
 
 **"为什么不同文化如此不同？"** → [社会文化人类学](./01_sociocultural_anthropology.md)
-**"人类从哪里来？"** → [体质人类学](./biological_anthropology.md)
-**"古代文明如何生活？"** → [考古学](./03_archaeology.md)
-**"语言如何塑造思维？"** → [语言人类学](./04_linguistic_anthropology.md)
-**"疾病如何与文化相关？"** → [医学人类学](./06_medical_anthropology.md)
+**"人类从哪里来？"** → 体质人类学（`./biological_anthropology.md`）
+**"古代文明如何生活？"** → 考古学（`./03_archaeology.md`）
+**"语言如何塑造思维？"** → 语言人类学（`./04_linguistic_anthropology.md`）
+**"疾病如何与文化相关？"** → 医学人类学（`./06_medical_anthropology.md`）
 
 ---
 

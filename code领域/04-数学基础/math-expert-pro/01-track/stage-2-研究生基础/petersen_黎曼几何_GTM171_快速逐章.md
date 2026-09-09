@@ -95,7 +95,7 @@ Petersen《黎曼几何》(GTM171) 是 stage-2 几何主线的**现代研究生�
   - 三组**对称性**：反交换 $R(X,Y)=-R(Y,X)$、对偶对称 $\langle R(X,Y)Z,W\rangle=\langle R(Z,W)X,Y\rangle$、第一第二 Bianchi 恒等式。独立分量从 $n^4$ 降至 $\frac{n^2(n^2-1)}{12}$（$n=2$ 时仅 1 个=Gauss 曲率）。
   - 三层级：**截面曲率** $K=\frac{\langle R(X,Y)Y,X\rangle}{|X|^2|Y|^2-\langle X,Y\rangle^2}$（最精细）；**Ricci** $\mathrm{Ric}(X,Y)=\mathrm{tr}(V\mapsto R(V,X)Y)$（控制体积增长）；**标量** $\mathrm{scal}=\mathrm{tr}_g\mathrm{Ric}$（全平均）。
   - 法坐标下 $g_{ij}=\delta_{ij}-\tfrac13 R_{ikjl}x^kx^l+O(|x|^3)$——曲率=度量的「二阶加速度」。
-- **飞腾锚点**：**matmul 15×[V03](曲率张量多线性)** —— $R$ 是 $(1,3)$ 型张量，$n^4$ 个分量，计算是密集多线性代数。
+- **飞腾锚点**：**matmul 15×V03（`曲率张量多线性`）** —— $R$ 是 $(1,3)$ 型张量，$n^4$ 个分量，计算是密集多线性代数。
   - 🟢事实：tensor core 做缩并(如 $\mathrm{Ric}_{ij}=g^{kl}R_{kilj}$)比标量快 15 倍。
   - 🟡类比：Ricci 缩并 $g^{kl}R_{kilj}$ 就是 `einsum('kl,kilj->ij', g_inv, R)`，是批量矩阵乘+迹收缩。
 - **几何/应用**：曲率=「空间的弯曲」——Einstein 方程 $R_{\mu\nu}-\tfrac12 Rg_{\mu\nu}=8\pi T_{\mu\nu}$ 中 Ricci 张量直接是物质能量的响应；信息几何中 Fisher 度量的曲率衡量统计模型族的「弯曲」。
@@ -113,7 +113,7 @@ Petersen《黎曼几何》(GTM171) 是 stage-2 几何主线的**现代研究生�
   - **第二变分** $\frac{d^2}{ds^2}E\big|_0=\int(|\nabla_{\dot\gamma}V|^2-\langle R(V,\dot\gamma)\dot\gamma,V\rangle)\,dt$——「动能-势能」结构，正曲率=硬弹簧(能量上升→不稳定)。
   - **Jacobi 方程** $\nabla_{\dot\gamma}\nabla_{\dot\gamma}J+R(J,\dot\gamma)\dot\gamma=0$；$J(0)=0$ 时 $J(t)=d(\exp_p)_{tv}\cdot tw$ 刻画 $\exp_p$ 的微分。
   - **共轭点**($\exp_p$ 退化处)是测地线停止最短的临界位置。越过第一共轭点后 $\gamma$ 不再最短。
-- **飞腾锚点**：**UDOT 16.9×[E05](能量泛函积分)** —— $E=\tfrac12\int|\dot\gamma|^2\,dt$ 离散化是逐点求 $g(\dot\gamma,\dot\gamma)$ 再积分=点积累加。
+- **飞腾锚点**：**UDOT 16.9×E05（`能量泛函积分`）** —— $E=\tfrac12\int|\dot\gamma|^2\,dt$ 离散化是逐点求 $g(\dot\gamma,\dot\gamma)$ 再积分=点积累加。
   - 🟢事实：UDOT(专用点积指令)比通用浮点快 16.9 倍，对 $\sum g_{ij}\dot\gamma^i\dot\gamma^j\Delta t$ 直接加速。
   - 🟡类比：第二变分被积式 $|\nabla_{\dot\gamma}V|^2-\langle R(V,\dot\gamma)\dot\gamma,V\rangle$ 是「动能-势能」结构；负曲率=软弹簧(稳定)，正曲率=硬弹簧(不稳定)。
 - **几何/应用**：Jacobi 场=「测地线束的发散/汇聚」——透镜方程、引力透镜的本质；共轭点=光学中焦点的几何推广。第二变分的正定性决定测地线的稳定性。
@@ -132,7 +132,7 @@ Petersen《黎曼几何》(GTM171) 是 stage-2 几何主线的**现代研究生�
   - ③ **Cartan-Hadamard**：$K\leq0$ 且完备单连通 $\Rightarrow\exp_p$ 是整体微分同胚（负曲率「摊开」，$M\cong\mathbb{R}^n$）。
   - ④ **Rauch 比较**：$K\leq\bar{K}$ 时 Jacobi 场不低于模型空间($\bar{K}$)的相应场——所有比较定理的引擎。
   - ⑤ **Cheng 最大直径**：$\mathrm{Ric}\geq n-1$ 且 $\mathrm{diam}=\pi\Rightarrow M$ 等距于 $S^n(1)$。
-- **飞腾锚点**：**Iron Law <2%[Lab00](变分误差)** —— Rauch 比较本质是「误差界」：Jacobi 场与模型场的偏差被曲率差控制。
+- **飞腾锚点**：**Iron Law <2%Lab00（`变分误差`）** —— Rauch 比较本质是「误差界」：Jacobi 场与模型场的偏差被曲率差控制。
   - 🟢事实：数值优化要求相对误差 <2%；Rauch 中 Jacobi 场比值 $\frac{|J(t)|}{|\bar{J}(t)|}$ 被 $\sin(\sqrt{k}t)$ 类函数夹逼，是曲率空间的「误差预算」。
   - 🟡类比：Bonnet-Myers 的「正曲率→紧致」可类比优化中「强凸($\lambda>0$)→有限步收敛」——曲率正=函数凸=空间「合拢」。
 - **几何/应用**：Hopf-Rinow 保证完备流形上「距离可达」(算法在无洞流形上全局收敛)；Bonnet-Myers 说明正曲率宇宙(如爱因斯坦静态宇宙)必然紧致(有限大小)；Cartan-Hadamard 是双曲几何整体存在性的理论根据。
@@ -150,7 +150,7 @@ Petersen《黎曼几何》(GTM171) 是 stage-2 几何主线的**现代研究生�
   - **Toponogov 比较定理**：$K\geq k$ 时 $M$ 中测地三角形「比模型($K=k$)的更胖」(边更短/角更大)——Rauch 的三角化版。
   - **Synge 定理**：$K>0$ 紧致偶数维可定向 ⟹ 单连通($\pi_1=0$)；奇数维 ⟹ 可定向。正截面曲率对拓扑极强约束。
   - **Soul 定理(预告)**：$K\geq0$ 完备非紧 ⟹ 含紧致全测地子流形(Soul)，$M$ 是其法丛——「非负曲率=紧致的核+向外摊开」。
-- **飞腾锚点**：**分支预测[Lab02](测地分支)** —— Toponogov 中「三角形更胖/更瘦」是离散分支；测地线在正曲率空间「汇聚」。
+- **飞腾锚点**：**分支预测Lab02（`测地分支`）** —— Toponogov 中「三角形更胖/更瘦」是离散分支；测地线在正曲率空间「汇聚」。
   - 🟢事实：$K>0$ 时邻近测地线汇聚(=「预测命中」)，$K<0$ 时发散(=「预测 miss」)，影响测地线追踪效率。
   - 🟡类比：Synge「正曲率逼单连通」可类比强约束下搜索收敛到唯一解；Soul「核+摊开」类似 Git 的 main+feature 分支。
 - **几何/应用**：Soul 定理说明非负曲率完备流形「本质上是紧致的」(可形变收缩到 Soul)；正曲率流形分类是未解难题——已知紧正曲率例子极少(球面、$\mathbb{CP}^n$、少数齐性空间)。
@@ -167,7 +167,7 @@ Petersen《黎曼几何》(GTM171) 是 stage-2 几何主线的**现代研究生�
   - ① **Bishop-Gromov 体积比较**：$\mathrm{Ric}\geq(n-1)k$ 时 $\frac{\mathrm{Vol}(B(p,r))}{V_k(r)}$ 单调递减($V_k(r)$=模型空间 $K\equiv k$ 的球体积)，故 $\mathrm{Vol}(B(p,r))\leq V_k(r)$。是现代几何分析的支柱。
   - ② **Bochner 公式** $\tfrac12\Delta|\nabla f|^2=|\mathrm{Hess}\,f|^2+\langle\nabla f,\nabla\Delta f\rangle+\mathrm{Ric}(\nabla f,\nabla f)$——末项 Ricci 符号直接控制调和函数：$\mathrm{Ric}\geq0$ 时调和函数增长受梯度约束。
   - ③ **分裂定理**(Cheeger-Gromoll)：$\mathrm{Ric}\geq0$ 且含直线(双向无限最短测地线) ⟹ $M\cong N\times\mathbb{R}$（平坦因子分裂）。
-- **飞腾锚点**：**GEMM 9.45G[Lab05](高维曲率)** —— $\mathrm{Ric}_{ij}$ 有 $n^2$ 分量，体积比较 $\mathrm{Vol}(B(p,r))=\int_{S^{n-1}}\int_0^r J(\theta,t)\,dt\,d\theta$ 是高维密集积分。
+- **飞腾锚点**：**GEMM 9.45GLab05（`高维曲率`）** —— $\mathrm{Ric}_{ij}$ 有 $n^2$ 分量，体积比较 $\mathrm{Vol}(B(p,r))=\int_{S^{n-1}}\int_0^r J(\theta,t)\,dt\,d\theta$ 是高维密集积分。
   - 🟢事实：GEMM 每秒 9.45G 次运算，Bishop-Gromov 体积比值在高维($n\gg2$)是密集 GEMM 吞吐。
   - 🟡类比：体积比值「单调递减」可类比 loss 单调下降——Ricci 下界保证体积增长「不超过模型」，正如正则化保证 loss 不发散。
 - **几何/应用**：Bishop-Gromov 是 Ricci 流分析的基础(Perelman 的体积非塌缩估计)；Bochner 技巧推广到 $p$-形式($\mathrm{Ric}>0\Rightarrow H^1(M)=0$)给出 Betti 数的曲率约束。分裂定理刻画非负 Ricci 流形中的平坦因子。
@@ -185,7 +185,7 @@ Petersen《黎曼几何》(GTM171) 是 stage-2 几何主线的**现代研究生�
   - ② **Gromov-Lawson 手术定理**：正标量曲率在手术($\dim\geq3$)下保持，故同伦等价的流形「共享」$\mathrm{scal}>0$ 的存在性。
   - ③ **Schoen-Yau 方法**：用稳定极小曲面给拓扑障碍——$M^3\cong\Sigma\times S^1$ ⟹ $M$ 不承载 $\mathrm{scal}>0$。
   - 三种方法(旋量/手术/极小曲面)是正标量曲率的独立工具箱。
-- **飞腾锚点**：**FP16 3.81×[L01](数值微分几何)** —— Dirac 算子 $D$ 的离散化是密集浮点运算。
+- **飞腾锚点**：**FP16 3.81×L01（`数值微分几何`）** —— Dirac 算子 $D$ 的离散化是密集浮点运算。
   - 🟢事实：FP16 吞吐是 FP32 的 3.81 倍；$\mathrm{scal}>0$ 时 $D$ 的谱无零点，但仍需足够精度确认 $\ker D=0$。
   - 🟡类比：$\hat{A}$ 亏格=拓扑的「质量检测器」——若非零，则不管怎么扭度量都做不到 $\mathrm{scal}>0$，类似编译器类型检查拒绝非法代码。
 - **几何/应用**：$\hat{A}$ 亏格消失是「纯拓扑=几何不可能」的典范——旋量场在正标量曲率下无零模，与弦论中 GSO 投影(消除快子)的精神相通。Gromov-Lawson 手术保持性使正标量曲率成为「粗同伦不变量」。
@@ -203,7 +203,7 @@ Petersen《黎曼几何》(GTM171) 是 stage-2 几何主线的**现代研究生�
   - ② **Gromov 紧性定理**：$\mathrm{diam}\leq D$ + $\mathrm{Ric}\geq(n-1)k$ 的流形列在 GH 拓扑下**预紧**(子列收敛到紧致极限)，极限可能是**非流形**(奇点)。
   - ③ **Cheeger-Colding 理论**：体积非塌缩($\mathrm{Vol}(B(p,1))\geq v$)时极限「几乎处处」是流形，Laplacian 在极限上良定义。
   - ④ **塌缩**：体积→0 时流形 GH 极限「缩」到低维(如 $S^1_\epsilon\times S^1\to S^1$)，Cheeger-Gromov-Fukaya 刻画降维。
-- **飞腾锚点**：**GEMM 9.45G[Lab05](高维曲率)** —— GH 距离需在点云上做全对距离矩阵($O(n^2)$)，是密集 GEMM 吞吐。
+- **飞腾锚点**：**GEMM 9.45GLab05（`高维曲率`）** —— GH 距离需在点云上做全对距离矩阵($O(n^2)$)，是密集 GEMM 吞吐。
   - 🟢事实：Gromov 紧性的极限空间计算(离散化为点云后做全对距离)是典型高维 GEMM 负载。
   - 🟡类比：GH 收敛=流形空间的「梯度下降」——流形列在曲率约束(=loss landscape)下收敛到极小值；塌缩=维度退化(类似 PCA 降维)。
 - **几何/应用**：GH 收敛是「流形逼近」的严格框架——点云重建(流形学习)本质是在数据集 GH 意义下逼近底层流形；Cheeger-Colding 理论是 Perelman 证明 Poincaré 猜想中处理 Ricci 流奇点的工具。塌缩理论解释为何高维流形可「降维」到低维模型。

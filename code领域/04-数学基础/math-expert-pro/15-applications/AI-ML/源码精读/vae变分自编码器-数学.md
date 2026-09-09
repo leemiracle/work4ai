@@ -154,4 +154,4 @@ ELBO_β = E[log p(x|z)] - β × KL(q(z|x) || p(z))
 
 ---
 
-*配套：[tinygen/vae.py](../projects/tinygen/vae.py) | [loss-functions精读](loss-functions-精读.md) | [backprop-graph精读](backprop-graph-精读.md)*
+*配套：tinygen/vae.py（`../projects/tinygen/vae.py`） | loss-functions精读（`loss-functions-精读.md`） | backprop-graph精读（`backprop-graph-精读.md`）*

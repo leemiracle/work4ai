@@ -524,7 +524,7 @@ LoongArch 用 **LBT（LoongArch Binary Translation）扩展**原生支持 x86/AR
 
 > 1. **飞腾切 RISC-V 的编译器基础设施"基本就绪"（综合 ~53%）**——后端稳定（68 cpp/90 td/16 调度模型 `[实测]`）+ RVA23 profile 成熟 + 国密 Zk 支持。但**深度欠半**：服务器级调度模型只有 AArch64 1/3、AI 推理栈落后 2 年、二进制续命（无 LBT）只有 25%。**够启动预研，不够全面切换**。
 >
-> 2. **飞腾切 RISC-V 比 Apple 2005 切 x86 难 3 倍**——① 切到"边缘 ISA"（RISC-V 服务器生态落后 ARM 3–5 年）而非"主流 ISA"；② 飞腾无垂直整合（双栈协调外部化给信创 ISV）；③ RISC-V 无 LBT 原生翻译（旧软件续命性能 30–50%，远低于 Rosetta 2 的 70–90%）。**飞腾切 RISC-V 不是"能不能"的问题，是"比 Apple 难 3 倍但必须做"的被动求生**。**🔒 2026-07 校准**：C930（2025-03 交付，首款国产服务器级 RISC-V CPU，3.4 GHz/15.2 SPECint2006/GHz，TITAN+TPE+8 TOPS Matrix，平头哥对外授权 IP）让"边缘 ISA"的硬件差距缩小——C930 性能已达 Cortex-A77/Neoverse-N1 区间，不再是"边缘"。但 OS/DB/ISV 国产适配仍落后 ARM 3-5 年，"难 3 倍"的核心约束（生态非硬件）不变。深度供应链分析见飞腾体系结构实验 [Lens_03 §节点③](../../体系结构实验/Lenses/Lens_03_SupplyChain.md) + [Expert_22 §2.1](../../体系结构实验/Expert_22_OpenSource_Ecosystem/)。
+> 2. **飞腾切 RISC-V 比 Apple 2005 切 x86 难 3 倍**——① 切到"边缘 ISA"（RISC-V 服务器生态落后 ARM 3–5 年）而非"主流 ISA"；② 飞腾无垂直整合（双栈协调外部化给信创 ISV）；③ RISC-V 无 LBT 原生翻译（旧软件续命性能 30–50%，远低于 Rosetta 2 的 70–90%）。**飞腾切 RISC-V 不是"能不能"的问题，是"比 Apple 难 3 倍但必须做"的被动求生**。**🔒 2026-07 校准**：C930（2025-03 交付，首款国产服务器级 RISC-V CPU，3.4 GHz/15.2 SPECint2006/GHz，TITAN+TPE+8 TOPS Matrix，平头哥对外授权 IP）让"边缘 ISA"的硬件差距缩小——C930 性能已达 Cortex-A77/Neoverse-N1 区间，不再是"边缘"。但 OS/DB/ISV 国产适配仍落后 ARM 3-5 年，"难 3 倍"的核心约束（生态非硬件）不变。深度供应链分析见飞腾体系结构实验 Lens_03 §节点③（`../../体系结构实验/Lenses/Lens_03_SupplyChain.md`） + Expert_22 §2.1（`../../体系结构实验/Expert_22_OpenSource_Ecosystem/`）。
 >
 > 3. **飞腾切 RISC-V 的 trigger 是三重组合**——v9 不授（必要，> 80%）+ RISC-V 服务器成熟（充分，2030–2035）+ 信创强制国产 ISA（政策，30–45%）。最可能组合启动时点约 2030–2032，10 年档标准路径完成约 2040（概率 50–65%）。**Trigger 触发后第一动作不是写编译器，是建立 upstream 能力——学香山把调度模型推回主线**。
 >

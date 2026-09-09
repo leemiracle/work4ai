@@ -368,8 +368,8 @@
 
 ## 练习记录
 
-- [练习模板](../practices/systems-thinking-advanced/template.md)
-- [练习示例](../practices/systems-thinking-advanced/example.md)
+- 练习模板（`../practices/systems-thinking-advanced/template.md`）
+- 练习示例（`../practices/systems-thinking-advanced/example.md`）
 
 ---
 

@@ -143,7 +143,7 @@ Lang 的风格鲜明——**代数家的简洁**：证明短而结构清晰，�
 ### 第 X 章 · Riemann-Stieltjes Integral and Measure（Riemann-Stieltjes 积分与测度）
 
 - **核心**：从经典 Riemann-Stieltjes 视角重新审视测度。**有界变差函数** $F$（全变差 $\|F\|_{BV}<\infty$）与 Lebesgue-Stieltjes 测度 $\mu_F((a,b])=F(b)-F(a)$ 的一一对应。**Riemann-Stieltjes 积分** $\int f\,dF$ 与 Lebesgue 积分 $\int f\,d\mu_F$ 的等价（$F$ 单调右连续时）。**Fourier 分析的应用**：Fourier 级数的收敛判定（Dirichlet-Jordan 判据——有界变差函数 Fourier 级数逐点收敛于 Cesàro 均值）。
-- **飞腾锚点**：**FP16 3.81× [L01](复用)** —— 有界变差 = 函数总波动有限 = 数值精度的可控性。$F\in BV$ 的 Fourier 级数收敛性保证（Dirichlet-Jordan）如同有限精度下的数值稳定性。Stieltjes 测度把「函数的跳跃」编码为「测度的原子」，如同 FP16 把连续值离散化为有限精度表示。
+- **飞腾锚点**：**FP16 3.81× L01（`复用`）** —— 有界变差 = 函数总波动有限 = 数值精度的可控性。$F\in BV$ 的 Fourier 级数收敛性保证（Dirichlet-Jordan）如同有限精度下的数值稳定性。Stieltjes 测度把「函数的跳跃」编码为「测度的原子」，如同 FP16 把连续值离散化为有限精度表示。
   🟢BV-Stieltjes 对应是事实；🟡 精度档为类比。
 - **关键定理**：**BV-Stieltjes 对应** —— $\mathbb{R}$ 上有界变差右连续函数 $F$ 与有限 Lebesgue-Stieltjes 测度 $\mu_F$ 一一对应；$\int_{\mathbb{R}}f\,dF=\int_{\mathbb{R}}f\,d\mu_F$（RS 积分 = Lebesgue 积分）。
 - **自测**：对 Cantor 函数 $c(x)$（连续 BV，$c'(x)=0$ a.e. 但 $c(0)=0,c(1)=1$），计算 $\mu_c$（Cantor 测度，奇异连续）并说明 $c\notin AC$（微积分基本定理失效）。再说明 Cantor-Lebesgue 函数是「连续 + BV + 导数 a.e. 为零 + 非常数」的经典反例，它揭示了 $AC$ 条件在 FTC 中的不可替代性。
@@ -157,7 +157,7 @@ Lang 的风格鲜明——**代数家的简洁**：证明短而结构清晰，�
   分布导数**总存在**：$D^\alpha T(\phi)=(-1)^{|\alpha|}T(D^\alpha\phi)$——使 $\delta$（Dirac 分布，$\delta(\phi)=\phi(0)$）合法化。每个局部可积函数 $f\in L^1_{\mathrm{loc}}$ 自然诱导分布 $T_f(\phi)=\int f\phi$，且其分布导数可能不是经典导数（如 Heaviside 阶跃函数 $H$ 的分布导数 $DH=\delta$）。
   
   **支撑**（$\operatorname{supp}T$：使 $T$ 在其补集的邻域上为零的最大开集）、**局部化**。**离散支撑分布** = Dirac 测度及其导数的有限/可数线性组合——分布中最简单的类。分布是 PDE 弱解理论的语言基础（椭圆正则性、Sobolev 空间）。
-- **飞腾锚点**：**分支预测 [Lab02](复用)** —— 分布 = 「合法化的奇异性」。$\delta$ 不是函数但合法（作为泛函），如同分支预测允许「推测执行」——先假设路径正确，后续验证。分布导数总存在 = 「每个信号都有频谱」（可无限微分），降低了分析的门槛。
+- **飞腾锚点**：**分支预测 Lab02（`复用`）** —— 分布 = 「合法化的奇异性」。$\delta$ 不是函数但合法（作为泛函），如同分支预测允许「推测执行」——先假设路径正确，后续验证。分布导数总存在 = 「每个信号都有频谱」（可无限微分），降低了分析的门槛。
   🟢分布理论是事实；🟡 分支预测为类比。
 - **关键定理**：**分布的结构定理** —— 支撑为单点 $\{x_0\}$ 的分布必为有限阶 Dirac 导数之和：$T=\sum_{|\alpha|\le N}c_\alpha D^\alpha\delta_{x_0}$。
 - **自测**：验证 $\delta'$ 满足 $D\delta(\phi)=-\delta(D\phi)=-\phi'(0)$；说明 $T(\phi)=\sum_{n=1}^\infty \phi^{(n)}(1/n)$ 是合法分布但支撑为 $\{1/n:n\in\mathbb{N}\}\cup\{0\}$（离散支撑）。
@@ -167,7 +167,7 @@ Lang 的风格鲜明——**代数家的简洁**：证明短而结构清晰，�
 ### 第 XII 章 · Integration on Locally Compact Groups（局部紧群上的积分）
 
 - **核心**：局部紧群 $G$ 上的 **Haar 测度**——唯一（至多差常数）的左（右）平移不变正则 Borel 测度。**唯一性**（两个左 Haar 测度差正数常数）与**存在性**（构造性证明或泛函分析证明）。**模函数** $\Delta:G\to\mathbb{R}_{>0}$（左 Haar $\to$ 右 Haar 的换算因子）。**商群与齐性空间**上的不变测度（$G/H$ 有 $G$-不变测度 ⟺ $\Delta_G|_H=\Delta_H$）。Haar 测度是群上调和分析（Fourier 变换、表示论）的地基。
-- **飞腾锚点**：**UDOT 16.9× [E05](复用)** —— Haar 测度 = 群上的「均匀点积权重」：平移不变性保证 $\int_G f(xh)\,dm=\int_G f(x)\,dm$——积分不依赖「起点」，如同 UDOT 对对称数据结构的无偏累加。Fourier 变换在群上的推广 $\hat f(\gamma)=\int_G f(x)\overline{\gamma(x)}\,dm(x)$ 统一了 $\mathbb{R}^n$/ $\mathbb{T}$/ $\mathbb{Z}$ 上的所有 Fourier 分析。
+- **飞腾锚点**：**UDOT 16.9× E05（`复用`）** —— Haar 测度 = 群上的「均匀点积权重」：平移不变性保证 $\int_G f(xh)\,dm=\int_G f(x)\,dm$——积分不依赖「起点」，如同 UDOT 对对称数据结构的无偏累加。Fourier 变换在群上的推广 $\hat f(\gamma)=\int_G f(x)\overline{\gamma(x)}\,dm(x)$ 统一了 $\mathbb{R}^n$/ $\mathbb{T}$/ $\mathbb{Z}$ 上的所有 Fourier 分析。
   🟢Haar 测度唯一存在是事实；🟡 无偏累加为类比。
 - **关键定理**：**Haar 测度存在唯一性定理** —— 每个局部紧群 $G$ 上存在左 Haar 测度 $m\ne0$（$\int_G f(xh)\,dm=\int_G f\,dm$，$\forall h\in G$），且在至多差正常数意义下唯一。
 - **自测**：验证 $\mathbb{R}^n$ 的 Haar 测度 = Lebesgue 测度（模函数 $\Delta\equiv1$）；对 $G=GL(n,\mathbb{R})$ 说明左 Haar 测度 $dm=|\det x|^{-n}dx$（非紧群，模函数可能非平凡）。再验证紧群的 Haar 测度可归一化为概率测度（$\int_G 1\,dm=1$），且左右 Haar 测度自动相等（$\Delta\equiv1$）。
@@ -177,7 +177,7 @@ Lang 的风格鲜明——**代数家的简洁**：证明短而结构清晰，�
 ### 第 XIII-XIV 章 · Differential Calculus & Inverse Mappings（微分计算与反函数定理）
 
 - **核心**：在 Banach 空间中重建微分学。**Fréchet 导数**：$f:E\to F$ 在 $x$ 处可微 ⟺ 存在有界线性算子 $Df(x):E\to F$ 使 $f(x+h)=f(x)+Df(x)h+o(\|h\|)$。**链式法则**、**中值定理**（Banach 值版）、**Taylor 公式**。**反函数定理**（$Df(x_0)$ 可逆 ⟹ $f$ 局部微分同胚）、**隐函数定理**（消去变量）。**ODE 存在定理**（Picard 迭代：$\dot x=f(t,x)$ 在 Lipschitz 条件下局部解存在唯一）。**流的光滑性**（解对初始条件的全局光滑依赖）。
-- **飞腾锚点**：**matmul 15× [V03](复用)** —— Fréchet 导数 $Df(x)$ 是线性算子 = 矩阵（有限维）：$f:\mathbb{R}^n\to\mathbb{R}^m$ 的导数 = Jacobi 矩阵 $J_f\in\mathbb{R}^{m\times n}$。反函数定理 $f^{-1}$ 的导数 $=J_f^{-1}$（矩阵求逆）。Picard 迭代 $x_{n+1}=x_0+\int f(t,x_n)\,dt$ = 不动点迭代，工程上对应迭代求解器。
+- **飞腾锚点**：**matmul 15× V03（`复用`）** —— Fréchet 导数 $Df(x)$ 是线性算子 = 矩阵（有限维）：$f:\mathbb{R}^n\to\mathbb{R}^m$ 的导数 = Jacobi 矩阵 $J_f\in\mathbb{R}^{m\times n}$。反函数定理 $f^{-1}$ 的导数 $=J_f^{-1}$（矩阵求逆）。Picard 迭代 $x_{n+1}=x_0+\int f(t,x_n)\,dt$ = 不动点迭代，工程上对应迭代求解器。
   🟢反函数定理是事实；🟡 Jacobi 矩阵为有限维类比。
 - **关键定理**：**反函数定理（Banach 空间版）** —— Banach 空间间 $C^1$ 映射 $f:E\to F$，若 $Df(x_0)$ 有界可逆，则 $f$ 在 $x_0$ 附近是 $C^1$ 微分同胚（$f^{-1}$ 存在且 $C^1$，$Df^{-1}(f(x_0))=[Df(x_0)]^{-1}$）。
 - **自测**：对 $f:\mathbb{R}^2\to\mathbb{R}^2$，$f(x,y)=(e^x\cos y,e^x\sin y)$，计算 Jacobi 矩阵并说明 $f$ 在何处局部可逆（$\det J=e^{2x}\ne0$ 处处可逆）。再用 Picard 迭代求解 $\dot x=-x$，$x(0)=1$（迭代 $x_{n+1}(t)=1-\int_0^t x_n(s)\,ds\to e^{-t}$）。
@@ -187,7 +187,7 @@ Lang 的风格鲜明——**代数家的简洁**：证明短而结构清晰，�
 ### 第 XV 章 · The Open Mapping Theorem, Factor Spaces, and Duality（开映射定理、商空间与对偶）⭐
 
 - **核心**：泛函分析三大定理的核心章。**开映射定理**（满射有界线性算子 $T:X\to Y$ 是开映射 ⟹ 有界逆定理：连续双射之逆连续）、**闭图像定理**（全定义闭算子 ⟹ 有界）。**Hahn-Banach 定理**（分析形式：子空间上受半范数控制的线性泛函可保控延拓；几何形式：不相交凸集可严格分离）。**正交性**（Hilbert 空间中 $M^\perp$，$H=M\oplus M^\perp$）。商空间 $E/F$ 与对偶关系 $(E/F)^*\cong F^\perp$。
-- **飞腾锚点**：**Iron Law<2% ⭐ [Lab00](复用)** —— 开映射定理保证 $Tx=y$ 的解连续依赖 $y$——数值迭代稳定性的根基。闭图像定理 = 验证有界性只需查图像闭（简化验证），如同 Iron Law 要求误差可控。Hahn-Banach 保证拉格朗日乘子存在（凸优化对偶的根基）——「有约束 ⟹ 有乘子」。
+- **飞腾锚点**：**Iron Law<2% ⭐ Lab00（`复用`）** —— 开映射定理保证 $Tx=y$ 的解连续依赖 $y$——数值迭代稳定性的根基。闭图像定理 = 验证有界性只需查图像闭（简化验证），如同 Iron Law 要求误差可控。Hahn-Banach 保证拉格朗日乘子存在（凸优化对偶的根基）——「有约束 ⟹ 有乘子」。
   🟢三大定理是事实；🟡 Iron Law 阈值为类比。
 - **关键定理**：**开映射 + 闭图 + Hahn-Banach 三联** —— （1）Banach 空间满射有界线性算子是开映射。（2）$T:X\to Y$ 线性，图像 $\Gamma_T=\{(x,Tx)\}$ 闭 $\Rightarrow$ $T$ 有界。（3）子空间 $M\subset E$ 上线性泛函 $f\le p$（$p$ 半范数）可延拓到 $E$ 上保持 $\tilde f\le p$。
 - **自测**：用闭图像定理证明：若 $T:C[0,1]\to C[0,1]$ 线性且 $f_n\to f,\,Tf_n\to g\Rightarrow g=Tf$，则 $T$ 有界；用 Hahn-Banach 证明 $\forall x\ne0\in E$，$\exists f\in E^*$ 使 $f(x)=\|x\|,\,\|f\|=1$。
@@ -201,7 +201,7 @@ Lang 的风格鲜明——**代数家的简洁**：证明短而结构清晰，�
   **Gelfand-Mazur 定理**（复 Banach 除法代数 $\cong\mathbb{C}$）——由此推出任意 Banach 代数中 $\sigma(x)\ne\varnothing$（反证法 + Liouville 定理）。**Gelfand 变换** $\hat x:\Delta\to\mathbb{C}$（$\Delta$ = 极大理想空间/非零乘法泛函空间，赋予弱\* 拓扑），$\sigma(x)=\hat x(\Delta)$（谱 = 值域），谱半径 $r(x)=\|\hat x\|_\infty=\lim\|x^n\|^{1/n}$。
   
   **C\*-代数**（带对合 $*$，满足 C\*-恒等式 $\|x^*x\|=\|x\|^2$）——交换 C\*-代数 Gelfand 变换为等距\*-同构 $A\cong C(\Delta)$，这是「代数 ⟺ 函数」的核心桥梁，也是 Gelfand-Naimark 定理的交换版。
-- **飞腾锚点**：**matmul 15× [V03](复用)** —— 谱 = 算子的「特征频率」，有限维里 $\sigma(T)$ = 特征值集，matmul 特征分解 / PCA 是有限维谱论。Gelfand 变换 = 「把代数元素变成 $\Delta$ 上的函数」，如同把矩阵对角化后在特征基上变对角矩阵。C\*-恒等式 $\|x^*x\|=\|x\|^2$ 内嵌了内积结构。
+- **飞腾锚点**：**matmul 15× V03（`复用`）** —— 谱 = 算子的「特征频率」，有限维里 $\sigma(T)$ = 特征值集，matmul 特征分解 / PCA 是有限维谱论。Gelfand 变换 = 「把代数元素变成 $\Delta$ 上的函数」，如同把矩阵对角化后在特征基上变对角矩阵。C\*-恒等式 $\|x^*x\|=\|x\|^2$ 内嵌了内积结构。
   🟢Gelfand 变换是事实；🟡 矩阵对角化为类比。
 - **关键定理**：**Gelfand-Mazur 定理 + 交换 C\*-代数表示** —— 复 Banach 除法代数 $\cong\mathbb{C}$（⟹ $\sigma(x)\ne\varnothing$）；带单位交换 C\*-代数 $A$ 的 Gelfand 变换 $A\to C(\Delta)$ 是等距\*-同构。
 - **自测**：对 Wiener 代数 $W$（$\sum|c_n|<\infty$ 的 Fourier 级数），证明 $\Delta\cong\mathbb{T}$，由此推出 Wiener 定理（$f\in W$，$f\ne0$ 处处 $\Rightarrow 1/f\in W$）。
@@ -215,7 +215,7 @@ Lang 的风格鲜明——**代数家的简洁**：证明短而结构清晰，�
   **Fredholm 算子** $T:E\to F$（$\ker T$ 有限维，$\operatorname{coker}T$ 有限维，值域闭）——**Fredholm 指标** $\operatorname{ind}(T)=\dim\ker T-\dim\operatorname{coker}T$ 是同伦不变量（$T+K$ 与 $T$ 同伦当 $K$ 紧时 $\operatorname{ind}$ 不变）。
   
   **紧算子谱定理**：非零谱是有限重数特征值，至多可数且只以 $0$ 为聚点。**Fredholm 择一性**：$I-T$（$T$ 紧）要么唯一可解，要么有非平凡核——推广有限维「$A$ 满秩 ⟺ 唯一解」。应用：积分方程 $f(x)+\int K(x,y)f(y)\,dy=g(x)$ 的可解性判定。
-- **飞腾锚点**：**GEMM 9.45G [Lab05](复用)** —— 紧算子 = 「可压缩到有限维」：SVD 截断 $T\approx\sum_{n=1}^N s_n\langle\cdot,e_n\rangle f_n$，保留大奇异值丢小的——模型压缩/低秩近似的根基。Fredholm 指标 = 「亏格」——分类算子在同伦下的不变量，如同拓扑度。
+- **飞腾锚点**：**GEMM 9.45G Lab05（`复用`）** —— 紧算子 = 「可压缩到有限维」：SVD 截断 $T\approx\sum_{n=1}^N s_n\langle\cdot,e_n\rangle f_n$，保留大奇异值丢小的——模型压缩/低秩近似的根基。Fredholm 指标 = 「亏格」——分类算子在同伦下的不变量，如同拓扑度。
   🟢紧算子有限秩逼近是事实；🟡 SVD 截断为类比。
 - **关键定理**：**紧算子谱定理 + Fredholm 指标** —— Banach 空间上紧算子 $T$ 的谱至多可数，非零谱为有限重数特征值，$0$ 是唯一聚点；Fredholm 算子指标 $\operatorname{ind}(T)=\dim\ker T-\operatorname{coker}T$ 在紧扰动下不变（$\operatorname{ind}(T+K)=\operatorname{ind}(T)$，$K$ 紧）。
 - **自测**：证明恒等算子 $I$ 在无穷维空间上不紧（单位球不紧）；计算 Volterra 算子 $(Vf)(x)=\int_0^x K(x,y)f(y)\,dy$（$K$ 连续）的指标（答：$\operatorname{ind}(V)=0$，紧算子扰动）。
@@ -235,7 +235,7 @@ Lang 的风格鲜明——**代数家的简洁**：证明短而结构清晰，�
 ### 第 XIX-XX 章 · Further Spectral Theorems & Spectral Measures（进一步谱定理与谱测度）⭐
 
 - **核心**：Ch XIX 把谱定理推广到**正规算子**（$T^*T=TT^*$）并引入**算子函数演算** $f(T)=\int f(\lambda)\,dE(\lambda)$（$f$ 有界 Borel）。自伴算子的**自伴延拓**（von Neumann 亏指数理论）。实例：**Laplace 算子** $\Delta$ 在 $\mathbb{R}^2$ 上的谱分析。Ch XX 建立**谱测度**的完整理论：谱测度 $E:\mathfrak{B}(\mathbb{R})\to\mathcal{P}(H)$（投影值测度）的公理与构造。**Titchmarsh-Kodaira 公式**（谱测度的唯一性，由 Weyl $m$-函数决定）。**无界算子的函数演算**。**谱族**（分辨率幺元 $\{E_\lambda\}$）与 Stieltjes 积分 $T=\int\lambda\,dE_\lambda$。
-- **飞腾锚点**：**TLB 4.81× [E04](复用)** —— 谱测度 $E(\cdot)$ 是投影值测度 = 「分层寻址」：每个 Borel 集 $S$ 映射到一个正交投影 $E(S)$，如同 TLB 把地址范围映射到缓存页。Titchmarsh-Kodaira 公式说谱测度由边界行为唯一决定 = 地址翻译表由页表项唯一确定。Stieltjes 积分 $T=\int\lambda\,dE_\lambda$ = 沿谱族逐层累加，对应多级缓存逐级翻译。
+- **飞腾锚点**：**TLB 4.81× E04（`复用`）** —— 谱测度 $E(\cdot)$ 是投影值测度 = 「分层寻址」：每个 Borel 集 $S$ 映射到一个正交投影 $E(S)$，如同 TLB 把地址范围映射到缓存页。Titchmarsh-Kodaira 公式说谱测度由边界行为唯一决定 = 地址翻译表由页表项唯一确定。Stieltjes 积分 $T=\int\lambda\,dE_\lambda$ = 沿谱族逐层累加，对应多级缓存逐级翻译。
   🟢谱测度理论是事实；🟡 TLB 分层为类比。
 - **关键定理**：**正规算子谱定理 + Titchmarsh-Kodaira 公式** —— 有界正规算子 $T$ 存在唯一谱测度 $E$ 使 $T=\int z\,dE(z)$；对自伴算子，谱测度由 Weyl-Titchmarsh $m$-函数唯一确定：$d\langle E_\lambda x,x\rangle=\frac{1}{\pi}\operatorname{Im}m(\lambda+i0)\,d\lambda$。
 - **自测**：对 Laplacian $\Delta=-\frac{d^2}{dx^2}$ 在 $L^2(\mathbb{R})$ 上说明谱 $=[0,\infty)$（纯连续谱，无特征值）；验证 $f(\Delta)=(2\pi)^{-1}\int \hat f(\xi)e^{-i\xi x}\,d\xi$（函数演算 = Fourier 乘子）。

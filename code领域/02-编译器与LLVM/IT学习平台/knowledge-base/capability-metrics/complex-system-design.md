@@ -707,8 +707,8 @@ AI能诊断局部问题，但不能设计演化路径
 
 ## 练习文件
 
-- [练习模板](../practices/complex-system-design/template.md)
-- [练习示例](../practices/complex-system-design/example.md)
+- 练习模板（`../practices/complex-system-design/template.md`）
+- 练习示例（`../practices/complex-system-design/example.md`）
 
 ---
 

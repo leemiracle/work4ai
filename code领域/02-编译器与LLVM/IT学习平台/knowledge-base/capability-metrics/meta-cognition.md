@@ -486,8 +486,8 @@
 
 ## 练习记录
 
-- [练习模板](../practices/meta-cognition/template.md)
-- [练习示例](../practices/meta-cognition/example.md)
+- 练习模板（`../practices/meta-cognition/template.md`）
+- 练习示例（`../practices/meta-cognition/example.md`）
 
 ---
 

@@ -8,7 +8,7 @@
 
 ## 一、work4ai 原版：代码实证层（retrospective）
 
-work4ai 三层讲解宪法（[`../work4ai/README.md`](../../work4ai/README.md) §六）：
+work4ai 三层讲解宪法（`../work4ai/README.md`（`../../work4ai/README.md`） §六）：
 
 ```
 直觉层（Intuition）  →  数学层（Math）  →  代码实证层（Code）

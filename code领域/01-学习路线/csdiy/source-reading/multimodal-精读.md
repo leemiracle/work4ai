@@ -219,4 +219,4 @@ results = vectorstore.search(combined)
 
 ---
 
-*配套：[tinyembedding](../projects/tinyembedding/) | [tinyrag/vectorstore.py](../projects/tinyrag/vectorstore.py) | [transformer-attention-deep](transformer-attention-deep-精读.md)*
+*配套：tinyembedding（`../projects/tinyembedding/`） | [tinyrag/vectorstore.py](../projects/tinyrag/vectorstore.py) | [transformer-attention-deep](transformer-attention-deep-精读.md)*

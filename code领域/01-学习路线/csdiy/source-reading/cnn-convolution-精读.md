@@ -175,4 +175,4 @@ ConvNeXt: 用 CNN 技巧追赶 Transformer → 在某些任务上超越 ViT
 
 ---
 
-*配套：[tinycnn(原)](../projects/tinycnn/) | [csapp Ch6(cache局部性)](../notes/csapp-程序员视角.md) | [tinytorch/nn.py](../projects/tinytorch/nn.py)*
+*配套：tinycnn(原)（`../projects/tinycnn/`） | [csapp Ch6(cache局部性)](../notes/csapp-程序员视角.md) | [tinytorch/nn.py](../projects/tinytorch/nn.py)*

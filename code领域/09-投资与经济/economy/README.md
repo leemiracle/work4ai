@@ -13,67 +13,67 @@
 
 | 任务 | 交付物 | 路径 |
 |---|---|---|
-| 0. 资源核实 | 17 仓库一手核实表（含修正记录） | [`resources/01-repos-verified.md`](resources/01-repos-verified.md) |
-| 0. 资源地图 | 论文/项目/教材/数据库/工具/网站总汇 | [`resources/00-resource-map.md`](resources/00-resource-map.md) |
-| 1. 五域深度分析 | 规律/特点/难点/重点/问题 + 跨域共性 | [`analysis/10-domain-analysis.md`](analysis/10-domain-analysis.md) |
-| 2. 问题 + 解决方案 | 五域 × 问题 × 可落地方案对照 | [`analysis/11-domain-problems-solutions.md`](analysis/11-domain-problems-solutions.md) |
-| 3. 技术栈地图 | L1-L4 分层能力与技术总汇 | [`deliverables/20-tech-stack-map.md`](deliverables/20-tech-stack-map.md) |
-| 5. 创新点 | 14 个分级创新点 + 优先级矩阵 | [`deliverables/21-innovation-points.md`](deliverables/21-innovation-points.md) |
+| 0. 资源核实 | 17 仓库一手核实表（含修正记录） | `resources/01-repos-verified.md`（`resources/01-repos-verified.md`） |
+| 0. 资源地图 | 论文/项目/教材/数据库/工具/网站总汇 | `resources/00-resource-map.md`（`resources/00-resource-map.md`） |
+| 1. 五域深度分析 | 规律/特点/难点/重点/问题 + 跨域共性 | `analysis/10-domain-analysis.md`（`analysis/10-domain-analysis.md`） |
+| 2. 问题 + 解决方案 | 五域 × 问题 × 可落地方案对照 | `analysis/11-domain-problems-solutions.md`（`analysis/11-domain-problems-solutions.md`） |
+| 3. 技术栈地图 | L1-L4 分层能力与技术总汇 | `deliverables/20-tech-stack-map.md`（`deliverables/20-tech-stack-map.md`） |
+| 5. 创新点 | 14 个分级创新点 + 优先级矩阵 | `deliverables/21-innovation-points.md`（`deliverables/21-innovation-points.md`） |
 
 ### 二、AI 论文机会（v1.0-1.12，撞车核查后重定位）
 
 | 任务 | 交付物 | 路径 |
 |---|---|---|
-| 6. AI 论文机会（v1.0） | 程序员可写论文的全景地图 | [`deliverables/22-ai-paper-opportunities.md`](deliverables/22-ai-paper-opportunities.md) |
-| 6b. 撞车核查 | ⚠️ v1.0 蓝海判断的网络核查修正 | [`deliverables/23-paper-collision-check.md`](deliverables/23-paper-collision-check.md) |
-| 6c. 论文机会重定位 | 撞车后真正可做的论文点（v1.1，权威） | [`deliverables/25-repositioned-opportunities.md`](deliverables/25-repositioned-opportunities.md) |
-| 6d. R-1 实验设计 | spillover×SE 实证完整可执行设计 | [`deliverables/26-R1-experiment-design.md`](deliverables/26-R1-experiment-design.md) |
-| 6e. law 战略警告 | LawPM vs legalis-verifier 致命竞品对比 | [`deliverables/27-law-strategic-warning.md`](deliverables/27-law-strategic-warning.md) |
-| 6f. 5W3H 方向开拓 | 四方向系统提问（发散） | [`deliverables/28-5w3h-direction-exploration.md`](deliverables/28-5w3h-direction-exploration.md) |
-| 6g. 5W3H 深入结果 | P0 law 规模差 + P1 R-1 u'_i 双突破 | [`deliverables/29-5w3h-deepening-results.md`](deliverables/29-5w3h-deepening-results.md) |
-| 6h. R-1 算法核心 | Katz-Bonacich + Golub 平衡条件（**已跑通**） | [`deliverables/code/r1_spillover_balance.py`](deliverables/code/r1_spillover_balance.py) |
-| 6i. R-1 真实数据入口 | git log→共编图（**端到端跑通**） | [`deliverables/code/r1_coedit_graph.py`](deliverables/code/r1_coedit_graph.py) |
+| 6. AI 论文机会（v1.0） | 程序员可写论文的全景地图 | `deliverables/22-ai-paper-opportunities.md`（`deliverables/22-ai-paper-opportunities.md`） |
+| 6b. 撞车核查 | ⚠️ v1.0 蓝海判断的网络核查修正 | `deliverables/23-paper-collision-check.md`（`deliverables/23-paper-collision-check.md`） |
+| 6c. 论文机会重定位 | 撞车后真正可做的论文点（v1.1，权威） | `deliverables/25-repositioned-opportunities.md`（`deliverables/25-repositioned-opportunities.md`） |
+| 6d. R-1 实验设计 | spillover×SE 实证完整可执行设计 | `deliverables/26-R1-experiment-design.md`（`deliverables/26-R1-experiment-design.md`） |
+| 6e. law 战略警告 | LawPM vs legalis-verifier 致命竞品对比 | `deliverables/27-law-strategic-warning.md`（`deliverables/27-law-strategic-warning.md`） |
+| 6f. 5W3H 方向开拓 | 四方向系统提问（发散） | `deliverables/28-5w3h-direction-exploration.md`（`deliverables/28-5w3h-direction-exploration.md`） |
+| 6g. 5W3H 深入结果 | P0 law 规模差 + P1 R-1 u'_i 双突破 | `deliverables/29-5w3h-deepening-results.md`（`deliverables/29-5w3h-deepening-results.md`） |
+| 6h. R-1 算法核心 | Katz-Bonacich + Golub 平衡条件（**已跑通**） | `deliverables/code/r1_spillover_balance.py`（`deliverables/code/r1_spillover_balance.py`） |
+| 6i. R-1 真实数据入口 | git log→共编图（**端到端跑通**） | `deliverables/code/r1_coedit_graph.py`（`deliverables/code/r1_coedit_graph.py`） |
 
 ### 三、制度与治理认知提升体系（v1.13-1.15，项目灵魂）
 
 | 任务 | 交付物 | 路径 |
 |---|---|---|
-| L1 思维模型 | 认知地图：15 可迁移模型 + 4 元认知 | [`deliverables/30-cognition-map.md`](deliverables/30-cognition-map.md) |
-| L2 制度认知 | 机制设计（Vickrey 代码验证 + Arrow 边界） | [`deliverables/31-institution-mechanism-design.md`](deliverables/31-institution-mechanism-design.md) |
-| L3 治理认知 | 4 范式 + 多中心 + QV 代码验证 + 改造 5 步法 | [`deliverables/32-governance-cognition.md`](deliverables/32-governance-cognition.md) |
-| 体系总览 | 成熟度阶梯(L0→L4) + 数学路径 + 项目统一 | [`deliverables/33-cognition-system-overview.md`](deliverables/33-cognition-system-overview.md) |
+| L1 思维模型 | 认知地图：15 可迁移模型 + 4 元认知 | `deliverables/30-cognition-map.md`（`deliverables/30-cognition-map.md`） |
+| L2 制度认知 | 机制设计（Vickrey 代码验证 + Arrow 边界） | `deliverables/31-institution-mechanism-design.md`（`deliverables/31-institution-mechanism-design.md`） |
+| L3 治理认知 | 4 范式 + 多中心 + QV 代码验证 + 改造 5 步法 | `deliverables/32-governance-cognition.md`（`deliverables/32-governance-cognition.md`） |
+| 体系总览 | 成熟度阶梯(L0→L4) + 数学路径 + 项目统一 | `deliverables/33-cognition-system-overview.md`（`deliverables/33-cognition-system-overview.md`） |
 
 ### 三·补、认知体系的数学地基层（v1.17-1.25，9 块完整闭环 ✅）
 
 | 块 | 任务 | 交付物 | 路径 |
 |---|---|---|---|
-| 1 | 博弈论入门 | 纳什均衡/占优/混合策略（三层讲透） | [`deliverables/35-game-theory-intro.md`](deliverables/35-game-theory-intro.md) |
-| 1 | 博弈论验证 | 囚徒困境/协调/性别之战/石头剪刀布 | [`deliverables/code/gt_verify.py`](deliverables/code/gt_verify.py) |
-| 2 | 契约理论 | 委托代理/道德风险 b*=1/(1+rσ²) | [`deliverables/36-contract-theory.md`](deliverables/36-contract-theory.md) |
-| 2 | 契约验证 | 激励-保险权衡（已跑通） | [`deliverables/code/contract_verify.py`](deliverables/code/contract_verify.py) |
-| 3 | 拍卖理论 | RET/Myerson 最优拍卖（机制设计第三支柱） | [`deliverables/37-auction-theory.md`](deliverables/37-auction-theory.md) |
-| 3 | 拍卖验证 | 收益等价+保留价（蒙特卡洛 20 万次） | [`deliverables/code/auction_verify.py`](deliverables/code/auction_verify.py) |
-| 4 | 社会选择 | Arrow/Gibbard 不可能性（边界认知） | [`deliverables/38-social-choice.md`](deliverables/38-social-choice.md) |
-| 4 | 社会选择验证 | Condorcet/Borda/spoiler/弃保 | [`deliverables/code/social_choice_verify.py`](deliverables/code/social_choice_verify.py) |
-| 5 | 动态博弈 | SPE/Grim/Folk/TFT（时间与合作涌现） | [`deliverables/39-dynamic-game.md`](deliverables/39-dynamic-game.md) |
-| 5 | 动态验证 | 蜈蚣博弈/重复 PD/Rubinstein | [`deliverables/code/dynamic_verify.py`](deliverables/code/dynamic_verify.py) |
-| 6 | 贝叶斯博弈 | BNE/Spence 信号/Harsanyi（不完全信息） | [`deliverables/40-bayesian-game.md`](deliverables/40-bayesian-game.md) |
-| 6 | 贝叶斯验证 | 一价 BNE 推导/RET 复现/教育信号 | [`deliverables/code/bayesian_verify.py`](deliverables/code/bayesian_verify.py) |
-| 7 | **机制设计总论** | **实施理论/显示原理/Maskin（统合 7 块，最终收尾）** | [`deliverables/41-mechanism-design-synthesis.md`](deliverables/41-mechanism-design-synthesis.md) |
-| 📖 | **学习指南** | **9 块系统导航（学习顺序/Anki 20 卡/复习计划/自测题）** | [`deliverables/42-math-foundation-guide.md`](deliverables/42-math-foundation-guide.md) |
-| 🤝 | **合作博弈（第 8 块）** | **Shapley value/Core/Nash 讨价还价/SHAP（公平分配，接 R-1）** | [`deliverables/44-cooperative-game.md`](deliverables/44-cooperative-game.md) |
-| 🤝 | 合作博弈验证 | Shapley/Core/机场分摊/SHAP/Nash 讨价还价（已跑通） | [`deliverables/code/shapley_verify.py`](deliverables/code/shapley_verify.py) |
-| 🌐 | **网络博弈（第 9 块）** | **Ballester 2006/Katz-Bonacich/Golub 平衡（R-1 直接理论根基）** | [`deliverables/45-network-game.md`](deliverables/45-network-game.md) |
-| 🌐 | 网络博弈验证 | centrality/Ballester 均衡/Golub CV/谱半径（已跑通） | [`deliverables/code/network_verify.py`](deliverables/code/network_verify.py) |
-| 🔬 | **案例集** | **8 个真实制度分析（996/KPI/开源/平台/拍卖/投票/学历/谈判）** | [`deliverables/43-mechanism-design-cases.md`](deliverables/43-mechanism-design-cases.md) |
+| 1 | 博弈论入门 | 纳什均衡/占优/混合策略（三层讲透） | `deliverables/35-game-theory-intro.md`（`deliverables/35-game-theory-intro.md`） |
+| 1 | 博弈论验证 | 囚徒困境/协调/性别之战/石头剪刀布 | `deliverables/code/gt_verify.py`（`deliverables/code/gt_verify.py`） |
+| 2 | 契约理论 | 委托代理/道德风险 b*=1/(1+rσ²) | `deliverables/36-contract-theory.md`（`deliverables/36-contract-theory.md`） |
+| 2 | 契约验证 | 激励-保险权衡（已跑通） | `deliverables/code/contract_verify.py`（`deliverables/code/contract_verify.py`） |
+| 3 | 拍卖理论 | RET/Myerson 最优拍卖（机制设计第三支柱） | `deliverables/37-auction-theory.md`（`deliverables/37-auction-theory.md`） |
+| 3 | 拍卖验证 | 收益等价+保留价（蒙特卡洛 20 万次） | `deliverables/code/auction_verify.py`（`deliverables/code/auction_verify.py`） |
+| 4 | 社会选择 | Arrow/Gibbard 不可能性（边界认知） | `deliverables/38-social-choice.md`（`deliverables/38-social-choice.md`） |
+| 4 | 社会选择验证 | Condorcet/Borda/spoiler/弃保 | `deliverables/code/social_choice_verify.py`（`deliverables/code/social_choice_verify.py`） |
+| 5 | 动态博弈 | SPE/Grim/Folk/TFT（时间与合作涌现） | `deliverables/39-dynamic-game.md`（`deliverables/39-dynamic-game.md`） |
+| 5 | 动态验证 | 蜈蚣博弈/重复 PD/Rubinstein | `deliverables/code/dynamic_verify.py`（`deliverables/code/dynamic_verify.py`） |
+| 6 | 贝叶斯博弈 | BNE/Spence 信号/Harsanyi（不完全信息） | `deliverables/40-bayesian-game.md`（`deliverables/40-bayesian-game.md`） |
+| 6 | 贝叶斯验证 | 一价 BNE 推导/RET 复现/教育信号 | `deliverables/code/bayesian_verify.py`（`deliverables/code/bayesian_verify.py`） |
+| 7 | **机制设计总论** | **实施理论/显示原理/Maskin（统合 7 块，最终收尾）** | `deliverables/41-mechanism-design-synthesis.md`（`deliverables/41-mechanism-design-synthesis.md`） |
+| 📖 | **学习指南** | **9 块系统导航（学习顺序/Anki 20 卡/复习计划/自测题）** | `deliverables/42-math-foundation-guide.md`（`deliverables/42-math-foundation-guide.md`） |
+| 🤝 | **合作博弈（第 8 块）** | **Shapley value/Core/Nash 讨价还价/SHAP（公平分配，接 R-1）** | `deliverables/44-cooperative-game.md`（`deliverables/44-cooperative-game.md`） |
+| 🤝 | 合作博弈验证 | Shapley/Core/机场分摊/SHAP/Nash 讨价还价（已跑通） | `deliverables/code/shapley_verify.py`（`deliverables/code/shapley_verify.py`） |
+| 🌐 | **网络博弈（第 9 块）** | **Ballester 2006/Katz-Bonacich/Golub 平衡（R-1 直接理论根基）** | `deliverables/45-network-game.md`（`deliverables/45-network-game.md`） |
+| 🌐 | 网络博弈验证 | centrality/Ballester 均衡/Golub CV/谱半径（已跑通） | `deliverables/code/network_verify.py`（`deliverables/code/network_verify.py`） |
+| 🔬 | **案例集** | **8 个真实制度分析（996/KPI/开源/平台/拍卖/投票/学历/谈判）** | `deliverables/43-mechanism-design-cases.md`（`deliverables/43-mechanism-design-cases.md`） |
 
-> ✅ **数学地基 9 块完整闭环（7 核心 35-41 + 2 延伸 44-45）**：博弈论(35) + 契约(36) + 拍卖(37) + 社会选择(38) + 动态(39) + 贝叶斯(40) + 总论(41) + 合作博弈(44) + 网络博弈(45) = 机制设计 + 公平分配 + 网络结构的完整数学工具箱（[`33`](deliverables/33-cognition-system-overview.md) L4 改造能力的数学兑现，R-1 理论根基完整）。
+> ✅ **数学地基 9 块完整闭环（7 核心 35-41 + 2 延伸 44-45）**：博弈论(35) + 契约(36) + 拍卖(37) + 社会选择(38) + 动态(39) + 贝叶斯(40) + 总论(41) + 合作博弈(44) + 网络博弈(45) = 机制设计 + 公平分配 + 网络结构的完整数学工具箱（`33`（`deliverables/33-cognition-system-overview.md`） L4 改造能力的数学兑现，R-1 理论根基完整）。
 
 ### 四、赚钱与资源获取（v1.16，认知的现实应用）
 
 | 任务 | 交付物 | 路径 |
 |---|---|---|
-| 赚钱路线图 | 资产诊断 + T1-T4 路径 + 4 阶段 + 免费资源 | [`deliverables/34-money-resource-roadmap.md`](deliverables/34-money-resource-roadmap.md) |
+| 赚钱路线图 | 资产诊断 + T1-T4 路径 + 4 阶段 + 免费资源 | `deliverables/34-money-resource-roadmap.md`（`deliverables/34-money-resource-roadmap.md`） |
 
 ---
 
@@ -124,9 +124,9 @@
 ### ✅ 可行论文点
 | 点 | 状态 | 目标 | 说明 |
 |---|---|---|---|
-| **R-1** spillover×SE | 🔴 **降级**（v1.26 pilot+撞车）| — | 理论被 Golub 2024(arXiv:2411.08026)占领 + pilot H2 不成立；见 [`46`](deliverables/46-R1-pilot-report.md) |
+| **R-1** spillover×SE | 🔴 **降级**（v1.26 pilot+撞车）| — | 理论被 Golub 2024(arXiv:2411.08026)占领 + pilot H2 不成立；见 `46`（`deliverables/46-R1-pilot-report.md`） |
 | **R-2** 康威 topology | 🟡 数学向 | — | 须聚焦拓扑拆分避开 Mulongo sizing |
-| **R-6** Attention×OS | 🔴 **降级**（v1.27 撞车）| — | vLLM 2023(SOSP)+vAttention 2025(ASPLOS)占领同构；见 [`47`](deliverables/47-R6-collision-check.md) |
+| **R-6** Attention×OS | 🔴 **降级**（v1.27 撞车）| — | vLLM 2023(SOSP)+vAttention 2025(ASPLOS)占领同构；见 `47`（`deliverables/47-R6-collision-check.md`） |
 | **law A'** 全量中国法 cite 图 | 🟡 规模差 50 倍 | ICAIL 2027 | DeepLaw 垂直精选 vs LawPM 全量跨域 |
 
 ### ❌ 失效论文点（撞车放弃）
@@ -223,7 +223,7 @@ economy/
 
 ## 💰 赚钱与资源（v1.16，认知的现实应用）
 
-赚钱不是脱离认知/制度/治理——它就是制度(市场)与治理(监管)下的激励相容博弈。详见 [`deliverables/34-money-resource-roadmap.md`](deliverables/34-money-resource-roadmap.md)。
+赚钱不是脱离认知/制度/治理——它就是制度(市场)与治理(监管)下的激励相容博弈。详见 `deliverables/34-money-resource-roadmap.md`（`deliverables/34-money-resource-roadmap.md`）。
 
 - **资产诊断**：AI/LLM 全栈 + 形式化(Lean4) + 量化 + 4 深度项目 = 稀缺组合（护城河）。
 - **T1-T4 路径**：T1 短期现金流(外包) → T2 技能溢价(全职/远程) → T3 资产建设(开源/写作/课程/论文，复利) → T4 认知变现(咨询/研究)。

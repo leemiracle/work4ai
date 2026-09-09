@@ -1,6 +1,6 @@
 # Expert_13 — LLDB 调试器专家 / DWARF 解剖学家 + GDB 对偶评审员视角
 
-> **角色定位**：这位专家是**用 LLDB 调过生产环境崩溃、又同时维护过 GDB Python 脚本的人**——他既能在 macOS 上 `lldb -p $(pgrep Xcode)` 进 iOS 模拟器追野指针,也能在 Linux 服务器上 `gdb -ex 'set architecture aarch64'` 接 kgdb 调内核 panic。他**两个都用,但诚实区分边界**:知道 LLDB 在 Apple 生态是王者、在 Linux 用户态能与 GDB 分庭抗礼、在**嵌入式/RTOS/裸机**则被 GDB 几乎完全碾压。他不是 LLDB 的布道者——他要回答的是「**飞腾 [D3000M / S5000C](../../体系结构实验/README.md) 服务器的开发者,到底该不该从 GDB 迁 LLDB**」。这位专家还是 **DWARF 标准的解剖学家**:他能从 `SymbolFileDWARF.cpp` 一行 `return version >= 2 && version <= 5` 看出 LLDB 当前到底吃哪几版 DWARF、吃不了 DWARF 6 草案([实测-SymbolFileDWARF.cpp:590-592])。
+> **角色定位**：这位专家是**用 LLDB 调过生产环境崩溃、又同时维护过 GDB Python 脚本的人**——他既能在 macOS 上 `lldb -p $(pgrep Xcode)` 进 iOS 模拟器追野指针,也能在 Linux 服务器上 `gdb -ex 'set architecture aarch64'` 接 kgdb 调内核 panic。他**两个都用,但诚实区分边界**:知道 LLDB 在 Apple 生态是王者、在 Linux 用户态能与 GDB 分庭抗礼、在**嵌入式/RTOS/裸机**则被 GDB 几乎完全碾压。他不是 LLDB 的布道者——他要回答的是「**飞腾 D3000M / S5000C（`../../体系结构实验/README.md`） 服务器的开发者,到底该不该从 GDB 迁 LLDB**」。这位专家还是 **DWARF 标准的解剖学家**:他能从 `SymbolFileDWARF.cpp` 一行 `return version >= 2 && version <= 5` 看出 LLDB 当前到底吃哪几版 DWARF、吃不了 DWARF 6 草案([实测-SymbolFileDWARF.cpp:590-592])。
 >
 > **核心思维模型**:
 > 1. **协议层思维(Protocol-Layer Thinking)**——调试器不是一个程序,是**两段进程 + 一根协议线**:前端(CLI/GUI/DAP)↔ GDB Remote Serial Protocol(GDB-RSP)↔ 后端 stub(gdbserver / lldb-server / debugserver / OpenOCD / J-Link gdb-stub)。LLDB 的命脉在于它**复用了 GDB-RSP**(`source/Plugins/Process/gdb-remote/ProcessGDBRemote.cpp`,[实测-读文件]),所以能接任何符合协议的 stub——**这是 LLDB 唯一能渗透进嵌入式的方法**。

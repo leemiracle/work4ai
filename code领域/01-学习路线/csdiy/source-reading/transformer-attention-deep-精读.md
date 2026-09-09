@@ -182,4 +182,4 @@ x = x + Sublayer(LayerNorm(x))
 
 ---
 
-*配套：[nanoGPT精读](nanoGPT-读懂最小GPT.md) | [tinyllm/model.py](../projects/tinyllm/model.py) | [tinytransformer](../projects/tinytransformer/)*
+*配套：[nanoGPT精读](nanoGPT-读懂最小GPT.md) | [tinyllm/model.py](../projects/tinyllm/model.py) | tinytransformer（`../projects/tinytransformer/`）*

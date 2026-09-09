@@ -211,7 +211,7 @@ def : ProcessorModel<"generic", CortexA510Model, ProcessorFeatures.Generic,
 
 #### 2.3.2 飞腾用户的"正确"用法（但仍次优）
 
-飞腾 SDK 文档 `[推测-飞腾 SDK]` 推荐的编译选项是 `-march=armv8.4-a+simd+crypto+lse`（见飞腾项目 [扩展专题.md](../../体系结构实验/扩展专题.md) §3）。这会开启 feature，但**调度模型仍是 `generic`（CortexA510Model）**——因为 `-march` 只改 feature，不改 `-mcpu`，调度模型跟着 `-mcpu` 走。
+飞腾 SDK 文档 `[推测-飞腾 SDK]` 推荐的编译选项是 `-march=armv8.4-a+simd+crypto+lse`（见飞腾项目 扩展专题.md（`../../体系结构实验/扩展专题.md`） §3）。这会开启 feature，但**调度模型仍是 `generic`（CortexA510Model）**——因为 `-march` 只改 feature，不改 `-mcpu`，调度模型跟着 `-mcpu` 走。
 
 ```
 clang -march=armv8.4-a+simd+crypto+lse -O2 test.c
@@ -235,7 +235,7 @@ clang -march=armv8.4-a+simd+crypto+lse -mtune=cortex-a76 -O2 test.c
 
 **但 `-mtune=cortex-a76` 仍是次优**：A76 是 ARMv8.2，端口结构（`CortexA57Model` 的 `A57UnitALU/MAC/Div/LdSt/B/FPALU/FPMDS`）与 FCC862 的真实端口（飞腾实测 2 ALU/cycle + 2 NEON 通道 `[飞腾 E02]`）不一致。**真正的解药只有飞腾 upstream 一个 `AArch64SchedFTC86x.td`**（§3.2）。
 
-> **命脉级结论**：飞腾 FCC862 在主线 LLVM 的命运是"feature 能开（靠 -march）、调度永远错配（无专属模型）"。这与飞腾项目 [E11 §2.1](../../体系结构实验/Expert_11_Compiler_Research/README.md) 的 PhyGCC 分析形成对偶——PhyGCC 有 `FTC86x.md`（专属调度，10-18% 收益），主线 LLVM 没有。**飞腾的性能命运分裂在两个编译器之间：GCC 侧优化、LLVM 侧吃灰**。
+> **命脉级结论**：飞腾 FCC862 在主线 LLVM 的命运是"feature 能开（靠 -march）、调度永远错配（无专属模型）"。这与飞腾项目 E11 §2.1（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 的 PhyGCC 分析形成对偶——PhyGCC 有 `FTC86x.md`（专属调度，10-18% 收益），主线 LLVM 没有。**飞腾的性能命运分裂在两个编译器之间：GCC 侧优化、LLVM 侧吃灰**。
 
 ---
 
@@ -285,7 +285,7 @@ Layer 3: HWCAP 运行时检测（Linux kernel → getauxval）
 ═══════════════════════════════════════════════════════════════════════
 ```
 
-**飞腾 ARMv8.4 扩展在 AArch64 后端的覆盖实测**（对照飞腾 [扩展专题.md](../../体系结构实验/扩展专题.md) §1 能力矩阵）：
+**飞腾 ARMv8.4 扩展在 AArch64 后端的覆盖实测**（对照飞腾 扩展专题.md（`../../体系结构实验/扩展专题.md`） §1 能力矩阵）：
 
 | 飞腾特性 | AArch64 后端 Feature 定义 | `.td` 行号 | LLVM 是否支持 | 飞腾实测 |
 |---------|-------------------------|:--------:|:----------:|:------:|
@@ -435,7 +435,7 @@ def : ProcessorModel<"tsv110", TSV110Model, ProcessorFeatures.TSV110,
 
 3. **SME 是 2022-2026 最热的 AArch64 后端投资**：`AArch64SMEInstrInfo.td` + `SMEInstrFormats.td` + `SMEABIPass.cpp` + `MachineSMEABIPass.cpp` + `AArch64SMEAttributes.cpp/.h` + `SMEPeepholeOpt.cpp` + `SVEIntrinsicOpts.cpp`——一整套 SME 流水线。这是 Apple/ARM/华为在推的矩阵扩展（与 GPU 竞争）。飞腾完全缺席。
 
-> **战略叙事**：飞腾 ARMv8.4 在 AArch64 后端的处境是"底座覆盖完整（NEON/UDOT/SM3/SM4 都在）、前沿完全缺席（SVE/SVE2/SME/FP8 全无）"。**底座让飞腾"能跑"，前沿缺席让飞腾"跑不快"**。这与飞腾项目 [E21 AI 算力定位](../../体系结构实验/Expert_21_AI_Positioning/README.md) 的"AI 算力锚定 2017-2018 水位"战略伤疤是同一件事的两个视角——E21 从硬件 ISA 看，E08 从编译器后端看。
+> **战略叙事**：飞腾 ARMv8.4 在 AArch64 后端的处境是"底座覆盖完整（NEON/UDOT/SM3/SM4 都在）、前沿完全缺席（SVE/SVE2/SME/FP8 全无）"。**底座让飞腾"能跑"，前沿缺席让飞腾"跑不快"**。这与飞腾项目 E21 AI 算力定位（`../../体系结构实验/Expert_21_AI_Positioning/README.md`） 的"AI 算力锚定 2017-2018 水位"战略伤疤是同一件事的两个视角——E21 从硬件 ISA 看，E08 从编译器后端看。
 
 ---
 
@@ -449,7 +449,7 @@ def : ProcessorModel<"tsv110", TSV110Model, ProcessorFeatures.TSV110,
 
 2. **SVE/SME intrinsic**：更复杂，用 `arm_sve_sme_sema` 机制。`AArch64SVEInstrInfo.td` 里每条 SVE 指令可以挂 `SDNode` 和 intrinsic ID，clang 前端据此生成 `arm_sve.h`。**飞腾无 SVE → `arm_sve.h` 能 include 但 intrinsic 调用会编译失败**（因为 `FeatureSVE` 没开）。
 
-3. **飞腾实操**：飞腾开发者 `#include <arm_neon.h>` 后，`-march=armv8.4-a+dotprod+sm4` 即可用 `vdotq_s32`/`vsm4e_u32`。**这是飞腾拿 UDOT 16.9× / SM3 国密合规的唯一可靠路径**——靠自动向量化选不出 UDOT（见 [E11 §2.3.4](../../体系结构实验/Expert_11_Compiler_Research/README.md)），必须靠 intrinsic。
+3. **飞腾实操**：飞腾开发者 `#include <arm_neon.h>` 后，`-march=armv8.4-a+dotprod+sm4` 即可用 `vdotq_s32`/`vsm4e_u32`。**这是飞腾拿 UDOT 16.9× / SM3 国密合规的唯一可靠路径**——靠自动向量化选不出 UDOT（见 E11 §2.3.4（`../../体系结构实验/Expert_11_Compiler_Research/README.md`）），必须靠 intrinsic。
 
 **对偶判断**：如果换 GCC，`arm_neon.h` 是 GCC 手写维护的（`gcc/config/aarch64/arm_neon.h` 手写 vs clang TableGen 生成）。**LLVM 的 TableGen 生成机制更易扩展（加一条 SVE 指令 = 改一个 .td），GCC 的手写更难维护（每加一条要手写 intrinsic 包装）**。这是 LLVM 后端生态比 GCC 更活跃的微观原因之一。
 
@@ -525,7 +525,7 @@ def : ProcessorModel<"tsv110", TSV110Model, ProcessorFeatures.TSV110,
 
 1. **看不见运行时行为**：调度模型是**静态**的——它假设 FCC862 的端口负载均衡是固定的。但真实 workload 的 cache miss、分支预测、内存带宽饱和，调度模型一无所知。**一段"调度模型优化得很好"的代码，可能因为 cache 抖动实际跑得更慢**。这要靠 PGO（Profile-Guided Optimization）和 BOLT（[E12](../Expert_12_LLD_BOLT/README.md)）补。
 
-2. **看不见前端语义**：AArch64 后端 contributor 只看 IR/MIR，不看 C/C++ 源码。`-ffast-math` 改了 LoopVectorize 的 reduction 重关联（[E11 §2.5](../../体系结构实验/Expert_11_Compiler_Research/README.md)），这在后端看来只是"IR 形状变了"，后端不知道是 `-ffast-math` 在起作用。**后端是"被动接收者"，不是"决策者"**。
+2. **看不见前端语义**：AArch64 后端 contributor 只看 IR/MIR，不看 C/C++ 源码。`-ffast-math` 改了 LoopVectorize 的 reduction 重关联（E11 §2.5（`../../体系结构实验/Expert_11_Compiler_Research/README.md`）），这在后端看来只是"IR 形状变了"，后端不知道是 `-ffast-math` 在起作用。**后端是"被动接收者"，不是"决策者"**。
 
 3. **看不见硬件 errata**：飞腾 FCC862 可能有微架构 errata（某条指令在某些条件下结果错误），AArch64 后端不知道。这要靠 `[飞腾 E17 DFT]` 的 errata 文档喂给编译器（生成 workaround，类似 `AArch64A53Fix835769.cpp`）。
 
@@ -560,7 +560,7 @@ def : ProcessorModel<"tsv110", TSV110Model, ProcessorFeatures.TSV110,
 
 - **与 [E18 Phytium Adaptation](../Expert_18_Phytium_Adaptation/README.md) 一致**：E18 实测"主线 LLVM 零飞腾字符串"，本 E08 给出"这个零的工程含义 + 如何从零变有"。**E18 是诊断报告，E08 是专家会诊**。
 
-- **与飞腾 [E11 Compiler Research](../../体系结构实验/Expert_11_Compiler_Research/README.md) 一致**：飞腾 E11 讲 PhyGCC 的 `FTC86x.md`（GCC 侧），本 E08 讲主线 LLVM 的"零 FCC86x"（LLVM 侧）。**同一颗芯片，GCC 有表、LLVM 没表——两个视角拼出飞腾编译器战略全貌**。
+- **与飞腾 E11 Compiler Research（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 一致**：飞腾 E11 讲 PhyGCC 的 `FTC86x.md`（GCC 侧），本 E08 讲主线 LLVM 的"零 FCC86x"（LLVM 侧）。**同一颗芯片，GCC 有表、LLVM 没表——两个视角拼出飞腾编译器战略全貌**。
 
 ### 5.2 冲突（视角打架）
 
@@ -594,8 +594,8 @@ def : ProcessorModel<"tsv110", TSV110Model, ProcessorFeatures.TSV110,
 13. **[实测]** OpenXiangShan/llvm-project（LLVM 23.0.0git）. `AArch64Processors.td:1417`（generic=CortexA510Model）、`:833/1355/1544`（TSV110 三处）、`AArch64SchedTSV110.td:1-31`、`AArch64Features.td:132/108/212`、`AArch64.td:117-145`、`clang/lib/Driver/ToolChains/Arch/AArch64.cpp:69`。**全部行号锚点 2026-07-07 实测**。
 14. **[GitHub commit]** Huawei/HiSilicon TSV110 upstream 系列（D48617/D50897 等 Phabricator，2018-2019）. `[推测-LLVM git history]` —— 华为鲲鹏 920 调度模型 upstream 的 review 记录。
 15. **[报告]** 本项目 [Lens_03 SupplyChain](../Lenses/Lens_03_SupplyChain.md). AArch64 后端养育图（ARM/Apple/Qualcomm/Samsung/Cavium/Fujitsu/Ampere/NVIDIA/华为，飞腾缺席）。
-16. **[报告]** 飞腾项目 [Expert_11 Compiler Research](../../体系结构实验/Expert_11_Compiler_Research/README.md) §2.4. PhyGCC 的 `FTC86x.md` + 10-18% 调度收益。**本 E08 的 GCC 对偶**。
-17. **[报告]** 飞腾项目 [扩展专题.md](../../体系结构实验/扩展专题.md) §1. 飞腾 D3000 ARMv8.4 扩展能力矩阵（19 项实测）。**本 E08 的硬件锚点**。
+16. **[报告]** 飞腾项目 Expert_11 Compiler Research（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） §2.4. PhyGCC 的 `FTC86x.md` + 10-18% 调度收益。**本 E08 的 GCC 对偶**。
+17. **[报告]** 飞腾项目 扩展专题.md（`../../体系结构实验/扩展专题.md`） §1. 飞腾 D3000 ARMv8.4 扩展能力矩阵（19 项实测）。**本 E08 的硬件锚点**。
 18. **[社区]** LLVM Discourse. *AArch64 scheduling model* 讨论帖（2018-2026 多个）. `[推测-Discourse]` —— TSV110/Neoverse/Apple 调度模型 upstream 的社区讨论。
 19. **[社区]** Linaro. *LLVM AArch64 backend contributions* 年度报告. —— Linaro 是 ARM/Linux 生态对 LLVM AArch64 后端的重要贡献者（非厂商，但养着部分）。
 20. **[GitHub commit]** LLVM Project. `AArch64SchedAmpere1.td`（2022）/ `AArch64SchedOryon.td`（2024）/ `AArch64SchedOlympus.td`（2025）新增 commit. —— 近年新核 upstream 的案例（飞腾可参考的"如何加一颗核"）。
@@ -612,8 +612,8 @@ def : ProcessorModel<"tsv110", TSV110Model, ProcessorFeatures.TSV110,
 - [E18 Phytium Adaptation](../Expert_18_Phytium_Adaptation/README.md) —— 飞腾主线 LLVM 零字符串实测（本 E08 的诊断基础）。
 - [Lens_03 SupplyChain](../Lenses/Lens_03_SupplyChain.md) —— AArch64 后端养育图（飞腾缺席）。
 - [Lens_07 China Localization](../Lenses/Lens_07_China_Localization.md) —— 国产 CPU 编译器自主可控（与本 E08 的"upstream vs 自研"路线之争）。
-- 飞腾 [E11 Compiler Research](../../体系结构实验/Expert_11_Compiler_Research/README.md) —— PhyGCC 的 `FTC86x.md`（本 E08 的 GCC 对偶）。
-- 飞腾 [扩展专题.md](../../体系结构实验/扩展专题.md) —— ARMv8.4 扩展能力矩阵（本 E08 的硬件锚点）。
+- 飞腾 E11 Compiler Research（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） —— PhyGCC 的 `FTC86x.md`（本 E08 的 GCC 对偶）。
+- 飞腾 扩展专题.md（`../../体系结构实验/扩展专题.md`） —— ARMv8.4 扩展能力矩阵（本 E08 的硬件锚点）。
 
 ### 外部资源
 - **LLVM AArch64 后端源码**（`llvm/lib/Target/AArch64/`）—— 本 E08 全部行号锚点的来源。

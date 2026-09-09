@@ -12,11 +12,11 @@
 ## 0. 特异性测试 v2.0 自检（强制）
 
 > 本节按 [`改造蓝图_LLVM.md` §0.3](../改造蓝图_LLVM.md) 的双重门槛自检。本 Expert 同时满足三项：
-> - **(a) 飞腾工程实证**：引用飞腾项目 [View_01](../../体系结构实验/View_01_Compiler/README.md) 的 `-O0..-Ofast` 实测（-Ofast 比 -O3 快 4×）、[Expert_11 §2.3](../../体系结构实验/Expert_11_Compiler_Research/README.md) 的向量化失败诊断、[Lab05](../../体系结构实验/Lab05_并行与SIMD/README.md) 的 NEON GEMM 实测。
+> - **(a) 飞腾工程实证**：引用飞腾项目 View_01（`../../体系结构实验/View_01_Compiler/README.md`） 的 `-O0..-Ofast` 实测（-Ofast 比 -O3 快 4×）、Expert_11 §2.3（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 的向量化失败诊断、Lab05（`../../体系结构实验/Lab05_并行与SIMD/README.md`） 的 NEON GEMM 实测。
 > - **(b) 代码级实例**：全部以 `OpenXiangShan/llvm-project`（LLVM 23.0.0git）真实源码行号为锚——`LoopVectorize.cpp`（9963 行）、`AArch64TargetTransformInfo.cpp:3134`、`VPIntrinsics.def`（763 行 / 45 个 vp.* intrinsic）。不是 README 翻译。
 > - **(c) 对偶判断**：§2.5 给出 LLVM LoopVec vs GCC `tree-vectorizer` vs MLIR `vector` dialect 的三方对标表。
 >
-> **反向锚点（诚实披露）**：`grep -rn "FTC86\|Phytium" llvm/lib/Transforms/Vectorize/` = **零命中**。这意味着主线 LLVM 的向量化器对飞腾 FTC862 **零感知**，飞腾代码在线主线 LLVM 上跑的是通用 AArch64（Cortex-A 近似）成本模型——这正是飞腾向量化"半成功"的根因之一，与飞腾项目 [Expert_11 §3.2](../../体系结构实验/Expert_11_Compiler_Research/README.md) 的"提交 FTC86x 调度模型到主线"建议互为印证。
+> **反向锚点（诚实披露）**：`grep -rn "FTC86\|Phytium" llvm/lib/Transforms/Vectorize/` = **零命中**。这意味着主线 LLVM 的向量化器对飞腾 FTC862 **零感知**，飞腾代码在线主线 LLVM 上跑的是通用 AArch64（Cortex-A 近似）成本模型——这正是飞腾向量化"半成功"的根因之一，与飞腾项目 Expert_11 §3.2（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 的"提交 FTC86x 调度模型到主线"建议互为印证。
 
 ---
 
@@ -26,14 +26,14 @@
 
 1. **Loop Vectorizer 的 cost model 怎么读 TargetTransformInfo？** 不是抽象地"查表"——要看 `computeMaxVF()`（[实测-LoopVectorize.cpp:3574]）怎么问 `TTI.getRegisterBitWidth()`、`selectVectorizationFactor()`（[实测-LoopVectorize.cpp:4232]）怎么遍历候选 VF 算 `expectedCost`。**飞腾无 SVE 时，cost 怎么算？** `AArch64TTIImpl::getRegisterBitWidth`（[实测-TTI.cpp:3134]）对 `RGK_ScalableVector` 返回 `scalable(0)`——这一个返回值，让飞腾永远拿不到 scalable 向量化。
 2. **Vector Predication（VP）扩展——为什么 LLVM 要引入 `vp.*` intrinsic？** 不是"多一种写法"——是解决一个真实的工程债：SVE 用谓词寄存器 + 可变长，RVV 用 `v0.t` + AVL，AVX-512 用 `k` 掩码寄存器，三套机制语义相近但 IR 表达完全不同。`vp.add <4 x i32> %a, %b, mask=%m, evl=%n` 把三者统一成一个 intrinsic。**VP 与 SVE/RVV/AVX-512 的统一**进度如何？飞腾无 SVE 时 `vp.*` 还有用吗（答案是：NEON 也能 lower 部分 VP，靠 fold mask + select）？
-3. **SLP Vectorizer 的"超字并行"在飞腾 NEON 上的覆盖率到底多少？** 飞腾 [Expert_11 §2.3](../../体系结构实验/Expert_11_Compiler_Research/README.md) 引用了 SLP，但没给覆盖率数字。SLP 抓的是"基本块内 N 个独立标量运算"（如 `a.x*b.x, a.y*b.y, a.z*b.z, a.w*b.w` 四个独立乘法），这在图形/AI 代码里极常见。飞腾 NEON `<4 x float>` 正好对齐——但 SLP 的 cost model 同样依赖 TTI，飞腾无专用调度模型时 SLP 收益被低估。
+3. **SLP Vectorizer 的"超字并行"在飞腾 NEON 上的覆盖率到底多少？** 飞腾 Expert_11 §2.3（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 引用了 SLP，但没给覆盖率数字。SLP 抓的是"基本块内 N 个独立标量运算"（如 `a.x*b.x, a.y*b.y, a.z*b.z, a.w*b.w` 四个独立乘法），这在图形/AI 代码里极常见。飞腾 NEON `<4 x float>` 正好对齐——但 SLP 的 cost model 同样依赖 TTI，飞腾无专用调度模型时 SLP 收益被低估。
 4. **对偶：LLVM Loop Vectorizer vs GCC `tree-vectorizer` vs MLIR `vector` dialect。** 三者都在做向量化，但哲学迥异：LLVM 是"运行时 cost model 驱动"，GCC 是"静态启发式 + 数据引用向量"，MLIR 是"声明式 `vector.contract` + 渐进 lowering"。**谁在 AI 推理时代会赢？** 飞腾若选编译栈，选哪条路？
 5. **向量化的 legality 分析——alias analysis / loop dependence / memory disambiguation。** 这是向量化器最学术的部分。`LoopVectorizationLegality::canVectorizeMemory()`（[实测-Legality.cpp:1231]）调 `LoopAccessInfo`，后者跑依赖分析。**编译器怎么知道 `c[i]` 和 `a[i]` 会不会重叠？** TBAA（类型别名）、SCEV（下标演化）、运行时检查（loop versioning）三层防线。
-6. **Loop versioning（运行时别名检查）——飞腾代码里大量"半成功"案例。** 飞腾 [Expert_11 §2.3.1](../../体系结构实验/Expert_11_Compiler_Research/README.md) 指出，最常见的情况是编译器插入 `if (c+n <= a || a+n <= c) goto vector_loop; else goto scalar_loop;`，运行时一旦发现别名就走标量。**这种"双版本"在飞腾上的真实代价是多少？** 分支预测能覆盖吗？
-7. **Reduction 的向量化——FP 重关联（`-ffast-math`）vs IEEE 严格。** 飞腾 [View_01 实测](../../体系结构实验/View_01_Compiler/README.md)：`-O3` → 3.27 ms，`-Ofast`（`-O3 -ffast-math`）→ 0.83 ms，**整整 4×**。这个 4× 不是飞腾突然变快，是 `LoopVectorize` 的 reduction 处理从"单累加器串行"切到"4 独立累加器并行"，让飞腾 4-wide issue 终于吃饱。**这一刀切在哪里？** 在 `RecurrenceDescriptor` + `getArithmeticReductionCost`。
+6. **Loop versioning（运行时别名检查）——飞腾代码里大量"半成功"案例。** 飞腾 Expert_11 §2.3.1（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 指出，最常见的情况是编译器插入 `if (c+n <= a || a+n <= c) goto vector_loop; else goto scalar_loop;`，运行时一旦发现别名就走标量。**这种"双版本"在飞腾上的真实代价是多少？** 分支预测能覆盖吗？
+7. **Reduction 的向量化——FP 重关联（`-ffast-math`）vs IEEE 严格。** 飞腾 View_01 实测（`../../体系结构实验/View_01_Compiler/README.md`）：`-O3` → 3.27 ms，`-Ofast`（`-O3 -ffast-math`）→ 0.83 ms，**整整 4×**。这个 4× 不是飞腾突然变快，是 `LoopVectorize` 的 reduction 处理从"单累加器串行"切到"4 独立累加器并行"，让飞腾 4-wide issue 终于吃饱。**这一刀切在哪里？** 在 `RecurrenceDescriptor` + `getArithmeticReductionCost`。
 8. **Masked load/store / gather-scatter 在 NEON vs SVE vs AVX-512 的差异。** 这是谓词化的硬件落地。AVX-512 有 `vmaskmovps`，SVE 有 `ld1w {z0.s}, p0/z, [x0]`，**NEON 没有原生 masked load/store**——只能用 `cmp` + `bitwise select` 模拟，成本高 3–5 倍。飞腾缺失 masked memory 是 gather-scatter 密集循环（稀疏矩阵、哈希表）向量化的硬墙。
 9. **VPlan（Vectorization Plan）——LLVM 16+ 的新设计。** VPlan 把向量化从"边算边生成 IR"升级为"先规划一个完整计划（plan），再执行"。`VPlan.cpp` / `VPlanRecipes.cpp` / `VPlanTransforms.cpp` / `VPlanPredicator.cpp` 等 10+ 文件已全面接管。**VPlan 解决了什么老问题？** 解决了"外层循环向量化""嵌套向量化""谓词化方案选择"这些旧架构表达不出来的复杂决策。
-10. **飞腾 D3000M 上 UDOT 选不出——LoopVectorizer 是否会主动寻找 dotprod pattern？** 飞腾 [Expert_11 §2.3.4](../../体系结构实验/Expert_11_Compiler_Research/README.md) 给了案例：`sum += a[i]*b[i]`（int8）默认选不出 UDOT，因为前端把 int8 提升成 int32。**但 LLVM 23 是否有了改进？** `VPlanTransforms.cpp` 里有 `getPartialReductionCost`（[实测-VPlanTransforms.cpp:4383]）和 `getExtendedReductionCost`——这正是 dotprod pattern 的 cost 接口。答案是：LLVM 在改进，但飞腾要拿到红利，必须把 FTC86x 的 dotprod 能力**准确地填进 TTI**。
+10. **飞腾 D3000M 上 UDOT 选不出——LoopVectorizer 是否会主动寻找 dotprod pattern？** 飞腾 Expert_11 §2.3.4（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 给了案例：`sum += a[i]*b[i]`（int8）默认选不出 UDOT，因为前端把 int8 提升成 int32。**但 LLVM 23 是否有了改进？** `VPlanTransforms.cpp` 里有 `getPartialReductionCost`（[实测-VPlanTransforms.cpp:4383]）和 `getExtendedReductionCost`——这正是 dotprod pattern 的 cost 接口。答案是：LLVM 在改进，但飞腾要拿到红利，必须把 FTC86x 的 dotprod 能力**准确地填进 TTI**。
 
 ---
 
@@ -177,7 +177,7 @@ bool AArch64TTIImpl::shouldMaximizeVectorBandwidth(RegisterKind K) const {
 }
 ```
 
-**飞腾的 consolation prize**：NEON 模式下 `shouldMaximizeVectorBandwidth` 返回 `true`，鼓励 Loop Vectorizer 用满 128 位（即 VF=4 for fp32）。所以飞腾不是"不向量化"，而是"只向量化到 128 位固定宽度"。飞腾 [View_01 实测](../../体系结构实验/View_01_Compiler/README.md) `-O3` 生成 `fmla v.4s`（128 位 fp32 乘加）正是这个机制的结果。
+**飞腾的 consolation prize**：NEON 模式下 `shouldMaximizeVectorBandwidth` 返回 `true`，鼓励 Loop Vectorizer 用满 128 位（即 VF=4 for fp32）。所以飞腾不是"不向量化"，而是"只向量化到 128 位固定宽度"。飞腾 View_01 实测（`../../体系结构实验/View_01_Compiler/README.md`） `-O3` 生成 `fmla v.4s`（128 位 fp32 乘加）正是这个机制的结果。
 
 **Cost Model 选 VF 的心脏**（[实测-LoopVectorize.cpp:4232] `selectVectorizationFactor`）：
 
@@ -197,7 +197,7 @@ VectorizationFactor LoopVectorizationPlanner::selectVectorizationFactor() {
 }
 ```
 
-**飞腾在此处的隐性损失**：`expectedCost(VF)` 内部大量调 TTI 的 `getArithmeticInstrCost`、`getMemoryOpCost`、`getVectorInstrCost`。**这些函数的成本表对 FTC862 是不准的**——因为主线 LLVM 没有 FTC86x 的调度模型（[实测-Vectorize 目录 grep FTC86 零命中]，反向锚点）。飞腾用的是通用 Cortex-A 模型的近似成本，可能导致：(a) 一个本该向量化的循环被误判"不值得"（成本虚高）；(b) 一个向量化反而更慢的循环被误判"值得"（成本虚低）。**这就是飞腾 [Expert_11 §3.2](../../体系结构实验/Expert_11_Compiler_Research/README.md) 强烈建议"提交 FTC86x 调度模型到主线 LLVM"的向量化侧理由**——填准成本表，是提升向量化质量性价比最高的工程动作。
+**飞腾在此处的隐性损失**：`expectedCost(VF)` 内部大量调 TTI 的 `getArithmeticInstrCost`、`getMemoryOpCost`、`getVectorInstrCost`。**这些函数的成本表对 FTC862 是不准的**——因为主线 LLVM 没有 FTC86x 的调度模型（[实测-Vectorize 目录 grep FTC86 零命中]，反向锚点）。飞腾用的是通用 Cortex-A 模型的近似成本，可能导致：(a) 一个本该向量化的循环被误判"不值得"（成本虚高）；(b) 一个向量化反而更慢的循环被误判"值得"（成本虚低）。**这就是飞腾 Expert_11 §3.2（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 强烈建议"提交 FTC86x 调度模型到主线 LLVM"的向量化侧理由**——填准成本表，是提升向量化质量性价比最高的工程动作。
 
 ---
 
@@ -313,7 +313,7 @@ vec4 mul(vec4 a, vec4 b) {
 
 **图表 ③：Reduction 向量化前后（飞腾 -Ofast 的 4× 机理）**
 
-这是硬问题 7 的核心图示，解释飞腾 [View_01](../../体系结构实验/View_01_Compiler/README.md) 实测的 `-O3 → -Ofast` 4× 加速。
+这是硬问题 7 的核心图示，解释飞腾 View_01（`../../体系结构实验/View_01_Compiler/README.md`） 实测的 `-O3 → -Ofast` 4× 加速。
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
@@ -350,7 +350,7 @@ vec4 mul(vec4 a, vec4 b) {
 
 **这一刀切在哪里（代码级）**：`RecurrenceDescriptor`（识别 reduction 变量）+ `getArithmeticReductionCost`（[实测-VPlanRecipes.cpp:1171, 2950]）+ `canVectorizeFPMath`（[实测-LoopVectorize.cpp:9587]，调 `LoopVectorizationLegality::canVectorizeFPMath` [实测-Legality.cpp:1345]）。当 `-ffast-math` 关闭时，`canVectorizeFPMath` 检查 `FastMathFlags::allowReassoc`，若为 false 则 reduction 只能单累加器串行。
 
-**飞腾工程教训（来自 E11）**：飞腾 [View_01 实测](../../体系结构实验/View_01_Compiler/README.md) 的 `-Ofast` 4× 是飞腾 4-wide issue 红利的真正兑现。但代价是 IEEE 754 精度损失——金融/物理仿真代码绝不能全局开 `-ffast-math`，只能逐算子开（ML 推理的 matmul/softmax 可以，损失函数不行）。
+**飞腾工程教训（来自 E11）**：飞腾 View_01 实测（`../../体系结构实验/View_01_Compiler/README.md`） 的 `-Ofast` 4× 是飞腾 4-wide issue 红利的真正兑现。但代价是 IEEE 754 精度损失——金融/物理仿真代码绝不能全局开 `-ffast-math`，只能逐算子开（ML 推理的 matmul/softmax 可以，损失函数不行）。
 
 ---
 
@@ -400,11 +400,11 @@ bool LoopVectorizationLegality::canVectorize(bool UseVPlanNativePath) {
 
 **内存依赖分析（`canVectorizeMemory`，[实测-Legality.cpp:1231]）** 调 `LoopAccessInfo`（LAA），后者是 LLVM 循环依赖分析的集大成者：
 
-- **TBAA（Type-Based Alias Analysis）**：基于 C/C++ 类型规则推断不重叠。`float *a` 和 `int *b` 默认不别名（严格别名规则）。但 `-fno-strict-aliasing` 会让 TBAA 失效——飞腾 [Expert_11 §2.3.1](../../体系结构实验/Expert_11_Compiler_Research/README.md) 提醒：**这是飞腾向量化失败最隐蔽的杀手**。
+- **TBAA（Type-Based Alias Analysis）**：基于 C/C++ 类型规则推断不重叠。`float *a` 和 `int *b` 默认不别名（严格别名规则）。但 `-fno-strict-aliasing` 会让 TBAA 失效——飞腾 Expert_11 §2.3.1（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 提醒：**这是飞腾向量化失败最隐蔽的杀手**。
 - **SCEV（Scalar Evolution）**：分析下标演化，`a[i]` 与 `a[i+1]` 的距离可计算 → 证明不重叠。
 - **运行时检查（loop versioning）**：静态分析失败时，插入运行时指针比较（下一节详述）。
 
-**循环携带依赖**：`isReductionPHI`（[实测-Legality.cpp:885]）识别 reduction 变量。依赖距离（dependence distance）决定生死——距离 0 独立可并行；距离 1 且 reduction 可重排；距离 1 且 recurrence（如 Horner）不可向量化。飞腾 [Expert_11 §2.3.2](../../体系结构实验/Expert_11_Compiler_Research/README.md) 的 Horner 案例正是 distance-1 recurrence。
+**循环携带依赖**：`isReductionPHI`（[实测-Legality.cpp:885]）识别 reduction 变量。依赖距离（dependence distance）决定生死——距离 0 独立可并行；距离 1 且 reduction 可重排；距离 1 且 recurrence（如 Horner）不可向量化。飞腾 Expert_11 §2.3.2（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 的 Horner 案例正是 distance-1 recurrence。
 
 ---
 
@@ -430,7 +430,7 @@ if (c+n <= a || a+n <= c) {       // 运行时别名检查：不重叠？
 }
 ```
 
-**飞腾的"半成功"画像**（来自 [Expert_11 §2.3.1](../../体系结构实验/Expert_11_Compiler_Research/README.md)）：
+**飞腾的"半成功"画像**（来自 Expert_11 §2.3.1（`../../体系结构实验/Expert_11_Compiler_Research/README.md`））：
 - **好消息**：运行时检查开销极小（1 次 `cmp` + 1 次分支，飞腾 1–2 周期），循环长时摊薄。分支预测器在 `c` 与 `a/b` 实际不重叠的常见情况下会正确预测走向量循环。
 - **坏消息**：一旦运行时发现别名（`c` 真的与 `a` 重叠），飞腾走标量回退，**彻底丢掉 NEON**。这是飞腾代码 `-fopt-info-vec` 最常报的 "loop versioned for vectorization because of possible aliasing"——编译器"尽力了"，但留下了性能悬崖。
 - **修法（飞腾实操）**：加 `restrict` 关键字（`float * restrict c`），编译器直接信任，跳过检查，纯 NEON。或用 `__builtin_assume_aligned` + `restrict` 组合。
@@ -456,7 +456,7 @@ if (c+n <= a || a+n <= c) {       // 运行时别名检查：不重叠？
 - **条件流处理**（`if (pred[i]) out[k++] = in[i]`）：飞腾用 `cmp` + `bsl` 模拟，成本 3–5×，向量化收益被模拟开销吃掉。
 - **AI 推理的 attention/embedding gather**：这是 LLM 推理的热点，飞腾无 gather → 只能手写或退标量。
 
-**这就是飞腾向量化覆盖率 20–30%（NEON）vs SVE 平台 40–60% 的物理根因**（飞腾 [Expert_11 §2.3.3](../../体系结构实验/Expert_11_Compiler_Research/README.md) 估算）——不是算法笨，是 ISA 没给硬件武器。VP intrinsic（§2.3）在飞腾上 lower 时，也受此限制——`vp.load` 带 mask 的版本在 NEON 上展开成 `cmp`+`bsl`，性能收益有限。
+**这就是飞腾向量化覆盖率 20–30%（NEON）vs SVE 平台 40–60% 的物理根因**（飞腾 Expert_11 §2.3.3（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 估算）——不是算法笨，是 ISA 没给硬件武器。VP intrinsic（§2.3）在飞腾上 lower 时，也受此限制——`vp.load` 带 mask 的版本在 NEON 上展开成 `cmp`+`bsl`，性能收益有限。
 
 ---
 
@@ -474,7 +474,7 @@ if (c+n <= a || a+n <= c) {       // 运行时别名检查：不重叠？
 ```
 
 **VPlan 的工程价值**：
-1. **外层循环向量化**：嵌套循环（如 GEMM 的三重循环）可以选择向量化哪一层。VPlan 能表达"外层向量化 + 内层标量"的方案。飞腾 [Lab05](../../体系结构实验/Lab05_并行与SIMD/README.md) GEMM 优化的 `ikj` 循环交换，理论上 Loop Vectorizer 配合 VPlan 能自动选对层——但实际常需手写 micro-kernel。
+1. **外层循环向量化**：嵌套循环（如 GEMM 的三重循环）可以选择向量化哪一层。VPlan 能表达"外层向量化 + 内层标量"的方案。飞腾 Lab05（`../../体系结构实验/Lab05_并行与SIMD/README.md`） GEMM 优化的 `ikj` 循环交换，理论上 Loop Vectorizer 配合 VPlan 能自动选对层——但实际常需手写 micro-kernel。
 2. **谓词化方案比较**：`VPlanPredicator.cpp` 能生成多种谓词化方案（fold-tail-by-masking、scalar-epilogue），cost model 选最优。飞腾无 SVE 时，谓词化方案受限，但仍比旧架构灵活。
 3. **dotprod pattern 识别**：`VPlanTransforms.cpp:4383` 的 `getPartialReductionCost`（[实测]）——这正是 UDOT 选出的 cost 接口（见 §2.10）。
 
@@ -484,7 +484,7 @@ if (c+n <= a || a+n <= c) {       // 运行时别名检查：不重叠？
 
 ### 2.10 飞腾 UDOT 选不出——LoopVectorizer 是否主动找 dotprod pattern？
 
-硬问题 10。这是飞腾 INT8 推理的命门。飞腾 [Expert_11 §2.3.4](../../体系结构实验/Expert_11_Compiler_Research/README.md) 案例：
+硬问题 10。这是飞腾 INT8 推理的命门。飞腾 Expert_11 §2.3.4（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 案例：
 
 ```c
 int32_t dot_int8(const int8_t *a, const int8_t *b, int n) {
@@ -502,8 +502,8 @@ int32_t dot_int8(const int8_t *a, const int8_t *b, int n) {
 **但问题在飞腾侧**：`getPartialReductionCost` 的答案**完全取决于 TTI 是否声明 FTC862 支持 dotprod**。飞腾是 ARMv8.4，有 UDOT（dotprod 扩展），但主线 LLVM 的 AArch64 后端需要 `-march=armv8.4-a+dotprod` 或 `-mcpu=<支持dotprod的cpu>` 才会启用。**飞腾若没在编译选项里指定，UDOT 永远选不出**。
 
 **飞腾的实操路径**：
-1. **编译选项**：`-march=armv8.4-a+dotprod` 或 PhyGCC/PhyClang 默认开（飞腾 [Expert_11 §2.4](../../体系结构实验/Expert_11_Compiler_Research/README.md) 提到 PhyGCC 默认开 UDOT 模式匹配）。
-2. **手写 intrinsic**（最可靠）：飞腾 [Expert_05](../../体系结构实验/Expert_05_AI_Inference/README.md) 的 16.9× 加速全部来自手写 `vdotq_s32`。
+1. **编译选项**：`-march=armv8.4-a+dotprod` 或 PhyGCC/PhyClang 默认开（飞腾 Expert_11 §2.4（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 提到 PhyGCC 默认开 UDOT 模式匹配）。
+2. **手写 intrinsic**（最可靠）：飞腾 Expert_05（`../../体系结构实验/Expert_05_AI_Inference/README.md`） 的 16.9× 加速全部来自手写 `vdotq_s32`。
 3. **等 LLVM 上游改进**：`getPartialReductionCost` 是 2023+ 的新机制，飞腾用新 LLVM 版本（≥17）才能受益。飞腾 Yocto 用 LLVM 13（[实测-phytium_repos]），拿不到这个红利。
 
 **诚实判断**：LoopVectorizer 在**主动找** dotprod pattern（VPlanTransforms 证明），但找到后能否选出 UDOT，**取决于 TTI 声明 + 编译选项 + LLVM 版本**三重条件。飞腾在 2026 年的现状是：硬件有 UDOT，编译器栈（LLVM 13）太旧，自动向量化基本选不出，必须手写。**这是飞腾 INT8 算力"理论上有、实际拿不到"的编译器侧根因**。
@@ -530,12 +530,12 @@ int32_t dot_int8(const int8_t *a, const int8_t *b, int n) {
 ### 3.3 飞腾工程教训（锁死与可改）
 
 **锁死（无解）**：
-1. **无 SVE 谓词寄存器**——条件循环向量化覆盖率被砍一半。ISA 层级缺失，编译器无法补。要解只能等 D4000 补 SVE（受 ARM v9 授权限制，见飞腾 [Expert_21](../../体系结构实验/Expert_21_AI_Positioning/README.md)）。
+1. **无 SVE 谓词寄存器**——条件循环向量化覆盖率被砍一半。ISA 层级缺失，编译器无法补。要解只能等 D4000 补 SVE（受 ARM v9 授权限制，见飞腾 Expert_21（`../../体系结构实验/Expert_21_AI_Positioning/README.md`））。
 2. **无 gather/scatter**——稀疏/间接寻址循环 100% 退标量。同上，ISA 锁死。
 3. **NEON 固定 128 位**——VF 硬上限，无 scalable 红利。
 
 **可改（工程动作）**：
-1. **提交 FTC86x 调度模型到主线 LLVM**（与飞腾 [Expert_11 §3.2](../../体系结构实验/Expert_11_Compiler_Research/README.md) 一致）——让 cost model 对飞腾准确，是提升向量化质量性价比最高的动作。
+1. **提交 FTC86x 调度模型到主线 LLVM**（与飞腾 Expert_11 §3.2（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 一致）——让 cost model 对飞腾准确，是提升向量化质量性价比最高的动作。
 2. **PhyClang 默认开 `+dotprod+fp16`**——确保 UDOT/FP16 算力默认可用，而非要用户手写 `-march`。
 3. **升级 Yocto LLVM 到 ≥17**——飞腾 Yocto 用 LLVM 13（[实测]），拿不到 VPlanTransforms 的 dotprod cost 改进、VP 的成熟支持。
 4. **文档化"飞腾向量化最佳实践"**——`restrict` 必加、`-ffast-math` 逐算子开、UDOT 用 intrinsic、loop versioning 的性能悬崖。这些是飞腾开发者最该知道的，但飞腾 SDK 文档罕有提及。
@@ -555,7 +555,7 @@ int32_t dot_int8(const int8_t *a, const int8_t *b, int n) {
 
 一个激进的反方：**2026 年，自动向量化是"上个时代的优化"，AI 推理时代的热点全靠手写/intrinsic/MLIR，投资 Loop Vectorizer 不如投资 MLIR `vector` dialect 和手写算子库**。论据：
 - LLM 推理的 GEMM/Attention，没有任何一个生产部署靠 LLVM Loop Vectorizer——全是 cuBLAS/oneDNN/手写 NEON。
-- 向量化器的边际收益趋零：`-O2` 到 `-O3`（开向量化）在通用代码上只快 ~2%（飞腾 [View_01](../../体系结构实验/View_01_Compiler/README.md) 实测 3.34→3.27 ms）。
+- 向量化器的边际收益趋零：`-O2` 到 `-O3`（开向量化）在通用代码上只快 ~2%（飞腾 View_01（`../../体系结构实验/View_01_Compiler/README.md`） 实测 3.34→3.27 ms）。
 - MLIR 在更高层做张量级优化，lowering 到 LLVM 时向量化已基本完成，Loop Vectorizer 只是"扫尾"。
 
 **这个反方有道理但不完全对**：向量化器的价值在**长尾与通用代码**——飞腾服务器跑的数据库/网络栈/中间件，90% 是通用 C/C++，没人手写优化。向量化器把这 90% 从 `-O0` 拉到 `-O2/-O3`，整体性能提 3–4×。**向量化器不是冠军，是基础设施。基础设施烂，冠军也跑不快**。且 LLVM Loop Vectorizer 的技术（cost model、legality、VPlan）是 MLIR `vector` dialect 的知识基础——放弃 Loop Vectorizer 等于放弃人才储备。
@@ -569,13 +569,13 @@ int32_t dot_int8(const int8_t *a, const int8_t *b, int n) {
 - **与 [E03 Pass 框架](../Expert_03_Pass_Framework/README.md) 一致**：Loop Vectorizer / SLP Vectorizer 是 New PM 下 `PassInfoMixin` 的标准变换 Pass，返回 `PreservedAnalyses`。E03 讲 Pass 骨架，本 Expert 讲骨架上跑的具体算法。两者一致：New PM 的精确分析失效让向量化器能复用 `LoopAccessInfo`、`ScalarEvolution` 而不必每次重算。
 - **与 [E04 中端优化](../Expert_04_Middle_End_Opt/README.md) 一致**：Loop Vectorizer 依赖 LICM（循环不变量外提）、LoopUnroll（展开触发向量化）等中端 Pass 铺路。E04 讲"中端边际收益趋零"，但向量化是中端的**例外**——它仍是 `-O3` 相对 `-O2` 的主要增益来源（飞腾 View_01 实测 3.34→3.27 ms）。
 - **与 [E05 CodeGen](../Expert_05_CodeGen_SelectionDAG_GlobalISel/README.md) 一致**：向量化器生成 IR 后，由 SelectionDAG/GlobalISel lower 成 NEON/SVE 指令。UDOT 能否最终选出，取决于 SelectionDAG 的 pattern match（E05）+ 向量化器的 cost（本 Expert）两层。两视角互为因果。
-- **与飞腾 [Expert_11](../../体系结构实验/Expert_11_Compiler_Research/README.md) 一致**：E11 §2.3 给向量化失败的飞腾实测案例，本 Expert 给 LLVM 源码级机理。E11 是现象，本 Expert 是根因。E11 说"UDOT 选不出"，本 Expert 指出是 `getPartialReductionCost` + TTI 声明 + LLVM 版本三重条件。
+- **与飞腾 Expert_11（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 一致**：E11 §2.3 给向量化失败的飞腾实测案例，本 Expert 给 LLVM 源码级机理。E11 是现象，本 Expert 是根因。E11 说"UDOT 选不出"，本 Expert 指出是 `getPartialReductionCost` + TTI 声明 + LLVM 版本三重条件。
 
 ### 5.2 冲突（视角打架）
 
 - **与 [E11 GPU/异构后端](../Expert_11_GPU_Heterogeneous_Backend/README.md) 部分冲突**：E11 论证"GPU/异构是 AI 算力未来"，本 Expert 暗示"CPU 向量化仍是基础"。在飞腾无 GPU 的现实下，向量化器是飞腾 CPU 算力的唯一自动化来源——但 E11 会说"CPU 向量化再好也比不过 GPU/NPU 专用算力"。**这是"通用基础设施 vs 专用加速器"的路线之争**，飞腾的处境是两者都缺。
 - **与 MLIR `vector` dialect 路线潜在冲突**：MLIR 派认为"循环级向量化是旧范式，张量级 `vector.contract` 才是未来"。本 Expert 反驳：MLIR 最终 lowering 到 LLVM IR，仍经过 Loop Vectorizer 扫尾；且非 AI 代码（通用 C/C++）MLIR 不管，只能靠 Loop Vectorizer。**两者是分工不是替代**，但 MLIR 确实在蚕食 Loop Vectorizer 的"AI 算子"地盘。
-- **与飞腾 [Expert_21 AI 算力战略家](../../体系结构实验/Expert_21_AI_Positioning/README.md) 部分冲突**：E21 说"飞腾无 BF16/I8MM/SVE 是战略伤疤，AI 算力锁死"。本 Expert 部分认同（ISA 锁死），但反驳"编译器无用论"：即便无 SVE，若把 NEON 向量化覆盖率从 20% 拉到 35%（填准 TTI + 用户教育 + `restrict`），飞腾通用代码还能再榨 1.5–2×。**E21 是战略悲观，本 Expert 是工程乐观**。
+- **与飞腾 Expert_21 AI 算力战略家（`../../体系结构实验/Expert_21_AI_Positioning/README.md`） 部分冲突**：E21 说"飞腾无 BF16/I8MM/SVE 是战略伤疤，AI 算力锁死"。本 Expert 部分认同（ISA 锁死），但反驳"编译器无用论"：即便无 SVE，若把 NEON 向量化覆盖率从 20% 拉到 35%（填准 TTI + 用户教育 + `restrict`），飞腾通用代码还能再榨 1.5–2×。**E21 是战略悲观，本 Expert 是工程乐观**。
 
 ---
 
@@ -607,10 +607,10 @@ int32_t dot_int8(const int8_t *a, const int8_t *b, int n) {
 19. **[实测]** `grep -rn "FTC86\|Phytium" llvm/lib/Transforms/Vectorize/` = **零命中**（反向锚点：主线向量化器无飞腾感知）。
 
 ### 飞腾工程实证（[实测]/[报告]）
-20. **[实测]** 飞腾项目 [View_01_Compiler](../../体系结构实验/View_01_Compiler/README.md)：`-O0..-Ofast` 在 D3000M 上 dot_product 实测（-O3 3.27ms → -Ofast 0.83ms，4×）。
-21. **[实测]** 飞腾项目 [Expert_11_Compiler_Research §2.3](../../体系结构实验/Expert_11_Compiler_Research/README.md)：向量化失败诊断（别名/依赖/无SVE/UDOT）。
-22. **[实测]** 飞腾项目 [Lab05_并行与SIMD](../../体系结构实验/Lab05_并行与SIMD/README.md)：NEON GEMM 优化全栈（40 GFLOPS/core 理论）。
-23. **[实测]** 飞腾项目 [Expert_05_AI_Inference](../../体系结构实验/Expert_05_AI_Inference/README.md)：UDOT 16.9× 加速（手写 intrinsic）。
+20. **[实测]** 飞腾项目 View_01_Compiler（`../../体系结构实验/View_01_Compiler/README.md`）：`-O0..-Ofast` 在 D3000M 上 dot_product 实测（-O3 3.27ms → -Ofast 0.83ms，4×）。
+21. **[实测]** 飞腾项目 Expert_11_Compiler_Research §2.3（`../../体系结构实验/Expert_11_Compiler_Research/README.md`）：向量化失败诊断（别名/依赖/无SVE/UDOT）。
+22. **[实测]** 飞腾项目 Lab05_并行与SIMD（`../../体系结构实验/Lab05_并行与SIMD/README.md`）：NEON GEMM 优化全栈（40 GFLOPS/core 理论）。
+23. **[实测]** 飞腾项目 Expert_05_AI_Inference（`../../体系结构实验/Expert_05_AI_Inference/README.md`）：UDOT 16.9× 加速（手写 intrinsic）。
 24. **[报告]** 飞腾 `phytium_repos` Yocto LLVM recipe（`PV = "13.0.1"`）。[实测-phytium_repos]
 
 ### 标准
@@ -627,8 +627,8 @@ int32_t dot_int8(const int8_t *a, const int8_t *b, int n) {
 - [E08 AArch64 后端](../Expert_08_AArch64_Backend/README.md) —— `AArch64TargetTransformInfo.cpp` 的 TTI 实现（本 Expert 反复引用）。
 - [E10 RISC-V 后端](../Expert_10_RISCV_Backend/README.md) —— RVV 可变长向量与 SVE 的对偶，VP intrinsic 的另一受益者。
 - [E11 GPU/异构后端](../Expert_11_GPU_Heterogeneous_Backend/README.md) —— GPU 向量化 vs CPU 向量化的路线之争。
-- 飞腾 [Expert_11](../../体系结构实验/Expert_11_Compiler_Research/README.md) —— 向量化失败的飞腾实测案例（本 Expert 是其源码级深化）。
-- 飞腾 [View_01](../../体系结构实验/View_01_Compiler/README.md) —— `-O` 等级实测数据来源。
+- 飞腾 Expert_11（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） —— 向量化失败的飞腾实测案例（本 Expert 是其源码级深化）。
+- 飞腾 View_01（`../../体系结构实验/View_01_Compiler/README.md`） —— `-O` 等级实测数据来源。
 
 ### 外部资源
 - **LLVM Vectorizers 文档**（llvm.org/docs/Vectorizers.html）—— Loop / SLP 向量化用户指南。

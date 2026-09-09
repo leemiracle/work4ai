@@ -12,20 +12,20 @@
 
 | 代码 | 一级学科 | 英文名称 | 研究对象 | 词典 |
 |------|---------|----------|---------|------|
-| 0701 | 数学 | Mathematics | 数量、结构、空间、变化 | [数学词典](./0701_mathematics.md) ✅ |
-| 0702 | 物理学 | Physics | 物质、能量、时空、相互作用 | [物理词典](./0702_physics.md) ✅ |
-| 0703 | 化学 | Chemistry | 物质组成、结构、性质、变化 | [化学词典](./0703_chemistry.md) |
-| 0704 | 天文学 | Astronomy | 天体、宇宙 | [天文学词典](./0704_astronomy.md) |
-| 0705 | 地理学 | Geography | 地理环境、人地关系 | [地理学词典](./0705_geography.md) |
-| 0706 | 大气科学 | Atmospheric Science | 大气现象、气候系统 | [大气科学词典](./0706_atmospheric.md) |
-| 0707 | 海洋科学 | Oceanography | 海洋物理、化学、生物、地质 | [海洋科学词典](./0707_oceanography.md) |
-| 0708 | 地球物理学 | Geophysics | 地球内部结构、物理场 | [地球物理词典](./0708_geophysics.md) |
-| 0709 | 地质学 | Geology | 地球物质、构造、演化 | [地质学词典](./0709_geology.md) |
-| 0710 | 生物学 | Biology | 生命现象、生物体 | [生物学词典](./0710_biology.md) |
-| 0711 | 系统科学 | Systems Science | 复杂系统、系统演化 | [系统科学词典](./0711_systems.md) |
-| 0712 | 科学技术史 | History of S&T | 科学技术发展历程 | [科技史词典](./0712_history.md) |
-| 0713 | 生态学 | Ecology | 生物与环境关系 | [生态学词典](./0713_ecology.md) |
-| 0714 | 统计学 | Statistics | 数据收集、分析、推断 | [统计学词典](./0714_statistics.md) |
+| 0701 | 数学 | Mathematics | 数量、结构、空间、变化 | 数学词典（`./0701_mathematics.md`） ✅ |
+| 0702 | 物理学 | Physics | 物质、能量、时空、相互作用 | 物理词典（`./0702_physics.md`） ✅ |
+| 0703 | 化学 | Chemistry | 物质组成、结构、性质、变化 | 化学词典（`./0703_chemistry.md`） |
+| 0704 | 天文学 | Astronomy | 天体、宇宙 | 天文学词典（`./0704_astronomy.md`） |
+| 0705 | 地理学 | Geography | 地理环境、人地关系 | 地理学词典（`./0705_geography.md`） |
+| 0706 | 大气科学 | Atmospheric Science | 大气现象、气候系统 | 大气科学词典（`./0706_atmospheric.md`） |
+| 0707 | 海洋科学 | Oceanography | 海洋物理、化学、生物、地质 | 海洋科学词典（`./0707_oceanography.md`） |
+| 0708 | 地球物理学 | Geophysics | 地球内部结构、物理场 | 地球物理词典（`./0708_geophysics.md`） |
+| 0709 | 地质学 | Geology | 地球物质、构造、演化 | 地质学词典（`./0709_geology.md`） |
+| 0710 | 生物学 | Biology | 生命现象、生物体 | 生物学词典（`./0710_biology.md`） |
+| 0711 | 系统科学 | Systems Science | 复杂系统、系统演化 | 系统科学词典（`./0711_systems.md`） |
+| 0712 | 科学技术史 | History of S&T | 科学技术发展历程 | 科技史词典（`./0712_history.md`） |
+| 0713 | 生态学 | Ecology | 生物与环境关系 | 生态学词典（`./0713_ecology.md`） |
+| 0714 | 统计学 | Statistics | 数据收集、分析、推断 | 统计学词典（`./0714_statistics.md`） |
 
 ---
 

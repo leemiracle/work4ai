@@ -11,4 +11,4 @@ python3 main.py --help
 ```
 
 ## csdiy 交叉
-参见 [PROJECTS.md](../PROJECTS.md) 和 [COVERAGE.md](../COVERAGE.md)
+参见 PROJECTS.md（`../PROJECTS.md`） 和 COVERAGE.md（`../COVERAGE.md`）

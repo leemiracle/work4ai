@@ -369,6 +369,6 @@ X =df A & B & C...
 
 ---
 
-**返回**：[认识论总目录](./README.md)
+**返回**：认识论总目录（`./README.md`）
 
-**下一卷**：[伦理学](../volume3/ethics/01_normative_ethics.md)
+**下一卷**：伦理学（`../volume3/ethics/01_normative_ethics.md`）

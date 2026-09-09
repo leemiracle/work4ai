@@ -15,14 +15,14 @@
 | 模块 | 学科领域 | 文件名 | 状态 |
 |------|---------|--------|------|
 | 模块1 | 马克思主义哲学 | [01_marxist_philosophy.md](./01_marxist_philosophy.md) | ✅ |
-| 模块2 | 中国哲学 | [02_chinese_philosophy.md](./02_chinese_philosophy.md) | ✅ |
-| 模块3 | 西方哲学 | [03_western_philosophy.md](./03_western_philosophy.md) | ✅ |
-| 模块4 | 逻辑学 | [04_logic.md](./04_logic.md) | ✅ |
-| 模块5 | 伦理学 | [05_ethics.md](./05_ethics.md) | ✅ |
-| 模块6 | 美学 | [06_aesthetics.md](./06_aesthetics.md) | ✅ |
-| 模块7 | 宗教学 | [07_religious_studies.md](./07_religious_studies.md) | ✅ |
-| 模块8 | 科学技术哲学 | [08_philosophy_of_science_technology.md](./08_philosophy_of_science_technology.md) | ✅ |
-| 模块9 | 现代哲学流派与新兴领域 | [09_modern_emerging_philosophy.md](./09_modern_emerging_philosophy.md) | ✅ |
+| 模块2 | 中国哲学 | 02_chinese_philosophy.md（`./02_chinese_philosophy.md`） | ✅ |
+| 模块3 | 西方哲学 | 03_western_philosophy.md（`./03_western_philosophy.md`） | ✅ |
+| 模块4 | 逻辑学 | 04_logic.md（`./04_logic.md`） | ✅ |
+| 模块5 | 伦理学 | 05_ethics.md（`./05_ethics.md`） | ✅ |
+| 模块6 | 美学 | 06_aesthetics.md（`./06_aesthetics.md`） | ✅ |
+| 模块7 | 宗教学 | 07_religious_studies.md（`./07_religious_studies.md`） | ✅ |
+| 模块8 | 科学技术哲学 | 08_philosophy_of_science_technology.md（`./08_philosophy_of_science_technology.md`） | ✅ |
+| 模块9 | 现代哲学流派与新兴领域 | 09_modern_emerging_philosophy.md（`./09_modern_emerging_philosophy.md`） | ✅ |
 
 ---
 
@@ -120,4 +120,4 @@
 
 ---
 
-**下一步**：选择您感兴趣的模块开始学习，或查看[综合术语索引](./10_comprehensive_index.md)
+**下一步**：选择您感兴趣的模块开始学习，或查看综合术语索引（`./10_comprehensive_index.md`）

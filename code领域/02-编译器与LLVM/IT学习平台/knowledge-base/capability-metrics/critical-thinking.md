@@ -345,8 +345,8 @@ A导致B，B导致C，A导致C（不当因果链）。
 
 ## 练习记录
 
-- [练习模板](../practices/critical-thinking/template.md)
-- [练习示例](../practices/critical-thinking/example.md)
+- 练习模板（`../practices/critical-thinking/template.md`）
+- 练习示例（`../practices/critical-thinking/example.md`）
 
 ---
 

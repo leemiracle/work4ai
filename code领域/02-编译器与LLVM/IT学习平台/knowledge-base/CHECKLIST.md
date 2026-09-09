@@ -129,7 +129,7 @@
 - [ ] 制定下一季度改进计划：___________
 
 #### 转型阶段对照
-根据 [ROADMAP.md](../ROADMAP.md) 评估:
+根据 ROADMAP.md（`../ROADMAP.md`） 评估:
 
 **当前阶段**: Phase X
 

@@ -160,4 +160,4 @@ class BloomFilter:
 
 ---
 
-*配套：[leveldb-lsm-精读.md](leveldb-lsm-精读.md) | [tinysearch](../projects/tinysearch/) | [tinydb](../projects/tinydb/)*
+*配套：[leveldb-lsm-精读.md](leveldb-lsm-精读.md) | tinysearch（`../projects/tinysearch/`） | [tinydb](../projects/tinydb/)*

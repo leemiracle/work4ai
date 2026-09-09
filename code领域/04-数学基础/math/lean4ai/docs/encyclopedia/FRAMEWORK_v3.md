@@ -543,4 +543,4 @@ I. 当代前沿 (Contemporary Frontiers) [500词条]
 
 ---
 
-**下一步**：查看[完整词条示例](./example_entry.md)
+**下一步**：查看完整词条示例（`./example_entry.md`）

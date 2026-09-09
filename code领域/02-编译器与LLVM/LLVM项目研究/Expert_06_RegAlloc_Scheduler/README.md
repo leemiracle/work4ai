@@ -1,6 +1,6 @@
 # Expert_06 — 寄存器分配与指令调度专家视角
 
-> **角色定位**：这位专家是 **LLVM CodeGen 后端的核心算法工程师**——他维护 `RegAllocGreedy.cpp`（2994 行 / 114 KB [GitHub]）、`MachineScheduler.cpp`（4995 行 / 188 KB [GitHub]）、`CalcSpillWeights.cpp`（392 行 / 13.9 KB [GitHub]）、`LiveIntervals.cpp` 和整套 MC layer。他的日常不是选 `-O2` 还是 `-O3`（那是 [View_01](../../../体系结构实验/View_01_Compiler/) 的活），而是：**给定一个 SSA 形式的 MIR 函数，如何把它降级到有限的物理寄存器上，同时让指令排列对微架构友好？** 他能在 `llc -debug-only=regalloc` 的 dump 输出里看出一个虚拟寄存器为何被溢出，能在 `llc -debug-only=misched` 里看出一条 NEON 指令为何排在了关键路径上。
+> **角色定位**：这位专家是 **LLVM CodeGen 后端的核心算法工程师**——他维护 `RegAllocGreedy.cpp`（2994 行 / 114 KB [GitHub]）、`MachineScheduler.cpp`（4995 行 / 188 KB [GitHub]）、`CalcSpillWeights.cpp`（392 行 / 13.9 KB [GitHub]）、`LiveIntervals.cpp` 和整套 MC layer。他的日常不是选 `-O2` 还是 `-O3`（那是 View_01（`../../../体系结构实验/View_01_Compiler/`） 的活），而是：**给定一个 SSA 形式的 MIR 函数，如何把它降级到有限的物理寄存器上，同时让指令排列对微架构友好？** 他能在 `llc -debug-only=regalloc` 的 dump 输出里看出一个虚拟寄存器为何被溢出，能在 `llc -debug-only=misched` 里看出一条 NEON 指令为何排在了关键路径上。
 >
 > **核心思维模型**：
 > 1. **SSA → LiveIntervals → RegAlloc → Sched → MC pipeline**：编译器后端是一条"抽象下降"流水线。SSA 层有无限虚拟寄存器，LiveIntervals 把活跃性算出来，RegAlloc 在有限的物理寄存器里做 NP-hard 的分配，Scheduler 在微架构约束下重排指令，MC layer 把 MachineInstr 编码成字节。**每一层都是独立算法论文的战场**。
@@ -912,10 +912,10 @@ def FTC862UnitLdSt  : ProcResource<1>;  // 飞腾 1 Load/Store 端口 [推测]
 
 ### 资源指引
 
-详见 [`领域资源库_LLVM.md`](../../领域资源库_LLVM.md) §RegAlloc 章节。核心入口：
+详见 `领域资源库_LLVM.md`（`../../领域资源库_LLVM.md`） §RegAlloc 章节。核心入口：
 - LLVM `lib/CodeGen/` 源码（本地 `/data/usershare/ai/riscv/OpenXiangShan/llvm-project/llvm/lib/CodeGen/`）
 - AArch64 调度模型（本地 `llvm/lib/Target/AArch64/AArch64Sched*.td`，34 个文件）
-- 飞腾实测数据：[飞腾 Expert_11 §2.2](../../体系结构实验/Expert_11_Compiler_Research/README.md)
+- 飞腾实测数据：飞腾 Expert_11 §2.2（`../../体系结构实验/Expert_11_Compiler_Research/README.md`）
 - MLGO 项目：[Google AI Blog 2021](https://ai.googleblog.com/) + `MLRegAllocEvictAdvisor.cpp`
 
 ### 飞腾就绪度判断

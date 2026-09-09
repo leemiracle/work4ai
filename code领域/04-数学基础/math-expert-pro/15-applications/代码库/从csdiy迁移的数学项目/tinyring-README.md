@@ -8,4 +8,4 @@ python3 main.py
 ```
 
 ## 参照
-参见 [PROJECTS.md](../PROJECTS.md)
+参见 PROJECTS.md（`../PROJECTS.md`）

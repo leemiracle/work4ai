@@ -818,11 +818,11 @@
 
 ## 🔗 相关模块
 
-- [体质/生物人类学](./biological_anthropology.md)：人类的生物基础
-- [语言人类学](./04_linguistic_anthropology.md)：语言与文化
-- [考古学](./03_archaeology.md)：物质文化与过去
-- [医学人类学](./06_medical_anthropology.md)：健康与文化
+- 体质/生物人类学（`./biological_anthropology.md`）：人类的生物基础
+- 语言人类学（`./04_linguistic_anthropology.md`）：语言与文化
+- 考古学（`./03_archaeology.md`）：物质文化与过去
+- 医学人类学（`./06_medical_anthropology.md`）：健康与文化
 
 ---
 
-**下一模块**：[体质/生物人类学 - 人类的生物基础](./biological_anthropology.md)
+**下一模块**：体质/生物人类学 - 人类的生物基础（`./biological_anthropology.md`）

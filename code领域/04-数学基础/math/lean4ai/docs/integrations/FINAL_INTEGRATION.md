@@ -599,7 +599,7 @@ AI 代理: 10+ 个
 ### 核心文档
 - [README.md](./README.md) - 项目总览
 - [FINAL_INTEGRATION.md](./FINAL_INTEGRATION.md) - 本文档 ⭐
-- [MATHLIB_GUIDE.md](./MATHLIB_GUIDE.md) - Mathlib4 指南
+- MATHLIB_GUIDE.md（`./MATHLIB_GUIDE.md`） - Mathlib4 指南
 
 ### 整合文档
 - [AWESOME_AGILE_INTEGRATION.md](./AWESOME_AGILE_INTEGRATION.md)
@@ -607,9 +607,9 @@ AI 代理: 10+ 个
 - [FOUR_DIMENSIONAL_INTEGRATION.md](./FOUR_DIMENSIONAL_INTEGRATION.md)
 
 ### 学习资源
-- [LEARNING_PATHS.md](./LEARNING_PATHS.md)
-- [QUICK_REFERENCE.md](./QUICK_REFERENCE.md)
-- [NEXT_STEPS.md](./NEXT_STEPS.md)
+- LEARNING_PATHS.md（`./LEARNING_PATHS.md`）
+- QUICK_REFERENCE.md（`./QUICK_REFERENCE.md`）
+- NEXT_STEPS.md（`./NEXT_STEPS.md`）
 
 ### 外部资源
 - **Lean4**: https://lean-lang.org

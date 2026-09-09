@@ -1,7 +1,7 @@
 # Position Paper 大纲 · 系统域 AlphaProof 的先验修正
 
 > **状态**：大纲就绪，待扩写（R4 建议 6 个月内出 arXiv 预印占位蓝海）
-> **理论锚点**：[Limit of RLVR](../explorations/rl/05-paper-limit-of-rlvr.md)（arXiv:2504.13837, NeurIPS 2025 Oral）
+> **理论锚点**：Limit of RLVR（`../explorations/rl/05-paper-limit-of-rlvr.md`）（arXiv:2504.13837, NeurIPS 2025 Oral）
 > **核心蓝海**：R4 确认 L2.5+L3 教学 同时 ≥3 的竞品 = 0；B1 确认系统域 RL+形式化 近乎空白
 
 ---

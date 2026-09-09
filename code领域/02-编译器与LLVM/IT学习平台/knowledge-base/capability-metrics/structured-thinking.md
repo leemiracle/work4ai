@@ -415,8 +415,8 @@
 
 ## 练习记录
 
-- [练习模板](../practices/structured-thinking/template.md)
-- [练习示例](../practices/structured-thinking/example.md)
+- 练习模板（`../practices/structured-thinking/template.md`）
+- 练习示例（`../practices/structured-thinking/example.md`）
 
 ---
 

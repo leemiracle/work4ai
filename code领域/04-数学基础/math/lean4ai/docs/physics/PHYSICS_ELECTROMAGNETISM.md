@@ -1032,9 +1032,9 @@ P₂ ≈ P₁（理想）
 
 ## 🔗 下一步学习
 
-- **[热力学与统计物理](./PHYSICS_THERMODYNAMICS.md)** - 热与熵
+- **热力学与统计物理（`./PHYSICS_THERMODYNAMICS.md`）** - 热与熵
 - **[狭义相对论](./PHYSICS_SPECIAL_RELATIVITY.md)** - 电磁学与相对论
-- **[量子场论](./PHYSICS_QFT.md)** - 量子电动力学
+- **量子场论（`./PHYSICS_QFT.md`）** - 量子电动力学
 
 ---
 

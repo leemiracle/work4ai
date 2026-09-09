@@ -532,8 +532,8 @@
 
 ## 练习记录
 
-- [练习模板](../practices/strategy/template.md)
-- [练习示例](../practices/strategy/example.md)
+- 练习模板（`../practices/strategy/template.md`）
+- 练习示例（`../practices/strategy/example.md`）
 
 ---
 

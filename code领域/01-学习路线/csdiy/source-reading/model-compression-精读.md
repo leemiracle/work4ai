@@ -220,4 +220,4 @@ LLaMA-70B 部署优化：
 
 ---
 
-*配套：[mixed-precision精读](mixed-precision-精读.md) | [fine-tuning-landscape精读](fine-tuning-landscape-精读.md) | [tinyquantize](../projects/tinyquantize/)*
+*配套：[mixed-precision精读](mixed-precision-精读.md) | [fine-tuning-landscape精读](fine-tuning-landscape-精读.md) | tinyquantize（`../projects/tinyquantize/`）*

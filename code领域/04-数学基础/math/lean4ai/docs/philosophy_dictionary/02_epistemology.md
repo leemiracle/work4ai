@@ -733,10 +733,10 @@
 ## 🔗 相关模块
 
 - [形而上学](./01_metaphysics.md)：真理的形而上学
-- [科学哲学](./07_philosophy_of_science.md)：科学知识
-- [语言哲学](./05_philosophy_of_language.md)：真理的语义学
-- [心灵哲学](./06_philosophy_of_mind.md)：认知过程
+- 科学哲学（`./07_philosophy_of_science.md`）：科学知识
+- 语言哲学（`./05_philosophy_of_language.md`）：真理的语义学
+- 心灵哲学（`./06_philosophy_of_mind.md`）：认知过程
 
 ---
 
-**下一模块**：[伦理学 - 什么是善？](./03_ethics.md)
+**下一模块**：伦理学 - 什么是善？（`./03_ethics.md`）

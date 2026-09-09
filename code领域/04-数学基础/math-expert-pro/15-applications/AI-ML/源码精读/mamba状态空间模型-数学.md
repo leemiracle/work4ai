@@ -190,4 +190,4 @@ Mamba-2: 利用状态空间对偶性（SSD）
 
 ---
 
-*配套：[attention-variants精读](attention-variants-精读.md) | [transformer-attention-deep](transformer-attention-deep-精读.md) | [flash-attention精读](flash-attention-精读.md)*
+*配套：attention-variants精读（`attention-variants-精读.md`） | transformer-attention-deep（`transformer-attention-deep-精读.md`） | flash-attention精读（`flash-attention-精读.md`）*

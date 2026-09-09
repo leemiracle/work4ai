@@ -745,4 +745,4 @@
 
 ---
 
-**下一模块**：[模块2：中国哲学](./02_chinese_philosophy.md)
+**下一模块**：模块2：中国哲学（`./02_chinese_philosophy.md`）

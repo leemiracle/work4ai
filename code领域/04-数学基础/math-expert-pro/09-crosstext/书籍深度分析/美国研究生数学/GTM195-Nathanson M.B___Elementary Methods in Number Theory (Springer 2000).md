@@ -1,6 +1,6 @@
 # 28 视角深度分析：GTM195-Nathanson M.B___Elementary Methods in Number Theory (Springer 2000)
 
-> 自动生成自 [书籍索引](../书籍索引/) · 主题：**数论**
+> 自动生成自 [书籍索引](../../书籍索引) · 主题：**数论**
 
 
 ## 📊 元数据

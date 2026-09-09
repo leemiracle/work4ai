@@ -198,4 +198,4 @@ def quantize_fp32_to_int8(weights):
 
 ---
 
-*配套：[tinyquantize](../projects/tinyquantize/) | [nanoGPT精读](nanoGPT-读懂最小GPT.md) | [weight-init精读](weight-init-精读.md)*
+*配套：tinyquantize（`../projects/tinyquantize/`） | [nanoGPT精读](nanoGPT-读懂最小GPT.md) | [weight-init精读](weight-init-精读.md)*

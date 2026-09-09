@@ -473,8 +473,8 @@ theorem prediction_in_interval (sprints : List SprintData) :
 
 ### 我们的项目文档
 - [README.md](./README.md) - 项目总览
-- [LEARNING_PATHS.md](./LEARNING_PATHS.md) - 学习路径
-- [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) - 快速参考
+- LEARNING_PATHS.md（`./LEARNING_PATHS.md`） - 学习路径
+- QUICK_REFERENCE.md（`./QUICK_REFERENCE.md`） - 快速参考
 
 ### Mathlib4 资源
 - [官方文档](https://leanprover-community.github.io/mathlib4_docs)

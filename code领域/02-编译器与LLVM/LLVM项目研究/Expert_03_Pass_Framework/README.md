@@ -20,7 +20,7 @@
 5. **Pass Manager 的层次结构**——Module / Function / Loop / CGSCC / Region（New PM 四层 + Machine）为什么要这么切？每个层次对应什么 IR 单元？`createFunctionToLoopPassAdaptor`（[实测-LoopPassManager.h:442]）这种"适配器"是怎么把高层 Pass 套进低层流水线的？
 6. **Pipeline 颗粒度**——`OptimizerEarlyEPCallback` / `VectorizerStartEPCallback` 这些"扩展点"（Extension Point）是什么？CGSCC-to-Function 降级（`createCGSCCToFunctionPassAdaptor`）什么时候触发？飞腾若想在向量化前插一个 FTC86x 专用 Pass，应该挂在哪个 EP？
 7. **LICM 在 New PM 下的 loop-nest 处理——LoopNestPass 是什么时候新增的？** LICM 从 `run(Loop&)` 升级到 `run(LoopNest&)`（[实测-LICM.h:94]），让 LICM 能一次看整个循环嵌套而不是逐个循环。这对飞腾多嵌套 GEMM 循环的优化意味着什么？
-8. **飞腾 PhyGCC 的 GIMPLE Pass 对应 LLVM 的哪些 IR Pass？**（GIMPLE→IR 对照表）PhyGCC 改的是 GCC 的 `.md`/调度模型（飞腾项目 [Expert_11](../../体系结构实验/Expert_11_Compiler_Research/README.md) §2.4 已详述），但 GCC 的 Pass pipeline（gimple pass / rtl pass）与 LLVM 的 IR Pass 在概念上同构却不同名——这一对偶判断决定了"飞腾编译器知识能否从 GCC 迁到 LLVM"。
+8. **飞腾 PhyGCC 的 GIMPLE Pass 对应 LLVM 的哪些 IR Pass？**（GIMPLE→IR 对照表）PhyGCC 改的是 GCC 的 `.md`/调度模型（飞腾项目 Expert_11（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） §2.4 已详述），但 GCC 的 Pass pipeline（gimple pass / rtl pass）与 LLVM 的 IR Pass 在概念上同构却不同名——这一对偶判断决定了"飞腾编译器知识能否从 GCC 迁到 LLVM"。
 9. **Pass 的成本模型——PassManager 如何决定 Pass 执行顺序、是否触发？** 不是"写死的顺序"，而是 `PassBuilder::buildModuleOptimizationPipeline`（[实测-PassBuilderPipelines.cpp:1478]）这个 1700 行函数里，每个 `addPass` 的位置都是论文 + 实测调出来的。哪些 Pass 的边际收益已经趋零（E04 的命题），哪些 Pass 的顺序错一个就掉 10%？
 10. **Fuzzing / Alive2 验证 Pass 正确性——LLVM 内部测试基础设施是什么？** 一个写错的 Pass 就是 miscompilation，是编译器的"心脏骤停"。Alive2（Nuno Lopes 团队，[论文-Lopes 2022]）怎么用 SMT 自动证明 `transform before → after` 保持语义？`llvm-reduce` + `bugpoint` 怎么把 miscompilation 最小化？飞腾若写私有 Pass，必须接上这条验证链，否则就是"定时炸弹"。
 
@@ -336,7 +336,7 @@ PassPluginLibraryInfo llvmGetPassPluginInfo() {
 | **(A) Fork LLVM，改 Target 源码** | 高（每次 rebase 主线要重合并） | 高（私有 fork 维护债） | 生产定型 |
 | **(B) out-of-tree plugin** | **低（不重编 LLVM）** | 低（API 版本要跟） | **原型验证** |
 
-**飞腾实战建议**：NPU 后端的**第一阶段原型**，用 PassPlugin API（姿势 B）验证可行性——飞腾的 NPU 指令选择、寄存器分配策略，先用 plugin 形式跑通 `IR → NPU 指令`的闭环，验证性能，再决定要不要 fork。这样飞腾不会一上来就背上"私有 LLVM fork 永久 rebase"的巨债（飞腾项目 [Expert_11](../../体系结构实验/Expert_11_Compiler_Research/README.md) §2.4 已指出 PhyGCC 落后主线 1-2 版本就是这种债的实例）。
+**飞腾实战建议**：NPU 后端的**第一阶段原型**，用 PassPlugin API（姿势 B）验证可行性——飞腾的 NPU 指令选择、寄存器分配策略，先用 plugin 形式跑通 `IR → NPU 指令`的闭环，验证性能，再决定要不要 fork。这样飞腾不会一上来就背上"私有 LLVM fork 永久 rebase"的巨债（飞腾项目 Expert_11（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） §2.4 已指出 PhyGCC 落后主线 1-2 版本就是这种债的实例）。
 
 **plugin 的唯一坑**：`LLVM_PLUGIN_API_VERSION`。LLVM 主线每改一次 PassBuilder 的回调签名，这个版本号就涨。**飞腾的 plugin 必须和它链接的 LLVM 主版本一致**（LLVM 13 的 plugin 不能直接在 LLVM 15 上加载，会报 API 版本不匹配）。这就是为什么 llvm-tutor 对每个 LLVM 大版本都有独立分支。
 
@@ -357,7 +357,7 @@ PassPluginLibraryInfo llvmGetPassPluginInfo() {
 
 > **特异性锚点**：本节回答"飞腾编译器知识能否从 GCC 迁到 LLVM"。飞腾主力编译器是 PhyGCC（基于 GCC，[官方-飞腾开发者平台]），但 PhyCC/PhyGCC 也涉及 LLVM（PhyCC 2.0 基于 LLVM [官方]）。两套编译器的 Pass pipeline 概念同构却不同名，飞腾工程师在两者间迁移时，这张对照表是导航图。
 
-GCC 的 Pass 分两大类：**GIMPLE Pass**（中端，机器无关，对应 LLVM 的 IR Pass）和 **RTL Pass**（后端，机器相关，对应 LLVM 的 MachineIR Pass）。下表是飞腾 [Expert_11](../../体系结构实验/Expert_11_Compiler_Research/README.md) §2.1 已建立的对照的精简深化版，聚焦 Pass 框架层面：
+GCC 的 Pass 分两大类：**GIMPLE Pass**（中端，机器无关，对应 LLVM 的 IR Pass）和 **RTL Pass**（后端，机器相关，对应 LLVM 的 MachineIR Pass）。下表是飞腾 Expert_11（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） §2.1 已建立的对照的精简深化版，聚焦 Pass 框架层面：
 
 | GCC GIMPLE/RTL Pass | 对应 LLVM IR/MIR Pass | 概念对应 | 差异点 |
 |--------------------|-----------------------|:--------:|--------|
@@ -422,7 +422,7 @@ New PM 定义了一组**命名扩展点**，插件可注册回调在这些位置
 | `LoopOptimizerEndEPCallbacks` | 循环优化结束 | 循环结果固化 |
 | `FullLinkTimeOptimizationEarlyEPCallbacks` | LTO 早期 | 跨模块优化 |
 
-**飞腾实战建议**：飞腾若要让 FTC86x 的 UDOT 自动选出来更多（飞腾项目 [Expert_11](../../体系结构实验/Expert_11_Compiler_Research/README.md) §2.3.4 指出"手写 C 几乎选不出 UDOT"），**最干净的挂法是在 `VectorizerEndEPCallbacks` 注册一个识别 int8 点积模式的 Pass**，在向量化之后扫一遍 IR，把 `mul+add` 序列聚合成 `@llvm.aarch64.neon.udot`。这比改 SelectionDAG（要懂后端 .td）门槛低一个数量级。
+**飞腾实战建议**：飞腾若要让 FTC86x 的 UDOT 自动选出来更多（飞腾项目 Expert_11（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） §2.3.4 指出"手写 C 几乎选不出 UDOT"），**最干净的挂法是在 `VectorizerEndEPCallbacks` 注册一个识别 int8 点积模式的 Pass**，在向量化之后扫一遍 IR，把 `mul+add` 序列聚合成 `@llvm.aarch64.neon.udot`。这比改 SelectionDAG（要懂后端 .td）门槛低一个数量级。
 
 #### 2.6.3 哪些 Pass 边际收益趋零（衔接 E04）
 
@@ -517,7 +517,7 @@ New PM 定义了一组**命名扩展点**，插件可注册回调在这些位置
 
 - **与 [E02 IR 设计](../Expert_02_LLVM_IR_Design/README.md) 一致**：E02 谈 IR 的语义（SSA/undef/poison/内存模型），E03 谈承载这些 IR 变换的框架。两者是**内容与容器**的关系——IR 是内容，Pass Manager 是容器。PreservedAnalyses 的精确失效，正是建立在 E02 定义的 IR 语义可分析性之上。
 - **与 [E04 中端优化](../Expert_04_Middle_End_Opt/README.md) 一致**：E04 谈"哪些优化还有边际收益"，E03 谈"这些优化跑在什么骨架上"。E04 说"-O2→-O3 边际收益趋零"，E03 解释"因为 Pass 流水线已打磨到极限"。E04 的悲观，E03 的结构性解释。
-- **与 [飞腾 Expert_11 编译器研究](../../体系结构实验/Expert_11_Compiler_Research/README.md) 一致**：飞腾 E11 谈 PhyGCC 的 GIMPLE Pass pipeline 对 FTC862 的影响，本项目 E03 谈 LLVM Pass 框架的迁移。两者在"GIMPLE Pass vs IR Pass 对照"上互补——飞腾 E11 给 GCC 视角的实战，E03 给 LLVM 视角的框架机理。
+- **与 飞腾 Expert_11 编译器研究（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 一致**：飞腾 E11 谈 PhyGCC 的 GIMPLE Pass pipeline 对 FTC862 的影响，本项目 E03 谈 LLVM Pass 框架的迁移。两者在"GIMPLE Pass vs IR Pass 对照"上互补——飞腾 E11 给 GCC 视角的实战，E03 给 LLVM 视角的框架机理。
 - **与 [E14 Sanitizers + compiler-rt](../Expert_14_CompilerRT_Sanitizers_JIT/README.md) 一致**：E14 谈编译器正确性保障（ASan/MSan），E03 谈 Pass 正确性保障（Alive2）。前者验证**生成的代码**，后者验证**变换本身**。
 
 ### 5.2 冲突（视角打架）
@@ -556,7 +556,7 @@ New PM 定义了一组**命名扩展点**，插件可注册回调在这些位置
 19. **[社区]** LLVM Weekly（Alex Denner 编辑）. llvmweekly.org. —— 迁移期每个版本的 Pass 改动速报.
 
 ### 项目内交叉（[项目内]）
-20. **[项目内]** 飞腾体系结构实验 [Expert_11_Compiler_Research](../../体系结构实验/Expert_11_Compiler_Research/README.md) §2.1（Pass Pipeline 逐站）/ §2.4（PhyGCC diff）/ §2.3（向量化失败机理）. —— GCC 视角互补.
+20. **[项目内]** 飞腾体系结构实验 Expert_11_Compiler_Research（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） §2.1（Pass Pipeline 逐站）/ §2.4（PhyGCC diff）/ §2.3（向量化失败机理）. —— GCC 视角互补.
 21. **[项目内]** 本项目 [改造蓝图_LLVM.md](../改造蓝图_LLVM.md) §5 断层 ④. —— 本文承载的战略断层.
 22. **[项目内]** 本项目 [领域资源库_LLVM.md](../领域资源库_LLVM.md) §2（Pass 开发工具 opt/-passes=/-load-pass-plugin）/ §4（NewPassManager 文档）. —— 通用资源.
 
@@ -571,7 +571,7 @@ New PM 定义了一组**命名扩展点**，插件可注册回调在这些位置
 - [Expert_06_RegAlloc_Scheduler](../Expert_06_RegAlloc_Scheduler/README.md) —— 后端 Pass 的算法内核（Greedy/MISched）。
 - [Expert_07_Auto_Vectorization](../Expert_07_Auto_Vectorization/README.md) —— LoopVectorizer 这个 Pass 本身。
 - [Expert_18_Phytium_Adaptation](../Expert_18_Phytium_Adaptation/README.md) —— 飞腾 LLVM fork / PhyCC 实证（本文的飞腾锚点深化）。
-- [飞腾 Expert_11_Compiler_Research](../../体系结构实验/Expert_11_Compiler_Research/README.md) —— PhyGCC GIMPLE Pass 实战（GCC 对偶）。
+- 飞腾 Expert_11_Compiler_Research（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） —— PhyGCC GIMPLE Pass 实战（GCC 对偶）。
 
 ### 外部资源（详见 [领域资源库_LLVM.md](../领域资源库_LLVM.md)）
 - **llvm-tutor**（github.com/banach-space/llvm-tutor）—— 写 Pass 第一教程。

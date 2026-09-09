@@ -19,7 +19,7 @@
 2. **选择（Selection）**：同一语义的 IR，选哪条机器指令？`sum += a[i]*b[i]`（int8）能选 `UDOT`（一条指令，16.9× 加速）还是只能选 `mul`+`add`（两条，无加速）？这取决于 Pattern match 能否命中。
 3. **降级（Lowering）**：IR 里没有对应概念的 IR 结构（如 `va_arg`、`setjmp`、栈上 alloca），如何"降级"成一串机器指令序列？
 
-这三个问题，飞腾 [Expert_11 §2.1](../../体系结构实验/Expert_11_Compiler_Research/README.md) 已经从 Pass Pipeline 角度点过，**本专家把它深化到源码级**——每一个论断都锚定到 `OpenXiangShan/llvm-project` 里的真实 `.td` / `.cpp` 行号。
+这三个问题，飞腾 Expert_11 §2.1（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 已经从 Pass Pipeline 角度点过，**本专家把它深化到源码级**——每一个论断都锚定到 `OpenXiangShan/llvm-project` 里的真实 `.td` / `.cpp` 行号。
 
 > **特异性测试 v2.0 双重门槛声明**：本文同时满足——**(a) 代码级实例**：所有论断锚定 OpenXiangShan/llvm-project 真实 `.td`/`.cpp` 行号（非 README 翻译）；**(b) 飞腾 E11 引用**：深化飞腾项目 Expert_11 §2.1/§2.3.4 的 Pipeline 与 UDOT 分析；**(c) GCC `.md` 对偶**：§2.5 给出 TableGen vs GCC Machine Description 的设计对比。
 
@@ -732,13 +732,13 @@ SelectionDAG 是 LLVM 最难调试的子系统之一。核心武器（详见 [�
 
 - **与 [Expert_08 AArch64 Backend](../Expert_08_AArch64_Backend/README.md) 一致**：E08 讲 AArch64 后端的整体（寄存器/调度/特性），本专家讲代码生成子系统（SDAG/GISel）如何消费 AArch64 后端的 `.td` 描述。E08 的"无 FTC86x 调度模型"反向锚点（§2.9）正是本专家 §2.9 的同源发现。
 
-- **与飞腾 [Expert_11 §2.1](../../体系结构实验/Expert_11_Compiler_Research/README.md) 一致并深化**：E11 §2.1 从 Pass Pipeline 角度点破 Legalize 对"无 SVE"的约束、UDOT 选不出来；本专家深化到 `.td` 层（`AArch64Unsupported`、`partial_reduce_umla` Pat、`HasMatMulInt8` gate）和源码层（`LegalizeVectorTypes.cpp:9-18`、`AArch64TargetMachine.cpp:158-161`）。E11 给现象，本专家给 `.td`/源码级根因。
+- **与飞腾 Expert_11 §2.1（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 一致并深化**：E11 §2.1 从 Pass Pipeline 角度点破 Legalize 对"无 SVE"的约束、UDOT 选不出来；本专家深化到 `.td` 层（`AArch64Unsupported`、`partial_reduce_umla` Pat、`HasMatMulInt8` gate）和源码层（`LegalizeVectorTypes.cpp:9-18`、`AArch64TargetMachine.cpp:158-161`）。E11 给现象，本专家给 `.td`/源码级根因。
 
 ### 5.2 冲突（视角打架）
 
 - **与 [Expert_04 Middle-End Opt](../Expert_04_Middle_End_Opt/README.md) 轻微冲突**：E04 的中端优化（GVN/LICM/LoopUnroll）在 IR 上做，可能"破坏"代码生成想要的形态——例如 LoopUnroll 把循环展开成标量，反而让 UDOT 更难聚合（因为向量性丢失）。中端"最优"可能让后端"选不出最优指令"。这是中端-后端的经典张力，LLVM 用 `TargetTransformInfo`（TTI）让后端给中端"成本反馈"来缓解，但不完美。
 
-- **与飞腾 [Expert_11 §2.4 PhyGCC](../../体系结构实验/Expert_11_Compiler_Research/README.md) 路径选择冲突**：E11 详述 PhyGCC（飞腾 GCC fork）的调度优化收益（10-18%）。本专家从 LLVM 视角指出：飞腾应投资 LLVM（贡献调度模型 + 拥抱 GISel/MLIR），而非只维护 GCC fork。**E11 是"GCC 工程实战"，本专家是"LLVM 战略建议"——同一个飞腾，两个视角给出不同编译器路线**。真相是飞腾需要双栈（GCC for 服务器/Linux 发行版，LLVM for AI/嵌入式/JIT）。
+- **与飞腾 Expert_11 §2.4 PhyGCC（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 路径选择冲突**：E11 详述 PhyGCC（飞腾 GCC fork）的调度优化收益（10-18%）。本专家从 LLVM 视角指出：飞腾应投资 LLVM（贡献调度模型 + 拥抱 GISel/MLIR），而非只维护 GCC fork。**E11 是"GCC 工程实战"，本专家是"LLVM 战略建议"——同一个飞腾，两个视角给出不同编译器路线**。真相是飞腾需要双栈（GCC for 服务器/Linux 发行版，LLVM for AI/嵌入式/JIT）。
 
 - **与 [Expert_07 Auto-Vectorization](../Expert_07_Auto_Vectorization/README.md) 协同但有边界争议**：E07 讲 LoopVectorize/SLPVectorizer（中端，IR 层），本专家讲代码生成（后端）。向量化在中端决定"要不要向量化"（生成 `<16 x i8>` IR），代码生成在后端决定"选 UDOT 还是 mul+add"。UDOT 选不出来（§2.6）说明：**中端向量化成功了（生成了 `<16 x i8>`），后端却没选到最优指令**——这是中端-后端衔接的断层。
 
@@ -766,7 +766,7 @@ SelectionDAG 是 LLVM 最难调试的子系统之一。核心武器（详见 [�
 
 ### 项目内实测与开源资源
 15. **[实测]** 本项目 OpenXiangShan/llvm-project（LLVM 23.0.0git）源码：`llvm/lib/CodeGen/SelectionDAG/`、`llvm/lib/CodeGen/GlobalISel/`、`llvm/lib/Target/AArch64/`、`llvm/utils/TableGen/`。本文所有行号锚点均来自此。
-16. **[实测]** 飞腾项目 [Expert_11_Compiler_Research](../../体系结构实验/Expert_11_Compiler_Research/README.md) §2.1 Pass Pipeline、§2.3.4 UDOT 选择难题、§2.4 PhyGCC。本专家深化其源码级根因。
+16. **[实测]** 飞腾项目 Expert_11_Compiler_Research（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） §2.1 Pass Pipeline、§2.3.4 UDOT 选择难题、§2.4 PhyGCC。本专家深化其源码级根因。
 17. **[GitHub]** LLVM Project. github.com/llvm/llvm-project. —— 代码生成子系统源。
 18. **[GitHub]** OpenXiangShan/NanHu 调度模型贡献. github.com/OpenXiangShan/XiangShan. —— 香山进 mainline 的养育实证。
 19. **[Discourse]** LLVM Discourse: GlobalISel 进展 / Legalize 讨论. discourse.llvm.org. —— GISel 覆盖率与迁移讨论。
@@ -783,7 +783,7 @@ SelectionDAG 是 LLVM 最难调试的子系统之一。核心武器（详见 [�
 - [Expert_06 RegAlloc Scheduler](../Expert_06_RegAlloc_Scheduler/README.md) —— 代码生成的下游（寄存器分配 + 调度）。
 - [Expert_07 Auto-Vectorization](../Expert_07_Auto_Vectorization/README.md) —— 中端向量化（LoopVec/SLP）与后端指令选择（UDOT）的衔接断层。
 - [Expert_08 AArch64 Backend](../Expert_08_AArch64_Backend/README.md) —— AArch64 后端整体（寄存器/调度/特性），本专家是其代码生成子系统的深化。
-- 飞腾项目 [Expert_11_Compiler_Research](../../体系结构实验/Expert_11_Compiler_Research/README.md) §2.1/§2.3.4/§2.4 —— Pipeline、UDOT、PhyGCC，本专家深化其源码级根因。
+- 飞腾项目 Expert_11_Compiler_Research（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） §2.1/§2.3.4/§2.4 —— Pipeline、UDOT、PhyGCC，本专家深化其源码级根因。
 
 ### 外部资源（通用资源见 [领域资源库_LLVM.md](../领域资源库_LLVM.md)）
 - **LLVM Code Generator 文档**（llvm.org/docs/CodeGenerator.html）—— SelectionDAG/GlobalISel 官方总览

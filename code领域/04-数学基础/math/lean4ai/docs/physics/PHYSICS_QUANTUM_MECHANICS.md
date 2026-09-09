@@ -864,7 +864,7 @@ n, l, m, mₛ 四个量子数完全确定一个状态
 ## 🔗 下一步学习
 
 - **[狭义相对论](./PHYSICS_SPECIAL_RELATIVITY.md)** - 时空结构
-- **[量子场论](./PHYSICS_QFT.md)** - 相对论量子力学
+- **量子场论（`./PHYSICS_QFT.md`）** - 相对论量子力学
 - **[量子信息](./PHYSICS_QUANTUM_INFO.md)** - 量子计算
 
 ---

@@ -185,7 +185,7 @@
 ## 🔍 快速查找
 
 ### 按字母顺序索引
-[查看A-Z索引](./index_alphabetical.md)（待创建）
+查看A-Z索引（`./index_alphabetical.md`）（待创建）
 
 ### 按主题索引
 [查看主题索引](./index_thematic.md)（待创建）
@@ -194,7 +194,7 @@
 [查看哲学家索引](./index_philosophers.md)（待创建）
 
 ### 按时代索引
-[查看时代索引](./index_historical.md)（待创建）
+查看时代索引（`./index_historical.md`）（待创建）
 
 ---
 

@@ -725,9 +725,9 @@ ChatGPT说"我理解你的问题"：
 ## 🔗 相关模块
 
 - [认识论](./02_epistemology.md)：我们如何知道形而上学真理？
-- [心灵哲学](./06_philosophy_of_mind.md)：心身问题
-- [科学哲学](./07_philosophy_of_science.md)：科学实在论
-- [逻辑学](./04_logic.md)：模态逻辑
+- 心灵哲学（`./06_philosophy_of_mind.md`）：心身问题
+- 科学哲学（`./07_philosophy_of_science.md`）：科学实在论
+- 逻辑学（`./04_logic.md`）：模态逻辑
 
 ---
 

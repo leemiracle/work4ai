@@ -626,8 +626,8 @@
 
 ## 练习记录
 
-- [练习模板](../practices/influence/template.md)
-- [练习示例](../practices/influence/example.md)
+- 练习模板（`../practices/influence/template.md`）
+- 练习示例（`../practices/influence/example.md`）
 
 ---
 

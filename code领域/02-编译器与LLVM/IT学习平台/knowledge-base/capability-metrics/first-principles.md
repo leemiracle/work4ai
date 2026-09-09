@@ -359,8 +359,8 @@
 
 ## 练习记录
 
-- [练习模板](../practices/first-principles/template.md)
-- [练习示例](../practices/first-principles/example.md)
+- 练习模板（`../practices/first-principles/template.md`）
+- 练习示例（`../practices/first-principles/example.md`）
 
 ---
 

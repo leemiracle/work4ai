@@ -19,13 +19,13 @@
    - 麦克斯韦方程组
    - 电磁波
 
-3. **[热力学与统计物理](./PHYSICS_THERMODYNAMICS.md)**
+3. **热力学与统计物理（`./PHYSICS_THERMODYNAMICS.md`）**
    - 热力学定律
    - 统计力学
    - 相变
    - 热传导
 
-4. **[光学词典](./PHYSICS_OPTICS.md)**
+4. **光学词典（`./PHYSICS_OPTICS.md`）**
    - 几何光学
    - 波动光学
    - 量子光学
@@ -50,7 +50,7 @@
    - 量子态与测量
    - 角动量与自旋
 
-8. **[量子场论](./PHYSICS_QFT.md)**
+8. **量子场论（`./PHYSICS_QFT.md`）**
    - 场的量子化
    - 标准模型
    - 重整化
@@ -63,19 +63,19 @@
    - 对撞机物理
    - 超出标准模型
 
-10. **[凝聚态物理](./PHYSICS_CONDENSED_MATTER.md)**
+10. **凝聚态物理（`./PHYSICS_CONDENSED_MATTER.md`）**
     - 固体物理
     - 超导
     - 拓扑材料
     - 量子相变
 
-11. **[天体物理与宇宙学](./PHYSICS_ASTROPHYSICS.md)**
+11. **天体物理与宇宙学（`./PHYSICS_ASTROPHYSICS.md`）**
     - 恒星物理
     - 星系与宇宙结构
     - 大爆炸宇宙学
     - 暗物质与暗能量
 
-12. **[原子分子与光物理](./PHYSICS_AMO.md)**
+12. **原子分子与光物理（`./PHYSICS_AMO.md`）**
     - 原子结构
     - 分子光谱
     - 激光物理
@@ -88,7 +88,7 @@
     - 量子纠缠
     - 量子纠错
 
-14. **[物理前沿专题](./PHYSICS_FRONTIERS.md)**
+14. **物理前沿专题（`./PHYSICS_FRONTIERS.md`）**
     - 弦论/M理论
     - 量子引力
     - 暗物质探测
@@ -299,7 +299,7 @@ Timeline: 物理学里程碑
 
 1. **初学者**: 从[经典力学](./PHYSICS_CLASSICAL_MECHANICS.md)开始
 2. **有基础**: 选择感兴趣的模块深入学习
-3. **研究者**: 查阅[前沿专题](./PHYSICS_FRONTIERS.md)
+3. **研究者**: 查阅前沿专题（`./PHYSICS_FRONTIERS.md`）
 
 ---
 

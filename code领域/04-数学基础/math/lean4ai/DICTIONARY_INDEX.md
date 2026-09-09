@@ -112,8 +112,8 @@ lean4ai/
 
 ### 综合概览 → [docs/overviews/](./docs/overviews/)
 
-- [EIGHT_IN_ONE_OVERVIEW.md](./docs/overviews/EIGHT_IN_ONE_OVERVIEW.md) - 八合一总览
-- [NINETEEN_IN_ONE_OVERVIEW.md](./docs/overviews/NINETEEN_IN_ONE_OVERVIEW.md) - 十九合一总览
+- EIGHT_IN_ONE_OVERVIEW.md（`./docs/overviews/EIGHT_IN_ONE_OVERVIEW.md`） - 八合一总览
+- NINETEEN_IN_ONE_OVERVIEW.md（`./docs/overviews/NINETEEN_IN_ONE_OVERVIEW.md`） - 十九合一总览
 - [LEARNING_RESOURCES_OVERVIEW.md](./docs/overviews/LEARNING_RESOURCES_OVERVIEW.md) - 学习资源概览
 
 ---

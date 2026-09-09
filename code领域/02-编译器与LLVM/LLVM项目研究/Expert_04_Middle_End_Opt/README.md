@@ -20,7 +20,7 @@
 5. **Loop Vectorizer 在 MLIR vector dialect 里 vs LLVM IR Loop Vectorizer，谁更先进？** LLVM IR 的 `LoopVectorize.cpp` 用 VPlan（`VPlan.h`，Vector Predication 的核心，[实测-Vectorize/ 有 20+ 个 VPlan* 文件]）建模；MLIR 的 vector dialect 把向量类型/操作提升为一等公民，配 `VectorToLLVM`/`VectorToSCF`/`VectorToGPU` 多后端 lowering。**前者是"在一个不擅长向量的 IR 上硬做向量化"，后者是"先把向量做成一等抽象再做优化"**——这又是表达力阶梯的体现。飞腾无 SVE（NEON 128-bit 硬上限）的向量化天花板，在两种范式下命运不同。
 6. **PGO（Profile-Guided Optimization）在 LLVM 中端的角色——BOLT 后链接优化的反差是什么？** 中端的 `SampleProfile.cpp`（[实测-IPO/ 目录]）吃 AutoFDO 的 profile 做布局/内联；但 BOLT（后链接二进制优化器，[E12]）在**链接之后**重跑整个中端 Pass，吃 perf profile。这种"中端跑两遍"（编译期 PGO + 链接后 BOLT）是 LLVM 相对 GCC 的一个**架构级优势**，飞腾服务器场景（spec2017/数据库）收益显著。
 7. **Attributor（过程间属性推导）——为什么 LLVM 引入这个新框架？** 实测 `IPO/Attributor.cpp` + `AttributorAttributes.cpp` 是 LLVM 近年的**过程间优化重头戏**。但 `PassBuilderPipelines.cpp:285-286` `static cl::opt<AttributorRunOption> AttributorRun("attributor-enable", cl::init(AttributorRunOption::NONE)...)`——**默认 NONE，关闭**。一个被社区力推的新框架为何没默认？因为它"激进推导属性"在错误代码上会触发 miscompilation，社区还在打磨。这又是"算法先进 ≠ 默认采纳"的第二例证。
-8. **飞腾 D3000M 上 LoopUnroll 触发条件——LLVM 默认值是不是次优？** 飞腾项目 [Expert_11](../../体系结构实验/Expert_11_Compiler_Research/README.md) Lab02 实测：**飞腾 FTC862 上 unroll 2 最优**（[实测-飞腾 E11 §line 593]）。但 LLVM 默认 LoopUnroll 是 `LoopUnrollOptions(Level.getSpeedupLevel(), ...)` 按 cost model **动态决策**（[实测-Pipelines.cpp:1353]），不硬编码 unroll=2。**问题来了**：这个 cost model 在"无 FTC86x 调度模型"的主线 LLVM 上（[实测-grep Phytium/FTC86 中端 0 命中]），算出来的 unroll 因子对飞腾是否最优？答案大概率是**否**——这正是飞腾要校准 `.md`/cost model 的工程动机（飞腾 E11 §line 340：实测校准 `.md` 指令成本能让展开阈值更准）。
+8. **飞腾 D3000M 上 LoopUnroll 触发条件——LLVM 默认值是不是次优？** 飞腾项目 Expert_11（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） Lab02 实测：**飞腾 FTC862 上 unroll 2 最优**（[实测-飞腾 E11 §line 593]）。但 LLVM 默认 LoopUnroll 是 `LoopUnrollOptions(Level.getSpeedupLevel(), ...)` 按 cost model **动态决策**（[实测-Pipelines.cpp:1353]），不硬编码 unroll=2。**问题来了**：这个 cost model 在"无 FTC86x 调度模型"的主线 LLVM 上（[实测-grep Phytium/FTC86 中端 0 命中]），算出来的 unroll 因子对飞腾是否最优？答案大概率是**否**——这正是飞腾要校准 `.md`/cost model 的工程动机（飞腾 E11 §line 340：实测校准 `.md` 指令成本能让展开阈值更准）。
 9. **GIMPLE Pass（GCC）vs LLVM IR Pass 对照表——InstCombine 对应什么？** 飞腾主力是 PhyGCC（基于 GCC），PhyCC 基于 LLVM。两套中端 Pass 概念同构却不同名，飞腾工程师迁移时需要一张导航图（见 §2.8 对标表）。
 10. **MemCpyOpt / SROA / LoopIdiomRecognize（识别 memset/memcpy 模式）的工程价值是什么？** 这三个是"把高级模式降级成单条机器指令"的转换器——`LoopIdiomRecognize` 把 `for(i) a[i]=0` 认成 `memset`，`MemCpyOpt` 把连续 `load/store` 聚合成 `memcpy`，`SROA`（Scalar Replacement of Aggregates）把栈上 struct 拆成寄存器。它们看似不起眼，却决定了一段 C 代码能否命中 libc 的向量化 `memset`/`memcpy`——这是飞腾 GEMM/图像处理的隐藏加速器。
 11. **SCCP（Sparse Conditional Constant Propagation）+ ConstraintElimination——常量与约束推导的现代版是什么？** SCCP 是 1990s 经典（Wegman-Zadeck），`SCCP.cpp` 至今在跑。但 LLVM 近年新增 `ConstraintElimination.cpp`（[实测-Scalar/]）用 **SMT solver 在编译期证明约束**（如 `x<y && y<z → x<z`），这是"把形式化方法塞进标量优化"的激进尝试——又是"算法先进但默认关闭"（仅 `-O3` 才开）的典型。
@@ -30,7 +30,7 @@
 
 ## 2. 具体分析：代码级实例 + 飞腾工程实证 + 对偶判断（过 §0.3 特异性测试 v2.0）
 
-> **特异性测试 v2.0 自检**：本节以 `OpenXiangShan/llvm-project`（LLVM 23.0.0git）真实源码行号为锚，引用飞腾 `phytium_repos` 真实 recipe + 飞腾项目 [Expert_11](../../体系结构实验/Expert_11_Compiler_Research/README.md) Lab02 实测，并给出 GCC GIMPLE Pass / Cranelift 对偶。删掉飞腾与代码行号后，本文是 LLVM 官方文档翻译——判定失败。故此节三者并重。
+> **特异性测试 v2.0 自检**：本节以 `OpenXiangShan/llvm-project`（LLVM 23.0.0git）真实源码行号为锚，引用飞腾 `phytium_repos` 真实 recipe + 飞腾项目 Expert_11（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） Lab02 实测，并给出 GCC GIMPLE Pass / Cranelift 对偶。删掉飞腾与代码行号后，本文是 LLVM 官方文档翻译——判定失败。故此节三者并重。
 > **关键反向锚点**：`grep -rn "Phytium\|FTC86" llvm/lib/Transforms/ mlir/` 在中端与 MLIR **0 命中**（[实测-grep]）——这是中端优化 **target-independent 本质**的铁证。中端连飞腾字符串都没有，飞腾特异性全部下沉到后端（[E05/E08]）。这条反向锚点恰恰解释了"为什么飞腾的编译器命运不取决于中端 Pass，而取决于后端 cost model"。
 
 ### 2.1 GVN / NewGVN / EarlyCSE 三角：2026 还剩多少边际收益（含对标表）
@@ -355,7 +355,7 @@ LLVM 的反馈优化有**两个时间点**：
 
 #### 2.6.1 飞腾 Lab02 实测：unroll 2 最优
 
-飞腾项目 [Expert_11](../../体系结构实验/Expert_11_Compiler_Research/README.md) §line 593 实测：**飞腾 FTC862 上 LoopUnroll 因子 = 2 最优**（Lab02 数据）。这条结论的物理基础（飞腾 E11 §line 163）：飞腾有 **32 个 V 寄存器**（V0-V31），真正自由的有 16 个（V16-V31）+ 8 个传参可重用，`4×4` 矩阵分块能全进寄存器。**unroll 太大（如 4/8）会爆寄存器→溢出→掉速；unroll 太小（1）ILP 不足**。
+飞腾项目 Expert_11（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） §line 593 实测：**飞腾 FTC862 上 LoopUnroll 因子 = 2 最优**（Lab02 数据）。这条结论的物理基础（飞腾 E11 §line 163）：飞腾有 **32 个 V 寄存器**（V0-V31），真正自由的有 16 个（V16-V31）+ 8 个传参可重用，`4×4` 矩阵分块能全进寄存器。**unroll 太大（如 4/8）会爆寄存器→溢出→掉速；unroll 太小（1）ILP 不足**。
 
 #### 2.6.2 LLVM 默认 LoopUnroll 是动态 cost model，不硬编码 2
 
@@ -483,7 +483,7 @@ FPM.addPass(LoopUnrollPass(LoopUnrollOptions(
 - **与 [E02 IR 设计](../Expert_02_LLVM_IR_Design/README.md) 一致**：E02 谈 IR 语义（单层 SSA 的表达力边界），E04 谈"在这个边界上做优化的边际收益躺平"。E04 的悲观（中端躺平），E02 的结构性解释（单层 IR 表达力受限）。**两者共同指向 MLIR 是出路**。
 - **与 [E03 Pass 框架](../Expert_03_Pass_Framework/README.md) 一致**：E03 谈"Pass 跑在什么骨架上"，E04 谈"骨架里塞的算法"。E03 的"-O2→-O3 边际趋零"，E04 给出算法级解释（GVN/InstCombine 已打磨到顶）。E03 的工程红利（LoopNestPass 协同），E04 的算法承载。
 - **与 [E07 自动向量化](../Expert_07_Auto_Vectorization/README.md) 一致**：E07 谈 LoopVectorizer 的算法，E04 谈它在中端流水线的位置 + MLIR vector dialect 的对偶。飞腾无 SVE 的向量化天花板，E04（IR 表达力）+ E07（算法）+ E08（NEON 硬上限）三角印证。
-- **与 [飞腾 Expert_11 编译器研究](../../体系结构实验/Expert_11_Compiler_Research/README.md) 一致**：飞腾 E11 给 PhyGCC GIMPLE Pass 实战，本项目 E04 给 LLVM IR Pass 框架机理。两者在"GIMPLE Pass vs IR Pass 对照"上互补（§2.7 表）。
+- **与 飞腾 Expert_11 编译器研究（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 一致**：飞腾 E11 给 PhyGCC GIMPLE Pass 实战，本项目 E04 给 LLVM IR Pass 框架机理。两者在"GIMPLE Pass vs IR Pass 对照"上互补（§2.7 表）。
 
 ### 5.2 冲突（视角打架）
 
@@ -525,7 +525,7 @@ FPM.addPass(LoopUnrollPass(LoopUnrollOptions(
 22. **[社区]** LLVM Weekly（Alex Denner）. llvmweekly.org. —— 中端 Pass 每版本改动速报.
 
 ### 项目内交叉（[项目内]）
-23. **[项目内]** 飞腾体系结构实验 [Expert_11_Compiler_Research](../../体系结构实验/Expert_11_Compiler_Research/README.md) §line 593（unroll 2 最优实测）/ §line 340（飞腾校准 .md 成本）/ §line 389-390（-O3/-Os 实测）/ §line 163（32 V 寄存器）. —— 飞腾 GIMPLE Pass + unroll 实证.
+23. **[项目内]** 飞腾体系结构实验 Expert_11_Compiler_Research（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） §line 593（unroll 2 最优实测）/ §line 340（飞腾校准 .md 成本）/ §line 389-390（-O3/-Os 实测）/ §line 163（32 V 寄存器）. —— 飞腾 GIMPLE Pass + unroll 实证.
 24. **[项目内]** 本项目 [改造蓝图_LLVM.md](../改造蓝图_LLVM.md) §5 断层 ②. —— 本文承载的战略断层.
 25. **[项目内]** 本项目 [Lens_03 供应链](../Lenses/Lens_03_SupplyChain.md)（MLIR 谁养）/ [Lens_01 历史](../Lenses/Lens_01_Historian.md)（48 方言实测）/ [领域资源库_LLVM.md](../领域资源库_LLVM.md) §6.1（48 方言）/ §7.8（MLIR×AI）. —— 通用资源.
 
@@ -542,7 +542,7 @@ FPM.addPass(LoopUnrollPass(LoopUnrollOptions(
 - [Expert_08_AArch64_Backend](../Expert_08_AArch64_Backend/README.md) —— AArch64 后端（飞腾 NEON/UDOT 落地）。
 - [Expert_12_LLD_BOLT](../Expert_12_LLD_BOLT/README.md) —— BOLT 链接后优化（对编译期中端的反差）。
 - [Expert_18_Phytium_Adaptation](../Expert_18_Phytium_Adaptation/README.md) —— 飞腾 phytvm / NPU 编译栈实证。
-- [飞腾 Expert_11_Compiler_Research](../../体系结构实验/Expert_11_Compiler_Research/README.md) —— PhyGCC GIMPLE Pass 实战（GCC 对偶）。
+- 飞腾 Expert_11_Compiler_Research（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） —— PhyGCC GIMPLE Pass 实战（GCC 对偶）。
 
 ### 外部资源（详见 [领域资源库_LLVM.md](../领域资源库_LLVM.md)）
 - **MLIR 官方文档**（mlir.llvm.org）+ **IREE Linalg tutorial**（iree.dev/community/blog/2024-01-29-iree-mlir-linalg-tutorial）—— Linalg→LLVM lowering 一手。

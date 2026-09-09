@@ -9,7 +9,7 @@
 - 不要急着回答。先让问题在你脑子里发酵。
 - 每个问题后面会慢慢长出笔记、代码、洞察、跨学科映射。
 - 一个问题被"想通了"不是终点——而是产生新问题的起点。
-- 用 [`/question`](../../.config/opencode/command/question.md) 命令对任意问题做苏格拉底式深挖。
+- 用 `/question`（`../../.config/opencode/command/question.md`） 命令对任意问题做苏格拉底式深挖。
 
 ---
 

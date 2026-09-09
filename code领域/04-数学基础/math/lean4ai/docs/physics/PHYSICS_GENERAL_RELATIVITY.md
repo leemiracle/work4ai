@@ -715,8 +715,8 @@ T ≈ 2.7 K
 ## 🔗 下一步学习
 
 - **[粒子物理](./PHYSICS_PARTICLE_PHYSICS.md)** - 标准模型
-- **[量子场论](./PHYSICS_QFT.md)** - 量子引力基础
-- **[天体物理](./PHYSICS_ASTROPHYSICS.md)** - 黑洞与宇宙
+- **量子场论（`./PHYSICS_QFT.md`）** - 量子引力基础
+- **天体物理（`./PHYSICS_ASTROPHYSICS.md`）** - 黑洞与宇宙
 
 ---
 

@@ -255,7 +255,7 @@
 
 ### 状态
 - 29 文件（24 md + 5 py），~25K 词。
-- **机制设计数学地基完成（三大支柱）**：博弈论(35) + 契约理论(36) + 拍卖理论(37)。用户现已具备"理解与改造制度/治理"的完整数学工具箱（[`33`](deliverables/33-cognition-system-overview.md) L4 改造能力的具体兑现）。
+- **机制设计数学地基完成（三大支柱）**：博弈论(35) + 契约理论(36) + 拍卖理论(37)。用户现已具备"理解与改造制度/治理"的完整数学工具箱（`33`（`deliverables/33-cognition-system-overview.md`） L4 改造能力的具体兑现）。
 - 下一步（更高阶）：社会选择（Arrow）→ 动态博弈+子博弈完美 → 机制设计总论（实施理论）。
 
 
@@ -284,7 +284,7 @@
 ## v1.21 — 2026-07-24（数学地基 7 块完整闭环：动态博弈 + 贝叶斯 + 机制设计总论）
 
 ### 新增（3 块，完成 33 第六节路线）
-- **`deliverables/39-dynamic-game.md`**：动态博弈——时间、重复与合作的涌现。承接 [`35`](deliverables/35-game-theory-intro.md) 的动态深化。三层讲透：Backward Induction（蜈蚣博弈 SPE = 第一步 take）/ 子博弈完美均衡 SPE（Selten 1965，剔除不可信威胁）/ 有限重复 PD 崩塌（连锁店悖论）/ 无限重复 + Grim Trigger 合作条件 δ≥(T-R)/(T-P)=0.5 / Folk Theorem / Axelrod Tit-for-Tat 四原则 / Rubinstein 讨价还价（先手优势）。核心洞察：**制度/法律/声誉的本质 = 把一次性博弈变成无限重复博弈，让合作涌现**。
+- **`deliverables/39-dynamic-game.md`**：动态博弈——时间、重复与合作的涌现。承接 `35`（`deliverables/35-game-theory-intro.md`） 的动态深化。三层讲透：Backward Induction（蜈蚣博弈 SPE = 第一步 take）/ 子博弈完美均衡 SPE（Selten 1965，剔除不可信威胁）/ 有限重复 PD 崩塌（连锁店悖论）/ 无限重复 + Grim Trigger 合作条件 δ≥(T-R)/(T-P)=0.5 / Folk Theorem / Axelrod Tit-for-Tat 四原则 / Rubinstein 讨价还价（先手优势）。核心洞察：**制度/法律/声誉的本质 = 把一次性博弈变成无限重复博弈，让合作涌现**。
 - **`deliverables/40-bayesian-game.md`**：贝叶斯博弈——不完全信息下的博弈。Harsanyi 类型模型 / 贝叶斯纳什均衡 BNE（一价拍卖 b(v)=(n-1)/n·v 严格推导）/ RET 的 BNE 复现（接 37）/ **Spence 教育信号**（分离均衡 e_H*∈[0.5,1]，学历通胀）/ 混同 vs 分离福利对比 / Harsanyi 教义。核心：BNE 是机制设计的分析语言。
 - **`deliverables/41-mechanism-design-synthesis.md`**：**机制设计总论——制度工程的统一理论（最终收尾）**。统合全部 6 块。实施理论（implementation theory）/ 显示原理严格版 / Maskin 实施定理（单调性 + 否决权）/ 7 块全景图 / 三大不可能性边界统一视角（Arrow/Gibbard/Myerson-Satterthwaite 交易）/ 信息租金 vs 效率权衡 / 与用户所有项目的最终统一 / **L4 改造能力的数学兑现**。
 
@@ -295,7 +295,7 @@
 ### 状态（数学地基完整闭环 ✅）
 - 35 文件（27 md + 8 py），~36K 词。
 - **机制设计数学地基层 7 块全部完成**：博弈论(35) + 契约(36) + 拍卖(37) + 社会选择(38) + 动态(39) + 贝叶斯(40) + 总论(41)。
-- [`33`](deliverables/33-cognition-system-overview.md) **L4 改造能力的数学兑现**：用户具备"理解 + 证明 + 设计制度"的完整工具箱。R-1 可从机制设计理论根基讲透。
+- `33`（`deliverables/33-cognition-system-overview.md`） **L4 改造能力的数学兑现**：用户具备"理解 + 证明 + 设计制度"的完整工具箱。R-1 可从机制设计理论根基讲透。
 - 下一步（实战/更高阶）：R-1 pilot 启动 / 算法机制设计 AMD / 动态机制设计 / market design。
 
 
@@ -338,7 +338,7 @@
 ### 意义
 - 数学地基（35-41）从"学"激活为"**用数学改造制度**"的实战能力。
 - 认知体系（30-33）+ 数学地基（35-41）+ 学习指南（42）+ 应用案例（43）= **完整的"理解→证明→设计→应用"闭环**。
-- 这是 [`33`](deliverables/33-cognition-system-overview.md) L4 改造能力的实战兑现。
+- 这是 `33`（`deliverables/33-cognition-system-overview.md`） L4 改造能力的实战兑现。
 
 ### 状态
 - 37 文件（29 md + 8 py），~41K 词。
@@ -409,7 +409,7 @@
 - **`deliverables/47-R6-collision-check.md`**：R-6（Attention×OS）撞车核查 + economy 论文机会诚实总结：
   - **R-6 撞车**：vLLM/PagedAttention（**SOSP 2023**）已明确建立 attention↔OS 同构（"blocks as pages, tokens as bytes, requests as processes"）；vAttention（**ASPLOS 2025**, Microsoft）用真正 OS demand paging 深化；2026 多篇博客已常识化。R-6 同构核心被占领。
   - **economy 论文诚实总结**：R-1（Golub 2024 占领）+ R-6（vLLM 2023 占领）**两个首选都降级**。
-  - **项目灵魂印证**：[`33`](deliverables/33-cognition-system-overview.md) 早已预言"论文只是验证认知的沙盘"——R-1/R-6 撞车恰恰证明这一点。真正价值是认知体系(30-33)+数学地基(35-45)，不会被撞车。
+  - **项目灵魂印证**：`33`（`deliverables/33-cognition-system-overview.md`） 早已预言"论文只是验证认知的沙盘"——R-1/R-6 撞车恰恰证明这一点。真正价值是认知体系(30-33)+数学地基(35-45)，不会被撞车。
   - **论文精力转向**：law（LawPM Lean4）/ ai-os-dd（FormalLinux）等独家形式化资产（不易撞车）。
 
 ### 状态

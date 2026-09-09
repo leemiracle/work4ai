@@ -10,24 +10,24 @@
 
 | 日期 | 调用谁 | 什么操作 | 用于什么问题 | 产出 | 反馈 |
 |------|--------|---------|------------|------|------|
-| 2026-07-12 | 布劳威尔 | 构造性检验 | Q10 金钱——"金钱是信息"能否构造？ | [insight](../insights/2026-07/2026-07-12-constructive-test-of-money.md) | 有效，但需区分"定义构造"和"机制构造" |
-| 2026-07-12 | 尼采 | 谱系分析 | Q11 权力——"权力=强制"是谁的定义？ | [insight](../insights/2026-07/2026-07-12-genealogy-of-power.md) | 暴露了建构性，但须警惕起源谬误 |
-| 2026-07-12 | 罗尔斯 | 无知之幕 | Q15 自由——消极自由的隐含立场 | [insight](../insights/2026-07/2026-07-12-veil-of-ignorance-on-freedom.md) | 暴露了立场偏差，但"无负荷自我"有争议 |
-| 2026-07-12 | 康德 | 先验追问 | Q3 智能——"AI会思考"在什么条件下可能 | [insight](../insights/2026-07/2026-07-12-transcendental-test-of-ai-thinking.md) | 暴露三个未证假设，但日常可能过于苛刻 |
-| 2026-07-12 | 韦伯 | 理性化诊断 | 效率——"效率至上"是铁笼吗 | [insight](../insights/2026-07/2026-07-12-iron-cage-of-efficiency.md) | 自指：essence的扩展冲动就是铁笼症状 |
-| 2026-07-12 | 福柯 | 权力-知识考古 | 推荐算法——你的"偏好"是你自己的吗 | [insight](../insights/2026-07/2026-07-12-foucault-archaeology-of-recommendation.md) | 揭露主体塑造，与谱系互补 |
-| 2026-07-12 | 黑格尔 | 辩证综合 | 个人vs集体——能扬弃吗 | [insight](../insights/2026-07/2026-07-12-hegel-dialectic-of-individual-collective.md) | 迁移精度中，须标注"类比非证明" |
-| 2026-07-12 | 王阳明 | 知行检验 | insight本身——知道但做到吗 | [insight](../insights/2026-07/2026-07-12-wang-yangming-zhi-xing-test.md) | 元审计：insight不改行为=收藏品 |
-| 2026-07-12 | 哥德尔 | 不完备性/自指 | council能否发现自己的根本盲区 | [insight](../insights/2026-07/2026-07-12-godel-council-self-reference.md) | 类比非证明，但提示结构性限制 |
-| 2026-07-12 | 库恩 | 范式审计 | 深度学习范式有危机吗 | [insight](../insights/2026-07/2026-07-12-kuhn-paradigm-of-deep-learning.md) | 有反常但尚未到危机，处于常规科学后期 |
-| 2026-07-12 | 亚里士多德+evolutionist | 中道+红皇后 | Q12 地位是零和的吗 | [insight](../insights/2026-07/2026-07-12-status-zero-sum-inversion.md) | 地位有零和层+非零和层，混淆导致错误策略 |
-| 2026-07-12 | 维特根斯坦 | 语言治疗 | Q23 历史有规律吗 | [insight](../insights/2026-07/2026-07-12-wittgenstein-laws-of-history.md) | "历史规律"是语言生病，应区分机制/模式/叙事 |
-| 2026-07-12 | 笛卡尔 | 方法论怀疑 | 你的信念建立在什么公理上 | [insight](../insights/2026-07/2026-07-12-descartes-doubt-of-beliefs.md) | 怀疑后基石比MANIFESTO宣称的少得多，但更诚实 |
-| 2026-07-12 | 老子+亚里士多德 | 反者道之动+四因 | Q7 为什么无序中涌现秩序 | [insight](../insights/2026-07/2026-07-12-emergence-east-west-dialogue.md) | 耗散结构(机制)+反者道之动(方向)互补，跨文明对话 |
-| 2026-07-12 | 荀子 | 制度设计 | 中国政治制度的性恶假设检验 | [insight](../insights/2026-07/2026-07-12-xunzi-test-of-china-institutions.md) | 性善/性恶分配是反的：对底层过度防范，对高层信任有余 |
-| 2026-07-12 | 黑格尔+维特根斯坦+波普尔 | 辩证+语言治疗+反决定论 | 统一-分裂是辩证还是马尔萨斯循环 | [insight](../insights/2026-07/2026-07-12-dialectic-or-malthusian-cycle.md) | 制度/技术进步+人口循环=同一现象两种解读，须分层 |
-| 2026-07-12 | 熊彼特+波兰尼 | 创造性破坏+嵌入/脱嵌 | 深圳成功可复制吗 | [insight](../insights/2026-07/2026-07-12-shenzhen-multiplication-model.md) | 乘法模型：地理不可复制，内陆需找非零乘数 |
-| 2026-07-12 | 福柯+王阳明+庄子 | 规训+知行+齐物 | 外儒内法在AI时代变成什么 | [insight](../insights/2026-07/2026-07-12-confucian-legalism-in-ai-age.md) | 外算法内数据：隐形规训比显性教化更危险 |
+| 2026-07-12 | 布劳威尔 | 构造性检验 | Q10 金钱——"金钱是信息"能否构造？ | insight（`../insights/2026-07/2026-07-12-constructive-test-of-money.md`） | 有效，但需区分"定义构造"和"机制构造" |
+| 2026-07-12 | 尼采 | 谱系分析 | Q11 权力——"权力=强制"是谁的定义？ | insight（`../insights/2026-07/2026-07-12-genealogy-of-power.md`） | 暴露了建构性，但须警惕起源谬误 |
+| 2026-07-12 | 罗尔斯 | 无知之幕 | Q15 自由——消极自由的隐含立场 | insight（`../insights/2026-07/2026-07-12-veil-of-ignorance-on-freedom.md`） | 暴露了立场偏差，但"无负荷自我"有争议 |
+| 2026-07-12 | 康德 | 先验追问 | Q3 智能——"AI会思考"在什么条件下可能 | insight（`../insights/2026-07/2026-07-12-transcendental-test-of-ai-thinking.md`） | 暴露三个未证假设，但日常可能过于苛刻 |
+| 2026-07-12 | 韦伯 | 理性化诊断 | 效率——"效率至上"是铁笼吗 | insight（`../insights/2026-07/2026-07-12-iron-cage-of-efficiency.md`） | 自指：essence的扩展冲动就是铁笼症状 |
+| 2026-07-12 | 福柯 | 权力-知识考古 | 推荐算法——你的"偏好"是你自己的吗 | insight（`../insights/2026-07/2026-07-12-foucault-archaeology-of-recommendation.md`） | 揭露主体塑造，与谱系互补 |
+| 2026-07-12 | 黑格尔 | 辩证综合 | 个人vs集体——能扬弃吗 | insight（`../insights/2026-07/2026-07-12-hegel-dialectic-of-individual-collective.md`） | 迁移精度中，须标注"类比非证明" |
+| 2026-07-12 | 王阳明 | 知行检验 | insight本身——知道但做到吗 | insight（`../insights/2026-07/2026-07-12-wang-yangming-zhi-xing-test.md`） | 元审计：insight不改行为=收藏品 |
+| 2026-07-12 | 哥德尔 | 不完备性/自指 | council能否发现自己的根本盲区 | insight（`../insights/2026-07/2026-07-12-godel-council-self-reference.md`） | 类比非证明，但提示结构性限制 |
+| 2026-07-12 | 库恩 | 范式审计 | 深度学习范式有危机吗 | insight（`../insights/2026-07/2026-07-12-kuhn-paradigm-of-deep-learning.md`） | 有反常但尚未到危机，处于常规科学后期 |
+| 2026-07-12 | 亚里士多德+evolutionist | 中道+红皇后 | Q12 地位是零和的吗 | insight（`../insights/2026-07/2026-07-12-status-zero-sum-inversion.md`） | 地位有零和层+非零和层，混淆导致错误策略 |
+| 2026-07-12 | 维特根斯坦 | 语言治疗 | Q23 历史有规律吗 | insight（`../insights/2026-07/2026-07-12-wittgenstein-laws-of-history.md`） | "历史规律"是语言生病，应区分机制/模式/叙事 |
+| 2026-07-12 | 笛卡尔 | 方法论怀疑 | 你的信念建立在什么公理上 | insight（`../insights/2026-07/2026-07-12-descartes-doubt-of-beliefs.md`） | 怀疑后基石比MANIFESTO宣称的少得多，但更诚实 |
+| 2026-07-12 | 老子+亚里士多德 | 反者道之动+四因 | Q7 为什么无序中涌现秩序 | insight（`../insights/2026-07/2026-07-12-emergence-east-west-dialogue.md`） | 耗散结构(机制)+反者道之动(方向)互补，跨文明对话 |
+| 2026-07-12 | 荀子 | 制度设计 | 中国政治制度的性恶假设检验 | insight（`../insights/2026-07/2026-07-12-xunzi-test-of-china-institutions.md`） | 性善/性恶分配是反的：对底层过度防范，对高层信任有余 |
+| 2026-07-12 | 黑格尔+维特根斯坦+波普尔 | 辩证+语言治疗+反决定论 | 统一-分裂是辩证还是马尔萨斯循环 | insight（`../insights/2026-07/2026-07-12-dialectic-or-malthusian-cycle.md`） | 制度/技术进步+人口循环=同一现象两种解读，须分层 |
+| 2026-07-12 | 熊彼特+波兰尼 | 创造性破坏+嵌入/脱嵌 | 深圳成功可复制吗 | insight（`../insights/2026-07/2026-07-12-shenzhen-multiplication-model.md`） | 乘法模型：地理不可复制，内陆需找非零乘数 |
+| 2026-07-12 | 福柯+王阳明+庄子 | 规训+知行+齐物 | 外儒内法在AI时代变成什么 | insight（`../insights/2026-07/2026-07-12-confucian-legalism-in-ai-age.md`） | 外算法内数据：隐形规训比显性教化更危险 |
 
 ---
 

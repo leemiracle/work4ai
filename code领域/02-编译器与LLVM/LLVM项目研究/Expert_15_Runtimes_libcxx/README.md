@@ -1,6 +1,6 @@
 # Expert_15 — C++ 运行时栈专家 / libcxx+libcxxabi+libunwind+openmp+offload 五件套解剖学家视角
 
-> **角色定位**：这位专家是 **C++ 运行时栈的维护者级别的人**——他自己给 libcxx 提过 patch，调试过 libcxxabi 的 `__cxa_throw` 崩溃，在 ARM64 上追过 libunwind 的 DWARF `.eh_frame` 解析 bug，给 OpenMP runtime 调过 80 核 NUMA 的 affinity。他不关心编译器怎么生成代码（那是 [E01 Clang](../Expert_01_Clang_Frontend/README.md) / [E05 CodeGen](../Expert_05_CodeGen_SelectionDAG_GlobalISel/README.md) 的活），他关心的是**程序编译完之后、运行时赖以生存的那一坨 `.so`/`.a`**：`libc++.so`（标准库）、`libc++abi.so`（ABI 与异常）、`libunwind.so`（栈展开）、`libomp.so`（OpenMP runtime）、`libomptarget.so`（异构 offload）。这五件套是 C++ 程序"能在 ARM64 Linux 上跑起来"的最低运行时契约。这位专家同时是飞腾 [D3000 8 核 / S5000C 80 核](../../体系结构实验/README.md) 多核扩展性的**运行时命脉**——OpenMP runtime 的 hwloc affinity、NUMA membind 直接决定 S5000C 80 核能不能线性扩展。
+> **角色定位**：这位专家是 **C++ 运行时栈的维护者级别的人**——他自己给 libcxx 提过 patch，调试过 libcxxabi 的 `__cxa_throw` 崩溃，在 ARM64 上追过 libunwind 的 DWARF `.eh_frame` 解析 bug，给 OpenMP runtime 调过 80 核 NUMA 的 affinity。他不关心编译器怎么生成代码（那是 [E01 Clang](../Expert_01_Clang_Frontend/README.md) / [E05 CodeGen](../Expert_05_CodeGen_SelectionDAG_GlobalISel/README.md) 的活），他关心的是**程序编译完之后、运行时赖以生存的那一坨 `.so`/`.a`**：`libc++.so`（标准库）、`libc++abi.so`（ABI 与异常）、`libunwind.so`（栈展开）、`libomp.so`（OpenMP runtime）、`libomptarget.so`（异构 offload）。这五件套是 C++ 程序"能在 ARM64 Linux 上跑起来"的最低运行时契约。这位专家同时是飞腾 D3000 8 核 / S5000C 80 核（`../../体系结构实验/README.md`） 多核扩展性的**运行时命脉**——OpenMP runtime 的 hwloc affinity、NUMA membind 直接决定 S5000C 80 核能不能线性扩展。
 >
 > **核心思维模型**：
 > 1. **ABI 优先思维（ABI-First Thinking）**——运行时栈的每一层都是 ABI 契约。`libc++abi` 的 `__cxa_exception` 结构体布局（[实测-cxa_exception.h:30-77]）是 Itanium C++ ABI 的物理化身；`libunwind` 的 `_Unwind_ReasonCode` 返回值是跨编译器、跨语言的 unwinder 契约（GCC 的 libgcc_s 和 LLVM 的 libunwind 必须互换兼容）；`libc++` 的 `_LIBCPP_ABI_VERSION` 决定了 `std::string`/`std::vector` 的内存布局能否与 GCC libstdc++ 互通。**ABI 是运行时的地壳**——改一个字段偏移，全世界的 `.so` 都要重编。
@@ -588,7 +588,7 @@ offload 子项目（[实测-offload/]）提供 OpenMP target offload + 异构运
 
 **冲突**：libcxxrt（FreeBSD 用的）是 BSD 2-Clause（不是 Apache 2.0），许可证不同。飞腾若同时处理 libcxx（Apache）和 libcxxrt（BSD），需注意合规差异。
 
-### 5.5 与飞腾项目 [Expert_11 Compiler Research](../../体系结构实验/Expert_11_Compiler_Research/README.md) 的对偶
+### 5.5 与飞腾项目 Expert_11 Compiler Research（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） 的对偶
 
 **一致**：飞腾项目 E11 写 PhyGCC（基于 GCC），本 Expert 写飞腾 C++ 运行时栈。PhyGCC 编译的程序用 libstdc++ + libgcc_s，PhyCC（基于 LLVM）编译的程序用 libcxx + libcxxabi/libunwind——两者运行时栈完全不同。
 
@@ -642,7 +642,7 @@ offload 子项目（[实测-offload/]）提供 OpenMP target offload + 异构运
 - [Expert_14 CompilerRT Sanitizers JIT](../Expert_14_CompilerRT_Sanitizers_JIT/README.md) —— ASan 如何 hook libcxx `operator new`/`__cxa_throw`
 - [Expert_18 Phytium Adaptation](../Expert_18_Phytium_Adaptation/README.md) + [飞腾SDK_LLVM版本矩阵.md](../Expert_18_Phytium_Adaptation/飞腾SDK_LLVM版本矩阵.md) —— 飞腾 6 大 OS 栈的 LLVM 版本（本 Expert 的飞腾实证基础）
 - [Expert_17 Governance License](../Expert_17_Governance_License/README.md) —— Apache 2.0 with LLVM Exception 对运行时栈静态链接的影响
-- 飞腾项目 [Expert_11 Compiler Research](../../体系结构实验/Expert_11_Compiler_Research/README.md) —— PhyGCC（libstdc++ + libgcc_s）与 PhyCC（libcxx + libcxxabi）的 ABI 不互通
+- 飞腾项目 Expert_11 Compiler Research（`../../体系结构实验/Expert_11_Compiler_Research/README.md`） —— PhyGCC（libstdc++ + libgcc_s）与 PhyCC（libcxx + libcxxabi）的 ABI 不互通
 
 ### 7.2 外部延伸
 

@@ -1,6 +1,6 @@
 # `../math` 全部书籍总索引 · v2（含 28 视角适配）
 
-> 自动汇总自 [书籍索引/](书籍索引/) · 由 `scripts/build_total_index_v2.py` 生成
+> 自动汇总自 [书籍索引/](.) · 由 `scripts/build_total_index_v2.py` 生成
 
 > v2 增强：扩展主题分类 + 加入 28 视角适配建议
 

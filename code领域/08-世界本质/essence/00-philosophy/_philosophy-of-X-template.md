@@ -89,5 +89,5 @@
 ## 九、关联
 
 - 学科主笔记：`[链接]`
-- 哲学之根：[`00-philosophy/README.md`](../../00-philosophy/README.md)
-- 相关哲学分支：[`00-philosophy/X/`](../../00-philosophy/X/)
+- 哲学之根：`00-philosophy/README.md`（`../../00-philosophy/README.md`）
+- 相关哲学分支：`00-philosophy/X/`（`../../00-philosophy/X/`）

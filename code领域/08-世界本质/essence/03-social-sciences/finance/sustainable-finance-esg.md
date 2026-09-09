@@ -1,7 +1,7 @@
 # 可持续金融与 ESG · Sustainable Finance & ESG
 
 > **位置**：`03-social-sciences/finance/sustainable-finance-esg.md`  
-> **关联**：[`_overview.md`](./_overview.md) 总览 + [`_philosophy-of-finance.md`](./_philosophy-of-finance.md) 哲学锚点 + [`corporate-finance.md`](./corporate-finance.md) §9.4 ESG 与利益相关者 + [`asset-allocation.md`](./asset-allocation.md) ESG 配置 + [`finance-ethics.md`](./finance-ethics.md)（金融伦理）  
+> **关联**：[`_overview.md`](./_overview.md) 总览 + [`_philosophy-of-finance.md`](./_philosophy-of-finance.md) 哲学锚点 + [`corporate-finance.md`](./corporate-finance.md) §9.4 ESG 与利益相关者 + [`asset-allocation.md`](./asset-allocation.md) ESG 配置 + `finance-ethics.md`（`./finance-ethics.md`）（金融伦理）  
 > **学科哲学锚点**：[`_philosophy-of-finance.md`](./_philosophy-of-finance.md) §"企业为谁存在"——规范前提之争 + [`00-philosophy/ethics/`](../../00-philosophy/ethics/)（代际正义、集体行动）  
 > **思想家主线**：Friedman / Freeman / Elkington / Porter / Scholes / Carney  
 > **一句话**：可持续金融 = **把"外部性"从脚注搬进定价核心的金融范式革命**——它追问的不是"这笔投资能赚多少"，而是"这笔投资在赚钱的同时，创造了还是毁灭了什么"。
@@ -1125,7 +1125,7 @@ ESG 整合组合优化：不同 ESG 约束下的有效前沿
 - **中国金融** → [`china-financial-system.md`](./china-financial-system.md)——绿色金融的中国路径
 - **央行与监管** → [`central-banking.md`](./central-banking.md)、[`financial-regulation.md`](./financial-regulation.md)——NGFS、气候监管
 - **系统科学** → [`06-systems/complexity/`](../../06-systems/complexity/)——气候临界点、系统性风险
-- **金融伦理** → [`finance-ethics.md`](./finance-ethics.md)（待建）——ESG 伦理、碳定价伦理、漂绿伦理
+- **金融伦理** → `finance-ethics.md`（`./finance-ethics.md`）（待建）——ESG 伦理、碳定价伦理、漂绿伦理
 - **公共经济学** → [`03-social-sciences/economics/`](../../03-social-sciences/economics/)——外部性、公共物品、庇古税
 
 ### 10.4 阅读路径

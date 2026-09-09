@@ -150,4 +150,4 @@ a → d → e
 
 ---
 
-*配套：[micrograd精读](micrograd-100行吃透自动微分.md) | [tinytorch/tensor.py](../projects/tinytorch/tensor.py)*
+*配套：micrograd精读（`micrograd-100行吃透自动微分.md`） | tinytorch/tensor.py（`../projects/tinytorch/tensor.py`）*
