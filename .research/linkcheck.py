@@ -3,7 +3,7 @@
 
 用法:python linkcheck.py <目录或文件> [目录或文件 ...]
 - 递归收集 .md 文件,提取 markdown 链接 [text](target)
-- 跳过代码围栏(``` / ~~~)内的内容,避免代码示例误报
+- 跳过代码围栏(``` / ~~~)内的内容,避免代码示例误报;行内反引号代码 span 同样剥离
 - 只检查相对链接(http/https/mailto/锚点跳过);#片段剥离后校验文件存在
 - 尖括号形式 `](<a b.md>)` 按字面量解析(允许空格);普通形式先做 %XX 解码再校验
 - 输出死链清单,exit 1 若有死链,否则 exit 0
@@ -16,6 +16,7 @@ from pathlib import Path
 LINK_RE = re.compile(r'\[([^\]]*)\]\((<[^>]*>|[^)\s]+)\)')
 FENCE_RE = re.compile(r'^\s*(```|~~~)')
 MATH_INLINE_RE = re.compile(r'(\$[^$\n]+\$|\$\$.+?\$\$)')
+CODE_INLINE_RE = re.compile(r'`[^`\n]+`')
 
 
 def extract_links(text: str):
@@ -35,7 +36,8 @@ def extract_links(text: str):
                 in_math = False
             else:
                 continue
-        stripped = MATH_INLINE_RE.sub('', line)
+        stripped = CODE_INLINE_RE.sub('', line)
+        stripped = MATH_INLINE_RE.sub('', stripped)
         if stripped.count('$$') % 2 == 1:  # 块开始且未闭合
             in_math = True
             stripped = stripped.split('$$', 1)[0]

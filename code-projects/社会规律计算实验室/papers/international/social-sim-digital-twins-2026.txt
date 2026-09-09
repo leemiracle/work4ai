@@ -1,0 +1,535 @@
+                                         Social Simulations: from Agent-Based Modeling to Digital Twins
+                                                                    Erica Cau                                     Andrea Failla
+                                                Department of Computer Science, University of Pisa                 ISTI-CNR
+                                                           erica.cau@phd.unipi.it                          andrea.failla@isti.cnr.it
+                                                            Valentina Pansanella                           Giulio Rossetti
+                                                                 ISTI-CNR                                   ISTI-CNR
+                                                     valentina.pansanella@isti.cnr.it              giulio.rossetti@isti.cnr.it
+
+
+
+                                                                                       Abstract
+                                                   Social simulation is a computational approach for studying how social phenomena emerge
+                                               from interactions among individuals, groups, organizations, and their environments. This
+                                               article surveys the progression from classical agent-based modeling to large-language-model-
+arXiv:2607.13693v1 [cs.MA] 15 Jul 2026
+
+
+
+
+                                               enhanced agent-based simulations and social digital twins. It outlines their core modeling
+                                               assumptions, architectural components, advantages, limitations, and the scope of claims
+                                               that these approaches can support.
+
+
+                                         Synonyms
+                                         Agent-based Modeling, Generative Agent-Based Modeling, LLM-based Agent-based Modeling,
+                                         Digital Twin, Social Digital Twin.
+
+
+                                         Glossary
+                                             • Agent-Based Modeling: A computational method that simulates the interactions of
+                                               autonomous agents to study the emergent behavior of complex systems.
+
+                                             • Generative Agent-Based Modeling/LLM-based Agent-Based Modeling: A form
+                                               of agent-based modeling where large language models drive agent reasoning, communica-
+                                               tion, and decision-making in simulations.
+
+                                             • Digital Twin: A virtual representation of a physical system, process, or entity that
+                                               mirrors its real-world counterpart.
+
+                                             • Social Digital Twin: A digital twin designed to model and simulate social systems,
+                                               human interactions, and collective behavior to analyze and predict societal dynamics.
+
+                                             • Socio-Technical Systems: Systems composed of interacting social and technical ele-
+                                               ments, where human behavior, organizational processes, and technological infrastructures
+                                               are deeply interdependent and jointly shape overall system outcomes.
+
+
+                                         1     Definition
+                                         Social simulation is the computational study of social phenomena through the construction
+                                         and analysis of formal models that represent individuals, groups, organizations, and their in-
+                                         teractions, with the aim of generating artificial societies in silico to observe, explain, or predict
+                                         emergent patterns of collective behavior. It is the algorithmic continuation of classical thought
+
+
+                                                                                            1
+experiments, translating stylized “what-if” scenarios of social theory into executable models
+whose outcomes can be observed, measured, and systematically varied.
+
+
+2     Social Simulations
+Social systems are inherently complex: collective outcomes emerge from the interactions of het-
+erogeneous individuals, whose behaviors, beliefs, and relationships evolve over time. Traditional
+analytical methods often struggle to capture this complexity, as they rely on simplified assump-
+tions or static snapshots that cannot represent dynamic, adaptive social processes. Social sim-
+ulation is a computational approach that addresses this challenge by creating artificial societies
+in silico in which agents interact according to explicit rules. These simulations allow researchers
+to observe how micro-level behaviors generate macro-level phenomena, to test theoretical as-
+sumptions, and to explore counterfactual “what-if” scenarios that are difficult or impossible to
+experiment with in the real world. At its core, social simulation is the algorithmic continuation
+of classical thought experiments in social theory. Philosophers and social scientists have long
+employed stylized “what-if” reasoning to explore social phenomena: for example, how segrega-
+tion might emerge even if individuals have mild location preferences, or how norms stabilize
+in small communities. Social simulation formalizes these thought experiments into executable
+models, producing measurable outcomes that can be systematically analyzed. The field draws
+on diverse methods, including agent-based modeling (ABM), system dynamics, network simula-
+tions, and, more recently, AI-enhanced models and digital twins. ABMs, in particular, provide a
+natural bridge between theory and computation by representing individual agents with distinct
+attributes, states, and behavioral rules within structured environments. These models make it
+possible to study emergent dynamics such as cooperation, polarization, diffusion of innovations,
+and social influence in a controlled, repeatable manner. In this chapter, we first introduce
+classical ABMs as the foundation of social simulations, highlighting their structure, design, and
+limitations. We then present advances in ABM enhanced with Large Language Models (LLMs),
+which enable agents to interact using natural language and simulate complex cognitive and
+social processes. Finally, we discuss the integration of social simulations into digital twins, al-
+lowing high-fidelity, data-driven representations of real-world socio-technical systems. Together,
+these perspectives illustrate the evolution of social simulation from conceptual experiments to
+computational frameworks capable of addressing pressing questions in social science.
+
+2.1   Classical ABM
+Agent-based models (ABMs) are a form of computational social science [7], involving models im-
+plemented as computer programs [9] that represent social systems as collections of autonomous,
+heterogeneous agents interacting according to explicit rules within structured environments [4].
+ABMs formalize theoretical assumptions and explore how micro-level interactions produce emer-
+gent collective dynamics, such as cooperation, segregation, polarization, or diffusion [4].
+
+The Architecture. The design of an ABM involves designing computational experiments
+that can address one or more research questions through the agents’ local behaviors. These
+questions determine the specific social mechanism under investigation, whether it concerns
+opinion polarization, disease transmission, market dynamics, or urban segregation. The choice
+of a specific research question drives the definition of the model and the design of the initial
+population.
+Agents constitute the fundamental building blocks. An agent represents an abstraction of a
+real-world entity – an individual, organization, or other – that possesses agency, meaning the
+capacity to make decisions and take actions. Each agent is characterized by three primary
+elements: attributes, states, and rules.
+
+
+                                                2
+  • Attributes are agent-level variables that represent relatively stable characteristics that
+    define the identity of agents and, collectively, of the population. These may include
+    demographic variables such as age, gender, or education level, economic variables, such
+    as the income level or job title, as well as psychological traits such as risk tolerance or
+    cognitive biases. Attributes usually remain constant throughout a simulation, or change
+    at a much slower rate than other agent properties. Their evolution is not the objective
+    of the study; rather, the modeler wants to see their causal impact on the dynamics. In
+    many classical models, attributes are assumed to be homogeneous across the population;
+    however, one of the main strengths of ABMs lies in their ability to introduce heterogeneity
+    among agents. Attributes are normally part of the model parameters, i.e., the set of
+    variables that influence the studied dynamics. This is possible because they normally
+    become part of the rules governing agents’ behavior. In this way, modelers can evaluate
+    their causal impact on the emergent behaviors that arise from the social simulations.
+
+  • States represent the current condition of an agent and are the properties that change
+    throughout a simulation. Their evolution is driven by the model’s rules, which update
+    states over time based on interactions among agents and with the environment. Because
+    states capture what changes, they are often the focus of analyses of emergent phenom-
+    ena. For example, an agent’s opinion can be modeled as a state, allowing researchers to
+    study the emergence of polarization or consensus; similarly, in epidemic models, states
+    such as susceptible, or infected, enable the study of how diseases spread through a pop-
+    ulation. States can be binary, discrete, or continuous variables, as well as more complex
+    mathematical entities.
+
+  • Rules define how agents behave within the model. In practice, this means that each agent
+    follows an internal algorithm that guides its choices, determines its actions and inter-
+    actions, and updates its states. Rules are usually grounded in cognitive or sociological
+    theories, and must be explicitly specified and logically consistent, even when they incorpo-
+    rate stochastic elements. Through rules, specific behavioral mechanisms are connected to
+    observable outcomes, enabling researchers to test theoretical propositions about how indi-
+    vidual behaviors generate collective patterns. When a rule involves an agent’s attribute,
+    it becomes an agent-level parameter.
+
+Rules can also be influenced by model parameters, which are properties defined at the pop-
+ulation level. These parameters affect the behavior of all agents in the same way and are
+conceptually distinct from agent-level attributes, which can vary across individuals. Examples
+include the bias of a recommender system that curates agents’ timelines or the transmission
+probability of a virus in an epidemic model.
+In social systems, much of the observed complexity arises from interactions among agents, which
+are usually constrained by the relationships that connect individuals. For instance, it is more
+likely that one’s opinion will be influenced by friends, colleagues, or family members than by
+complete strangers. Relationships between agents are commonly represented using network
+structures, most often graphs, where agents are modeled as nodes and their relationships as
+edges. Classical network models (e.g., random, small-world, or scale-free graphs) often provide
+a framework for the design of agents’ societies. The topology of such a network is a key deter-
+minant of system-level outcomes, influencing diffusion, coordination, and emergent behaviors.
+Like agents, relationships can also have attributes. These relationships can be static or dynamic.
+As state dynamics, relationship dynamics are also governed by rules. When relationships evolve
+over time, dynamic networks provide a natural formalism for representing them. More advanced
+ABMs use multi-layer networks, hypergraphs, or more complex structures that allow different
+types of relationships (e.g., family, friendship, professional ties) to be represented simultane-
+ously. Finally, relationships can also be adaptive. In many domains, the evolution of social ties
+
+
+                                                3
+and the evolution of agent states are interdependent. Adaptive networks, also called co-evolving
+networks, provide a modeling framework in which both the network structure and the states
+of its nodes change over time. This co-evolution can generate complex behaviors and emergent
+patterns that would not arise if either the network or the agent states evolved independently.
+Time represents a critical but challenging aspect of Agent-based modeling. Real-world social
+processes occur in continuous time, but computational models must discretize time into man-
+ageable steps. Modelers must decide on the appropriate time step duration, which determines
+how many actions or interactions occur within each simulation cycle. Additionally, they must
+choose between synchronous updating (where all agents act simultaneously) and asynchronous
+updating (where agents act sequentially), as this choice can significantly impact simulation
+outcomes due to path-dependence effects.
+Space provides another dimension of complexity in agent-based models. While some models
+operate in abstract (or virtual) social spaces defined only by relationships, others incorporate
+explicit spatial representations. Spatially explicit models range from simple grid-based envi-
+ronments to complex geographic information system integrations that incorporate real-world
+spatial data. The spatial component becomes particularly important when modeling phenom-
+ena such as urban development or epidemic spread, where physical proximity and environmental
+characteristics play crucial roles.
+Besides defining the model and the initial population, where agents, relationships, time, and
+space are specified, the design of an agent-based social simulation also involves several addi-
+tional decisions like choosing the initial state distribution for agents, which may be uniform,
+biased, or based on empirical data; selecting the range of parameter values to explore in order
+to test their effects on the system; determining the duration of a single simulation run, either in
+terms of the number of actions or interactions, discrete time steps, or until a stopping condition
+is met; and finally, identifying which metrics to compute during each simulation run, so that
+results can be aggregated across runs to produce meaningful experimental outcomes.
+
+Agent-based Social Simulations. Agent-based modeling in the social sciences emerged in
+the 1960s–70s, with the seminal work on segregation by Thomas Schelling [19] introduced simu-
+lations of individual behavior and interaction, as an alternative to dominant macro-level system
+theories.
+     The 1990s marked the peak of ABM popularity, thanks to increasing computational power
+and the development of dedicated computer platforms, e.g., NetLogo [24]. An advantage of
+these platforms is that they allow even non-computer scientists to develop models, enabling the
+development of a multidisciplinary field of research at the intersection of sociology, psychology,
+computer science, mathematics, physics, and complex systems theory [4]. Two of the most
+prominent examples from this decade of work are Axelrod’s dissemination of culture [1], and
+Epstein and Axtell’s Sugarscape [8]. Now, several programming languages allow for the creation
+of agent-based models, also through specialized libraries [17, 21].
+     More recently, Agent-based social simulations have been applied in economics and finance
+[2], sociology [4], and other fields.
+Agent-based models where states are binary are particularly well-suited for studying processes
+where the phenomenon of interest can be characterized as something that agents either possess
+or do not possess. These models typically employ a contagion metaphor where agents transmit
+states to one another through social influence mechanisms. In the modeling of the diffusion of
+innovations [12], agents transition from non-adopters to adopters of new technologies or prac-
+tices. Information diffusion [25] models study how news, rumors, or knowledge spread through
+social networks. In recent years, researchers have focused specifically on online social networks
+[10]. Following this approach, researchers have approached diffusion of behaviors [16] and emo-
+tions [22]. Voting behavior models [11] represent another important application area, where
+agents’ electoral choices are influenced by their social interactions. Epidemiological models [13],
+
+                                                4
+while not exclusively social in nature, represent a significant application of discrete state ABM
+in studying disease spread through social networks. Agent-based models where states are con-
+tinuous address phenomena that exist on spectrums rather than as binary states. Models of
+opinion dynamics [20] represent the most prominent application in this category, studying how
+individual opinions evolve through social influence.
+
+Advantages and Limitations. Agent-based models offer several distinctive advantages
+for studying social phenomena. They naturally capture complexity and nonlinearity, accommo-
+dating heterogeneous agents with diverse behavioral rules and interaction patterns. ABMs are
+particularly suited to studying emergent phenomena, showing how simple micro-level rules can
+generate macro-level patterns such as convergence, polarization, or segregation. Their trans-
+parency is another strength: behavioral assumptions are explicitly coded, making mechanisms
+open to inspection and testing, unlike many statistical or machine learning models. A distinc-
+tive advantage is the ability to study causal relationships. While empirical data often reveal
+only correlations, ABMs embed mechanisms directly, allowing researchers to vary parameters
+systematically and identify their causal effects on target outcomes. Finally, ABMs serve as
+effective platforms for policy analysis, enabling scenario testing of interventions aimed at indi-
+vidual behaviors and their population-level consequences, such as in health or environmental
+policies.
+    ABMs also face important limitations. They are built on assumptions about behavioral
+mechanisms that, though theory-informed, may be arbitrary, without validation. In opinion
+dynamics, for example, models often assume opinions converge through averaging, yet alterna-
+tive mechanisms (e.g., cumulative effects, backfire) are equally plausible. Network analysis and
+network mining techniques play a crucial role in informing, calibrating, and validating agent-
+based models. Empirical network data can be mined to infer realistic interaction structures,
+estimate model parameters, and identify relevant mesoscopic patterns such as communities or
+motifs. Conversely, networks generated by simulations can be analyzed using standard network
+metrics to compare simulated and real-world systems, thus closing the loop between modeling,
+simulation, and empirical observation. However, there is a lack of a robust validation frame-
+work: outputs may resemble real data without ensuring that the underlying mechanisms are
+correct, and most models are not calibrated with empirical initial conditions. As a result, many
+ABMs function better as thought experiments than as tools for direct application, whether for
+prediction, inference, or policy-making. As models grow more complex, their analysis can be-
+come as difficult as the study of empirical data itself, limiting their explanatory power. Finally,
+computational demands can be significant, especially in large or detailed models, raising both
+technical and environmental concerns.
+
+2.2   ABM Enhanced with AI
+The rise of artificial intelligence, especially generative agents, has introduced a new class of
+computational models that bridges classic ABMs and social digital twins. This evolution marks
+a shift in social simulations, moving from traditional rule-based ABM toward LLM-enhanced
+agent-based modeling, in which agents produce context-aware arguments that mirror human
+discourse patterns. This approach addresses one of the main limitations of classical agent-based
+models: while the traditional model relies on mechanistic rules for modeling the actions of agents
+that do not consider the linguistic dimension necessary in social interaction, LLM-based agents
+can produce emergent behaviors that arise, in a natural way, from conversational dynamics and
+contextual interpretation. In this way, not only is it possible to understand the interaction pat-
+terns of the nodes of the network, but also to understand the way arguments and conversations
+unfold to capture complex social behaviors, such as persuasion and argumentation strategies of
+LLMs, and the impact of psychological biases. For these reasons, LLM-based agent simulations
+
+
+                                                5
+might impact other fields beyond computational social science itself. Such simulations can help
+understand how these models express stances, construct arguments, and, more broadly, whether
+they are capable of inferring others’ internal states and adapting their responses, approximating
+a Theory of Mind as an emergent cognitive capability of LLMs.
+
+Architecture of LLM-ABM. Although still in its early stages, this research spans a wide
+variety of approaches. An LLM-enhanced agent-based simulation primarily consists of a popu-
+lation of agents and an underlying language model, such as Llama or Mistral, that generates
+each agent’s reasoning and comments. Agents are prompted with a specific role or behavior
+(e.g., one agent is tasked with persuading the other). At the same time, the debate topic and
+the number of interactions define the simulation’s context and settings. Distinct personalities
+or divergent initial opinions may further characterize agents through prompts. They can also
+be equipped with memory mechanisms, allowing them to retain past interactions and adapt
+future responses accordingly. Starting from this minimal configuration, additional components
+can be introduced by drawing on classical ABMs.
+    Agents can interact in a mean-field scenario or be embedded in a network structure tailored
+to the study’s aim (e.g., small-world or scale-free).
+    Other extensions include integrating interaction rules or opinion update rules from the ABMs
+literature to regulate when interactions occur and how opinions evolve. In this way, agents may
+be influenced by their neighbors, adjust their stance based on confidence bounds, or follow
+inertia or peer pressure. This approach enables a more thorough investigation of the interplay
+between social ties and natural language arguments, potentially yielding new insights into how
+information spreads within networked populations.
+
+Studies on LLM-opinion dynamics. Current applications of LLM agent simulations have
+explored a range of social phenomena traditionally studied in computational social science, in-
+cluding opinion dynamics, persuasion mechanisms, and polarization. Early studies show that
+LLM agents can demonstrate structured behavior, such as organizational skills, relationship-
+forming capabilities, and coordination of group activities [14, 15].
+    In the field of opinion dynamics, LLM agents have been employed to simulate debates in
+which individuals exchange arguments in natural language. In mean-field interaction settings,
+they tend toward agreement through structured persuasion, in which agents reach consensus by
+selectively adopting peers’ arguments rather than blindly accepting opinions [5]. Instead, when
+embedded in network structures, LLM agents can interact and/or change their opinions ac-
+cording to rules derived from classical opinion-dynamics models. Applying bounded-confidence
+interaction rules promotes polarization and the formation of echo chambers. Simulation re-
+sults show that small-world and scale-free networks encourage echo chamber formation and the
+formation of large clusters of like-minded agents, mirroring real-world patterns of information
+diffusion [23]. Within this same networked setting, polarization can be further induced by
+prompting agents with cognitive biases. For example, simulated confirmation bias affects
+how agents interpret incoming arguments, with stronger biases influencing agents to maintain
+polarized positions and weaker biases increasing opinion adaptability during interaction [6].
+
+Advantages and limitations. LLM-based simulations remain structurally similar to classical
+ABMs: the agents interact locally through network ties and generate emergent collective
+patterns at the population level. Their main advantage lies in their language-mediated in-
+teractions, which allow LLM-agents to engage in argumentation and persuasion and to make
+micro-level influence mechanisms more evident through language. Moreover, LLM-based ABMs
+allow us to investigate in vitro scenarios to determine whether LLM-agent populations sponta-
+neously exhibit characteristics similar to those of human populations, and to explore scenarios
+that would be infeasible to test in real-world settings. In this sense, LLM-based simulations
+
+
+                                               6
+can support explanatory claims about how specific interaction mechanisms generate collec-
+tive outcomes, and exploratory investigations of plausible social scenarios under hypothetical
+conditions.
+    At the same time, LLM-based simulations face important limitations. LLMs are statistical
+models trained on incomplete datasets, which might reflect cultural and demographic biases.
+Simulation outcomes are highly sensitive to prompt design, raising concerns about robustness
+and applicability, especially given the stochastic nature of their outputs. Many current studies
+also rely on simplified or absent network structures, overlooking a key driver of real-world social
+influence. Validation presents additional issues. Unlike traditional opinion dynamics models,
+the presence of linguistic interactions makes benchmarking less straightforward and increases
+the risk of mistaking model biases for realistic social phenomena. A common approach is to
+compare the LLM-enhanced simulation with corresponding agent-based models to understand
+the patterns introduced by the LLM. As a consequence, LLM agent models cannot provide
+reliable predictive claims about real-world systems, and their realistic language should not
+be considered as evidence of the ability to properly simulate human behavior. A promising
+approach is the development of social digital twins, which can ground LLM-based simulations
+in richer and more realistic representations of social systems.
+
+2.3   Digital Twins
+So far, we have touched on traditional and AI-enhanced Agent-based social simulations. What
+these two paradigms have in common is that they are task-oriented: the primitives of the sim-
+ulation are designed specifically to answer a defined research question, or to solve a particular
+task. In a generic epidemic model, for instance, the objective is to understand how a pathogen
+spreads and (possibly) dies out. As a result, agents are equipped only with the minimal set of
+attributes necessary for that task — typically, their current state and transition probabilities.
+Digital twins adopt a different stance, bringing simulations one step closer to realism. A dig-
+ital twin (DT) is a virtual replica of a specific physical, biological, or social system, designed
+to mirror its structure, state, and behavior using empirical data [3]. Instead of tailoring the
+model to a narrow problem, DTs aim to replicate an entire, living system in silico, preserving
+its complexity and detail, even when such detail is not immediately relevant to a single research
+objective. The goal is thus not simply to approximate behavior under specific assumptions, but
+to construct a dynamic, data-driven representation of a particular system capable of supporting
+multiple forms of investigation.
+
+As such, each DT is anchored to a real-world referent, that is, the object or system it is
+replicating. For instance, one does not build the DT of a generic city, but of a specific one —
+e.g., the DT of the city of Rome. This twin is directly tied to its real-world counterpart and
+may ingest live data from it, such as traffic, mobility, infrastructure, and human behavior data.
+Depending on the nature of the system they aim to replicate, DTs can be ascribed to one of
+three main categories:
+
+  • DTs of mechanical systems, which replicate tangible, material systems governed by phys-
+    ical laws (e.g., the DT of a car, the DT of a bridge). These are typically coupled with the
+    source system through real-time sensors that continuously capture and feed this data into
+    the digital replica.
+
+  • DTs of biological and cognitive systems, which model individual living organisms and their
+    physiological and/or psychological functions. These twins aim to reproduce the internal
+    states of biological entities like humans (e.g., DTs of medical patients, DTs of athletes);
+
+  • DTs of socio-technical systems, which represent interacting agents embedded within tech-
+    nological and/or social infrastructures. While the previous category focused on mirroring
+
+                                                7
+      individual living entities, under this category fall all those DTs that capture the collective
+      dynamics emerging from the interactions among multiple agents and their environment
+      (e.g., DTs of hospitals, DTs of social media platforms).
+
+Clearly, the third category is the most relevant to the domain of social simulations. Socio-
+technical digital twins (SDTs) usually retain the core ABM paradigm but reduce its abstraction
+and also further ground the paradigm in real data. This epistemic switch ultimately redefines
+the question behind social simulation studies: from “what happens, in general, to societies with
+these characteristics?” to “what will happen here, now, under these conditions?”.
+
+In practice, SDTs offer multiple advantages with respect to traditional simulative approaches.
+First, they provide a controlled environment for testing counterfactual scenarios that would
+be costly or unethical in the real world. For example, a digital twin of a social-media platform
+allows researchers to vary recommendation algorithms and observe their effects on network-
+mediated processes without exposing actual users to untested interventions. Re-running the
+twin under different settings yields comparable trajectories for systematic evaluation [18]. Sim-
+ilarly, a DT of urban mobility can simulate how changes in transportation policies reshape
+commuting networks, while a DT of an organization can explore how modifications in commu-
+nication structures affect productivity or knowledge diffusion.
+Second, SDTs are reusable: once the core model is calibrated, the same infrastructure can
+support multiple investigations; the same SDT of a social media platform allows studying rec-
+ommendation impact, misinformation diffusion, echo-chamber formation, or other processes, all
+without rebuilding the model.
+High-fidelity grounding also yields augmented forecast granularity. While traditional
+ABMs typically return aggregate trends (e.g., the expected size of an information cascade)
+a SDT can generate micro- and meso-level predictions.
+Finally, realistic SDTs can generate substitute data when direct access is limited. The recent
+tightening of social-media APIs, for instance, restricts the availability of interaction logs, but a
+digital twin can produce synthetic datasets that approximate the missing evidence.
+
+Yet, as with any technological promise, the adoption of SDTs comes with challenges. First and
+foremost are the costs: developing and maintaining a high-fidelity SDT is resource-intensive.
+It requires fine-grained data, computational infrastructure, and deep domain expertise. But
+the more fundamental issue is validation. To be reliable tools for reasoning and prediction,
+SDTs must be validated on at least three levels. First, on a structural level, researchers should
+assess whether the architecture of the digital twin accurately reflects the composition and orga-
+nization of the real-world system it replicates. This includes validating the network structure,
+agent types, affordances, and constraints, ensuring that the components and their relationships
+correspond to those observed in reality. Second, on a behavioral level, it is essential to verify
+that the agents within the twin behave in plausible and heterogeneous ways. This means not
+only reproducing average trends but capturing the diversity of strategies and responses that
+emerge in the real system. In social systems, especially, overlooking behavioral heterogeneity
+can indeed lead to misleading forecasts. Third, on a predictive level, the outputs of the SDT
+should be compared with empirical observations to evaluate its forecasting power. This does
+not imply perfect correspondence at all times, but the twin should be able to reproduce past or
+ongoing dynamics with reasonable accuracy under known conditions.
+
+Finally, greater realism is not inherently an epistemic virtue. While high-fidelity models like
+SDTs allow more granular insights and predictions, they also risk overfitting to the peculiarities
+of the system they emulate. In this sense, realism can become a double-edged sword, and re-
+searchers should carefully weigh the trade-offs between specificity and abstraction. The choice
+between a digital twin and a more abstract ABM should depend on the research goals: whether
+
+                                                 8
+the priority is to forecast outcomes in a particular system, or to uncover general mechanisms
+that apply across contexts.
+More generally, the scope of the claims supported by SDTs and LLM-based simulations must
+be interpreted with care. These models can reliably support exploratory uses (generating
+hypotheses, testing counterfactuals) and explanatory uses, by identifying mechanisms that
+could account for observed dynamics. Their predictive use, however, is necessarily more
+limited: forecasts are conditional on data quality, calibration, and behavioral assumptions, and
+should be regarded as scenario-dependent projections rather than precise point predictions.
+Over-interpretation is a concrete risk, especially when high-fidelity outputs create an illusion
+of accuracy; apparent realism does not guarantee epistemic validity. Consequently, results
+from SDTs and LLM-driven agents are best understood as decision-support tools that inform
+reasoning about possible futures, not as definitive or context-independent predictors.
+
+
+References
+ [1] Robert Axelrod. The dissemination of culture: A model with local convergence and global
+     polarization. Journal of conflict resolution, 41(2):203–226, 1997.
+ [2] Robert L Axtell and J Doyne Farmer. Agent-based modeling in economics and finance:
+     Past, present, and future. Journal of Economic Literature, 63(1):197–287, 2025.
+ [3] Barbara Rita Barricelli, Elena Casiraghi, and Daniela Fogli. A survey on digital twin:
+     Definitions, characteristics, applications, and design implications. IEEE access, 7:167653–
+     167671, 2019.
+ [4] Federico Bianchi and Flaminio Squazzoni. Agent-based models in sociology. Wiley Inter-
+     disciplinary Reviews: Computational Statistics, 7(4):284–306, 2015.
+ [5] Erica Cau, Valentina Pansanella, Dino Pedreschi, and Giulio Rossetti. Selective agreement,
+     not sycophancy: investigating opinion dynamics in llm interactions. EPJ Data Science,
+     14(1):59, 2025.
+ [6] Yun-Shiuan Chuang, Agam Goyal, Nikunj Harlalka, Siddharth Suresh, Robert Hawkins,
+     Sijia Yang, Dhavan Shah, Junjie Hu, and Timothy Rogers. Simulating opinion dynam-
+     ics with networks of llm-based agents. In Findings of the association for computational
+     linguistics: NAACL 2024, pages 3326–3346, 2024.
+ [7] Rosaria Conte, Nigel Gilbert, Giulia Bonelli, Claudio Cioffi-Revilla, Guillaume Deffuant,
+     Janos Kertesz, Vittorio Loreto, Suzy Moat, J-P Nadal, Anxo Sanchez, et al. Manifesto of
+     computational social science. The European Physical Journal Special Topics, 214(1):325–
+     346, 2012.
+ [8] Joshua M Epstein and Robert Axtell. Growing artificial societies: social science from the
+     bottom up. Brookings Institution Press, 1996.
+ [9] Nigel Gilbert. Agent-based models. Sage Publications, 2019.
+[10] Adrien Guille, Hakim Hacid, Cecile Favre, and Djamel A Zighed. Information diffusion in
+     online social networks: A survey. ACM Sigmod Record, 42(2):17–28, 2013.
+[11] Richard A Holley and Thomas M Liggett. Ergodic theorems for weakly interacting infinite
+     systems and the voter model. The annals of probability, pages 643–663, 1975.
+[12] Elmar Kiesling, Markus Günther, Christian Stummer, and Lea M Wakolbinger. Agent-
+     based simulation of innovation diffusion: a review. Central European Journal of Operations
+     Research, 20(2):183–230, 2012.
+
+                                               9
+[13] Fabian Lorig, Emil Johansson, and Paul Davidsson. Agent-based social simulation of the
+     covid-19 pandemic: A systematic review. JASSS: Journal of Artificial Societies and Social
+     Simulation, 24(3), 2021.
+
+[14] Joon Sung Park, Joseph O’Brien, Carrie Jun Cai, Meredith Ringel Morris, Percy Liang,
+     and Michael S Bernstein. Generative agents: Interactive simulacra of human behavior. In
+     Proceedings of the 36th annual acm symposium on user interface software and technology,
+     pages 1–22, 2023.
+
+[15] Joon Sung Park, Lindsay Popowski, Carrie Cai, Meredith Ringel Morris, Percy Liang, and
+     Michael S Bernstein. Social simulacra: Creating populated prototypes for social computing
+     systems. In Proceedings of the 35th Annual ACM Symposium on User Interface Software
+     and Technology, pages 1–18, 2022.
+
+[16] Adarsh Prabhakaran, Valerio Restocchi, and Benjamin D Goddard. Improving tobacco so-
+     cial contagion models using agent-based simulations on networks. Applied Network Science,
+     8(1):54, 2023.
+
+[17] Giulio Rossetti, Letizia Milli, and Salvatore Rinzivillo. Ndlib: a python library to model
+     and analyze diffusion processes over complex networks. In Companion Proceedings of the
+     The Web Conference 2018, pages 183–186, 2018.
+
+[18] Giulio Rossetti, Massimo Stella, Rémy Cazabet, Katherine Abramski, Erica Cau, Salvatore
+     Citraro, Andrea Failla, Riccardo Improta, Virginia Morini, and Valentina Pansanella. Y
+     social: an llm-powered social media digital twin. arXiv preprint arXiv:2408.00818, 2024.
+
+[19] Thomas C Schelling. Dynamic models of segregation. Journal of mathematical sociology,
+     1(2):143–186, 1971.
+
+[20] Alina Sîrbu, Vittorio Loreto, Vito DP Servedio, and Francesca Tria. Opinion dynamics:
+     models, extensions and external effects. In Participatory sensing, opinions and collective
+     awareness, pages 363–401. Springer, 2016.
+
+[21] Ewout ter Hoeven, Jan Kwakkel, Vincent Hess, Thomas Pike, Boyu Wang, rht, and Jackie
+     Kazil. Mesa 3: Agent-based modeling with python in 2025. Journal of Open Source
+     Software, 10(107):7668, 2025.
+
+[22] ES Van Haeringen, Charlotte Gerritsen, and Koen V Hindriks. Emotion contagion in agent-
+     based simulations of crowds: a systematic review. Autonomous Agents and Multi-Agent
+     Systems, 37(1):6, 2023.
+
+[23] Chenxi Wang, Zongfang Liu, Dequan Yang, and Xiuying Chen. Decoding echo chambers:
+     Llm-powered simulations revealing polarization in social networks. In Proceedings of the
+     31st international conference on computational linguistics, pages 3913–3923, 2025.
+
+[24] Uri Wilensky. Netlogo. http://ccl.northwestern.edu/netlogo/, 1999. Center for Con-
+     nected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
+
+[25] Haifeng Zhang and Yevgeniy Vorobeychik. Empirically grounded agent-based models of
+     innovation diffusion: a critical review. Artificial Intelligence Review, 52(1):707–741, 2019.
+
+
+
+
+                                               10
+

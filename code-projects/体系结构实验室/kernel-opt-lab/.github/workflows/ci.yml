@@ -1,0 +1,48 @@
+# ============================================================================
+# GitHub Actions CI — Kernel-Lab
+#
+# 在 aarch64 Ubuntu runner 上跑 make test（正确性回归）
+# 注意：性能 bench 受 runner 配置影响，CI 只验证正确性 + 编译
+#
+# 触发：push/PR 到 main/master
+# ============================================================================
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-and-test:
+    name: Build & Test (aarch64)
+    runs-on: ubuntu-22.04-arm
+    # 若 GitHub ARM runner 不可用，回退 QEMU 模拟（慢但能跑正确性）
+    # runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libomp-dev gcc
+
+      - name: Build all targets
+        run: make all
+
+      - name: Run correctness regression
+        run: make test
+
+      - name: Show bin sizes
+        run: ls -lh bin/
+
+      - name: Upload bench artifacts (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-results
+          path: results/bench-*.md
+          if-no-files-found: ignore
+          retention-days: 30

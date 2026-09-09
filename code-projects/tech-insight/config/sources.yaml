@@ -1,0 +1,183 @@
+# 技术媒体数据源配置
+# 合规优先级: RSS/API > robots.txt+限流爬取
+
+sources:
+  # ==================== 核心站点 ====================
+  infoq:
+    name: "InfoQ 中文站"
+    url: "https://www.infoq.cn"
+    type: rss
+    priority: 1
+    description: "全球领先的软件开发社区，聚焦架构、AI、云原生"
+    feeds:
+      - endpoint: "https://www.infoq.cn/feed.xml"
+        category: "最新"
+      - endpoint: "https://www.infoq.cn/rss.xml"
+        category: "推荐"
+    detail_endpoint: "https://www.infoq.cn/public/v1/article/getDetail"
+    tags: ["架构", "AI", "微服务", "云原生", "编程语言", "数据库", "运维", "安全"]
+
+  # ==================== 相似技术媒体（RSS/API优先） ====================
+  juejin:
+    name: "掘金"
+    url: "https://juejin.cn"
+    type: api
+    priority: 2
+    headers:
+      Origin: "https://juejin.cn"
+      Referer: "https://juejin.cn/"
+    feeds:
+      - endpoint: "https://api.juejin.cn/recommend_api/v1/article/recommend_all_feed"
+        method: POST
+        body: { "id_type": 2, "sort_type": 200, "cursor": "0", "limit": 20 }
+        category: "推荐"
+    tags: ["前端", "后端", "Android", "iOS", "AI", "工具"]
+
+  segmentfault:
+    name: "SegmentFault 思否"
+    url: "https://segmentfault.com"
+    type: rss
+    priority: 2
+    feeds:
+      - endpoint: "https://segmentfault.com/feeds/blogs"
+        category: "博客"
+      - endpoint: "https://segmentfault.com/feeds/questions"
+        category: "问答"
+    tags: ["编程", "Web开发", "数据库", "架构"]
+
+  oschina:
+    name: "开源中国"
+    url: "https://www.oschina.net"
+    type: rss
+    priority: 2
+    feeds:
+      - endpoint: "https://www.oschina.net/blog/rss"
+        category: "博客"
+      - endpoint: "https://www.oschina.net/news/rss"
+        category: "资讯"
+    tags: ["开源", "架构", "数据库", "云计算", "AI"]
+
+  cnblogs:
+    name: "博客园"
+    url: "https://www.cnblogs.com"
+    type: rss
+    priority: 2
+    feeds:
+      - endpoint: "https://feed.cnblogs.com/blog/sitehome/rss"
+        category: "首页"
+      - endpoint: "https://www.cnblogs.com/rss"
+        category: "综合"
+    tags: ["编程", ".NET", "架构", "数据库", "前端"]
+
+  v2ex:
+    name: "V2EX"
+    url: "https://www.v2ex.com"
+    type: api
+    priority: 2
+    feeds:
+      - endpoint: "https://www.v2ex.com/api/topics/hot.json"
+        method: GET
+        category: "热门话题"
+    tags: ["程序员", "创业", "职业", "技术杂谈"]
+
+  # ==================== AI 专项媒体 ====================
+  jiqizhixin:
+    name: "机器之心"
+    url: "https://www.jiqizhixin.com"
+    type: rss
+    priority: 3
+    description: "国内领先的人工智能媒体"
+    feeds:
+      - endpoint: "https://www.jiqizhixin.com/rss"
+        category: "AI资讯"
+    tags: ["AI", "机器学习", "深度学习", "NLP", "CV", "大模型"]
+
+  qbitai:
+    name: "量子位"
+    url: "https://www.qbitai.com"
+    type: web
+    priority: 3
+    feeds:
+      - endpoint: "https://www.qbitai.com/feed"
+        category: "AI资讯"
+    tags: ["AI", "大模型", "AI产品", "AI创业"]
+
+  # ==================== 综合科技 ====================
+  kr36:
+    name: "36氪"
+    url: "https://36kr.com"
+    type: web
+    priority: 3
+    feeds:
+      - endpoint: "https://36kr.com/feed"
+        category: "科技资讯"
+    tags: ["创业", "商业", "科技", "AI", "投资"]
+
+  geekpark:
+    name: "极客公园"
+    url: "https://www.geekpark.net"
+    type: web
+    priority: 3
+    feeds:
+      - endpoint: "https://www.geekpark.net/rss"
+        category: "科技资讯"
+    tags: ["科技", "产品", "AI", "互联网"]
+
+  # ==================== 国际技术媒体 ====================
+  hackernews:
+    name: "Hacker News"
+    url: "https://news.ycombinator.com"
+    type: api
+    priority: 3
+    feeds:
+      - endpoint: "https://hacker-news.firebaseio.com/v0/topstories.json"
+        method: GET
+        category: "热门"
+      - endpoint: "https://hacker-news.firebaseio.com/v0/beststories.json"
+        method: GET
+        category: "精选"
+    detail_template: "https://hacker-news.firebaseio.com/v0/item/{id}.json"
+    tags: ["编程", "创业", "安全", "AI", "开源"]
+
+  devto:
+    name: "Dev.to"
+    url: "https://dev.to"
+    type: api
+    priority: 3
+    feeds:
+      - endpoint: "https://dev.to/api/articles?per_page=30&top=7"
+        method: GET
+        category: "热门"
+    tags: ["Web开发", "编程", "DevOps", "AI"]
+
+  # ==================== 大厂技术博客 ====================
+  aliyun_developer:
+    name: "阿里云开发者"
+    url: "https://developer.aliyun.com"
+    type: web
+    priority: 4
+    description: "阿里巴巴技术团队实践"
+    tags: ["架构", "中间件", "云原生", "Java", "数据库"]
+
+  meituan_tech:
+    name: "美团技术团队"
+    url: "https://tech.meituan.com"
+    type: rss
+    priority: 4
+    feeds:
+      - endpoint: "https://tech.meituan.com/atom.xml"
+        category: "技术博客"
+    tags: ["架构", "大数据", "AI", "外卖/配送算法", "前端"]
+
+# ==================== 采集全局配置 ====================
+collection:
+  # 合规策略: 先尝试 RSS/API，失败则按 robots.txt 限流爬取
+  compliance_mode: "strict"  # strict | permissive
+  respect_robots_txt: true
+  user_agent: "TechInsight-Research-Bot/1.0 (+https://github.com/tech-insight)"
+  default_delay_seconds: 3
+  max_retries: 3
+  timeout_seconds: 30
+  concurrent_requests: 3
+  # 每站点每日最大采集量
+  daily_limit_per_source: 200

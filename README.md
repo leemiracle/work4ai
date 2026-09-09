@@ -124,6 +124,7 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 | **费曼学习法** | **质量门 F1-F4 + AI 陪练脚本**（戳穿"自以为懂"）|
 | **CS 课程整合** | **4 跨校主题**（算法 + 数据库 + 网络 + CS224N/NLP）+ 9 单校纵深（归拢 top-cs-projects/）⭐ 2026-08 |
 | **教育学知识库** | **33 文档**（[`top-education-courses/`](top-education-courses) 姐妹库：学习理论 + 评估 + AI for Ed）⭐ 2026-08-14 新增 |
+| **code 自研项目区** | **6 项目**（政治学研修 62 万字全量 / 体系结构真机实验链 / tech-insight 采集管线 / world-ai4sci 选粹 / 社会规律选粹 / trending 蒸馏，[`code-projects/`](code-projects)）⭐ 2026-09-09 收编 |
 
 ---
 
@@ -489,10 +490,22 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 | [`prompt工程手册/`](工程化手册库/prompt工程手册/README.md) | prompt 工程 11 文件完整版方法论 |
 | [`知识故事集/`](知识故事集/README.md) | 知识的故事化重述集 |
 | [`mermaid-render/`](mermaid-render/README.md) | mermaid 图渲染工具（配套渲染服务）|
-| `§12-15 理论·形式化·安全·可信AI 整合.md` | LLM 理论/形式化/安全/可信四主题整合笔记 |
 | [`多角色审查报告.md`](多角色审查报告.md) | 多角色（多视角）审查方法与实践报告 |
 | [`最有价值.md`](最有价值.md) | 项目价值密度最高的内容筛选清单 |
 | `黑格尔观念论核心视角-总入口.md` | 黑格尔观念论视角导航（概念卡在 [`视角库/`](视角库/README.md)）|
+
+### 17. code 自研项目区：[`code-projects/`](code-projects) ⭐ 2026-09-09 收编
+
+> C:\workspace 六个外部项目（political-studies / social-laws / tech-insight / trending-repos / world-ai4sci-math / 体系结构）经六路重叠分析后收编入 code 领域集中区：**重合内容去重落指针、无等价物全量、低密度只蒸馏**，不保留原文件夹。详见 [`code-projects/README.md`](code-projects/README.md) 收录三档原则表。
+
+| 项目 | 定位 | 收录 |
+|---|---|---|
+| [`政治学研修/`](code-projects/政治学研修/入库说明.md) | 62 万字七模块系统研修 + 10 个可跑 py（与 [`讲透政治学/`](讲透政治学)「目录骨架 vs 深度内容」互补） | 全量 233 文件 |
+| [`体系结构实验室/`](code-projects/体系结构实验室/README.md) | 飞腾 D3000 真机 PMU→NEON 算子 + DDCA Verilog/Capstone RV32I（补 [`top-cs-projects/`](top-cs-projects/README.md) 无 18-447 级深度实验之缺） | 双库选收 |
+| [`tech-insight/`](code-projects/tech-insight/README.md) | 14 源采集→SQLite+向量→LLM 分析管线（无 key 降级可跑，与 [`前沿与媒体/`](前沿与媒体) 人工策展互补） | 全量 83 文件 |
+| [`世界模型与AI4Sci调研/`](code-projects/世界模型与AI4Sci调研/README.md) | 133 万字调研卷选粹：研究课题/学习路径/跨领域对照（弃收部分指针至 [`讲透模型/`](讲透模型) 等） | 选粹 29.8% |
+| [`社会规律计算实验室/`](code-projects/社会规律计算实验室/README.md) | 五段式规律卡实验室 + 21 篇 CSSCI 双轨校准（弃收 py 指针至数理社会学/博弈论等价实现） | 选粹 113 文件 |
+| [`GitHub热门仓分析/`](code-projects/GitHub热门仓分析/INDEX.md) | 424 仓横断分析：FlashMLA 深读 + 数学分析 + 227 条去重索引（LLM 名仓回链 [`透视GitHub-LLM高星仓库全景.md`](透视GitHub-LLM高星仓库全景.md)） | 蒸馏 4 文件 |
 
 ---
 

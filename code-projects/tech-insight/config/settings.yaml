@@ -1,0 +1,80 @@
+# 全局配置
+
+# LLM 配置 - 支持多 provider
+llm:
+  # 默认使用 OpenAI 兼容接口（可配置国内服务如智谱、月之暗面等）
+  provider: "openai_compatible"
+  base_url: "{env:LLM_BASE_URL|https://open.bigmodel.cn/api/paas/v4}"
+  api_key: "{env:LLM_API_KEY}"
+  model: "glm-4-flash"
+  # 深度分析模型（质量优先）
+  deep_model: "glm-4"
+  temperature: 0.3
+  max_tokens: 4096
+  request_interval: 0.5
+
+# 向量嵌入配置
+embedding:
+  provider: "openai_compatible"
+  base_url: "{env:EMBEDDING_BASE_URL|https://open.bigmodel.cn/api/paas/v4}"
+  api_key: "{env:EMBEDDING_API_KEY|{env:LLM_API_KEY}}"
+  model: "embedding-3"
+  dimension: 1024
+
+# 存储配置
+storage:
+  sqlite_path: "data/processed/tech_insight.db"
+  vector_path: "data/vectors"
+  raw_data_path: "data/raw"
+  reports_path: "data/reports"
+  graphs_path: "data/graphs"
+
+# 分析配置
+analysis:
+  # 知识图谱
+  knowledge_graph:
+    entity_types: ["技术", "公司", "人物", "产品", "概念", "框架", "语言", "事件"]
+    relation_types: ["使用", "开发", "竞争", "依赖", "属于", "影响", "替代", "集成"]
+    min_confidence: 0.6
+    top_entities: 200
+
+  # 趋势分析
+  trend:
+    time_windows: [7, 14, 30]  # 天
+    keywords_top_n: 50
+    growth_rate_threshold: 0.3
+
+  # 架构提取
+  architecture:
+    extract_patterns: true
+    extract_tech_stacks: true
+    extract_diagrams: true
+
+  # 机会识别
+  opportunity:
+    dimensions: ["技术趋势", "人才缺口", "创业方向", "个人成长", "变现路径"]
+    time_horizon: "6-12个月"
+
+# 报告配置
+report:
+  output_format: "markdown"
+  include_charts: true
+  language: "zh-CN"
+  report_types:
+    - "content_digest"        # 内容摘要
+    - "knowledge_graph"       # 知识图谱分析
+    - "trend_report"          # 趋势报告
+    - "architecture_map"      # 架构全景
+    - "industry_insight"      # 行业洞察
+    - "ai_opportunity"        # AI时代个人机会
+
+# Web 配置
+web:
+  host: "127.0.0.1"
+  port: 8765
+  debug: false
+
+# 日志配置
+logging:
+  level: "INFO"
+  file: "data/processed/app.log"

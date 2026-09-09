@@ -1,0 +1,34 @@
+duration_ms: 15000
+flush_period_ms: 1000
+buffers { size_kb: 65536 }
+buffers { size_kb: 65536 fill_policy: RING_BUFFER }
+
+# 进程/线程信息（每秒采一次 /proc）
+data_sources {
+  config {
+    name: "linux.process_stats"
+    target_buffer: 1
+    process_stats_config {
+      scan_all_processes_on_start: true
+      record_thread_names: true
+      proc_stats_polling_interval_ms: 1000
+    }
+  }
+}
+
+# 系统拓扑信息
+data_sources { config { name: "linux.system_info" } }
+
+# PMU 硬件计数器（关键）
+data_sources {
+  config {
+    name: "linux.perf"
+    target_buffer: 0
+    perf_event_config {
+      # 全系统采样（所有 CPU）
+      all_counters: true
+      # 单线程追踪用 per_cpu_period_ms 控制
+      per_cpu_period_ms: 1000
+    }
+  }
+}

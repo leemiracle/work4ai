@@ -1,0 +1,21 @@
+#!/bin/bash
+# pre-commit hook: 跑 make test，FAIL 阻止 commit
+# 安装：./scripts/setup-hooks.sh
+set -e
+echo "[pre-commit] 跑 make test 正确性回归..."
+
+# 只在源码改动时跑 test
+if git diff --cached --name-only | grep -qE '\.(c|h)$|Makefile$|scripts/'; then
+    if [ -f Makefile ]; then
+        make test >/tmp/precommit-test.log 2>&1 || {
+            echo "[pre-commit] ❌ make test FAIL，commit 已阻止"
+            tail -20 /tmp/precommit-test.log
+            echo "[pre-commit] 完整日志: /tmp/precommit-test.log"
+            echo "[pre-commit] 如要跳过（不推荐）: git commit --no-verify"
+            exit 1
+        }
+        echo "[pre-commit] ✅ make test PASS"
+    fi
+else
+    echo "[pre-commit] 无 .c/.h/Makefile 改动，跳过 test"
+fi

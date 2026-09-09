@@ -1,0 +1,739 @@
+                                                                                                                                                                      ArXiv
+
+
+
+                                        A Psychologically-Motivated Model of Opinion
+                                        Change with Applications to American Politics
+                                        Peter Duggins
+
+                                         Abstract
+                                         Agent-based models are versatile tools for studying how societal opinion change, including political polarization
+                                         and cultural diffusion, emerges from individual behavior. This study expands agents’ psychological realism using
+                                         empirically-motivated rules governing interpersonal influence, commitment to previous beliefs, and conformity
+                                         in social contexts. Computational experiments establish that these extensions produce three novel results: (a)
+arXiv:1406.7770v3 [cs.MA] 20 Feb 2017
+
+
+
+
+                                         sustained “strong” diversity of opinions across society, (b) opinion subcultures, and (c) pluralistic ignorance.
+                                         These phenomena arise from a combination of agents’ intolerance, susceptibility and conformity, with extremist
+                                         agents and social networks playing important roles. The distribution and dynamics of simulated opinions
+                                         reproduce two empirical datasets on Americans’ political opinions.
+                                         Keywords
+                                         Agent-Based Model, Opinion Dynamics, Social Networks, Conformity, Polarization, Extremism
+                                         Computational Neuroscience Research Group, University of Waterloo
+                                         psipeter@gmail.com
+
+
+
+
+                                                                 Contents                                         Building multi-level, quantitative, predictive models of
+                                                                                                             opinion change is challenging because opinions arise from
+                                            Introduction                                                1    a multitude of neurological, psychological, and social pro-
+                                            Social Psychology of Opinion Change                         2    cesses. Empirically, the extent to which people are persuaded
+                                                                                                             by each others’ subjective evaluations depends on numerous
+                                            Model Description                                           3
+                                                                                                             factors, including previous beliefs and a desire to minimize
+                                            Results                                                     4    cognitive dissonance [12]; motivations to be accurate, self-
+                                            Validation: American Political Opinions                   10     consistent, and socially accepted [13, 14]; issue framing, emo-
+                                                                                                             tional arousal, and cognitive elaboration [15]; self-esteem
+                                            Discussion                                                14
+                                                                                                             [16]; social norms [17]; and more. Mathematical and compu-
+                                            Conclusion                                                16     tational models help formally investigate both the interplay
+                                            References                                                16     of internal psychological forces and the feedback between
+                                                                                                             opinion change and social influence among many individuals.
+                                                                                                             Unfortunately, models have historically neglected important
+                                                               Introduction                                  elements of social psychology, assuming that individuals be-
+                                        Opinions are mutable: individuals revise their beliefs through       have identically, rationally, or with perfect information. This
+                                        social interaction, personal experience, and reflection, while       raises questions about whether their results properly inform
+                                        societal norms shift in response to global events and public         our understanding of human societies.
+                                        opinion. Opinion change at the individual and societal scales             Agent-based models (ABMs) seek to explain macroscopic
+                                        interact to produce political polarization, cultural globaliza-      outcomes by showing that artificial societies populated by
+                                        tion, and other important social trends. To understand these         psychologically-plausible software individuals can, when ini-
+                                        phenomenon and design appropriate interventions, we need             tialized in a virtual environment and evolved through time, en-
+                                        quantitative tools that simulate the psychological and social as-    dogenously “grow” complex social phenomenon [18]. Three
+                                        pects of opinion change. For example, models of interpersonal        features of ABMs make them ideal for modeling opinion
+                                        communication will help activists organize grassroots support,       change. First, agents are autonomous and heterogeneous:
+                                        help leaders design effective campaigns, and help peacekeep-         each individual has distinct internal attributes, such as an in-
+                                        ers prevent the spread of extremism. Computational models of         tolerance of opposing views, a propensity to socially conform,
+                                        opinion change have studied the relationship between polariza-       or a tendency towards stubbornness. Second, agents can be
+                                        tion, social influence, and political intolerance [1, 2, 3, 4, 5],   psychologically and cognitively authentic, endowed with ra-
+                                        while models of cultural diffusion have improved our under-          tional, emotional, and social thinking of arbitrary complexity
+                                        standing of cultural convergence [6, 7], subculture formation        [19]. Third, agents interact locally in an explicitly defined
+                                        [8, 9], and cultural stability within organizations [10, 11].        space: individuals have incomplete information about the
+                  A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 2/18
+
+
+
+world, and interact in social networks of plausible size and          Social Psychology of Opinion Change
+composition, causing influence to spread through society in a
+manner constrained by personal connections.                       Social influence is a process in which the social exchange of
+    Although a rich literature of opinion dynamics using ABMs     information causes individuals to reevaluate their own opin-
+already exists [1, 20, 2, 3, 21, 22, 4, 23, 6, 7], several impor- ions on a subjective issue. Arguably the most important
+tant questions remain unanswered:                                 feature of social influence is homophily, the principle that
+                                                                  contact between similar people occurs more frequently and
+                                                                  has greater impact than contact between dissimilar people.
+    1. How do social groups maintain a diversity of opin- Empirical evidence for homophily and its effects on social
+        ions? Previous models have shown that when agents         influence abounds: for an overview, see [24]. Interpersonal in-
+        exchange interpersonal influence, their opinions either   fluence among friends is known to engender common attitudes
+        converge to a single value (consensus) or diverge to      [25, 26, 27], while the strength of dyadic connections concur-
+        homogeneous opinion groups (polarization). Although       rently increases with similarity [10, 28]. On the other hand,
+        consensus and polarization are important political and    interactions can impart negative social influence if opinions
+        cultural trends, real societies never converge or diverge differ greatly [29, 30], causing individuals to adopt more ex-
+        absolutely: diversity is always preserved. Surprisingly, treme attitudes when exposed to counterattitudinal arguments
+        models have not yet shown that such a distribution can    [31, 32, 33].
+        persist.                                                      Homophily is a cornerstone of opinion dynamics mod-
+                                                                  els: individuals exert social influence on each other propor-
+    2. Will subcultures of opinions survive in a well-connected   tional to their ideological similarity. In dyadic conversations,
+        society? Pockets of extreme opinions exist within mod- similarity encourages consensus, while dissimilarity fosters
+        erate real-world societies. Although such subcultures     polarization. A lineage of models have shown that a society
+        have emerged in previous models, they survive only be- with high tolerance (a parameter governing the relationship
+        cause of psychologically-implausible rules that curtail   between opinion similarity and the magnitude of influence)
+        any interpersonal influence.                              leads to consensus, while low tolerance leads to polarization
+                                                                  [2, 3, 1, 20, 21, 22, 4, 23, 6, 7]. Weak diversity, defined
+    3. Does pluralistic ignorance affect societal opinion change? as the convergence of opinions to n > 1 attractor states, can
+        The views we express in public often differ from those    be maintained when opinion subcultures form and become
+        we hold privately. This situation undoubtedly affects in- isolated. This outcome is common in bounded confidence
+        dividual and societal opinion dynamics, yet falsification models when influence between dissimilar agents goes to
+        remains unstudied in computational models.                zero. Generally, strong diversity, defined as a smooth distri-
+                                                                  bution of opinions along a continuous ideological spectrum,
+    4. Can an opinion change model reproduce empirical            disappears in these models whenever social networks are fully
+        data? Opinion dynamics models capture qualitative         connected [11, 34, 35], even accounting for noise and other
+        phenomenon like polarization and clustering, but are      minor deviations [36, 37].
+        rarely validated with quantitative empirical data. Clos-      Social influence does not take place in a vacuum, but in an
+        ing the loop will increase the scientific credibility and environment filled by people who seek social acceptance and
+        predictive power of these models.                         who judge each other upon personality and beliefs. Confor-
+                                                                  mity describes an individual’s desire to gain social approval
+     In this study, I aim to answer these questions by studying   and avoid rejection by expressing normative beliefs. There
+the relationship between the social psychology of personal        is substantial empirical evidence of people misrepresenting
+opinion change and the distributions, dynamics, and geog- their true beliefs [13, 14, 38], though some “anticonformists”
+raphy of opinions across society. In Section 2, I review the      will express non-normative beliefs so as to appear more dis-
+literature on the social and psychological forces that drive      tinct [35, 39]. Together, conformity and distinctiveness lead
+opinion change. In Section 3, I describe the model, explaining    to pluralistic ignorance [40], a condition in which the true
+how it extends previous models by expanding the psychologi- distribution of opinions in society differs from what is spoken
+cal realism of agents. In Section 4, I pose hypotheses about      and heard in public. Pluralistic ignorance makes people un-
+the relationship between psychological forces and societal        aware of others’ true beliefs; a lack of accurate information
+opinion change, run computational experiments to test them, can, though the mechanisms of social influence, feedback
+and describe the emergence of (a) strong societal diversity, to change people’s true opinions. For example, after years
+(b) persistent subcultures of opinions, and (c) pluralistic ig- government oppression, levels of popular dissent in author-
+norance. In Section 5, I compare these results with empirical     itarian societies may become suddenly obvious, leading to
+data on Americans’ political opinions. I conclude by summa- political turmoil and violent tipping points [41, 42]. Despite
+rizing the major findings, suggesting extensions to the model, current enthusiasm for studying the effects of conformity and
+and proposing a research agenda for agent models in the social    distinctiveness on opinion change [43, 35, 44], ABMs have
+sciences.                                                         yet to investigate the repercussions of agents’ explicit belief
+                   A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 3/18
+
+
+
+falsification on public opinion.                                      Agents remain stationary.
+    The way an individual receives and internalizes others’                Agent i initiates a dialogue with all agents j in his social
+beliefs can be as important as the content and context of the         network. He is the first to express an opinion, and always
+influence. People who hold strong opinions are committed              voices his true opinion (Oi ). Subsequently, each j distorts his
+to their beliefs: they resist opinion change, because it would        opinion in order to conform or appear distinct. Specifically,
+challenge their political worldview and induce cognitive disso-        j calculates the average of all opinions (Ek ) expressed so
+nance, and because they judge contrary information as invalid         far in the dialogue (D), then expresses an opinion (E j ) that
+due to confirmation bias [45]. Strongly opinionated individu-         is between his true opinion (O j ) and the dialogue’s opinion
+als have been shown to reject opinions contrary to their own          norm (conformity), or that is distanced by some amount from
+belief and even become more extreme. On the other hand,               the dialogue’s norm (distinctiveness):
+moderately opinionated individuals are susceptible to opin-
+ion change and will more readily internalize beliefs presented                              cj 1 D
+                                                                            Ej = Oj +         ∗    (Ek − O j )                      (1)
+by others [31, 32, 33]. Surprisingly, few models of opinion                                 kj N ∑
+                                                                                                 k
+change have looked into how susceptibility and commitment
+                                                                      The agent parameter c j represents an agent’s inherent willing-
+help sustain diversity and prevent homogenization of small
+                                                                      ness to misrepresent his beliefs in social contexts in order to
+cultural groups [5].
+                                                                      appear either normal or distinct. The parameter captures both
+    Finally, the social networks through which individuals in-
+                                                                      conformity (c j > 0) and distinctiveness (c j < 0). Greater
+teract determine how opinion change spreads through society.
+                                                                      magnitude c j produces greater belief falsification: c j = 0
+These networks can be characterized by statistical descriptions
+                                                                      causes the agent to speak truthfully, c j = 1 causes the agent to
+such as the degree of connectivity (average size of a social net-
+                                                                      express the dialogue’s “mean opinion”, and c = −1 causes the
+work); real-world networks have positive assortativity (people
+                                                                      agent to express an opinion that is more dislike the mean than
+with large networks tend to know others with large networks),
+                                                                      his true opinion. In this model, conformity and distinctiveness
+low whole-network density (most people don’t know each
+                                                                      are manifest in expression but not directly in opinion change:
+other), and high but heterogeneous clustering. Though sim-
+                                                                      agents attempt to gain social favor by stating opinions that dif-
+ulations have confirmed that the size and composition of so-
+                                                                      fer from their true beliefs, but do not change their true beliefs
+cial networks strongly affect opinion change, their outcomes
+                                                                      to reflect this posturing.
+vary widely with the models’ assumptions about the network
+                                                                           The extent of j’s conformity is further mitigated by his cur-
+[46, 47], which rarely take these empirical regularities into
+                                                                      rent commitment k j , which is proportional to his susceptibility
+account. One procedure which does effectively reproduce
+                                                                      s j and the extremeness of his current opinion:
+these statistics is the social circle model [48], which is easily
+incorporated into an ABM framework [49].                                                     |50 − O j |
+                                                                            kj = 1+sj ∗                  .                          (2)
+                                                                                                 50
+       The Influence, Susceptibility, and                             The susceptibility parameter s j represents an agent’s inherent
+            Conformity Model (ISC)                                    commitment to strong beliefs; it causes him to be less affected
+                                                                      by social context and social influence. Its magnitude governs
+To summarize, agents are randomly placed within a two-                how a departure from a neutral opinion (Oi = 50) translates to
+dimensional space. Each agent has a unique initial opinion,           a shrinking of influence: higher values result in less opinion
+three parameters for tolerance, conformity, and susceptibil-          change.
+ity, and a social network. Each round, every agent initiates                After each j has expressed E j once in the dialogue, i
+a dialogue with members of his social network. In the dia-            updates his true opinion according to the dialogue’s influence
+logue, each agent expresses an opinion that reflects his true         (Ii ), which is proportional to each E j and the weight that i
+opinion, his conformity, and the opinions already expressed           assigns to that expression (wi j ):
+in the dialogue. Afterwards, the initiating agent updates his
+true opinion based on his tolerance, susceptibility, and the                       ∑Nj wi j ∗ (E j − Oi )
+                                                                            Ii =                                                    (3)
+expressed opinions’ weighted influence. The model records                               ∑Nj |wi j |
+the true and expressed opinion of each agent after every round.
+The model, data, and figures are available on GitHub.                 Conceptually, the dialogue’s influence Ii results from i being
+     Agents’ opinions, interpreted as beliefs on a single subjec-     pulled towards (or pushed away from) each opinion expressed
+tive issue, lie on a continuous 0 − 100 scale. Initial opinion,       in the dialogue, E j , by an amount proportional to the intera-
+tolerance, conformity, susceptibility, and social reach are all       gent weight, wi j . The weight, in turn, is calculated according
+drawn from normal distributions whose means and variances             to homophily: the greater the absolute distance between i’s
+are specified in each experiment. Agents are randomly as-             opinion and j’s expression, the more negative the weight, and
+signed a continuously-valued (x, y) location, then each agent         the less influence j’s expression will exert on i’s opinion:
+creates a social network N with all agents within euclidean                                 |E j − Oi |
+radius equal to his social reach r, as per the social circle model.         wi j = 1 − ti                                           (4)
+                                                                                                50
+                   A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 4/18
+
+
+
+where ti represents i’s inherent intolerance of dissimilar opin-                                Results
+ions. Its magnitude dictates how strongly a given opinion
+difference translates to a loss of interagent weight. A high         Experiment 1: Social Influence and Intolerance
+value implies that an agent will only assign positive weight         To begin, I reproduce a classical experiment in opinion dy-
+to opinions that are similar to his own beliefs; a low value         namics, in which the final distribution of opinions is examined
+implies the agent will be positively influenced by a wider           as a function of intolerance. In this model, intolerance is an
+range of opinions. Mathematically, ti is the slope of i’s weight     agent-level parameter ti which is initially drawn from a normal
+vs. ∆ opinion curve, which is continuous and linear. This is a       distribution of mean µt and variance σt . For these prelimi-
+departure from the canonical bounded confidence approach, in         nary experiments I assume no heterogeneity of intolerance,
+which weight is a threshold function of an agent’s intolerance       susceptibility, or conformity: σt , σs , σc = 0.
+εi . I believe continuous weighting better reflects the subtleties     Hypothesis 1: low intolerance promotes societal opinion
+of opinion appraisal and social influence than a binary “full           convergence, while high intolerance produces opinion
+acceptance vs. complete disregard” judgment. This approach                        polarization and weak diversity.
+has also been adopted by [35]. Weights are bounded from −1
+to +1.                                                               In a society with low intolerance, µt = 0.7, most agents assign
+      Finally, i updates his true opinion based on his previous      positive weight to each others’ opinions during dialogues, and
+opinion and the dialogue’s influence, scaled by his commit-          are consequently pulled towards the mean opinion in that dia-
+ment:                                                                logue. Figure 1 (left) shows that an initial normal distribution
+                        Ii                                           of opinions, µO = 50, σO = 20, rapidly converges to a single,
+      Oi,t+1 = Oi,t +                                         (5)    centrist opinion: given enough time, diversity will completely
+                        ki
+                                                                     disappear, and all agents will believe Oi = 50. Conversely, in
+This process is repeated for each i in the population, conclud-      a society with high intolerance, µt = 1.0, many agents assign
+ing one timestep.                                                    negative weight to each others’ opinions and are pushed away
+     I use four metrics to investigate the diversity, dynamics,      from the dialogue mean. As agents adopt stronger opinions,
+and geography of opinions within the population. Opinion             they assign stronger negative weights, resulting in polarizing
+histograms plot the frequency of opinions across the ideolog-        feedback. Figure 1 (right) shows this society rapidly diverges
+ical spectrum at particular times, and are the most complete         to two extremists opinions at either end of the opinion spec-
+measure of strong vs. weak diversity. Opinion trajectories plot      trum. As t → ∞ only weak diversity remains: all agents either
+each agent’s history as a line on a opinion vs. time graph, and      hold Oi = 0 or Oi = 100. These base-case results confirm
+are used to study dynamics towards or away from diversity.           the classical finding that, in the absence of other psychologi-
+To distinguish different regions of opinion space, I use the         cal forces, the degree of individuals’ intolerance determines
+terms centrist to describe agents who hold (33 < Oi < 66),           whether society homogenizes or polarizes.
+moderate to describe agents with moderately-strong opin-
+ions (16 < Oi < 33 or 66 < Oi < 83), and extremist to de-            Experiment 2: Conformity and Distinctiveness
+scribe agents with the strongest opinions (0 < Oi < 16 or            Next I introduce social context into the simulation by allow-
+83 < Oi < 100). Spatial maps plot each agent as a circle in          ing agents to misrepresent their true opinions in dialogues.
+(x, y) space with color representing the agent’s opinion, and        Though opinion falsification does not directly affect agents’
+can help identify subgroup formation and regions of ideologi-        true opinion update, it does affect the information available to
+cal mixing. Finally, the Jensen-Shannon Divergence (JSD)             those agents. If falsification is significant, agents will perceive
+is a measure of the similarity of true opinions and expressed        an unrepresentative distribution of opinions (compared to each
+opinions across society. The JSD quantifies pluralistic igno-        others’ true beliefs) and change their beliefs accordingly.
+rance and is used to study how agents’ falsifications affects
+the diversity of opinions within society. It is calculated from      Hypothesis 2: a conformist society will homogenize under
+the Kullback–Leibler divergence D(P||Q), a standard entropy          conditions that otherwise cause polarization, while a society
+metric for probability distributions:                                driven by distinctiveness will polarize under conditions that
+                                                                                      otherwise favor consensus.
+                 1         1
+      JSD(P||Q) = D(P||M) + D(Q||M)                           (6)
+                 2         2                                             First, I simulate a society whose high intolerance would
+where P and Q are the true and expressed opinion distributions,      normally cause polarization, µt = 1.0, but introduce a moder-
+M = 12 (P + Q), and                                                  ate tendency towards social conformity, µc = 0.5. Conform-
+                                                                     ing agents now express opinions that are close enough to the
+                               P(i)                                  dialogue mean that almost nobody assigns these (falsified)
+      D(P||Q) = ∑ P(i) log          .                         (7)    opinions a negative weight. Agents adopt opinions closer to
+                    i          Q(i)
+                                                                     the norms expressed in the dialogue, and opinions converge,
+The JSD ranges from 0 (identity) to 1 (minimum mutual in-            eventually resulting in societal consensus as shown in Figure
+formation)                                                           2 (right). Second, I simulate the opposite conditions: a society
+                  A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 5/18
+
+
+
+
+Figure 1. A society populated by agents who initially hold normally distributed opinions converges to a single centrist opinion
+if agents’ intolerance of dissimilar opinions is low, and diverges to two extremists opinion if agents’ intolerance is high. This
+result reproduces findings in classical opinion dynamics and represents the base case of the simulation, in which social
+influence is the only active psychological force and all agents are identically intolerant. Additional runs show that societies
+with intolerance below µt = 0.7 always converge, societies with intolerance above µt = 1.0 always diverge, and societies in
+between can either converge or diverge, depending on initial conditions. Strong diversity doesn’t emerge.
+
+
+whose low intolerance would normally cause convergence,           (not shown). This result contradicts Hypothesis 3, showing
+µt = 0.7, but filled with agents who possess a strong desire      that commitment by itself cannot reverse homophilous opin-
+to be distinct, µc = −1.5. When agents converse, they ex-         ion convergence.
+press opinions that differ radically from centrist norms. As          However, personal susceptibility can affect a society that
+expressions become more extreme, social influence causes          is intolerant and conformist, which normally homogenizes
+agents to adopt and retain extreme beliefs. Figure 2 (left)       as in Experiment 2. Opinions initially converge due to the
+shows that opinions initially converge, then diverge towards      strong centrist norms perceived in conformist social dialogues,
+two homogeneous extremist parties. These results indicate         but extremists are slow to change. By t = 300, most agents
+that contextual opinion falsification can reverse the effects of  have adopted moderate or centrist opinions and expressions,
+intolerance, but cannot sustain strong diversity or pluralistic   but about 2% of agents have, through intolerant repelling,
+ignorance.                                                        adopted maximally extreme opinions, as shown in Figure 3.
+                                                                  These extreme agents are now so committed to their beliefs
+Experiment 3: Commitment to Strong Beliefs                        that they barely soften their expressions to socially conform,
+I conclude the preliminary experiments by investigating whether, Oi = 100 → Ei = 95, and their strongly opinionated vocaliza-
+when agents’ susceptibility to influence decreases with their     tions polarize their social networks. Over time, this influence
+belief extremity, different patterns of societal opinion change   bifurcates society, as can be seen by the divergence of opin-
+emerge.                                                           ions past t = 500. This experiment indicates that personal
+ Hypothesis 3: when extremist agents undergo less opinion         commitment fosters pockets of extremism whose long-term
+   change than moderate or centrist agents, their persistent      influence significantly alters societal opinion dynamics.
+ influence will prevent centrist homogenization and produce
+                         weak diversity.                          Experiment 4: Strong Diversity
+                                                                  Equipped with a basic understanding of model behavior and
+Beginning with the simple case of a tolerant society with         the independent effects of intolerance, susceptibility, and com-
+no opinion falsification, I test whether strong commitment, mitment, I now simulate societies in which all three psychoso-
+µs = 10.0, can reverse trends towards convergence. The mean       cial forces interact. In this experiment, all agent parameters
+opinion expressed in dialogues is still Ō ' 50, but because      are drawn from normal distributions with nonzero means and
+agents are tolerant and truthful, they assign positive weights to variances, creating an artificial society with greater hetero-
+all opinions they hear. Extreme agents undergo little opinion     geneity and psychological realism than previous opinion dy-
+change due to their commitment, but without a repelling force     namics models.
+to push them away from social norms (i.e. intolerance or dis-
+tinctiveness), they are still pulled slowly towards this centrist Hypothesis 4: when agents are simultaneously motivated by
+opinion. Although they remain steadfast in their views for        social influence, personal susceptibility, and social context of
+longer periods of time than in Experiment 1, they eventually      varying degrees, society will (a) maintain a strong diversity of
+converge to a single centrist opinion like the rest of society          opinions and (b) exhibit and pluralistic ignorance.
+                  A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 6/18
+
+
+
+
+Figure 2. When agents with low intolerance wish to appear distinct in social contexts, they express extremists beliefs in
+dialogues, which eventually polarizes society and leaves weak, bimodal diversity. When agents with high intolerance are
+motivated to socially conform, they express normative centrist views, causing society to converge to centrism.
+
+
+     First I examine a society which is on average tolerant        map. These subcultures are stable and coherent, but continue
+and conformist (µt = 0.7, µc = 0.4), but with enough diver-        to influence each other through persuadable agents on their
+sity to create some intolerant and distinction-seeking agents      mutual border. Eventually, society settles into two extremist
+(σt = 0.3, σc = 0.1). These forces tend to pull society towards    groups and a centrist group. The spatial orientation of the
+convergence. However, an opposing commitment to strong             extremist parties is such that the centrist party receives ap-
+beliefs (µs = 5.0, σs = 0.4) helps initially-extreme agents re-    proximately equal influence from both sides of the opinion
+sist normalization and locally exert polarizing influence. The     spectrum, and acts as a relatively stable buffer between the
+opinion trajectory plot in Figure 4 shows that society initially   two extremes.
+converges, but scattered extremists retain their strong views.
+Unlike in Experiment 3, where strong commitment kept ex-
+tremists from softening their expressions, extremists in this      Experiment 6: Pluralistic Ignorance
+society moderate their expressions and few extreme opinions        Pluralistic ignorance and unpredictable dynamics are also
+are publicly voiced. This, combined with low extremist den-        possible under various conditions, such as when agents have
+sity, prevents radicals from attracting many followers: by         intermediate intolerance (µt = 0.8, σt = 0.3), low commit-
+t = 1, 000, less than 5% of the population holds or expresses      ment (µs = 0.1, σs = 0.1), and highly variable conformity
+extreme views. However, these extremists exert enough influ-       (µc = 0.3, σc = 0.5). Opinions converge early on, and soci-
+ence that they keep centrist norms from completely homog-          ety is sufficiently tolerant and uncommitted that only a few
+enizing society. By t = 10, 000, the distribution of opinions      agents retain extreme opinions. Through some combination
+and expressions have settled into a diverse centrist group,        of the extremists’ social influence, conformity of their neigh-
+a moderate fringe, and scattered extremists. This strongly         bors, and distinction of agents from centrist norms, opinions
+diverse distribution of opinions persists past t = 100, 000 de-    throughout society begin drifting towards the extreme. How-
+spite small opinion fluctuations. A spatial map of opinions        ever, unlike in Experiment 4, the extremists abruptly convert
+shows that the diversity within the centrist party arises from     to centrism, causing a dramatic turn towards convergence, Fig-
+the minor influence exerted by extremists, which keeps the         ure 6. Before these conversions, centrist or extremist agents
+surrounding neighborhoods to the ideological left and right of     express moderate opinions in dialogues, and pluralistic igno-
+Ō ' 50. This result is, to my knowledge, the first evidence of    rance spikes. The perceived moderate norm pulls centrists
+indefinitely-sustained strong diversity in a continuous-opinion    towards extremism, causing the slow drift before t = 500
+model.                                                             in the opinion trajectories, but also pulls extremists towards
+                                                                   centrism, causing the occasional conversion of an extremists
+Experiment 5: Opinion Subcultures                                  agent. If the former trend dominates, society bifurcates; if
+Next, I increase agents’ average intolerance and conformity        the latter dominates, society homogenizes. Although this ex-
+(µt = 1.0, µc = 0.5, µs = 5.0), then tweak their psychological     periment shows that strong diversity does not always persist
+diversity (σt = 0.3, σs = 0.3, σc = 0.3). The results are shown    in the model, it suggests that pluralistic ignorance precedes
+in Figure 5. After an initial period of convergence, several ex-   dramatic and sometimes nonlinear changes in societal opinion
+tremists neighborhoods develop, affecting partial polarization.    dynamics.
+Society quickly self-organizes into distinct, geographically-
+clustered opinion subcultures, as can be seen in the spatial
+                 A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 7/18
+
+
+
+
+Figure 3. In a society filled with individuals who are intolerant, conformist, and committed to extreme beliefs, a minority of
+agents will distance themselves from centrist norms and stubbornly express extremist views. The influence of these agents
+polarizes their neighbors, spreading extremism spatially outward until society bifurcates into weak diversity. Spatial maps at
+t = 200 and t = 2000 show that polarization originates from neighborhoods that contain extremist agents.
+                  A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 8/18
+
+
+
+
+Figure 4. When agents are motivated by social influence, personal susceptibility, and social context of heterogeneous strength,
+novel opinion distributions emerge at the societal scale. The opinion trajectory shows that society settles into a stable opinion
+configuration, while the opinion histogram confirms that the final distribution of opinions is strongly diverse. As confirmed by
+the spatial map, most agents have adopted a centrist opinion, but a small minority of extremists counterbalance homogenizing
+norms, preventing total convergence but exerting too little influence to bifurcate society
+                                                                .
+                 A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 9/18
+
+
+
+
+Figure 5. Extremists counteract initial trends towards convergence and form neighborhoods of strongly (but uniquely)
+opinionated agents. These groups compete on the border: when one group exerts greater influence, they persuade moderate
+agents to become extremists; and when both groups exert equal influence, a buffer zone of centrist forms between them. These
+strongly diverse subcultures persist through time without artificial geographic or social barriers to prevent communication.
+                 A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 10/18
+
+
+
+
+Figure 6. The conversion of influential extremists may shift the course of societal opinion change from polarization to
+convergence. These events occur rapidly and are frequently preceded by spikes in pluralistic ignorance, such as at
+t ' 500, 1000, 5800. This suggests that when sustained levels of opinion falsification are finally revealed, tipping-point
+phenomenon may occur, leading to nonlinear opinion dynamics.
+
+
+Experiment 7: Social Reach                                         strongest influence in all geographic regions, and that centrists
+Finally, I investigate whether strong diversity, opinion subcul-   and moderates will turn towards that extreme. In either case,
+tures, and pluralistic ignorance are robust to changes in the      strong diversity vanishes, in contradiction with Hypothesis 5.
+size of agents’ social networks:
+                                                                     Validation: American Political Opinions
+     Hypothesis 5: small social networks will promote
+geographically-distinct opinion subcultures while large social     Although the ISC model is grounded in social psychology
+   networks will dissolve subgroups; strong diversity and          and reproduces features of real-world opinion dynamics like
+         pluralistic ignorance will not be affected.               strong diversity, opinion subcultures, and pluralistic ignorance,
+                                                                   I have not shown that it quantitatively captures real-world data.
+    I reproduce Experiment 5 with smaller social networks, ob-     In this section, I validate the model by reproducing empirical
+tained by reducing agents’ social reach (from µr = 22, σr = 4      data on the distributions and dynamics of political opinions in
+to µr = 11, σr = 2). Opinions rapidly become clustered in          American society.
+geographically-constrained networks, producing discrete sub-           As a proof-of-concept for strong diversity, I compare the
+cultures, Figure 7. These subcultures continue to receive          expressed opinion distributions produced by the ISC model
+influence from surrounding networks, often through persuad-        with a survey that assessed people’s opinions on each of
+able agents on the border who continually oppose consensus         twelve issues in contemporary American politics [50]. Each
+and promote strong diversity within each subculture. The           respondent was asked which of seven idealized positions,
+partial isolation of subcultures prevents both homogenization      ranging from extremely liberal to extremely conservative
+and polarization globally, which is reflected in a wide, mul-      statements about that issue, best described his or her belief,
+timodal opinion distribution. Both opinion subcultures and         creating a seven-point opinion scale. Using several parameter-
+strong diversity remain stable past t = 5, 000. Similar results    space exploration strategies, including an evolutionary algo-
+were obtained by reducing social reach in Experiments 4 and        rithm and hyperopt[51], I found values for mean intoler-
+6.                                                                 ance, susceptibility, and conformity that produced the dis-
+    Conversely, increasing agents’ social reach promotes ho-       tributions shown in Figure 9. These parameters, optimized
+mogenization. Initially, most agent converge to centrism,          to reduce the root-mean-square-error between the model dis-
+while the large size and strong centrist norms in dialogues en-    tribution and Broockman’s data over n = 4 realizations, lie
+courage the remaining extremists to express moderate views.        within the bounds of the values used in the above experiments
+Two outcomes are possible: either all extremists convert and       (except for σO = 50). The model captures distributions with
+society converges to centrism; or, as shown in Figure 8, an        a variety of different shapes, including: normal distributions
+imbalance of extremists remains, and society drifts towards        around a centrist opinion (gun control) and a moderate opin-
+the most vocal group. Unlike in Experiment 5, where a buffer       ion (affirmative action); centrist dominance with an extreme
+zone between extremist groups prevented takeover, large net-       group (healthcare and contraception); and other strange shapes
+works decrease the likelihood that centrists participate in dia-   (abortion and immigration, with less accuracy). This result
+logues that are well-balanced between the two extremes. This       quantitatively demonstrates that real-world opinion distribu-
+increases the probability that the dominant group will exert the   tions are within the output-space of the model.
+                A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 11/18
+
+
+
+
+Figure 7. Shrinking agents’ social networks encourages the formation of geographically-organized opinion subcultures.
+Reduced interaction between these groups prevents both centrist and extremist takeover, but continuing dialogues with
+intermediary agents keeps these groups, and society as a whole, strongly diversity. Histograms and maps show opinions at
+t = 10, 000.
+                A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 12/18
+
+
+
+
+Figure 8. Expanding agents’ social networks dilutes the influence of extremist agents over larger network, while globalized
+influence prevents the formation of opinion subcultures and eventually destroys strong diversity. The spatial maps at t = 4, 000
+and t = 5, 000 show that the buffer zone that previously preserved diversity no longer prevents the takeover of the dominant
+extremist group.
+                A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 13/18
+
+
+
+
+Figure 9. The ISC model produces expressed opinion distributions that align with American’s opinions on contemporary
+political issues ranging from gun control to healthcare to immigration. Data reproduced with permission from [50], parameters
+for each realization available on GitHub
+                 A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 14/18
+
+
+
+    I also compare the model’s opinion dynamics with a large-      or diverge to two polar opposites, and is also quantitatively
+N, multi-year survey of American’s ideological consistency         plausible, as shown through empirical validation. Whenever
+conducted by the Pew Research Center [52]. The survey              possible, agent-based modelers should move away from psy-
+consisted of ten questions assessing individuals’ attitudes        chologically and socially implausible assumptions and adopt
+about current political issues such as “[the] size and scope       empirically-motivated cognitive heuristics: doing so will so-
+of government, the social safety net, immigration, homosex-        lidify the model’s foundations and, as exemplified by this
+uality, business, the environment, foreign policy and racial       study, produce more complex and realistic results.
+discrimination,” with each response coded −1 (liberal), +1              Maintaining a diversity of opinions is important outside
+(conservative) , or 0 (don’t know/refused). These values were      the modeling community. Indigenous cultures dissolve in the
+summed for each individual, creating an “ideological consis-       face of globalization as people substitute traditional languages
+tency” scale ranging from −10 (liberal responses to every          and practices for the norms of modern society. Corporations
+question) to +10 (conservative responses to every question).       fall prey to groupthink when individuals with original ideas
+The study found that Americans have become increasingly            choose not to voice them. Political and religions groups be-
+polarized from 1994 to 2014: individuals who previously held       come polarized due to intolerance of dissimilar beliefs. To
+mixed liberal and conservative positions on different issues       promote cultural and ideological diversity, leaders must rec-
+are increasing partisan and ideologically uniform. As shown        ognize that social influence is not the only force that drives
+in Figure 10, this trend manifests a spreading of the empirical    single-mindedness. They must recognize, not just concep-
+distribution over time. Using the same parameter-space explo-      tually but with the quantitative precision afforded by com-
+ration tools as above, I found the ISC model produced similar      putational models, the role of psychological heterogeneity,
+patterns of polarization: a normal-like opinion distribution       personal commitment, and social context in destroying the
+midway through the simulation gradually spread as extremists       valuable resource of diversity.
+on both sides pulled centrists towards the periphery. It can
+also reproduce more subtle dynamics, such as the leftward
+                                                                   Will subcultures of opinions survive in a well con-
+shift of the kernel density estimate’s central peak from 1994
+                                                                   nected society?
+to 1999, then back to the right as a sharper peak from 1999 to
+2004.                                                              In the ISC model, communities of dissenters can survive
+                                                                   among globalized centrism or extremist competition in two
+                                                                   circumstances. In a tolerant or conformist society, the push
+                       Discussion                                  towards centrism rapidly homogenizes most agents, but leaves
+How do social groups maintain a strong diversity of                a few intolerant or committed agents on the ideological pe-
+opinions?                                                          riphery. When intolerant agents who hold opposing beliefs
+Psychological forces such as a commitment to strong opinions       live together, they reject the opposite perspective so strongly
+or a drive to distinctiveness may oppose homogenizing social       that they become extreme despite centrist influence, as in
+influence and preserve strong diversity. When society contains     Experiments 3 and 5. Polarization spreads outward, leav-
+agents with heterogeneous intolerance, susceptibility, and         ing cohesive extremist parties and undecided agents on the
+conformity, each individual is simultaneously pulled towards       neighborhoods’ borders. Densely clustered extremists resist
+centrism and extremism. If these forces are balanced, a strong     moderate influence; it seems that neither a centrist majority
+diversity of opinions emerges and remains stable through           nor an opposing extreme minority effectively moderates their
+time. Figures 4, 5, and 7 showed this diversity can take           speech or prevents their polarizing influence. If left undis-
+the form of (a) a centrist party diversified by influence from     turbed, these individuals will either settle into small conflicted
+a few extremist, (b) two extremist parties with undecided          communities or radicalize society.
+agents on the borders, and (c) geographically-isolated opinion         In the second scenario, agents’ small social networks limit
+subcultures.                                                       communication, producing a larger number of semi-isolated,
+    The maintenance of strong diversity is a novel result          cohesive, persistent communities. Communication is still
+in opinion change and cultural diffusion models based on           possible between such communities, but must travel through
+bounded confidence, which assume that agents influence one         bridging individuals whose influence is often overcome by
+another only if their opinion similarity is above an interaction   the group consensus. These communities cannot coalesce
+threshold [53, 7, 2, 3, 21, 22, 4]. Though this approximation      when agents’ social networks are large; social influence, when
+of intolerance has proved a useful first step in understanding     distributed over a large network, may cause either centrist
+convergence vs. polarization, I argue that it is overly rigid:     convergence or extremist takeover. These results imply that
+people do not classify each others’ trustworthiness according      (a) a lack of communication within society can encourage ide-
+to a binary scheme. The ISC model assumes that social in-          ological splintering in the same way that geographic barriers
+fluence changes continuously with intolerance, commitment,         facilitate speciation and genetic diversification, and (b) when
+and context, and produces sustained, strong diversity under        advances in communication technology put isolated cultures
+multiple psychological and network conditions. This result is      into contact with the outside world, the inflow of globalized
+intuitive, since societies do not converge to a single opinion     ideas can overwhelm the distinct features of their culture. In
+                A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 15/18
+
+
+
+
+Figure 10. The ISC model produces opinion dynamics that are consistent with the polarization of Americans’ political
+opinions from 1994 to 2014. Blue and green lines are Gaussian kernel density estimates for the respective distributions. Data
+reproduced from the Pew Research Center [52]
+                 A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 16/18
+
+
+
+reality, extremism often emerges in locations with limited                                Conclusion
+communication and access to external information. Although
+                                                                   In this study, I examined the relationship between the psy-
+networking extremists with new individuals has the potential
+                                                                   chosocial forces driving opinion change and the resulting
+to spread radicalization, it also increases the probability that
+                                                                   distributions, dynamics, and topologies of opinions across so-
+extremists will find a bridge to more moderate attitudes that,
+                                                                   ciety. This research extends previous studies in computational
+over time, persuades them to soften their beliefs, as occurred
+                                                                   opinion dynamics by expanding the psychological depth of
+in Experiment 6.
+                                                                   agents to include previously unstudied forces. Through a se-
+                                                                   ries of computational experiments, I showed that networks
+Does pluralistic ignorance affect societal opinion
+                                                                   of heterogeneous agents will interact to produce (a) distribu-
+change?
+                                                                   tions of opinions that match political opinion data (b) opinion
+We assess others’ opinions through their expressions and use       subcultures, and (c) trend-setting pluralistic ignorance. These
+that assessment to reevaluate our own beliefs. Experiment          results are significant advances in the study of macroscopic
+2 showed that agents’ desire to conform can lead others to         opinion change and suggest that modest increases in the com-
+mistakenly think that agreement exists in society, reverse the     plexity of agent models can produce opinion dynamics that
+process of opinion polarization, and bring an intolerant society   align better with reality.
+back to consensus. It also showed that when agents express
+                                                                       Many extensions of the ISC model are possible. People ac-
+opinions with the goal of appearing distinct, no observable
+                                                                   tively promote their opinions at rallies or online, while others
+consensus exists on any issue, and the false atmosphere of
+                                                                   join organizations that enforce their beliefs through coercion
+extremism causes societal polarization. Social norms like
+                                                                   and punishment. Introducing social mechanisms for these
+the desire to be distinct from the previous generation or to
+                                                                   behaviors would permit the study of collective action prob-
+conform to the community’s religious beliefs do have far
+                                                                   lems and suggest more specific strategies that leaders could
+reaching effects on opinion change at the societal level; any
+                                                                   take to achieve desired patterns of opinion change. Another
+simulation which assumes agents have perfect information is
+                                                                   extension would allow for dynamic social networks. Though
+missing an important aspect of social communication.
+                                                                   the social reach procedure captures important statistics of so-
+    Pluralistic ignorance appeared in simulations with nonlin-     cial networks, the people with whom we converse change
+ear opinion dynamics, spiking during the critical periods of       constantly. Introducing dynamic networking, possibly in an
+change in that society’s history, such as before stubborn ex-      expanded virtual environment, would permit a more complete
+tremist converted to centrism and when centrist experimented       study of how opinions change in a society dominated by social
+with moderate expressions. One interpretation of these re-         media. I would also like to compare opinion geography and
+sults is that long-term history is relatively predictable when     pluralistic ignorance to empirical data.
+everyone communicates perfectly, but when social context en-
+                                                                       I contend that empirically-accurate patterns of opinion
+courages belief falsification, tensions between what is heard
+                                                                   change only emerge when agents act according to plausible
+and what is felt build until they are suddenly released. This
+                                                                   rules, and that modelers must expand the depth of agents’ so-
+interpretation agrees with Kuran’s work on the role of pref-
+                                                                   cial cognition to explain complex social phenomenon. This is
+erence falsification in authoritarian revolutions [41], and was
+                                                                   best achieved by endowing agents with human-like cognitive
+likely a contributing factor in the unexpected and rapid nature
+                                                                   architectures capable of affecting perception, memory, emo-
+of the arab spring [42].
+                                                                   tion, attention, and communication. Several opinion change
+                                                                   models have already incorporated neurally-inspired mecha-
+Can the ISC model reproduce empirical opinion dis-                 nisms to great effect [54, 55]. Recent advances in neural
+tributions and dynamics?                                           engineering suggest that building agents with artificial brains
+All models should be treated with skepticism until they have       may soon be possible [56]. In future work, I plan to incorpo-
+been credibly validated with empirical data. The agreement         rate such artificial intelligences into social simulations.
+between Broockman’s data and the simulated opinion distribu-
+tions shows that the model reproduces strong diversity. These
+political opinion distributions are sometimes far from normal,                            References
+and may be non-symmetric or have few agents at the ideo-           [1]   Bibb Latané. The psychology of social impact. American
+logical center. Furthermore, the similarities between political
+                                                                         psychologist, 36(4):343, 1981.
+polarization in the Pew dataset and in the simulation shows
+the model also captures certain features of opinion change, in-    [2]   Rainer Hegselmann, Ulrich Krause, et al. Opinion dy-
+cluding short-term centrist fluctuations and long-term societal          namics and bounded confidence models, analysis, and
+polarization. Overall, the validation experiments should be              simulation. Journal of Artificial Societies and Social
+seen as an existence proof of plausible diversity and dynam-             Simulation, 5(3), 2002.
+ics in the model, not as evidence of a calibrated simulation       [3]   Guillaume Deffuant, Frédéric Amblard, Gérard Weis-
+capable of precisely predicting opinion change.
+                                                                         buch, and Thierry Faure. How can extremism prevail? a
+                                                                         study based on the relative agreement interaction model.
+                   A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 17/18
+
+
+
+       Journal of artificial societies and social simulation, 5(4),   [18]   Joshua M Epstein. Generative social science: Studies in
+       2002.                                                                 agent-based computational modeling. Princeton Univer-
+ [4]   Wander Jager and Frédéric Amblard. Uniformity, bipo-                sity Press, 2006.
+       larization and pluriformity captured as generic stylized       [19]   Joshua M Epstein. Agent Zero: Toward Neurocognitive
+       behavior with an agent-based simulation model of attitude             Foundations for Generative Social Science. Princeton
+       change. Computational & Mathematical Organization                     University Press, 2014.
+       Theory, 10(4):295–303, 2005.                                   [20]   Morris H DeGroot. Reaching a consensus. Journal of
+ [5]   Delia Baldassarri and Peter Bearman. Dynamics of                      the American Statistical Association, 69(345):118–121,
+       political polarization. American sociological review,                 1974.
+       72(5):784–811, 2007.                                           [21]   Pranav Dandekar, Ashish Goel, and David T Lee. Biased
+ [6]   Kathleen Carley. A theory of group stability. American                assimilation, homophily, and the dynamics of polariza-
+       Sociological Review, pages 331–354, 1991.                             tion. Proceedings of the National Academy of Sciences,
+ [7]   Noah Mark. Beyond individual differences: Social dif-                 110(15):5791–5796, 2013.
+       ferentiation from first principles. American Sociological      [22]   Laurent Salzarulo. A continuous opinion dynamics model
+       Review, pages 309–330, 1998.                                          based on the principle of meta-contrast. Journal of Artifi-
+ [8]   Jenna Bednar, Aaron Bramson, Andrea Jones-Rooy, and                   cial Societies and Social Simulation, 9(1), 2006.
+       Scott Page. Emergent cultural signatures and persistent        [23]   Robert Axelrod. The dissemination of culture a model
+       diversity: A model of conformity and consistency. Ratio-              with local convergence and global polarization. Journal
+       nality and Society, 22(4):407–444, 2010.                              of conflict resolution, 41(2):203–226, 1997.
+ [9]   James A Kitts. Social influence and the emergence of           [24]   Miller McPherson, Lynn Smith-Lovin, and James M
+       norms amid ties of amity and enmity. Simulation Mod-                  Cook. Birds of a feather: Homophily in social networks.
+       elling Practice and Theory, 14(4):407–422, 2006.                      Annual review of sociology, pages 415–444, 2001.
+[10]   Glenn R Carroll and J Richard Harrison. Come together?         [25]   Noah E Friedkin. Structural cohesion and equivalence ex-
+       the organizational dynamics of post-merger cultural in-               planations of social homogeneity. Sociological Methods
+       tegration. Simulation Modelling Practice and Theory,                  & Research, 12(3):235–261, 1984.
+       10(5):349–368, 2002.                                           [26]   Peter V Marsden. Homogeneity in confiding relations.
+[11]   James A Kitts and Paul T Trowbridge. Shape up or ship                 Social networks, 10(1):57–76, 1988.
+       out: social networks, turnover, and organizational culture.    [27]   Noah E Friedkin. Structural bases of interpersonal in-
+       Computational and Mathematical Organization Theory,                   fluence in groups: A longitudinal case study. American
+       13(4):333–353, 2007.                                                  Sociological Review, pages 861–872, 1993.
+[12]   Richard E Petty, Duane T Wegener, and Leandre R Fab-           [28]   James A Kitts, Michael W Macy, and Andreas Flache.
+       rigar. Attitudes and attitude change. Annual review of                Structural learning: Attraction and conformity in task-
+       psychology, 48(1):609–647, 1997.                                      oriented groups. Computational & Mathematical Orga-
+[13]   Wendy Wood. Attitude change: Persuasion and social                    nization Theory, 5(2):129–145, 1999.
+       influence. Annual review of psychology, 51(1):539–570,         [29]   Milton E Rosenbaum. The repulsion hypothesis: On the
+       2000.                                                                 nondevelopment of relationships. Journal of Personality
+[14]   Robert B Cialdini and Noah J Goldstein. Social influence:             and Social Psychology, 51(6):1156, 1986.
+       Compliance and conformity. Annu. Rev. Psychol., 55:591–        [30]   George Smeaton, Donn Byrne, and Sarah K Murnen. The
+       621, 2004.                                                            repulsion hypothesis revisited: Similarity irrelevance or
+[15]   Bertram Gawronski and Galen V Bodenhausen. Asso-                      dissimilarity bias? Journal of Personality and Social
+       ciative and propositional processes in evaluation: an in-             Psychology, 56(1):54, 1989.
+       tegrative review of implicit and explicit attitude change.     [31]   Charles G Lord, Lee Ross, and Mark R Lepper. Biased
+       Psychological bulletin, 132(5):692, 2006.                             assimilation and attitude polarization: The effects of prior
+[16]   Gregory J Pool, Wendy Wood, and Kira Leck. The self-                  theories on subsequently considered evidence. Journal
+       esteem motive in social influence: agreement with valued              of personality and social psychology, 37(11):2098, 1979.
+       majorities and disagreement with derogated minorities.         [32]   Arthur G Miller, John W McHoskey, Cynthia M Bane,
+       Journal of personality and social psychology, 75(4):967,              and Timothy G Dowd. The attitude polarization phe-
+       1998.                                                                 nomenon: Role of response measure, attitude extremity,
+[17]   Maria Knight Lapinski and Rajiv N Rimal. An explication               and behavioral consequences of reported attitude change.
+       of social norms. Communication Theory, 15(2):127–147,                 Journal of Personality and Social Psychology, 64(4):561,
+       2005.                                                                 1993.
+                   A Psychologically-Motivated Model of Opinion Change with Applications to American Politics — 18/18
+
+
+[33]   Charles S Taber and Milton Lodge. Motivated skepticism         [47]   Damon Centola, Robb Willer, and Michael Macy. The
+       in the evaluation of political beliefs. American Journal              emperor’s dilemma: A computational model of self-
+       of Political Science, 50(3):755–769, 2006.                            enforcing norms1. American Journal of Sociology,
+[34]                                                                         110(4):1009–1040, 2005.
+       Andreas Flache and Michael W Macy. Local convergence
+                                                                      [48]   Lynne Hamill and Nigel Gilbert. Social circles: A simple
+       and global diversity from interpersonal to social influence.
+       Journal of Conflict Resolution, 55(6):970–995, 2011.                  structure for agent-based social network models. Jour-
+[35]
+                                                                             nal of Artificial Societies and Social Simulation, 12(2):3,
+       Michael Mäs, Andreas Flache, and James A Kitts. Cul-                 2009.
+       tural integration and differentiation in groups and orga-      [49]
+       nizations. In Perspectives on Culture and Agent-based                 Elisabeth zu Erbach-Schoenberg, Seth Bullock, and Sally
+       Simulations, pages 71–90. Springer, 2014.                             Brailsford. A model of spatially constrained social net-
+                                                                             work dynamics. Social Science Computer Review, page
+[36]   Konstantin Klemm, Vı́ctor M Eguı́luz, Raúl Toral, and                0894439313511934, 2013.
+       Maxi San Miguel. Global culture: A noise-induced tran-         [50]   David E Broockman. Approaches to studying policy
+       sition in finite systems. Physical Review E, 67(4):045101,
+                                                                             representation. Legislative Studies Quarterly, 41(1):181–
+       2003.
+                                                                             215, 2016.
+[37]   Luca De Sanctis and Tobias Galla. Effects of noise             [51]   James Bergstra, Brent Komer, Chris Eliasmith, Dan
+       and confidence thresholds in nominal and metric axel-                 Yamins, and David D Cox. Hyperopt: a python library for
+       rod dynamics of social influence. Physical Review E,                  model selection and hyperparameter optimization. Com-
+       79(4):046108, 2009.                                                   putational Science & Discovery, 8(1):014008, 2015.
+[38]   Solomon E Asch. Effects of group pressure upon the mod-        [52]   Michael Dimock, Jocelyn Kiley, Scott Keeter, and Carroll
+       ification and distortion of judgments. Groups, leadership,            Doherty. Political polarization in the american public.
+       and men, pages 222–236, 1951.                                         Technical report, Pew Research Center, 2014.
+[39]                                                                  [53]   Michael W Macy, James A Kitts, Andreas Flache, and
+       Roland Imhoff and Hans-Peter Erb. What motivates
+       nonconformity? uniqueness seeking blocks majority in-                 Steve Benard. Polarization in dynamic networks: A hop-
+       fluence. Personality and Social Psychology Bulletin,                  field model of emergent structure. Dynamic social net-
+       35(3):309–320, 2009.                                                  work modeling and analysis, pages 162–173, 2003.
+[40]                                                                  [54]   Tobias Schröder and Paul Thagard. The affective mean-
+       Deborah A Prentice and Dale T Miller. Pluralistic igno-
+       rance and alcohol use on campus: some consequences                    ings of automatic social behaviors: Three mechanisms
+       of misperceiving the social norm. Journal of personality              that explain priming. Psychological Review, 120(1):255,
+       and social psychology, 64(2):243, 1993.                               2013.
+                                                                      [55]   Ingo Wolf, Tobias Schröder, Jochen Neumann, and Ger-
+[41]   Timur Kuran. Sparks and prairie fires: A theory of unan-
+                                                                             hard de Haan. Changing minds about electric cars: An
+       ticipated political revolution. Public choice, 61(1):41–74,
+                                                                             empirically grounded agent-based modeling approach.
+       1989.
+                                                                             Technological forecasting and social change, 94:269–285,
+[42]   Jeff Goodwin. Why we were surprised (again) by the arab               2015.
+       spring. Swiss Political Science Review, 17(4):452–456,         [56]   Chris Eliasmith, Terrence C Stewart, Xuan Choo, Trevor
+       2011.                                                                 Bekolay, Travis DeWolf, Yichuan Tang, and Daniel Ras-
+[43]   Matthew Jarman, Andrzej Nowak, Wojciech Borkowski,                    mussen. A large-scale model of the functioning brain.
+       David Serfass, Alexander Wong, and Robin Vallacher.                   science, 338(6111):1202–1205, 2012.
+       The critical few: Anticonformists at the crossroads of mi-
+       nority opinion survival and collapse. Journal of Artificial
+       Societies and Social Simulation, 18(1):6, 2015.
+[44]   Paul E Smaldino and Joshua M Epstein. Social confor-
+       mity despite individual preferences for distinctiveness.
+       Royal Society open science, 2(3):140437, 2015.
+[45]   Icek Ajzen. Nature and operation of attitudes. Annual
+       review of psychology, 52(1):27–58, 2001.
+[46]   Frédéric Amblard and Guillaume Deffuant. The role of
+       network topology on extremism propagation with the rel-
+       ative agreement opinion dynamics. Physica A: Statistical
+       Mechanics and its Applications, 343:725–738, 2004.
+

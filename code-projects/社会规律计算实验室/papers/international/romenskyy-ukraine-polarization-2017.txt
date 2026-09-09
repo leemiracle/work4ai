@@ -1,0 +1,1001 @@
+                                                       Polarized Ukraine 2014: Opinion and Territorial Split Demonstrated with the
+                                                              Bounded Confidence XY Model, Parameterized by Twitter Data
+                                                                                                      Maksym Romenskyy
+                                                                        Department of Life Sciences, Imperial College London, London SW7 2AZ, UK and
+                                                                        Department of Mathematics, Uppsala University, Box 480, Uppsala 75106, Sweden
+
+                                                                                                        Viktoria Spaiser
+                                                                       School of Politics and International Studies, University of Leeds, Leeds LS2 9JT, UK
+arXiv:1706.00419v2 [physics.soc-ph] 25 Jul 2018
+
+
+
+
+                                                                                                          Thomas Ihle
+                                                              Institute of Physics, University of Greifswald, Felix-Hausdorff-Str. 6, Greifswald 17489, Germany
+
+                                                                                                       Vladimir Lobaskin
+                                                                             School of Physics, University College Dublin, Belfield, Dublin 4, Ireland
+                                                                                                     (Dated: July 26, 2018)
+                                                                  Multiple countries have recently experienced extreme political polarization, which in some cases
+                                                               led to escalation of hate crime, violence and political instability. Beside the much discussed presi-
+                                                               dential elections in the United States and France, Britain’s Brexit vote and Turkish constitutional
+                                                               referendum, showed signs of extreme polarization. Among the countries affected, Ukraine faced
+                                                               some of the gravest consequences. In an attempt to understand the mechanisms of these phe-
+                                                               nomena, we here combine social media analysis with agent-based modeling of opinion dynamics,
+                                                               targeting Ukraine’s crisis of 2014. We use Twitter data to quantify changes in the opinion divide
+                                                               and parameterize an extended Bounded-Confidence XY Model, which provides a spatiotemporal
+                                                               description of the polarization dynamics. We demonstrate that the level of emotional intensity is a
+                                                               major driving force for polarization that can lead to a spontaneous onset of collective behavior at
+                                                               a certain degree of homophily and conformity. We find that the critical level of emotional intensity
+                                                               corresponds to a polarization transition, marked by a sudden increase in the degree of involvement
+                                                               and in the opinion bimodality.
+
+
+                                                                  I.     INTRODUCTION                              tion with over 2.6 million internally displaced persons
+                                                                                                                   and refugees and a formation of self-proclaimed states in
+                                                                                                                   Donetsk and Luhansk [2]. These events escalated the po-
+                                                     Ukraine represents a bright example of a nearly
+                                                                                                                   larization in the country that has grown over the years.
+                                                  evenly split society with two opposing camps, where
+                                                                                                                   As the two political sides became more extreme in their
+                                                  the East/South gravitates towards Russia while the
+                                                                                                                   views in the course of the events a dialogue and there-
+                                                  West/North towards European neighbors [1]. The over-
+                                                                                                                   fore a peaceful solution has become increasingly difficult.
+                                                  all political vector in the country sways between politi-
+                                                                                                                   The extreme opinion divide affected not only society as
+                                                  cal parties and leaders that on the one side seek closer
+                                                                                                                   a whole but also destabilized multiple families and local
+                                                  ties to the West and in particular Europe and on the
+                                                                                                                   communities.
+                                                  other hand to the East and in particular Russia. The Or-
+                                                  ange Revolution in 2004 brought pro-western politicians             In this paper, we present a novel approach, in which
+                                                  to power, however, in the 2010 elections a pro-eastern           we combine rich social media data with the power of
+                                                  politician, Viktor Yanukovych, was elected for president,        methods of statistical physics, to study political opin-
+                                                  not least because of major support in the eastern re-            ion polarization mechanisms, seeking to understand what
+                                                  gions of Ukraine (see Fig. 1). In November 2013, af-             mechanisms turned Ukraine into a irreconcilably polar-
+                                                  ter Yanukovych failed to sign a political association and        ized state. Though the integration of the two approaches
+                                                  free trade agreement with the European Union, protests           has been increasingly discussed [5, 6], there are only few
+                                                  in Ukraine erupted. The initially peaceful rallies became        studies so far that have actually attempted to combine
+                                                  violent in January 2014 after the government passed laws         these [7–11]. None of them, however, studies polariza-
+                                                  to suppress the protests. In February 2014, the violence         tion and integrates the unstructured data analysis com-
+                                                  escalated, which led to the removal of Yanukovych from           prehensively with the computational model. In the past
+                                                  office by the parliament. Meanwhile a separatist and             studies there has been a methodological gap between the
+                                                  anti-interim-government movement rose with the sup-              social media analysis and agent-based modeling, which
+                                                  port of Russia in eastern and southern parts of Ukraine,         has limited the relation between the two to rather qual-
+                                                  and ignited a military conflict. Crimea was annexed by           itative statements. We are presenting an approach here
+                                                  the Russian Federation after a referendum that was de-           that elaborately links the two approaches. Combining
+                                                  nounced internationally as illegitimate and illegal. Later       them has the advantage to parameterize the computa-
+                                                  in 2014, the crisis resulted in further territorial separa-      tional model and validate it by empirical evidence and
+                                                                                                                               2
+
+
+
+
+Figure 1: (A) Ukraine’s political divide in 2010 elections [3]. The majority of the voters in the eastern and southern regions of
+Ukraine supported a pro-eastern candidate, Viktor Yanukovych. (B) Ukraine’s linguistic divide according to national census
+2001 [4]. In the three regions most affected by Ukraine crisis in 2014, Luhansk oblast, Donetsk oblast and Crimea, Russian is
+a native language for more than 50% of the population.
+
+
+on the other hand to make use of the rich social media            ple want to be perceived in a more favorable way than
+data in a theory-guided way beyond mere descriptives.             what we perceive to be the average tendency. Through
+This holds the potential to gain new insights into the            observations they determine what the average tendency
+underlying social mechanisms of polarization. In the fol-         is and then they express a slightly more extreme opinion
+lowing, we will describe a new computational model of             than the perceived average opinion [13, 15, 16]. There
+polarization, a 2D lattice agent-based model, that is in-         is clear evidence for this assumption from numerous ex-
+formed by the theoretical work on polarization discussed          perimental studies [13, 17, 18]. Moreover, due to the ho-
+below and that brings in the spatial dimension and em-            mophily phenomenon [19], which states that people are
+phasizes the role of regional differences. We then look           more likely to interact with those who are similar to them
+at the empirical polarization dynamics in the Ukrainian           with respect to socio-economic background [20] as well as
+Twittersphere, before parameterizing the model with the           attitudes [21], people are more likely to socially compare
+analyzed Twitter data, hereby validating the model. The           themselves to similar peers. Group polarization phenom-
+combination of the two approaches reveals the important           ena are also explained drawing on the Persuasive Argu-
+role that emotional intensity levels play in polarization         ment Theory, which states that people are more likely to
+thus far not sufficiently accounted for by classical the-         change their opinion when presented with persuasive ar-
+oretical or empirical studies of polarization. The few            guments. Group polarization can occur when the group
+studies that investigate the role of emotions in polar-           discourse is manipulated through biased information or
+ization have usually focussed on very specific emotions,          misinformation, exposing a group to false persuasive ar-
+e.g. “self-conscious” emotions like pride and embarrass-          guments [13, 16, 22]. The theory is strongly supported
+ment/shame and showed that these emotions can rein-               by empirical evidence from numerous experimental stud-
+force conformity and polarization [12]. In this paper, we         ies [13, 23, 24]. The two mechanisms, social comparison
+do not focus on specific emotions, but, rather examine            and persuasive argument usually co-occur. For instance,
+the role of emotional intensity levels and show how these         persuasive arguments in an environment of biased infor-
+emotional intensity levels can be a decisive driver in po-        mation can further push an individual to adopt a more
+larization.                                                       extreme attitude than expressed in the group they com-
+                                                                  pare themselves to. Another mechanism with respect to
+                                                                  polarization dynamics is the Biased Assimilation [25] in
+                                                                  opinion formation processes, which maintains that peo-
+           II.   OPINION POLARIZATION
+                                                                  ple are likely to keep their original position and draw
+                                                                  support for it if confronted with mixed or inconclusive
+  Opinion polarization has been intensely studied over            arguments. This mechanism, which again is empirically
+the last few decades, initiated by the observation that           well established [26–28], shows that people are only to a
+groups tend to adopt positions that are more extreme              limited extent open to change their opinions and this can
+than the initial individual positions of its members              contribute to polarization dynamics. In fact, Dandekar et
+[13, 14]. One explanation of this phenomenon is based on          al. [21] show that the two earlier described mechanisms
+the Social Comparison Theory, which suggests that peo-
+                                                                                                                           3
+
+and in particular the social comparison mechanism, is not       Archive Team [47]. The archived data is the freely avail-
+sufficient to produce polarization, the biased assimilation     able Twitter Streaming API Spritzer Sample, which col-
+mechanism has to be added.                                      lects 1% of all public tweets in real-time. The Twitter
+   Polarization processes have been empirically investi-        Streaming API Spritzer Sample allows for unfiltered data
+gated through experimental studies as mentioned previ-          analysis and hence for capturing the full discourse picture
+ously and to a lesser extent through survey based stud-         comparing to a more narrow, focussed (e.g. based on cer-
+ies [29, 30]. Furthermore, applied statistical physics          tain hashtags, user networks etc.) approach facilitated by
+and agent-based modeling approaches [21, 31–33] have            data using the Twitter REST API [48] that would disre-
+been used extensively to study polarization mechanisms          gard discourse contributions beyond the specified search
+through computer simulations. Prominent are for in-             queries. The data for January 2014 was missing and we
+stance bounded confidence models of opinion dynamics,           did not find any other archive providing this data. The
+stochastic models for the evolution of continuous-valued        tweet data is stored in JSON format. The data was pro-
+opinions within a finite group of individuals that explore      cessed and analyzed in Python. Specifically, the data was
+conditions for consensus and opinion fragmentation, in-         filtered for Russian/Ukrainian language (excluding Twit-
+troduced by Deffuant et al. [34] and further elaborated         ter users who specified being from Russia), cleared of
+by numerous studies [35–37]. We will draw inspiration           SPAM, and then filtered for political content with an ex-
+from these models as well. The challenges of using sta-         tensive set of keywords (see the electronic supplementary
+tistical physics models for modeling social phenomena are       material for details). We used the tweets to determine
+known. The tractable models are usually oversimplified          the political affiliation of each Twitter user using a set of
+and too general and thus lack flexibility required to reflect   keywords indicating neutral, pro- or anti-West attitudes
+the features of a particular social phenomena. Moreover,        and a set of keywords indicating neutral, pro- or anti-
+while computational studies are rigorous in investigat-         Russian attitudes (see the electronic supplementary ma-
+ing the specific mechanisms and dynamics of polarization        terial for details). Moreover, we conducted a sentiment
+they often lack empirical foundation and thus it remains        analysis of the tweets, in order to determine the political
+often unclear to what extent these often abstract mod-          affiliation for previously seemingly neutral Twitter users.
+els accurately represent phenomena we see in real world.        For this purpose we utilized the SentiStrength system for
+More recently, social media (e.g. Twitter and Facebook)         automatic sentiment analysis, built an Ukrainian sen-
+data have been increasingly used to study opinion polar-        timent words dictionary (see the electronic supplemen-
+ization [38–41]. Gruzd and Tsyganova [42], for instance,        tary material) and extended the SentiStrength Russian
+use Ukrainian Vkontakte data to demonstrate the split           sentiment words dictionary to make it equivalent to the
+between the two political camps in Ukraine (pro-East vs.        Ukrainian sentiment words dictionary (see the electronic
+pro-West) during the Maidan protests. Twitter has also          supplementary material for details). Our classification
+played a quite important role as a contested public de-         algorithm scanned all tweets for each user and checked
+bate arena throughout the crisis in Ukraine [4, 5]. Stud-       whether the tweet contained any of the keywords and any
+ies with social media data have revealed the strong effect      of the sentiment words specified and calculated overall
+of homophily in online social networks, which may lead          scores for political “West” and “East” affiliation as well
+to phenomena like the echo chamber [41, 45, 46], where          as sentiment scores (see the electronic supplementary ma-
+opinions are amplified through communication and repe-          terial for details). For the geo-plots in Fig. 3C,D, we fo-
+tition inside an “enclosed” social system. Echo chambers        cused on the data of the last week in September 2014. We
+can prevent people from noticing contrary persuasive ar-        scanned the Twitter data of each user for two possible ge-
+guments and they skew the perceived average that people         ographical information, the value of their “location” tag
+take into consideration in social comparison processes.         and/or geo/place “coordinates” tag which is a latitude
+Though social media data is potentially rich, i.e. fine-        and a longitude coordinate value. The vast majority of
+grained, time-resolved, relational, geo-coded, etc., with-      users have the default option “geo enabled:false”, thus do
+out an explicit theoretical underpinning, the studies of        not provide precise geographical information attached to
+polarization on social media remain usually rather de-          the tweet, a few more provide profile “location” informa-
+scriptive. By combining rich social media data with the         tion, but overall, geographical data is often not specified
+power of methods of statistical physics a better under-         and thus missing. We therefore ended up with only 493
+standing of specific political opinion polarization mecha-      Twitter users for whom we had a geographical informa-
+nisms is sought in this paper.                                  tion. The “West” and “East” political affiliation scores
+                                                                of these 493 Twitter users were plotted in Fig. 3C,D (see
+                                                                the electronic supplementary material for details).
+                    III.   METHODS
+
+    A.    Political opinion mining of Twitter data
+
+   We used the archived Twitter API Streaming data
+from October 2013 to September 2014 provided by the
+                                                                                                                                                              4
+
+                     35000
+   Number of users
+                     30000
+                     25000
+                     20000
+                     15000
+                     10000
+                      5000
+                         0
+
+
+
+                                                  1.4
+                     Emotional/neutral opinions
+
+
+
+
+                                                  1.2
+                                                  1.0
+                                                  0.8
+                                                  0.6
+                                                  0.4
+                                                  0.2
+                                                  0.0
+                                                        1   5   9   13 17 21 25 29 33 37 41 45 49
+                                                                         Time (weeks)
+
+
+
+Figure 2: (A) Time series plot of number of tweets, in total, neutral and emotional. (B) Time series plot of emotional/neutral
+tweets ratio with key political events tags. (C) Time series plot of number of average (weekly) users’ opinions, in total, pro-
+West and pro-East. (D) Average weekly number of tweets per user. No data was available for January 2014 (see Materials and
+Methods and the electronic supplementary material) therefore the data gaps in plots A-D between the weeks 13 and 17.
+
+
+   B.                                             Bounded Confidence XY Model of Opinion            zero noise, η = 0 corresponds to full conformity, η = 2π
+                                                             Polarization                           allows an individual to deviate from the group opinion
+                                                                                                    by an unlimited value. A contribution of each interact-
+    We model opinion dynamics in an assembly of inter-                                              ing agent is weighted by the emotional intensity of its
+active agents placed on a two-dimensional lattice of fi-                                            opinion p. The interaction has a limited range r, which
+nite size, which emulates a regional opinion distribution                                           sets the number of nearest neighbors considered. In 2D,
+and localization. Each opinion is represented by a vector                                           interaction range r = 2 corresponds to 24 interaction
+that can freely rotate in plane, similar to that in the XY                                          peers, r = 3 gives 48 peers, etc (see the electronic sup-
+model of a magnet, and is characterized by the length p                                             plementary material for details). In addition to this, the
+(emotional intensity, i.e. fervent strength of an opinion)                                          interaction is selective so that the vectors align only with
+and polar angle θ (orientation). This allows us to model                                            those neighbors, whose orientation (opinion) deviates by
+a continuous opinion spectrum with respect to the speci-                                            an angle less than some fixed value α from their own
+fied direction by a cosine of the angle between the vectors,                                        opinion vector. This rule is inspired by the bounded con-
+which can vary in the range between -1 (agent opposes                                               fidence model, or Deffuant model [34], and allows one to
+the opinion) and 1 (agent fully supports the opinion).                                              imitate systems with different levels of opinion tolerance
+Each agent can interact with a fixed number of nearest                                              [50]. Scaled value α/π denotes a fraction of the opinion
+neighbors. The social interactions are introduced via lo-                                           spectrum that is taken into account by each individual,
+cal mean field, similar to the Vicsek model [49]: the new                                           e.g. α/π = 0.1 corresponds to 10% closest opinions taken
+orientation of each vector is calculated as a mean of the                                           into account. Note that our model does not explicitly in-
+average direction of the neighbors and agent’s own ori-                                             clude any intrinsic preference to agent’s own opinion (i.e.
+entation:                                                                                           orientation of the opinion vector i in the previous time
+                     " P                             #                                              step) because using a relatively small values of η and α
+                       1    j,|j−i|≤r pj sin(θj (t))
+                                                                                                    already allows to achieve a socially realistic behavior.
+                 −1
+θi (t + ∆t) = tan        P                             + ξ(η, t),
+                      N j,|j−i|≤r pj cos(θj (t))                                                       We model a finite system with the boundary condi-
+                                                             (1)                                    tions set by two fixed rows of agents on each side. The
+where N is the number of interacting agents, ξ is the                                               boundary vectors are fixed according to the following
+angular noise variable uniformly distributed in the inter-                                          scheme: the left and upper rows are oriented to the left
+val [−η/2, η/2] and η is the noise strength. The noise is                                           (θ = π), imitating a bias towards “West” and the right
+added to model the level of conformity of the individual:                                           and bottom rows are fixed to point in the opposite di-
+                                                                                                                           5
+
+rection (θ = 0), thus mimicking a bias towards “East”.         ical data we have are discontinuous. Moreover, we have
+When other agents interact with the boundary vectors           no appropriate model for individual psychology. There-
+this introduces a spatially dependent local bias that can      fore, we decided not to introduce an artificial evolution
+account for geographical inhomogeneity in opinions, thus       of the opinions. As the individual history is lost, we can
+imitating cultural or ethnic differences, information bias,    only follow the variation of the averages corresponding
+etc. (see the electronic supplementary material for de-        to the snapshot of Twitter data.
+tails; see also the interactive model [51]).
+   These model settings reflect the theoretical assump-
+tions about polarization described above. The orien-              C.    Model parameterization with Twitter data
+tation represents political attitudes and the local mean
+field calculation of new orientations for each agent rep-         To parameterize the Bounded confidence XY model we
+resents the social comparison theory assumptions. The          used weekly distributions of the overall users’ emotional
+homophily effect is included through the bounded confi-        intensity scores. For each week, the overall emotional
+dence feature, where agents align only with those neigh-       intensity of each user was defined from the mean of the
+bors, whose political orientation is similar to their own.     average sentiment scores on a continuous scale from 0
+Furthermore, the biased assimilation mechanism is re-          to 5, with 0 corresponding to a neutral average user’s
+flected in the noise variable that determines the agents’      opinion and 5 reflecting an extremely emotional average
+willingness to change opinion (conformity level). Finally,     opinion. This measure did not contain any information
+the persuasive argument theory assumption, in particular       about political affiliation, so that each non-zero value
+with respect to the contribution of biased information to      could correspond to either pro-West or pro-East user’s
+polarization, is simulated via the boundary conditions.        political attitude. The data was sampled with a bin size
+We have added a further parameter to our model, the            of 1 for all non-zero opinions and a resulting discrete dis-
+emotional intensity, i.e. vector length, that represents       tribution was normalized by the total number of users
+the level of emotional strength and vehemence of a po-         per week giving probabilities for each discrete value of
+litical opinion. This parameter reflects results we have       overall emotional intensity (0 to 5). This distribution
+obtained from Twitter data sentiment analysis discussed        was then applied to the simulated system to define the
+in the next sections. It also builds on recent computa-        length p of each opinion vector. In each simulation, val-
+tional models and big data analysis of opinion dynamics        ues of p were assigned to agents at random, according
+[52, 53], which showcase the importance of emotions, and       to obtained discrete weekly distributions of overall emo-
+in particular of negative emotions, for people’s engage-       tional intensity, and kept constant throughout the simu-
+ment in political debates and for opinion formations and       lation. The simulated system consisted of 14641 agents
+changes.                                                       placed in nodes of 120 × 120 lattice. We performed at
+   We modeled evolution of the opinion spectrum in the         least 106 update cycles to determine the structure of the
+described system starting from randomized initial distri-      steady state. Each statistics was averaged over at least
+butions of agents’ emotional intensity and orientations        5 independent runs. We computed the bimodality coef-
+based on general uniform distributions. The emotional          ficient as β = (γ 2 + 1)/k, where γ is the skewness and k
+intensity levels for each agent were kept fixed in each sim-   is the kurtosis of weekly distributions of average opinion
+ulation while the orientations evolved due to noise and        scores in Twitter data or weekly distributions of cosines
+interactions. For each opinion spectrum extracted from         of orientations θ of opinion vectors in simulations.
+Twitter data, we performed a simulation until a steady
+state was reached. After that, the following statistics
+were collected: steady state distribution of the opinion                            IV.    RESULTS
+along the “East-West” scale, as defined by the boundary
+conditions, mean order parameter, and bimodality index.                A.   Opinion Polarization in the Ukrainian
+   We should note here that in this setup the week-by-                               Twittersphere
+week series of calculated properties do not reflect the real
+time, nor the actual system’s dynamics as the history of          To validate the model assumptions, we used Twitter
+the individuals as well as previous steady states are ig-      Streaming data from October 2013 to September 2014
+nored. To follow the variation of collective properties,       provided by the Archive Team. We use Twitter data be-
+ideally one should look at the evolution of each user’s        cause it provides fine-grained, time-series and rich data
+opinion and derive the group behavior from the corre-          on recent political opinion dynamics in Ukraine, other-
+sponding statistics. For this purpose, one would need          wise not available. To determine the political affiliation
+to either parameterize the individual opinions from the        of the Twitter users in our data, we used a political affilia-
+empirical data directly or solve the inverse problem and       tion classification procedure based on keyword and senti-
+introduce the variation of opinions based on the instan-       ment analysis suggested and tested by Spaiser et al. [54]
+taneous statistical averages. As we could reach only a         (see the electronic supplementary material for details).
+random sample of the tweets, it was not possible to follow     As a result, every Twitter user was assigned two scores,
+the former route and track individual users. The empir-        a “West” score and an “East” score, representing their
+                                                                                                                          6
+
+
+
+
+Figure 3: (A) Pro-against-European (West)/pro-against-Russian (East) opinion space plot for the first week of October 2013.
+(B) Pro-against-European (West)/pro-against-Russian (East) opinion space plot for the second week of August 2014. The
+points in plots C and D are Twitter users based on their two scores, the orange dot is the average. (C) Twitter users (dots)
+colored according to their “East” affiliation score and plotted over the Ukraine map using Twitter geo, place or location
+information. (D) Twitter users (dots) colored according to their “West” affiliation score and plotted over the Ukraine map
+using Twitter geo, place or location information.
+
+
+political position in a pro-against-European (West)/pro-           Fig. 3A,B moreover shows the polarization in a con-
+against-Russian (East) opinion space (see Fig. 3A,B) and        tinuous two-dimensional space defined by pro-against-
+an emotional intensity score, combining their sentiment         European (West)/pro-against-Russian (East) scores.
+analysis scores.                                                This figure shows that the polarization resulted in ap-
+                                                                pearance of two main opinion clusters, those who are
+   Our Twitter analyzes show that political polarization        pro-East and against-the-West on the one side and those
+did indeed take place in the Ukrainian Twittersphere be-        who are against East but who are also quite critical of the
+tween October 2013 and September 2014. Fig. 2A shows            West on the other side (see the electronic supplementary
+a discontinuous increase in emotional users in February         material for details). This in fact reflects most current
+2014, while the total number of users and the number of         surveys that show the disappointment of many Western
+neutral ones increased steadily. Fig. 2B depicts a ratio        oriented Ukrainians with the pro-West Poroshenko gov-
+of emotional/neutral opinions, where a jump from values         ernment [55].
+of about 1.0 to about 1.4 is visible around February as
+well. We added to this figure the key political incidents
+in Ukraine during this year, so the discontinuous changes
+in the data can be related to actual political events. This        Our Twitter data analysis confirms that political affil-
+shows that the biggest discontinuous change in February         iation follows the expected geographical pattern. People
+took place around the time when the Maidan protests             who are pro-East and against-West are more likely to be
+escalated and 100 people died on a single day. These re-        located in the Eastern and Southern parts of Ukraine,
+sults inspired the inclusion of emotional intensity levels      while Ukrainians with rather an against-East and (crit-
+as a parameter in the computational model. In addition          ical) pro-West attitude are to be found in the Western
+to an abrupt increase in the total number of users (Figs.       and Northern territories (see Fig. 3C,D). This analysis
+2A,C), users’ involvement in the topic also changed dis-        is a validation of our classification procedure, since the
+continuously (Fig. 2D). The dynamics of the average             geographical distribution of the Twitter users with their
+number of tweets per user completely resembles that of          respective political affiliation scores matches the actual
+the emotional level of tweets (Fig. 2B), with a charac-         geographical political camp distributions in Ukraine (see
+teristic jump around week 19 (February 2014).                   Fig. 1).
+                                                                                                                        7
+
+
+
+
+                                                       A
+
+
+
+
+Figure 4: (A)Time series plot of coefficient of bimodality of Twitter users’ opinion distribution. (B) Time series plot of
+coefficient of bimodality of vector orientations in simulations (η = 0.12).
+
+
+B.   Validating the Bounded Confidence XY Model                den increase of the emotional intensity, which we noted
+     of Opinion Polarization with Twitter data                 in the data in Fig. 2B.
+
+   To quantify the opinion divide, we present here the
+bimodality index for the opinion spectrum (see Materi-          C.   Onset of Opinion Clustering and Formation of
+als and Methods for the definition), as we found it to be                      Territorial Domains
+most sensitive to the changes of the spectrum, therefore,
+the best integral characteristic of the observed behavior.        The increase in emotional intensity leads to important
+The changes in the bimodality coefficient over 12 months       consequences in the spatial dimension. In the weeks be-
+from October 2013 are shown in Fig. 4A,B. In the Twit-         fore and early at the outbreak of the crisis, the simula-
+ter data the bimodality keeps as low as 0.2 to 0.26 from       tions display large diversity of the opinions (Fig. 5C)
+the start of observation until week 18 (February 2014) but     characterized by the large number (Fig. 5A) of small
+then demonstrates sudden increase to 0.35 to 0.40 within       (Fig. 5B) opinion domains (clusters). This picture,
+the next two or three weeks, after which it stays high,        however, changes further into the crisis, around week
+and the original value is never restored. This sudden          19, when a smaller number of larger opinion domains
+increase of the bimodality reflects a formation of two dis-    is formed. While clusters rarely exceed 100 agents before
+tinct political camps and clearly shows that the opinion       the critical weeks 17-18, starting from week 19 we observe
+divide has suffered a significant deepening in this short      clusters of up to 5000 agents and the numbers rarely drop
+period. Moreover, we see that the deepening was non-           below 1000. That the behavior becomes expressly collec-
+recoverable in the short term. The computational model,        tive is consistent with the rise of emotional intensity and
+parameterized with the Twitter emotional intensity spec-       of the fraction of involved agents (those with non-zero va-
+trum for each respective week, captures this behavior well     lence), which increases the number of interactions within
+and shows a similar qualitative trend. In a simulation         each individual’s circle and thus the local aligning field.
+with α = 0.15π, the bimodality coefficient jumps from          This is further confirmed by Fig. 5F,G showing the po-
+ca. 0.60 – 0.65 to 0.8 – 0.85 during the same period. The      lar opinion histogram for the two critical time points,
+quantitative difference in the values is mostly due to the     week 18 and 19 obtained from simulation analyses. The
+use of cosine function. We should note that, although          distributions are visibly gravitating towards 0 or 180 de-
+the model is parameterized by the Twitter data, it is          grees (“East” and “West”) in both sets. The fraction of
+not bound to reproduce the distribution, as the vectors        neutral opinions drops from week 18 to week 19 and the
+are allowed to change the orientation, and this behav-         distribution of opinions in each subgroup becomes very
+ior follows only from the specific anisotropic interactions    narrow.
+between the agents. We repeated the simulations with              Simulation analysis moreover shows that the opinion
+a different interaction parameter α = 1.0, corresponding       divide induces also territorial splitting. Subfigures Fig.
+to agents without any resistance to opinion change and         5C,D show the in-plane opinion distribution. We plot-
+found no jump in the bimodality. Therefore, the opinion        ted the opinions as predicted by the model just before
+divide is conditioned by both the restriction of confidence    the jump in the bimodality (week 18 – C) and immedi-
+and by conformity (noise) levels, thus confirming the ho-      ately after that (week 19 – D). The change in the dis-
+mophily and biased assimilation assumptions. Moreover,         tribution between these points is dramatic: while the
+the drastic change in bimodality corresponds to the sud-       predicted data for week 18 show a merely uniform dis-
+                                                                                                                             8
+
+
+
+
+Figure 5: (A)Time series plot of average number of clusters in simulations. (B) Time series plot of maximal cluster size in
+simulations. (C) Simulation snapshot for week 18, February 2014. (D) Simulation snapshot for week 19, February 2014. Each
+square in plots C and D represents an individual agent; size of a square is proportional to emotional intensity; color of each
+square denotes cosine of an orientation angle for each spin, with -1 and 1 corresponding to orientation towards “West” and
+“East”, respectively. (E) Log-log plot of distribution of cluster sizes in simulations for week 18, February 2014 (blue) and
+week 19, February 2014 (red). (F) Simulation cluster orientation diagram for week 18, February 2014. (G) Simulation cluster
+orientation diagram for week 19, February 2014. Orientation of clusters in plots F and G is shown in degrees; 180 and 0
+degrees denote orientation towards “West” and “East”, respectively; length of each bin reflects cluster probability. Simulation
+parameters in plots A–G are α = 0.15 and η = 0.12.
+
+
+tribution of both “East” and “West” orientations, the            gles, α < 0.4π, on the other hand produce regions of
+picture for week 19 features two distinct clusters with          prevalence of the bipolar states, thus structure the sys-
+predominant “West” orientation in the lower left cor-            tem in a polar or bipolar way. A combination of small
+ner and domination of the “East” orientation in the top          restriction angle (strongly bounded confidence) and high
+right corner. These orientations correspond to vector di-        noise (low conformity) does not produce any global or-
+rections in the preset boundary conditions. Each do-             der and is rather unrealistic since at these conditions the
+main contains practically no opposing opinion, as they           system represents a set of selective but randomly vacil-
+are squeezed out to the periphery and then to the op-            lating agents. Polarized states are generally only possible
+posing domain as the steady state develops. We can see           at low noise (high conformity) and small restriction an-
+small islands of mixed/neutral opinion in the middle of          gles (strongly bounded confidence). The changing level
+the simulation domain. The prediction of the territorial         of emotional intensity pushes the boundary between the
+divide matches also well the geo-location data shown in          polarized and non-polarized societies moreover outwards,
+Fig. 3C,D. We should stress however that the biased              thus extending the range of the polarized states, and
+boundary conditions alone are not sufficient to produce          brings the originally weakly polarized society to a highly
+any large domains even in the system with limited con-           polarized one. This splitting resembles in appearance a
+fidence (Fig. 5C, see the electronic supplementary ma-           phase separation in dissimilar liquids (e.g. oil in water).
+terial for details), although they definitely facilitate this    The important difference of our system from the liquid
+collective behaviour.                                            state systems is that the agents are not dissimilar from
+   The simulation allows us to analyze the steady states         the beginning but the dissimilarity and effective repul-
+of the system and provides insights into the mechanisms          sion between the opposite arises from strong social inter-
+of sudden onset of polarization, clustering, and territo-        actions that dictate cohesion between the like opinions.
+rial splitting (see the electronic supplementary material        Another important observation here is that the transi-
+for details). We in particular examined varying levels of        tion is driven primarily by the increase of emotional level
+noise, restriction angles and vector lengths. High noise         while the other parameters (conformity, confidence) stay
+(low conformity) corresponds to a globally disordered be-        constant. We should stress that the source of and the
+haviour (without any prominent consensus or polariza-            original direction of the emotional agents were not cru-
+tion) and the range of higher α allows only states with          cial. The key properties of the model that determine the
+polar order (global consensus). Smaller restriction an-          nature of the steady states (non-polar, polar or bipolar)
+                                                                                                                        9
+
+are the high conformity and strongly bounded confidence.      nomenon is not unique to Ukraine, and similar processes
+                                                              of deepening polarization leading to separatism are well
+                                                              known elsewhere (e.g. Northern Ireland). In most cases,
+                  V.   CONCLUSION                             however, the separatism is related to more obvious eth-
+                                                              nic, racial, or religious differences between the commu-
+   We have analyzed the opinion dynamics over a recent        nities, while in Ukraine the division is more subtle and
+period of political unrest in Ukraine. Based on the Twit-     roots in small cultural differences, which were artificially
+ter data, we registered an onset of emotional intensity       enhanced by external factors. And our results show how
+of tweets that corresponded to rising levels of involve-      dangerous targeted agitation can be when it is backed
+ment of the population in the political feud, fueled by       by modern information warfare techniques [56, 57] as it
+the action of the government, collisions of the opposing      boils emotions making polarized world views increasingly
+groups, and foreign military activities. The escalating       irreconcilable.
+opinion divide around the time became apparent among                                    Ethics
+others in the jump of the opinion bimodality index. We
+proposed an agent-based lattice model to study political        Tweets were collected and analysed in accordance with
+polarization as a collective behavior including the spatial   the Twitter Privacy Policy and the Twitter Terms of Ser-
+dimension of polarization. By parameterizing the model        vice.
+with Twitter data at distinct time points, we predicted
+the onset of collective behavior and territorial splitting
+of the opinion. We demonstrated that the tendency of                               Data accessibility
+territorial splitting is conditioned by the high conformity
+and homophily in the society and is driven by the growth        The datasets supporting the conclusions of this article
+in emotional intensity. Our analyzes demonstrate clearly      are provided by the Archive Team [47].
+the importance of emotional intensity for polarization, a
+factor that has been largely ignored thus far in classic
+theoretical and empirical literature on polarization with                       Authors’ contributions
+a few noteworthy exceptions as discussed earlier. Specifi-
+cally, while our analyzes confirm the importance of social       MR: Development and Testing of the Bounded Con-
+comparison, homophily, persuasive argument and biased         fidence XY Model, Parametrization and Testing of the
+assimilation mechanisms and their specific interactions       Model with Twitter Data, Development of Ukrainian dic-
+for polarization, they also show that these mechanisms        tionary for sentiment analysis, Preparing graphics, Writ-
+are not sufficient to ignite the extreme societal polariza-   ing the paper, VS: Processing and Analyzing Twitter
+tion we can observe for instance in Ukraine. The emo-         data, Preparing graphics, Writing the paper, TI: Devel-
+tional intensity is a key reinforcement mechanism that        opment of the Bounded Confidence XY Model, Writing
+has to be added.                                              the paper, VL: Development of the Bounded Confidence
+   Our analysis seem also to suggest a link between polar-    XY Model, Writing the paper.
+ization and separatist trends. The polarization dynamics
+that we establish for February 2014 in the data and sim-
+ulation increases in fact further around April and May                            Acknowledgements
+2014, when the self-declared Donetsk and Luhansk Peo-
+ple’s Republics were formed in the South-East of Ukraine.
+                                                                The authors thank Ian Harper for help with program-
+This seems to suggest that the opinion split may facili-
+                                                              ming and testing of the web applet.
+tate the separatist trends on its own. The observed phe-
+
+
+
+
+[1] James Bell, Katie Simmons, and Russ Oates.      De-       [4] Ukraine’s 2001 census. http://2001.ukrcensus.gov.ua.
+    spite concerns about governance, Ukrainians want              Accessed on: 14 Aug 2017.
+    to remain one country. Pew Research Center.               [5] Dirk Helbing and Stefano Balietti.                How
+    http://www.webcitation.org/6qqM20kvf, 2014.     Ac-           to do agent-based simulations in the future:
+    cessed on: 30 May 2017.                                       From     modeling   social   mechanisms    to    emer-
+[2] European     Commission.    Humanitarian Air    and           gent phenomena and interactive systems design.
+    Civil Protection.        Ukraine. ECHO Factsheet.             http://www.santafe.edu/media/workingpapers/11-06-024.pdf,
+    http://www.webcitation.org/70SmHLcRn, 2016.     Ac-           2011. Accessed on: 30 May 2017.
+    cessed on: 30 May 2017.                                   [6] Mark Birkin and Nick Malleson.           Investigating
+[3] BBC.                 Ukraine’s    sharp   divisions.          the behaviour of Twitter users to construct an
+    http://www.bbc.co.uk/news/world-europe-26387353,              individual-level model of metropolitan dynamics.
+    2014. Accessed on: 30 May 2017.                               http://www.webcitation.org/70SmCQuDQ, 2012.        Ac-
+                                                                                                                               10
+
+    cessed on: 26 June 2018.                                          assimilation and attitude polarization: The effects of prior
+[7] Emilio Serrano, Carlos A. Iglesias, and Mercedes Garijo.          theories on subsequently considered evidence. Journal
+    A novel agent-based rumor spreading model in Twitter. In          of Personality and Social Psychology, 37(11):2098–2109,
+    Proceedings of the International World Wide Web Confer-           1979.
+    ence (IW3C2), 2015.                                           [26] Arthur G. Miller, John W. McHoskey, Cynthia M. Bane,
+[8] William Rand, Jeffrey Herrmann, Brandon Schein, and               and Timothy G. Dowd. The attitude polarization phe-
+    Neža Vodopivec. An agent-based model of urgent diffusion         nomenon: Role of response measure, attitude extremity,
+    in social media. Journal of Artificial Societies and Social       and behavioral consequences of reported attitude change.
+    Simulation, 18(2):DOI: 10.18564/jasss.2616, 2015.                 Journal of Personality and Social Psychology, 64(4):561–
+[9] Bruno Gon¸alves, Nicola Perra, and Alessandro Vespig-             574, 1993.
+    nani. Modeling users’ activity on Twitter networks: Val-      [27] Geoffrey D. Munro, Peter H. Ditto, Lisa K. Lockhart,
+    idation of dunbar’s number. PLOS ONE, 6(8):1–5, 08                Angela Fagerlin, Mitchell Gready, and Elizabeth Peterson.
+    2011.                                                             Biased assimilation of sociopolitical arguments: Evaluat-
+[10] L. Weng, A. Flammini, A. Vespignani, and F. Menczer.             ing the 1996 U.S. presidential debate. Basic and Applied
+    Competition among memes in a world with limited atten-            Social Psychology, 24(1):15–26, 2002.
+    tion. Scientific Reports, 2:00335, 03 2012.                   [28] Charles S. Taber and Milton Lodge. Motivated skepti-
+[11] Misako Takayasu, Kazuya Sato, Yukie Sano, Kenta Ya-              cism in the evaluation of political beliefs. American Jour-
+    mada, Wataru Miura, and Hideki Takayasu. Rumor diffu-             nal of Political Science, 50(3):755–769, 2006.
+    sion and convergence during the 3.11 earthquake: A Twit-      [29] Wayne E. Baker. America’s Crisis of Values: Reality and
+    ter case study. PLOS ONE, 10(4):1–18, 04 2015.                    Perception. Princeton, NJ: Princeton University Press,
+[12] Elizabeth Suhay. Explaining group influence: The role            2005.
+    of identity and emotion in political conformity and polar-    [30] Michael Dimock, Carroll Doherty, Jocelyn Ki-
+    ization. Political Behavior, 37(1):221–251, 2015.                 ley,   and Russ Oates.               Political polarization
+[13] Daniel J. Isenberg. Group polarization: A critical review        in the American public. Pew Research Center.
+    and meta-analysis. Journal of Personality and Social Psy-         http://www.webcitation.org/70SlevVb7, 2014.             Ac-
+    chology, 50(6):1141–1151, 1986.                                   cessed on: 26 June 2018.
+[14] Serge Moscovici and Marisa Zavalloni. The group as a         [31] Delia Baldassarri and Peter Bearman. Dynamics of
+    polarizer of attitudes. Journal of Personality and Social         political polarization.     American Sociological Review,
+    Psychology, 12(2):125–135, 1969.                                  72(5):784–811, 2007.
+[15] Morris H. DeGroot. Reaching a consensus. Journal of the      [32] Claudio Castellano, Santo Fortunato, and Vittorio
+    American Statistical Association, 69(345):118–121, 1974.          Loreto. Statistical physics of social dynamics. Reviews
+[16] Cass R. Sunstein. The law of group polarization. The             of Modern Physics, 81(2):591–646, 2009.
+    Journal of Political Philosophy, 10(2):175–195, 2002.         [33] Michael Mäs, Andreas Flache, Károly Takács, and
+[17] Robert S. Baron and Gard Roper. Reaffirmation of social          Karen A. Jehn. In the short term we divide, in the long
+    comparison views of choice shifts: Averaging and extrem-          term we unite: Demographic crisscrossing and the effects
+    ity effects in an autokinetic situation. Journal of Person-       of faultilines on subgroup polarization. Organization Sci-
+    ality and Social Psychology, 33(5):521–530, 1976.                 ence, 24(3):716–736, 2013.
+[18] David G. Myers, Sandra Brown Wojcicki, and Bobette S.        [34] Guillaume Deffuant, David Neau, Frederic Amblard,
+    Aardema. Attitude comparison: Is there ever a band-               and Gérard Weisbuch. Mixing beliefs among interacting
+    wagon effect?      Journal of Applied Social Psychology,          agents. Advances in Complex Systems, 3:87–98, 2000.
+    7(4):341–347, 1977.                                           [35] Rainer Hegselmann and Ulrich Krause. Opinion dynam-
+[19] Miller McPherson, Lynn Smith-Lovin, and James M.                 ics and bounded confidence models, analysis, and simula-
+    Cook. Birds of a feather: Homophily in social networks.           tion. Journal of Artificial Societies and Social Simulation,
+    Annual Review of Sociology, 27:415–444, 2001.                     5(3):1, 2002.
+[20] Sergio Currarini, Matthew O. Jackson, and Paolo Pin.         [36] Santo Fortunato, Vito Latora, Alessa Ndro Pluchino,
+    An economic model of friendship: Homophily, minorities,           and Andrea Rapisarda. Vector opinion dynamics in a
+    and segregation. Econometrica, 77(4):1003–1045, 2009.             bounded confidence consensus model. International Jour-
+[21] Pranav Dandekar, Ashish Goel, and David T. Lee. Biased           nal of Modern Physics C, 16(10):1535, 2005.
+    assimilation, homophily, and the dynamics of polarization.    [37] Jan Lorenz.        Continuous opinion dynamics under
+    PNAS, 110(15):5791–5796, 2013.                                    bounded confidence: A survey. International Journal of
+[22] Eugene Bernstein. Persuasion as argument processing.             Modern Physics C, 18(12):1819, 2007.
+    In Hermann Brandstatter, James H. Davis, and Gisela           [38] Eytan Bakshy, Solomon Messing, and Lada Adamic. Ex-
+    Stocker-Kreichgauer, editors, Contemporary problems in            posure to ideologically diverse news and opinion on Face-
+    group decision-making, pages 103–124. NewYork: Aca-               book. Science, 348(6239):1130–1132, 2015.
+    demic Press, 1982.                                            [39] Michael D. Conover, Jacob Ratkiewicz, Matthew Fran-
+[23] Ebbe B. Ebbsen and Richard J. Bowers. Proportion of              cisco, Bruno Goncalves, Filippo Menczer, and Alessandro
+    risky to conservative arguments in a group discussion and         Flammini. Political polarization on twitter. In Fifth Inter-
+    choice shifts. Journal of Personality and Social Psychol-         national AAAI Conference on Weblogs and Social Media,
+    ogy, 29(3):316–327, 1974.                                         pages 89–96, 2011.
+[24] Amiram Vinokur and Eugene Bernstein. Novel argumen-          [40] Sarita Yardi and Danah Boyd. Dynamic debates: An
+    tation and attitude change: The case of polarization fol-         analysis of group polarization over time on twitter. Bul-
+    lowing group discussion. European Journal of Social Psy-          letin of Science, Technology & Society, 30(5):316–327,
+    chology, 8(3):335–348, 1978.                                      2010.
+[25] Charles G. Lord, Lee Ross, and Mark R. Lepper. Biased        [41] Molly Asher, Cristina Leston Bandeira, and Vikto-
+                                                                                                                         11
+
+    ria Spaiser. Assessing the effectiveness of e-petitioning        Cohen, and Ofer Shochet. Novel type of phase transi-
+    through Twitter conversations. In Political Studies Asso-        tion in a system of self-driven particles. Physical Review
+    ciation Annual Meeting 2017, 2017.                               Letters, 75:1226–1229, 1995.
+[42] Anatoliy Gruzd and Ksenia Tsyganova. Politically po-        [50] Maksym Romensky, Vladimir Lobaskin, and Thomas
+    larized online groups and their social structures formed         Ihle. Tricritical points in a vicsek model of self-propelled
+    around the 2013–2014 crisis in Ukraine. Internet, Poli-          particles with bounded confidence. Physical Review E,
+    tics, Policy 2014: Crowdsourcing for Politics and Policy.,       90:063315, 2014.
+    2014.                                                        [51] Bounded Confidence XY Model: Online Simulator.
+[43] David     Stern.           The    Twitter   war:      So-       http://maksymromensky.com/bounded_confidence_xy_model.
+    cial      media’s      role     in     Ukraine     unrest.       Accessed on: 24 June 2018.
+    http://www.webcitation.org/70Slybzp7, 2014.           Ac-    [52] Pawel Sobkowicz. Discrete model of opinion changes us-
+    cessed on: 26 June 2018.                                         ing knowledge and emotions as control variables. PLoS
+[44] Alexander Ronzhyn. The use of facebook and Twitter              ONE, 7(9):1–16, 09 2012.
+    during the 2013-2014 protests in ukraine. In Proceedings     [53] Pawel Sobkowicz. Minority persistence in agent based
+    of the European Conference on Social Media: ECSM 2014,           model using information and emotional arousal as control
+    2014.                                                            variables. The European Physical Journal B, 86(7):335,
+[45] Elanor Colleoni, Alessandro Rozza, and Adam Arvids-             2013.
+    son. Echo chamber or public sphere? Predicting political     [54] Viktoria Spaiser, Thomas Chadefaux, Karsten Donnay,
+    orientation and measuring political homophily in Twitter         Fabian Russmann, and Dirk Helbing. Communication
+    using Big Data. Journal of Communication, 64(2):317–             power struggles on social media: A case study of the 2011-
+    332, 2014.                                                       12 Russian protests. Journal of Information Technology &
+[46] Pablo Barberá. Birds of the same feather tweet together:       Politics, 14(2):132–153, 2017.
+    Bayesian ideal point estimation using Twitter data. Po-      [55] Julie Ray. Ukrainians disillusioned with leadership.
+    litical Analysis, 23(1):76–91, 2015.                             http://www.webcitation.org/70Sm5d0YG, 2015.             Ac-
+[47] Archive Team:            The Twitter Stream Grab.               cessed on: 30 May 2017.
+    https://archive.org/details/twitterstream.            Ac-    [56] Christina Cottiero, Katherine Kucharski, Evgenia
+    cessed on: 30 May 2017.                                          Olimpieva, and Robert W. Orttung. War of words: the
+[48] Mi Kyung Lee, Ho Young Yoon, Marc Smith, Hye Jin                impact of russian state television on the russian internet.
+    Park, and Han Woo Park. Mapping a twitter scholarly              Nationalities Papers, 43(4):533–555, 2015.
+    communication network: a case of the association of inter-   [57] Jessikka Aro. The cyberspace war: propaganda and
+    net researchers’ conference. Scientometrics, 112(2):767–         trolling as warfare tools. European View, 15(1):121–132,
+    797, 2017.                                                       2016.
+[49] Tamas Vicsek, Andras Czirók, Eshel Ben-Jacob, Inon
+                                                                                                                             1
+
+  Supplementary Material for: Polarized Ukraine 2014: Opinion and Territorial Split
+  Demonstrated with the Bounded Confidence XY Model, Parameterized by Twitter
+                                        Data
+                     Maksym Romenskyy,1,2 Viktoria Spaiser,3 Thomas Ihle,4 Vladimir Lobaskin5
+   1
+    Department of Life Sciences, Imperial College London, London SW7 2AZ, UK 2 Department of Mathematics,
+ Uppsala University, Box 480, Uppsala 75106, Sweden 3 School of Politics and International Studies, University of
+Leeds, Leeds LS2 9JT, UK 4 Institute of Physics, University of Greifswald, Felix-Hausdorff-Str. 6, Greifswald 17489,
+                Germany 5 School of Physics, University College Dublin, Belfield, Dublin 4, Ireland
+                                                   (Dated: July 26, 2018)
+
+
+                                                 Supplementary Methods
+
+                                               Further Model Specifications
+
+   Supplementary Figure S1 illustrates interactions in the Bounded Confidence XY model. The red opinion vector
+interacts with its 24 neighbors located within two nearest lattice nodes in any direction r = 2. In this illustration,
+each of the 24 neighbors has orientation relative to the focal (red) vector less than α and therefore all 24 agents
+contribute to future orientation of the focal vector. For simplicity, all vectors in Supplementary Fig. S1 are shown to
+have same length. In all simulations, the initial orientations of all agents except the ones at the system’s boundary
+were drawn randomly from the uniform distribution in the interval [−π, π].
+
+
+
+
+                                                                 α
+
+
+
+
+Figure S1: The interaction parameters in the Bounded Confidence XY model with r = 2. The focal opinion vector (red arrow)
+interacts only with those neighbors whose relative orientation is less or equal to α and who are located within the two nearest
+rows/columns (blue arrows).
+
+  To quantify formation of territorially isolated domains in our model, we performed a simple cluster analysis. We
+define a cluster based on two criteria: distance and relative orientation between the agents. Therefore, a cluster is
+a set of connected agents, each of which is within the cutoff distance (defined by r) from one or more other opinion
+vectors from the same cluster and a relative orientation between any two neighbors in the cluster is less or equal to
+restriction angle α. Conversely, two agents will not belong to the same cluster, if there is no continuous path on the
+neighbor network leading from the first agent to the second or if this path is broken because the angle between two
+neighbors is larger than α and hence the opinion vectors do not interact. For each update step we calculated size of
+each cluster, maximal cluster size and total number of clusters.
+  We characterised orientational ordering in our model using two order parameters. Polar order parameter was used
+to quantify the average degree of opinion agreement between the agents
+                                                           N
+                                                        1 X
+                                                   ϕ=         exp(ıθj ) ,                                                 (S1)
+                                                        N j=1
+                                                                                                                              2
+
+
+
+
+Figure S2: Phase behavior of the Bounded Confidence XY model. (A) Phase diagrams based on polar ϕ and bipolar Q
+order parameters for the model system without and with parameterization by Twitter data. (B) Combined phase diagrams
+for the model system without and with parameterization by Twitter data showing regions of dominance of polar and bipolar
+order. (C) Phase diagrams based on polar ϕ and bipolar Q order parameters for non-parameterized model system at different
+simulation parameters (see legend). (D) Combined phase diagrams showing regions of dominance of polar and bipolar order
+for unparameterized model system at different simulation parameters (see legend). The red plus marker denotes simulation
+parameters α and η for the parameterized version of the model used throughout the paper. In plots C and D, s denotes size of
+a side of a square lattice; E stands for East and means that all boundary spins are fixed to the right (θ = 0), W − E stands for
+West – East and means that the boundary spins on the left and on top are fixed to the left (θ = π) and the boundary spins on
+the right and on the bottom are fixed to the right (θ = 0); r denotes the interaction range.
+
+
+where ı is the imaginary unit and θj is the direction of each vector j. This order parameter turns zero in the isotropic
+phase, when opinions of all agents are very different from each other, and assumes finite positive values in the ordered
+phase, reaching unity when global consensus settles in.
+  To characterise opinion polarization in our model we use the following bipolar order parameter
+                                                            N
+                                                         1 X
+                                                   Q=          exp(ı2θj ) .                                                (S2)
+                                                         N j=1
+
+When the two vectors are oriented perfectly collinearly, Q = 1. Note that a perfectly polarly ordered phase is
+characterized by ϕ = Q = 1, as the polar ordering implies the bipolar ordering. A bipolarly ordered phase requires
+only Q = 1 while the polar order parameter can take any value ϕ < 1. Therefore, requirements for the polar order
+are more restrictive.
+  For each weekly distribution of opinions, both for the Twitter data and in simulations, we computed the bimodality
+                                                                                                                                          3
+
+
+                                               2
+                                                   A                                                       B
+                                                                                                       2
+
+
+
+
+                            Contra/Pro East
+
+
+
+
+                                                                                    Contra/Pro East
+                                               0
+                                                                                                       0
+
+
+
+                                              −2                                                      −2
+
+
+
+                                              −4                                                      −4
+
+
+
+                                                       −2          0          2                                −4    −2         0     2
+                                                            Contra/Pro West                                         Contra/Pro West
+
+
+
+
+Figure S3: (A) Panel Twitter users (black dots) in the pro-against-European (West)/pro-against-Russian (East) opinion space,
+data from first week in October 2013. (B) Panel Twitter users (black dots) in the pro-against-European (West)/pro-against-
+Russian (East) opinion space, data from first week in September 2014.
+
+
+coefficient (see main text, Methods) by first calculating the skewness and kurtosis of the distribution. Skewness is
+defined as the third standardised moment around the mean
+                                                            µ3
+                                                      γ = 3/2 ,                                                (S3)
+                                                           µ2
+where µ2 and µ3 are the second and the third cumulants, respectively. Kurtosis is computed as the fourth central
+moment
+                                                       µ4
+                                                  k = 2,                                                   (S4)
+                                                       µ2
+where µ2 and µ4 are the second and the fourth cumulants, respectively.
+   The model phase diagrams, shown in Supplementary Figs. S2 A-D, demonstrate three different steady states of
+the system. The high noise (low conformity) generally corresponds to a globally disordered behavior (without any
+prominent consensus or polarization). The region of disordered behavior shrinks as the restriction angle α is increased
+(Supplementary Fig. S2 A). The lesser restriction leads to more interactions between the nearest neighbours and to the
+onset of order (consensus). At lower noise, below the transition line we observe either polar or bipolar structuring of the
+system (Supplementary Fig. S2 B). The range of higher α allows only states with global consensus, while at α < 0.4π
+we see the region of prevalence of the bipolar polarized states. In other words, the polarized states are only possible
+at low noise (high conformity) and small restriction angles (strongly bounded confidence). The change in level of
+emotional intensity pushes the boundary between the polarized and non-polarized societies outwards (Supplementary
+Fig. S2 B), thus extending the range of the polarized states, and brings the originally weakly polarized society to a
+highly polarized one. The most important observation here is that the transition happens just due to the increase of
+emotional intensity while the other parameters (conformity, confidence) stay constant. Supplementary Figures S2 C,D
+show phase diagrams for unparameterized systems at different simulation parameters. For a larger system, s = 240
+constituting of 58081 agents, the area of bipolar ordering is slightly reduced as compared to the standard system size
+(s = 120) used in this study. The shrinking happens because the influence of biased boundary vectors is decreased
+due to larger system size. If the agents have larger interaction range, r = 3 (i.e. each vectors interacts with up to 48
+nearest neighbors), the region of bipolar ordering expands to larger restriction angles and noise values because longer
+correlation range becomes possible and effect of the boundary bias is more pronounced at these conditions. Finally,
+if all boundary vectors are fixed in one direction (in this case to the East, θ = 0), the area of bipolar polarization
+shrinks significantly but does not disappear. At these conditions bipolar ordering also displays more sensitivity with
+respect to noise than to restriction angle.
+
+
+                                                                              Twitter Data
+
+   The archived Twitter Streaming API Spritzer Sample tweet data was stored in JSON (JavaScript Oobject
+Notation) file format, which is the most common open standard data format to transmit data objects in asyn-
+chronous browser/server communication. The data was then processed and analyzed in Python using the Python
+Natural Language Text Processing Toolkit (NLTK) [S1, S2]. NTLK is a collection of various classes, interfaces and
+functions for natural language processing, including important text mining methods. It was developed at the Univer-
+sity of Pennsylvania and is widely used in computational linguistics, machine learning, and cognitive science (see in
+particular https://nltk.googlecode.com/svn/trunk/doc/api/index.html).
+                                                                                                                                       4
+
+   The collected tweets were filtered, first for Russian and Ukrainian language, identifying respective alphabet char-
+acters in the tweet text. Tweets, where Twitter users specified being from Russia or any region/town in Russia were
+removed from the data. We also filtered for SPAM tweets (around 17% of all the tweets in our data), using the following
+keywords, based on word count analyses: porn, phone, games, androidgames, minecraft, ipadgames, loosing weight, gold,
+mtvstars, crossword, barbie, sony, holidays, shop, TV series, volkswagen, sales, starlet, apartments, estate, bmw, mercedes,
+sex, happysex, viagra, stock, prostitutes, teen, price, diet, buy, credit in English, Ukrainian and Russian language. Tweets
+containing these words were removed from the data. Furthermore, we filtered the data for political context with an
+extensive set of keywords to remove irrelevant tweets and therefore unnecessary noise from the data: protest, mobiliza-
+tion, Ukraine, kiborgi, glory to the heroes (one word hashtag in Ukrainian and Russian - geroiamslava), junta, government,
+duma, kremlin, parliament, rada, premier ministry, president, minister, ministry, political action, demonstration, opposition,
+power, authorities, democracy, nationalists, communists, liberals, Putin, Poroshenko, political party, politics, politicians,
+political, policy, revolution, citizen, criticism, critics, agitation, sanctions, censoring, illegal, legal, solidarity, assembly, rally,
+law, regulation, resistance, civil disobedience, resist, reforms, communism, capitalism, administration, news, society, viola-
+tion, RNBO, Iaijtheniukh, ukr, ukry, khokhly, okraina, ruina, raguli, poproshenko, papashenko, papasha, bacon to the heroes
+(a wordplay in Russian with glory to the heroes - geroiamsala), civil war, nazis, Bandera, banderlogi, bandery, banderovtsy,
+benderovets, visitka Iarosha, titushki, EuroMaidan, U revolution, peaceful march, radio freedom, inforesist, Aronets, av-
+tomaijdan, Ukraine truth news (one word hashtag), SOS Maidan (one word hashtag), digital Maidan (one word hashtag),
+Maidan history (one word hashtag), sidemaidan, Maidan, freedom, Ukrainian, NATO for Ukraine (one word hashtag), will,
+choice, against, anti-Maidan, ukrop, Europe, USA, Kiev, Timoshenko, Cameron, dead, killed, negotiations, military service,
+Zakharchenko, police, Obama, war, activists, right sector, Azarov, upper, leader, Jatseniuk, Turchinov, Klitchko, MID,
+Nayyem, briginets, constitution, Avakov, MVD, Yushenko, Kuchma, Kravchuk, Kharkov, Grushevskogo, warriors, soldiers,
+prisoners, Euro, EU, military, Sloviansk, army, West, East, Mariupol, reconciliations, NATO, ATO, crimealook, conflict,
+Medvedchuk, Medvedchukov, geo-politics, confrontation, Strasbourg, crisis, Lutsenko, Tusk, peace, world, Vladimirova,
+Vladimir, relations, unity, national, help, oligarchs, glory to Ukraine (one word hashtag), hundred, over, own will, self-
+determination, power, annexion, annexing, separatism, separatist, rebels, freedom fighters, freedom fight, moskali (meaning
+Moscow sympathizers), [Russian] official, Putin khujlo (offensive word, one word hashtag), luganda, lungandon, daunbas,
+zrada, occupants, MGB, Zakhar, Russian peace (one word hashtag), Russian world (one word hashtag), Putin is murder
+(one word hashtag), Putler, Putin help (one word hashtag), putinism, insurgents, insurgency, small/so what Russia, Crimea
+is ours (one word hashtag), At least Crimea is our (one word hashtag), punitive, ptnpnkh, ptn, pnkh, vata, vatnik, glory to
+Russia (one word hashtag), Russia, provocation, Novorossiia, DNR, LNR, berkut, kiberberkut, glory, stopcrimeantatarsgeno-
+cide, russiainvadeukraine, russiaviolatedceasefire, stoprussianaggression, weapon, Russian, Medvedev, Moscow, legislation,
+Yanukovich, truth, Donetsk, Luhansk, Russian march (one word hashtag), Russians, Ukrainians, Non-russians, Navalny,
+monument, Lenin, western, eastern, geek, Lavrov, grad, humanitarian, anti-Russian, SSSR, Donbass, Bafana, elections,
+legislator, fire, Mirakova, ukraintsami, radio, Putin supporters (one word hashtag), Ukraine France, Zakharov, Mironov in
+Ukrainian and Russian language. Tweets that contained at least one of these keywords were kept in the filtered data,
+otherwise removed.
+   Any analysis of Twitter data faces a number of well-known difficulties [S3]. Some of them, e.g. the SPAM tweet
+problems, we have addressed already above. One potential problem is that the sample only includes public tweets
+from public Twitter accounts. This does not pose a problem in the context of our study though, since we are
+interested in the use of Twitter as an instrument of communication in the public sphere. Moreover, Twitter data is
+not representative, which again is rather unproblematic for our study because all political groups and their supporters
+are represented on Twittersphere, so the public debate on Twitter does overall mirror the general public debate and
+public opinions [S4, S5]. Another potential issue is that the sample is based solely on the 1% of all public tweets,
+which for instance makes it difficult to use the data as panel data (though we’ve done this to probe opinion changes
+within individuals, see Supplementary Fig. S3, the number of observations is however drastically reduced). However,
+other Twitter data samples offered by Twitter (e.g. Gardenhose with 10% of all pubic tweets) have to be purchased,
+which makes them often unaffordable for research purposes.
+   One aspect of Twitter data ”richness” is that it is supposedly geo-referenced. However, as already mentioned in
+the main manuscript quite a large proportion of Twitter users do in fact not provide any geographical information.
+Frequently, even if ”geo enabled” was activated by the Twitter user (thus the value was set to ”true”), the actual
+”geo” or ”place” ”coordinates” value would be ”null” because the device that was used to post the tweet had no
+geo-referencing (e.g. GPS) activated. The data that the user provides through the profile ”location” tag is more often
+available, however, here we have to rely on the accuracy and honesty of the Twitter users. Moreover, if the information
+provided through ”location” was imprecise, e.g. just ”Ukraine”, we could not use this information for plotting. Did
+we however have serious and specific information from the user, e.g. ”Kiev”, then we used that information to
+generate a longitude and a latitude coordinate value that we could then plot on a generated Ukraine map in Fig.
+3C,D in the main manuscript. We deliberately ignored another potential geographical information, the ”time zone”,
+because it offers only imprecise geographical information. Overall, we could extract form the Twitter data of the last
+                                                                                                                           5
+
+September week 2014 493 Twitter users for whom we had sufficiently precise geographical data. This data along with
+the calculated West and East scores were used to produce the Figures 3C and D in the main manuscript.
+
+
+                                                   Twitter Data Analysis
+
+   In order to understand the empirical polarization dynamic in Ukraine and furthermore in order to make the data
+usable for model calibration, it was necessary to identify the political opinion of the Twitter users in our data. First,
+we identified the Twitter users in our Twitter data based on the value of their ”screen name”. We then compiled two
+lists of keywords, extracted from the word count analysis of the most common words that contain words associated
+with either the pro-East political camp or the pro-West political camp: annexion: -2 , annexing: -2, separatism: -2,
+moskali (meaning Moscow sympathizers): -2, [Russian] official: -2, Putin khuijlo (one word hashtag): -3, Luganda: -3,
+Lugandon: -3, Daunbas: -3, zrada: -2, insurgents: -2, occupants: -2, MGB: 1, Zakhar: 1, Russian peace (one word
+hashtag): -2, Putin is murder (one word hashtag): -3, Putler: -3, Putin help (one word hashtag): 2, putinism: -1, freedom
+fighters (one word): 2, freedom fight (one word): 2, small/so what Russia: 2, Crimea is ours (one word hashtag): 3, At
+least Crimea is ours (one word hashtag): 3, punitive: 3, ptnpnkh: -3, ptn: -1, pnkh: -3, vata: -3, vatnik: -3, glory to
+Russia: 3, Russia: 0, Russian: 0, Russians: 0, provocation: 0, separatist: -3, separatism: -3, Novorossiia: 2, DNR: 1, LNR:
+1, sanctions: 1, berkut: 1, kiberberkut: 1, stopcrimeantatarsgenocide: -3, russiainvadedukraine: -3, russiaviolatedceasefire:
+-3, anti-Russian sanctions (one word hashtag): 2, stoprussianaggression: -3, peace: 0, Putin: 0, weapon: 0, Medvedev:
+0, Crimea: 0, Moscow: 0, Yanukovich: 0, truth: 0, Donetsk: 0, from Lugansk (one word): 0, Russian march (one word
+hashtag): 0, Non-Russians: 0, dead/killed: 0, negotiations: 0, politce: 0, rebels: 0, Lugansk: 0, war: 0, duma: 0, Mockva:
+-1, government: 0, leader: 0, monument: 1, Lenin: 1, warriors: 0, prisonerns: 0, military: 0, East: 0, army: 0, relations:
+0, soldier: 0, reconciliations: 0, geek: -2, Lavrov: 0, grad: -1, humanitarian: 1, anti-Russian: 2, SSSR: 1, Donbass:
+0, Bafana: 0, elections: 1, referendum: 0, confrontation: 0, fire: 0, crisis: 0, conflict: 0, Putin supporters (one word
+hashtag): -1, Mironov: 0 were the keywords for the East political camp and mobilization: 1, kiborgi: 2, unity: 1, glory
+to the heroes (one word hashtag): 3, RNBO: 1, Iaijtheniukh: -3, junta: -2, ukr: -3, ukry: -3, khokhly: -1, okraina: -1,
+Ruina: -3, raguli: -3, poproshenko: -2, Papashenko: -2, papasha: -3, bacon to the heroes (a wordplay in Russian with
+glory to the heroes - geroiamsala): -3, civil war (one word hashtag):- 2, visit Kaiarosha (one word hashtag): 2, nazis: -3,
+Bandera: -3, banderlogi: -3, bandery: -3, banderovtsy: -3, titushki: 2, Ukraine: 0, Euro Maidan (one word hashtag): 1,
+U REVOLUTION: 2, peaceful march (one word hashtag): 1, radio freedom (one word hashtag): 1, inforesist: 1, Aronets:
+1, avtomaijdan: 1, Ukrainian truth news (one word hashtag): 1, SOS Maidan (one word hashtag): 1, digital Maidan (one
+word hashtag): 1, Maidan history (one word hashtag): 1, sitemaidan:1, Maidan: 0, freedom:1, government: 1, Ukrainian:
+0, Urkrainians: 0, NATO for Ukraine (one word hashtag): 2, will: 2, will: self-determination, against: 2, revolution: 2,
+anti-Maidan:- 2, ukrop: -3, Poroshenko: 0, Europe: 0, USA: 0, Kiev: 0, weapon: 0, Timoshenko: 0, truth: 0, Cameron:
+0, democracy: 0, dead/killed: 0, negotiations: 0, military service: 0, Zakharchenko: 0, opposition: 0, Obama: 0, war:
+0, parliament: 0, activists: 0, political action (one word): 0, protest: 0, sector: 0, Azarov: 0, upper: 0, leader: 0, rada:
+0, Yatseniuk: 0, Turchinov: 0, Klichko: 0, MID: 0, Nayyem: 0, Briginets: 0, constitution: 0, president: 0, Avakov: 0,
+MVD: 0, Yushchenko: 0, Kuchma: 0, Kravchuk: 0, Kharkov: 0, Grushevskogo: 0, warriors: 0, Euro: 0, EU: 0, military:
+0, Slaviansk: 0, West: 0, western: 0, army: 0, soldier: 0, Mariupol: 0, reconciliations: 0, NATO: 0, ATO: 1, conflict: 0,
+Medvedchuk: 0, Medvedchukvv: 0, Strasbourg: 0, crisis: 0, Lutsenko: 0 ,Tusk: 0, peace: 0, relations: 0, national: 1, help:
+1, glory to Ukraine (one word hashtag): 2, hundred: 2, over: 2, power: 2, BENDERovets: 3, civil war: -2, krimealook:
+1, Ukraine France: 1 were the keywords for the West political camp. These keywords were scored between -3 and
+3, with negative scores indicating negative attitudes towards the respective political camp, positive values positive
+attitudes and a zero a neutral opinion. Some keywords were unambiguously associated with a political affiliation. For
+instance, the word ”Putler” (scored -3), a composition of Putin and Hitler, is clearly a negatively annotated word
+referencing the East political camp. Similarly, the word ”banderovtsy” (scored -3) linking the West political camp to
+Stepan Bandera, leader of the Ukrainian nationalist and independence movement during the Second World War, who
+cooperated with Nazi Germany, shows clearly a strong disapproval of the West political camp. On the other hand
+the hashtag #slavarossii (translated: Glory to Russia, scored +3), shows a clear support for the East political camp,
+while the hashtag #natoforukraine (scored +3) expresses an unequivocal pro-Western political affiliation. A word
+like ”Putin” (East political camp) or ”Poroshenko” (West political camp) however would be assigned a ”0” because
+depending on the remaining content of the tweet the names could have been associated with positive or negative
+attitudes. And for that reason an additional sentiment analysis of the tweets was necessary.
+   We used the sentiment analysis SentiStrength (http://sentistrength.wlv.ac.uk) approach to determine a sen-
+timent score for each tweet. SentiStrength is a free Java-based automatic sentiment analysis tool, widely used in
+research, which is also available for the Russian language. We created a comprehensive dictionary for Ukrainian
+sentiment words (to be shared upon request) based on the SentiStrength sentiment scoring system and we reviewed
+the sentiment word dictionary that SentiStrength is using for the Russian language and complemented it with other
+                                                                                                                                                            6
+
+                                   1.3                                                                    0.6
+
+                                   1.2                                                                    0.5
+
+                                   1.1
+                                                                                                          0.4
+
+
+
+
+                                                                                     Skewness (abs)
+                  Skewness (abs)
+                                   1.0
+                                                                                                          0.3
+                                   0.9
+                                                                                                          0.2
+                                   0.8
+                                                                                                          0.1
+                                   0.7
+
+                                   0.6                                                                    0.0
+
+                                   0.5                                                                    0.1
+                                         1   5   9   13 17 21 25 29 33 37 41 45 49                              1   5   9   13 17 21 25 29 33 37 41 45 49
+                                                          Time (weeks)                                                           Time (weeks)
+                                   9.5                                                                    2.1
+
+                                   9.0                                                                    2.0
+
+                                   8.5                                                                    1.9
+
+                                   8.0                                                                    1.8
+                  Kurtosis
+
+
+
+
+                                                                                               Kurtosis
+                                   7.5                                                                    1.7
+
+                                   7.0                                                                    1.6
+
+                                   6.5                                                                    1.5
+
+                                   6.0                                                                    1.4
+
+                                   5.5                                                                    1.3
+
+                                   5.0                                                                    1.2
+                                         1   5   9   13 17 21 25 29 33 37 41 45 49                              1   5   9   13 17 21 25 29 33 37 41 45 49
+                                                          Time (weeks)                                                           Time (weeks)
+
+
+
+
+Figure S4: (A) Time series plot of absolute skewness for opinion distributions in Twitter data. (B) Time series plot of absolute
+skewness for opinion distributions in simulations. (C) Kurtosis of the distribution of opinions in Twitter data. (D) Kurtosis of
+the distribution of opinions in simulations. Simulation parameters in plots B and D are α = 0.15 and η = 0.12.
+
+
+
+
+sentiment words (among others offensive words that were missing in SentiStrength) to make it equivalent to the
+Ukrainian dictionary. The sentiment scores in SentiStrength and thus in our two sentiment words dictionaries range
+from -5 to +5 with 0 signifying a neutral word, negative values a negative sentiment and positive values a positive
+sentiment. The higher the absolute value the stronger the sentiment. For each tweet we calculated a sentiment score
+average based on the identified sentiment words in the tweet. We calculated a separate sentiment score for the East
+political camp related keywords and one for the West political camp related keywords. The emotional intensity score
+is averaging these two sentiment scores.
+
+  In the case of unequivocal keyword tweets, the tweet score would derive from these keywords. For instance, if a
+keyword contained the words ”Putler” (scored -3) and the hashtag ”stoprussianaggression” (scored -3), the tweet score
+would be the average of these two scores, thus -3. Whenever a tweet was scored zero because of neutral keywords, we
+added to the score the respective sentiment score. Thus if an East political camp related tweet had a zero score (e.g.
+”Putin”), and the East political camp related sentiment score was -2 (for instance resulting from the sentiment word
+”zachvatil” (translated: grabbed)), then the tweet would get an East political affiliation score of -2. This is based
+on the assumption that users would express positive sentiments about terms associated with their own camp and/or
+negative sentiments towards terms associated with the other camp. Since most users would have posted several tweets,
+users were assigned a set of tweet scores, depending on the number of tweets and from these scores overall average
+scores, one East score, one West score, were calculated for each user, representing their political affiliation
+
+   Automatic classification and sentiment analysis have certainly their limitations, e.g. automatic sentiment analysis
+often fail to spot irony and classifications do not account for instance for complex inner-fraction dynamics, that is
+political fractions within political fractions. However, manual classification is becoming increasingly impossible with
+the growing amount of data and/or limited capacities and resources and thus automatic classification is increasingly
+applied. It is however important to work on further developing and elaborating these tools and to supervise, critically
+reflect and where required correct the process of automatic analysis and its outcomes.
+                                                                                                                     7
+
+                                                 Additional Results
+
+  We present here some additional results that support our main conclusions in the manuscript. Supplementary
+Figure S4 shows the skewness and kurtosis of opinions in the Twitter data and computer simulation. These plots
+show again the discontinuity of political opinions in the Ukrainian Twittersphere, with jumps in February 2014.
+
+
+
+
+[S1] S. Bird, E. Klein, and E. Loper, Natural Language Processing with Python (Sebastopol: O’Reilly, 2009).
+[S2] J. Perkins, Python Text Processing with NLTK 2.0 Cookbook (Birmingham: PACKT, 2010).
+[S3] D. Ruths and J. Pfeffer, Science 346, 1063 (2014).
+[S4] D. Stern, The Twitter war: Social media’s role in Ukraine unrest, http://news.nationalgeographic.com/news/2014/05/140510-ukrai
+     (2014), accessed on: 30 May 2017.
+[S5] A. Ronzhyn, in Proceedings of the European Conference on Social Media: ECSM 2014 (2014).
+

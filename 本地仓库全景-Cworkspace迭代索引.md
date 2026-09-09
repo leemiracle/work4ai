@@ -16,7 +16,7 @@ burke:
     - "方法: dr-research 流水线（research → research-deep 分批 agent）"
     - "姊妹篇: 复杂系统迭代work4ai.md（网络治理理论）、用例库/（GitHub 279 仓）、Agent框架案例/deepseek-harness插件化框架（今日已并）"
     - "今日增补: 透视GitHub-DeepSeek开源全景.md + 讲透DeepSeek/（org:deepseek-ai 36 仓全量深读；本地克隆在 work4ai/.tools/deepseek-repos/，gitignored）"
-updated: 2026-08-15
+updated: 2026-09-09
 ---
 
 # 🗺 本地仓库全景：C:\workspace 21 仓迭代索引
@@ -33,7 +33,7 @@ updated: 2026-08-15
 | 层 | 仓库 | 一句话本质 | 建议动作 |
 |---|---|---|---|
 | A | **neo-os** | 把 work4ai"讲透"方法论**运行时化**的可解释性基础设施（四层栈 + Lean4 sorry=0 + trace 可证伪实证） | 桥接互链 + 用例库收录（其 03-methodology 已单向引用 work4ai，应回链成双向） |
-| A | **world-ai4sci-math** | 133 万字、1152 arXiv 一手核实、118 可运行实验的世界模型×AI4Sci×AI4Math 全景调研卷 | 桥接互链 + 精选合并（top-20-insights / ten-lessons 两篇直接入库） |
+| A | **world-ai4sci-math** | 133 万字、1152 arXiv 一手核实、118 可运行实验的世界模型×AI4Sci×AI4Math 全景调研卷 | 桥接互链 + 精选合并（top-20-insights / ten-lessons 两篇直接入库）→ ✅ 已执行收编 2026-09-09（选粹 29.8% 入 `code-projects/世界模型与AI4Sci调研/`，弃收落 15 行等价物指针表；top-20/ten-lessons 随 docs/ 全收并由 前沿与媒体/15 回链） |
 | A | **ai-atlas** | 三天 AI 批量生成的广度型 AI 全景"总入口"姊妹库（实测 447 md，README 统计口径混乱） | 部分合并 + 互链（选型/职业/术语/技能图谱是 work4ai 缺位组件） |
 | A | **ai-os-dd** | 单日成型的 AI×OS 尽调深潜：78 创新点矩阵 + FormalLinux(30 lean) + llmkv 跨进程 KV Cache daemon | 桥接互链 + 精选单篇合并（M14/M18 → 讲透KV Cache 等） |
 | A | **math-expert-pro** | 时间主轴×概念横切×双透镜（16 数学家轴+55 从业者角色）三维数学训练矩阵，35 个可跑脚本 | 桥接互链 + 精选合并（AI-for-Math 卡 → 讲透Lean4数学） |
@@ -42,7 +42,7 @@ updated: 2026-08-15
 | B | **gongwen-mastery** | "本质→操作→实战"三层架构的百万字公文库（实测 121 万字 < 宣称 163 万，词表 150-190 对 < 宣称 1000） | 仅索引 + 互链（AI 辅助写作边界两处互链，引用以实测数为准） |
 | B | **master-equivalent** | 考试倒逼的备考军火库 + PaddleOCR 全书解析→闪卡/模拟卷自动生成流水线 | 仅索引 + 考古参考（知识加工流水线方法卡一条） |
 | B | **agi-venture** | 以变现为终的 AGI 战略操作手册骨架（决策框架精，但 28 分钟生成后 17 天零迭代） | 桥接互链 + 精选合并（agent-patterns → 讲透Agent；市场数据需校准） |
-| B | **social-laws** | 五段式规律卡（历史→直觉→数学→Python→批判）的社会科学规律实验室，21 篇 CSSCI 双轨校准 | 桥接互链 + 精选合并（体例 → 讲透复杂系统借鉴） |
+| B | **social-laws** | 五段式规律卡（历史→直觉→数学→Python→批判）的社会科学规律实验室，21 篇 CSSCI 双轨校准 | 桥接互链 + 精选合并（体例 → 讲透复杂系统借鉴）→ ✅ 已执行收编 2026-09-09（选粹 113 文件入 `code-projects/社会规律计算实验室/`，弃收 10 个重复 py 落数理社会学/博弈论等价物指针表；CSSCI 论文库 PDF 本地保留不入库） |
 | B | **economy** | 极小档案壳：远端本体（30 commits/v1.27）的完整索引，内容文件全缺 | 考古参考 + 仅索引（7 轮撞车核查方法论提炼一篇入 notes/economics） |
 | B | **ai-lab-landscape** | CSRankings 数据 + 三档 delegate prompt 单日量产 155 篇实验室档案的"批量调研工厂" | 桥接互链 + 数据定点合并（4 份 CSV → 前沿与媒体/13 学术圈） |
 | C | **Foundations-of-LLMs** | 浙大 2024 中文《大模型基础》六章教材快照 + 987 行章节对齐论文列表 | 仅索引（第 5 章模型编辑是 work4ai 空白主题，留作引用源） |
@@ -79,7 +79,7 @@ updated: 2026-08-15
 
 ## 4. 网络治理呼应
 
-本索引是《[复杂系统迭代work4ai.md](./复杂系统迭代work4ai.md)》可证伪预测的第一次系统实践：
+本索引是《[复杂系统迭代work4ai.md](./前沿与媒体/55-AI复杂系统与涌现专题.md)》可证伪预测的第一次系统实践：
 - **补桥**：本文件 + 用例库映射行，把 5 个"孤儿引用"姊妹库接入 work4ai 网络；
 - **温度诊断**：workspace 整体处于"高 T 探索后未降温"态，建议进入固化期（执行合并清单、补回链、提交未入库资产）；
 - **hub 检查**：work4ai 入度来源已从"内部讲透系列互引"扩展为"外部项目方法论依赖"——hub 地位成立，单点风险可控（方法论已外化为 neo-os 契约层副本）。
@@ -95,3 +95,18 @@ updated: 2026-08-15
 ```
 
 📌 **下一步**：执行合并清单 Top10（建议顺序：1 数据安全 → 2/5 桥接 → 3/4/10 内容合并 → 6/7/8/9 借鉴互链）
+
+## 6. 增补：2026-09-09 六仓收编（code-projects/）
+
+本索引之后 workspace 又新增四个仓（political-studies / tech-insight / trending-repos / 体系结构），连同已列的 world-ai4sci-math、social-laws 共六仓，于 2026-09-09 按用户指令「集成合并、不保留原文件夹、转成 code 领域」一次性收编入 [`code-projects/`](./code-projects/README.md)：
+
+| 仓 | 收录档 | 去向 |
+|---|---|---|
+| political-studies | 全量（233 文件，讲透政治学仅 GB/T 骨架无正文重合） | code-projects/政治学研修/ |
+| 体系结构 | 双库选收（剔 .opencode×2/gpu-mode-resources ~170MB） | code-projects/体系结构实验室/ |
+| tech-insight | 全量（83 文件，仓库唯一自动采集管线） | code-projects/tech-insight/ |
+| world-ai4sci-math | 选粹 29.8%（见总表 A 行） | code-projects/世界模型与AI4Sci调研/ |
+| social-laws | 选粹（见总表 B 行） | code-projects/社会规律计算实验室/ |
+| trending-repos | 蒸馏（8 报告收 6 弃 2；453 仓克隆 177 万文件不入库） | code-projects/GitHub热门仓分析/ |
+
+六源目录收编验收后删除，workspace 收敛为单 hub。

@@ -1,0 +1,35 @@
+
+ Performance counter stats for 'taskset -c 0 ../../Lab05_并行与SIMD/src/gemm_full_stack':
+
+    18,611,929,046      cycles                                                      
+    33,330,968,582      instructions              #    1.79  insn per cycle         
+     1,310,519,368      cache-misses              #    9.347 % of all cache refs    
+    14,021,378,082      cache-references                                            
+         8,661,810      branch-misses                                               
+     1,310,519,368      L1-dcache-load-misses                                       
+
+       8.132091981 seconds time elapsed
+
+       7.389818000 seconds user
+       0.060341000 seconds sys
+
+
+
+=== program stdout ===
+== Lab05.3: GEMM 优化全栈 (N=512, 2.5 GHz) ==
+
+method                           T(ms)       GFLOPS      %peak
+-----------------------     ----------   ----------     ------
+0. 朴素 (i,j,k)                574.4         0.47       2.3%
+1. 循环交换 (i,k,j)          105.9         2.53      12.7%
+2. 分块 (32x32)                136.1         1.97       9.9%
+4. NEON 手写 (fp32)             43.8         6.13      15.3%
+5. OpenMP 8核 (i,k,j)           123.8         2.17       1.4%
+
+  == 解读 ==
+  * peak/core = 20 GFLOPS (4-wide × fmla × 2 op)
+  * peak/8 cores = 160 GFLOPS
+  * 朴素 → 循环交换: cache miss 大幅减少
+  * 循环交换 → 分块: L1/L2 利用率最大化
+  * 分块 → NEON: SIMD 4-wide fp32 加速 ~4x
+  * 单核 → 8 核: ~6-7x 加速（受内存带宽限制）
