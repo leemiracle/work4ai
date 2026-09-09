@@ -2,7 +2,7 @@
 
 > [00](./00-为什么KV Cache是推理的生命线.md) 算过 KV Cache 账：Llama-3-70B 在 batch=32 时要 86GB，**比权重还大**。问题是显存不只"总量不够"，还有"**碎片**"——不同请求序列长度各异，按最大长度预分配会浪费 60-80%。vLLM（SOSP 2023）的 PagedAttention 把 OS 虚拟内存思想直接搬进推理引擎：**把 KV Cache 切成固定大小的 block，逻辑连续/物理离散，block table 做映射**。这是 OS 思想在 AI 最经典的一次复用。
 >
-> 配套：[`讲透公开课/03-I1 vLLM`](<../讲透公开课/03-AI Infra 源码导读清单.md>)（源码 `vllm/core/block_manager.py`）+ [`讲透GPU与系统级/03`](../讲透GPU与系统级/03-推理引擎.md)
+> 配套：[`讲透公开课/03-I1 vLLM`](<../../讲透公开课/03-AI Infra 源码导读清单.md>)（源码 `vllm/core/block_manager.py`）+ [`讲透GPU与系统级/03`](../../讲透GPU与系统级/03-推理引擎.md)
 
 ---
 

@@ -62,15 +62,15 @@ for f in experiments/0*.py experiments/1*.py; do echo "=== $f ==="; python3 -u "
 ## 🔗 理论锚点（§12-15 横向打通）
 
 > 本系列讲"LoRA/QLoRA/RLHF"的微调实战；这门课把 RLHF 背后的**偏好聚合数学**公理化：
-> 枢纽：[`§12-15 整合`](../§12-15%20理论·形式化·安全·可信AI%20整合.md) §21
+> 枢纽：`§12-15 整合` §21
 
 | 课程 | 产物 | 公理化的内容 |
 |---|---|---|
-| §15.3 Stanford CS329T/CS324（Percy Liang）| [`pluralistic_safety.py`](../top-cs-projects/stanford-cs-projects/topic3-safety/pluralistic_safety.py) | preference aggregation（Plurality/Borda/Approval）+ Condorcet 悖论 + Arrow 不可能性——RLHF "对齐谁的偏好"的社会选择理论根基 |
+| §15.3 Stanford CS329T/CS324（Percy Liang）| [`pluralistic_safety.py`](../../top-cs-projects/stanford-cs-projects/topic3-safety/pluralistic_safety.py) | preference aggregation（Plurality/Borda/Approval）+ Condorcet 悖论 + Arrow 不可能性——RLHF "对齐谁的偏好"的社会选择理论根基 |
 
 ---
 
-🔗 **交叉链接**：Stanford CS336 论文精读 · 对齐与后训练（SFT/RLHF/DPO/GRPO/R1，8 篇），见 [`讲透公开课/06-CS336论文精读/H-对齐与后训练.md`](../讲透公开课/06-CS336论文精读/H-对齐与后训练.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments)。
+🔗 **交叉链接**：Stanford CS336 论文精读 · 对齐与后训练（SFT/RLHF/DPO/GRPO/R1，8 篇），见 [`讲透公开课/06-CS336论文精读/H-对齐与后训练.md`](../../讲透公开课/06-CS336论文精读/H-对齐与后训练.md)；配套可运行验证实验见 [`其 experiments/`](../../讲透公开课/06-CS336论文精读/experiments)。
 
 ## 🔗 与其他宇宙的连接
 

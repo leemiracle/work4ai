@@ -2,7 +2,7 @@
 
 > **这一篇填补项目此前的最大空白**：[01 Q-Learning/DQN](./01-Q-Learning与DQN.md) 和 [02 PG/PPO](./02-策略梯度与PPO.md) 讲了 RL 两大流派的**地基**（值函数 + 策略方法），但 CS285 真正的核心——**连续控制 + 样本高效 + 离线学习**——是这一篇的内容。也是机器人、具身智能、AlphaProof-after 等方向的硬通货。
 >
-> 配套：**Berkeley CS 285 Lecture 5-19**（Sergey Levine）+ **Stanford CS234 收敛性证明**（Emma Brunskill）+ [`top-cs-projects/INSIGHTS_FULL_PICTURE.md`](../top-cs-projects/INSIGHTS_FULL_PICTURE.md) 洞察 11
+> 配套：**Berkeley CS 285 Lecture 5-19**（Sergey Levine）+ **Stanford CS234 收敛性证明**（Emma Brunskill）+ [`top-cs-projects/INSIGHTS_FULL_PICTURE.md`](../../top-cs-projects/INSIGHTS_FULL_PICTURE.md) 洞察 11
 >
 > 代码验证：[`experiments/08_bellman_and_deadly_triad.py`](./experiments/08_bellman_and_deadly_triad.py)（已跑通）
 
@@ -460,7 +460,7 @@ $$
 - 🎬 课程：[CS 285 Fall 2023 全套 YouTube](https://www.youtube.com/playlist?list=PL_iWQOsE6TfX7KaI6Kc9VZwJ3ooQHHT2u)（Levine）+ [CS234 Autumn 2023](http://web.stanford.edu/class/cs234/)
 - 📖 教材：Sutton & Barto **《Reinforcement Learning: An Introduction》2nd ed**（2018，免费）— §11 deadly triad / §13 PG / §16 PG theorem
 - 🔗 项目内：
-  - 元洞察：[`top-cs-projects/INSIGHTS_FULL_PICTURE.md`](../top-cs-projects/INSIGHTS_FULL_PICTURE.md) 洞察 11
+  - 元洞察：[`top-cs-projects/INSIGHTS_FULL_PICTURE.md`](../../top-cs-projects/INSIGHTS_FULL_PICTURE.md) 洞察 11
   - 前置：[01 Q-Learning/DQN](./01-Q-Learning与DQN.md) + [02 PG/PPO](./02-策略梯度与PPO.md)
   - 后续：[03 RLHF/DPO/GRPO](./03-RLHF-DPO-GRPO.md)（DPO 是 offline RL 的特例）
   - 全景：[07 RL 全景地图](./07-2026最新研究全景.md)
@@ -472,4 +472,4 @@ $$
 
 ---
 
-**完成日期**：2026-08-12  ·  **作者**：AI Mentor (ai-mentor)  ·  **配套**：[UNIFIED_ROADMAP L13](../top-cs-projects/UNIFIED_ROADMAP.md) + [讲透RL 系列 README](./README.md)
+**完成日期**：2026-08-12  ·  **作者**：AI Mentor (ai-mentor)  ·  **配套**：[UNIFIED_ROADMAP L13](../../top-cs-projects/UNIFIED_ROADMAP.md) + [讲透RL 系列 README](./README.md)

@@ -190,7 +190,7 @@ PPO 在 LLM 上有几个问题，催生了 DPO/GRPO（[03 篇](./03-RLHF-DPO-GRP
 1. **要 4 个模型同时在显存**：actor + critic + reference（冻结的 SFT 模型，算 KL）+ reward model——显存爆炸
 2. **critic 难训**：critic 是另一个大模型，训练不稳
 3. **超参敏感**：KL 系数、clip ε、学习率都要调
-4. **工程复杂**：要分布式 rollout + 训练分离（见 [`讲透公开课/03`](<../讲透公开课/03-AI Infra 源码导读清单.md>) 的 verl/AReaL）
+4. **工程复杂**：要分布式 rollout + 训练分离（见 [`讲透公开课/03`](<../../讲透公开课/03-AI Infra 源码导读清单.md>) 的 verl/AReaL）
 
 DPO（去 RM）/ GRPO（去 critic）就是来解决这些的。
 

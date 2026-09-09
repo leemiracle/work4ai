@@ -5,13 +5,15 @@
 - 递归收集 .md 文件,提取 markdown 链接 [text](target)
 - 跳过代码围栏(``` / ~~~)内的内容,避免代码示例误报
 - 只检查相对链接(http/https/mailto/锚点跳过);#片段剥离后校验文件存在
+- 尖括号形式 `](<a b.md>)` 按字面量解析(允许空格);普通形式先做 %XX 解码再校验
 - 输出死链清单,exit 1 若有死链,否则 exit 0
 """
 import re
 import sys
+import urllib.parse
 from pathlib import Path
 
-LINK_RE = re.compile(r'\[([^\]]*)\]\(([^)\s]+)\)')
+LINK_RE = re.compile(r'\[([^\]]*)\]\((<[^>]*>|[^)\s]+)\)')
 FENCE_RE = re.compile(r'^\s*(```|~~~)')
 MATH_INLINE_RE = re.compile(r'(\$[^$\n]+\$|\$\$.+?\$\$)')
 
@@ -52,7 +54,11 @@ def check_file(md: Path, root: Path):
     for line, target in extract_links(text):
         if re.match(r'^[a-zA-Z][a-zA-Z0-9+.-]*:', target):
             continue  # http:, mailto:, etc.
-        path_part = target.split('#', 1)[0]
+        if target.startswith('<') and target.endswith('>'):
+            # 尖括号形式:内容按字面量处理(空格合法,不解码)
+            path_part = target[1:-1].split('#', 1)[0]
+        else:
+            path_part = urllib.parse.unquote(target).split('#', 1)[0]
         if not path_part:
             continue  # 纯锚点
         resolved = (md.parent / path_part).resolve()

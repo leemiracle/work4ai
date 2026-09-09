@@ -1,10 +1,10 @@
 # 讲透NLP × 数学：反向索引
 
 > **本目录作用**：讲透NLP 是数学的**消费方**（用数学做 NLP），不是数学的**建立方**（证明新定理）。
-> 这个 README 把 NLP 每章用到的数学**反向链接**到 [`../../top-math-courses/`](../../top-math-courses) 的对应课程——
+> 这个 README 把 NLP 每章用到的数学**反向链接**到 [`../../top-math-courses/`](../../../top-math-courses) 的对应课程——
 > 让你在学 NLP 时知道"哪个数学概念该回去补"，在学数学时知道"它能用在 NLP 哪里"。
 >
-> 这份索引是 [`../../top-math-courses/CROSS_INDEX_WITH_WORK4AI.md`](../../top-math-courses/CROSS_INDEX_WITH_WORK4AI.md) 的**反向版**（那份是 数学→NLP，本份是 NLP→数学）。
+> 这份索引是 [`../../top-math-courses/CROSS_INDEX_WITH_WORK4AI.md`](../../../top-math-courses/CROSS_INDEX_WITH_WORK4AI.md) 的**反向版**（那份是 数学→NLP，本份是 NLP→数学）。
 
 ---
 
@@ -133,10 +133,10 @@
 
 ## 六、与其他文档的衔接
 
-- **正向索引（数学→NLP）**：[`../../top-math-courses/CROSS_INDEX_WITH_WORK4AI.md`](../../top-math-courses/CROSS_INDEX_WITH_WORK4AI.md)
-- **数学主路径**：[`../../top-math-courses/UNIFIED_ROADMAP.md`](../../top-math-courses/UNIFIED_ROADMAP.md)
-- **数学研究方法论**：[`../../top-math-courses/RESEARCH_METHODOLOGY.md`](../../top-math-courses/RESEARCH_METHODOLOGY.md)
-- **学数学同时练 Lean**：[`../../top-math-courses/LEAN_MATH_TRACK.md`](../../top-math-courses/LEAN_MATH_TRACK.md)
+- **正向索引（数学→NLP）**：[`../../top-math-courses/CROSS_INDEX_WITH_WORK4AI.md`](../../../top-math-courses/CROSS_INDEX_WITH_WORK4AI.md)
+- **数学主路径**：[`../../top-math-courses/UNIFIED_ROADMAP.md`](../../../top-math-courses/UNIFIED_ROADMAP.md)
+- **数学研究方法论**：[`../../top-math-courses/RESEARCH_METHODOLOGY.md`](../../../top-math-courses/RESEARCH_METHODOLOGY.md)
+- **学数学同时练 Lean**：[`../../top-math-courses/LEAN_MATH_TRACK.md`](../../../top-math-courses/LEAN_MATH_TRACK.md)
 - **NLP 主 README**：[`../README.md`](../README.md)
 
 ---

@@ -6,7 +6,7 @@
 
 ## 0. 方法论
 
-> 承接 [`讲透AI历史/00-为什么学AI历史`](../讲透AI历史/00-为什么学AI历史.md) 的思想史方法论。
+> 承接 [`讲透AI历史/00-为什么学AI历史`](../../讲透AI历史/00-为什么学AI历史.md) 的思想史方法论。
 
 **年代史**（教科书做法）：Lush 1987 → Torch 2002 → Theano 2010 → Caffe 2013 → TensorFlow 2015 → PyTorch 2016 → JAX 2018 → PyTorch 2.0 2022。
 
@@ -706,7 +706,7 @@ Google 在 2017 年其实有内部项目支持 eager（`tf.contrib.eager`），�
 |------|------|
 | [01-Autograd 与计算图](01-Autograd与计算图.md) | eager/autograd 的技术实现——PyTorch 灵魂 |
 | [06-编译与图模式](06-编译与图模式.md) | torch.compile 技术细节——PyTorch 2.0 范式转移 |
-| [08-现代 PyTorch (2.x)](08-现代PyTorch(2.x特性).md).md).md).md).md) | export/SDPA/DTensor——当前前沿 |
+| [08-现代 PyTorch (2.x)](<08-现代PyTorch(2.x特性).md>) | export/SDPA/DTensor——当前前沿 |
 | [09-PyTorch 生态全景](09-PyTorch生态全景.md) | 生态库分类/选型 |
 | [10-PyTorch 内核精读](10-PyTorch内核精读.md) | dispatcher/autograd 边界——框架内核 |
 
@@ -725,8 +725,8 @@ Google 在 2017 年其实有内部项目支持 eager（`tf.contrib.eager`），�
 
 ### 15.3 延伸阅读
 
-- [讲透AI历史/00-为什么学AI历史](../讲透AI历史/00-为什么学AI历史.md)——思想史方法论
-- [讲透AI历史/advanced/01-范式转移的库恩分析](../讲透AI历史/advanced/01-范式转移的库恩分析.md)——范式转移理论
+- [讲透AI历史/00-为什么学AI历史](../../讲透AI历史/00-为什么学AI历史.md)——思想史方法论
+- [讲透AI历史/advanced/01-范式转移的库恩分析](../../讲透AI历史/advanced/01-范式转移的库恩分析.md)——范式转移理论
 - 讲透AI历史/advanced/03-路径依赖与偶然性（待写/未落盘）——历史偶然性
 
 ---
@@ -782,4 +782,4 @@ Google 在 2017 年其实有内部项目支持 eager（`tf.contrib.eager`），�
 2. **想搞懂 compile 范式转移** → [06-编译与图模式](06-编译与图模式.md)
 3. **想理解 2026 框架全景** → [09-PyTorch 生态全景](09-PyTorch生态全景.md)
 4. **想挖到框架内核** → [10-PyTorch 内核精读](10-PyTorch内核精读.md)
-5. **想回到更宏大的 AI 思想史** → [讲透AI历史](../讲透AI历史/README.md)
+5. **想回到更宏大的 AI 思想史** → [讲透AI历史](../../讲透AI历史/README.md)

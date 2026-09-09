@@ -33,9 +33,9 @@
 ### 输入与系统工程
 | 文档 | 主题 |
 |------|------|
-| [13-Tokenizer](13-Tokenizer.md) | BPE / SentencePiece / 大词表 (Transformer 文本前端) |
-| └ [13-Tokenizer.多视角](13-Tokenizer.多视角.md) | 13 篇的多视角重述（诸视角叠加版）|
-| └ [13-Tokenizer.费曼检验](13-Tokenizer.费曼检验.md) | 13 篇的 F1-F4 费曼检验卡（🟡 F1 血肉/F2/F4 待作者本人填）|
+| [13-Tokenizer](../../讲透Transformer/13-Tokenizer.md) | BPE / SentencePiece / 大词表 (Transformer 文本前端) |
+| └ [13-Tokenizer.多视角](../../讲透Transformer/13-Tokenizer.多视角.md) | 13 篇的多视角重述（诸视角叠加版）|
+| └ [13-Tokenizer.费曼检验](../../讲透Transformer/13-Tokenizer.费曼检验.md) | 13 篇的 F1-F4 费曼检验卡（🟡 F1 血肉/F2/F4 待作者本人填）|
 | [14-训练并行](14-训练并行.md) | DP/ZeRO/TP/PP/EP/SP 五种并行 (大模型训练系统基础) |
 | [15-长上下文](15-长上下文.md) | RoPE scaling / 稀疏注意力 / Ring Attention (突破 O(n²)) |
 
@@ -131,7 +131,7 @@ experiments/
 
 ---
 
-🔗 **交叉链接**：Stanford CS336 论文精读 · Transformer 架构组件（RoPE/SwiGLU/GQA/MLA 等 18 篇），见 [`讲透公开课/06-CS336论文精读/B-Transformer架构.md`](../讲透公开课/06-CS336论文精读/B-Transformer架构.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments)。
+🔗 **交叉链接**：Stanford CS336 论文精读 · Transformer 架构组件（RoPE/SwiGLU/GQA/MLA 等 18 篇），见 [`讲透公开课/06-CS336论文精读/B-Transformer架构.md`](../../讲透公开课/06-CS336论文精读/B-Transformer架构.md)；配套可运行验证实验见 [`其 experiments/`](../../讲透公开课/06-CS336论文精读/experiments)。
 
 ## 🔗 与其他宇宙的连接
 

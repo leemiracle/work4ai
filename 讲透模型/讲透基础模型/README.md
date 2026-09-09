@@ -120,7 +120,7 @@ python3 -u math/entropy_demo.py             # 信息论地基
 
 ## 🎭 欺骗动力学视角：scaling law 可预测性
 
-> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../欺骗动力学-社会进步的隐秘引擎.md) §5。
+> 承接 [`欺骗动力学-社会进步的隐秘引擎.md`](../../欺骗动力学-社会进步的隐秘引擎.md) §5。
 
 ### 三问
 
@@ -134,11 +134,11 @@ python3 -u math/entropy_demo.py             # 信息论地基
 
 ---
 
-🔗 **交叉链接**：Stanford CS336 论文精读 · Scaling Laws 三代演进（Kaplan/Chinchilla/过训练，10 篇），见 [`讲透公开课/06-CS336论文精读/D-Scaling-Laws.md`](../讲透公开课/06-CS336论文精读/D-Scaling-Laws.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments)。
+🔗 **交叉链接**：Stanford CS336 论文精读 · Scaling Laws 三代演进（Kaplan/Chinchilla/过训练，10 篇），见 [`讲透公开课/06-CS336论文精读/D-Scaling-Laws.md`](../../讲透公开课/06-CS336论文精读/D-Scaling-Laws.md)；配套可运行验证实验见 [`其 experiments/`](../../讲透公开课/06-CS336论文精读/experiments)。
 
 ## 🔗 与其他宇宙的连接
 
 - **[`讲透模型可能性/`](../讲透模型可能性)**：基础模型讲 Transformer 为什么赢，模型可能性讲谁可能赢下一个十年
 - **[`讲透LLM/`](../讲透LLM/README.md)**：本系列是 LLM 的"训练侧地基"；LLM 整合枢纽把 00-06 放进完整生命周期（pretrain→SFT→RL→deploy）
-- **[`讲透Prompt/`](../讲透Prompt/README.md)**：03 涌现（ICL/CoT）的"使用侧"在讲透Prompt——能力如何被激活（总纲：[`激活LLM能力-5W3H`](../讲透Prompt/激活LLM能力-5W3H分析.md)）
+- **[`讲透Prompt/`](../../讲透Prompt/README.md)**：03 涌现（ICL/CoT）的"使用侧"在讲透Prompt——能力如何被激活（总纲：[`激活LLM能力-5W3H`](../../讲透Agent/讲透Prompt/激活LLM能力-5W3H分析.md)）
 - **[`讲透多模态/`](../讲透多模态/README.md)**：HISTORY 的跨模态同质化叙事 ↔ 多模态四代演化（CLIP→LLaVA→原生多模态）

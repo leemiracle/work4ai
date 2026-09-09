@@ -169,9 +169,9 @@ graph TB
 
 ---
 
-🔗 **交叉链接**：Stanford CS336 论文精读 · GLU 变体/SwiGLU（B6）激活函数演化，见 [`讲透公开课/06-CS336论文精读/B-Transformer架构.md`](../讲透公开课/06-CS336论文精读/B-Transformer架构.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments)。
+🔗 **交叉链接**：Stanford CS336 论文精读 · GLU 变体/SwiGLU（B6）激活函数演化，见 [`讲透公开课/06-CS336论文精读/B-Transformer架构.md`](../../讲透公开课/06-CS336论文精读/B-Transformer架构.md)；配套可运行验证实验见 [`其 experiments/`](../../讲透公开课/06-CS336论文精读/experiments)。
 
 ## 🔗 与其他宇宙的连接
 
-- **[`激活大语言模型能力-总结.md`](../激活大语言模型能力-总结.md)**：本单元担任 **S 结构前提层**——非线性是 L0 涌现的前提（线性坍缩 4 万倍实验），SwiGLU 门控是"按需激活"在 FFN 内的最早形态
+- **[`激活大语言模型能力-总结.md`](../../激活大语言模型能力-总结.md)**：本单元担任 **S 结构前提层**——非线性是 L0 涌现的前提（线性坍缩 4 万倍实验），SwiGLU 门控是"按需激活"在 FFN 内的最早形态
 - **[`讲透Transformer/`](../讲透Transformer)**：SwiGLU 是现代 Transformer 的标配——激活函数宇宙的终章写在 attention 里

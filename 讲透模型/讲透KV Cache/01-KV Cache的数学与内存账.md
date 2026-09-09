@@ -165,8 +165,8 @@ $$
 
 FlashAttention 不是减少 FLOPs（甚至略增），是**减少 HBM 读写**——通过 tiling 把 attention 的中间矩阵留在 SRAM，避免往返 HBM。这恰好针对 decode 的 memory-bound 痛点。
 
-- 详见 [`讲透GPU与系统级/01-FlashAttention深度`](../讲透GPU与系统级/01-FlashAttention深度.md)
-- 源码：[`讲透公开课/03`](<../讲透公开课/03-AI Infra 源码导读清单.md>) 的 K1 FlashAttention 条目
+- 详见 [`讲透GPU与系统级/01-FlashAttention深度`](../../讲透GPU与系统级/01-FlashAttention深度.md)
+- 源码：[`讲透公开课/03`](<../../讲透公开课/03-AI Infra 源码导读清单.md>) 的 K1 FlashAttention 条目
 
 ### 推论 2：投机解码（speculative decoding）的动机
 
@@ -207,7 +207,7 @@ prefill 是 compute-bound（吃算力），decode 是 memory-bound（吃显存�
 > 2. prefill 是 compute-bound，decode 是 memory-bound（算术强度差 ~2000x）——所有推理优化都围绕这个差异。
 > 3. MLA 是 2024-2025 最重要架构创新，把 DeepSeek-V3 的 KV Cache 压缩 85x，让 65k 上下文 MoE 真正可部署。
 
-**下一篇 [`02-PagedAttention深挖`](.)**（待写）：vLLM 怎么用 OS 虚拟内存思想管理这坨巨大的、动态变化的 KV Cache——为什么"分页"能消除碎片、为什么这是系统工程思维在 AI 的典范。配合 [`讲透公开课/02-C4 6.1810 OS`](../讲透公开课/02-数理计算机神课清单.md) 的虚存章节 + [`讲透公开课/03`](<../讲透公开课/03-AI Infra 源码导读清单.md>) 的 vLLM 源码条目食用。
+**下一篇 [`02-PagedAttention深挖`](.)**（待写）：vLLM 怎么用 OS 虚拟内存思想管理这坨巨大的、动态变化的 KV Cache——为什么"分页"能消除碎片、为什么这是系统工程思维在 AI 的典范。配合 [`讲透公开课/02-C4 6.1810 OS`](../../讲透公开课/02-数理计算机神课清单.md) 的虚存章节 + [`讲透公开课/03`](<../../讲透公开课/03-AI Infra 源码导读清单.md>) 的 vLLM 源码条目食用。
 
 ---
 
