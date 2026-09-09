@@ -1,6 +1,6 @@
 # 108 · Graph Engineering 五环谱系专题（2026-08 术语战争与架构收敛）
 
-> 前沿与媒体 专题清单 | 核实 2026-08-26，全部一手来源 | 深读单元：[`讲透Graph/`](../讲透Graph/README.md)（README + papers.md + E5/E6 实验）
+> 前沿与媒体 专题清单 | 核实 2026-08-26，全部一手来源 | 深读单元：[`讲透Graph/`](../讲透Agent/讲透Graph/README.md)（README + papers.md + E5/E6 实验）
 
 ## 一句话
 

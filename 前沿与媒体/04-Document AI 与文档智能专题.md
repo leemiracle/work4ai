@@ -1,6 +1,6 @@
 # 前沿与媒体 · 04 - Document AI 与文档智能专题
 
-> 姊妹篇：[`03-模态专题`](./03-模态专题（NLP+Vision+Speech+多模态）.md)（多模态）｜ [`../讲透RAG/`](../讲透RAG)（RAG 的文档加载层）。
+> 姊妹篇：[`03-模态专题`](./03-模态专题（NLP+Vision+Speech+多模态）.md)（多模态）｜ [`../讲透Agent/讲透RAG/`](../讲透Agent/讲透RAG)（RAG 的文档加载层）。
 >
 > Document AI 是 LLM 应用最赚钱的场景之一（合同/财报/论文/PPT/邮件解析）。本篇把"**PDF/Office 文档 → markdown/JSON/结构化**"这一条工具链集中起来——是 RAG/Agent/知识库的**上游基础设施**。
 >

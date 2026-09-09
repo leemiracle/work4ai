@@ -12,7 +12,7 @@
 三个事实决定了它的权重：
 
 1. **46 个客户端已采纳**（agentskills.io/clients，2026-08）：Claude/Claude Code、ChatGPT & Codex、GitHub Copilot、VS Code、Cursor、Gemini CLI、OpenCode、Goose、Amp、Roo Code、Kiro、TRAE、OpenClaw、Hermes Agent……连 Spring AI（Java 框架）、Laravel Boost（框架技能包）都入了列。**这不是 Anthropic 的私有格式，是 agent 时代的 "markdown 级" 互操作层。**
-2. **与本项目已分析的 dsh 生态互相印证**：dsh-plugin 生态分析（见 [Agent框架案例](../Agent框架案例/deepseek-harness插件化框架/notes/07-ecosystem/01-dsh-plugin生态分析.md)）里头部 skill 包（archify 12.3k 星、colleague-skill 21.9k 星、harmony-next、sealos-skills）**全部跨宿主**——因为 SKILL.md 是数据不是代码。**插件绑生态、skill 绑工作流**，两条曲线已分叉。
+2. **与本项目已分析的 dsh 生态互相印证**：dsh-plugin 生态分析（见 [Agent框架案例](../讲透Agent/Agent框架案例/deepseek-harness插件化框架/notes/07-ecosystem/01-dsh-plugin生态分析.md)）里头部 skill 包（archify 12.3k 星、colleague-skill 21.9k 星、harmony-next、sealos-skills）**全部跨宿主**——因为 SKILL.md 是数据不是代码。**插件绑生态、skill 绑工作流**，两条曲线已分叉。
 3. **标准的哲学与 work4ai 项目宪法同构**：渐进披露 ≈ 本项目"三层宪法"；"从真实专长出发、不许 LLM 空想" ≈ 项目"禁止伪代码、每个论断 bash 可验"；eval 驱动迭代 ≈ 项目 F5 反欺骗质量门。**学这个标准 = 给项目方法论找互操作出口。**
 
 ---
@@ -120,7 +120,7 @@ description **独自承担全部触发负担**（启动时只有它在上下文�
 
 ## 3. 与 dsh skill 机制的对照（项目已有知识的再利用）
 
-work4ai 的 [dsh 插件机制笔记](../Agent框架案例/deepseek-harness插件化框架/notes/02-capability-seams/02-插件机制全景.md) §10 已源码级解剖 dsh 的 skill 实现，两者对齐如下：
+work4ai 的 [dsh 插件机制笔记](../讲透Agent/Agent框架案例/deepseek-harness插件化框架/notes/02-capability-seams/02-插件机制全景.md) §10 已源码级解剖 dsh 的 skill 实现，两者对齐如下：
 
 | 维度 | agentskills.io 开放标准 | dsh 实现（源码验证） | 评价 |
 |---|---|---|---|
@@ -186,7 +186,7 @@ work4ai 的 [dsh 插件机制笔记](../Agent框架案例/deepseek-harness插件
 ## 📌 导航
 
 - 上游标准：[agentskills.io](https://agentskills.io) ｜ [规范](https://agentskills.io/specification) ｜ [GitHub](https://github.com/agentskills/agentskills)
-- dsh skill 机制源码级笔记：[`Agent框架案例/deepseek-harness插件化框架/notes/02-capability-seams/02-插件机制全景.md`](../Agent框架案例/deepseek-harness插件化框架/notes/02-capability-seams/02-插件机制全景.md) §10
-- 生态中 skill 赛道分析：[`Agent框架案例/deepseek-harness插件化框架/notes/07-ecosystem/01-dsh-plugin生态分析.md`](../Agent框架案例/deepseek-harness插件化框架/notes/07-ecosystem/01-dsh-plugin生态分析.md) §2.2
+- dsh skill 机制源码级笔记：[`Agent框架案例/deepseek-harness插件化框架/notes/02-capability-seams/02-插件机制全景.md`](../讲透Agent/Agent框架案例/deepseek-harness插件化框架/notes/02-capability-seams/02-插件机制全景.md) §10
+- 生态中 skill 赛道分析：[`Agent框架案例/deepseek-harness插件化框架/notes/07-ecosystem/01-dsh-plugin生态分析.md`](../讲透Agent/Agent框架案例/deepseek-harness插件化框架/notes/07-ecosystem/01-dsh-plugin生态分析.md) §2.2
 - 项目内首个 skill：[`费曼学习法/skill/SKILL.md`](../费曼学习法/skill/SKILL.md)
 ---
