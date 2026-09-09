@@ -1,0 +1,751 @@
+diff --git a/llvm/include/llvm/IR/Use.h b/llvm/include/llvm/IR/Use.h
+index a86b9c46c1f6..36839b6e0cb1 100644
+--- a/llvm/include/llvm/IR/Use.h
++++ b/llvm/include/llvm/IR/Use.h
+@@ -26,79 +26,423 @@ template <typename> struct simplify_type;
+ class User;
+ class Value;
+ 
+-/// A Use represents the edge between a Value definition and its users.
++/// 【Use类 - 表示Value定义与其使用者之间的边】
++///
++/// 【核心设计：二维链表结构】
++/// Use实现了双向链表结构，支持两个维度的遍历：
++///
++/// 【维度1：Use-Def链（从定义到使用）】
++/// 对于某个Value V，遍历所有使用V的User：
++///    V.use_begin() → Use1 → Use2 → Use3 → ... → V.use_end()
++///
++///    每个Use通过Next/Prev指针链接
++///    Value维护指向第一个Use的指针（UseList）
++///
++/// 【维度2：Def-Use（从使用到定义）】
++/// 对于某个User U，访问它使用的Value：
++///    U.getOperand(i) → Use[i].get() → Value
++///
++///    User的Use数组连续存储
++///    每个Use有指向所属User的指针（Parent）
++///
++/// 【链表结构可视化】
++///
++/// 示例IR：
++///    %1 = add i32 %a, %b
++///    %2 = add i32 %a, %c
++///    %3 = add i32 %2, %d
++///
++/// Use-Def链（从%a的角度）：
++///
++///    Value(%a).UseList ─────┐
++///           ↓                    │
++///    ┌────Use────┐              │
++///    │ Val = %a │              │
++///    │ User = %1│              │
++///    └─────────┘              │
++///           ↓                  │
++///    ┌────Use────┐             │
++///    │ Val = %a │             │
++///    │ User = %2│             │
++///    └─────────┘             │
++///           ↓                  │
++///          nullptr              │
++///           ↑                  │
++///           └──────────────────┘
++///
++/// Def-Use（从%1指令的角度）：
++///
++///    BinaryOperator(%1)内存布局：
++///    | Use[0] | Use[1] | BinaryOperator对象 |
++///       ↓        ↓
++///    %a      %b
++///
++///    Use[0].Parent → BinaryOperator(%1)
++///    Use[0].Val → Value(%a)
++///    Use[0].Next → Use[1]（在%a的Use-Def链中）
++///    Use[0].Prev → &(Value(%a).UseList)
++///
++/// 【数据成员详解】
++///
++/// 【Val：被使用的Value指针】
++/// - 指向这个Use正在使用的Value
++/// - 可以是任何Value的子类（Instruction, Constant, Argument等）
++/// - 可以为nullptr（表示未初始化或已清除）
++///
++/// 【Next：同一Value的下一个Use】
++/// - 指向Value的Use-Def链中的下一个Use
++/// - 如果是最后一个Use，则为nullptr
++/// - 用于遍历某个Value的所有使用
++///
++/// 【Prev：指向前一个Use的指针的指针】
++/// - 不是指向前一个Use，而是指向存储前一个Use指针的变量
++/// - 设计原因：支持O(1)的链表头部插入
++/// - 可能指向：
++///   - Value::UseList（如果这是第一个Use）
++///   - 前一个Use的Next字段（如果这不是第一个Use）
++///
++/// 【Parent：包含此Use的User指针】
++/// - 指向包含此Use的User对象
++/// - 通常是Instruction（但也可以是Constant等其他User）
++/// - 用于从Use回溯到使用者
++///
++/// 【链表操作】
++///
++/// 【addToList：添加到链表头部】
++///
++/// 目标：将this插入到链表*List的头部
++///
++/// 初始状态：
++///    *List → Use_A → Use_B → nullptr
++///
++/// 操作：
++///    1. this.Next = *List               // this指向原第一个Use
++///    2. if (this.Next) {
++///         this.Next.Prev = &this.Next    // 原第一个Use的Prev指向this.Next
++///       }
++///    3. this.Prev = List                // this的Prev指向List指针本身
++///    4. *List = this                    // List指向this
++///
++/// 结果：
++///    *List → this → Use_A → Use_B → nullptr
++///
++/// 时间复杂度：O(1)
++///
++/// 应用场景：
++/// - 创建新Use时（Use::set被调用）
++/// - Value::addUse()调用此方法
++///
++/// 【removeFromList：从链表移除】
++///
++/// 目标：将this从链表中移除
++///
++/// 初始状态：
++///    *(Prev) → this → Next → ...
++///
++/// 操作：
++///    1. *(Prev) = Next     // 前驱的Next指向我们的Next
++///    2. if (Next) {
++///         Next.Prev = Prev   // 后继的Prev指向我们的Prev
++///       }
++///
++/// 结果：
++///    *(Prev) → Next → ...  (this被移除)
++///
++/// 时间复杂度：O(1)
++///
++/// 应用场景：
++/// - Use析构时
++/// - Use::set被调用修改目标Value时
++///
++/// 【关键方法详解】
++///
++/// 【set(Value *Val)：修改使用的Value】
++///
++/// 实现逻辑（在Value.h中）：
++/// ```cpp
++/// void Use::set(Value *V) {
++///   if (Val) removeFromList();  // 从旧Value的Use-Def链移除
++///   Val = V;                 // 更新目标Value
++///   if (V) V->addUse(*this); // 添加到新Value的Use-Def链
++/// }
++/// ```
++///
++/// 示例场景：
++/// ```cpp
++/// // 原始代码：
++/// %1 = add i32 %a, %b
++///
++/// // 优化：发现%b和%c总是相等
++/// // 替换：%1 = add i32 %a, %c
++///
++/// // 实现：
++/// %1->setOperand(1, %c);
++///
++/// // setOperand内部调用Use::set：
++/// Use[1].set(%c);
++///
++/// // set内部：
++/// 1. removeFromList() - 从%b的Use-Def链移除Use[1]
++/// 2. Val = %c
++/// 3. %c->addUse(Use[1]) - 将Use[1]添加到%c的Use-Def链
++/// ```
++///
++/// 【operator Value *()：隐式类型转换】
++///
++/// 允许Use像Value指针一样使用：
++/// ```cpp
++/// Use U = ...;
++/// Value *V = U;        // 隐式转换
++/// V->getType();         // 直接使用
++///
++/// // 等价于：
++/// Value *V = U.get();
++/// ```
++///
++/// 【getUser()：获取使用者】
++///
++/// ```cpp
++/// Use &U = ...;
++/// User *UserOfU = U.getUser();
++///
++/// if (Instruction *I = dyn_cast<Instruction>(UserOfU)) {
++///   // I是使用此Value的指令
++///   I->dump();
++/// }
++/// ```
++///
++/// 【典型使用模式】
++///
++/// 【模式1：遍历Value的所有使用】
++/// ```cpp
++/// Value *V = ...;
++///
++/// for (Use &U : V->uses()) {
++///   User *User = U.getUser();
++///   if (Instruction *I = dyn_cast<Instruction>(User)) {
++///     // 处理使用V的指令I
++///     errs() << "Used in instruction: " << I->getName() << "\n";
++///   }
++/// }
++///
++/// // 或者使用user_iterator
++/// for (User *U : V->users()) {
++///   if (Instruction *I = dyn_cast<Instruction>(U)) {
++///     // U已经是Instruction*
++///   }
++/// }
++/// ```
++///
++/// 【模式2：替换所有使用】
++/// ```cpp
++/// Value *OldVal = ...;
++/// Value *NewVal = ...;
++///
++/// // 一次性替换所有使用
++/// OldVal->replaceAllUsesWith(NewVal);
++///
++/// // 结果：所有原来使用OldVal的User现在使用NewVal
++/// // OldVal->use_empty() == true
++/// ```
++///
++/// 【模式3：条件替换】
++/// ```cpp
++/// Value *V = ...;
++/// Value *Replacement = ...;
++///
++/// // 只替换某些使用
++/// V->replaceUsesWithIf(Replacement, [](Use &U) {
++///   Instruction *I = cast<Instruction>(U.getUser());
++///   // 只替换在基本块BB中的使用
++///   return I->getParent() == BB;
++/// });
++/// ```
++///
++/// 【模式4：查找特定类型的使用】
++/// ```cpp
++/// Value *V = ...;
++///
++/// for (Use &U : V->uses()) {
++///   if (StoreInst *SI = dyn_cast<StoreInst>(U.getUser())) {
++///     // 找到了存储V的指令
++///     if (SI->getValueOperand() == V) {
++///       // V是被存储的值
++///       errs() << "Stored by: " << *SI << "\n";
++///     }
++///   }
++/// }
++/// ```
++///
++/// 【内存和性能考虑】
++///
++/// 【内存开销】
++/// - 每个Use对象：4个指针 = 32字节（64位）
++/// - 对于大型函数，可能有数百万个Use
++/// - 因此LLVM对Use的存储进行了特殊优化
++///
++/// 【性能优化】
++/// 1. 链表操作都是O(1)
++/// 2. 遍历使用是线性时间
++/// 3. hasOneUse()优化检查（不需要遍历）
++/// 4. Use-Def链插入总是在头部（最快）
++///
++/// 【常见陷阱】
++///
++/// ❌ 不要：
++/// ```cpp
++/// // 直接操作Use链
++/// Use *Next = U.getNext();
++/// delete &U;  // 错误！应该通过User接口删除
++/// ```
++///
++/// ✅ 应该：
++/// ```cpp
++/// // 通过User接口操作
++/// Instruction *I = cast<Instruction>(U.getUser());
++/// I->eraseFromParent();
++/// // Use会自动清理
++/// ```
++///
++/// ❌ 不要：
++/// ```cpp
++/// // 修改Val而不更新链表
++/// U.Val = NewVal;  // 错误！链表会不一致
++/// ```
++///
++/// ✅ 应该：
++/// ```cpp
++/// // 使用set方法
++/// U.set(NewVal);  // 正确！自动维护链表
++/// ```
++///
++/// 【调试技巧】
++///
++/// 1. 打印Value的所有使用：
++/// ```cpp
++/// void dumpAllUses(Value *V) {
++///   errs() << "Value " << V->getName() << " is used by:\n";
++///   for (Use &U : V->uses()) {
++///     U.getUser()->dump();
++///   }
++/// }
++/// ```
++///
++/// 2. 检查循环依赖：
++/// ```cpp
++/// bool hasCyclicUse(Value *V) {
++///   for (Use &U : V->uses()) {
++///     Instruction *I = dyn_cast<Instruction>(U.getUser());
++///     if (I && I->mayReadOrWriteMemory()) {
++///       // 可能形成依赖循环
++///     }
++///   }
++///   return false;
++/// }
++/// ```
+ ///
+-/// This is notionally a two-dimensional linked list. It supports traversing
+-/// all of the uses for a particular value definition. It also supports jumping
+-/// directly to the used value when we arrive from the User's operands, and
+-/// jumping directly to the User when we arrive from the Value's uses.
+ class Use {
+ public:
+   Use(const Use &U) = delete;
+ 
+-  /// Provide a fast substitute to std::swap<Use>
+-  /// that also works with less standard-compliant compilers
++  /// 提供std::swap<Use>的快速替代方案
++  /// 同时兼容标准合规性较低的编译器
+   void swap(Use &RHS);
+ 
+ private:
+-  /// Destructor - Only for zap()
++  /// 析构函数 - 仅用于zap()
++  /// 注意：普通删除应该通过User接口，Use会自动清理
+   ~Use() {
+     if (Val)
+-      removeFromList();
++      removeFromList(); // 自动从Value的Use-Def链移除
+   }
+ 
+-  /// Constructor
++  /// 构造函数 - 由User调用
+   Use(User *Parent) : Parent(Parent) {}
+ 
+ public:
+   friend class Value;
+   friend class User;
+ 
++  /// 隐式转换到Value*
++  /// 允许Use像Value指针一样使用
+   operator Value *() const { return Val; }
++
++  /// 获取被使用的Value
+   Value *get() const { return Val; }
+ 
+-  /// Returns the User that contains this Use.
++  /// 返回包含此Use的User
+   ///
+-  /// For an instruction operand, for example, this will return the
+-  /// instruction.
++  /// 对于指令的操作数，这将返回该指令本身
+   User *getUser() const { return Parent; };
+ 
++  /// 【关键方法：修改使用的Value】
++  ///
++  /// 此方法自动维护Use-Def链的完整性：
++  /// 1. 从旧Value的Use-Def链移除此Use
++  /// 2. 更新Val指针
++  /// 3. 将此Use添加到新Value的Use-Def链
++  ///
++  /// 时间复杂度：O(1)
+   inline void set(Value *Val);
+ 
++  /// 赋值操作符
+   inline Value *operator=(Value *RHS);
+   inline const Use &operator=(const Use &RHS);
+ 
++  /// 指针操作符重载
+   Value *operator->() { return Val; }
+   const Value *operator->() const { return Val; }
+ 
++  /// 获取Use-Def链中的下一个Use
+   Use *getNext() const { return Next; }
+ 
+-  /// Return the operand # of this use in its User.
++  /// 返回此Use在其User中的操作数编号
++  ///
++  /// 示例：
++  /// 对于指令 %3 = add i32 %1, %2
++  /// Use[0].getOperandNo() 返回 0
++  /// Use[1].getOperandNo() 返回 1
+   unsigned getOperandNo() const;
+ 
+-  /// Destroys Use operands when the number of operands of
+-  /// a User changes.
++  /// 当User的操作数数量改变时销毁Use操作数
+   static void zap(Use *Start, const Use *Stop, bool del = false);
+ 
+ private:
+-
++  /// 被使用的Value指针
++  /// 这是Use-Def链的一端，指向被使用的Value
+   Value *Val = nullptr;
++
++  /// 同一Value的Use-Def链中的下一个Use
++  /// 用于从Value端遍历所有使用
+   Use *Next = nullptr;
++
++  /// 指向前一个Use的指针的指针（双指针）
++  /// 用于O(1)的链表操作
++  /// 指向存储前一个Use指针的位置
+   Use **Prev = nullptr;
++
++  /// 包含此Use的User指针
++  /// 这是Def-Use链的一端，指向使用此Value的User
+   User *Parent = nullptr;
+ 
++  /// 将此Use添加到链表*List的头部
++  ///
++  /// 时间复杂度：O(1)
+   void addToList(Use **List) {
+-    Next = *List;
++    Next = *List; // this指向原第一个Use
+     if (Next)
+-      Next->Prev = &Next;
+-    Prev = List;
+-    *Prev = this;
++      Next->Prev = &Next; // 原第一个Use的Prev指向this.Next
++    Prev = List;          // this的Prev指向List本身
++    *Prev = this;         // List指向this
+   }
+ 
++  /// 从Use-Def链中移除此Use
++  ///
++  /// 时间复杂度：O(1)
+   void removeFromList() {
+-    *Prev = Next;
++    *Prev = Next; // 前驱的Next跳过this
+     if (Next)
+-      Next->Prev = Prev;
++      Next->Prev = Prev; // 后继的Prev跳过this
+   }
+ };
+ 
+diff --git a/llvm/include/llvm/IR/Value.h b/llvm/include/llvm/IR/Value.h
+index cfed12e2f5f8..801bc5dbf55a 100644
+--- a/llvm/include/llvm/IR/Value.h
++++ b/llvm/include/llvm/IR/Value.h
+@@ -47,7 +47,7 @@ class MDNode;
+ class Module;
+ class ModuleSlotTracker;
+ class raw_ostream;
+-template<typename ValueTy> class StringMapEntry;
++template <typename ValueTy> class StringMapEntry;
+ class Twine;
+ class Type;
+ class User;
+@@ -60,27 +60,62 @@ using ValueName = StringMapEntry<Value *>;
+ 
+ /// LLVM Value Representation
+ ///
+-/// This is a very important LLVM class. It is the base class of all values
+-/// computed by a program that may be used as operands to other values. Value is
+-/// the super class of other important classes such as Instruction and Function.
+-/// All Values have a Type. Type is not a subclass of Value. Some values can
+-/// have a name and they belong to some Module.  Setting the name on the Value
+-/// automatically updates the module's symbol table.
++/// 【核心类说明】
++/// 这是LLVM中最重要、最基础的类之一。所有由程序计算并可作为其他值操作数的值都继承自此类。
++/// Value是指令(Instruction)、函数(Function)、常量(Constant)等IR元素的基类。
+ ///
+-/// Every value has a "use list" that keeps track of which other Values are
+-/// using this Value.  A Value can also have an arbitrary number of ValueHandle
+-/// objects that watch it and listen to RAUW and Destroy events.  See
+-/// llvm/IR/ValueHandle.h for details.
++/// 【关键特性】
++/// 1. 类型系统: 所有Value都有一个Type类型，但Type本身不是Value的子类
++/// 2. 命名系统: 某些Value可以拥有名称，这些名称存储在所属Module的符号表中
++/// 3. 使用链(Use-Def Chains):
++/// 每个Value维护一个"使用列表"，跟踪哪些其他Value正在使用该Value
++/// 4. ValueHandle系统:
++/// Value可以被任意数量的ValueHandle对象监视，监听RAUW(ReplaceAllUsesWith)和Destroy事件
++///
++/// 【继承层次】
++/// Value
++///   ├─ User (有操作数的Value)
++///   │   ├─ Instruction (所有指令的基类)
++///   │   │   ├─ BinaryOperator (二元运算指令)
++///   │   │   ├─ CmpInst (比较指令)
++///   │   │   ├─ CallInst (函数调用)
++///   │   │   ├─ LoadInst/StoreInst (内存访问)
++///   │   │   └─ ... (其他指令)
++///   │   └─ Constant (常量值)
++///   │       ├─ ConstantInt/ConstantFP (数值常量)
++///   │       ├─ ConstantArray/ConstantStruct (聚合常量)
++///   │       └─ GlobalValue (全局值)
++///   │           ├─ GlobalVariable (全局变量)
++///   │           ├─ Function (函数)
++///   │           └─ GlobalAlias (全局别名)
++///   ├─ Argument (函数参数)
++///   ├─ BasicBlock (基本块)
++///   └─ InlineAsm (内联汇编)
++///
++/// 【内存布局优化】
++/// 该类使用位域(bitfield)和紧凑的数据结构来优化内存使用，
++/// 因为IR中可能有数百万个Value对象。
+ class Value {
+-  const unsigned char SubclassID;   // Subclass identifier (for isa/dyn_cast)
+-  unsigned char HasValueHandle : 1; // Has a ValueHandle pointing to this?
++  // 子类标识符，用于isa/dyn_cast类型判断
++  // 每个具体的Value子类都有一个唯一的ID，存储在这里
++  const unsigned char SubclassID;
++
++  // 标志位: 是否有ValueHandle指向此Value
++  // ValueHandle是一种机制，用于在Value被修改或删除时得到通知
++  unsigned char HasValueHandle : 1;
+ 
+ protected:
+-  /// Hold subclass data that can be dropped.
+-  ///
+-  /// This member is similar to SubclassData, however it is for holding
+-  /// information which may be used to aid optimization, but which may be
+-  /// cleared to zero without affecting conservative interpretation.
++  // 【可选子类数据位域】
++  // 存储子类特定且可以被丢弃的数据(优化提示等)
++  //
++  // 设计思路:
++  // 这里的数据可以被优化器用于改进代码，但即使被清除也不会影响保守(安全)的解释
++  // 例如: 某些指令可能会存储"这个值是否已知为非零"等优化信息
++  // 当进行保守分析时，可以安全地将这些位清零
++  //
++  // 与SubclassData的区别:
++  // - SubclassData: 存储子类必需的重要信息
++  // - SubclassOptionalData: 仅存储优化提示等可选信息
+   unsigned char SubclassOptionalData : 7;
+ 
+ private:
+@@ -181,7 +216,9 @@ private:
+     user_iterator_impl() = default;
+ 
+     bool operator==(const user_iterator_impl &x) const { return UI == x.UI; }
+-    bool operator!=(const user_iterator_impl &x) const { return !operator==(x); }
++    bool operator!=(const user_iterator_impl &x) const {
++      return !operator==(x);
++    }
+ 
+     /// Returns true if this iterator is equal to user_end() on the value.
+     bool atEnd() const { return *this == user_iterator_impl(); }
+@@ -198,9 +235,7 @@ private:
+     }
+ 
+     // Retrieve a pointer to the current User.
+-    UserTy *operator*() const {
+-      return UI->getUser();
+-    }
++    UserTy *operator*() const { return UI->getUser(); }
+ 
+     UserTy *operator->() const { return operator*(); }
+ 
+@@ -346,9 +381,7 @@ public:
+     return UseList == nullptr;
+   }
+ 
+-  bool materialized_use_empty() const {
+-    return UseList == nullptr;
+-  }
++  bool materialized_use_empty() const { return UseList == nullptr; }
+ 
+   using use_iterator = use_iterator_impl<Use>;
+   using const_use_iterator = use_iterator_impl<const Use>;
+@@ -458,8 +491,8 @@ public:
+     return const_cast<Value *>(this)->getSingleUndroppableUse();
+   }
+ 
+-  /// Return true if there is exactly one unique user of this value that cannot be
+-  /// dropped (that user can have multiple uses of this value).
++  /// Return true if there is exactly one unique user of this value that cannot
++  /// be dropped (that user can have multiple uses of this value).
+   User *getUniqueUndroppableUser();
+   const User *getUniqueUndroppableUser() const {
+     return const_cast<Value *>(this)->getUniqueUndroppableUser();
+@@ -514,7 +547,7 @@ public:
+ #define HANDLE_VALUE(Name) Name##Val,
+ #include "llvm/IR/Value.def"
+ 
+-    // Markers:
++  // Markers:
+ #define HANDLE_CONSTANT_MARKER(Marker, Constant) Marker = Constant##Val,
+ #include "llvm/IR/Value.def"
+   };
+@@ -529,21 +562,15 @@ public:
+   /// # there are more possible values for the value type than in ValueTy enum.
+   /// # the InstructionVal enumerator must be the highest valued enumerator in
+   ///   the ValueTy enum.
+-  unsigned getValueID() const {
+-    return SubclassID;
+-  }
++  unsigned getValueID() const { return SubclassID; }
+ 
+   /// Return the raw optional flags value contained in this value.
+   ///
+   /// This should only be used when testing two Values for equivalence.
+-  unsigned getRawSubclassOptionalData() const {
+-    return SubclassOptionalData;
+-  }
++  unsigned getRawSubclassOptionalData() const { return SubclassOptionalData; }
+ 
+   /// Clear the optional flags contained in this value.
+-  void clearSubclassOptionalData() {
+-    SubclassOptionalData = 0;
+-  }
++  void clearSubclassOptionalData() { SubclassOptionalData = 0; }
+ 
+   /// Check the optional flags for equality.
+   bool hasSameSubclassOptionalData(const Value *V) const {
+@@ -675,8 +702,8 @@ public:
+   /// Alias analysis.
+   const Value *stripPointerCastsForAliasAnalysis() const;
+   Value *stripPointerCastsForAliasAnalysis() {
+-    return const_cast<Value *>(static_cast<const Value *>(this)
+-                                   ->stripPointerCastsForAliasAnalysis());
++    return const_cast<Value *>(
++        static_cast<const Value *>(this)->stripPointerCastsForAliasAnalysis());
+   }
+ 
+   /// Strip off pointer casts and all-constant inbounds GEPs.
+@@ -686,7 +713,7 @@ public:
+   const Value *stripInBoundsConstantOffsets() const;
+   Value *stripInBoundsConstantOffsets() {
+     return const_cast<Value *>(
+-              static_cast<const Value *>(this)->stripInBoundsConstantOffsets());
++        static_cast<const Value *>(this)->stripInBoundsConstantOffsets());
+   }
+ 
+   /// Accumulate the constant offset this value has compared to a base pointer.
+@@ -761,7 +788,7 @@ public:
+   const Value *stripInBoundsOffsets(function_ref<void(const Value *)> Func =
+                                         [](const Value *) {}) const;
+   inline Value *stripInBoundsOffsets(function_ref<void(const Value *)> Func =
+-                                  [](const Value *) {}) {
++                                         [](const Value *) {}) {
+     return const_cast<Value *>(
+         static_cast<const Value *>(this)->stripInBoundsOffsets(Func));
+   }
+@@ -786,8 +813,7 @@ public:
+   /// IF CanBeFreed is true, the pointer is known to be dereferenceable at
+   /// point of definition only.  Caller must prove that allocation is not
+   /// deallocated between point of definition and use.
+-  uint64_t getPointerDereferenceableBytes(const DataLayout &DL,
+-                                          bool &CanBeNull,
++  uint64_t getPointerDereferenceableBytes(const DataLayout &DL, bool &CanBeNull,
+                                           bool &CanBeFreed) const;
+ 
+   /// Returns an alignment of the pointer value.
+@@ -806,7 +832,7 @@ public:
+                                 const BasicBlock *PredBB) const;
+   Value *DoPHITranslation(const BasicBlock *CurBB, const BasicBlock *PredBB) {
+     return const_cast<Value *>(
+-             static_cast<const Value *>(this)->DoPHITranslation(CurBB, PredBB));
++        static_cast<const Value *>(this)->DoPHITranslation(CurBB, PredBB));
+   }
+ 
+   /// The maximum alignment for instructions.
+@@ -822,9 +848,7 @@ public:
+   /// completely invalid IR very easily.  It is strongly recommended that you
+   /// recreate IR objects with the right types instead of mutating them in
+   /// place.
+-  void mutateType(Type *Ty) {
+-    VTy = Ty;
+-  }
++  void mutateType(Type *Ty) { VTy = Ty; }
+ 
+   /// Sort the use-list.
+   ///
+@@ -877,7 +901,9 @@ protected:
+   void setValueSubclassData(unsigned short D) { SubclassData = D; }
+ };
+ 
+-struct ValueDeleter { void operator()(Value *V) { V->deleteValue(); } };
++struct ValueDeleter {
++  void operator()(Value *V) { V->deleteValue(); }
++};
+ 
+ /// Use this instead of std::unique_ptr<Value> or std::unique_ptr<Instruction>.
+ /// Those don't work because Value and Instruction's destructors are protected,
+@@ -890,9 +916,11 @@ inline raw_ostream &operator<<(raw_ostream &OS, const Value &V) {
+ }
+ 
+ void Use::set(Value *V) {
+-  if (Val) removeFromList();
++  if (Val)
++    removeFromList();
+   Val = V;
+-  if (V) V->addUse(*this);
++  if (V)
++    V->addUse(*this);
+ }
+ 
+ Value *Use::operator=(Value *RHS) {
+@@ -977,7 +1005,8 @@ template <class Compare> void Value::sortUseList(Compare Cmp) {
+ //
+ template <> struct isa_impl<Constant, Value> {
+   static inline bool doit(const Value &Val) {
+-    static_assert(Value::ConstantFirstVal == 0, "Val.getValueID() >= Value::ConstantFirstVal");
++    static_assert(Value::ConstantFirstVal == 0,
++                  "Val.getValueID() >= Value::ConstantFirstVal");
+     return Val.getValueID() <= Value::ConstantLastVal;
+   }
+ };
+@@ -997,7 +1026,7 @@ template <> struct isa_impl<ConstantAggregate, Value> {
+ };
+ 
+ template <> struct isa_impl<Argument, Value> {
+-  static inline bool doit (const Value &Val) {
++  static inline bool doit(const Value &Val) {
+     return Val.getValueID() == Value::ArgumentVal;
+   }
+ };
+@@ -1062,21 +1091,20 @@ DEFINE_ISA_CONVERSION_FUNCTIONS(Value, LLVMValueRef)
+ 
+ // Specialized opaque value conversions.
+ inline Value **unwrap(LLVMValueRef *Vals) {
+-  return reinterpret_cast<Value**>(Vals);
++  return reinterpret_cast<Value **>(Vals);
+ }
+ 
+-template<typename T>
+-inline T **unwrap(LLVMValueRef *Vals, unsigned Length) {
++template <typename T> inline T **unwrap(LLVMValueRef *Vals, unsigned Length) {
+ #ifndef NDEBUG
+   for (LLVMValueRef *I = Vals, *E = Vals + Length; I != E; ++I)
+     unwrap<T>(*I); // For side effect of calling assert on invalid usage.
+ #endif
+   (void)Length;
+-  return reinterpret_cast<T**>(Vals);
++  return reinterpret_cast<T **>(Vals);
+ }
+ 
+ inline LLVMValueRef *wrap(const Value **Vals) {
+-  return reinterpret_cast<LLVMValueRef*>(const_cast<Value**>(Vals));
++  return reinterpret_cast<LLVMValueRef *>(const_cast<Value **>(Vals));
+ }
+ 
+ } // end namespace llvm
