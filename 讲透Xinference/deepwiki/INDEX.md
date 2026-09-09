@@ -40,7 +40,7 @@
 - [7.2-distributed-deployment](deepwiki/7.2-distributed-deployment.md) — Distributed Deployment
 - [7.3-docker-and-kubernetes](deepwiki/7.3-docker-and-kubernetes.md) — Docker and Kubernetes
 - [7.4-environment-configuration](deepwiki/7.4-environment-configuration.md) — Environment Configuration
-- [7.5-observability:-metrics-dashboards-and-logging](deepwiki/7.5-observability:-metrics-dashboards-and-logging.md) — Observability: Metrics, Dashboards, and Logging
+- [7.5-observability:-metrics-dashboards-and-logging](deepwiki/7.5-observability：-metrics-dashboards-and-logging.md) — Observability: Metrics, Dashboards, and Logging
 - [8-customization-and-extension](deepwiki/8-customization-and-extension.md) — Customization and Extension
 - [8.1-custom-model-registration](deepwiki/8.1-custom-model-registration.md) — Custom Model Registration
 - [8.2-model-specifications-and-schemas](deepwiki/8.2-model-specifications-and-schemas.md) — Model Specifications and Schemas

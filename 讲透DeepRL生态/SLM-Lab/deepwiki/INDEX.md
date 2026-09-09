@@ -8,7 +8,7 @@
 - [2.2-running-your-first-experiment](deepwiki/2.2-running-your-first-experiment.md) — Running Your First Experiment
 - [3-architecture](deepwiki/3-architecture.md) — Architecture
 - [4-experiment-system](deepwiki/4-experiment-system.md) — Experiment System
-- [4.1-control-flow:-experiment-trial-and-session](deepwiki/4.1-control-flow:-experiment-trial-and-session.md) — Control Flow: Experiment, Trial, and Session
+- [4.1-control-flow:-experiment-trial-and-session](deepwiki/4.1-control-flow：-experiment-trial-and-session.md) — Control Flow: Experiment, Trial, and Session
 - [4.2-metrics-and-analysis](deepwiki/4.2-metrics-and-analysis.md) — Metrics and Analysis
 - [4.3-hyperparameter-search](deepwiki/4.3-hyperparameter-search.md) — Hyperparameter Search
 - [4.4-visualization](deepwiki/4.4-visualization.md) — Visualization
@@ -16,8 +16,8 @@
 - [5.1-agent-and-metricstracker](deepwiki/5.1-agent-and-metricstracker.md) — Agent and MetricsTracker
 - [5.2-algorithms](deepwiki/5.2-algorithms.md) — Algorithms
 - [5.2.1-algorithm-base-class-and-action-selection](deepwiki/5.2.1-algorithm-base-class-and-action-selection.md) — Algorithm Base Class and Action Selection
-- [5.2.2-value-based-methods:-sarsa-and-dqn](deepwiki/5.2.2-value-based-methods:-sarsa-and-dqn.md) — Value-Based Methods: SARSA and DQN
-- [5.2.3-policy-gradient-methods:-reinforce-actor-critic-and-ppo](deepwiki/5.2.3-policy-gradient-methods:-reinforce-actor-critic-and-ppo.md) — Policy Gradient Methods: REINFORCE, Actor-Critic, and PPO
+- [5.2.2-value-based-methods:-sarsa-and-dqn](deepwiki/5.2.2-value-based-methods：-sarsa-and-dqn.md) — Value-Based Methods: SARSA and DQN
+- [5.2.3-policy-gradient-methods:-reinforce-actor-critic-and-ppo](deepwiki/5.2.3-policy-gradient-methods：-reinforce-actor-critic-and-ppo.md) — Policy Gradient Methods: REINFORCE, Actor-Critic, and PPO
 - [5.2.4-soft-actor-critic-(sac)](deepwiki/5.2.4-soft-actor-critic-(sac).md) — Soft Actor-Critic (SAC)
 - [5.3-memory](deepwiki/5.3-memory.md) — Memory
 - [5.3.1-replay-and-on-policy-memory](deepwiki/5.3.1-replay-and-on-policy-memory.md) — Replay and On-Policy Memory

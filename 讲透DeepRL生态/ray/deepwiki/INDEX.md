@@ -11,7 +11,7 @@
 - [2.3-raylet-gcs-and-object-store](deepwiki/2.3-raylet-gcs-and-object-store.md) — Raylet, GCS, and Object Store
 - [2.4-autoscaler-and-cluster-management](deepwiki/2.4-autoscaler-and-cluster-management.md) — Autoscaler and Cluster Management
 - [2.5-runtime-environment-and-dependency-management](deepwiki/2.5-runtime-environment-and-dependency-management.md) — Runtime Environment and Dependency Management
-- [2.6-observability:-dashboard-metrics-and-state-api](deepwiki/2.6-observability:-dashboard-metrics-and-state-api.md) — Observability: Dashboard, Metrics, and State API
+- [2.6-observability:-dashboard-metrics-and-state-api](deepwiki/2.6-observability：-dashboard-metrics-and-state-api.md) — Observability: Dashboard, Metrics, and State API
 - [3-ray-data](deepwiki/3-ray-data.md) — Ray Data
 - [3.1-dataset-api-and-transformations](deepwiki/3.1-dataset-api-and-transformations.md) — Dataset API and Transformations
 - [3.2-data-sources-and-sinks](deepwiki/3.2-data-sources-and-sinks.md) — Data Sources and Sinks

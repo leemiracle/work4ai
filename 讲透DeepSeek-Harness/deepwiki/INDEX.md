@@ -10,7 +10,7 @@
 | 4 | [10-glossary](10-glossary.md) | Glossary |
 | 5 | [2-core-architecture](2-core-architecture.md) | Core Architecture |
 | 6 | [2.1-cordis-framework-and-vendored-dependencies](2.1-cordis-framework-and-vendored-dependencies.md) | Cordis Framework & Vendored Dependencies |
-| 7 | [2.2-plugin-composition:-profiles-bundles-and-configuration](2.2-plugin-composition:-profiles-bundles-and-configuration.md) | Plugin Composition: Profiles, Bundles & Configuration |
+| 7 | [2.2-plugin-composition:-profiles-bundles-and-configuration](2.2-plugin-composition：-profiles-bundles-and-configuration.md) | Plugin Composition: Profiles, Bundles & Configuration |
 | 8 | [2.3-event-bus-and-capability-seams](2.3-event-bus-and-capability-seams.md) | Event Bus & Capability Seams |
 | 9 | [3-agent-system](3-agent-system.md) | Agent System |
 | 10 | [3.1-agent-loop-and-lifecycle](3.1-agent-loop-and-lifecycle.md) | Agent Loop & Lifecycle |
@@ -24,7 +24,7 @@
 | 18 | [4.3-sandboxing-and-security](4.3-sandboxing-and-security.md) | Sandboxing & Security |
 | 19 | [5-api-layer-and-host-client-bridge](5-api-layer-and-host-client-bridge.md) | API Layer & Host-Client Bridge |
 | 20 | [5.1-api-proxy-and-rpc-protocol](5.1-api-proxy-and-rpc-protocol.md) | API Proxy & RPC Protocol |
-| 21 | [5.2-typert:-type-safe-rpc-generation](5.2-typert:-type-safe-rpc-generation.md) | Typert: Type-Safe RPC Generation |
+| 21 | [5.2-typert:-type-safe-rpc-generation](5.2-typert：-type-safe-rpc-generation.md) | Typert: Type-Safe RPC Generation |
 | 22 | [5.3-client-runtime-and-session-management](5.3-client-runtime-and-session-management.md) | Client Runtime & Session Management |
 | 23 | [6-web-ui](6-web-ui.md) | Web UI |
 | 24 | [6.1-conversation-ui-and-chat-view](6.1-conversation-ui-and-chat-view.md) | Conversation UI & Chat View |

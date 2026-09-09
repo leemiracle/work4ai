@@ -188,7 +188,7 @@
 ## 20. SGLang Router (sgl-router)
 
 - [20-sglang-router-(sgl-router).md](20-sglang-router-(sgl-router).md) — 章节总览
-- [20.1-experimental-sgl-router:-slim-kv-aware-router.md](20.1-experimental-sgl-router:-slim-kv-aware-router.md) — 实验性 slim KV-aware router
+- [20.1-experimental-sgl-router：-slim-kv-aware-router.md](20.1-experimental-sgl-router：-slim-kv-aware-router.md) — 实验性 slim KV-aware router
 - [20.2-router-grpc-pipeline-and-tool-parsing.md](20.2-router-grpc-pipeline-and-tool-parsing.md) — Router gRPC 流水线与 tool 解析
 
 ## 21. SGLang Model Gateway (sgl-model-gateway)
@@ -214,8 +214,8 @@
 ## 24. 术语表
 
 - [24-glossary.md](24-glossary.md) — 章节总览
-- [24.1-glossary:-runtime-scheduling-and-memory-terms.md](24.1-glossary:-runtime-scheduling-and-memory-terms.md) — 运行时/调度/内存术语
-- [24.2-glossary:-distributed-quantization-multimodal-and-gateway-terms.md](24.2-glossary:-distributed-quantization-multimodal-and-gateway-terms.md) — 分布式/量化/多模态/网关术语
+- [24.1-glossary：-runtime-scheduling-and-memory-terms.md](24.1-glossary：-runtime-scheduling-and-memory-terms.md) — 运行时/调度/内存术语
+- [24.2-glossary：-distributed-quantization-multimodal-and-gateway-terms.md](24.2-glossary：-distributed-quantization-multimodal-and-gateway-terms.md) — 分布式/量化/多模态/网关术语
 
 ---
 

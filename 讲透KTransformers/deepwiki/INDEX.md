@@ -27,13 +27,13 @@
 - [3.1-system-design-overview](deepwiki/3.1-system-design-overview.md) — System Design Overview
 - [3.2-cpu-gpu-heterogeneous-computing](deepwiki/3.2-cpu-gpu-heterogeneous-computing.md) — CPU-GPU Heterogeneous Computing
 - [3.3-build-system-and-compilation](deepwiki/3.3-build-system-and-compilation.md) — Build System and Compilation
-- [4-kt-kernel:-inference-engine](deepwiki/4-kt-kernel:-inference-engine.md) — kt-kernel: Inference Engine
+- [4-kt-kernel:-inference-engine](deepwiki/4-kt-kernel：-inference-engine.md) — kt-kernel: Inference Engine
 - [4.1-architecture-and-design](deepwiki/4.1-architecture-and-design.md) — Architecture and Design
 - [4.2-moe-operator-system](deepwiki/4.2-moe-operator-system.md) — MoE Operator System
 - [4.3-sglang-integration](deepwiki/4.3-sglang-integration.md) — SGLang Integration
 - [4.4-python-api-reference](deepwiki/4.4-python-api-reference.md) — Python API Reference
 - [4.5-cli-tools-(kt-cli)](deepwiki/4.5-cli-tools-(kt-cli).md) — CLI Tools (kt-cli)
-- [5-kt-sft:-fine-tuning-framework](deepwiki/5-kt-sft:-fine-tuning-framework.md) — kt-sft: Fine-Tuning Framework
+- [5-kt-sft:-fine-tuning-framework](deepwiki/5-kt-sft：-fine-tuning-framework.md) — kt-sft: Fine-Tuning Framework
 - [5.1-architecture-overview](deepwiki/5.1-architecture-overview.md) — Architecture Overview
 - [5.2-llama-factory-integration](deepwiki/5.2-llama-factory-integration.md) — LLaMA-Factory Integration
 - [5.3-training-configuration](deepwiki/5.3-training-configuration.md) — Training Configuration
