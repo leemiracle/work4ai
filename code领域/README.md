@@ -44,3 +44,9 @@
 - **上游参考库**（03区 15 个克隆、05区 deepseek-harness 等、04区 awesome-math/mathlib4 等）为第三方开源项目副本，仅作本地学习参考；其内部链接自成体系，**不纳入本仓链检范围**
 - 各源迁移脚本与对账工具在车道提交历史中（`git log --grep=code领域`）；一次性工具 `.mig-*.py/sh` 已清理
 - 原文件夹处置记录：2026-09-10 终批删除（见 `迁移完成报告.md`）
+
+## 来源处置记录（不可逆动作留痕）
+
+2026-09-10 00:28-00:30，对账全平后删除 15 个原目录（16 源；llvm/ 含 llvm-project）：
+`csdiy · deepseek-harness · economy · essence · fastisslow · infoq-analysis · infoq-atlas · leemiracle · llvm(含llvm-project) · LLVM项目研究 · Machine-Learning-Interviews · math · math-expert-pro · neo-os · paper-os`
+每源删除条件 = 基线对账相等 或 用户书面豁免（github-repos/books/fastisslow-PDF/LLVM-monorepo/economy缓存）。删除日志存车道提交历史。
