@@ -43,10 +43,10 @@ This page describes how vLLM is tested and how its continuous integration pipeli
 
 For details on individual topics, see the child pages:
 
-  * **Test Organization and Infrastructure** — directory layout, test categories, and fixtures: see [Test Organization and Infrastructure](/vllm-project/vllm/12.1-test-organization-and-infrastructure)
-  * **Buildkite CI Pipelines** — pipeline generation, test sharding, and pipeline structure: see [Buildkite CI Pipelines](/vllm-project/vllm/12.2-buildkite-ci-pipelines)
-  * **Hardware-Specific Testing** — AMD/ROCm, TPU, XPU setup, and hardware-specific overrides: see [Hardware-Specific Testing](/vllm-project/vllm/12.3-hardware-specific-testing)
-  * **Model Correctness Validation** — model correctness tests, reference comparisons, and benchmarking tools: see [Model Correctness Validation](/vllm-project/vllm/12.4-model-correctness-validation)
+  * **Test Organization and Infrastructure** — directory layout, test categories, and fixtures: see [Test Organization and Infrastructure](../../../../vllm-project/vllm/12.1-test-organization-and-infrastructure)
+  * **Buildkite CI Pipelines** — pipeline generation, test sharding, and pipeline structure: see [Buildkite CI Pipelines](../../../../vllm-project/vllm/12.2-buildkite-ci-pipelines)
+  * **Hardware-Specific Testing** — AMD/ROCm, TPU, XPU setup, and hardware-specific overrides: see [Hardware-Specific Testing](../../../../vllm-project/vllm/12.3-hardware-specific-testing)
+  * **Model Correctness Validation** — model correctness tests, reference comparisons, and benchmarking tools: see [Model Correctness Validation](../../../../vllm-project/vllm/12.4-model-correctness-validation)
 
 * * *
 

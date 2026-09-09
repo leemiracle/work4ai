@@ -6,7 +6,7 @@
 >
 > 2024-2026 是 mechanistic interpretability 的爆发期：Anthropic 的 scaling monosemanticity、OpenAI 的 SAE 研究都让人乐观。但**完全理解大模型还远**——这是 AI for AI 里**最深刻的方向**（[`07-AI for AI`](../讲透AI应用全景/07-AI for AI.md) 第⑥层）。
 >
-> 配套：[`讲透AI应用全景/07-AI for AI`](../讲透AI应用全景/07-AI for AI.md) 第⑥层（AI 理解 AI）+ [`讲透基础模型`](../讲透基础模型/)（理解模型才能理解它的内部）+ [`讲透科学的现代性/03-AI时代的科学哲学`](../讲透科学的现代性/03-AI时代的科学哲学.md)（"AI 发现的规律算不算理解"）
+> 配套：[`讲透AI应用全景/07-AI for AI`](../讲透AI应用全景/07-AI for AI.md) 第⑥层（AI 理解 AI）+ [`讲透基础模型`](../讲透基础模型)（理解模型才能理解它的内部）+ [`讲透科学的现代性/03-AI时代的科学哲学`](../讲透科学的现代性/03-AI时代的科学哲学.md)（"AI 发现的规律算不算理解"）
 
 ---
 
@@ -53,7 +53,7 @@
 ## 配套
 
 - 系列：[`讲透AI应用全景/07-AI for AI`](../讲透AI应用全景/07-AI for AI.md) 第⑥层
-- 模型基础：[`讲透基础模型`](../讲透基础模型/) + [`讲透Transformer`](../讲透Transformer/)
+- 模型基础：[`讲透基础模型`](../讲透基础模型) + [`讲透Transformer`](../讲透Transformer)
 - 哲学反思：[`讲透科学的现代性/03`](../讲透科学的现代性/03-AI时代的科学哲学.md)
 - 信息源：[`前沿与媒体/01-AI顶级信息源`](../前沿与媒体/01-AI顶级信息源实时清单.md) 的 Anthropic blog + Transformer Circuits Thread
 

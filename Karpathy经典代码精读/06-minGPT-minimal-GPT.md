@@ -249,10 +249,10 @@ minGPT 强调**可读**（教学），nanoGPT 强调**可训**（速度）。nan
 
 | 本精读讲透的 | work4ai 深度版 |
 |---|---|
-| GPT 整体架构 | [`讲透Transformer`](../讲透Transformer/)（attention/MoE/推理优化）|
+| GPT 整体架构 | [`讲透Transformer`](../讲透Transformer)（attention/MoE/推理优化）|
 | CausalSelfAttention 逐行 | [`讲透Transformer/11-HuggingFace源码对照`](../讲透Transformer/11-HuggingFace源码对照.md)（对比生产实现）|
-| 自回归生成（temperature/top-k）| [`讲透基础模型`](../讲透基础模型/)（NTP + 解码策略）|
-| pre-LN 残差 / 初始化 | [`讲透PyTorch`](../讲透PyTorch/)（残差为何能训深网）|
+| 自回归生成（temperature/top-k）| [`讲透基础模型`](../讲透基础模型)（NTP + 解码策略）|
+| pre-LN 残差 / 初始化 | [`讲透PyTorch`](../讲透PyTorch)（残差为何能训深网）|
 
 **阅读路径**：读 [讲透Transformer] 懂 attention 数学 → 读本精读看 310 行最小 GPT → 读 [nanoGPT](./07-nanoGPT-从零训练GPT.md)（下一篇）看生产优化。
 

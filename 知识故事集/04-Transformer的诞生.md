@@ -144,8 +144,8 @@ Transformer 杀死的不仅是 RNN，是**整个领域的范式**：
 ## 🛠️ 我该深挖什么
 
 ### work4ai 系列
-- [`../讲透Transformer/`](../讲透Transformer/)：self-attention / multi-head / MoE / 推理优化
-- [`../讲透基础模型/`](../讲透基础模型/)：attention 在 LLM 中的角色
+- [`../讲透Transformer/`](../讲透Transformer)：self-attention / multi-head / MoE / 推理优化
+- [`../讲透基础模型/`](../讲透基础模型)：attention 在 LLM 中的角色
 
 ### 必读
 - **Vaswani et al. 2017 "Attention Is All You Need"**（原文，10 页，必读 5 遍）

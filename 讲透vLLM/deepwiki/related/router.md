@@ -26,12 +26,12 @@ The project is built as a hybrid system with a performance-critical Rust core an
 
 This page provides a high-level introduction to the system's purpose, architecture, and operational modes. For detailed information about specific subsystems:
 
-  * Architecture details and component interactions: [Architecture](/vllm-project/router/1.1-architecture)
-  * Technology choices and dependencies: [Technology Stack](/vllm-project/router/1.2-technology-stack)
-  * Routing logic and worker selection: [Routing Architecture](/vllm-project/router/3-routing-architecture)
-  * Prefill-Decode disaggregation specifics: [Prefill-Decode Disaggregation](/vllm-project/router/4-prefill-decode-disaggregation)
-  * Kubernetes-native service discovery: [Worker Management](/vllm-project/router/5-worker-management)
-  * Fault tolerance and resilience: [Resilience & Reliability](/vllm-project/router/6-resilience-and-reliability)
+  * Architecture details and component interactions: [Architecture](../../../../../vllm-project/router/1.1-architecture)
+  * Technology choices and dependencies: [Technology Stack](../../../../../vllm-project/router/1.2-technology-stack)
+  * Routing logic and worker selection: [Routing Architecture](../../../../../vllm-project/router/3-routing-architecture)
+  * Prefill-Decode disaggregation specifics: [Prefill-Decode Disaggregation](../../../../../vllm-project/router/4-prefill-decode-disaggregation)
+  * Kubernetes-native service discovery: [Worker Management](../../../../../vllm-project/router/5-worker-management)
+  * Fault tolerance and resilience: [Resilience & Reliability](../../../../../vllm-project/router/6-resilience-and-reliability)
 
 **Sources:** [README.md1-11](https://github.com/vllm-project/router/blob/eb57b66b/README.md?plain=1#L1-L11) [pyproject.toml5-12](https://github.com/vllm-project/router/blob/eb57b66b/pyproject.toml#L5-L12)
 

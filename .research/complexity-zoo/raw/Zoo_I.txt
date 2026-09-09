@@ -1,0 +1,62 @@
+__NOTOC__
+{{CZ-Letter-Menu|I}}
+
+
+===== <span id="iclogpoly" style="color:red">IC[log,poly]</span>: Logarithmic Instance Complexity, Polynomial Time =====
+The class of decision problems such that, for every n-bit string x, there exists a program A of size O(log n) that, given x as input, "correctly decides" the answer on x in time polynomial in n.  This means:
+<ul>
+<li>There exists a polynomial p such that for any input y, A returns either "yes", "no", or "I don't know" in time p(|y|).</li>
+<li>Whenever A returns "yes" or "no", it is correct.</li>
+<li>A returns either "yes" or "no" on x.</li>
+</ul>
+Defined in [[zooref#oks94|[OKS+94]]]; see also [[zooref#lv97|[LV97]]].
+
+If [[Complexity Zoo:N#np|NP]] is contained in IC[log,poly], then [[Complexity Zoo:P#p|P]] = [[Complexity Zoo:N#np|NP]] [[zooref#oks94|[OKS+94]]].  Indeed, any self-reducible problem in IC[log,poly] is also in [[Complexity Zoo:P#p|P]].
+
+Strictly contains [[Complexity Zoo:P#plog|P/log]], and is strictly contained in [[Complexity Zoo:P#ppoly|P/poly]].
+
+----
+===== <span id="ip" style="color:red">IP</span>: Interactive Proof Systems =====
+The class of decision problems for which a "yes" answer can be verified by an <i>interactive proof</i>.  Here a probabilistic polynomial-time verifier sends messages back and forth with an all-powerful prover.  They can have polynomially many rounds of interaction. Given the verifier's algorithm, at the end:
+<ol>
+<li>If the answer is "yes," the prover must be able to behave in such a way that the verifier accepts with probability at least 2/3 (over the choice of the verifier's random bits).</li>
+<li>If the answer is "no," then however the prover behaves the verifier must reject with probability at least 2/3.</li>
+</ol>
+Defined in [[zooref#gmr89|[GMR89]]], with the motivation of providing a framework for the introduction of zero-knowledge proofs (see the class [[Complexity Zoo:Z#zk|ZK]]). Interestingly, the power of general interactive proof systems is not decreased if the verifier is only allowed random queries (i.e., it merely tosses coins and sends any outcome to the prover). The latter model, known as the Arthur-Merlin (or public-coin) model was introduced independently (but later) in [[zooref#babai85|[Bab85]]], and a strong equivalent (which preserves the number of rounds) is proved in [[zooref#gs86|[GS86]]]. 
+Often, it is required that the prover can convince the verifier to accept correct assertions with probability 1; this is called <i>perfect completeness</i>.
+However, the definitions with one-sided and two-sided error can be shown to be equivalent (see [[zooref#fgmsz89|[FGM+89]]]).
+
+<p>
+First demonstration to the power of interactive proofs was given by showing that for [[Complexity_Garden#graph_isomorphism|<i>graph nonisomorphism</i>]] (a problem not known in [[Complexity Zoo:N#np|NP]]) has such proofs [[zooref#gmw91|[GMW91]]]. Five years later is was shown that
+IP contains [[Complexity Zoo:P#ph|PH]] [[zooref#lfk90|[LFK+90]]], and indeed (this was discovered only a few weeks later) equals [[Complexity Zoo:P#pspace|PSPACE]] [[zooref#sha90|[Sha90]]].  On the other hand, [[Complexity Zoo:C#conp|coNP]] is not contained in IP relative to a random oracle [[zooref#ccg94|[CCG+94]]].
+</p>
+
+<p>
+The verifier for [[Complexity Zoo:P#pspace|PSPACE]] only uses logarithmic space when given two way, read only access to its randomness. On the other hand, given only read once access to its randomness, a log space verifier can only verify languages in [[Complexity Zoo:P#p|P]] [[zooref#sha90|[Sha90]]]. Further, a log space verifier with read once access to its randomness can verifier any language in [[Complexity Zoo:P#p|P]] [[zooref#gkr15|[GKR15]]]. See [[Complexity Zoo:B#bpl|BPL]] vs [[Complexity Zoo:B#bpdotl|BP•L]] for a comparison between read once and read multiple access to randomness.
+</p>
+
+<p>
+See also: [[Complexity Zoo:M#mip|MIP]], [[Complexity Zoo:Q#qip|QIP]], [[Complexity Zoo:M#ma|MA]], [[Complexity Zoo:A#am|AM]].
+</p>
+----
+
+===== <span id="iop" style="color:red">IOP</span>: Interactive Oracle Proof =====
+An interactive oracle proof (IOP) is a proof system that combines [[Complexity Zoo:P#pcp|PCP]] and [[Complexity Zoo:I#ip|IP]]. An IOP allows both the prover and verifier to send messages like in the interactive proof model, but the verifier is given oracle access to the prover's messages. This is similar to a [[Complexity Zoo:P#pcp|PCP]], but instead of sending one fixed proof, the prover can send multiple proofs during the interaction, with the proofs' contents depending on the verifier messages. The verifier can then randomly query symbols from the received proofs.
+
+The class of problems solved by IOP is [[Complexity Zoo:N#nexp|NEXP]], which is also the class of problems solved by [[Complexity Zoo:P#pcp|PCP]]. Therefore IOPs are not more powerful than [[Complexity Zoo:P#pcp|PCP]]s, but they can achieve better parameters such as total proof length, alphabet size, and query complexity. The parameters of an IOP are determined by simply summing up the parameters at each round. IOPs can be converted to [[Complexity Zoo:I#ip|IP]]s using Merkle trees via the BCS compiler, the same way [[Complexity Zoo:P#pcp|PCP]]s are converted.
+
+See also: [[Complexity Zoo:I#ip|IP]], [[Complexity Zoo:N#nexp|NEXP]], [[Complexity Zoo:P#pcp|PCP]].
+
+----
+
+===== <span id="ipp" style="color:red">IPP</span>: Unbounded [[#ip|IP]] =====
+Same as [[#ip|IP]], except that if the answer is "yes," there need only be a prover strategy that causes the verifier to accept with probability greater than 1/2, while if the answer is "no," then for all prover strategies the verifier accepts with probability less than 1/2.
+
+Defined in [[zooref#ccg94|[CCG+94]]], where it was also shown that IPP = [[Complexity Zoo:P#pspace|PSPACE]] relative to <i>all</i> oracles.  Since [[#ip|IP]] is strictly contained in [[Complexity Zoo:P#pspace|PSPACE]] relative to a random oracle, the authors interpreted this as evidence against the Random Oracle Hypothesis (a slight change in definition can cause the behavior of a class relative to a random oracle to change drastically).
+
+See also: [[Complexity Zoo:P#ppspace|PPSPACE]].
+
+----
+
+===== <span id="ippolylog" style="color:red">IP[polylog]</span>: [[#ip|IP]] With Polylog Rounds =====
+Alternate name for [[Complexity Zoo:A#ampolylog|AM[polylog]]].

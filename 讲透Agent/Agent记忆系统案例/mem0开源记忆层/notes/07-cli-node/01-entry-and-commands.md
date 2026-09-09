@@ -309,4 +309,4 @@ export function detectAgentCaller(): string | undefined {
 
 ---
 
-📌 **下一步** → [`../08-integrations/`](../08-integrations/) 6 个集成。
+📌 **下一步** → [`../08-integrations/`](../08-integrations) 6 个集成。

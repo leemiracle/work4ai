@@ -4,7 +4,7 @@
 >
 > **博士级标准**：不是"年份+论文+指标"的维基百科年代史，是**思想史**（history of ideas）——为什么注意力机制在 1990s 就有雏形却等了 20 年才爆发？为什么 Vaswani 团队 8 人全在 Google？为什么 Shazeer 一个人贡献了 Transformer + SwiGLU + MQA + MoE 四大基石？当前的"LLaMA 配方"有多少是历史偶然？
 >
-> 配套：[`讲透AI历史`](../讲透AI历史/)（AI 史方法论）· [`讲透Transformer/06`](06-架构演进与MoE.md)（架构技术细节）· [`讲透Transformer/README`](README.md)（2026 配方速查）
+> 配套：[`讲透AI历史`](../讲透AI历史)（AI 史方法论）· [`讲透Transformer/06`](06-架构演进与MoE.md)（架构技术细节）· [`讲透Transformer/README`](README.md)（2026 配方速查）
 
 ---
 
@@ -737,7 +737,7 @@ Anthropic 的机械可解释性研究（mechanistic interpretability）正在揭
 > 📌 **下一步**
 > 1. **进入 [00-Transformer全景](00-Transformer全景.md)**：从思想史转到技术实现，跑 mini-GPT 实验
 > 2. **读 [06-架构演进与MoE](06-架构演进与MoE.md)**：深入四时代框架和 MoE 技术细节
-> 3. **对照 [讲透AI历史](../讲透AI历史/)**：把 Transformer 史放进更大的 AI 思想史
+> 3. **对照 [讲透AI历史](../讲透AI历史)**：把 Transformer 史放进更大的 AI 思想史
 > 4. **思考开放问题**（§14）：选一个做深入研究——每个都是博士论文级方向
 
 ---

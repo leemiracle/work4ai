@@ -10,11 +10,11 @@
 
 | 系列 | 数量 | 定位 | 难度区间 |
 |------|------|------|---------|
-| **[tong/](tong/)** David Tong | 23 本 | **当代费曼，首选**。免费、全面、清晰 | ★ - ★★★★★ |
-| **[feynman/](feynman/)** 费曼讲义 FLP | 3 卷 | 直觉与教学的圣经。免费在线 | ★★ - ★★★★ |
-| **[berkeley/](berkeley/)** Berkeley Course | 5 卷 | 与费曼同时代，系统互补 | ★★ - ★★★★ |
-| **[landau/](landau/)** Landau-Lifshitz | 10 卷 | 研究生圣经。最简洁深刻 | ★★★ - ★★★★★ |
-| **[susskind/](susskind/)** 理论最小 | 6 本 | 科普→教材的桥梁 | ★★ - ★★★ |
+| **[tong/](tong)** David Tong | 23 本 | **当代费曼，首选**。免费、全面、清晰 | ★ - ★★★★★ |
+| **[feynman/](feynman)** 费曼讲义 FLP | 3 卷 | 直觉与教学的圣经。免费在线 | ★★ - ★★★★ |
+| **[berkeley/](berkeley)** Berkeley Course | 5 卷 | 与费曼同时代，系统互补 | ★★ - ★★★★ |
+| **[landau/](landau)** Landau-Lifshitz | 10 卷 | 研究生圣经。最简洁深刻 | ★★★ - ★★★★★ |
+| **[susskind/](susskind)** 理论最小 | 6 本 | 科普→教材的桥梁 | ★★ - ★★★ |
 
 ---
 
@@ -50,7 +50,7 @@
 
 ### 阶段 5：前沿（弦论/拓扑/SUSY）
 - [tong/18_string_theory.md](tong/18_string_theory.md) / [tong/19_quantum_hall.md](tong/19_quantum_hall.md) / [tong/15_stat_field_theory.md](tong/15_stat_field_theory.md)
-- [landau/](landau/) 全 10 卷（研究生参考）
+- [landau/](landau) 全 10 卷（研究生参考）
 
 ---
 

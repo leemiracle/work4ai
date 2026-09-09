@@ -52,11 +52,11 @@
 
 ### 📓 源码精读笔记（`notes/`，41 篇）
 
-> 📁 [`notes/`](./notes/) · 13 子目录 / 15036 行 / 676K · 中文 / 三层讲透宪法（直觉→公式→代码 bash 跑通）
+> 📁 [`notes/`](./notes) · 13 子目录 / 15036 行 / 676K · 中文 / 三层讲透宪法（直觉→公式→代码 bash 跑通）
 
 按"从算法核心到外围生态"的顺序组织，与 15 层架构一一对应：
 
-#### 🏛 [00-overview](./notes/00-overview/) — 项目全景（6 篇，必读）
+#### 🏛 [00-overview](./notes/00-overview) — 项目全景（6 篇，必读）
 
 | 文档 | 内容 |
 |------|------|
@@ -67,7 +67,7 @@
 | [05-two-modes.md](./notes/00-overview/05-two-modes.md) | OSS 自托管 vs Platform 托管的 **API 同构哲学** |
 | [06-deepwiki-cross-reference.md](./notes/00-overview/06-deepwiki-cross-reference.md) | deepwiki.com 站点交叉引用 |
 
-#### 🧠 [01-py-sdk-core](./notes/01-py-sdk-core/) — Python SDK 核心（8 篇，最重要）
+#### 🧠 [01-py-sdk-core](./notes/01-py-sdk-core) — Python SDK 核心（8 篇，最重要）
 
 | 文档 | 内容 |
 |------|------|
@@ -80,7 +80,7 @@
 | [07-search-pipeline.md](./notes/01-py-sdk-core/07-search-pipeline.md) ⭐🔥 | **`search()` 多信号融合（semantic + BM25 + entity boost 三路并行）** |
 | [08-update-delete.md](./notes/01-py-sdk-core/08-update-delete.md) | update/delete 全链路 + soft-delete 模型 |
 
-#### 🔌 [02-py-sdk-providers](./notes/02-py-sdk-providers/) — Provider 插件模式（8 篇）
+#### 🔌 [02-py-sdk-providers](./notes/02-py-sdk-providers) — Provider 插件模式（8 篇）
 
 | 文档 | 内容 |
 |------|------|
@@ -93,7 +93,7 @@
 | [07-factory.md](./notes/02-py-sdk-providers/07-factory.md) | `Factory` 工厂模式——按 config 字符串实例化 |
 | [08-utils.md](./notes/02-py-sdk-providers/08-utils.md) | 工具函数（entity_extraction/scoring/lemmatization/http/gcp_auth/spacy_models） |
 
-#### ☁️ [03-py-sdk-client](./notes/03-py-sdk-client/) — Hosted Platform Client（3 篇）
+#### ☁️ [03-py-sdk-client](./notes/03-py-sdk-client) — Hosted Platform Client（3 篇）
 
 | 文档 | 内容 |
 |------|------|
@@ -101,52 +101,52 @@
 | [02-proxy.md](./notes/03-py-sdk-client/02-proxy.md) | OpenAI 兼容 proxy（`mem0.proxy.main`） |
 | [03-telemetry.md](./notes/03-py-sdk-client/03-telemetry.md) | PostHog 匿名遥测 + aliasing |
 
-#### 🌀 [04-ts-sdk](./notes/04-ts-sdk/) — TypeScript SDK 平行实现（2 篇）
+#### 🌀 [04-ts-sdk](./notes/04-ts-sdk) — TypeScript SDK 平行实现（2 篇）
 
 | 文档 | 内容 |
 |------|------|
 | [01-structure.md](./notes/04-ts-sdk/01-structure.md) | TS SDK 目录结构 + Zod schema 替代 Pydantic + deferred init |
 | [02-providers-and-types.md](./notes/04-ts-sdk/02-providers-and-types.md) | TS Provider 工厂 + 类型系统 |
 
-#### 🖥 [05-server](./notes/05-server/) — FastAPI 自托管 Server（2 篇）
+#### 🖥 [05-server](./notes/05-server) — FastAPI 自托管 Server（2 篇）
 
 | 文档 | 内容 |
 |------|------|
 | [01-architecture.md](./notes/05-server/01-architecture.md) ⭐🔥 | **FastAPI + JWT + API key 双轨认证 + PostgreSQL/pgvector** |
 | [02-vs-hosted.md](./notes/05-server/02-vs-hosted.md) | 自托管 Server vs Hosted Platform 决策矩阵 |
 
-#### ⌨️ [06-cli-python](./notes/06-cli-python/) — Python Typer CLI（1 篇）
+#### ⌨️ [06-cli-python](./notes/06-cli-python) — Python Typer CLI（1 篇）
 
 | 文档 | 内容 |
 |------|------|
 | [01-entry-and-commands.md](./notes/06-cli-python/01-entry-and-commands.md) | Typer app 主入口 + 命令实现 + Rich 渲染 |
 
-#### ⌨️ [07-cli-node](./notes/07-cli-node/) — Node Commander CLI（1 篇）
+#### ⌨️ [07-cli-node](./notes/07-cli-node) — Node Commander CLI（1 篇）
 
 | 文档 | 内容 |
 |------|------|
 | [01-entry-and-commands.md](./notes/07-cli-node/01-entry-and-commands.md) | Commander program + Biome lint + vitest |
 
-#### 🔗 [08-integrations](./notes/08-integrations/) — Agent & Editor 集成（2 篇）
+#### 🔗 [08-integrations](./notes/08-integrations) — Agent & Editor 集成（2 篇）
 
 | 文档 | 内容 |
 |------|------|
 | [01-mem0-plugin.md](./notes/08-integrations/01-mem0-plugin.md) ⭐🔥 | **mem0-plugin（MCP server + lifecycle hooks + OpenCode 插件）** |
 | [02-other-integrations.md](./notes/08-integrations/02-other-integrations.md) | OpenClaw / Pi Agent / Vercel AI SDK / n8n / Zapier |
 
-#### 🎓 [09-skills](./notes/09-skills/) — AI Agent Skill 体系（1 篇）
+#### 🎓 [09-skills](./notes/09-skills) — AI Agent Skill 体系（1 篇）
 
 | 文档 | 内容 |
 |------|------|
 | [01-skills-overview.md](./notes/09-skills/01-skills-overview.md) | 6 个 skill（3 reference always-on + 3 pipeline on-demand） |
 
-#### 🧪 [10-examples-eval](./notes/10-examples-eval/) — 示例与评测（1 篇）
+#### 🧪 [10-examples-eval](./notes/10-examples-eval) — 示例与评测（1 篇）
 
 | 文档 | 内容 |
 |------|------|
 | [01-examples-and-eval.md](./notes/10-examples-eval/01-examples-and-eval.md) | 10 个 demo + 外部 benchmark（LOCOMO/LongMemEval/BEAM） |
 
-#### 🔍 [11-layer-surveys](./notes/11-layer-surveys/) — 层级综述（4 篇，深度专题）
+#### 🔍 [11-layer-surveys](./notes/11-layer-surveys) — 层级综述（4 篇，深度专题）
 
 | 文档 | 内容 |
 |------|------|
@@ -155,7 +155,7 @@
 | [03-L11-skills.md](./notes/11-layer-surveys/03-L11-skills.md) | L11 Skills 层综述 |
 | [04-L7-dashboard.md](./notes/11-layer-surveys/04-L7-dashboard.md) | L7 Dashboard 层（Next.js 前端） |
 
-#### 📚 [99-appendix](./notes/99-appendix/) — 附录（1 篇）
+#### 📚 [99-appendix](./notes/99-appendix) — 附录（1 篇）
 
 | 文档 | 内容 |
 |------|------|
@@ -232,14 +232,14 @@ notes/09-skills/01-skills-overview.md（6 个 skill）
 
 | work4ai 系列 | 关系 |
 |-------------|------|
-| [讲透Agent](../../讲透Agent/) | 本案例是 Agent 记忆子系统的真实开源标准实现 |
-| [讲透RAG](../../讲透RAG/) | Mem0 本质是 **"记忆即 RAG"** 的特殊形态——自身文档作为持久化语料库 |
-| [讲透Prompt](../../讲透Prompt/) | Mem0 的 V3 single-pass 抽取 prompt 是工业级 prompt 工程样本（`ADDITIVE_EXTRACTION_PROMPT`） |
-| [讲透基础模型](../../讲透基础模型/) | Mem0 的 21 个 LLM provider 适配器是 LLM 抽象层的实战参考 |
-| [讲透PyTorch](../../讲透PyTorch/) | （间接）Mem0 的 embedding provider 中 HuggingFace 等用 PyTorch |
-| [讲透微调](../../讲透微调/) | （间接）Mem0 支持 LangChain ChatModel 接入微调后的模型 |
-| [讲透AI应用全景](../../讲透AI应用全景/) | 本案例是 AI 应用中「记忆」维度的深度展开 |
-| [Agent架构模式参考](../../Agent架构模式参考/) | 本案例是 Provider 插件模式 + 双 SDK 同构的具体系统深度分析 |
+| [讲透Agent](../../讲透Agent) | 本案例是 Agent 记忆子系统的真实开源标准实现 |
+| [讲透RAG](../../讲透RAG) | Mem0 本质是 **"记忆即 RAG"** 的特殊形态——自身文档作为持久化语料库 |
+| [讲透Prompt](../../讲透Prompt) | Mem0 的 V3 single-pass 抽取 prompt 是工业级 prompt 工程样本（`ADDITIVE_EXTRACTION_PROMPT`） |
+| [讲透基础模型](../../讲透基础模型) | Mem0 的 21 个 LLM provider 适配器是 LLM 抽象层的实战参考 |
+| [讲透PyTorch](../../讲透PyTorch) | （间接）Mem0 的 embedding provider 中 HuggingFace 等用 PyTorch |
+| [讲透微调](../../讲透微调) | （间接）Mem0 支持 LangChain ChatModel 接入微调后的模型 |
+| [讲透AI应用全景](../../讲透AI应用全景) | 本案例是 AI 应用中「记忆」维度的深度展开 |
+| [Agent架构模式参考](../../Agent架构模式参考) | 本案例是 Provider 插件模式 + 双 SDK 同构的具体系统深度分析 |
 | 项目案例-OpenPhone（待写/未落盘） | 互补——OpenPhone 是"产品级"项目案例，本案例是"基础设施级" |
 
 ---

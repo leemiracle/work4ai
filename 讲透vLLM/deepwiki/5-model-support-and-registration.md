@@ -89,7 +89,7 @@ The registry maintains separate dictionaries for different model types, such as 
 
 The module name is relative to `vllm.model_executor.models`, so `"llama"` refers to `vllm/model_executor/models/llama.py`.
 
-For details, see [Model Registry and Architecture Detection](/vllm-project/vllm/5.1-model-registry-and-architecture-detection).
+For details, see [Model Registry and Architecture Detection](../../../../vllm-project/vllm/5.1-model-registry-and-architecture-detection).
 
 **Sources:** [vllm/model_executor/models/registry.py72-211](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/registry.py#L72-L211) [vllm/model_executor/models/registry.py213-278](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/registry.py#L213-L278) [vllm/model_executor/models/registry.py311-527](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/registry.py#L311-L527)
 
@@ -114,7 +114,7 @@ Model Type| Custom Config Class| Purpose
   
 vLLM also provides `VerifyAndUpdateConfig` classes to programmatically adjust model configurations during loading. For instance, `UnlimitedOCRForCausalLMConfig` disables prefix caching and selects optimized attention backends based on hardware capability. [vllm/model_executor/models/config.py18-170](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/config.py#L18-L170)
 
-For details, see [Configuration Loading and Parsing](/vllm-project/vllm/5.2-configuration-loading-and-parsing).
+For details, see [Configuration Loading and Parsing](../../../../vllm-project/vllm/5.2-configuration-loading-and-parsing).
 
 **Sources:** [vllm/transformers_utils/config.py72-142](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/config.py#L72-L142) [vllm/model_executor/models/config.py18-170](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/config.py#L18-L170) [vllm/transformers_utils/model_arch_config_convertor.py25-166](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/model_arch_config_convertor.py#L25-L166)
 
@@ -139,7 +139,7 @@ For models without a native implementation, vLLM can use the "Transformers model
   * Model must set `_supports_attention_backend = True`. [docs/models/supported_models.md87](https://github.com/vllm-project/vllm/blob/185cada3/docs/models/supported_models.md?plain=1#L87-L87)
   * For MoE, the sparse block must have an `experts` attribute inheriting from `nn.ModuleList`. [docs/models/supported_models.md80-83](https://github.com/vllm-project/vllm/blob/185cada3/docs/models/supported_models.md?plain=1#L80-L83)
 
-For details, see [Transformers Modeling Backend](/vllm-project/vllm/5.3-transformers-modeling-backend).
+For details, see [Transformers Modeling Backend](../../../../vllm-project/vllm/5.3-transformers-modeling-backend).
 
 **Sources:** [docs/models/supported_models.md16-142](https://github.com/vllm-project/vllm/blob/185cada3/docs/models/supported_models.md?plain=1#L16-L142) [vllm/model_executor/models/registry.py279-308](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/registry.py#L279-L308)
 
@@ -181,7 +181,7 @@ Models can define specialized processing info to handle multimodal input transfo
 
 **Multimodal Data Flow**
 
-For details, see [Multimodal Model Support](/vllm-project/vllm/5.4-multimodal-model-support) and [Multimodal Data Processing](/vllm-project/vllm/5.5-multimodal-data-processing).
+For details, see [Multimodal Model Support](../../../../vllm-project/vllm/5.4-multimodal-model-support) and [Multimodal Data Processing](../../../../vllm-project/vllm/5.5-multimodal-data-processing).
 
 **Sources:** [vllm/config/model.py16-23](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/model.py#L16-L23) [vllm/model_executor/models/registry.py213-278](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/registry.py#L213-L278) [vllm/config/multimodal.py1-96](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/multimodal.py#L1-L96)
 
@@ -195,7 +195,7 @@ vLLM supports several speculative decoding methods, including draft models, EAGL
 
 [vllm/config/speculative.py69-79](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/speculative.py#L69-L79)
 
-For details, see [Speculative Decoding](/vllm-project/vllm/4.5-speculative-decoding).
+For details, see [Speculative Decoding](../../../../vllm-project/vllm/4.5-speculative-decoding).
 
 **Sources:** [vllm/config/speculative.py69-79](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/speculative.py#L69-L79) [vllm/transformers_utils/config.py144](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/config.py#L144-L144)
 
@@ -203,8 +203,8 @@ For details, see [Speculative Decoding](/vllm-project/vllm/4.5-speculative-decod
 
 ## Child Pages
 
-  * [Model Registry and Architecture Detection](/vllm-project/vllm/5.1-model-registry-and-architecture-detection) — Detailed mapping of HF architectures to vLLM implementations and capability queries.
-  * [Configuration Loading and Parsing](/vllm-project/vllm/5.2-configuration-loading-and-parsing) — Documentation on `HFConfigParser`, `VerifyAndUpdateConfig`, and configuration adaptation.
-  * [Transformers Modeling Backend](/vllm-project/vllm/5.3-transformers-modeling-backend) — Technical details on using the Transformers backend for non-native models.
-  * [Multimodal Model Support](/vllm-project/vllm/5.4-multimodal-model-support) — Interface definitions and supported modalities for VLMs, Audio, and Omni models.
-  * [Multimodal Data Processing](/vllm-project/vllm/5.5-multimodal-data-processing) — Handling of `MultiModalDataDict` and tensor conversion for images/audio/video.
+  * [Model Registry and Architecture Detection](../../../../vllm-project/vllm/5.1-model-registry-and-architecture-detection) — Detailed mapping of HF architectures to vLLM implementations and capability queries.
+  * [Configuration Loading and Parsing](../../../../vllm-project/vllm/5.2-configuration-loading-and-parsing) — Documentation on `HFConfigParser`, `VerifyAndUpdateConfig`, and configuration adaptation.
+  * [Transformers Modeling Backend](../../../../vllm-project/vllm/5.3-transformers-modeling-backend) — Technical details on using the Transformers backend for non-native models.
+  * [Multimodal Model Support](../../../../vllm-project/vllm/5.4-multimodal-model-support) — Interface definitions and supported modalities for VLMs, Audio, and Omni models.
+  * [Multimodal Data Processing](../../../../vllm-project/vllm/5.5-multimodal-data-processing) — Handling of `MultiModalDataDict` and tensor conversion for images/audio/video.

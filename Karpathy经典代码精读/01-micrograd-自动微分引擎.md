@@ -286,9 +286,9 @@ python3 -m pytest repos/micrograd/test/ -q   # 跑官方测试（2 passed）
 | 本精读讲透的 | work4ai 深度版 |
 |---|---|
 | Value 类 + 计算图 | [`讲透反向传播`](../讲透PyTorch/01-Autograd与计算图.md)（VJP / 反向模式 AD 的数学）|
-| backward 拓扑排序 | [`讲透PyTorch/`](../讲透PyTorch/)（Autograd 章节的真实张量实现）|
-| Neuron/Layer/MLP | [`讲透基础模型/`](../讲透基础模型/)（从 MLP 到 Transformer）|
-| `loss.backward()` 训练循环 | [`讲透PyTorch/`](../讲透PyTorch/) + [`讲透PyTorch/11-损失函数与优化器.md`](../讲透PyTorch/11-损失函数与优化器.md) |
+| backward 拓扑排序 | [`讲透PyTorch/`](../讲透PyTorch)（Autograd 章节的真实张量实现）|
+| Neuron/Layer/MLP | [`讲透基础模型/`](../讲透基础模型)（从 MLP 到 Transformer）|
+| `loss.backward()` 训练循环 | [`讲透PyTorch/`](../讲透PyTorch) + [`讲透PyTorch/11-损失函数与优化器.md`](../讲透PyTorch/11-损失函数与优化器.md) |
 
 **阅读路径**：读 [讲透反向传播] 搞懂 VJP 数学 → 读本精读看 94 行最小实现 → 读 [讲透PyTorch] 看 PyTorch 怎么把标量 autograd 向量化、CUDA 化。
 

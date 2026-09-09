@@ -270,4 +270,4 @@ $$\sigma(\omega) = \frac{1}{k_BT} \int_0^\infty dt \, e^{i\omega t} \langle J(t)
 ---
 
 **完成日期**：2026-08-13（深化版 v2）
-**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

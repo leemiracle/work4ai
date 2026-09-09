@@ -132,9 +132,9 @@ The project uses `setuptools_scm` for versioning, supporting `release`, `nightly
 
 ## Next Steps
 
-  * [Installation & Setup](/vllm-project/llm-compressor/2-installation-and-setup) — Guide for environment setup and installation.
-  * [Core Architecture](/vllm-project/llm-compressor/3-core-architecture) — Deep dive into the `CompressionSession` and `Modifier` systems.
-  * [Compression Techniques](/vllm-project/llm-compressor/4-compression-techniques) — Details on specific algorithms like GPTQ, AWQ, and REAP.
-  * [vLLM Integration](/vllm-project/llm-compressor/6.1-vllm-integration) — How to serve optimized models.
+  * [Installation & Setup](../../../../../vllm-project/llm-compressor/2-installation-and-setup) — Guide for environment setup and installation.
+  * [Core Architecture](../../../../../vllm-project/llm-compressor/3-core-architecture) — Deep dive into the `CompressionSession` and `Modifier` systems.
+  * [Compression Techniques](../../../../../vllm-project/llm-compressor/4-compression-techniques) — Details on specific algorithms like GPTQ, AWQ, and REAP.
+  * [vLLM Integration](../../../../../vllm-project/llm-compressor/6.1-vllm-integration) — How to serve optimized models.
 
 **Sources:** [README.md102-106](https://github.com/vllm-project/llm-compressor/blob/b7a014f3/README.md?plain=1#L102-L106)

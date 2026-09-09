@@ -2,7 +2,7 @@
 
 > **Agent = LLM + 工具 + 循环**。从单次 LLM 调用的"闭眼猜"升级为"感知→推理→行动→反馈"的闭环。本系列从 ReAct 地基讲到规划/记忆/工具调用/实战案例，覆盖 2024-2026 Agent 工程全栈。
 >
-> 配套：[`讲透LLM/`](../讲透模型/讲透LLM/)（基座）+ [`讲透Prompt/03`](./讲透Prompt/03-结构化输出与函数调用.md)（function calling）+ [`讲透Prompt/`](../讲透Prompt/)（**教程系列**：11 个实验讲透 CoT/PAL/ToT/ReAct/注入攻防/模型适配/OPRO，2026-08-26 完成）+ [`讲透RL/`](../讲透模型/讲透RL/)（Agent RL）+ [`Agent架构模式参考/`](./Agent架构模式参考/)（生产架构）+ [`Agent记忆系统案例/`](./Agent记忆系统案例/)（memory 落地）
+> 配套：[`讲透LLM/`](../讲透模型/讲透LLM)（基座）+ [`讲透Prompt/03`](./讲透Prompt/03-结构化输出与函数调用.md)（function calling）+ [`讲透Prompt/`](../讲透Prompt)（**教程系列**：11 个实验讲透 CoT/PAL/ToT/ReAct/注入攻防/模型适配/OPRO，2026-08-26 完成）+ [`讲透RL/`](../讲透模型/讲透RL)（Agent RL）+ [`Agent架构模式参考/`](./Agent架构模式参考)（生产架构）+ [`Agent记忆系统案例/`](./Agent记忆系统案例)（memory 落地）
 
 ---
 
@@ -18,12 +18,12 @@
 | **04** | [记忆机制](./04-记忆机制.md) | short-term / long-term / RAG memory / summary buffer |
 | **05** | [自进化延伸](./05-自进化延伸.md) | What/When/How 三维分类（arXiv:2507.21046）；Reflexion→Self-Rewarding→ADAS/AFlow→RAGEN→EvoAgentX 谱系；自改稳定性三条件 |
 | **05'** | [自进化2.0-整体叠加](./自进化2.0-整体叠加.md) | 五层扩**八层谱系**（Skills/Harness 独立成层）+ **RSI 四系统**（STOP→DGM 2505.22954→DGM-H 2603.19461→AlphaEvolve 2506.13131，一级证据全核实）+ 2026 三新综述（更新算子/动态图重写/记忆三阶段）+ 八层落地自查表 + 最小 DGM 实验（贪心 0/30 vs 存档 15/30，p<0.0001：**探索权>探索技巧**）|
-| **实战** | [Open-AutoGLM 手机 Agent](./实战案例-Open-AutoGLM手机Agent/) | 真实端到端 Agent 案例 |
-| **实战** | [DeepSeek Harness 框架](./Agent框架案例/deepseek-harness插件化框架/) | 工业级 agent harness："一切皆插件"+ 信任平面源码解剖 |
-| **实战** | [deepseek-universal-harness](../deepseek-universal-harness/)（仓库根） | ★2026-08-26 家族第六成员：**coding 骨架 × 四验证策略 → 通用研究 Agent（math 一等公民）**——math profile 三层验证降级（本机 Lean 4.21 退出码+sorry 双查 / SymPy / 固定 seed 数值反例）+ win-trap 专家迭代库 + 引理检索（内置 C1 候选，对接 MATH_DISCOVERY_ENGINE）；prover_harness 规律（R1 分解/R5 库）+ DeepResearch 纪律（离线）+ rl 可复现思想汇流。首跑 e2e：Σk³ 入 win 库、假变体被反例击杀入 trap 库 |
-| **实战** | [opencode 自成长改造](./Agent框架案例/opencode自成长改造/) | hermes×ECC 蓝图：把本地 opencode 改造成自成长 Agent（闭环学习环实操） |
-| **实战** | [MCP 协议生态全景](./Agent框架案例/MCP协议生态全景/) | topics/mcp 64k 仓知识集成：生态六赛道 + **2026-07-28 规范无状态化重构** + SDK v2/Registry 格局 + 项目内 MCP 互链网 |
-| **实战** | [RL 领域 Agent](./实战案例-RL领域Agent/) | ★自建可跑：contextual bandit 内核+四层记忆+Reflexion+**三进化环**（Q表/APO/Ctx-APO context 栈）+kb_curate 知识固化+debate 双 agent（892 行纯标准库，31 项技术映射经两轮五角色审查核验）|
+| **实战** | [Open-AutoGLM 手机 Agent](./实战案例-Open-AutoGLM手机Agent) | 真实端到端 Agent 案例 |
+| **实战** | [DeepSeek Harness 框架](./Agent框架案例/deepseek-harness插件化框架) | 工业级 agent harness："一切皆插件"+ 信任平面源码解剖 |
+| **实战** | [deepseek-universal-harness](../deepseek-universal-harness)（仓库根） | ★2026-08-26 家族第六成员：**coding 骨架 × 四验证策略 → 通用研究 Agent（math 一等公民）**——math profile 三层验证降级（本机 Lean 4.21 退出码+sorry 双查 / SymPy / 固定 seed 数值反例）+ win-trap 专家迭代库 + 引理检索（内置 C1 候选，对接 MATH_DISCOVERY_ENGINE）；prover_harness 规律（R1 分解/R5 库）+ DeepResearch 纪律（离线）+ rl 可复现思想汇流。首跑 e2e：Σk³ 入 win 库、假变体被反例击杀入 trap 库 |
+| **实战** | [opencode 自成长改造](./Agent框架案例/opencode自成长改造) | hermes×ECC 蓝图：把本地 opencode 改造成自成长 Agent（闭环学习环实操） |
+| **实战** | [MCP 协议生态全景](./Agent框架案例/MCP协议生态全景) | topics/mcp 64k 仓知识集成：生态六赛道 + **2026-07-28 规范无状态化重构** + SDK v2/Registry 格局 + 项目内 MCP 互链网 |
+| **实战** | [RL 领域 Agent](./实战案例-RL领域Agent) | ★自建可跑：contextual bandit 内核+四层记忆+Reflexion+**三进化环**（Q表/APO/Ctx-APO context 栈）+kb_curate 知识固化+debate 双 agent（892 行纯标准库，31 项技术映射经两轮五角色审查核验）|
 | **综合** | [RL 全景综合 2026-08](./RL全景综合-2026-08.md) | ★08-27：六块本地资产×网络最新（TTRL 三代 CoRE/Hi-TTRL/SCRL、WMRL 3-4×、CA 47 法、GRPO 第一性）的体系级收口——四波浪潮两因子叙事+五永恒问题矩阵+一切 RL 是 IMPROVE 算子实例+三条体系定律 |
 | **综合** | [预训练与架构全景综合 2026-08](./预训练与架构全景综合-2026-08.md) | ★08-27：七块本地资产×网络最新（Olmo Hybrid 2×+表达力定理/InfoLaw 0.15%/Mamba-3 MIMO/课程真相/MoE 正交/μP-PredictableScale）——**七维决策空间统一框架**（数据配方/序列混合/通道扩展/上下文/优化/系统/目标）+三条本仓库独有统一线（谱系统一预言混合排序/遗忘地板=状态设计律/μP=维度耦合器） |
 | **综合** | [SFT/RL 后训练全景综合 2026-08](./SFT-RL后训练全景综合-2026-08.md) | ★08-27：六块本地资产×网络最新（**OPD 第三范式五旗舰**/状态分布统一观/PEAR 秩反转/阶段专用数据 SFT=Extend-RL=Recall/BRIDGE 双层）——**状态分布 q×监督信号 z 统一框架**+方法选择决策树+后训练版 IMPROVE 算子表+三条定律再应验（含新增状态分布定律："在哪个状态上学决定学完在哪能用"） |
@@ -31,16 +31,16 @@
 | **总纲** | [Agent 设计总纲 2026-08](./Agent设计总纲-2026-08.md) | ⭐⭐ **后续一切 Agent 建设的宪法**——七条设计原则（全部来自自家实验教训）+身份三要素（Goal/Scope/Memory Contract）+四层堆栈骨架+横切三系统+run 生命周期规格+**零件对账（器官全齐、主体缺失——三 ❌）**+负空间五不做+实施三步（身份实例→主循环→角色注入） |
 | **综合** | [SFT 全景综合 2026-08](../讲透模型/讲透微调/SFT全景综合-2026-08.md) | ★08-27：SFT **工程实操层**收口（与上篇理论层互补）——质量>数量×重复击败扩数据（400×128ep>51k×1ep）/token级配比/r与lr耦合/**LoRA入侵维度**（持续学习反超FullFT遗忘）/dip-and-recovery修正/SFT扩张RL压缩机制/长CoT定RL天花板/**Agent轨迹SFT五病五解**（接口捷径PIPE/DAG修剪/PACT特权训练/ExpRAG/ACC编译） |
 | **综合** | [多Agent协作全景综合 2026-08](./多Agent协作全景综合-2026-08.md) | ★08-27：分类框架（三轴：上下文×拓扑×A2A协议栈）×失败模式六分类（MAST κ=0.88对照）×Agent社会四旗舰（Agentopia/Moltbook无社会化/Vending-Bench Arena/Pinchwork-RentAHuman劳务市场）×**13节点一手实验**（Prover×lean 三拓扑等预算：独立并行12/12完胜辩论9-12/层级效率13×；辩论修订轮增益0+33%抄袭+角色零分化=认知投降与理解债实证）——470事件轨迹全量可回放 |
-| **实践** | [实践阶梯 · 端侧事实记忆 Agent](./实践阶梯/) | ★L1→L5 上手动手单元：CPU-only Qwen2.5-0.5B 事实抽取+记忆+意图识别；**34 条任务集×5 版消融**（few-shot 治塌缩 32→0、反馈重试净负、受限 generation 65% 完胜 scoring 27%）；评估环否决 3 个自己的设计断言——「上手/设计/衡量」三缺口的实操答案 |
+| **实践** | [实践阶梯 · 端侧事实记忆 Agent](./实践阶梯) | ★L1→L5 上手动手单元：CPU-only Qwen2.5-0.5B 事实抽取+记忆+意图识别；**34 条任务集×5 版消融**（few-shot 治塌缩 32→0、反馈重试净负、受限 generation 65% 完胜 scoring 27%）；评估环否决 3 个自己的设计断言——「上手/设计/衡量」三缺口的实操答案 |
 | **参考** | [AI-Agents-in-Depth 全书深读卡](./AI-Agents-in-Depth全书深读卡.md) | 306页 2026 教科书逐章知识点+核验（✓互锁15+/△转引30/⚠自引8+/✗偏差1：Mem0 v3数字）；与项目14资产对账表——**评估方法论(Ch7)与多Agent失败模式学(Ch10)为最大增量** |
-| **实战** | [性能优化 Agent](./实战案例-性能优化Agent/) | GPU/CPU/Linux 设备性能优化 Agent 设计蓝图：**2025-2026 四线全景**（AKO4X/KernelAgent/KernelArc/SemaTune/LumOS/SchedCP/AgentKernelArena 一手实证）+ 三大遗留缺口速答（上手三级跳 T0-T2 / 取舍四问×guard 分工 / 三层指标+reward hacking 博弈档案 14.5% 作弊率）|
-| **实战** | [Prover 数学 Agent](./实战案例-Prover数学Agent/) | ★内网 DCU 实测：DeepSeek-Prover-V2-7B 逆向蒸馏**十条规律**（子目标分解=难度在跨度/RZPD 策展/一致性奖励/专家迭代/小模型技能枝）→ 三件套（oprover-math skill 全局已装 + prover_harness.py 递归闭环 + 官方 prompt 双模式）+ DCU 三坑实录 |
-| **讲透** | [讲透 Skills](./讲透Skills/) | ★2026-08-25 新建：Agent Skills 全景知识站（00-09 + 实验室三实验全跑通：E1 触发评测 zero-shot 2/10→few-shot 4/10 欠触发铁证 / E2 渐进披露省 93.1% + CC 1% 预算下 128K 窗口仅装 5 个 / E3 本机 117 目录扫出 2 真 C4 bug）+ 官方规范/skill-creator 485 行一手拆解 + **六线研究地图**（MCE 2601.21557/SkillRL/MemSkill/Memento-Skills/skill smells 实证/SkillNet 全核实）+ 数学五型 skill 类型学×MATH_LOOP_ENGINE 挂网 |
+| **实战** | [性能优化 Agent](./实战案例-性能优化Agent) | GPU/CPU/Linux 设备性能优化 Agent 设计蓝图：**2025-2026 四线全景**（AKO4X/KernelAgent/KernelArc/SemaTune/LumOS/SchedCP/AgentKernelArena 一手实证）+ 三大遗留缺口速答（上手三级跳 T0-T2 / 取舍四问×guard 分工 / 三层指标+reward hacking 博弈档案 14.5% 作弊率）|
+| **实战** | [Prover 数学 Agent](./实战案例-Prover数学Agent) | ★内网 DCU 实测：DeepSeek-Prover-V2-7B 逆向蒸馏**十条规律**（子目标分解=难度在跨度/RZPD 策展/一致性奖励/专家迭代/小模型技能枝）→ 三件套（oprover-math skill 全局已装 + prover_harness.py 递归闭环 + 官方 prompt 双模式）+ DCU 三坑实录 |
+| **讲透** | [讲透 Skills](./讲透Skills) | ★2026-08-25 新建：Agent Skills 全景知识站（00-09 + 实验室三实验全跑通：E1 触发评测 zero-shot 2/10→few-shot 4/10 欠触发铁证 / E2 渐进披露省 93.1% + CC 1% 预算下 128K 窗口仅装 5 个 / E3 本机 117 目录扫出 2 真 C4 bug）+ 官方规范/skill-creator 485 行一手拆解 + **六线研究地图**（MCE 2601.21557/SkillRL/MemSkill/Memento-Skills/skill smells 实证/SkillNet 全核实）+ 数学五型 skill 类型学×MATH_LOOP_ENGINE 挂网 |
 | **讲透** | [Agent 工具设计 · 五类六原则深读卡](./Agent工具设计-五类六原则-深读卡.md) | ★2026-08-26 新建：工具子系统设计方法论——五类（感知/执行/协作/用户沟通/事件触发）× 六原则（专用vs Skill/粒度/通用性/描述艺术/保真性/三代演进），**逐条映射本项目两大活案例**（agent_host 13 工具 + opencode 自身工具表含 scheduler 事件触发类）+ 一手资源地图 8 项全核实（SWE-agent ACI 2405.15793；Anthropic 2025-11 三件套：Tool Search 49%→74%/Examples 72%→90%/PTC -37%；Code execution with MCP 150K→2K）。**批判增量：验证工具在五类框架无位置→建议六分法**；tool_call_repair=保真性"转换可以，必须在账本上"的正面教材 |
-| **讲透** | [讲透 Loop](../讲透Loop/)（仓库根） | ★2026-08-26 新建：三部曲终章（Prompt→Context→**Loop**），2026-06 命名新学科。四层堆栈定位 + 循环规格五件套（2607.00038）+ 0.59% 采用率实证（2608.21884）+ E1-E3 模拟器全跑通：**自评停止 87% 早停 / 漏检率被轮数放大 / 卡死场景"好验证器+无上限"最贵（155k tok）**。MATH_LOOP_ENGINE = 本单元 Ch10 活案例 |
-| **讲透** | [讲透 Harness](../讲透Harness/)（仓库根） | ★2026-08-26 新建：工程四部曲运行环境层收官（Prompt→Context→Loop→**Harness**）。E1-E3 全跑通：**naive 幻觉式完成 FCR=true（自称6/6实际4/6）vs 最小harness 结构性FCR=0** / 验证器三级消融（V0自评漏报全在"看起来合理"处、成本阶梯 V1≈0ms<V2≈3ms<<V0≈3862ms）/ 崩溃恢复（无账本=100%幻觉恢复，账本=可读但弱模型解析仍1/3出错=harness dependence 本地版）。**Harness-Bench 2605.27922 一手核实**（106任务×6harness×8模型，同模型池差23.8分）+ 论述命名映射表（Meta/Self/Evo-Harness→AHE/Trellis/讲透Loop E4，绝不虚构引用）。与 harness工程手册（操作层）/三综述（文献层）构成三层栈 |
-| **讲透** | [讲透 Context](../讲透Context/)（仓库根） | ★2026-08-26 收官：E1-E8 八实验全跑通。**E6 Bloom 97.9% 完胜 glm 超预算摘要**（通信复杂度 Thm 3 本地复现）/ E7 自由笔记 91.7%>结构化模板 83.3%（丢字段诱发幻觉）/ E8 蒸馏悬崖（抽取式 1/2→67%、1/5→17%、1/10→0%）/ E4 日期锚 0→4/4（schema 给结构给不了时间）。六线前沿综述（ACE/ACON/Scroll/2608.01326）+ 本仓活案例 |
-| **讲透** | [讲透 Graph](../讲透Graph/)（仓库根） | ★2026-08-26 新建：五环谱系收口环（Prompt→Context→Harness→Loop→**Graph**，arXiv 2608.21156 综述一手核实）。双分支=Execution Graph（环非 DAG）+ Context Graph（typed edges/bi-temporal/作废不删除）；E1-E6 全跑通：**类型边 5/5 vs 相似度 0/5 / 图税 6×/每跳乘法灾难 p=0.9 十跳剩 35% / 本仓 proto-graph 实测 3058 节点真孤儿 831**（治理债坐标） |
+| **讲透** | [讲透 Loop](../讲透Loop)（仓库根） | ★2026-08-26 新建：三部曲终章（Prompt→Context→**Loop**），2026-06 命名新学科。四层堆栈定位 + 循环规格五件套（2607.00038）+ 0.59% 采用率实证（2608.21884）+ E1-E3 模拟器全跑通：**自评停止 87% 早停 / 漏检率被轮数放大 / 卡死场景"好验证器+无上限"最贵（155k tok）**。MATH_LOOP_ENGINE = 本单元 Ch10 活案例 |
+| **讲透** | [讲透 Harness](../讲透Harness)（仓库根） | ★2026-08-26 新建：工程四部曲运行环境层收官（Prompt→Context→Loop→**Harness**）。E1-E3 全跑通：**naive 幻觉式完成 FCR=true（自称6/6实际4/6）vs 最小harness 结构性FCR=0** / 验证器三级消融（V0自评漏报全在"看起来合理"处、成本阶梯 V1≈0ms<V2≈3ms<<V0≈3862ms）/ 崩溃恢复（无账本=100%幻觉恢复，账本=可读但弱模型解析仍1/3出错=harness dependence 本地版）。**Harness-Bench 2605.27922 一手核实**（106任务×6harness×8模型，同模型池差23.8分）+ 论述命名映射表（Meta/Self/Evo-Harness→AHE/Trellis/讲透Loop E4，绝不虚构引用）。与 harness工程手册（操作层）/三综述（文献层）构成三层栈 |
+| **讲透** | [讲透 Context](../讲透Context)（仓库根） | ★2026-08-26 收官：E1-E8 八实验全跑通。**E6 Bloom 97.9% 完胜 glm 超预算摘要**（通信复杂度 Thm 3 本地复现）/ E7 自由笔记 91.7%>结构化模板 83.3%（丢字段诱发幻觉）/ E8 蒸馏悬崖（抽取式 1/2→67%、1/5→17%、1/10→0%）/ E4 日期锚 0→4/4（schema 给结构给不了时间）。六线前沿综述（ACE/ACON/Scroll/2608.01326）+ 本仓活案例 |
+| **讲透** | [讲透 Graph](../讲透Graph)（仓库根） | ★2026-08-26 新建：五环谱系收口环（Prompt→Context→Harness→Loop→**Graph**，arXiv 2608.21156 综述一手核实）。双分支=Execution Graph（环非 DAG）+ Context Graph（typed edges/bi-temporal/作废不删除）；E1-E6 全跑通：**类型边 5/5 vs 相似度 0/5 / 图税 6×/每跳乘法灾难 p=0.9 十跳剩 35% / 本仓 proto-graph 实测 3058 节点真孤儿 831**（治理债坐标） |
 
 ---
 
@@ -50,25 +50,25 @@
  [00](./00-为什么需要Agent.md) → [01](./01-经典Agent范式对比.md) → [02](./02-工具调用工程.md)
 
 ### 🛤 想搭生产 Agent
- [02 工具调用](./02-工具调用工程.md) → [04 记忆](./04-记忆机制.md) → [Agent架构模式参考](./Agent架构模式参考/)
+ [02 工具调用](./02-工具调用工程.md) → [04 记忆](./04-记忆机制.md) → [Agent架构模式参考](./Agent架构模式参考)
 
 ### 🛤 想搞长程规划
  [03 规划与搜索](./03-规划与搜索.md) → Tree-of-Thought / MCTS / Plan-and-Execute
 
 ### 🛤 想做自进化 / 自改进 Agent
- [05 自进化](./05-自进化延伸.md) → [05' 整体叠加 RSI](./自进化2.0-整体叠加.md) → [experiments/05_selfevolve.py](./experiments/05_selfevolve.py)（最小 DGM 真跑）→ [实战案例-RL领域Agent](./实战案例-RL领域Agent/)（三进化环工程版）
+ [05 自进化](./05-自进化延伸.md) → [05' 整体叠加 RSI](./自进化2.0-整体叠加.md) → [experiments/05_selfevolve.py](./experiments/05_selfevolve.py)（最小 DGM 真跑）→ [实战案例-RL领域Agent](./实战案例-RL领域Agent)（三进化环工程版）
 
 ### 🛤 想做 Agent RL
- [`讲透RL/`](../讲透模型/讲透RL/)（PPO/GRPO + tool use reward）
+ [`讲透RL/`](../讲透模型/讲透RL)（PPO/GRPO + tool use reward）
 
 ---
 
 ## 配套生态
 
-- **基座**：[`讲透LLM/`](../讲透模型/讲透LLM/)（生命周期）
-- **架构参考**：[`Agent架构模式参考/`](./Agent架构模式参考/)（生产架构模式）
-- **记忆案例**：[`Agent记忆系统案例/`](./Agent记忆系统案例/)（MemGPT/Letta 等）
-- **框架案例**：[`Agent框架案例/deepseek-harness插件化框架/`](./Agent框架案例/deepseek-harness插件化框架/)（DeepSeek 官方 harness，loop/日志/沙箱/接缝源码级笔记）
+- **基座**：[`讲透LLM/`](../讲透模型/讲透LLM)（生命周期）
+- **架构参考**：[`Agent架构模式参考/`](./Agent架构模式参考)（生产架构模式）
+- **记忆案例**：[`Agent记忆系统案例/`](./Agent记忆系统案例)（MemGPT/Letta 等）
+- **框架案例**：[`Agent框架案例/deepseek-harness插件化框架/`](./Agent框架案例/deepseek-harness插件化框架)（DeepSeek 官方 harness，loop/日志/沙箱/接缝源码级笔记）
 - **Prompt 工程**：[`讲透Prompt/03`](./讲透Prompt/03-结构化输出与函数调用.md)（function calling）
 - **外部论文流**：[`PaperAgent精华合入-总入口`](./PaperAgent精华合入-总入口.md)（PaperAgent 公众号 15 主题精华：Agent/RAG/记忆/工具学习/RL×LLM/自演化/**Agentic RL/Deep Research/Vibe Coding/AI4Research/世界模型×具身**；讲透Agent 01-04 章+RL/代码生成/RAG 系列各有对应合入条目）
 - **应用形态**：[`讲透DeepResearch/`](./讲透DeepResearch/README.md)（Deep Research = Agent 循环 × 检索 × 综合成文的产品级汇流；讲透Agent 的 01 循环 + 02 工具 + 04 记忆在该系列组装成调研工作流）
@@ -96,5 +96,5 @@
 
 ## 🔗 与其他宇宙的连接
 
-- **[`讲透多Agent协作/`](./讲透多Agent协作/)**：单 Agent 的可靠性问题在多体下放大为协调问题；深读卡 §十 补三块增量——**信息增量判据**（协作是否引入生成时无法获得的新信息=多Agent价值唯一标准）、六失败模式学（Why Multi-Agent Fail 14种归纳）、A2A 协议（Agent×Agent 的 MCP）
+- **[`讲透多Agent协作/`](./讲透多Agent协作)**：单 Agent 的可靠性问题在多体下放大为协调问题；深读卡 §十 补三块增量——**信息增量判据**（协作是否引入生成时无法获得的新信息=多Agent价值唯一标准）、六失败模式学（Why Multi-Agent Fail 14种归纳）、A2A 协议（Agent×Agent 的 MCP）
 - **[`AI-Agents-in-Depth全书深读卡.md`](./AI-Agents-in-Depth全书深读卡.md)**：本宇宙的教科书坐标系（10章逐点核验+与14资产对账表）；深潜任何主题前先翻对应章建图

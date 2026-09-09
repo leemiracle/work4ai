@@ -1,0 +1,359 @@
+__NOTOC__
+{{CZ-Letter-Menu|M}}
+
+
+===== <span id="ma" style="color:red">MA</span>: Merlin-Arthur =====
+The class of decision problems solvable by a <i>Merlin-Arthur protocol</i>, which goes as follows.  Merlin, who has unbounded computational resources, sends Arthur a polynomial-size purported proof that the answer to the problem is "yes."  Arthur must verify the proof in [[Complexity Zoo:B#bpp|BPP]] (i.e. probabilistic polynomial-time), so that
+<ol>
+<li>If the answer is "yes," then there exists a proof such that Arthur accepts with probability at least 2/3.</li>
+<li>If the answer is "no," then for all proofs Arthur accepts with probability at most 1/3.</li>
+</ol>
+Defined in [[zooref#bab85|[Bab85]]].
+
+An alternative definition requires that if the answer is "yes," then there exists a proof such that Arthur accepts with certainty.  However, the definitions with one-sided and two-sided error can be shown to be equivalent (see [[zooref#FGM+89|[FGM+89]]]).
+
+Contains [[Complexity Zoo:N#np|NP]] and [[Complexity Zoo:B#bpp|BPP]] 
+(in fact also [[Complexity Zoo:E#existsbpp|&#8707;BPP]]), and is contained in [[Complexity Zoo:A#am|AM]] and in [[Complexity Zoo:Q#qma|QMA]].
+
+Also contained in [[Complexity Zoo:S#sigma2p|&#931;<sub>2</sub>P]] &#8745; [[Complexity Zoo:P#pi2p|&#928;<sub>2</sub>P]].
+
+There exists an oracle relative to which [[Complexity Zoo:B#bqp|BQP]] is not in [[#ma|MA]] [[zooref#wat00|[Wat00]]].
+
+Equals [[Complexity Zoo:N#np|NP]] under a derandomization assumption: if [[Complexity Zoo:E#e|E]] requires exponentially-sized circuits, then [[Complexity Zoo:P#promisebpp|PromiseBPP]] = [[Complexity Zoo:P#promisep|PromiseP]], implying that MA = [[Complexity Zoo:N#np|NP]] [[zooref#iw97|[IW97]]].
+
+Shown in {{zcite|San07}} that MA/1 (that is, MA with 1 bit of advice) does not have circuits of size <math>n^k</math> for any <math>k>0</math>. In the same paper, the result was used to show that MA/1 cannot be solved on more than a <math>1/2 + 1/{n^k}</math> fraction of inputs having length <math>n</math> by any circuit of size <math>n^k</math>. Finally, it was shown that MA does not have ''arithmetic'' circuits of size <math>n^k</math>.
+
+''See also'': [[#mae|MA<sub>E</sub>]], [[#maexp|MA<sub>EXP</sub>]], [[Complexity Zoo:O#oma|OMA]].
+
+----
+
+===== <span id="macc" style="color:red">MA<sup>cc</sup></span>: Communication Complexity [[#ma|MA]] =====
+
+Here, Alice and Bob collectively constitute "Arthur", and the cost of an MA<sup>cc</sup> communication protocol is defined as the bit length of Merlin's message plus the communication cost of the ensuing randomized protocol between Alice and Bob. (Not charging for the length of Merlin's message would enable every function to be computed with constant cost in this model.)
+
+Does not contain [[Complexity Zoo:C#conpcc|coNP<sup>cc</sup>]] (first shown by [[zooref#kla03|[Kla03]]]).
+
+It is open to prove that there exists an explicit two-party function whose MA<sup>cc</sup>-type communication complexity is &omega;(n<sup>1/2</sup>).
+
+----
+
+===== <span id="maprime" style="color:red">MA'</span>: Sparse [[#ma|MA]] =====
+The subclass of [[#ma|MA]] such that for each input size n, there is a sparse set S<sub>n</sub> that Merlin's proof string always belongs to (no matter what the input is).
+
+Defined in [[zooref#kst93|[KST93]]], where it is also observed that if [[Complexity_Garden#graph_isomorphism|graph isomorphism]] is in [[Complexity Zoo:P#ppoly|P/poly]], then the complement of [[Complexity_Garden#graph_isomorphism|graph isomorphism]] is in MA'.
+
+----
+
+===== <span id="mac0" style="color:red">MAC<sup>0</sup></span>: Majority of [[Complexity Zoo:A#ac0|AC<sup>0</sup>]] =====
+Same as [[Complexity Zoo:A#ac0|AC<sup>0</sup>]], except now we're allowed a single unbounded-fanin majority gate at the root.
+
+Defined in [[zooref#jks02|[JKS02]]].
+
+MAC<sup>0</sup> is strictly contained in [[Complexity Zoo:T#tc0|TC<sup>0</sup>]] [[zooref#abf94|[ABF+94]]].
+
+----
+===== <span id="mae" style="color:red">MA<sub>E</sub></span>: Exponential-Time [[#ma|MA]] With Linear Exponent =====
+Same as [[#ma|MA]], except now Arthur is [[Complexity Zoo:E#e|E]] instead of polynomial-time.
+
+If MA<sub>E</sub> = [[Complexity Zoo:N#nee|NEE]] then [[#ma|MA]] = [[Complexity Zoo:N#nexp|NEXP]] &#8745; [[Complexity Zoo:C#conexp|coNEXP]] [[zooref#ikw01|[IKW01]]].
+
+----
+===== <span id="maexp" style="color:red">MA<sub>EXP</sub></span>: Exponential-Time [[#ma|MA]] =====
+Same as [[#ma|MA]], except now Arthur is [[Complexity Zoo:E#exp|EXP]] instead of polynomial-time, and the message from Merlin can be exponentially long.
+
+There is a problem in MA<sub>EXP</sub> that does not have polynomial-size circuits [[zooref#bft98|[BFT98]]].  On the other hand, there is an oracle relative to which every problem in MA<sub>EXP</sub> does have polynomial-size circuits.
+
+[[zooref#mvw99|[MVW99]]] considered the best circuit lower bound obtainable for a problem in MA<sub>EXP</sub>, using current techniques.  They found that this bound is <i>half-exponential</i>: i.e. a function f such that f(f(n))=2<sup>n</sup>.  Such functions exist, but are not expressible using standard asymptotic notation.
+
+----
+===== <span id="mal" style="color:red">mAL</span>: Monotone [[Complexity Zoo:A#al|AL]] =====
+Defined in [[zooref#gs90|[GS90]]].  Equals [[#mp|mP]] by definition.
+
+----
+
+===== <span id="mapolylog" style="color:red">MA<sub>POLYLOG</sub></span>: {{zcls|m|ma}} With Polylog Verifier =====
+
+Identical to {{zcls|m|ma}} except for that Arthur (the verifier) has random access to the proof string given by Merlin, and is limited to running times of order <math>O(\textrm{poly}(\log n))</math>.
+
+This class was used by {{zcite|SM03}} to show that if {{zcls|e|exp}} has circuits of polynomial size, then {{zcls|e|exp}} = [[#ma|MA]].
+
+----
+
+===== <span id="maxnp" style="color:red">MaxNP</span>: Maximization [[Complexity Zoo:N#np|NP]] =====
+Has the same relation to [[Complexity Zoo:N#np|NP]] as [[#maxsnp|MaxSNP]] does to [[Complexity Zoo:S#snp|SNP]].
+
+Contains [[#maxpb|MaxPB]].
+
+The closure of MaxNP under [[Complexity Zoo:P#ptas|PTAS]] reduction is [[Complexity Zoo:A#apx|APX]] [[zooref#kms99|[KMS+99]]], [[zooref#ct94|[CT94]]].
+
+----
+===== <span id="maxpb" style="color:red">MaxPB</span>: [[#maxnp|MaxNP]] Polynomially Bounded =====
+The subclass of [[#maxnp|MaxNP]] problems for which the cost function is guaranteed always to be bounded by a polynomial.
+
+[[#minpb|MinPB]] can be defined similarly.
+
+Defined in [[zooref#kt94|[KT94]]].
+
+The closure of MaxPB under [[Complexity Zoo:P#ptas|PTAS]] reductions equals [[Complexity Zoo:N#npopb|NPOPB]] [[zooref#cks99|[CKS+99]]].
+
+----
+===== <span id="maxsnp" style="color:red">MaxSNP</span>: Maximization [[Complexity Zoo:S#snp|SNP]] =====
+The class of optimization problems reducible by an "L-reduction" to a problem in [[#maxsnp0|MaxSNP<sub>0</sub>]].  (<i>Note:</i> 'L' stands for linear -- this is <i>not</i> the same as an [[Complexity Zoo:L#l|L]] reduction!  For more details see [[zooref#py88|[PY88]]].)
+
+Defined in [[zooref#py88|[PY88]]], where the following was also shown:
+<ul>
+<li>Max3SAT is MaxSNP-complete.  (Max3SAT is the problem of finding an assignment that maximizes the number of satisfied clauses in a CNF formula with at most 3 literals per clause.)</li>
+<li>Any problem in MaxSNP can be approximated to within a fixed ratio.</li>
+</ul>
+The closure of MaxSNP under [[Complexity Zoo:P#ptas|PTAS]] reduction is [[Complexity Zoo:A#apx|APX]] [[zooref#kms99|[KMS+99]]], [[zooref#ct94|[CT94]]].
+
+----
+===== <span id="maxsnp0" style="color:red">MaxSNP<sub>0</sub></span>: Generating Class of MaxSNP =====
+The class of function problems expressible as "find a relation such that the set of k-tuples for which a given [[Complexity Zoo:S#snp|SNP]] predicate holds has maximum cardinality."
+
+For example (see [[zooref#pap94|[Pap94]]]), the Max-Cut problem can be expressed as follows:
+<ul> Given a graph G, find a subset S of vertices that maximizes the number of pairs (u,v) of vertices such that u is in S, and v is not in S, and G has an edge from u to v. </ul>
+Defined in [[zooref#py88|[PY88]]].
+
+----
+===== <span id="mconl" style="color:red">mcoNL</span>: Complement of [[#mnl|mNL]] =====
+Defined in [[zooref#gs90|[GS90]]], where it was also shown that mcoNL does not equal [[#mnl|mNL]].
+
+See also: [[#ml|mL]].
+
+----
+===== <span id="minpb" style="color:red">MinPB</span>: MinNP Polynomially Bounded =====
+Same as [[#maxpb|MaxPB]] but for minimization instead of maximization problems.
+
+----
+===== <span id="mip" style="color:red">MIP</span>: Multi-Prover Interactive Proof =====
+Same as [[Complexity Zoo:I#ip|IP]], except that now the verifier can exchange messages with many provers, not just one.  The provers cannot communicate with each other during the execution of the protocol, so the verifier can "cross-check" their assertions (as with suspects in separate interrogation rooms).
+
+Defined in [[zooref#bgk88|[BGK+88]]].
+
+Let MIP[k] be the class of decision problems for which a "yes" answer can be verified with k provers.  Then for all k&gt;2, MIP[k] = MIP[2] = MIP [[zooref#bgk88|[BGK+88]]].
+
+MIP equals [[Complexity Zoo:N#nexp|NEXP]] [[zooref#bfl91|[BFL91]]]; this is a famous non-relativizing result. In fact, there is an MIP for [[Complexity Zoo:N#ne|NE]] where the verifier is quasilinear time [[zooref#cm23|[CM23]]]. 
+
+----
+
+===== <span id="mipstar" style="color:red">MIP*</span>: [[#mip|MIP]] With Quantum Provers =====
+Same as [[#mip|MIP]], except that the provers can share arbitrarily many entangled qubits.  The verifier is classical, as are all messages between the provers and verifier.
+
+Defined in [[zooref#cht04|[CHT+04]]], where evidence was given suggesting that MIP* does not "obviously" equal [[Complexity Zoo:N#nexp|NEXP]].  
+
+MIP* contains [[Complexity Zoo:N#nexp|NEXP]] [[zooref#iv12|[IV12]]]. By contrast, [[Complexity Zoo:M#mip|MIP]], the corresponding class without entanglement, equals [[Complexity Zoo:N#nexp|NEXP]] (and even MIP[2,1] with two provers and one round equals NEXP).
+
+Even MIP*[4,poly] and MIP[5,1] contain NEXP [[zooref#iv12|[IV12]]].
+
+MIP*[2,1] contains [[Complexity Zoo:X#xormipstar21|XOR-MIP*[2,1]]].
+
+In 2012 it was shown that [[Complexity Zoo:Q#qmip|QMIP]] = MIP* [[zooref#ruv12|[RUV12]]]
+
+In 2020 it was shown that MIP* = [[Complexity Zoo:R#re|RE]] [[zooref#jnvwy20|[JNVWY20]]].
+
+----
+
+===== <span id="mipns" style="color:red">MIP<sup>ns</sup></span>: [[#mip|MIP]] with Non-Signaling Provers =====
+Same as [[#mip|MIP]], except that the provers can have non-signaling strategies.
+
+MIP<sup>ns</sup> with two provers is equal to [[Complexity Zoo:P#pspace|PSPACE]] [[zooref#ito10|[Ito10]]]. MIP<sup>ns</sup> with polylogarithmically many provers is equal to [[Complexity Zoo:E#exp|EXP]] [[zooref#krr13|[KRR13]]].
+
+----
+
+===== <span id="mipexp" style="color:red">MIP<sub>EXP</sub></span>: Exponential-Time Multi-Prover Interactive Proof =====
+The exponential-time analogue of [[#mip|MIP]].
+
+In the unrelativized world, equals [[Complexity Zoo:N#neexp|NEEXP]].
+
+There exists an oracle relative to which MIP<sub>EXP</sub> equals the intersection of [[Complexity Zoo:P#ppoly|P/poly]], [[Complexity Zoo:P#pnp|P<sup>NP</sup>]], and [[Complexity Zoo:Symbols#parityp|&#8853;P]] [[zooref#bft98|[BFT98]]].
+
+----
+===== <span id="mkp" style="color:red">(M<sub>k</sub>)P</span>: Acceptance Mechanism by Monoid M<sub>k</sub> =====
+A <i>monoid</i> is a set with an associative operation and an identity element (so it's like a group, except that it need not have inverses).
+
+Then (M<sub>k</sub>)P is the class of decision problems solvable by an [[Complexity Zoo:N#np|NP]] machine with the following acceptance mechanism.  The i<sup>th</sup> computation path (under some lexicographic ordering) outputs an element m<sub>i</sub> of M<sub>k</sub>.  Then the machine accepts if and only if m<sub>1</sub>m<sub>2</sub>...m<sub>s</sub> is the identity (where s is the number of paths).
+
+Defined by Hertrampf [[zooref#her97|[Her97]]], who also showed the following (in the special case M is a group):
+<ul>
+<li>If G is any nonsolvable group (for example S<sub>5</sub>, the symmetric group on 5 elements), then (G)P = [[Complexity Zoo:P#pspace|PSPACE]].</li>
+<li>(Z<sub>k</sub>)P = [[#comodkp|coMod<sub>k</sub>P]], where Z<sub>k</sub> is the cyclic group on k elements.</li>
+<li>If |G|=k, then (G)P contains [[#comodkp|coMod<sub>k</sub>P]].</li>
+</ul>
+
+----
+===== <span id="ml" style="color:red">mL</span>: Monotone [[Complexity Zoo:L#l|L]] =====
+The class of decision problems solvable by a family of monotone log-width polynomial-size leveled circuits.  (A <i>leveled</i> circuit is one where gates on each level can depend only on the level immediately below it.)
+
+Defined in [[zooref#gs90|[GS90]]], who raise as an open problem to define a uniform version of mL.
+
+Strictly contains [[#mnc1|mNC<sup>1</sup>]] [[zooref#gs91|[GS91]]].
+
+Contained in (nonuniform versions of) [[#mnl|mNL]] and [[#mconl|mcoNL]].
+
+----
+===== <span id="mm" style="color:red">MM</span>: Problems reducible to matrix multiplication =====
+The set of all problems reducible to matrix multiplication. That is, the set of problems <math>P</math> that can be reduced to the multiplication of two square matrices can be reduced to <math>P</math> in linear time.
+
+Currently, the best known algorithm for multiplying two <math>n\times n</math> matrices is the [http://en.wikipedia.org/wiki/Coppersmith%E2%80%93Winograd_algorithm Coppersmith–Winograd_algorithm], which has a time complexity of <math>O(n^{2.376})</math> {{zcite|CW90}}. Note that for the general problem, a lower bound of <math>\Omega(n^2)</math> is trivial from the number of elements being considered.
+
+----
+
+===== <span id="mmsnp" style="color:red">MMSNP</span>: Monadic Monotone [[Complexity Zoo:S#snp|SNP]] =====
+Defined in [[zooref#fv93|[FV93]]] as a subclass of [[Complexity Zoo:S#snp|SNP]].  There are three syntactic restrictions defining the subclass MMSNP, based on the form of the SNP formula defining the language:
+# The second order existentially quantified variables, known as the proof relations, are restricted to be monadic.  (Monadic relations can be treated as sets.)
+# Any relations in the formula other than the proof relations must occur only negated (the formula is monotone).
+# No inequality relations can occur in the formula.
+
+MMSNP seems to obey dichotomy, by excluding languages that are [[Complexity Zoo:N#npi|NP-intermediate]].  This is still open but widely believed.  Dropping any of the restrictions monotone/monadic/without inequalities allows NP-intermediate languages unless P = NP, since any problem in NP is polynomial time equivalent to a problem in each of these broader classes.  MMSNP therefore seems to be a maximal fragment of NP where NP-intermediate languages are excluded.
+
+Every constraint satisfaction problem with a fixed target structure is expressible in MMSNP, and there is a polynomial time Turing reduction from every MMSNP query to finitely many constraint satisfaction problems.  MMSNP therefore seems to capture the class of constraint satisfaction problems with fixed templates, [[Complexity Zoo:C#csp|CSP]].
+----
+
+===== <span id="mnc1" style="color:red">mNC<sup>1</sup></span>: Monotone [[Complexity Zoo:N#nc1|NC<sup>1</sup>]] =====
+The class of decision problems solvable by a family of monotone [[Complexity Zoo:N#nc1|NC<sup>1</sup>]] circuits (i.e. AND and OR gates only).
+
+A uniformity condition could also be imposed.
+
+Defined in [[zooref#gs90|[GS90]]].
+
+Strictly contained in [[#mnl|mNL]] [[zooref#kw88|[KW88]]], and indeed in [[#ml|mL]] [[zooref#gs91|[GS91]]].
+
+Strictly contains [[#mtc0|mTC<sup>0</sup>]] [[zooref#yao89|[Yao89]]].
+
+----
+
+===== <span id="mnl" style="color:red">mNL</span>: Monotone [[Complexity Zoo:N#nl|NL]] =====
+See [[#mp|mP]] for the definition of a monotone nondeterministic Turing machine, due to [[zooref#gs90|[GS90]]].
+
+mNL is the class of decision problems solvable by a monotone nondeterministic log-space Turing machine.
+
+mNL does not equal [[#mconl|mcoNL]] [[zooref#gs90|[GS90]]], in contrast to the case for [[Complexity Zoo:N#nl|NL]] and [[Complexity Zoo:C#conl|coNL]].
+
+Also, mNL strictly contains [[#mnc1|mNC<sup>1</sup>]] [[zooref#kw88|[KW88]]].
+
+See also: [[#ml|mL]].
+
+----
+===== <span id="mnp" style="color:red">mNP</span>: Monotone [[Complexity Zoo:N#np|NP]] =====
+The class of decision problems for which a 'yes' answer can be verified in [[#mp|mP]] (that is, monotone polynomial-time).  The monotonicity requirement applies only to the input bits, not to the bits that are guessed nondeterministically. So, in the corresponding circuit, one can have NOT gates so long as they depend only on the nondeterministic guess bits.
+
+Defined in [[zooref#gs90|[GS90]]], where it was also shown that mNP is 'trivial': that is, it contains exactly the monotone problems in [[Complexity Zoo:N#np|NP]].
+
+Strictly contains [[#mp|mP]] [[zooref#raz85|[Raz85]]].
+
+----
+===== <span id="modkl" style="color:red">Mod<sub>k</sub>L</span>: Mod-k [[Complexity Zoo:L#l|L]] =====
+Has the same relation to [[Complexity Zoo:L#l|L]] as [[#modkp|Mod<sub>k</sub>P]] does to [[Complexity Zoo:P#p|P]].
+
+For any prime k, Mod<sub>k</sub>L contains [[Complexity Zoo:S#sl|SL]] [[zooref#kw93|[KW93]]].
+
+For any prime k, Mod<sub>k</sub>L<sup>ModkL</sup> = Mod<sub>k</sub>L [[zooref#hrv00|[HRV00]]].
+
+For any k>1, contains [[Complexity Zoo:L#logfew|LogFew]] [[zooref#bdh92|[BDH+92]]].
+
+----
+
+===== <span id="modl" style="color:red">ModL</span>: Mod{{zcls|l|l}} =====
+A language <math>L\in\mathsf{ModL}</math> if there are functions <math>f\in\mathsf{GapL}</math> and <math>g\in\mathsf{FL}</math> such that for all strings <math>x</math>:
+* There exists a prime <math>p</math> and a natural number <math>\alpha</math> such that <math>g(x)=0^{p^{\alpha}}</math>.
+* <math>x\in L</math> if and only if <math>f(x)\equiv0(\left|g(x)\right|)</math>.
+
+Thus, for any prime <math>p</math> and natural number <math>\alpha</math>, <math>\mathsf{Mod}_{p^{\alpha}}\mathsf{L}\subseteq\mathsf{ModL}</math>. Moreover, {{zcls|f|fl}}<sup>ModL</sup> = {{zcls|f|fl}}<sup>{{zcls|g|gapl|GapL}}</sup> {{zcite|AV04}}.
+
+Defined in {{zcite|AV04}}.
+
+----
+
+===== <span id="modkp" style="color:red">Mod<sub>k</sub>P</span>: Mod-k Polynomial-Time =====
+For any k&gt;1: The class of decision problems solvable by an [[Complexity Zoo:N#np|NP]] machine such that the number of accepting paths is divisible by k, if and only if the answer is "no."
+
+Mod<sub>2</sub>P is more commonly known as [[Complexity Zoo:Symbols#parityp|&#8853;P]] "parity-P."
+
+For every k, Mod<sub>k</sub>P contains [[Complexity_Garden#graph_isomorphism|graph isomorphism]] [[zooref#ak02|[AK02]]].
+
+Defined in [[zooref#ch89|[CH89]]], [[zooref#her90|[Her90]]].
+
+[[zooref#her90|[Her90]]] and [[zooref#bg92|[BG92]]] showed that Mod<sub>k</sub>P is the set of unions of languages in Mod<sub>p</sub>P for each prime p that divides k.  In particular, if p is prime, then Mod<sub>p</sub>P = Mod<sub>p^m</sub>P for all positive integers m.  A further fact is that Mod<sub>p</sub>P is closed under union, intersection, and complement, and low for itself, for p prime.
+
+On the other hand, if k is not a prime power, then there exists an oracle relative to which Mod<sub>k</sub>P is not closed under intersection or complement [[zooref#bbr94|[BBR94]]].
+
+For prime p, there exists an oracle relative to which Mod<sub>p</sub>P does not contain [[Complexity Zoo:E#eqp|EQP]] [[zooref#gv02|[GV02]]].
+
+----
+
+===== <span id="modp" style="color:red">ModP</span>: [[#modkp|Mod<sub>k</sub>P]] With Arbitrary k =====
+The class of decision problems solvable by a [[#modkp|Mod<sub>k</sub>P]] machine where k can vary depending on the input.  The only requirement is that 0<sup>k</sup> be computable in polynomial time.
+
+Defined in [[zooref#kt96|[KT96]]], where it was also shown that ModP is contained in [[Complexity Zoo:A#ampmp|AmpMP]].
+
+----
+===== <span id="modph" style="color:red">ModPH</span>: Modular Counting Hierarchy =====
+The closure of [[#p|P]] under the ∃, ∀, and Mod<sub>''k''</sub> operators. Equivalently, the smallest class ''C'' such that NP<sup>''C''</sup>, coNP<sup>''C''</sup>, and Mod<sub>''k''</sub>P<sup>''C''</sup> are included in ''C'' for each ''k''. Introduced in [[zooref#gkr95|[GKR+95]]].
+
+Contains [[Complexity Zoo:P#ph|PH]] and [[#modkp|Mod<sub>''k''</sub>P]] for each ''k''. Contained in, and low for, [[Complexity Zoo:A#ampmp|AmpMP]] and [[#mp2|MP]].
+
+For a fixed ''m'', the restriction of the class that only allows Mod<sub>''k''</sub> for ''k'' = ''m'' is denoted ModPH<sub>''m''</sub> [[zooref#buss17|[Buss17]]]. Toda’s theorem [[zooref#tod89|[Tod89]]] implies that for prime ''m'', ModPH<sub>''m''</sub> = BP·Mod<sub>''m''</sub>P.
+
+----
+
+===== <span id="modzkl" style="color:red">ModZ<sub>k</sub>L</span>: Restricted [[#modkl|Mod<sub>k</sub>L]] =====
+The class of decision problems solvable by a nondeterministic logspace Turing machine, such that
+<ol>
+<li>If the answer is "yes," then the number of accepting paths is not congruent to 0 mod k.</li>
+<li>If the answer is "no," then there are no accepting paths.</li>
+</ol>
+Defined in [[zooref#bdh92|[BDH+92]]], where it was also shown that ModZ<sub>k</sub>L contains [[Complexity Zoo:L#logfewnl|LogFewNL]] for all k>1.
+
+Contained in [[#modkl|Mod<sub>k</sub>L]] and in [[Complexity Zoo:N#nl|NL]].
+
+----
+===== <span id="mp" style="color:red">mP</span>: Monotone [[Complexity Zoo:P#p|P]] =====
+The definition of this class, due to [[zooref#gs90|[GS90]]], is not obvious.  First, a <i>monotone nondeterministic Turing machine</i> is one such that, whenever it can make a transition with a 0 on its input tape, it can also make that same transition with a 1 on its input tape. (This restriction does not apply to the work tape.)  A <i>monotone alternating Turing machine</i> is subject to the restriction that it can only reference an input bit x by, "there exists a z at most x," or "for all z at least x."
+
+Then applying the result of [[zooref#cks81|[CKS81]]] that [[Complexity Zoo:P#p|P]] = [[Complexity Zoo:A#al|AL]], mP is defined to be [[#mal|mAL]]: the class of decision problems solvable by a monotone alternating log-space Turing machine.
+
+Actually there's a caveat: A monotone Turing machine or circuit can first negate the <i>entire</i> input, then perform a monotone computation.  That way it becomes meaningful to talk about whether a monotone complexity class is closed under complement.
+
+Strictly contained in [[#mnp|mNP]] [[zooref#raz85|[Raz85]]].
+
+Deciding whether a bipartite graph has a perfect matching, despite being both a monotone problem and in [[Complexity Zoo:P#p|P]], requires monotone circuits of superpolynomial size [[zooref#raz85b|[Raz85b]]].  Letting MONO be the class of monotone problems, it follows that mP is strictly contained in MONO &#8745; [[Complexity Zoo:P#p|P]].
+
+See also: [[#mnc1|mNC<sup>1</sup>]], [[#ml|mL]], [[#mnl|mNL]], [[#mconl|mcoNL]].
+
+----
+===== <span id="mp2" style="color:red">MP</span>: Middle-Bit [[Complexity Zoo:P#p|P]] =====
+The class of decision problems such that for some [[Complexity Zoo:Symbols#sharpp|#P]] function f, the answer on input x is 'yes' if and only if the middle bit of f(x) is 1.
+
+Defined in [[zooref#gkr95|[GKR+95]]].
+
+Contains [[Complexity Zoo:A#ampmp|AmpMP]], and [[#modph|ModPH]], which is low for both AmpMP and MP. Contained in [[Complexity Zoo:P#psharpp1|P<sup>#P[1]</sup>]].
+
+MP with [[#modp|ModP]] oracle equals MP with [[Complexity Zoo:Symbols#sharpp|#P]] oracle [[zooref#kt96|[KT96]]].
+
+----
+
+===== <span id="mpc" style="color:red">MPC</span>: Monotone Planar Circuits =====
+The class of decision problems solvable by a family of <i>monotone stratified planar circuits</i> (a uniformity condition may also be imposed).
+
+Such a circuit can contain only AND and OR gates of bounded fanin.  It must be embeddable in the plane with no wires crossing.  Furthermore, the input bits can only be accessed at the bottom level, where they are listed in order (x<sub>1</sub>,...,x<sub>n</sub>).
+
+Defined in [[zooref#dc89|[DC89]]].
+
+[[zooref#blm99|[BLM+99]]] showed that we can assume without loss of generality that the circuit has width n and depth n<sup>3</sup>.
+
+----
+===== <span id="mppoly" style="color:red">mP/poly</span>: Monotone [[Complexity Zoo:P#ppoly|P/poly]] =====
+The class of decision problems solvable by a nonuniform family of polynomial-size Boolean circuits with only AND and OR gates, no NOT gates.  (Or rather, following the definitions of [[zooref#gs90|[GS90]]], the entire input can be negated as long as there are no other negations.)
+
+More straightforward to define than [[#mp|mP]].
+
+----
+===== <span id="mtc0" style="color:red">mTC<sup>0</sup></span>: Monotone [[Complexity Zoo:T#tc0|TC<sup>0</sup>]] =====
+The class of decision problems solvable by a family of monotone [[Complexity Zoo:T#tc0|TC<sup>0</sup>]] circuits (i.e. constant-depth, polynomial-size, AND, OR, and threshold gates, but no NOT gates).
+
+A uniformity condition could also be imposed.
+
+Defined in [[zooref#gs90|[GS90]]].
+
+Strictly contained in [[#mnc1|mNC<sup>1</sup>]] [[zooref#yao89|[Yao89]]].

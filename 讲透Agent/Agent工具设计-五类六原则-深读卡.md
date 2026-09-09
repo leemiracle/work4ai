@@ -120,7 +120,7 @@
 
 - **上游**：[02-工具调用工程](./02-工具调用工程.md)（描述/schema/粒度/MCP/Code Action 的实验层——本卡的"怎么写描述"细节在那）；[讲透Prompt/03 结构化输出](./讲透Prompt/03-结构化输出与函数调用.md)
 - **平行**：[讲透Skills](./讲透Skills/README.md)（3.1 专用vs Skill 的 Skill 侧全解）；[讲透Harness](../讲透Harness/README.md)（T 组件在六组件中的位置；§2.1 工具表=其 Ch11 活案例）；[讲透Context](../讲透Context/README.md)（3.3 通用性的 token 经济学=其 Ch04 组装）
-- **下游**：[deepseek-agent-harness/](../deepseek-agent-harness/)（13 工具活案例）；[讲透Agent/05-自进化延伸](./05-自进化延伸.md)（Skill 库当工程对象=进化闭环素材）
+- **下游**：[deepseek-agent-harness/](../deepseek-agent-harness)（13 工具活案例）；[讲透Agent/05-自进化延伸](./05-自进化延伸.md)（Skill 库当工程对象=进化闭环素材）
 - **未核实不用**：论述提及的 Simple Notes / Advanced JSON Cards（记忆工具具体指称）未找到独立一手出处，不展开；IATs 的 arXiv 号在检索中仅见残缺引用（"2610.16165"非完整 ID），**按铁律不凭记忆补全**，标"待核"
 
 ---

@@ -63,11 +63,11 @@
 ## 与其他单元的连接
 
 - 上游：[讲透Agent/00-为什么需要Agent](../00-为什么需要Agent.md)（范式）· [02-工具调用工程](../02-工具调用工程.md)（tool 层）
-- 方法论：[harness工程手册](../工程化手册库/harness工程手册/)（L2 的五子系统/四文件来源）· [harness精华合入-总入口](../harness精华合入-总入口.md)
-- 评估先例：[实战案例-RL领域Agent](../实战案例-RL领域Agent/) 的 rl_agent v5（0/24→13/24 评估驱动迭代示范）
-- 领域特化姊妹篇：[实战案例-性能优化Agent](../实战案例-性能优化Agent/)（同一三问题在 GPU/CPU/Linux 性能优化领域的答案：裁判更强的 T0-T2 上手路线 + guard/评估为不变资产 + 反作弊衡量）
+- 方法论：[harness工程手册](../工程化手册库/harness工程手册)（L2 的五子系统/四文件来源）· [harness精华合入-总入口](../harness精华合入-总入口.md)
+- 评估先例：[实战案例-RL领域Agent](../实战案例-RL领域Agent) 的 rl_agent v5（0/24→13/24 评估驱动迭代示范）
+- 领域特化姊妹篇：[实战案例-性能优化Agent](../实战案例-性能优化Agent)（同一三问题在 GPU/CPU/Linux 性能优化领域的答案：裁判更强的 T0-T2 上手路线 + guard/评估为不变资产 + 反作弊衡量）
 - 评估纪律升级（2026-08-24 反哺）：[性能优化Agent/08-方法论反哺实录](../实战案例-性能优化Agent/08-方法论反哺实录.md) + [03c_eval_double.py](./experiments/03c_eval_double.py)——L3 评估环新增**版本交错同轮基线 + 双测四分支 verdict + majority-dummy 下界**（naive 27% 仅 +12pp over dummy=弱证据）；threads=1 greedy 跨进程 bitwise 稳定（0/9 翻转）实证
-- 记忆设计参考：[Agent框架案例/ClaudeCode源码深读](../Agent框架案例/ClaudeCode源码深读/)（无向量库的文件记忆）
+- 记忆设计参考：[Agent框架案例/ClaudeCode源码深读](../Agent框架案例/ClaudeCode源码深读)（无向量库的文件记忆）
 
 ---
 生成：2026-08-24 · 遵守[新卡挂网规范](../../AGENTS.md)（孤儿文件=死亡内容）

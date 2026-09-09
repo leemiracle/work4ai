@@ -1,6 +1,6 @@
 # 🎨 世界顶级艺术院校 · 全课程实战（2026 中国大陆可访问版）
 
-> **一句话定位**：仿照 [`top-physics-courses/`](../top-physics-courses/) 与 [`top-math-courses/`](../top-math-courses/) 的方法论，把全球顶级艺术院校（中国八大美院 + 国际名院）的核心课程，用**费曼学习法**还原为可理解、可实践、可衔接的知识体系。
+> **一句话定位**：仿照 [`top-physics-courses/`](../top-physics-courses) 与 [`top-math-courses/`](../top-math-courses) 的方法论，把全球顶级艺术院校（中国八大美院 + 国际名院）的核心课程，用**费曼学习法**还原为可理解、可实践、可衔接的知识体系。
 >
 > **与前三套的关系**：物理版（自然规律）/ 数学版（数学原理）/ 经济金融版（会反思你的人）→ **艺术版（研究「美与表达」）**。艺术是唯一一个**没有客观对错**的领域——它的核心是**张力**而非**真理**。
 
@@ -97,7 +97,7 @@
 | **🌗 阴阳家** | 留白与笔墨 = 阴阳虚实；干湿浓淡 = 阴阳消长 |
 | **📜 儒家** | "文以载道" = 他律艺术；文人修养 = 诗书画印 |
 
-> 📌 **学习入口**：[`讲透AIfor各学科/艺术`](../讲透AIfor各学科/艺术/) + 央美/国美在中国大学MOOC 开的中国美术史课（可访问）。
+> 📌 **学习入口**：[`讲透AIfor各学科/艺术`](../讲透AIfor各学科/艺术) + 央美/国美在中国大学MOOC 开的中国美术史课（可访问）。
 
 ---
 
@@ -174,9 +174,9 @@
 | **⑤ 音乐与声音** | 听得见的数学（毕达哥拉斯→序列主义）| 调性 vs 无调性 | 央音公开课 / B站乐理 |
 | **⑥ 戏剧与舞蹈** | 用身体思考（亚里士多德《诗学》）| 模仿 vs 表现 | 中戏公开课 / 林怀民云门 |
 | **⑦ 摄影与电影** | 机械复制时代的艺术（本雅明）| 技艺 vs 机械 | 北电公开课 / 贾樟柯电影课 |
-| **⑧ 数字与 AI 艺术** ⭐ | 把创造力交给算法 | **技艺 vs 观念（终极）** | [`讲透生成模型`](../讲透生成模型/) + Stable Diffusion |
+| **⑧ 数字与 AI 艺术** ⭐ | 把创造力交给算法 | **技艺 vs 观念（终极）** | [`讲透生成模型`](../讲透生成模型) + Stable Diffusion |
 
-> ⭐ **第 8 主题 = 弯道超车**（呼应 [`top-physics-courses/ai_for_physics/`](../top-physics-courses/ai_for_physics/)）。**可跑 demo**：[`ai_for_art/art_demos.py`](ai_for_art/art_demos.py)（黄金比例/色彩/透视/分形/风格迁移概念，纯标准库）。
+> ⭐ **第 8 主题 = 弯道超车**（呼应 [`top-physics-courses/ai_for_physics/`](../top-physics-courses/ai_for_physics)）。**可跑 demo**：[`ai_for_art/art_demos.py`](ai_for_art/art_demos.py)（黄金比例/色彩/透视/分形/风格迁移概念，纯标准库）。
 
 ---
 
@@ -235,7 +235,7 @@ top-art-courses/
 
 附加：
 - **不足层**——这场运动/这件作品的批评、局限、被颠覆的方式（**艺术特有且最重要**）
-- **应用层**——与设计/媒体/AI 创作的具体关联（对接 [`讲透生成模型`](../讲透生成模型/)）
+- **应用层**——与设计/媒体/AI 创作的具体关联（对接 [`讲透生成模型`](../讲透生成模型)）
 
 ---
 
@@ -253,7 +253,7 @@ top-art-courses/
 
 ## 11. AI for Art：你的弯道超车主题
 
-> 艺术的「AI 原生」弯道超车 = 物理版的 `ai_for_physics/`。详见 `ai_for_art/ai_for_art.md`（待写/未落盘） + [`讲透AIfor各学科/艺术`](../讲透AIfor各学科/艺术/)。
+> 艺术的「AI 原生」弯道超车 = 物理版的 `ai_for_physics/`。详见 `ai_for_art/ai_for_art.md`（待写/未落盘） + [`讲透AIfor各学科/艺术`](../讲透AIfor各学科/艺术)。
 
 **6 大子方向**：
 
@@ -261,7 +261,7 @@ top-art-courses/
 |---|---|---|---|
 | **生成模型** | 文生图/视频 | **Stable Diffusion / Midjourney / DALL-E / Sora** | 开源 SD（本地可跑）/ B站教程 |
 | **神经风格迁移** | 内容+风格分离 | Gatys et al. (2015) | art_demos.py 概念演示 |
-| **CLIP/多模态** | 文图对齐 | Radford et al. (2021) | [`讲透多模态`](../讲透多模态/) |
+| **CLIP/多模态** | 文图对齐 | Radford et al. (2021) | [`讲透多模态`](../讲透多模态) |
 | **代码艺术/生成艺术** | Processing/p5.js/分形 | Casey Reas / 曼德博 | 纯 Python 可做 |
 | **交互/新媒体** | 装置/沉浸式 | teamLab / 国美跨媒体 | — |
 | **AI 艺术伦理版权** | 谁是作者？| "Edmond de Belamy" 拍卖 / 2023-26 诉讼 | 中文讨论丰富 |
@@ -346,13 +346,13 @@ graph TD
 
 | 子目录 | 入口 |
 |---|---|
-| [`bfa-art-courses/`](bfa-art-courses/) | [`SCHOOL.md`](bfa-art-courses/SCHOOL.md) |
-| [`caa-art-courses/`](caa-art-courses/) | [`SCHOOL.md`](caa-art-courses/SCHOOL.md) |
-| [`cad-art-courses/`](cad-art-courses/) | [`SCHOOL.md`](cad-art-courses/SCHOOL.md) |
-| [`cafa-art-courses/`](cafa-art-courses/) | [`SCHOOL.md`](cafa-art-courses/SCHOOL.md) |
-| [`ccom-art-courses/`](ccom-art-courses/) | [`SCHOOL.md`](ccom-art-courses/SCHOOL.md) |
-| [`ensba-art-courses/`](ensba-art-courses/) | [`SCHOOL.md`](ensba-art-courses/SCHOOL.md) |
-| [`florence-art-courses/`](florence-art-courses/) | [`SCHOOL.md`](florence-art-courses/SCHOOL.md) |
-| [`rca-art-courses/`](rca-art-courses/) | [`SCHOOL.md`](rca-art-courses/SCHOOL.md) |
-| [`risd-art-courses/`](risd-art-courses/) | [`SCHOOL.md`](risd-art-courses/SCHOOL.md) |
-| [`tsinghua-art-courses/`](tsinghua-art-courses/) | [`SCHOOL.md`](tsinghua-art-courses/SCHOOL.md) |
+| [`bfa-art-courses/`](bfa-art-courses) | [`SCHOOL.md`](bfa-art-courses/SCHOOL.md) |
+| [`caa-art-courses/`](caa-art-courses) | [`SCHOOL.md`](caa-art-courses/SCHOOL.md) |
+| [`cad-art-courses/`](cad-art-courses) | [`SCHOOL.md`](cad-art-courses/SCHOOL.md) |
+| [`cafa-art-courses/`](cafa-art-courses) | [`SCHOOL.md`](cafa-art-courses/SCHOOL.md) |
+| [`ccom-art-courses/`](ccom-art-courses) | [`SCHOOL.md`](ccom-art-courses/SCHOOL.md) |
+| [`ensba-art-courses/`](ensba-art-courses) | [`SCHOOL.md`](ensba-art-courses/SCHOOL.md) |
+| [`florence-art-courses/`](florence-art-courses) | [`SCHOOL.md`](florence-art-courses/SCHOOL.md) |
+| [`rca-art-courses/`](rca-art-courses) | [`SCHOOL.md`](rca-art-courses/SCHOOL.md) |
+| [`risd-art-courses/`](risd-art-courses) | [`SCHOOL.md`](risd-art-courses/SCHOOL.md) |
+| [`tsinghua-art-courses/`](tsinghua-art-courses) | [`SCHOOL.md`](tsinghua-art-courses/SCHOOL.md) |

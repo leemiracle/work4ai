@@ -1,6 +1,6 @@
 # 00 · 中国大陆可访问艺术资源总指南（本系列核心增值）
 
-> **本文件存在的原因**：[`top-physics-courses`](../../top-physics-courses/) 与 [`top-math-courses`](../../top-math-courses/) 大量引用 YouTube / Google Arts & Culture / Coursera / 英文画册——这些在中国大陆访问困难。本系列**强制要求**：凡引用外部资源，给出中国大陆可访问的等价替代。本文件就是那张"替代总表"。
+> **本文件存在的原因**：[`top-physics-courses`](../../top-physics-courses) 与 [`top-math-courses`](../../top-math-courses) 大量引用 YouTube / Google Arts & Culture / Coursera / 英文画册——这些在中国大陆访问困难。本系列**强制要求**：凡引用外部资源，给出中国大陆可访问的等价替代。本文件就是那张"替代总表"。
 >
 > **使用方式**：当你在某个讲透章节看到"⚠️ 需替代"标记时，回查本文件找替代。
 
@@ -158,10 +158,10 @@
 ```markdown
 **资源**：[作品/课名]
 - ✅ 可访问：[故宫数字文物库链接 / B站BV号 / 中国大学MOOC课名]
-- ⚠️ 原资源（需替代）：[YouTube链接 / 英文书名] → 见 [可访问性指南](../RESOURCES/00_accessibility_guide_cn.md)
+- ⚠️ 原资源（需替代）：[YouTube链接 / 英文书名] → 见 [可访问性指南](00_accessibility_guide_cn.md)
 ```
 
-> 这条规范是本系列区别于 [`top-physics-courses`](../../top-physics-courses/) / [`top-math-courses`](../../top-math-courses/) 的**核心特征**，必须严格遵守。
+> 这条规范是本系列区别于 [`top-physics-courses`](../../top-physics-courses) / [`top-math-courses`](../../top-math-courses) 的**核心特征**，必须严格遵守。
 
 ---
 

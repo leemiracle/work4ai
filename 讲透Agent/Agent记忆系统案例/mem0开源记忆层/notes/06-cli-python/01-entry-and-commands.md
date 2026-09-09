@@ -321,4 +321,4 @@ def render_memory(memory: dict, format: str = "auto"):
 
 ---
 
-📌 **下一步** → [`../07-cli-node/`](../07-cli-node/) Node CLI。
+📌 **下一步** → [`../07-cli-node/`](../07-cli-node) Node CLI。

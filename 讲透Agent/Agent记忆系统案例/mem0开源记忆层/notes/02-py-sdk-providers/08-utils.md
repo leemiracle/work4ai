@@ -351,4 +351,4 @@ python -m spacy download en_core_web_sm
 
 ---
 
-📌 **下一步** → [`../03-py-sdk-client/`](../03-py-sdk-client/) Hosted Platform Client。
+📌 **下一步** → [`../03-py-sdk-client/`](../03-py-sdk-client) Hosted Platform Client。

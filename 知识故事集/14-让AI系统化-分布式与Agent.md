@@ -186,11 +186,11 @@ OpenAI Sora（2024-02）：
 ## 🛠️ 我该深挖什么
 
 ### work4ai 系列
-- [`../讲透分布式AI系统/`](../讲透分布式AI系统/)：DDP / FSDP / ZeRO / TP
-- [`../讲透GPU与系统级/`](../讲透GPU与系统级/)：CUDA / FlashAttention / NCCL
-- [`../讲透Agent/`](../讲透Agent/)：Agent 框架 / ReAct / 多 Agent
-- [`../讲透世界模型/`](../讲透世界模型/)：JEPA / Sora / Dreamer（博士级）
-- [`../讲透形式化验证/`](../讲透形式化验证/)：seL4 → Lean4（与 Agent / 系统结合）
+- [`../讲透分布式AI系统/`](../讲透分布式AI系统)：DDP / FSDP / ZeRO / TP
+- [`../讲透GPU与系统级/`](../讲透GPU与系统级)：CUDA / FlashAttention / NCCL
+- [`../讲透Agent/`](../讲透Agent)：Agent 框架 / ReAct / 多 Agent
+- [`../讲透世界模型/`](../讲透世界模型)：JEPA / Sora / Dreamer（博士级）
+- [`../讲透形式化验证/`](../讲透形式化验证)：seL4 → Lean4（与 Agent / 系统结合）
 
 ### 必读
 - **Shoeybi et al. 2019 "Megatron-LM"**

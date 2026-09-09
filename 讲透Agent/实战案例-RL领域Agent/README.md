@@ -1,14 +1,14 @@
 # 实战案例：RL 领域 Agent（rl_agent v3）——项目知识全融合
 
 > **定位**（采纳多角色审查判词）：讲透Agent × 讲透RL × 讲透Prompt 的可跑缝合器——contextual bandit 内核 + prompt 先验 + **三进化环**（Q表/APO/**Ctx-APO**），30 秒在终端看见 ε-greedy、Reflexion、RLVR、reward hacking、以及 **context 栈本身被奖励信号进化** 的最小形态。
-> **v4 = 同日新增 [harness_rl/](./harness_rl/)**：RL agent 融合 [harness工程手册](../../工程化手册库/harness工程手册/README.md) 全部 12 章技术（六组件 E/T/C/S/L/V + 配置即动作空间的 bandit 内环 + AHE 编辑-预测-回滚外环），并**反哺迭代两类 harness**：v3.1 的 ctx_policy（RL 域靶）与自身 components/（自指靶）。实跑战报与设计卡见 [harness_rl/DESIGN.md](./harness_rl/DESIGN.md)（5 REVERT/2 COMMIT 的可证伪闭环全史）。
+> **v4 = 同日新增 [harness_rl/](./harness_rl)**：RL agent 融合 [harness工程手册](../../工程化手册库/harness工程手册/README.md) 全部 12 章技术（六组件 E/T/C/S/L/V + 配置即动作空间的 bandit 内环 + AHE 编辑-预测-回滚外环），并**反哺迭代两类 harness**：v3.1 的 ctx_policy（RL 域靶）与自身 components/（自指靶）。实跑战报与设计卡见 [harness_rl/DESIGN.md](./harness_rl/DESIGN.md)（5 REVERT/2 COMMIT 的可证伪闭环全史）。
 > 宪法：纯标准库零依赖 · demo 1.8s · toy 简化处全部诚实标注。
 > v2 = 2026-08-17 五角色审查（[多角色审查报告](./多角色审查报告-RL领域Agent.md)）后大修版：P0×6/P1×13 全修。
 > v3 = 2026-08-17 同日增量：**融合 context 技术全集为可进化配置**（CtxPolicy 五维：检索深度/记忆预算/步数预算/路由/bookend）+ **第三进化环 Ctx-APO**（agent 迭代自己的 context 栈，MemAgent arXiv:2507.02259 思想 toy 版）+ **kb_curate**（实验结论固化回 kb，episodic→semantic，agent 迭代 RL 领域知识）。
 > v3.1 = 同日五角色二审（oracle/security/councillor/perf + 主审计）：修 P0×2（eval 隔离假/塑形退化→字典序）+ P1×6（CTX_F 读回生效/缓存同步失效/卡片投毒净化/ev_ref 截断漏固化/glm_ctx_apo 挂链/元数据）。审查发现记录于 [GLM-CtxAPO实验报告.md](./GLM-CtxAPO实验报告.md) §审查。
 > v3.2 = 同日路线图落地：**debate 双 agent 对抗验证**（P 提案 bandit × C 规则挑战，映射 #31）。
 > v3.3 = 同日 **verl/verl_tool 三层集成**（映射 #32）：任务环境接入 verl_tool 协议（L1 本地实测）+ exp_grpo vs verl GRPO 读码对照（L2）+ GPU 配方（L3 待卡）。
-> v5 = 2026-08-19 **逆向激活工程 rae**（[逆向激活工程/](./逆向激活工程/)）：把两条观察规律形式化为**激活层谱**（Prompt→Skills→Context→LoRA→参数：越近自然语言越易解释越随机，越近参数越确定越难改），然后**逆向**——以参数态工件为能力参照物，RL 搜索等效软层工件。旗舰 exp2：多模态 LoRA（模拟直通）→ skill（glm-5.3+UCB1 实跑 51 调用/175s），裸模型 0% 证实能力缺失，skill 路线决赛 **100% 追平** LoRA 模拟且查询仅 14 tok/题，自动生成符合开放标准的 `generated_SKILL.md`；exp1 层谱定律 toy 验证（含反直觉铁证：RAG 确定性 100% 但组合泛化任务准确率仅 55%——确定≠准确）。
+> v5 = 2026-08-19 **逆向激活工程 rae**（[逆向激活工程/](./逆向激活工程)）：把两条观察规律形式化为**激活层谱**（Prompt→Skills→Context→LoRA→参数：越近自然语言越易解释越随机，越近参数越确定越难改），然后**逆向**——以参数态工件为能力参照物，RL 搜索等效软层工件。旗舰 exp2：多模态 LoRA（模拟直通）→ skill（glm-5.3+UCB1 实跑 51 调用/175s），裸模型 0% 证实能力缺失，skill 路线决赛 **100% 追平** LoRA 模拟且查询仅 14 tok/题，自动生成符合开放标准的 `generated_SKILL.md`；exp1 层谱定律 toy 验证（含反直觉铁证：RAG 确定性 100% 但组合泛化任务准确率仅 55%——确定≠准确）。
 
 ---
 
@@ -113,7 +113,7 @@ graph TD
 | 29 | **Ctx-APO 环 ⭐⭐** | `ctx-apo`：变异 CtxPolicy→RLVR+成本塑形→贪心保留；demo 实测 v0 0.92→记忆关闭 0.93→检索收紧 0.94（toy 真实 Pareto） | MemAgent×GEPA 精神交集 |
 | 30 | **kb_curate 知识固化** | 实验成功→结论卡写 `memory/kb_generated/`→下轮 kb_search 命中（实测第二轮第一击命中）——episodic→semantic | 讲透Agent/04 |
 | 31 | **debate 双 agent 对抗验证** | `debate`：P 提案（rank 选择=bandit）vs C 挑战（引用真伪+行质量）；demo 实测 3 轮涌现——P 被击倒后学会弃标题行改提实质行（Q[rank0]0.35→Q[rank1]0.76）——挑战从系统触发器变独立角色 | 讲透Agent/06·多智能体 |
-| 32 | **verl/verl_tool 集成**（三层） | [`verl_bridge/`](./verl_bridge/)：L1 环境接入（4 动作 tag 协议+RLVR 外部判分，14 项协议测试过+官方 get_tool_cls 注册验证）/ L2 exp_grpo vs verl GRPO 读码对照（Dr.GRPO 开关同源）/ L3 GPU 配方（Qwen2.5-1.5B+GRPO，本机无卡待跑）——同一任务环境，A/B 两种进化引擎 | verl core_algos.py:268 |
+| 32 | **verl/verl_tool 集成**（三层） | [`verl_bridge/`](./verl_bridge)：L1 环境接入（4 动作 tag 协议+RLVR 外部判分，14 项协议测试过+官方 get_tool_cls 注册验证）/ L2 exp_grpo vs verl GRPO 读码对照（Dr.GRPO 开关同源）/ L3 GPU 配方（Qwen2.5-1.5B+GRPO，本机无卡待跑）——同一任务环境，A/B 两种进化引擎 | verl core_algos.py:268 |
 
 ## 四、三层讲透（宪法合规·v2 诚实版）
 
@@ -141,4 +141,4 @@ graph TD
 ~~debate 双 agent~~ ✅ v3.2 已落地（映射 #31）；**verl/verl_tool 集成** ✅ v3.3 已落地 L1+L2（映射 #32，L3 待 GPU 机）。待做：n-step 轨迹级 credit / mcts_planner / arxiv_verify 联网核实 / RLHF-RM toy / debate 的 LLM 版挑战者。
 
 ---
-v3：2026-08-17 · context 融合 + Ctx-APO + kb_curate（MemAgent arXiv:2507.02259 思想）· v2 审查闭环见 [多角色审查报告](./多角色审查报告-RL领域Agent.md) · 姊妹案例：[Open-AutoGLM](../实战案例-Open-AutoGLM手机Agent/)（读生产项目）、[DeepSeek Harness](../Agent框架案例/deepseek-harness插件化框架/)（读工业框架）、**本案例**（自己写一个）
+v3：2026-08-17 · context 融合 + Ctx-APO + kb_curate（MemAgent arXiv:2507.02259 思想）· v2 审查闭环见 [多角色审查报告](./多角色审查报告-RL领域Agent.md) · 姊妹案例：[Open-AutoGLM](../实战案例-Open-AutoGLM手机Agent)（读生产项目）、[DeepSeek Harness](../Agent框架案例/deepseek-harness插件化框架)（读工业框架）、**本案例**（自己写一个）

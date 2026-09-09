@@ -416,8 +416,8 @@ python_sdk:
 | 想看 | 去哪 |
 |------|------|
 | 双模式（OSS vs Hosted）API 对比 | [`05-two-modes.md`](./05-two-modes.md) |
-| Python SDK 核心引擎 | [`01-py-sdk-core/`](../01-py-sdk-core/) |
-| Server 怎么实现 | [`05-server/`](../05-server/) |
+| Python SDK 核心引擎 | [`01-py-sdk-core/`](../01-py-sdk-core) |
+| Server 怎么实现 | [`05-server/`](../05-server) |
 
 ---
 

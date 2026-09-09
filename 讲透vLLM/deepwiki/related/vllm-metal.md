@@ -15,7 +15,7 @@ Relevant source files
 
 ## Purpose and Scope
 
-This page provides a high-level introduction to vLLM Metal, a plugin that enables vLLM to run high-performance large language model (LLM) inference on Apple Silicon hardware. It covers the system's purpose, architecture, design principles, and core components. For installation instructions, see [Getting Started](/vllm-project/vllm-metal/2-getting-started). For detailed component documentation, see [Core Components](/vllm-project/vllm-metal/4-core-components). For performance optimization details, see [Performance Optimization](/vllm-project/vllm-metal/5-performance-optimization).
+This page provides a high-level introduction to vLLM Metal, a plugin that enables vLLM to run high-performance large language model (LLM) inference on Apple Silicon hardware. It covers the system's purpose, architecture, design principles, and core components. For installation instructions, see [Getting Started](../../../../../vllm-project/vllm-metal/2-getting-started). For detailed component documentation, see [Core Components](../../../../../vllm-project/vllm-metal/4-core-components). For performance optimization details, see [Performance Optimization](../../../../../vllm-project/vllm-metal/5-performance-optimization).
 
 ## What is vLLM Metal?
 
@@ -106,7 +106,7 @@ Component| File| Purpose
 `MetalConfig`| [vllm_metal/config.py](https://github.com/vllm-project/vllm-metal/blob/c1a78599/vllm_metal/config.py)| Configuration management, environment variables  
 `BatchKVCache`| [vllm_metal/mlx_backend/batch_cache.py](https://github.com/vllm-project/vllm-metal/blob/c1a78599/vllm_metal/mlx_backend/batch_cache.py)| KV cache merging for batched inference  
   
-For detailed documentation of each component, see [Core Components](/vllm-project/vllm-metal/4-core-components).
+For detailed documentation of each component, see [Core Components](../../../../../vllm-project/vllm-metal/4-core-components).
 
 **Sources:** [README.md36-40](https://github.com/vllm-project/vllm-metal/blob/c1a78599/README.md?plain=1#L36-L40) [vllm_metal/__init__.py12-54](https://github.com/vllm-project/vllm-metal/blob/c1a78599/vllm_metal/__init__.py#L12-L54)
 
@@ -184,7 +184,7 @@ Variable| Default| Purpose
 `VLLM_METAL_BLOCK_SIZE`| `16`| KV cache block size in tokens  
 `VLLM_METAL_DEBUG`| `0`| Enable verbose debug logging  
   
-For detailed configuration documentation, see [Configuration](/vllm-project/vllm-metal/2.2-configuration).
+For detailed configuration documentation, see [Configuration](../../../../../vllm-project/vllm-metal/2.2-configuration).
 
 **Sources:** [README.md63-74](https://github.com/vllm-project/vllm-metal/blob/c1a78599/README.md?plain=1#L63-L74)
 
@@ -198,15 +198,15 @@ This pipeline has three distinct phases:
   2. **Decode** : Autoregressive generation of subsequent tokens
   3. **Cleanup** : Free KV cache blocks on request completion
 
-For detailed pipeline documentation, see [Inference Pipeline](/vllm-project/vllm-metal/6-inference-pipeline).
+For detailed pipeline documentation, see [Inference Pipeline](../../../../../vllm-project/vllm-metal/6-inference-pipeline).
 
 **Sources:** High-Level Architecture Diagram 3, Diagram 6
 
 ## Next Steps
 
-  * **Installation** : See [Installation](/vllm-project/vllm-metal/2.1-installation) for setup instructions
-  * **Configuration** : See [Configuration](/vllm-project/vllm-metal/2.2-configuration) for environment variable details
-  * **Architecture Deep Dive** : See [Architecture](/vllm-project/vllm-metal/3-architecture) for design rationale
-  * **Component Details** : See [Core Components](/vllm-project/vllm-metal/4-core-components) for class documentation
-  * **Performance** : See [Performance Optimization](/vllm-project/vllm-metal/5-performance-optimization) for Rust extensions and batching strategies
-  * **Development** : See [Development](/vllm-project/vllm-metal/7-development) for contributing guidelines
+  * **Installation** : See [Installation](../../../../../vllm-project/vllm-metal/2.1-installation) for setup instructions
+  * **Configuration** : See [Configuration](../../../../../vllm-project/vllm-metal/2.2-configuration) for environment variable details
+  * **Architecture Deep Dive** : See [Architecture](../../../../../vllm-project/vllm-metal/3-architecture) for design rationale
+  * **Component Details** : See [Core Components](../../../../../vllm-project/vllm-metal/4-core-components) for class documentation
+  * **Performance** : See [Performance Optimization](../../../../../vllm-project/vllm-metal/5-performance-optimization) for Rust extensions and batching strategies
+  * **Development** : See [Development](../../../../../vllm-project/vllm-metal/7-development) for contributing guidelines

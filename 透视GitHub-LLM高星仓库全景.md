@@ -110,7 +110,7 @@ datawhalechina 6 仓（hello-agents 73K、self-llm、happy-llm、llm-cookbook、
 
 **⑥ 提示词泄露/越狱是 LLM 特有的安全学，攻防两侧都被 star 承认。** 攻：system_prompts_leaks 62.9K + L1B3RT4S 21.0K（越狱提示集）+ heretic 27.6K（自动去除审查）；防：Anthropic-Cybersecurity-Skills 27.8K（817 个结构化安全技能）；红队工具化：promptfoo 24.2K + PentestGPT 14.9K + hexstrike 11.0K ≈ **合计 18 万星**。「研究别人怎么给产品写 system prompt」在 llm 域是被 star 承认的学科。对应 [`欺骗动力学-检测Prompt库.md`](./欺骗动力学-检测Prompt库.md)。
 
-**⑦ topic 是注意力市场，有 3.75% 的熵——且榜首揭示了新王。** 9 个非 LLM 原生仓（ray/kubesphere/casdoor/doocs-md/gitleaks/Halfrost-Field 等）靠自打 llm 标签蹭进榜单，做生态研究必须显式剥离（本文设 14 类兜底）。更重要的信号：**榜首 ECC 240K 不是模型、不是框架，而是「给 Claude Code/Codex 等编码 Agent 做训练与性能优化的 harness 系统」**——元工具（训练 Agent 的工具）登顶，与 ai 域观察的「harness 成为新共识词」互证。对应 [`讲透Agent/`](./讲透Agent/) 与 [`Agent架构模式参考/`](./Agent架构模式参考/)。
+**⑦ topic 是注意力市场，有 3.75% 的熵——且榜首揭示了新王。** 9 个非 LLM 原生仓（ray/kubesphere/casdoor/doocs-md/gitleaks/Halfrost-Field 等）靠自打 llm 标签蹭进榜单，做生态研究必须显式剥离（本文设 14 类兜底）。更重要的信号：**榜首 ECC 240K 不是模型、不是框架，而是「给 Claude Code/Codex 等编码 Agent 做训练与性能优化的 harness 系统」**——元工具（训练 Agent 的工具）登顶，与 ai 域观察的「harness 成为新共识词」互证。对应 [`讲透Agent/`](./讲透Agent) 与 [`Agent架构模式参考/`](./Agent架构模式参考)。
 
 ---
 
@@ -131,10 +131,10 @@ datawhalechina 6 仓（hello-agents 73K、self-llm、happy-llm、llm-cookbook、
 | [`讲透LLM/`](./讲透LLM/README.md) | 全链镜像：01/02/03 类 ↔ 00-05 篇目 |
 | [`讲透RAG/`](./讲透RAG/README.md) | 06 类：向量/图/无向量/LEANN 范式之争全谱系 |
 | [`讲透记忆/`](./讲透记忆/README.md) | 07 类：8 仓 22 万星 + 腾讯产品化 |
-| [`讲透Agent/`](./讲透Agent/) · [`讲透多Agent协作/`](./讲透多Agent协作/README.md) | 04/05 类：编排 + harness 产业链（ECC 登顶） |
+| [`讲透Agent/`](./讲透Agent) · [`讲透多Agent协作/`](./讲透多Agent协作/README.md) | 04/05 类：编排 + harness 产业链（ECC 登顶） |
 | [`讲透上下文缓存/`](./讲透上下文缓存/README.md) | 08 类：token 经济学 ≈38 万星 |
-| [`讲透微调/`](./讲透微调/) | 02 类：LlamaFactory/unsloth/peft/ms-swift |
-| [`讲透Prompt/`](./讲透Prompt/) | 09/12 类：promptfoo/prompt-optimizer/prompts.chat |
+| [`讲透微调/`](./讲透微调) | 02 类：LlamaFactory/unsloth/peft/ms-swift |
+| [`讲透Prompt/`](./讲透Prompt) | 09/12 类：promptfoo/prompt-optimizer/prompts.chat |
 | [`讲透代码生成/`](./讲透代码生成/README.md) | 05 类 23 仓：编码 Agent 食物链 |
 | [`欺骗动力学`](./欺骗动力学-检测Prompt库.md) | 11 类：泄露/越狱/红队攻防 |
 | [`用例库/`](./用例库/README.md) | 44 仓已在 topic:ai 深读，重叠仓用例卡直接复用 |

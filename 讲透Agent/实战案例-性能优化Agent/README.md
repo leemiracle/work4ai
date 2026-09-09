@@ -2,7 +2,7 @@
 
 > **目标场景**：设计一个用于 GPU、CPU 等设备性能优化的 Agent，底层 Linux。
 > **为什么值得单开一个单元**：性能优化是**可验证性最强的 agent 场景**——编译通过？数值正确？跑分快慢？三重裁判全是机器可判、毫秒级反馈、零标注成本。它同时是 2025–2026 agent 领域爆发最快的方向之一（NVIDIA/AMD/Meta/字节/MIT-HAN 都已下场），有大量一手 harness 可以借用，而不是从零造。
-> **定位**：这是 [实践阶梯](../实践阶梯/)（端侧记忆 Agent）的**领域特化姊妹篇**——同一套方法论（四问决策树/harness 五子系统/评估环/插槽化），换到"裁判最强、reward hacking 最凶"的领域重演一遍。
+> **定位**：这是 [实践阶梯](../实践阶梯)（端侧记忆 Agent）的**领域特化姊妹篇**——同一套方法论（四问决策树/harness 五子系统/评估环/插槽化），换到"裁判最强、reward hacking 最凶"的领域重演一遍。
 >
 > 生成：2026-08-24 · 引用全部来自当日 websearch 一手结果（arXiv HTML / GitHub README / 官方 leaderboard），未凭记忆。
 
@@ -20,8 +20,8 @@
 | 06 | [v2 战役与 GPU 线启动卡](./06-v2战役与GPU线启动卡.md) | re-baseline/容差分层/transformers 真负载(默认配置差 5.8×)/**E4 军备竞赛矩阵**(指针键 467× 绕过内容扰动,对象轮换双杀)/AKO4X 克隆+四步接入卡 | ✅ |
 | 07 | [CPU 线收官实录](./07-CPU线收官实录.md) | 双测协议(keep 需两次独立命中)+Qwen 常驻 server(load 1.3s)/**铁律#1 三级实证收官**(qwen0.5B 默认 8 线程 vs 1 线程差 1.42-1.73×,LLM 前向 thread-adverse) | ✅ CPU 线收官 |
 | 08 | [方法论反哺实录](./08-方法论反哺实录.md) | perfagent 测量纪律 → LLM 评估环：同轮基线/双测四分支 verdict/dummy 下界探针(naive 27% 成色=仅+12pp 弱证据) | ✅ |
-| — | [perfagent/](./perfagent/) | v3 ~950 行可运行全链路（10 模块，含 resident.py 常驻 server；双测 keep 协议）；[experiments/perfagent/](./experiments/perfagent/) 全部产物 | ✅ 已跑通 |
-| — | [experiments/perfloop/](./experiments/perfloop/) | 247 行教具：propose→validate→apply→measure→guard→keep/revert + win/trap 库 + LLM 插槽 | ✅ 已跑通 |
+| — | [perfagent/](./perfagent) | v3 ~950 行可运行全链路（10 模块，含 resident.py 常驻 server；双测 keep 协议）；[experiments/perfagent/](./experiments/perfagent) 全部产物 | ✅ 已跑通 |
+| — | [experiments/perfloop/](./experiments/perfloop) | 247 行教具：propose→validate→apply→measure→guard→keep/revert + win/trap 库 + LLM 插槽 | ✅ 已跑通 |
 
 ---
 
@@ -98,7 +98,7 @@ propose（生成一个候选：kernel 代码 / sysctl 配置）
 | **T0** 跑通裁判 | 克隆 KernelBench，`scripts/run_and_check.py` 跑 1 个任务的评估（`eval_mode=local`，无 GPU 可用 Modal 云端） | KernelBench | 半天 | ✅ **2026-08-24 完成**（本机 CPU-only 做解剖+CPU 复刻，见 [01](./01-KernelBench裁判解剖.md)；GPU 真跑命令已存档其 §六） |
 | **T1** 看现成 agent 打擂台 | 装 AgentKernelArena，让 Claude Code/Codex 之一跑同一批任务，看轨迹 | AgentKernelArena | 1–2 天 | 🔴 方法论已落卡（[02](./02-A:B实验方法论卡.md)）；真跑需 HIP/GPU 环境 |
 | **T2** 改别人的 harness | fork AKO4X 或 KernelAgent，做一个最小改动（加一个 SKILL / 换一个 benchmark / 改一条 guard 规则） | AKO4X 的 `templates/skills/`（丢一个文件夹即扩展）/ benchmark adapter 单接缝 | 1 周 | 🔶 备料完成：AKO4X 已克隆 `~/ai/AKO4X`，四步接入卡见 [06§六](./06-v2战役与GPU线启动卡.md)；真跑需 GPU 环境 |
-| **T-自建** 全链路 PerfAgent | **本单元核心交付物**：自建 CPU 线全链路 agent 并跑验收战役 | [perfagent/](./perfagent/)（04 设计/05 实录） | — | ✅ **2026-08-24 完成**（154 次评估 + E1/E2/E3 三实验 + 真 LLM 参战；GPU 扩展位已留：impl 插槽→KernelBench 式实现提交，感官→NCU，见 04 §五） |
+| **T-自建** 全链路 PerfAgent | **本单元核心交付物**：自建 CPU 线全链路 agent 并跑验收战役 | [perfagent/](./perfagent)（04 设计/05 实录） | — | ✅ **2026-08-24 完成**（154 次评估 + E1/E2/E3 三实验 + 真 LLM 参战；GPU 扩展位已留：impl 插槽→KernelBench 式实现提交，感官→NCU，见 04 §五） |
 
 ### 2.3 CPU-first 现实路径（本机无 GPU 时的完整闭环）
 
@@ -179,7 +179,7 @@ B 线证明 CPU/OS 层完全是独立战场，且**本机 Linux 就能跑**：
 
 ### 3.4 组装：PerfAgent 参考蓝图
 
-用 [harness工程手册](../工程化手册库/harness工程手册/) 六组件映射到性能优化场景：
+用 [harness工程手册](../工程化手册库/harness工程手册) 六组件映射到性能优化场景：
 
 ```
 ┌─ 模型层（插槽）：API 大模型 / 本地小模型；换模型不改任何下层
@@ -246,7 +246,7 @@ B 线证明 CPU/OS 层完全是独立战场，且**本机 Linux 就能跑**：
 ### 4.3 评估驱动迭代的工作流
 
 1. 定 10–20 个固定任务 + 协议（含硬件状态锁定）→ 2. baseline 跑分存档 → 3. 每个设计改动跑 A/B → 4. 改动分级：净增益合入 / 无效丢弃 / 记入 trap 库 → 5. 每轮把新发现的作弊手法加入检查清单。
-与 [rl_agent v5](../实战案例-RL领域Agent/) 的评估驱动迭代（0/24→13/24）同构——先有裁判，再有agent。
+与 [rl_agent v5](../实战案例-RL领域Agent) 的评估驱动迭代（0/24→13/24）同构——先有裁判，再有agent。
 
 ---
 
@@ -258,8 +258,8 @@ B 线证明 CPU/OS 层完全是独立战场，且**本机 Linux 就能跑**：
 
 ## 6. 与项目内资产的互链
 
-- 方法论底座：[harness工程手册](../工程化手册库/harness工程手册/)（六组件/最小实现）· [harness精华合入-总入口](../harness精华合入-总入口.md)（五子系统/四层栈）
-- 姊妹单元：[实践阶梯](../实践阶梯/)（同一三问题的端侧版；L1-L5 ↔ T0-T2 对应表见 §2.4）
-- substrate 参考：[ClaudeCode源码深读](../Agent框架案例/ClaudeCode源码深读/)（AKO4X 的 substrate 正是 Claude Code：queryLoop 状态机/压缩/防线）
-- 工具协议：[MCP协议生态全景](../Agent框架案例/MCP协议生态全景/)（SchedCP/LumOS 都以 MCP 为工具面——2026-07-28 无状态化后的实践样本）
-- 评估先例：[实战案例-RL领域Agent](../实战案例-RL领域Agent/)（评估驱动迭代）
+- 方法论底座：[harness工程手册](../工程化手册库/harness工程手册)（六组件/最小实现）· [harness精华合入-总入口](../harness精华合入-总入口.md)（五子系统/四层栈）
+- 姊妹单元：[实践阶梯](../实践阶梯)（同一三问题的端侧版；L1-L5 ↔ T0-T2 对应表见 §2.4）
+- substrate 参考：[ClaudeCode源码深读](../Agent框架案例/ClaudeCode源码深读)（AKO4X 的 substrate 正是 Claude Code：queryLoop 状态机/压缩/防线）
+- 工具协议：[MCP协议生态全景](../Agent框架案例/MCP协议生态全景)（SchedCP/LumOS 都以 MCP 为工具面——2026-07-28 无状态化后的实践样本）
+- 评估先例：[实战案例-RL领域Agent](../实战案例-RL领域Agent)（评估驱动迭代）

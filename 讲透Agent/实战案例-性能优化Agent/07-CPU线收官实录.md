@@ -1,7 +1,7 @@
 # 07 · CPU 线收官实录（v3：双测协议 + Qwen 常驻 server，2026-08-24 第三轮）
 
 > **任务来源**：06 收尾留下的两件 CPU 线收尾——① 候选双测中位 + keep 需两次独立命中（彻底解 512 方差）② Qwen2.5-0.5B 常驻 server 接 runner（bert → 真 LLM 前向负载）。
-> **产物**：[experiments/perfagent/](./experiments/perfagent/)（profile-v3.log / search-v3-qwen.log）+ perfagent v3 代码（campaign.py 双测协议、resident.py 新模块）
+> **产物**：[experiments/perfagent/](./experiments/perfagent)（profile-v3.log / search-v3-qwen.log）+ perfagent v3 代码（campaign.py 双测协议、resident.py 新模块）
 
 ---
 

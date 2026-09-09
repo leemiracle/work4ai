@@ -2,7 +2,7 @@
 
 > 承接 [01-探针与表征几何](./01-探针与表征几何.md)。01 的探针有个根本限制：**只能测你预设的概念**——你问"第 8 层知不知道词性"，它说知道；但它永远不会主动告诉你"第 8 层里还有个' Arabic 数字 vs 罗马数字'的特征"。SAE 就是用来**发现新概念**的工具。
 >
-> 配套：[`讲透基础模型`](../讲透基础模型/) + [`03-Circuits与超级可解释性`](./03-Circuits与超级可解释性.md)
+> 配套：[`讲透基础模型`](../讲透基础模型) + [`03-Circuits与超级可解释性`](./03-Circuits与超级可解释性.md)
 
 ---
 
@@ -194,4 +194,4 @@ def label_feature(sae, feature_idx: int, probe_prompts: list):
 - 下游：[`03-Circuits与超级可解释性`](./03-Circuits与超级可解释性.md)（SAE 找特征，circuits 找特征之间的连线）
 - 元理论：[`故事即世界迭代器-元理论.md`](../故事即世界迭代器-元理论.md) §断言 3（SAE = 把稠密表征分解成可命名故事的迭代器）
 - 理论支柱：Anthropic "Toy Models of Superposition"（Elhage 2022）+ "Towards Monosemanticity"（Bricken 2023）+ "Scaling Monosemanticity"（Templeton 2024）
-- 模型架构基础：[`讲透基础模型`](../讲透基础模型/)（理解 MLP 才能理解为什么 SAE 接在 MLP 输出上）
+- 模型架构基础：[`讲透基础模型`](../讲透基础模型)（理解 MLP 才能理解为什么 SAE 接在 MLP 输出上）

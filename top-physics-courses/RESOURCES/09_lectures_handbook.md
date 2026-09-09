@@ -302,7 +302,7 @@
 6. Kinetic Theory (非平衡, ML 相关)
 7. Mathematical Biology (网络/动力学)
 ```
-然后跳到 [ai_for_physics/](../ai_for_physics/)。
+然后跳到 [ai_for_physics/](../ai_for_physics)。
 
 **产出**：能用物理直觉做 AI for Physics 研究。
 

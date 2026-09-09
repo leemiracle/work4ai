@@ -180,4 +180,4 @@ ezyang 主持的播客，每集一个 PyTorch 内部主题（codegen / native_fu
 
 ---
 
-🔗 **交叉链接**：Stanford CS336 论文精读 · 优化器（AdamW→SOAP→Muon，8 篇），见 [`讲透公开课/06-CS336论文精读/G-优化器.md`](../讲透公开课/06-CS336论文精读/G-优化器.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments/)。
+🔗 **交叉链接**：Stanford CS336 论文精读 · 优化器（AdamW→SOAP→Muon，8 篇），见 [`讲透公开课/06-CS336论文精读/G-优化器.md`](../讲透公开课/06-CS336论文精读/G-优化器.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments)。

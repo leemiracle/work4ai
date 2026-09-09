@@ -299,7 +299,7 @@ Mem0 提供 [migration guide](https://docs.mem0.ai/migration/oss-to-platform)：
 
 > Server **本质就是把 OSS SDK 包成 REST API**：FastAPI + PostgreSQL/pgvector + Neo4j。代码在 `server/main.py` + `server/routers/`。
 >
-> 详见 [`05-server/`](../05-server/) 系列。
+> 详见 [`05-server/`](../05-server) 系列。
 
 ---
 
@@ -351,7 +351,7 @@ import { MemoryClient } from 'mem0ai'
 const m = new MemoryClient({ apiKey: '...' })
 ```
 
-详见 [`04-ts-sdk/`](../04-ts-sdk/) 系列。
+详见 [`04-ts-sdk/`](../04-ts-sdk) 系列。
 
 ---
 
@@ -381,4 +381,4 @@ graph TD
 
 ---
 
-📌 **下一步** → [`01-py-sdk-core/`](../01-py-sdk-core/) 系列，深入 Python SDK 核心引擎。
+📌 **下一步** → [`01-py-sdk-core/`](../01-py-sdk-core) 系列，深入 Python SDK 核心引擎。

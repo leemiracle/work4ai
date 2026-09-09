@@ -50,9 +50,9 @@ This plugin supports a variety of popular large language models, including Trans
 
 For comprehensive details on functionality, hardware support, and system design, please refer to the child pages:
 
-  * [Features and Capabilities](/vllm-project/vllm-ascend/1.1-features-and-capabilities)
-  * [Supported Hardware and Models](/vllm-project/vllm-ascend/1.2-supported-hardware-and-models)
-  * [System Architecture Overview](/vllm-project/vllm-ascend/1.3-system-architecture-overview)
+  * [Features and Capabilities](../../../../../vllm-project/vllm-ascend/1.1-features-and-capabilities)
+  * [Supported Hardware and Models](../../../../../vllm-project/vllm-ascend/1.2-supported-hardware-and-models)
+  * [System Architecture Overview](../../../../../vllm-project/vllm-ascend/1.3-system-architecture-overview)
 
 * * *
 
@@ -160,9 +160,9 @@ Users are encouraged to use `--additional-config` in vLLM commands to pass fine-
 
 This overview lays the foundation for understanding the vLLM-Ascend plugin architecture, its integration with upstream vLLM, and key platform-level details. For deeper technical insights and usage, please refer to the following child pages:
 
-  * [Features and Capabilities](/vllm-project/vllm-ascend/1.1-features-and-capabilities) — Supported attention backends (MLA/SFA/DSA), quantization methods, speculative decoding, distributed execution, and batch scheduling.
-  * [Supported Hardware and Models](/vllm-project/vllm-ascend/1.2-supported-hardware-and-models) — Details on Ascend NPU hardware (A2/A3/310P/A5), compatible model architectures, and version compatibility matrices.
-  * [System Architecture Overview](/vllm-project/vllm-ascend/1.3-system-architecture-overview) — High-level architecture diagrams and detailed flow of platform, worker, model runner, and patch integrations.
+  * [Features and Capabilities](../../../../../vllm-project/vllm-ascend/1.1-features-and-capabilities) — Supported attention backends (MLA/SFA/DSA), quantization methods, speculative decoding, distributed execution, and batch scheduling.
+  * [Supported Hardware and Models](../../../../../vllm-project/vllm-ascend/1.2-supported-hardware-and-models) — Details on Ascend NPU hardware (A2/A3/310P/A5), compatible model architectures, and version compatibility matrices.
+  * [System Architecture Overview](../../../../../vllm-project/vllm-ascend/1.3-system-architecture-overview) — High-level architecture diagrams and detailed flow of platform, worker, model runner, and patch integrations.
 
 * * *
 

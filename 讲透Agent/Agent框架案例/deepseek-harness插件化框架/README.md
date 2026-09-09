@@ -6,7 +6,7 @@
 > 本地克隆：`~/ai/agent/awesome-agents/repos/deepseek-harness`（2026-08-20 自 Windows workspace 迁入）
 > 笔记钉版 HEAD：`141eb6fef8`（2026-08-19，v0.1.0-rc.8，**无兼容性承诺**；旧基线 47f943859b=rc.5，2026-08-13，笔记 00-09 初版行号基于 rc.5，rc.6-8 增量见 10-incremental 分册）
 >
-> 本案例组织方式参照 [`Agent记忆系统案例/mem0开源记忆层`](../../Agent记忆系统案例/mem0开源记忆层/) 的分层笔记约定。
+> 本案例组织方式参照 [`Agent记忆系统案例/mem0开源记忆层`](../../Agent记忆系统案例/mem0开源记忆层) 的分层笔记约定。
 
 ## 为什么值得深读
 
@@ -53,6 +53,6 @@ $ sqlite3 .codegraph/codegraph.db "SELECT kind, COUNT(*) FROM edges GROUP BY kin
 - **命名撞车澄清与本土实践**：本案例是 DeepSeek 官方 dsh；另有一组同姓的本土五成员实践 `work4ai/deepseek-{kernel,rust,rl,llm,agent}-harness`（借 dsh 插件化理念 + 本手册 12 章骨架的领域插件家族，见 [harness工程手册 README 活案例区](../../../工程化手册库/harness工程手册/README.md)）——读 dsh 笔记时勿混淆。
 - **同为"harness 即产品"的对照案例**：[`../openclaw/`](../openclaw/README.md)（38.7 万★个人助手，42 挂点插件面 vs dsh 219 插件包，2026-08-20 快照）——dsh 是编码 harness 的插件化，openclaw 是个人助手 harness 的插件化。**双案例系统对照**：[`../openclaw-vs-dsh对照卡.md`](../openclaw-vs-dsh对照卡.md)（记忆/上下文/压缩/子代理/决策制度五维两极对照，2026-08-21）
 - 欺骗动力学视角（反欺骗四机制解剖）：[`欺骗动力学-AI纪实验包.md`](../../欺骗动力学-AI纪实验包.md) 实验 5
-- Agent 记忆案例对照：[`Agent记忆系统案例/mem0开源记忆层`](../../Agent记忆系统案例/mem0开源记忆层/)
+- Agent 记忆案例对照：[`Agent记忆系统案例/mem0开源记忆层`](../../Agent记忆系统案例/mem0开源记忆层)
 - 讲透Agent 实战篇已收录本案例：[`讲透Agent/README.md`](../../讲透Agent/README.md)
 - 用例库（279 仓横向谱系）定位参考：[`用例库/README.md`](../../用例库/README.md) 之"透视Agent系统工程"行——dsh 不在 279 快照内（发布于快照后），作为官方旗舰特写补充

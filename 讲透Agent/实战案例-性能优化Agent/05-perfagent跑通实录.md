@@ -1,7 +1,7 @@
 # 05 · perfagent 全链路跑通实录（2026-08-24）
 
 > **地位**：perfagent（04 设计）的验收战役——154 次真实评估、3 个实验（E1 红队/E2 提议器 A/B/E3 双 knob）、真 LLM（glm-5.3，ZHIPU coding 端点）参战。
-> **产物**：[experiments/perfagent/](./experiments/perfagent/)（cards.json / results.jsonl / campaign_report.md / redteam_report.md / 全程 log）
+> **产物**：[experiments/perfagent/](./experiments/perfagent)（cards.json / results.jsonl / campaign_report.md / redteam_report.md / 全程 log）
 > **环境**：aarch64 · 8 物理核无 SMT · Linux · numpy（拓扑来自 cards.json，型号按脱敏规范不录）
 
 ---
@@ -64,4 +64,4 @@ matmul-512 同一配置跨 run 漂移 **3×**（5t: 9.86ms vs 3.34ms；4t: 6.31 
 
 ---
 
-生成：2026-08-24 · 上级 [README](./README.md) · 设计 [04](./04-全链路PerfAgent设计.md) · 数据 [experiments/perfagent/](./experiments/perfagent/)
+生成：2026-08-24 · 上级 [README](./README.md) · 设计 [04](./04-全链路PerfAgent设计.md) · 数据 [experiments/perfagent/](./experiments/perfagent)

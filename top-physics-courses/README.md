@@ -44,12 +44,12 @@ cd cambridge-physics && python3 physics_demos.py   # Cambridge 8 个 demo
 
 > 把费曼/Tong/Berkeley/Landau/Susskind 等**经典讲义**逐本做成导读笔记，整合进项目（不是清单，是内容）。
 
-▶ **[classical_lectures/](classical_lectures/)** 目录，含 **47 本**经典讲义的逐本导读笔记：
-  - **[classical_lectures/tong/](classical_lectures/tong/)** — **David Tong 23 本**（当代费曼，免费，最推荐）。从科普级 *Particle Physics* 到研究生 *QFT/弦论*。含 [tong/README.md](classical_lectures/tong/README.md) 索引 + 3 条阅读路径
-  - **[classical_lectures/feynman/](classical_lectures/feynman/)** — 费曼物理学讲义 FLP 3 卷（免费 feynmanlectures.caltech.edu）
-  - **[classical_lectures/berkeley/](classical_lectures/berkeley/)** — Berkeley Physics Course 5 卷（重点 Purcell Vol2 / Reif Vol5）
-  - **[classical_lectures/landau/](classical_lectures/landau/)** — Landau-Lifshitz 10 卷（研究生圣经）
-  - **[classical_lectures/susskind/](classical_lectures/susskind/)** — 理论最小 6 本（科普→教材桥梁）
+▶ **[classical_lectures/](classical_lectures)** 目录，含 **47 本**经典讲义的逐本导读笔记：
+  - **[classical_lectures/tong/](classical_lectures/tong)** — **David Tong 23 本**（当代费曼，免费，最推荐）。从科普级 *Particle Physics* 到研究生 *QFT/弦论*。含 [tong/README.md](classical_lectures/tong/README.md) 索引 + 3 条阅读路径
+  - **[classical_lectures/feynman/](classical_lectures/feynman)** — 费曼物理学讲义 FLP 3 卷（免费 feynmanlectures.caltech.edu）
+  - **[classical_lectures/berkeley/](classical_lectures/berkeley)** — Berkeley Physics Course 5 卷（重点 Purcell Vol2 / Reif Vol5）
+  - **[classical_lectures/landau/](classical_lectures/landau)** — Landau-Lifshitz 10 卷（研究生圣经）
+  - **[classical_lectures/susskind/](classical_lectures/susskind)** — 理论最小 6 本（科普→教材桥梁）
   - 模板：[classical_lectures/TEMPLATE.md](classical_lectures/TEMPLATE.md)（每本笔记的标准结构）
 
 ### 🎯 想成为顶级物理专家（差距分析 + 补充资源中心）
@@ -62,7 +62,7 @@ cd cambridge-physics && python3 physics_demos.py   # Cambridge 8 个 demo
 
 ▶ **[READING_SCHEDULE.md](READING_SCHEDULE.md)** — 12/24/36 月可执行周历，把所有资源串起来
 
-▶ **[RESOURCES/](RESOURCES/)** — 8 份补充资源（按优先级）：
+▶ **[RESOURCES/](RESOURCES)** — 8 份补充资源（按优先级）：
   - [00_popular_science.md](RESOURCES/00_popular_science.md) 从科普开始（中文重点）
   - [01_mathematics.md](RESOURCES/01_mathematics.md) **P0** 物理研究级数学（你最大短板）+ 与 top-math-courses 映射
   - [02_computational_toolchain.md](RESOURCES/02_computational_toolchain.md) **P0** 科研级计算工具链（Quantum ESPRESSO/LAMMPS/PySCF/Mathematica）
@@ -74,7 +74,7 @@ cd cambridge-physics && python3 physics_demos.py   # Cambridge 8 个 demo
   - [08_lectures_and_courses.md](RESOURCES/08_lectures_and_courses.md) **★ 经典讲义**：费曼讲义 + David Tong（当代费曼）+ Susskind + Landau-Lifshitz + 费曼风格讲义示范
   - [09_lectures_handbook.md](RESOURCES/09_lectures_handbook.md) **★★ 讲义详细手册**：David Tong 23 本逐本详解（已 webfetch 核实）+ FLP/Susskind/Lewin/Berkeley/Landau/Dirac 全展开 + 3 条阅读路径
 
-▶ **[ai_for_physics/](ai_for_physics/)** — **你的弯道超车主题**（第 9 主题，跨校）：
+▶ **[ai_for_physics/](ai_for_physics)** — **你的弯道超车主题**（第 9 主题，跨校）：
   - [ai_for_physics.md](ai_for_physics/ai_for_physics.md) — 5 大子方向（PINN/Neural Potentials/可微模拟/GNoME/AI for Math）
   - [pinn_poisson.py](ai_for_physics/pinn_poisson.py) — **可跑 demo**（纯 NumPy，相对误差 0.01%）
 

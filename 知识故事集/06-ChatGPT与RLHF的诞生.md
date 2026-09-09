@@ -157,9 +157,9 @@ RLHF / DPO / GRPO 都是"对齐"的具体技术。但**什么是对齐**？
 ## 🛠️ 我该深挖什么
 
 ### work4ai 系列
-- [`../讲透微调/`](../讲透微调/)：LoRA / PEFT / QLoRA / DPO / GRPO
-- [`../讲透RL/`](../讲透RL/)：PPO / DPO / GRPO / RLHF（含 04 RL+形式证明 + 05 RLVR）
-- [`../讲透Prompt/`](../讲透Prompt/)：怎么"prompt"已对齐的模型
+- [`../讲透微调/`](../讲透微调)：LoRA / PEFT / QLoRA / DPO / GRPO
+- [`../讲透RL/`](../讲透RL)：PPO / DPO / GRPO / RLHF（含 04 RL+形式证明 + 05 RLVR）
+- [`../讲透Prompt/`](../讲透Prompt)：怎么"prompt"已对齐的模型
 
 ### 必读
 - **Ouyang et al. 2022 "Training language models to follow instructions with human feedback"**（InstructGPT，必读）

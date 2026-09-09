@@ -254,4 +254,4 @@ $$\Gamma_{i\to f} = \frac{2\pi}{\hbar}|\langle f|V|i\rangle|^2 \rho(E_f)$$
 ---
 
 **完成日期**：2026-08-13（深化版 v2，从 144 行扩到 ~310 行）
-**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics/)
+**配套**：[tong/README.md](README.md) + [TEMPLATE.md](../TEMPLATE.md) + [ai_for_physics/](../../ai_for_physics)

@@ -203,11 +203,11 @@ GPT-2/3、LLaMA、PaLM、几乎所有大模型都用 warmup + cosine decay。**�
 
 | 本精读讲透的 | work4ai 深度版 |
 |---|---|
-| 训练管线全景 | [`讲透基础模型`](../讲透基础模型/)（LLM 训练全流程）|
+| 训练管线全景 | [`讲透基础模型`](../讲透基础模型)（LLM 训练全流程）|
 | cosine LR / warmup | [`讲透优化器`](../讲透PyTorch/11-损失函数与优化器.md)（LR schedule）|
-| DDP 分布式 | [`讲透分布式AI系统`](../讲透分布式AI系统/)（DDP/FSDP）|
-| HellaSwag / 评测 | [`讲透数据`](../讲透数据/)（LM benchmark）|
-| 梯度累积 | [`讲透GPU与系统级`](../讲透GPU与系统级/)（显存优化）|
+| DDP 分布式 | [`讲透分布式AI系统`](../讲透分布式AI系统)（DDP/FSDP）|
+| HellaSwag / 评测 | [`讲透数据`](../讲透数据)（LM benchmark）|
+| 梯度累积 | [`讲透GPU与系统级`](../讲透GPU与系统级)（显存优化）|
 
 **阅读路径**：[minGPT](./06-minGPT-minimal-GPT.md)（架构）→ [nanoGPT](./07-nanoGPT-从零训练GPT.md)（工程优化）→ **本篇（完整管线）**。读完这三篇，你能从零写出可训的 GPT。
 

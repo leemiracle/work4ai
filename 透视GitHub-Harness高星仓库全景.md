@@ -147,7 +147,7 @@ awesome 清单直接收录 Inngest 的檄文《Your Agent Needs a Harness, Not a
 
 | 本镜产出 | 去处 |
 |---|---|
-| 概念卡（§3 五子系统/四层栈/CAR） | [`讲透Agent/`](./讲透Agent/)、[`Agent架构模式参考/`](./Agent架构模式参考/) 的生态锚点 |
+| 概念卡（§3 五子系统/四层栈/CAR） | [`讲透Agent/`](./讲透Agent)、[`Agent架构模式参考/`](./Agent架构模式参考) 的生态锚点 |
 | 20 仓核心思想蒸馏 | [`harness精华笔记.md`](./harness精华笔记.md) |
 | skill 合入 | [`harness精华合入-总入口.md`](./harness精华合入-总入口.md)（1 个 opencode skill） |
 | 单仓源码级深读 | [`Agent框架案例/`](./Agent框架案例/README.md)（已有 dsh 案例；deer-flow/CowAgent 是候选） |

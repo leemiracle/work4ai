@@ -73,11 +73,11 @@ This document describes the GPU-based model execution subsystem in vLLM, which i
 
 **Scope** : This page covers the overall architecture and lifecycle of GPU execution. For detailed information on specific components, see:
 
-  * GPUModelRunner implementation details: [GPUModelRunner](/vllm-project/vllm/4.1-gpumodelrunner)
-  * Worker and Executor Architecture: [Worker and Executor Architecture](/vllm-project/vllm/4.2-worker-and-executor-architecture)
-  * Request batching and state tracking: [InputBatch and Request State Management](/vllm-project/vllm/4.3-inputbatch-and-request-state-management)
-  * Token sampling methods: [Sampling and Token Generation](/vllm-project/vllm/4.4-sampling-and-token-generation)
-  * Speculative decoding mechanisms: [Speculative Decoding](/vllm-project/vllm/4.5-speculative-decoding)
+  * GPUModelRunner implementation details: [GPUModelRunner](../../../../vllm-project/vllm/4.1-gpumodelrunner)
+  * Worker and Executor Architecture: [Worker and Executor Architecture](../../../../vllm-project/vllm/4.2-worker-and-executor-architecture)
+  * Request batching and state tracking: [InputBatch and Request State Management](../../../../vllm-project/vllm/4.3-inputbatch-and-request-state-management)
+  * Token sampling methods: [Sampling and Token Generation](../../../../vllm-project/vllm/4.4-sampling-and-token-generation)
+  * Speculative decoding mechanisms: [Speculative Decoding](../../../../vllm-project/vllm/4.5-speculative-decoding)
 
 * * *
 
@@ -171,8 +171,8 @@ Newly allocated KV cache blocks are zeroed out to prevent stale data from interf
 
 For detailed technical information, please refer to the following child pages:
 
-  * **[GPUModelRunner](/vllm-project/vllm/4.1-gpumodelrunner)** : Deep dive into the `GPUModelRunner` class, coordinating forward passes, KV cache interaction, and Model Runner V2 subcomponents.
-  * **[Worker and Executor Architecture](/vllm-project/vllm/4.2-worker-and-executor-architecture)** : Details on `Worker` initialization, device management, and distributed coordination via Ray or Multiprocessing.
-  * **[InputBatch and Request State Management](/vllm-project/vllm/4.3-inputbatch-and-request-state-management)** : Detailed explanation of how `InputBatch` and `RequestState` track request data across execution steps.
-  * **[Sampling and Token Generation](/vllm-project/vllm/4.4-sampling-and-token-generation)** : Documentation of the sampling pipeline, including `LogitsProcessors` and the `Sampler`.
-  * **[Speculative Decoding](/vllm-project/vllm/4.5-speculative-decoding)** : Overview of speculative methods like Eagle, Medusa, and Ngram, and how draft tokens are managed and verified on GPU.
+  * **[GPUModelRunner](../../../../vllm-project/vllm/4.1-gpumodelrunner)** : Deep dive into the `GPUModelRunner` class, coordinating forward passes, KV cache interaction, and Model Runner V2 subcomponents.
+  * **[Worker and Executor Architecture](../../../../vllm-project/vllm/4.2-worker-and-executor-architecture)** : Details on `Worker` initialization, device management, and distributed coordination via Ray or Multiprocessing.
+  * **[InputBatch and Request State Management](../../../../vllm-project/vllm/4.3-inputbatch-and-request-state-management)** : Detailed explanation of how `InputBatch` and `RequestState` track request data across execution steps.
+  * **[Sampling and Token Generation](../../../../vllm-project/vllm/4.4-sampling-and-token-generation)** : Documentation of the sampling pipeline, including `LogitsProcessors` and the `Sampler`.
+  * **[Speculative Decoding](../../../../vllm-project/vllm/4.5-speculative-decoding)** : Overview of speculative methods like Eagle, Medusa, and Ngram, and how draft tokens are managed and verified on GPU.

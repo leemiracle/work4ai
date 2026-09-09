@@ -1,0 +1,203 @@
+__NOTOC__
+{{CZ-Letter-Menu|R}}
+
+
+===== <span id="r" style="color:red">R</span>: Recursive Languages =====
+The class of decision problems solvable by a Turing machine.  Often identified with the class of 'effectively computable' functions (the <i>Church-Turing thesis</i>).
+
+Defined in [[zooref#tur36|[Tur36]]], [[zooref#chu41|[Chu41]]], and other seminal early papers.
+
+Equals [[#re|RE]] &#8745; [[Complexity Zoo:C#core|coRE]].
+
+Strictly contains [[Complexity Zoo:P#pr|PR]], the primitive recursive functions (see [[zooref#kle71|[Kle71]]]).
+
+----
+===== <span id="rbqp" style="color:red">RBQP</span>: Strict Quantum [[#rp|RP]] =====
+The class of problems in [[Complexity Zoo:N#np|NP]] whose witnesses are in [[Complexity Zoo:F#fbqp|FBQP]].  For example, the set of square-free numbers is in coRBQP using only the fact that [[Complexity_Garden#integer_factorization|factoring]] is in [[Complexity Zoo:F#fbqp|FBQP]].  (Even without a proof that the factors are prime, the factorization proves that there is a square divisor.)
+
+Contains [[#rp|RP]] and [[Complexity Zoo:Z#zbqp|ZBQP]], and is contained in [[Complexity Zoo:B#bqp|BQP]] and [[#rqp|RQP]].  Defined here to clarify [[Complexity Zoo:E#eqp|EQP]]; see also [[Complexity Zoo:Z#zbqp|ZBQP]].
+
+----
+
+===== <span id="re" style="color:red">RE</span>: Recursively Enumerable Languages =====
+The class of decision problems for which a 'yes' answer can be verified by a Turing machine in a finite amount of time.  (If the answer is 'no,' on the other hand, the machine might never halt.)
+
+Equivalently, the class of decision problems for which a Turing machine can list all the 'yes' instances, one by one (this is what 'enumerable' means).
+
+A problem C is complete for RE if (1) C is in RE and (2) any problem in RE can be reduced to C by a Turing machine.
+
+Actually there are two types of reduction: M-reductions (for <i>many-one</i>), in which a single instance of the original problem is mapped to an instance of C, and T-reductions (for <i>Turing</i>), in which an algorithm for the original problem can make arbitrarily many calls to an oracle for C.
+
+RE-complete sets are also called <i>creative</i> sets for some reason.
+
+The canonical RE-complete problem is the <i>halting problem</i>: i.e., given a Turing machine, does it halt when started on a blank tape?
+
+The famous unsolvability of the halting problem [[zooref#tur36|[Tur36]]] implies that [[#r|R]] does not equal RE.
+
+Also, RE does not equal [[Complexity Zoo:C#core|coRE]].
+
+RE and [[Complexity Zoo:C#core|coRE]] can be generalized to the <i>arithmetic hierarchy</i> [[Complexity Zoo:A#ah|AH]].
+
+There are problems in RE that are neither RE-complete under T-reductions, nor in [[#r|R]] [[zooref#fri57|[Fri57]]] [[zooref#muc56|[Muc56]]].  This is the resolution of <i>Post's problem</i> [[zooref#pos44|[Pos44]]].
+
+Indeed, RE contains infinitely many nonequivalent 'T-degrees.'  (A T-degree is a class of problems, all of which can be T-reduced to one another.)  The structure of the T-degrees has been studied in more detail than you can possibly imagine [[zooref#sho99|[Sho99]]].
+
+----
+===== <span id="reg" style="color:red">REG</span>: Regular Languages =====
+The class of decision problems solvable by deterministic finite automata (DFAs).
+
+Equals the class solvable by nondeterministic finite automata (NDFAs).
+
+Equals [[Complexity Zoo:D#dspace|DSPACE]](O(1)) [[zooref#she59|[She59]]], which equals [[Complexity Zoo:D#dspace|DSPACE]](o(log log n)) [[zooref#hls65|[HLS65]]].
+
+Includes, i.e., "Is the parity of the input odd?," but not "Are the majority of bits in the input 1's?"  This is sometimes expressed as "finite automata can't count."
+
+Contained in [[Complexity Zoo:N#nc1|NC<sup>1</sup>]].
+
+See e.g. [[zooref#koz97|[Koz97]]], [[zooref#gur89|[Gur89]]] for basic results on regular languages.
+
+----
+===== <span id="revspace" style="color:red">RevSPACE(f(n))</span>: Reversible f(n)-Space =====
+The class of decision problems solvable in space O(f(n)) by a reversible Turing machine (a deterministic Turing machine for which every configuration has at most one immediate predecessor).
+
+Was shown to equal [[Complexity Zoo:D#dspace|DSPACE]](f(n)) [[zooref#lmt97|[LMT97]]].
+
+----
+===== <span id="rg" style="color:red">RG</span>: Refereed Games =====
+The class of problems solvable by a probabilistic polynomial-time verifier who can exchange a polynomial number of messages with two competing, computationally-unbounded provers -- one trying to convince the verifier that the answer is "yes," the other that the answer is "no."  Note that the verifier can hide information from the provers.  Public-coin RG amounts to {{zcls|s|saptime}}, which equals [[Complexity Zoo:P#pspace|PSPACE]] [[zooref#pap83|[Pap83]]].
+
+RG is in [[Complexity Zoo:E#exp|EXP]] relative to any oracle [[zooref#km92|[KM92]]]; they are equal, unrelativized [[zooref#fk97b|[FK97b]]].
+
+See also [[Complexity Zoo:P#pcd|PCD]], [[Complexity Zoo:G#gpcd|GPCD]].
+
+----
+
+===== <span id="rgk" style="color:red">RG(<i>k</i>)</span>: <i>k</i>-turn Refereed Games =====
+Same as [[#rg|RG]], except that now the verifier exchanges exactly <i>k</i> messages with each prover where <i>k</i> is a polynomial-bounded function of the input length. Messages are exchanged in parallel.  By definition, RG(poly) = [[Complexity Zoo:R#rg|RG]]. See also [[Complexity Zoo:R#rg1|RG(1)]] and [[Complexity Zoo:R#rg2|RG(2)]].
+
+Other than trivial bounds, very little is known of RG(k) for intermediate values of <i>k</i>. For example, does RG(<i>k</i>) = [[Complexity Zoo:P#pspace|PSPACE]] for each constant <math>k\geq 2</math>?
+
+----
+
+===== <span id="rg2" style="color:red">RG(2)</span>: Two-turn (one-round) Refereed Games =====
+Same as [[#rg|RG]], except that now the verifier can exchange only two messages with each prover. Messages are exchanged in parallel, so the verifier cannot process the answer from one prover before preparing the question for the other.  See also [[Complexity Zoo:R#rgk|RG(<i>k</i>)]].
+
+RG(2) is contained in [[Complexity Zoo:P#pspace|PSPACE]], and they are equal, unrelativized [[zooref#fk97b|[FK97b]]].
+
+----
+
+===== <span id="rg1" style="color:red">RG(1)</span>: One-turn Refereed Games =====
+The class of problems for which there exists a BPP machine M such that, on input x:
+<ol>
+<li>If the answer is 'yes,' then there exists a distribution Y such that for all distributions Z, M(x,Y,Z) accepts with probability at least 2/3.</li>
+<li>If the answer is 'no,' then there exists a distribution Z such that for all distributions Y, M(x,Y,Z) rejects with probability at least 2/3.</li>
+</ol>
+In other words, it's the same as [[Complexity Zoo:R#rgk|RG(<i>k</i>)]] for <math>k = 1</math>, the class of problems that admit interactive proofs with competing provers in which there's no communication from the verifier back to the provers.
+
+RG(1) trivially contains [[Complexity Zoo:S#s2p|S<sub>2</sub>P]].  Indeed, RG(1) can be viewed as a randomized version of [[Complexity Zoo:S#s2p|S<sub>2</sub>P]].
+
+RG(1) is trivially contained in [[Complexity Zoo:R#rg2|RG(2)]] (and hence [[Complexity Zoo:P#pspace|PSPACE]]).
+
+----
+
+===== <span id="rhl" style="color:red">R<sub>H</sub>L</span>: Randomized Halting Logarithmic-Space =====
+Has the same relation to [[Complexity Zoo:L#l|L]] as [[#rp|RP]] does to [[Complexity Zoo:P#p|P]].  The randomized machine must halt for every input <i>and</i> every setting of the random tape.
+
+Contains undirected reachability (is there a path from vertex u to vertex v in an undirected graph?) [[zooref#akl79|[AKL+79]]].
+
+Contained in [[#rl|RL]].
+
+----
+===== <span id="rhspace" style="color:red">R<sub>H</sub>SPACE(f(n))</span>: One-Sided Error Halting Probabilistic f(n)-Space =====
+Has the same relation to [[Complexity Zoo:B#bphspace|BP<sub>H</sub>SPACE(f(n))]] as [[#rp|RP]] does to [[Complexity Zoo:B#bpp|BPP]].
+
+----
+===== <span id="rg" style="color:red">#RHΠ<sub>1</sub></span> =====
+The class of all counting problems '''f''' that can be expressed in the form '''f(A)=|{(T,z) : A ⊧ ∀ y ψ(y,z,T)}|''' where ψ is an unquantified CNF formula in which each clause has at most one occurrence of an unnegated relation symbol from '''T''' and at most one occurrence of a negated relation symbol from '''T'''.
+
+Under a kind of reduction named approximation-preserving reduction defined in [[zooref#dggj04|[DGGJ04]]], #BIS (the problem of counting independent sets in a bipartite graph) is complete for this class.
+
+----
+===== <span id="rl" style="color:red">RL</span>: Randomized Logarithmic-Space =====
+Has the same relation to [[Complexity Zoo:L#l|L]] as [[#rp|RP]] does to [[Complexity Zoo:P#p|P]].  The randomized machine must halt with probability 1 on any input.  It must also run in polynomial time (since otherwise we would just get
+[[Complexity Zoo:N#nl|NL]]).
+
+Contains [[#rhl|R<sub>H</sub>L]].
+
+Contained in [[Complexity Zoo:S#sc|SC]] [[zooref#nis92|[Nis92]]].
+
+[[zooref#rtv05|[RTV05]]] give strong evidence that RL = [[Complexity Zoo:L#l|L]].
+
+----
+===== <span id="rnc" style="color:red">RNC</span>: Randomized [[Complexity Zoo:N#nc|NC]] =====
+Has the same relation to [[Complexity Zoo:N#nc|NC]] as [[#rp|RP]] does to [[Complexity Zoo:P#p|P]].
+
+Contains the maximum matching problem for bipartite graphs [[zooref#mvv87|[MVV87]]].
+
+Contained in [[Complexity Zoo:Q#qnc|QNC]].
+
+See also: [[Complexity Zoo:C#cornc|coRNC]].
+
+----
+===== <span id="rnc1" style="color:red">RNC<sup>1</sup></span>: Randomized [[Complexity Zoo:N#nc1|NC1]] =====
+Has the same relation to [[#rnc|RNC]] as [[Complexity Zoo:N#nc1|NC<sup>1</sup>]] does to [[Complexity Zoo:N#nc|NC]]. And the same relation to [[Complexity Zoo:N#nc1|NC<sup>1</sup>]] as [[#rp|RP]] does to [[Complexity Zoo:P#p|P]].
+
+Contained in [[Complexity Zoo:B#bpdotl|BP•L]].
+
+----
+
+===== <span id="rp" style="color:red">RP</span>: Randomized Polynomial-Time =====
+The class of decision problems solvable by an [[Complexity Zoo:N#np|NP]] machine such that
+<ol>
+<li>If the answer is 'yes,' at least 1/2 of computation paths accept.</li>
+<li>If the answer is 'no,' all computation paths reject.</li>
+</ol>
+Defined in [[zooref#gil77|[Gil77]]] (implicitly: the class VPP that is defined is equivalent to RP by running the recognizer as many times as necessary to reach probability 1/2).
+
+Contains the problem of testing whether an integer is prime [[zooref#ah87|[AH87]]], although this problem was subsequently shown to be in P [[zooref#aks02|[AKS02]]].
+
+For other problems in RP, see the standard text on randomized algorithms, [[zooref#mr95|[MR95]]].
+
+Has the same [[Zoo Glossary#p-measure|p-measure]] as {{zcls|z|zpp}}. Moreover, this measure is either zero or one. If the measure is non-zero, then {{zcls|z|zpp}} = {{zcls|b|bpp}} = {{zcls|e|exp}} {{zcite|IM03}}.
+
+See also: [[Complexity Zoo:C#corp|coRP]], [[Complexity Zoo:Z#zpp|ZPP]], [[Complexity Zoo:B#bpp|BPP]].
+
+----
+
+===== <span id="rpcc" style="color:red">RP<sup>cc</sup></span>: Communication Complexity [[#rp|RP]] =====
+The analogue of [[Complexity Zoo:P#pcc|P<sup>cc</sup>]] for bounded one-sided error probabilistic communication complexity.
+
+Contains the complement of the [[Complexity Garden#equality|EQUALITY]] problem.
+
+----
+
+===== <span id="rpkcc" style="color:red">RP<sub><math>k</math></sub><sup>cc</sup></span>: Randomized {{zcls|p|pkcc|P<sub><math>k</math></sub><sup>cc</sup>}} =====
+
+The class of functions <math>F</math> which can be computed by <math>k</math> players with access to shared random bits in the number-on-forehead (defined as in {{zcls|p|pkcc|P<sub><math>k</math></sub><sup>cc</sup>}}) model, subject to two constraints:
+# The communication cost (the sum of the number of random bits used and bits written to the shared blackboard) is <math>O(\textrm{polylog}(n))</math>.
+# If <math>F(X_1, \dots, X_k) = 1</math>, then the players decide correctly with probably at least 2/3, whereas if <math>F(X_1, \dots, X_k) = 0</math>, the players always decide correctly.
+
+NP<sub><math>k</math></sub><sup>cc</sup> is not equal to {{zcls|r|rpkcc|RP<sub><math>k</math></sub><sup>cc</sup>}} for <math>k\le(1-\delta)\cdot\log n</math> players, for any constant <math>\delta>0</math> {{zcite|DP08}}.
+
+----
+
+===== <span id="rpp" style="color:red">RPP</span>: Restricted Pseudo Polynomial-Time =====
+The class of decision problems (x,m) (where x is an input of length |x|=n and m is an integer parameter), that are solvable by a nondeterministic (i.e. [[Complexity Zoo:N#np|NP]]) machine in poly(n+m) time and O(m+log n) space simultaneously.
+
+Defined in [[zooref#mon80|[Mon80]]].
+
+See also [[Complexity Zoo:F#fpt|FPT]].
+
+----
+===== <span id="rqp" style="color:red">RQP</span>: One-sided Error Extension of [[Complexity Zoo:E#eqp|EQP]] =====
+
+The class of questions that can be answered by a QTM that accepts with probability 0 when the true answer is no, and accepts with probability at least 1/2 when the true answer is yes.  Since one of the probabilities has to vanish, RQP has the same technical caveats as [[Complexity Zoo:E#eqp|EQP]].
+
+Contains [[Complexity Zoo:Z#zqp|ZQP]] and [[#rbqp|RBQP]], and is contained in [[Complexity Zoo:B#bqp|BQP]].
+
+----
+
+===== <span id="rspace" style="color:red">RSPACE(f(n))</span>: Randomized f(n)-Space =====
+Same as [[#rl|RL]], but for O(f(n))-space instead of logarithmic-space.  (Just as an RL machine must run in polynomial time, so an RSPACE(f(n)) machine must run in 2<sup>O(f(n))</sup> time.)
+
+Contained in [[Complexity Zoo:N#nspace|NSPACE(f(n))]] and [[Complexity Zoo:B#bpspace|BPSPACE(f(n))]].

@@ -2,7 +2,7 @@
 
 > 承接 [02-稀疏自编码器SAE](./02-稀疏自编码器SAE.md)。02 把单个神经元/激活分解成 monosemantic 特征——但模型**不是靠单个特征计算**，而是靠**特征之间的连线**。本章讲 circuits：怎么找这些连线，superposition 为什么让它难，induction head 这个最经典的 circuit 是怎么被发现的。
 >
-> 配套：[`00-为什么AI是黑箱`](./00-为什么AI是黑箱.md) + [`讲透Transformer`](../讲透Transformer/)
+> 配套：[`00-为什么AI是黑箱`](./00-为什么AI是黑箱.md) + [`讲透Transformer`](../讲透Transformer)
 
 ---
 
@@ -223,7 +223,7 @@ def circuit_with_sae_features(sae, model, prompt: str, target_feature_idx: int):
 
 - 上游：[`00-为什么AI是黑箱`](./00-为什么AI是黑箱.md) §3.3（mechanistic interpretability 总览）
 - 上游：[`02-稀疏自编码器SAE`](./02-稀疏自编码器SAE.md)（SAE 找特征，circuits 找特征之间的连线）
-- Transformer 架构基础：[`讲透Transformer`](../讲透Transformer/)（不懂 attention 做不了 circuits）
-- ICL 的认知科学对应：[`cogsci/`](../cogsci/)（人类 few-shot 学习 vs induction head）
+- Transformer 架构基础：[`讲透Transformer`](../讲透Transformer)（不懂 attention 做不了 circuits）
+- ICL 的认知科学对应：[`cogsci/`](../cogsci)（人类 few-shot 学习 vs induction head）
 - 元理论：[`故事即世界迭代器-元理论.md`](../故事即世界迭代器-元理论.md) §断言 3（找 circuit = 把模型计算"翻译成人类故事"的迭代）
 - 理论支柱：Transformer Circuits Thread（Olah 2020-至今）+ "In-context Learning and Induction Heads"（Olsson 2022）+ "Toy Models of Superposition"（Elhage 2022）

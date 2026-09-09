@@ -10,6 +10,8 @@
 
 ## 🎯 新：最优学习路径（小白到专家的最快通道）
 
+▶ **[CS学习规划-课程地图.md](CS学习规划-课程地图.md)** — ⭐ **csdiy 对照落仓版**：把 [CS自学指南·CS学习规划](https://csdiy.wiki/CS%E5%AD%A6%E4%B9%A0%E8%A7%84%E5%88%92/) 的 23 个领域逐项映射到本仓库资源（讲透宇宙理论侧 + 九校库实战侧），缺口如实标注。配套 **[CS必学工具箱.md](CS必学工具箱.md)**（提问/命令行/Git/Vim/Make/CMake/LaTeX/Docker + 环境配置 + 国内镜像加速）。
+
 ▶ **[UNIFIED_PLAN_4_TRACKS.md](UNIFIED_PLAN_4_TRACKS.md)** — ⭐ **4 路并修最优计划**（E > R > P > M）：累计式 24-36 月，每阶段只加增量不重复。含每月检查点 + 前 4 周启动日程。
 
 ▶ **[UNIFIED_ROADMAP.md](UNIFIED_ROADMAP.md)** — **30 课最优路径**：从 108 主题中精选 30 课，按依赖排序，每课标最佳学校版本 + 时间估计 + 知识检查。包含 4 种快速通道（AI 工程师 6-12 月 / 研究员 18-24 月 / ML 算法 9-15 月 / 创业者 3-6 月）。
@@ -42,15 +44,15 @@
 
 | # | 学校 | 院系 | 项目路径 | 主题 | .py 文件 | 代码行数 | 招牌特色 |
 |---|------|------|---------|-----|---------|---------|---------|
-| 0 | **Stanford** | CS Department | [`./stanford-cs-projects/`](./stanford-cs-projects/) | 13 | 34 | 9,338 | LLM/Alignment/Agent（CS329H/Z/K）|
-| 1 | **CMU** | SCS | [`./cmu-cs-projects/`](./cmu-cs-projects/) | 12 | 22 | 5,655 | CSAPP / PGM / PAVL DBMS / NLP |
-| 2 | **MIT** | EECS / CSAIL | [`./mit-cs-projects/`](./mit-cs-projects/) | 12 | 22 | 5,779 | 6.824/828/858 + Tedrake Underactuated |
-| 3 | **UC Berkeley** | EECS | [`./berkeley-cs-projects/`](./berkeley-cs-projects/) | 12 | 22 | 6,403 | CS 61A SICP-Py / CS 188 Pacman / CS 285 RL |
-| 4 | **Princeton** | COS | [`./princeton-cs-projects/`](./princeton-cs-projects/) | 12 | 22 | 6,532 | Sedgewick Algos / COS 511 ML Theory / Fairness |
-| 5 | **Cambridge** | Computer Lab (Tripos) | [`./cambridge-cs-projects/`](./cambridge-cs-projects/) | 12 | 22 | 6,115 | Tripos 四年体系 / Hoare Logic / Compiler / Info Theory |
-| 6 | **Oxford** | CS Department | [`./oxford-cs-projects/`](./oxford-cs-projects/) | 12 | 22 | 7,502 | Categories/Proofs / Automated Reasoning / KR |
-| 7 | **ETH Zürich** | Informatik | [`./eth-cs-projects/`](./eth-cs-projects/) | 12 | 22 | 5,923 | Formal Methods / Paxos / Causality (Peters) / Krause |
-| 8 | **Toronto** | DCS | [`./toronto-cs-projects/`](./toronto-cs-projects/) | 12 | 22 | 7,320 | CSC 413 Deep / CSC 2547H Generative / Hinton 母校 |
+| 0 | **Stanford** | CS Department | [`./stanford-cs-projects/`](./stanford-cs-projects) | 13 | 34 | 9,338 | LLM/Alignment/Agent（CS329H/Z/K）|
+| 1 | **CMU** | SCS | [`./cmu-cs-projects/`](./cmu-cs-projects) | 12 | 22 | 5,655 | CSAPP / PGM / PAVL DBMS / NLP |
+| 2 | **MIT** | EECS / CSAIL | [`./mit-cs-projects/`](./mit-cs-projects) | 12 | 22 | 5,779 | 6.824/828/858 + Tedrake Underactuated |
+| 3 | **UC Berkeley** | EECS | [`./berkeley-cs-projects/`](./berkeley-cs-projects) | 12 | 22 | 6,403 | CS 61A SICP-Py / CS 188 Pacman / CS 285 RL |
+| 4 | **Princeton** | COS | [`./princeton-cs-projects/`](./princeton-cs-projects) | 12 | 22 | 6,532 | Sedgewick Algos / COS 511 ML Theory / Fairness |
+| 5 | **Cambridge** | Computer Lab (Tripos) | [`./cambridge-cs-projects/`](./cambridge-cs-projects) | 12 | 22 | 6,115 | Tripos 四年体系 / Hoare Logic / Compiler / Info Theory |
+| 6 | **Oxford** | CS Department | [`./oxford-cs-projects/`](./oxford-cs-projects) | 12 | 22 | 7,502 | Categories/Proofs / Automated Reasoning / KR |
+| 7 | **ETH Zürich** | Informatik | [`./eth-cs-projects/`](./eth-cs-projects) | 12 | 22 | 5,923 | Formal Methods / Paxos / Causality (Peters) / Krause |
+| 8 | **Toronto** | DCS | [`./toronto-cs-projects/`](./toronto-cs-projects) | 12 | 22 | 7,320 | CSC 413 Deep / CSC 2547H Generative / Hinton 母校 |
 | | **合计** | | | **109** | **210** | **60,567** | |
 
 每校另含：6-7 个 `core/` 共享基础设施文件（llm.py / rag.py / tools.py / react.py / eval.py / hybrid_search.py / __init__.py）+ `supplementary/` 三个文件（undergrad/grad/micro，每文件覆盖 8-10 门课）。
@@ -59,8 +61,8 @@
 
 | 库 | 定位 | 入口 |
 |---|------|------|
-| [`cs224n/`](./cs224n/) | Stanford CS224N（Winter 2026）教学简化版：A1-A4 作业 + mini-GPT-2 前向推理 | [`cs224n/README.md`](./cs224n/README.md) |
-| [`cs61a-learning/`](./cs61a-learning/) | Berkeley CS 61A 逐周学习笔记：week01 10 个 .py（lecture/hw/lab/hog 项目，2796 行）+ 2 篇周记 | 见 `week01/` 与 `notes/` |
+| [`cs224n/`](./cs224n) | Stanford CS224N（Winter 2026）教学简化版：A1-A4 作业 + mini-GPT-2 前向推理 | [`cs224n/README.md`](./cs224n/README.md) |
+| [`cs61a-learning/`](./cs61a-learning) | Berkeley CS 61A 逐周学习笔记：week01 10 个 .py（lecture/hw/lab/hog 项目，2796 行）+ 2 篇周记 | 见 `week01/` 与 `notes/` |
 
 ---
 

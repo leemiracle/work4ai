@@ -71,7 +71,7 @@ Relevant source files
 
 This page documents how vLLM is built, packaged, and deployed. It covers the Python packaging configuration, the CMake build system for multi-platform extensions (CUDA, ROCm, CPU, XPU), Docker image construction, and dependency management.
 
-For information about environment variables that affect runtime behavior, see [Environment Variables System](/vllm-project/vllm/2.3-environment-variables-system). For information about `torch.compile` integration and compilation modes, see [Compilation Configuration and Optimization Levels](/vllm-project/vllm/2.4-compilation-configuration-and-optimization-levels). For platform-specific runtime details, see [Platform Support](/vllm-project/vllm/10-platform-support).
+For information about environment variables that affect runtime behavior, see [Environment Variables System](../../../../vllm-project/vllm/2.3-environment-variables-system). For information about `torch.compile` integration and compilation modes, see [Compilation Configuration and Optimization Levels](../../../../vllm-project/vllm/2.4-compilation-configuration-and-optimization-levels). For platform-specific runtime details, see [Platform Support](../../../../vllm-project/vllm/10-platform-support).
 
 * * *
 
@@ -138,7 +138,7 @@ Sources: [setup.py194-222](https://github.com/vllm-project/vllm/blob/185cada3/se
 
 vLLM manages its Python dependencies through a structured set of `requirements/*.txt` files. These files are used during both local development and Docker image builds to ensure consistent environments.
 
-For details, see [Dependency Management](/vllm-project/vllm/11.2-dependency-management).
+For details, see [Dependency Management](../../../../vllm-project/vllm/11.2-dependency-management).
 
 ### Requirements File Structure
 
@@ -165,7 +165,7 @@ Sources: [requirements/cuda.txt1-35](https://github.com/vllm-project/vllm/blob/1
 
 vLLM provides Dockerfiles optimized for different hardware platforms.
 
-For details, see [Docker Multi-Stage Build](/vllm-project/vllm/11.1-docker-multi-stage-build).
+For details, see [Docker Multi-Stage Build](../../../../vllm-project/vllm/11.1-docker-multi-stage-build).
 
 ### Build Strategy
 
@@ -182,7 +182,7 @@ Sources: [docker/Dockerfile1-163](https://github.com/vllm-project/vllm/blob/185c
 
 vLLM supports various build configurations to target different hardware.
 
-For details, see [Build Variants and Configuration](/vllm-project/vllm/11.3-build-variants-and-configuration).
+For details, see [Build Variants and Configuration](../../../../vllm-project/vllm/11.3-build-variants-and-configuration).
 
   * **Target Devices** : `VLLM_TARGET_DEVICE` environment variable explicitly selects between `cuda`, `rocm`, `xpu`, or `cpu` [setup.py49-108](https://github.com/vllm-project/vllm/blob/185cada3/setup.py#L49-L108)
   * **Precompiled Extensions** : `VLLM_USE_PRECOMPILED` skips native compilation by using existing binaries in the source tree [setup.py50-54](https://github.com/vllm-project/vllm/blob/185cada3/setup.py#L50-L54)
@@ -197,7 +197,7 @@ Sources: [setup.py49-108](https://github.com/vllm-project/vllm/blob/185cada3/set
 
 vLLM performs Just-In-Time (JIT) compilation for high-performance kernels.
 
-For details, see [Runtime JIT Compilation](/vllm-project/vllm/11.4-runtime-jit-compilation).
+For details, see [Runtime JIT Compilation](../../../../vllm-project/vllm/11.4-runtime-jit-compilation).
 
   * **FlashInfer JIT** : Generates specialized attention kernels at runtime. Docker images include minimal CUDA base dependencies specifically to support this [docker/Dockerfile42-43](https://github.com/vllm-project/vllm/blob/185cada3/docker/Dockerfile#L42-L43)
   * **DeepGemm & EP Kernels**: These require a compiler-ready environment in the final image to generate optimized code for specific GPU architectures [docker/Dockerfile42-43](https://github.com/vllm-project/vllm/blob/185cada3/docker/Dockerfile#L42-L43)

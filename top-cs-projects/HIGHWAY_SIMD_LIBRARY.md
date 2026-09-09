@@ -752,11 +752,11 @@ int main() {
 
 | 关联主题 | 本文为它提供了什么 |
 |---------|-----------------|
-| [`../讲透GPU与系统级/`](../讲透GPU与系统级/) | CPU SIMD 是 GPU 之外另一条并行路；高算术强度（§7.1）+ 单 binary 跨 fleet 是 CPU 不可替代的场景 |
-| [`../讲透PyTorch/`](../讲透PyTorch/) | PyTorch CPU kernel 部分用类似抽象；gemma.cpp 是"不用 PyTorch 也能跑 LLM"的证据 |
-| [`../讲透NLP/`](../讲透NLP/) | gemma.cpp / ScaNN 是 NLP 推理 + 检索的 SIMD 工程化 |
-| [`../端侧AI压缩技术/`](../端侧AI压缩技术/) | 跨架构单 binary 是端侧 AI 部署的关键技术（vs 动态下载架构专用二进制）|
-| [`./cmu-cs-projects/topic2-systems/`](./cmu-cs-projects/topic2-systems/) | CSAPP → Agner → Highway 是 CMU 15-213 性能优化路线的应用层闭环 |
+| [`../讲透GPU与系统级/`](../讲透GPU与系统级) | CPU SIMD 是 GPU 之外另一条并行路；高算术强度（§7.1）+ 单 binary 跨 fleet 是 CPU 不可替代的场景 |
+| [`../讲透PyTorch/`](../讲透PyTorch) | PyTorch CPU kernel 部分用类似抽象；gemma.cpp 是"不用 PyTorch 也能跑 LLM"的证据 |
+| [`../讲透NLP/`](../讲透NLP) | gemma.cpp / ScaNN 是 NLP 推理 + 检索的 SIMD 工程化 |
+| [`../端侧AI压缩技术/`](../端侧AI压缩技术) | 跨架构单 binary 是端侧 AI 部署的关键技术（vs 动态下载架构专用二进制）|
+| [`./cmu-cs-projects/topic2-systems/`](./cmu-cs-projects/topic2-systems) | CSAPP → Agner → Highway 是 CMU 15-213 性能优化路线的应用层闭环 |
 
 ---
 

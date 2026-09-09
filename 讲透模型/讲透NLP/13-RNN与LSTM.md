@@ -223,10 +223,10 @@ loss 轨迹: 4.933 → 0.216 (下降 ✓)
 | 本篇讲透的 | 深度版 |
 |---|---|
 | RNN cell / BPTT | [`讲透反向传播`](../讲透PyTorch/01-Autograd与计算图.md)（BPTT 是反向传播的时间展开）|
-| LSTM 门控 + 残差思想 | [`讲透基础模型`](../讲透基础模型/)（残差连接是 Transformer 的标配）|
-| attention 为什么取代 RNN | [`08-Transformer`](./08-Transformer.md) / [`讲透Transformer`](../讲透Transformer/) |
+| LSTM 门控 + 残差思想 | [`讲透基础模型`](../讲透基础模型)（残差连接是 Transformer 的标配）|
+| attention 为什么取代 RNN | [`08-Transformer`](./08-Transformer.md) / [`讲透Transformer`](../讲透Transformer) |
 | RNN 在序列标注的应用 | [`17-序列标注-POS与NER`](./17-序列标注-POS与NER.md)（BiLSTM-CRF）|
-| Mamba/RWKV 等线性 RNN 复兴 | [`讲透基础模型`](../讲透基础模型/)（架构前沿）|
+| Mamba/RWKV 等线性 RNN 复兴 | [`讲透基础模型`](../讲透基础模型)（架构前沿）|
 
 ---
 
@@ -234,7 +234,7 @@ loss 轨迹: 4.933 → 0.216 (下降 ✓)
 
 - **理解 RNN 的继任者**：[`08-Transformer`](./08-Transformer.md)（attention 如何解决长程依赖 + 并行）
 - **看 RNN 的经典应用**：[`17-序列标注-POS与NER`](./17-序列标注-POS与NER.md)（BiLSTM-CRF 是 NER 的事实标准之一）
-- **动手深读**：Karpathy 的 char-rnn（[`../Karpathy经典代码精读/`](../Karpathy经典代码精读/)，Lua 版）是 RNN 教学的祖师级项目
+- **动手深读**：Karpathy 的 char-rnn（[`../Karpathy经典代码精读/`](../Karpathy经典代码精读)，Lua 版）是 RNN 教学的祖师级项目
 
 ## ✍️ 练习
 

@@ -6,7 +6,7 @@
 >
 > **🆕 想一次看全？** 进 [**07 · RL 全景地图与 2026 最新研究**](./07-2026最新研究全景.md)（截止 2026-08-12，整合项目内所有 RL 资产 + 10 大主题最新前沿）。
 >
-> 配套：[`讲透公开课/01-CS285 Spring 2026`](../讲透公开课/01-前沿课实时清单.md)（Berkeley 深度 RL，2026 版新增 LLM RL 章节）+ [`讲透微调`](../讲透微调/)（RLHF/DPO 实战）+ [`讲透世界模型`](../讲透世界模型/)（Dreamer/Genie 谱系）+ [`讲透AI应用全景/02-AI4Math`](../讲透AI应用全景/02-AI4Math.md)（AlphaProof 用 RL）
+> 配套：[`讲透公开课/01-CS285 Spring 2026`](../讲透公开课/01-前沿课实时清单.md)（Berkeley 深度 RL，2026 版新增 LLM RL 章节）+ [`讲透微调`](../讲透微调)（RLHF/DPO 实战）+ [`讲透世界模型`](../讲透世界模型)（Dreamer/Genie 谱系）+ [`讲透AI应用全景/02-AI4Math`](../讲透AI应用全景/02-AI4Math.md)（AlphaProof 用 RL）
 
 ---
 
@@ -40,10 +40,10 @@
 → 00 → 01 → 02（值函数 + 策略梯度两大主线）
 
 ### 🛤 想搞机器人 / 具身 / world model
-→ 00 → 01 → 02 → **[08 §1 SAC + §2 Model-Based](./08-Actor-Critic-SAC-ModelBased-OfflineRL.md)（CS285 核心硬通货）** → [`讲透公开课/01`](../讲透公开课/01-前沿课实时清单.md) §2 CS285 L15-16（model-based RL）→ [`讲透世界模型`](../讲透世界模型/)（Dreamer/Genie）→ [07](./07-2026最新研究全景.md) §2 主题 ⑦⑧
+→ 00 → 01 → 02 → **[08 §1 SAC + §2 Model-Based](./08-Actor-Critic-SAC-ModelBased-OfflineRL.md)（CS285 核心硬通货）** → [`讲透公开课/01`](../讲透公开课/01-前沿课实时清单.md) §2 CS285 L15-16（model-based RL）→ [`讲透世界模型`](../讲透世界模型)（Dreamer/Genie）→ [07](./07-2026最新研究全景.md) §2 主题 ⑦⑧
 
 ### 🛤 想搞 RL + 形式化 / 神经符号
-→ 03 → **04**（AlphaProof 谱系 + 基准破灭）→ 05（能力边界）→ [`讲透形式化验证`](../讲透形式化验证/) + [`讲透神经符号`](../讲透神经符号/)
+→ 03 → **04**（AlphaProof 谱系 + 基准破灭）→ 05（能力边界）→ [`讲透形式化验证`](../讲透形式化验证) + [`讲透神经符号`](../讲透神经符号)
 
 ### 🛤 想把 RL 用到生产系统
 → **直接读 06**（六条铁律 + AlphaEvolve vs DRL 的生产真相）→ **然后读 [09 §1§2](./09-工业实践与能力建设.md)**（5 阶段工程化 SOP + 失败模式库），然后才看 02
@@ -52,10 +52,10 @@
 → **直接读 [09](./09-工业实践与能力建设.md)**：30 条 checklist 自评 + 6 个阶梯项目 + §5 三大方向分流（每方向给入门路径 + 项目内资产 + 2026 前沿）
 
 ### 🛤 想做 RL 理论研究
-→ 00 + [`讲透统计学习理论`](../讲透统计学习理论/) → **[08 §4 Bellman/TD/Q-Learning 收敛性 + deadly triad](./08-Actor-Critic-SAC-ModelBased-OfflineRL.md#§4-收敛性证明cs234-的硬通货)（CS234 硬通货）** → **05**（pass@k 反转的数学根因）→ [07](./07-2026最新研究全景.md) §2 主题 ⑨
+→ 00 + [`讲透统计学习理论`](../讲透统计学习理论) → **[08 §4 Bellman/TD/Q-Learning 收敛性 + deadly triad](./08-Actor-Critic-SAC-ModelBased-OfflineRL.md#§4-收敛性证明cs234-的硬通货)（CS234 硬通货）** → **05**（pass@k 反转的数学根因）→ [07](./07-2026最新研究全景.md) §2 主题 ⑨
 
 ### 🛤 想做 Agent 决策
-→ 00 + 02（PPO 是 Agent 工具调用 RL 的基础）+ 配 [`讲透Agent`](../讲透Agent/)
+→ 00 + 02（PPO 是 Agent 工具调用 RL 的基础）+ 配 [`讲透Agent`](../讲透Agent)
 
 ---
 
@@ -69,7 +69,7 @@
 | **Test-time compute** | Noam Brown CS224R / PaCoRe（8B 超 GPT-5）/ Timely-RL | [`高效AI前沿`](../高效AI前沿-全行业热点地图.md) §三 |
 | **RL + 形式证明** | AlphaProof（IMO 银牌）/ Seed-Prover（99.6%）/ Delta-Prover（零微调）/ atp-checkers（基准破灭）| [04](./04-RL与形式证明.md) |
 | **RL + 系统软件** | AlphaEvolve（Google Borg）/ Cold-RL（NGINX）/ reward hacking 跨域泛化 | [06](./06-RL与系统软件.md) |
-| **World Model** | Dreamer V3 / Genie 2 / DIAMOND（部分待核）| [`讲透世界模型`](../讲透世界模型/) + [07](./07-2026最新研究全景.md) §2 主题 ⑦ |
+| **World Model** | Dreamer V3 / Genie 2 / DIAMOND（部分待核）| [`讲透世界模型`](../讲透世界模型) + [07](./07-2026最新研究全景.md) §2 主题 ⑦ |
 | **VLA & 具身 RL** | π0 / OpenVLA / Berkeley CS294-318 Levine（待核）| [07](./07-2026最新研究全景.md) §2 主题 ⑧ |
 | **RL 后端工程** | verl（22.8k⭐）/ OpenRLHF / TRL | [`前沿与媒体/02-后训练`](../前沿与媒体/02-后训练信息源专题.md) |
 
@@ -79,16 +79,16 @@
 
 - **课**：[`讲透公开课/01`](../讲透公开课/01-前沿课实时清单.md) §2 CS285 Spring 2026（含 2026 新增 LLM RL L14 + HW4）
 - **数学**：[`讲透公开课/02`](../讲透公开课/02-数理计算机神课清单.md) 的 Stat 110（概率/MDP）
-- **实战**：[`讲透微调`](../讲透微调/) 的 RLHF/DPO 部分
+- **实战**：[`讲透微调`](../讲透微调) 的 RLHF/DPO 部分
 - **源码**：[`讲透公开课/03`](<../讲透公开课/03-AI Infra 源码导读清单.md>) 的 T5（verl/AReaL/Miles，RL 后端）
 - **跨校代码**：[`berkeley-cs-projects/topic7-rl/deep_rl.py`](../top-cs-projects/berkeley-cs-projects/topic7-rl/deep_rl.py)（CS285 SAC/PPO numpy 实现）
 - **前沿追踪**：[`高效AI前沿-全行业热点地图`](../高效AI前沿-全行业热点地图.md)（2026-08-10）+ [`高效AI前沿-2025-2026顶会精选`](../高效AI前沿-2025-2026顶会精选.md)
 - **信息源**：[`前沿与媒体/02-后训练信息源专题`](../前沿与媒体/02-后训练信息源专题.md)（RLHF/DPO/GRPO 完整信息源 + verl/OpenRLHF + 一手研究者）
-- **内部视角**：[`访谈及其他/张小珺访谈精读/第140集-姚顺宇`](../访谈及其他/张小珺访谈精读/)（Anthropic Horizon RL 团队 10-11 人 + Gemini 3 Deep Think）
-- **world model**：[`讲透世界模型`](../讲透世界模型/)（Dreamer/Genie 谱系，model-based RL）
-- **分布式 RL**：[`讲透分布式AI系统`](../讲透分布式AI系统/)（RL 后端的 DDP/FSDP/ZeRO）
-- **形式化背景**：[`讲透形式化验证`](../讲透形式化验证/)（Lean4 / seL4，配 [04](./04-RL与形式证明.md)）
-- **神经符号闭环**：[`讲透神经符号`](../讲透神经符号/)（AlphaProof 式 RL+形式化，配 [04](./04-RL与形式证明.md)）
+- **内部视角**：[`访谈及其他/张小珺访谈精读/第140集-姚顺宇`](../访谈及其他/张小珺访谈精读)（Anthropic Horizon RL 团队 10-11 人 + Gemini 3 Deep Think）
+- **world model**：[`讲透世界模型`](../讲透世界模型)（Dreamer/Genie 谱系，model-based RL）
+- **分布式 RL**：[`讲透分布式AI系统`](../讲透分布式AI系统)（RL 后端的 DDP/FSDP/ZeRO）
+- **形式化背景**：[`讲透形式化验证`](../讲透形式化验证)（Lean4 / seL4，配 [04](./04-RL与形式证明.md)）
+- **神经符号闭环**：[`讲透神经符号`](../讲透神经符号)（AlphaProof 式 RL+形式化，配 [04](./04-RL与形式证明.md)）
 
 ---
 
@@ -136,4 +136,4 @@
 
 ---
 
-🔗 **交叉链接**：Stanford CS336 论文精读 · 对齐与后训练（PPO/RLHF/DPO/GRPO/R1，8 篇），见 [`讲透公开课/06-CS336论文精读/H-对齐与后训练.md`](../讲透公开课/06-CS336论文精读/H-对齐与后训练.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments/)。
+🔗 **交叉链接**：Stanford CS336 论文精读 · 对齐与后训练（PPO/RLHF/DPO/GRPO/R1，8 篇），见 [`讲透公开课/06-CS336论文精读/H-对齐与后训练.md`](../讲透公开课/06-CS336论文精读/H-对齐与后训练.md)；配套可运行验证实验见 [`其 experiments/`](../讲透公开课/06-CS336论文精读/experiments)。

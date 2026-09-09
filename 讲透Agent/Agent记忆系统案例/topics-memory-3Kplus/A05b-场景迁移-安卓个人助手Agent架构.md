@@ -2,7 +2,7 @@
 
 > **本文是什么**：A05-技术博客-TencentDB-Agent-Memory.md 的场景迁移**扩展版**——不止迁移记忆系统，而是以它为骨架之一，设计**安卓个人助手 Agent 的完整架构**：循环层 / 工具层 / 记忆层 / 技能层 / 上下文层 / 模型层 / 治理层，七层一起过。
 > **信源与诚实边界**：TencentDB 机制描述继承 A05 深读（官方 docs v2.0.0）；**完整架构设计是本笔记的工程练习**，融合本仓库讲透系列的方法论（讲透Loop 循环设计学 / 讲透KV Cache 09 谱系统一 / Open-AutoGLM 手机 Agent 实战）——非任何官方文档。
-> **姊妹篇**：[A05 原版](A05-技术博客-TencentDB-Agent-Memory.md)（coding 场景）｜[Open-AutoGLM 手机 Agent](../../实战案例-Open-AutoGLM手机Agent/)（真机先例）
+> **姊妹篇**：[A05 原版](A05-技术博客-TencentDB-Agent-Memory.md)（coding 场景）｜[Open-AutoGLM 手机 Agent](../../实战案例-Open-AutoGLM手机Agent)（真机先例）
 
 ## TL;DR
 
@@ -128,4 +128,4 @@ A05 原文结语说"没有 Memory，Loop 只是更快地重复"。完整架构�
 
 ---
 
-**信源**：TencentDB 机制继承 A05（官方 docs v2.0.0 + 源码笔记）；循环/守卫/状态方法论来自本仓库 [讲透Loop](../../../讲透Loop/)；谱系化上下文来自 [讲透KV Cache 09](../../讲透模型/讲透KV%20Cache/09-谱系统一：KVCache-SSM-TTT.md)；手机 GUI 执行教训来自 [Open-AutoGLM 案例](../../实战案例-Open-AutoGLM手机Agent/)。完整架构设计与安卓工程细节为本笔记工程练习。
+**信源**：TencentDB 机制继承 A05（官方 docs v2.0.0 + 源码笔记）；循环/守卫/状态方法论来自本仓库 [讲透Loop](../../../讲透Loop)；谱系化上下文来自 [讲透KV Cache 09](../../讲透模型/讲透KV%20Cache/09-谱系统一：KVCache-SSM-TTT.md)；手机 GUI 执行教训来自 [Open-AutoGLM 案例](../../实战案例-Open-AutoGLM手机Agent)。完整架构设计与安卓工程细节为本笔记工程练习。

@@ -71,7 +71,7 @@ $$
 
 ### 2.3 架构容量：Transformer
 
-Transformer（[`讲透Transformer/`](../讲透Transformer/)）的关键：
+Transformer（[`讲透Transformer/`](../讲透Transformer)）的关键：
 - **Self-Attention**：让每个 token 看到所有其他 token（长程依赖）
 - **堆叠层**：每层学不同抽象（浅层语法，深层语义）
 - **位置编码**：注入顺序信息（[`讲透Transformer/02`](../讲透Transformer/02-位置编码演进.md)）
@@ -178,13 +178,13 @@ LLM 不是"训一次"完成的，而是**三层渐进训练**（详见 [01 完�
 
 📌 **下一步**：
 - 想看 **完整训练流程** → [01 完整生命周期](./01-完整生命周期.md)
-- 想深入 **Transformer 架构** → [`讲透Transformer/`](../讲透Transformer/)
+- 想深入 **Transformer 架构** → [`讲透Transformer/`](../讲透Transformer)
 - 想深入 **对齐 RL** → [`讲透RL/03 RLHF/DPO/GRPO`](../讲透RL/03-RLHF-DPO-GRPO.md)
 - 想自己训 LLM → [`讲透公开课/06 CS336`](../讲透公开课/06-CS336语言建模从零造·全解.md)
 
 ---
 
-**完成日期**：2026-08-13  ·  **配套**：[讲透LLM README](./README.md) + [`讲透Transformer`](../讲透Transformer/) + [`讲透RL`](../讲透RL/)
+**完成日期**：2026-08-13  ·  **配套**：[讲透LLM README](./README.md) + [`讲透Transformer`](../讲透Transformer) + [`讲透RL`](../讲透RL)
 
 ---
 

@@ -191,4 +191,4 @@ Multi-Agent × Multi-Model 路由 / 自有协议层 / Variables @ 触发 / 大�
 
 ## 下一步
 - 看具体借鉴清单和决策树 → [`08-blueprint.md`](./08-blueprint.md)
-- 看具体形态细节 → [`01-05`](./)
+- 看具体形态细节 → [`01-05`](.)

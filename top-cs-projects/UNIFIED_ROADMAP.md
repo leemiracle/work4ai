@@ -309,7 +309,7 @@
   - **Stanford CS234**（Emma Brunskill，偏理论 / online learning / safe RL，能严格推导 Bellman / TD / Q-Learning 收敛性）
   - **MIT 6.S191 RL 章节 / 6.S192-198 IAP**（Alexander Amini，1 月 IAP 短期版，与 6.S191 配套；注：6.S192-6.S198 在 MIT catalog 是 placeholder，实际课号随年份浮动）
 - **作者归属校正**：Levine 是 **DDPG / GPS / PETS / MBPO / CQL / AWAC / Diffusion Policy** 的核心；TRPO 一作 Schulman、SAC 一作 Haarnoja，Levine 都是共同作者（不要再说"SAC/TRPO 之父"）。
-- **学完能去哪**：CS 285 → 机器人/具身智能（Boston Dynamics / Tesla Optimus / Figure）/ DeepMind / OpenAI RL 团队；CS234 → RL 理论 PhD / safe RL；6.S191-RL → 入门跳板。详见 [`INSIGHTS_FULL_PICTURE.md`](./INSIGHTS_FULL_PICTURE.md) 洞察 11 + [`讲透RL/`](../讲透RL/) 全套笔记。
+- **学完能去哪**：CS 285 → 机器人/具身智能（Boston Dynamics / Tesla Optimus / Figure）/ DeepMind / OpenAI RL 团队；CS234 → RL 理论 PhD / safe RL；6.S191-RL → 入门跳板。详见 [`INSIGHTS_FULL_PICTURE.md`](./INSIGHTS_FULL_PICTURE.md) 洞察 11 + [`讲透RL/`](../讲透RL) 全套笔记。
 - **知识检查**：解释 PPO 比 REINFORCE 好在哪；解释 Q-Learning 的 deadly triad 为什么会发散。
 
 ---

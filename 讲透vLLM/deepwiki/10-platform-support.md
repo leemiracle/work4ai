@@ -49,7 +49,7 @@ Relevant source files
 
 This document describes vLLM's platform abstraction layer, which enables cross-platform execution on NVIDIA GPUs (CUDA), AMD GPUs (ROCm), Intel GPUs (XPU), CPUs, and TPUs. The platform layer provides a unified interface for hardware detection, device capability queries, attention backend selection, and platform-specific configuration adjustments.
 
-For attention backend implementations, see [Attention Backends](/vllm-project/vllm/8-attention-backends). For distributed execution and communication backends, see [Distributed Execution](/vllm-project/vllm/9-distributed-execution).
+For attention backend implementations, see [Attention Backends](../../../../vllm-project/vllm/8-attention-backends). For distributed execution and communication backends, see [Distributed Execution](../../../../vllm-project/vllm/9-distributed-execution).
 
 * * *
 
@@ -95,19 +95,19 @@ Platform| Capability Representation| Detection Method| Key Attributes
 
 ### Platform Abstraction Layer
 
-For details, see [Platform Abstraction Layer](/vllm-project/vllm/10.1-platform-abstraction-layer). The `Platform` interface provides the blueprint for hardware-specific logic, ensuring that components like the `AttentionSelector` or `Worker` can interact with different accelerators through a common API. vLLM also supports a plugin system for registering out-of-tree (OOT) platforms via the `vllm.platform_plugins` entry point [docs/design/plugin_system.md50-51](https://github.com/vllm-project/vllm/blob/185cada3/docs/design/plugin_system.md?plain=1#L50-L51)
+For details, see [Platform Abstraction Layer](../../../../vllm-project/vllm/10.1-platform-abstraction-layer). The `Platform` interface provides the blueprint for hardware-specific logic, ensuring that components like the `AttentionSelector` or `Worker` can interact with different accelerators through a common API. vLLM also supports a plugin system for registering out-of-tree (OOT) platforms via the `vllm.platform_plugins` entry point [docs/design/plugin_system.md50-51](https://github.com/vllm-project/vllm/blob/185cada3/docs/design/plugin_system.md?plain=1#L50-L51)
 
 ### CUDA Platform
 
-For details, see [CUDA Platform](/vllm-project/vllm/10.2-cuda-platform). The CUDA platform supports NVIDIA GPUs. It utilizes `pynvml` for hardware discovery without initializing the CUDA context prematurely [vllm/platforms/cuda.py3-5](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py#L3-L5) It handles backend priorities via `_get_backend_priorities`, favoring `FLASHINFER` or `FLASHMLA` on Blackwell (SM 10.0) and `FLASH_ATTN` on older architectures [vllm/platforms/cuda.py83-163](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py#L83-L163)
+For details, see [CUDA Platform](../../../../vllm-project/vllm/10.2-cuda-platform). The CUDA platform supports NVIDIA GPUs. It utilizes `pynvml` for hardware discovery without initializing the CUDA context prematurely [vllm/platforms/cuda.py3-5](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py#L3-L5) It handles backend priorities via `_get_backend_priorities`, favoring `FLASHINFER` or `FLASHMLA` on Blackwell (SM 10.0) and `FLASH_ATTN` on older architectures [vllm/platforms/cuda.py83-163](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py#L83-L163)
 
 ### ROCm Platform
 
-For details, see [ROCm Platform](/vllm-project/vllm/10.3-rocm-platform). The ROCm platform supports AMD GPUs. It parses GCN architecture strings (e.g., `gfx942` for MI300X) using `amdsmi` to determine capabilities [vllm/platforms/rocm.py178-189](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L178-L189) It handles environment variable synchronization between `HIP_VISIBLE_DEVICES` and `CUDA_VISIBLE_DEVICES` [vllm/platforms/rocm.py127-156](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L127-L156)
+For details, see [ROCm Platform](../../../../vllm-project/vllm/10.3-rocm-platform). The ROCm platform supports AMD GPUs. It parses GCN architecture strings (e.g., `gfx942` for MI300X) using `amdsmi` to determine capabilities [vllm/platforms/rocm.py178-189](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L178-L189) It handles environment variable synchronization between `HIP_VISIBLE_DEVICES` and `CUDA_VISIBLE_DEVICES` [vllm/platforms/rocm.py127-156](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L127-L156)
 
 ### XPU, CPU, and TPU Platforms
 
-For details, see [XPU, CPU, and TPU Platforms](/vllm-project/vllm/10.4-xpu-cpu-and-tpu-platforms).
+For details, see [XPU, CPU, and TPU Platforms](../../../../vllm-project/vllm/10.4-xpu-cpu-and-tpu-platforms).
 
   * **XPU** : Supports Intel GPUs. It routes attention backends based on `AttentionSelectorConfig` [vllm/platforms/xpu.py142-194](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/xpu.py#L142-L194) and provides memory information via `get_mem_info_wrapper` which wraps the underlying C++ implementation `torch.ops._C_cache_ops.getMemoryInfo` [vllm/platforms/xpu.py31-97](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/xpu.py#L31-L97)
   * **CPU** : Supports multiple architectures (x86, ARM, PowerPC, RISC-V, S390X). It implements NUMA-aware memory allocation via `get_memory_node_info` [vllm/platforms/cpu.py123-125](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L123-L125) and `init_cpu_memory_env` in C++ [vllm/v1/worker/cpu_worker.py71](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/cpu_worker.py#L71-L71) It utilizes the `Gloo` distributed backend [vllm/platforms/cpu.py48](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L48-L48)

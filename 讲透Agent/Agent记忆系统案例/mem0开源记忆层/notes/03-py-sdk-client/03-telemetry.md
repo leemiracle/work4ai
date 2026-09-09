@@ -358,4 +358,4 @@ A: **是的**（除非设 `MEM0_TELEMETRY=False`）。Server 也 import mem0 SDK
 
 ---
 
-📌 **下一步** → [`../04-ts-sdk/`](../04-ts-sdk/) TypeScript SDK。
+📌 **下一步** → [`../04-ts-sdk/`](../04-ts-sdk) TypeScript SDK。

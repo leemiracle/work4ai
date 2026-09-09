@@ -231,8 +231,8 @@ train 按**频次**选 pair（建规则），encode 按 **merge index** 选 pair
 |---|---|
 | BPE 算法 + train/encode | `讲透NLP/02-词与token`（待写/未落盘）（token 化基础）|
 | GPT-2/4 tokenizer 的内部 | [`讲透Transformer/13-Tokenizer`](../讲透Transformer/13-Tokenizer.md)（生产级 tokenizer）|
-| byte-level / 子词 / OOV | [`讲透分词器/`](../notes/)（笔记，深化版）|
-| 分词对 LLM 的影响（拼写/反转/计数）| [`讲透Prompt`](../讲透Prompt/)（"LLM 不会数 token"现象）|
+| byte-level / 子词 / OOV | [`讲透分词器/`](../notes)（笔记，深化版）|
+| 分词对 LLM 的影响（拼写/反转/计数）| [`讲透Prompt`](../讲透Prompt)（"LLM 不会数 token"现象）|
 
 **阅读路径**：读 [讲透NLP/02] 搞懂 token 化概念 → 读本精读看 330 行最小 BPE 实现 → 读 [讲透Transformer/13] 看 tiktoken 生产级差异。
 

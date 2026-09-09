@@ -86,8 +86,8 @@ Pattern| Description| Examples
 
 For detailed technical information, refer to the following sections:
 
-  * **[Getting Started](/vllm-project/vllm-omni/1.1-getting-started)** : Installation for CUDA, ROCm, XPU, and NPU backends. Includes quickstart for offline and online inference [docs/getting_started/quickstart.mdNaN-NaN](https://github.com/vllm-project/vllm-omni/blob/10906e3a/docs/getting_started/quickstart.md?plain=1#LNaN-LNaN)
-  * **[Architecture Overview](/vllm-project/vllm-omni/1.2-architecture-overview)** : Deep dive into the multi-stage pipeline abstraction, the three representative model patterns (DiT-main, AR-main, AR+DiT), and the core orchestrator logic [docs/design/architecture_overview.md](https://github.com/vllm-project/vllm-omni/blob/10906e3a/docs/design/architecture_overview.md?plain=1)
+  * **[Getting Started](../../../../../vllm-project/vllm-omni/1.1-getting-started)** : Installation for CUDA, ROCm, XPU, and NPU backends. Includes quickstart for offline and online inference [docs/getting_started/quickstart.mdNaN-NaN](https://github.com/vllm-project/vllm-omni/blob/10906e3a/docs/getting_started/quickstart.md?plain=1#LNaN-LNaN)
+  * **[Architecture Overview](../../../../../vllm-project/vllm-omni/1.2-architecture-overview)** : Deep dive into the multi-stage pipeline abstraction, the three representative model patterns (DiT-main, AR-main, AR+DiT), and the core orchestrator logic [docs/design/architecture_overview.md](https://github.com/vllm-project/vllm-omni/blob/10906e3a/docs/design/architecture_overview.md?plain=1)
   * **Core Engine** : Details on `AsyncOmni` entrypoints, the `Orchestrator` request routing, and stage configuration YAML schemas.
   * **AR (Autoregressive) Module** : Overview of the AR execution path, including GPU model runners and schedulers for models like Qwen3-Omni and various TTS engines.
   * **Diffusion Module** : Internal architecture of `DiffusionEngine`, step-wise execution, attention backends, and caching acceleration like TeaCache and Cache-DiT [docs/design/index.md70-72](https://github.com/vllm-project/vllm-omni/blob/10906e3a/docs/design/index.md?plain=1#L70-L72)

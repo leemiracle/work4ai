@@ -61,7 +61,7 @@
 | [`讲透Agent/`](../讲透Agent/README.md) | ReAct 循环/工具调用/记忆机制归它；本系列是它的应用形态篇 |
 | [`讲透多Agent协作/`](../讲透多Agent协作/README.md) | 多体编排拓扑归它；本系列 01 只按"单体/流水线/多agent/混合"引用结论 |
 | [`讲透代码生成/`](../讲透代码生成/README.md) | Vibe Coding 五模式归它；DR 与 coding agent 的交叉（报告→代码→图表）留观 |
-| [`Agent框架案例/`](../Agent框架案例/) + [harness精华](../harness精华合入-总入口.md) | deer-flow 案例（DR 框架起家的 harness）在 harness 镜 §三，本系列 07 引用 |
+| [`Agent框架案例/`](../Agent框架案例) + [harness精华](../harness精华合入-总入口.md) | deer-flow 案例（DR 框架起家的 harness）在 harness 镜 §三，本系列 07 引用 |
 | [PaperAgent精华合入](../PaperAgent精华合入-总入口.md) | 论文锚点总库：§七/§十/§十一/§十五 直接支撑本系列四章 |
 
 ---

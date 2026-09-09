@@ -120,10 +120,10 @@ AlexNet 一发，整个圈震动。
 ## 🛠️ 我该深挖什么
 
 ### work4ai 系列
-- [`../讲透GPU与系统级/`](../讲透GPU与系统级/)：FlashAttention / vLLM / CUDA / 量化
-- [`../讲透激活函数/`](../讲透激活函数/)：sigmoid → ReLU → SwiGLU 完整故事
-- [`../讲透泛化/`](../讲透泛化/)：过拟合 / 双层下降 / 隐式正则
-- [`../讲透基础模型/`](../讲透基础模型/)：CNN / ViT 完整演进
+- [`../讲透GPU与系统级/`](../讲透GPU与系统级)：FlashAttention / vLLM / CUDA / 量化
+- [`../讲透激活函数/`](../讲透激活函数)：sigmoid → ReLU → SwiGLU 完整故事
+- [`../讲透泛化/`](../讲透泛化)：过拟合 / 双层下降 / 隐式正则
+- [`../讲透基础模型/`](../讲透基础模型)：CNN / ViT 完整演进
 
 ### 必读经典
 - **Krizhevsky et al. 2012 "ImageNet Classification with Deep CNNs"**（AlexNet 原文）

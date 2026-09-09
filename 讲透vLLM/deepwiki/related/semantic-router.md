@@ -44,7 +44,7 @@ The system delivers three core values [README.md27-31](https://github.com/vllm-p
   2. **LLM Safety** : Detect jailbreaks, sensitive PII leakage, and hallucinations so agents remain controllable, trustworthy, and auditable.
   3. **Fullmesh Intelligence** : Coordinate local, private, and frontier models across cost, privacy, and capability boundaries.
 
-For a detailed enumeration of capabilities, see [Key Features and Capabilities](/vllm-project/semantic-router/1.1-key-features-and-capabilities). For system architecture deep-dives, see [System Architecture at a Glance](/vllm-project/semantic-router/1.2-system-architecture-at-a-glance). For theoretical foundations, see [White Paper and Research](/vllm-project/semantic-router/1.3-white-paper-and-research).
+For a detailed enumeration of capabilities, see [Key Features and Capabilities](../../../../../vllm-project/semantic-router/1.1-key-features-and-capabilities). For system architecture deep-dives, see [System Architecture at a Glance](../../../../../vllm-project/semantic-router/1.2-system-architecture-at-a-glance). For theoretical foundations, see [White Paper and Research](../../../../../vllm-project/semantic-router/1.3-white-paper-and-research).
 
 **Sources:** [README.md19-32](https://github.com/vllm-project/semantic-router/blob/5d186b58/README.md?plain=1#L19-L32) [src/semantic-router/pkg/config/config.go24-45](https://github.com/vllm-project/semantic-router/blob/5d186b58/src/semantic-router/pkg/config/config.go#L24-L45) [src/semantic-router/pkg/extproc/processor_req_body.go29-97](https://github.com/vllm-project/semantic-router/blob/5d186b58/src/semantic-router/pkg/extproc/processor_req_body.go#L29-L97)
 
@@ -81,7 +81,7 @@ The router extracts 20+ maintained signal families defined as constants in the c
   * **Heuristic** : `keyword`, `language`, `context`, `structure`, `authz`.
   * **Learned/ML** : `embedding`, `domain`, `complexity`, `modality`, `jailbreak`, `pii`, `fact_check`, `user_feedback`, `reask`, `preference`, `kb`, `projection`, `conversation`, `event`.
 
-For details on how these signals drive routing logic, see [Key Features and Capabilities](/vllm-project/semantic-router/1.1-key-features-and-capabilities).
+For details on how these signals drive routing logic, see [Key Features and Capabilities](../../../../../vllm-project/semantic-router/1.1-key-features-and-capabilities).
 
 **Sources:** [src/semantic-router/pkg/config/config.go24-45](https://github.com/vllm-project/semantic-router/blob/5d186b58/src/semantic-router/pkg/config/config.go#L24-L45) [src/semantic-router/pkg/extproc/req_filter_classification.go21-130](https://github.com/vllm-project/semantic-router/blob/5d186b58/src/semantic-router/pkg/extproc/req_filter_classification.go#L21-L130)
 
@@ -91,7 +91,7 @@ The `OpenAIRouter` implements the four-phase Envoy ExtProc protocol: request hea
 
 ### ExtProc Four-Phase Flow
 
-For a deeper dive into the pipeline, see [System Architecture at a Glance](/vllm-project/semantic-router/1.2-system-architecture-at-a-glance).
+For a deeper dive into the pipeline, see [System Architecture at a Glance](../../../../../vllm-project/semantic-router/1.2-system-architecture-at-a-glance).
 
 **Sources:** [src/semantic-router/pkg/extproc/processor_req_header.go21-59](https://github.com/vllm-project/semantic-router/blob/5d186b58/src/semantic-router/pkg/extproc/processor_req_header.go#L21-L59) [src/semantic-router/pkg/extproc/processor_req_body.go29-141](https://github.com/vllm-project/semantic-router/blob/5d186b58/src/semantic-router/pkg/extproc/processor_req_body.go#L29-L141) [src/semantic-router/pkg/extproc/req_filter_classification.go21-64](https://github.com/vllm-project/semantic-router/blob/5d186b58/src/semantic-router/pkg/extproc/req_filter_classification.go#L21-L64)
 

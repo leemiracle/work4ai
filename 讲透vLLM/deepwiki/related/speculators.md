@@ -18,7 +18,7 @@ Relevant source files
 
 This document provides a high-level introduction to the Speculators library, explaining its purpose, core components, and main workflows. Speculators is a unified framework for building, training, and deploying speculative decoding models for large language model (LLM) inference acceleration, specifically optimized for frameworks like vLLM.
 
-For installation instructions, see [Installation and Setup](/vllm-project/speculators/1.3-installation-and-setup). For hands-on tutorials, see [Quick Start](/vllm-project/speculators/1.1-quick-start). For detailed system architecture, see [System Architecture](/vllm-project/speculators/1.2-system-architecture).
+For installation instructions, see [Installation and Setup](../../../../../vllm-project/speculators/1.3-installation-and-setup). For hands-on tutorials, see [Quick Start](../../../../../vllm-project/speculators/1.1-quick-start). For detailed system architecture, see [System Architecture](../../../../../vllm-project/speculators/1.2-system-architecture).
 
 **Sources:** [README.md13-26](https://github.com/vllm-project/speculators/blob/4f80f5dc/README.md?plain=1#L13-L26) [docs/index.md11-18](https://github.com/vllm-project/speculators/blob/4f80f5dc/docs/index.md?plain=1#L11-L18)
 

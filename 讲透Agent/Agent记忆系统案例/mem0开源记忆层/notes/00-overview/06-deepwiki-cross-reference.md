@@ -10,20 +10,20 @@
 
 | 章节 | 子页 | 对应本笔记 |
 |------|-----|----------|
-| **1. Overview** | 1.1 System Architecture / 1.2 Install / 1.3 Deployment Models | [`00-overview/`](../00-overview/) |
-| **2. Core Architecture** | 2.1 Factory Pattern / 2.2 Provider Ecosystem / 2.3 Configuration | [`02-py-sdk-providers/`](../02-py-sdk-providers/) |
-| **3. Memory System** | 3.1 Memory Class / 3.2 MemoryClient / 3.3 Operations / 3.4 Scoping / 3.5 Async / 3.6 Proxy / 3.7 Intelligent Processing | [`01-py-sdk-core/`](../01-py-sdk-core/) + [`03-py-sdk-client/`](../03-py-sdk-client/) |
+| **1. Overview** | 1.1 System Architecture / 1.2 Install / 1.3 Deployment Models | [`00-overview/`](.) |
+| **2. Core Architecture** | 2.1 Factory Pattern / 2.2 Provider Ecosystem / 2.3 Configuration | [`02-py-sdk-providers/`](../02-py-sdk-providers) |
+| **3. Memory System** | 3.1 Memory Class / 3.2 MemoryClient / 3.3 Operations / 3.4 Scoping / 3.5 Async / 3.6 Proxy / 3.7 Intelligent Processing | [`01-py-sdk-core/`](../01-py-sdk-core) + [`03-py-sdk-client/`](../03-py-sdk-client) |
 | **4. Graph Memory** ⚠️ | 4.1 Overview / 4.2 Store Providers / 4.3 Entity Extraction / 4.4 Search / 4.5 Thresholds | [`02-py-sdk-providers/05-graphs.md`](../02-py-sdk-providers/05-graphs.md) |
 | **5. Storage Backends** | 5.1 Vector Stores / 5.2 Providers / 5.3 Config / 5.4 History Audit | [`02-py-sdk-providers/04-vector-stores.md`](../02-py-sdk-providers/04-vector-stores.md) + [`01-py-sdk-core/03-storage.md`](../01-py-sdk-core/03-storage.md) |
 | **6. AI Model Integrations** | 6.1 LLMs / 6.2 LLM Config / 6.3 Embeddings / 6.4 Embed Config / 6.5 Reranking | [`02-py-sdk-providers/02-llms.md`](../02-py-sdk-providers/02-llms.md) 等 |
-| **7. Platform and API** | 7.1 Hosted / 7.2 REST API / 7.3 Versioning / 7.4 Orgs / 7.5 Webhooks / 7.6 Export | [`03-py-sdk-client/`](../03-py-sdk-client/) |
-| **8. Client SDKs** | 8.1 Python / 8.2 TS / 8.3 Vercel AI | [`04-ts-sdk/`](../04-ts-sdk/) |
-| **9. Framework Integrations** | 9.1 Agent Frameworks / 9.2 OpenClaw / 9.3 Voice / 9.4 Dev Tools / 9.5 MCP / 9.6 Pi | [`08-integrations/`](../08-integrations/) |
-| **10. Usage Patterns** | 10.1 Basic / 10.2 Advanced / 10.3 Domain | [`10-examples-eval/`](../10-examples-eval/) |
+| **7. Platform and API** | 7.1 Hosted / 7.2 REST API / 7.3 Versioning / 7.4 Orgs / 7.5 Webhooks / 7.6 Export | [`03-py-sdk-client/`](../03-py-sdk-client) |
+| **8. Client SDKs** | 8.1 Python / 8.2 TS / 8.3 Vercel AI | [`04-ts-sdk/`](../04-ts-sdk) |
+| **9. Framework Integrations** | 9.1 Agent Frameworks / 9.2 OpenClaw / 9.3 Voice / 9.4 Dev Tools / 9.5 MCP / 9.6 Pi | [`08-integrations/`](../08-integrations) |
+| **10. Usage Patterns** | 10.1 Basic / 10.2 Advanced / 10.3 Domain | [`10-examples-eval/`](../10-examples-eval) |
 | **11. Advanced Features** | 11.1 Custom Prompts / 11.2 Telemetry / 11.3 Performance / 11.4 Filtering / 11.5 Batch | 散见各章 |
-| **12. Self-Hosted Server** | 12.1 Setup / 12.2 Auth / 12.3 Dashboard | [`05-server/`](../05-server/) |
-| **13. CLI** | 13.1 Commands / 13.2 Config | [`06-cli-python/`](../06-cli-python/) + [`07-cli-node/`](../07-cli-node/) |
-| **14. Development** | 14.1 Setup / 14.2 Testing / 14.3 CI/CD / 14.4 Contrib / 14.5 Docs / 14.6 Eval / 14.7 Skills | [`00-overview/03-build-system.md`](./03-build-system.md) + [`00-overview/04-cicd.md`](./04-cicd.md) + [`09-skills/`](../09-skills/) |
+| **12. Self-Hosted Server** | 12.1 Setup / 12.2 Auth / 12.3 Dashboard | [`05-server/`](../05-server) |
+| **13. CLI** | 13.1 Commands / 13.2 Config | [`06-cli-python/`](../06-cli-python) + [`07-cli-node/`](../07-cli-node) |
+| **14. Development** | 14.1 Setup / 14.2 Testing / 14.3 CI/CD / 14.4 Contrib / 14.5 Docs / 14.6 Eval / 14.7 Skills | [`00-overview/03-build-system.md`](./03-build-system.md) + [`00-overview/04-cicd.md`](./04-cicd.md) + [`09-skills/`](../09-skills) |
 | **15. OpenMemory (Deprecated)** | 15.1 Migration / 15.2 MCP | （旧版本,本笔记不覆盖） |
 | **16. Legacy: Embedchain** | 16.1 / 16.2 / 16.3 | （更老的遗留,不覆盖） |
 | **17. Glossary** | — | [`99-appendix/index.md`](../99-appendix/index.md) §A |

@@ -2,10 +2,10 @@
 
 > 一句话定位：**Agent 的"眼睛"——预索引的代码知识图谱 / 语义检索基础设施，让 agent 一次调用拿到精确代码，而不是 grep/glob/Read 逐文件爬仓库。**
 >
-> 与 [`Agent框架案例/`](../Agent框架案例/)（harness 层：进程/工具/信任）、[`Agent记忆系统案例/`](../Agent记忆系统案例/)（记忆层：跨会话知识）平行，本目录是**上下文层**：单次任务内"给模型看什么代码"。
+> 与 [`Agent框架案例/`](../Agent框架案例)（harness 层：进程/工具/信任）、[`Agent记忆系统案例/`](../Agent记忆系统案例)（记忆层：跨会话知识）平行，本目录是**上下文层**：单次任务内"给模型看什么代码"。
 >
-> 首个案例：[`codegraph代码知识图谱/`](./codegraph代码知识图谱/)（66.4k★，2026-01 首发 npm，本地验证 2026-08-14）
-> 第二案例：[`graphify知识图谱skill/`](./graphify知识图谱skill/)（106k★，PyPI `graphifyy`，skill 交付 + 多模态语料，本地验证 2026-08-14）
+> 首个案例：[`codegraph代码知识图谱/`](./codegraph代码知识图谱)（66.4k★，2026-01 首发 npm，本地验证 2026-08-14）
+> 第二案例：[`graphify知识图谱skill/`](./graphify知识图谱skill)（106k★，PyPI `graphifyy`，skill 交付 + 多模态语料，本地验证 2026-08-14）
 
 ---
 
@@ -34,8 +34,8 @@ Baseline 是每个 coding agent 的原生探索循环：**grep → glob → Read
 
 | 项目 | Stars | 机制 | 语言 | 交付面 | License | 一句话 |
 |---|---|---|---|---|---|---|
-| [codegraph](https://github.com/colbymchenry/codegraph)（[案例](./codegraph代码知识图谱/)） | 66.4k | Rust 内核解析成图 → SQLite+FTS5 | 20+（Rust 原生 20） | MCP（默认单工具 `codegraph_explore`）+ CLI | MIT | 最快的完整代码图谱，本地优先，auto-sync 秒级 |
-| [graphify](https://github.com/Graphify-Labs/graphify)（[案例](./graphify知识图谱skill/)） | 106k | Python 七段管线：tree-sitter AST（零 LLM）+ LLM 语义 pass；每条边带 EXTRACTED/INFERRED/AMBIGUOUS 置信标签 | 36 语法 + docs/PDF/Office/音视频/arXiv | **skill（`/graphify`，20+ 平台）** + CLI + MCP/HTTP 可选；产物三件套可 git 共享 | Apache-2.0+MIT | 代码之外的一切（文档/PDF/视频/why 注释）也进图；Leiden 社区 + god nodes + path 查询；YC S26 |
+| [codegraph](https://github.com/colbymchenry/codegraph)（[案例](./codegraph代码知识图谱)） | 66.4k | Rust 内核解析成图 → SQLite+FTS5 | 20+（Rust 原生 20） | MCP（默认单工具 `codegraph_explore`）+ CLI | MIT | 最快的完整代码图谱，本地优先，auto-sync 秒级 |
+| [graphify](https://github.com/Graphify-Labs/graphify)（[案例](./graphify知识图谱skill)） | 106k | Python 七段管线：tree-sitter AST（零 LLM）+ LLM 语义 pass；每条边带 EXTRACTED/INFERRED/AMBIGUOUS 置信标签 | 36 语法 + docs/PDF/Office/音视频/arXiv | **skill（`/graphify`，20+ 平台）** + CLI + MCP/HTTP 可选；产物三件套可 git 共享 | Apache-2.0+MIT | 代码之外的一切（文档/PDF/视频/why 注释）也进图；Leiden 社区 + god nodes + path 查询；YC S26 |
 | [Serena](https://github.com/oraios/serena) | 28k | LSP 抽象层（或付费 JetBrains 插件后端） | 40+ | MCP（多工具：找符号/引用/重构/符号级编辑）+ 记忆系统 | MIT | "agent 的 IDE"——语义检索**加**精确编辑重构 |
 | [code-index-mcp](https://github.com/johnhuang316/code-index-mcp) | 1k | tree-sitter 深解析 10 语言 + fallback 50+ 文件类型 | 10 深/50+ 浅 | MCP（搜索为主，浅/深两级索引） | MIT | 轻量索引搜索，Claude 生态出身 |
 | Aider [repo map](https://aider.chat/docs/repomap.html) | — | tree-sitter 抽符号 → 文件依赖图上跑图排序（PageRank 式）→ 1k token 预算内出地图 | tree-sitter 全系 | prompt 注入（每轮随请求发送） | Apache-2.0 | "图排序选 top 符号"思想的原点（2023-10） |
@@ -103,6 +103,6 @@ Baseline 是每个 coding agent 的原生探索循环：**grep → glob → Read
 
 ## 📌 导航
 
-- 案例一：[`codegraph代码知识图谱/`](./codegraph代码知识图谱/)（MCP 常驻路线 · README + 3 篇笔记）
-- 案例二：[`graphify知识图谱skill/`](./graphify知识图谱skill/)（skill 按需路线 · README + 3 篇笔记；与案例一正面互文）
+- 案例一：[`codegraph代码知识图谱/`](./codegraph代码知识图谱)（MCP 常驻路线 · README + 3 篇笔记）
+- 案例二：[`graphify知识图谱skill/`](./graphify知识图谱skill)（skill 按需路线 · README + 3 篇笔记；与案例一正面互文）
 - 待办案例位：Serena（LSP 路线）、Greptile（SaaS 路线）、Aider repo map（地图路线）——按需增补

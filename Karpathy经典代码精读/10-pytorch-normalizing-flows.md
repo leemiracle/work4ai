@@ -177,10 +177,10 @@ MAF 用 MADE 当条件器，而 MADE 的 mask 和 [GPT causal attention](./06-mi
 
 | 本精读讲透的 | work4ai 深度版 |
 |---|---|
-| NF 改变变量公式 / 可逆变换 | [`讲透生成模型`](../讲透生成模型/)（Flow 家族）|
-| RealNVP 三角 Jacobian | [`讲透生成模型`](../讲透生成模型/)（耦合层）|
+| NF 改变变量公式 / 可逆变换 | [`讲透生成模型`](../讲透生成模型)（Flow 家族）|
+| RealNVP 三角 Jacobian | [`讲透生成模型`](../讲透生成模型)（耦合层）|
 | MADE 当条件器 | [03-pytorch-made 精读](./03-pytorch-made-掩码自编码器.md) |
-| NF vs VAE vs GAN vs Diffusion | [`讲透生成模型`](../讲透生成模型/)（生成模型全谱）|
+| NF vs VAE vs GAN vs Diffusion | [`讲透生成模型`](../讲透生成模型)（生成模型全谱）|
 
 **阅读路径**：[VQ-VAE 精读](./05-deep-vector-quantization-VQVAE.md)（离散生成）+ 本篇（精确密度）+ [讲透生成模型]（VAE/GAN/Diffusion 全谱）= 完整生成模型图景。
 

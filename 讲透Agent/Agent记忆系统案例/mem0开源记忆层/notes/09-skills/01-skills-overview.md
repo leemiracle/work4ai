@@ -169,4 +169,4 @@ skills/ 没有自己的 CI workflow（都是 markdown）,但 PR 改 skills/ 会�
 
 ---
 
-📌 **下一步** → [`../10-examples-eval/`](../10-examples-eval/) examples 和 benchmark。
+📌 **下一步** → [`../10-examples-eval/`](../10-examples-eval) examples 和 benchmark。

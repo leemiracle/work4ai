@@ -159,10 +159,10 @@ VQ-VAE 把图像变成 `ind` 网格（离散 token 序列）。一旦图像 toke
 
 | 本精读讲透的 | work4ai 深度版 |
 |---|---|
-| VAE + 离散潜变量 | [`讲透生成模型`](../讲透生成模型/)（VAE 家族）|
-| 向量量化 / codebook | [`讲透生成模型`](../讲透生成模型/)（VQ-VAE 章节）|
-| straight-through estimator | [`讲透PyTorch`](../讲透PyTorch/)（autograd 边界 case）|
-| 离散 token → 自回归生成（DALL-E）| [`讲透基础模型`](../讲透基础模型/)（多模态 LLM）|
+| VAE + 离散潜变量 | [`讲透生成模型`](../讲透生成模型)（VAE 家族）|
+| 向量量化 / codebook | [`讲透生成模型`](../讲透生成模型)（VQ-VAE 章节）|
+| straight-through estimator | [`讲透PyTorch`](../讲透PyTorch)（autograd 边界 case）|
+| 离散 token → 自回归生成（DALL-E）| [`讲透基础模型`](../讲透基础模型)（多模态 LLM）|
 
 **阅读路径**：读 [讲透生成模型] VAE 章节 → 读本精读看离散化的精巧 → 串到 DALL-E/Stable Diffusion 的图像 token 化。
 

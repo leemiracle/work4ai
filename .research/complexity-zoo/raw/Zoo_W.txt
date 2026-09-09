@@ -1,0 +1,125 @@
+__NOTOC__
+{{CZ-Letter-Menu|W}}
+
+
+===== <span id="w1" style="color:red">W[1]</span>: Weighted Analogue of [[Complexity Zoo:N#np|NP]] =====
+The class of decision problems of the form (x,k) (k a parameter), that are <i>fixed-parameter reducible</i> to the following:
+<ul>
+'''Weighted 3SAT:''' Given a 3SAT formula, does it have a satisfying assignment of Hamming weight k?
+</ul><!-- TODO: Move into the Garden. -->
+A fixed-parameter reduction is a Turing reduction that takes time at most f(k)p(|x|), where f is an arbitrary function and p is a polynomial.  Also, if the input is (x,k), then all Weighted 3SAT instances the algorithm queries about must have the form <x',k'> where k' is at most k.
+
+Contains [[Complexity Zoo:F#fpt|FPT]].
+
+Defined in [[zooref#df99|[DF99]]], where the following is also shown:
+<ul>
+<li>If [[Complexity Zoo:F#fpt|FPT]] = W[1] then [[Complexity Zoo:N#np|NP]] is contained in [[Complexity Zoo:D#dtime|DTIME]](2<sup>o(n)</sup>).</li>
+</ul>
+W[1] can be generalized to [[#wt|W[t]]].
+
+----
+===== <span id="wapp" style="color:red">WAPP</span>: Weak Almost-Wide [[Complexity Zoo:P#pp|PP]] =====
+The class of decision problems for which there exists a [[Complexity Zoo:Symbols#sharpp|#P]] function f, a polynomial p, and an &epsilon; &gt; 0, such that for all inputs x,
+<ol>
+<li>If the answer is "yes" then 2<sup>p(|x|)</sup> &ge; f(x) &gt; (1+&epsilon;) 2<sup>p(|x|)-1</sup>.</li>
+<li>If the answer is "no" then 0 &le; f(x) &lt; (1-&epsilon;) 2<sup>p(|x|)-1</sup>.</li>
+</ol>
+Defined in [[zooref#bgm02|[BGM02]]], where it is also shown that WAPP is contained in [[Complexity Zoo:A#awpp|AWPP]] and [[Complexity Zoo:S#sbp|SBP]].
+
+----
+===== <span id="wappcc" style="color:red">WAPP<sup>cc</sup></span>: Communication Complexity [[Complexity Zoo:W#wapp|WAPP]] =====
+
+This class is parameterized by a constant &epsilon;>0. The corresponding model consists of randomized protocols such that yes-inputs are accepted with probability in [(1-&epsilon;)&alpha;,&alpha;] and no-inputs are accepted with probability in [0,&alpha;] where &alpha; is to be thought of as a function of n. The cost of a protocol is defined to be its communication cost plus log(1/&alpha;).
+
+Does not admit efficient amplification with respect to the &epsilon; parameter [[zooref#glm+15|[GLM+15]]].
+
+The complexity measure associated with WAPP<sup>cc</sup> is equivalent to the "(one-sided) smooth rectangle bound" and also to the approximate nonnegative rank of the communication matrix [[zooref#kmsy14|[KMSY14]]].
+
+----
+
+===== <span id="while" style="color:red">WHILE</span>: While programs and some restrictions =====
+While is a theoretical programing language defined in [[zooref#jon98|[jon98]]], it is a way to define [[#Complexity_Zoo:P#P|P]] syntactically and a syntactic restriction of WHILE is exactly [[#Complexity_Zoo:L#L|L]]. The important point is that those two languages are powerful enough to simulate all of P (and L) and when we write a program in this language we never need to prove its time (space) complexity, since the language guarantees it!
+
+In While, inputs are composed only of lists (in a lisp-way where a list is either an empty list or a pair of its first element and its tail) and the elements of the list and variables are only pointers to lists.
+
+A program contains global variables and procedures.
+*Every procedure is composed of a name, a list of argument and local variables and a list of commands. The procedure doesn't return any value, it only affects global variables.
+*The commands are: variable affectation, while loop, if/then/else and procedure call.
+*The empty list is considered as false and everything else as true, this is the only way to do while/if test.
+
+There are three function primitives: tail, head, and cons(h,t), which respectively give the first value of a list, the tail of the list and a list the first element of which is h and the rest of the list is t. We can also call defined procedures.
+
+We can then define WHILE<sup>/cons-rec</sup> which is WHILE without the "cons" primitive and procedure call[#]. It is equivalent to L. The trick to do the computation in logspace is that without recursion we only need to save a fixed number of variables which are only pointers to part of the input, so they only take logspace. Since any logspace TM can avoid having a work tape by having a fixed number of reading head on his input, we can simulate logspace TM by using a variable for every reading head. (The binary string is coded as a list of () for 0 and (()) for 1, so equality can be checked trivially)
+
+[#] in fact we only need to forbid recursive call, hence the name, but when we lose recursion we can assume there is no procedure call w.l.o.g, in fact in [[zooref#jon98|[jon98]]] WHILE is first defined without procedure call and procedure are defined later, but this presentation may be more easy to understand and at least more general.
+
+We can then also define WHILE<sup>rec/cons</sup> which is WHILE without "cons" primitive but with procedure calls, and hence recursion. It is equivalent to [[#Complexity_Zoo:P#P|P]]. 
+The trick to do a computation of a WHILE<sup>rec/cons</sup> in P is to memoize the couple (global variables, input) when a procedure is called and the value of the globals variable when the procedure end, since we don't have cons, only a polynomial number of call will really be executed and we can detect loop.
+Simulating P in WHILE<sup>rec/cons</sup> is quite more subtle, P TM are equivalent to some counter machine wich can easily be simulated by WHILE programs with cons, and then we can simulate the cons thanks to the call stack. 
+----
+
+===== <span id="wlc0" style="color:red">WLC0</span>: Unbounded Fanin Linear Size (wires) Constant-Depth Circuits =====
+
+The class of decision problems solvable by a nonuniform family of Boolean circuits, with a ''linear'' number of wires, constant depth and unbounded fanin. Contained in {{zcls|l|lc0|LC<sup>0</sup>}}, and therefore strictly contained in {{zcls|a|ac0|AC<sup>0</sup>}}.
+----
+
+===== <span id="wp" style="color:red">W[P]</span>: Weighted Circuit Satisfiability =====
+The class of decision problems of the form (x,k) (k a parameter), that are fixed-parameter reducible to the following problem, for some constant h:
+<ul>
+'''Weighted Circuit-SAT:''' Given a Boolean circuit C (with no restriction on depth), does C have a satisfying assignment of Hamming weight k?
+</ul>
+See [[#w1|W[1]]] for the definition of fixed-parameter reducibility.
+
+Defined in [[zooref#df99|[DF99]]].
+
+Contains [[#wsat|W[SAT]]].
+
+----
+===== <span id="wpp" style="color:red">WPP</span>: Wide [[Complexity Zoo:P#pp|PP]] =====
+The class of decision problems solvable by an [[Complexity Zoo:N#np|NP]] machine such that
+<ol>
+<li>If the answer is "no," then the number of accepting computation paths exactly equals the number of rejecting paths.</li>
+<li>If the answer is "yes," then their difference exactly equals a function f(x) computable in polynomial time (i.e. [[Complexity Zoo:F#fp|FP]]).</li>
+</ol>
+Defined in [[zooref#ffk94|[FFK94]]].
+
+Contained in [[Complexity Zoo:C#cequalsp|C<sub>=</sub>P]] &#8745; [[Complexity Zoo:C#cocequalsp|coC<sub>=</sub>P]], as well as [[Complexity Zoo:A#awpp|AWPP]].
+
+Contains [[Complexity Zoo:S#spp|SPP]] and [[Complexity Zoo:L#lwpp|LWPP]].
+
+----
+
+===== <span id="wsat" style="color:red">W[SAT]</span>: Weighted Satisfiability =====
+The class of decision problems of the form (x,k) (k a parameter), that are fixed-parameter reducible to the following problem, for some constant h:
+<ul>
+'''Weighted SAT:''' Given a Boolean formula F (with no restriction on depth), does F have a satisfying assignment of Hamming weight k?
+</ul> <!-- TODO: Move into the Garden. -->
+See [[#w1|W[1]]] for the definition of fixed-parameter reducibility.
+
+Defined in [[zooref#df99|[DF99]]].
+
+Contains [[#wt|W[t]]] for every t, and is contained in [[#wp|W[P]]].
+
+----
+===== <span id="wstar" style="color:red">W[*]</span>: Union of W[t]'s =====
+The union of [[#wt|W[t]]] over all t.
+
+----
+===== <span id="wt" style="color:red">W[t]</span>: Nondeterministic Fixed-Parameter Hierarchy =====
+A generalization of [[#w1|W[1]]].
+
+The class of decision problems of the form (x,k) (k a parameter), that are fixed-parameter reducible to the following problem, for some constant h:
+<ul>
+'''Weighted Weft-t Depth-h Circuit-SAT:''' Given a Boolean circuit C, with a mixture of fanin-2 and unbounded-fanin gates.  The number unbounded-fanin gates along any path to the root is at most t, and the total depth (fanin-2 and unbounded-fanin) is at most h.  Does C have a satisfying assignment of Hamming weight k?
+</ul>
+See [[#w1|W[1]]] for the definition of fixed-parameter reducibility.
+
+Defined in [[zooref#df99|[DF99]]].
+
+Contained in [[#wsat|W[SAT]]] and in [[#wstart|W<sup>*</sup>[t]]].
+
+----
+===== <span id="wstart" style="color:red">W<sup>*</sup>[t]</span>: [[#wt|W[t]]] With Parameter-Dependent Depth =====
+Same as [[#wt|W[t]]], except that now the circuit depth can depend on the parameter k rather than being constant.  (The number of unbounded-fanin gates along any path to the root is still at most t.)
+
+W<sup>*</sup>[1] = [[#wt|W]][1] [[zooref#dft96|[DFT96]]], and W<sup>*</sup>[2] = [[#wt|W]][2] [[zooref#df97|[DF97]]], but the problem is open for larger t.

@@ -1,6 +1,6 @@
 # 实战案例 · Open-AutoGLM 手机 Agent
 
-> **讲透Agent 系列的实战补充**：把 [讲透Agent](../) 的理论（ReAct、工具调用、规划、记忆）落到一个真实的生产级手机 GUI Agent 项目上。
+> **讲透Agent 系列的实战补充**：把 [讲透Agent](..) 的理论（ReAct、工具调用、规划、记忆）落到一个真实的生产级手机 GUI Agent 项目上。
 > 本案例与 [讲透Agent/00-为什么需要Agent.md](../00-为什么需要Agent.md) ~ [04-记忆机制.md](../04-记忆机制.md) 互补：那些章节讲 **怎么做**，本案例讲 **真做了什么样**。
 
 ---
@@ -105,7 +105,7 @@ work4ai 主项目用「直觉 → 数学 → 代码跑通 → 不足 → 应用�
 - **生成工具**：[understand-anything](https://github.com/understand-anything/understand-anything) plugin（`/understand` → `/understand-onboard` → `/understand-explain`）
 - **生成日期**：2026-08-11
 - **质量保证**：所有行号引用对照源码核查（120 个，100% 准确）；文件覆盖完整性脚本核查（73 文件全覆盖）
-- **理论锚点**：[讲透Agent](../) 系列 5 章
+- **理论锚点**：[讲透Agent](..) 系列 5 章
 - **维护**：源项目代码变更后重跑 `/understand` → `/understand-onboard` 即可同步
 
 ---

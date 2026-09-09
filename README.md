@@ -11,11 +11,11 @@
 
 | 文件 | 作用 |
 |---|---|
-| [`用例库/README.md`](./用例库/README.md) | 总导航 + 双源审计方法 + 十八条横断结论 + 讲透单元映射索引 |
-| [`用例库/A-框架与编排.md`](./用例库/A-框架与编排.md) 等 A-D 册 | 首轮 44 代表仓深读（框架/助理记忆/编码研究/训练多模态四分册） |
-| [`用例库/E01-批01深挖.md`](./用例库/E01-批01深挖.md) ~ E24 | 全量扩展 24 分册，覆盖其余 235 仓（每册 10 仓，DeepWiki 命中 233/235） |
+| [`用例库/README.md`](./实例/用例库/README.md) | 总导航 + 双源审计方法 + 十八条横断结论 + 讲透单元映射索引 |
+| [`用例库/A-框架与编排.md`](./实例/用例库/A-框架与编排.md) 等 A-D 册 | 首轮 44 代表仓深读（框架/助理记忆/编码研究/训练多模态四分册） |
+| [`用例库/E01-批01深挖.md`](./实例/用例库/E01-批01深挖.md) ~ E24 | 全量扩展 24 分册，覆盖其余 235 仓（每册 10 仓，DeepWiki 命中 233/235） |
 
-**核心判断**：开源重心已从"造模型"迁移到"造 Agent 的基础设施"（46%），且全量审计揭示生态第一公理——**"LLM 提意图，确定性层做决定"**（24 批中 15+ 批独立复现）。是本项目 [`讲透多Agent协作/`](./讲透多Agent协作/README.md)、[`讲透记忆/`](./讲透记忆/README.md)、[`讲透代码生成/`](./讲透代码生成/README.md) 等单元的真实世界锚点。
+**核心判断**：开源重心已从"造模型"迁移到"造 Agent 的基础设施"（46%），且全量审计揭示生态第一公理——**"LLM 提意图，确定性层做决定"**（24 批中 15+ 批独立复现）。是本项目 [`讲透多Agent协作/`](./讲透Agent/讲透多Agent协作/README.md)、[`讲透记忆/`](./讲透Agent/讲透记忆/README.md)、[`讲透代码生成/`](./讲透代码生成/README.md) 等单元的真实世界锚点。
 
 ---
 
@@ -27,9 +27,9 @@
 |---|---|
 | [`透视GitHub-AI高星仓库全景.md`](./透视GitHub-AI高星仓库全景.md) | 开源 AI 生态星力分布快照：46% 是 Agent 基础设施、Python+TS 双寡头 62%、73% 仓库创建于 2023 年后；附全量 279 仓分类清单与误差声明 |
 | [`透视GitHub-Harness高星仓库全景.md`](./透视GitHub-Harness高星仓库全景.md) | topic:harness 全量 37 仓（≥1K★）快照：**"框架"正在被"harness"替换**（Agent=Model+Harness），54% 高星仓创建于 2026 年——三镜中最年轻的赛道；含 harness 概念卡（五子系统/四层栈/CAR 分解） |
-| [`透视GitHub-DeepSeek开源全景.md`](./透视GitHub-DeepSeek开源全景.md) | 第四镜·单一纵深：deepseek-ai **36 仓全量克隆深读**（~51.6 万星）——per-128 量化约定贯穿四层、磁盘 KV cache 命中 56.3%、harness 星王双峰；配套 [`讲透DeepSeek/`](./讲透DeepSeek/README.md) 五幕精馏 + 七份行号级底稿（`.research/deepseek/notes/`）⭐ 2026-08-15 |
+| `透视GitHub-DeepSeek开源全景.md` | 第四镜·单一纵深：deepseek-ai **36 仓全量克隆深读**（~51.6 万星）——per-128 量化约定贯穿四层、磁盘 KV cache 命中 56.3%、harness 星王双峰；配套 [`讲透DeepSeek/`](./讲透Agent/讲透DeepSeek/README.md) 五幕精馏 + 七份行号级底稿（`.research/deepseek/notes/`）⭐ 2026-08-15 |
 
-**核心判断**：开源重心已从"造模型"迁移到"造 Agent 的基础设施"（框架/harness/沙箱/记忆/MCP），是本项目 [`讲透多Agent协作/`](./讲透多Agent协作/README.md)、[`讲透记忆/`](./讲透记忆/README.md)、[`讲透代码生成/`](./讲透代码生成/README.md) 等单元的真实世界锚点。
+**核心判断**：开源重心已从"造模型"迁移到"造 Agent 的基础设施"（框架/harness/沙箱/记忆/MCP），是本项目 [`讲透多Agent协作/`](./讲透Agent/讲透多Agent协作/README.md)、[`讲透记忆/`](./讲透Agent/讲透记忆/README.md)、[`讲透代码生成/`](./讲透代码生成/README.md) 等单元的真实世界锚点。
 
 ---
 
@@ -65,7 +65,7 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 
 | 文件 | 作用 |
 |---|---|
-| [`复杂系统迭代work4ai.md`](./复杂系统迭代work4ai.md) | 用统计力学/重整化群/相变/网络/SOC/自由能「处理」整个项目。8 个健康指标 + 守混沌边缘 + 模块化防崩塌 + 正反馈强种子 |
+| [`复杂系统迭代work4ai.md`](./前沿与媒体/55-AI复杂系统与涌现专题.md) | 用统计力学/重整化群/相变/网络/SOC/自由能「处理」整个项目。8 个健康指标 + 守混沌边缘 + 模块化防崩塌 + 正反馈强种子 |
 | [`讲透复杂系统/`](./讲透复杂系统/README.md) | 配套宇宙五幕：从 Anderson「More Is Different」到 emergent ability = 相变、scaling law = 标度律、LLM = 自由能最小化机器 |
 
 **为什么需要**：已有两支柱——①故事迭代器（动力学）②熵治理（热力学）——回答「怎么变/为何变好」。复杂系统补上**「整体长什么样、何时跃迁、怎么治理拓扑」**。
@@ -95,18 +95,18 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 
 | 宇宙 | 核心张力 | 状态 |
 |---|---|---|
-| [`讲透记忆/`](./讲透记忆/README.md) | 全塞 context 会爆 vs 不塞失忆 | ✅ 五幕全 |
+| [`讲透记忆/`](./讲透Agent/讲透记忆/README.md) | 全塞 context 会爆 vs 不塞失忆 | ✅ 五幕全 |
 | [`讲透代码生成/`](./讲透代码生成/README.md) | 统计流畅性 ≠ 语义正确性 | ✅ 五幕全 |
-| [`讲透多Agent协作/`](./讲透多Agent协作/README.md) | 协调开销 vs 可靠性收益 | ✅ 五幕全 |
+| [`讲透多Agent协作/`](./讲透Agent/讲透多Agent协作/README.md) | 协调开销 vs 可靠性收益 | ✅ 五幕全 |
 | [`讲透群体智能/`](./讲透群体智能/README.md) | 涌现的力量 vs 不可控的诅咒 | ✅ 五幕全 |
-| [`讲透世界模型/`](./讲透世界模型/README.md) | 像素预测清晰但无用 vs 抽象预测有用但难训 | ✅ 五幕全 |
-| [`讲透上下文缓存/`](./讲透上下文缓存/README.md) | 命中省 90% vs 未命中浪费/过期出错 | ✅ 五幕全 |
-| [`讲透学习型Agent/`](./讲透学习型Agent/README.md) | 自我改进 vs Model Collapse | ✅ 五幕全 |
-| [`讲透CV/`](./讲透CV/README.md) | 逆图形学是病态问题 | ✅ 五幕全 |
-| [`讲透多模态/`](./讲透多模态/README.md) | 不同模态的几何结构差异（modality gap）| ✅ 五幕全 |
+| [`讲透世界模型/`](./讲透模型/讲透世界模型/README.md) | 像素预测清晰但无用 vs 抽象预测有用但难训 | ✅ 五幕全 |
+| [`讲透上下文缓存/`](./讲透Agent/讲透上下文缓存/README.md) | 命中省 90% vs 未命中浪费/过期出错 | ✅ 五幕全 |
+| [`讲透学习型Agent/`](./讲透Agent/讲透学习型Agent/README.md) | 自我改进 vs Model Collapse | ✅ 五幕全 |
+| [`讲透CV/`](./讲透模型/讲透CV/README.md) | 逆图形学是病态问题 | ✅ 五幕全 |
+| [`讲透多模态/`](./讲透模型/讲透多模态/README.md) | 不同模态的几何结构差异（modality gap）| ✅ 五幕全 |
 | [`讲透复杂系统/`](./讲透复杂系统/README.md) | 秩序 vs 混沌，最有创造力在临界点 | ✅ 五幕全（含物理/数学锚点）|
 | [`讲透机器人/`](./讲透机器人/README.md) | Moravec 悖论：走路比下棋难 | ✅ 五幕全（**全部引用中国可访问资源**）|
-| [`讲透DeepResearch/`](./讲透DeepResearch/README.md) | 一次性问答 vs 带工作记忆的调研循环 | 🆕 立项（2026-08-17，PaperAgent 精华第二批触发）|
+| [`讲透DeepResearch/`](./讲透Agent/讲透DeepResearch/README.md) | 一次性问答 vs 带工作记忆的调研循环 | 🆕 立项（2026-08-17，PaperAgent 精华第二批触发）|
 
 **并行度原理**：这 9 个宇宙两两正交（文件 ownership 不冲突），可由 9 个独立 agent 同时填章节——这正是「故事原语」设计的目标：**把内容拆成正交的故事卡，最大化并行迭代**。
 
@@ -123,7 +123,7 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 | **视角库** | **235 号视角 / 59+ 套镜片**（东西方全谱）· **以问题为核心的入口**：[`视角库/00-问题索引.md`](视角库/00-问题索引.md)（15 个 AI 真问题 × 不可置换动作 × 对撞裁决，2026-08-15 v3.0 入口翻转）|
 | **费曼学习法** | **质量门 F1-F4 + AI 陪练脚本**（戳穿"自以为懂"）|
 | **CS 课程整合** | **4 跨校主题**（算法 + 数据库 + 网络 + CS224N/NLP）+ 9 单校纵深（归拢 top-cs-projects/）⭐ 2026-08 |
-| **教育学知识库** | **33 文档**（[`top-education-courses/`](top-education-courses/) 姐妹库：学习理论 + 评估 + AI for Ed）⭐ 2026-08-14 新增 |
+| **教育学知识库** | **33 文档**（[`top-education-courses/`](top-education-courses) 姐妹库：学习理论 + 评估 + AI for Ed）⭐ 2026-08-14 新增 |
 
 ---
 
@@ -179,10 +179,36 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 | **讲透AI产品经理** 🆕 | [README](./讲透AI产品经理/README.md) + 00-09 十章（角色→形态→方法论→eval→概率设计→画像→社科八镜头→商业→能力模型→前沿）+ **3 个实验**（RICE 敏感性翻转/Kano 漂移/门槛经济学三段切换）+ **ai-pm agent**（[.opencode/agent/ai-pm.md](.opencode/agent/ai-pm.md)）⭐ 2026-09-04 挂网 |
 | **讲透复杂系统** | README + 01-05 五幕（涌现→数学→SOC 沙堆→不足→应用）⭐ 2026-08-14 |
 | **讲透DeepSeek** 🆕 | README + **01-05 五幕**（36 仓全栈解剖：稀疏性统一语言→解析模型→精读地图→负面知识→注入清单）⭐ 2026-08-15 |
-| **讲透AI for 职业** 🆕 | [README](./讲透AI%20for%20职业/README.md) + 00-19 二十章（程序员→安全工程师 19 类职业：任务结构×容错率×提效倍数实证）+ [职业全貌与面试指南](./讲透AI%20for%20职业/职业全貌与面试指南.md) ⭐ 2026-08-15 挂网 |
-| **讲透模型可能性** 🆕 | [README](./讲透模型可能性/README.md) + 00-16 十七章（SSM/LinearAttention/RWKV/Hyena/Jamba/Diffusion 演化/FlowMatching/NeSy/Hopfield 复兴/SNN/PredictiveCoding/GNN/MemoryNetworks）⭐ 2026-08-15 挂网 |
+| **讲透AI for 职业** 🆕 | README + 00-19 二十章（程序员→安全工程师 19 类职业：任务结构×容错率×提效倍数实证）+ 职业全貌与面试指南 ⭐ 2026-08-15 挂网 |
+| **讲透模型可能性** 🆕 | [README](./讲透模型/讲透模型可能性/README.md) + 00-16 十七章（SSM/LinearAttention/RWKV/Hyena/Jamba/Diffusion 演化/FlowMatching/NeSy/Hopfield 复兴/SNN/PredictiveCoding/GNN/MemoryNetworks）⭐ 2026-08-15 挂网 |
 | **讲透AI系统逆向工程** 🆕 | [README](./讲透AI系统逆向工程/README.md) + 00-10 十一章 + [exercises](./讲透AI系统逆向工程/exercises.md)（解包→DEX 反编译→二进制逆向→Frida 插桩→模型恢复→LLM 辅助逆向）⭐ 2026-08-15 挂网 |
 | ... | Agent / 信息论 / 控制论 / 系统论 / 公开课 |
+
+### C. GB13745 五学科宇宙（法学/军事学/信息工程/工程基础/科技史）⭐ 2026-09-09 挂网
+
+> 按 GB/T 13745-2009《学科分类与代码》二级学科**目录级穷尽**建宇宙：每家族 = README 宪法 + 00-04 五章（九要件）+ SKILL + 纯标准库实验（实测 exit 0）+ 支宪法；GB/T 有三级明细者全用原生支；与数学/统计学/复杂系统/管理学等宇宙互链成网。spec：[五学科GB13745扩展-design.md](docs/superpowers/specs/2026-09-07-五学科GB13745扩展-design.md)
+
+| 宇宙 | 家族 | 一句定位 |
+|---|---|---|
+| [`讲透法学/`](讲透法学/README.md)（820） | 4 家族 | 规范的科学：强制规则体系如何生成、解释、运行与演变 |
+| [`讲透军事学/`](讲透军事学/README.md)（830） | 12 家族 | 军事知识体系全景（敏感家族写作红线治理内建） |
+| [`讲透信息与系统工程技术/`](讲透信息与系统工程技术/README.md)（413） | 4 家族 | 控制/仿真/信息安全/系统应用的工程化身 |
+| [`讲透工程与技术科学基础/`](讲透工程与技术科学基础/README.md)（410） | 14 家族 | 一切工程学科的公共地基：数学→力学→……→通用技术→工业工程 |
+| [`讲透科学技术史/`](讲透科学技术史/README.md)（0712） | 5 家族 | 科学如何成为它自己：通史/思想/社会/技术/分科史 |
+
+### D. GB13745 七学科宇宙（统计/新闻/哲学/管理/教育/社会/文学）⭐ 2026-09-09 挂网
+
+> 与 C 节五学科宇宙同规范：GB/T 13745-2009 二级学科目录级穷尽，每家族 = README 宪法 + 00-04 五章（九要件）+ SKILL + 纯标准库实验（实测 exit 0）+ GB/T 原生支优先。spec：[七学科GB13745扩展-design.md](docs/superpowers/specs/2026-09-07-七学科GB13745扩展-design.md)
+
+| 宇宙 | 家族 | 一句定位 |
+|---|---|---|
+| [`讲透统计学/`](讲透统计学/README.md)（910） | 7 家族 | 给一切学科发准生证的科学：从统计史到社会/经济/科技统计 |
+| [`讲透新闻传播学/`](讲透新闻传播学/README.md)（860） | 6 家族 | 信息的社会流通：新闻理论到传播技术的建制版图 |
+| [`讲透哲学/`](讲透哲学/README.md)（720） | 9 家族 | 爱智的学科化：中西哲学史/逻辑/伦理/美学/宗教哲学 |
+| [`讲透管理学/`](讲透管理学/README.md)（630） | 12 家族 | 组织的艺术与科学：管理思想到部门/公共/企业管理 |
+| [`讲透教育学/`](讲透教育学/README.md)（880） | 15 家族 | 人如何学习与被教：原理/史论/各级各类教育 |
+| [`讲透社会学/`](讲透社会学/README.md)（840） | 19 家族 | 把理所当然变成问题：从理论方法到 18 支应用社会学 |
+| [`讲透文学/`](讲透文学/README.md)（750） | 24 家族 | 用语言造出世界的装置：理论批评/中国断代与各体/国别文学全景 |
 
 ---
 
@@ -244,20 +270,20 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 
 ## 三、参考资料（非教程类）
 
-### 1. 系统学：[`讲透公开课/`](讲透公开课/)
+### 1. 系统学：[`讲透公开课/`](讲透公开课)
 - 01 前沿 AI/ML/DL 课（10 门）
 - 02 数理计算机神课（30+ 门）
 - 03 AI Infra 源码导读（20+ 项目）
 - 04 全领域学习路径
-- 06-CS336 语言建模从零造·全解 + **[06-CS336论文精读/](讲透公开课/06-CS336论文精读/)（12 个主题文件 × 114 篇论文全覆盖 + verify_soul_papers.py 实验验证）** ⭐ 2026-08-14
+- 06-CS336 语言建模从零造·全解 + **[06-CS336论文精读/](讲透公开课/06-CS336论文精读)（12 个主题文件 × 114 篇论文全覆盖 + verify_soul_papers.py 实验验证）** ⭐ 2026-08-14
 
-### 2. 前沿：[`前沿与媒体/`](前沿与媒体/)
+### 2. 前沿：[`前沿与媒体/`](前沿与媒体)
 - 01 AI 顶级信息源（80+ 条）
 - 02 后训练专题（30+ 条）
 - **102 HuggingFace 生态全景**（467 库分类 × 对接 work4ai 各系列，含覆盖热力图与缺口清单）⭐ 2026-08
 - **103 AgentSkills 开放标准深度解析**（frontmatter 规范/三级渐进披露/客户端实现要点）⭐ 2026-08-14
 
-### 3. 深度：[`访谈及其他/`](访谈及其他/)
+### 3. 深度：[`访谈及其他/`](访谈及其他)
 - 谢清池访谈 / 张小珺访谈录 33 集
 
 ### 4. 总纲：[`横向打通-能力获取决策框架.md`](横向打通-能力获取决策框架.md)
@@ -267,45 +293,45 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 
 ### 5. 知识桥梁：[`neo-os知识桥梁.md`](neo-os知识桥梁.md)
 - 与 `../neo-os`（通用复杂软件可解释性基础设施）项目的知识映射
-- 2026-08 回流的 5 份前沿探索：RL+形式证明 / RLVR 极限 / RL+系统软件 / Lean4 形式化 / 神经符号闭环（详见 [`讲透RL/04-06`](讲透RL/) + [`讲透形式化验证`](讲透形式化验证/) + [`讲透神经符号`](讲透神经符号/)）
+- 2026-08 回流的 5 份前沿探索：RL+形式证明 / RLVR 极限 / RL+系统软件 / Lean4 形式化 / 神经符号闭环（详见 [`讲透RL/04-06`](讲透模型/讲透RL) + [`讲透形式化验证`](讲透形式化验证) + [`讲透神经符号`](讲透神经符号)）
 
-### 6. 产业架构参考：[`Agent架构模式参考/`](Agent架构模式参考/)
+### 6. 产业架构参考：[`Agent架构模式参考/`](讲透Agent/Agent架构模式参考)
 - 基于五类 AI Agent 产品形态（IDE-A/IDE-B/桌面Agent/CLI-TUI框架/多渠道网关）的脱敏架构调研：全景+对比+创新对决+选型决策树 ⭐ 2026-08（**已完全脱敏**，不指向任何商业产品）
 
-### 6a. Agent 框架案例：[`讲透Agent/Agent框架案例/deepseek-harness插件化框架/`](讲透Agent/Agent框架案例/deepseek-harness插件化框架/)
+### 6a. Agent 框架案例：[`讲透Agent/Agent框架案例/deepseek-harness插件化框架/`](讲透Agent/Agent框架案例/deepseek-harness插件化框架)
 - DeepSeek 官方开源 agent harness（dsh，219 插件包）源码级解剖：核心运行时（turn/step 状态机、事件日志）/ 能力接缝 + 插件机制全景 / 信任平面（沙箱+审批+供应链）/ 装配与外部接口 / DeepWiki 对照增补 / dsh-plugin 生态分析（star>66 全 59 仓库），12 篇笔记全部行号可验 ⭐ 2026-08
 - 反欺骗切面另见 [`欺骗动力学-AI纪实验包.md`](欺骗动力学-AI纪实验包.md) 实验 5
-- MCP 生态观测锚点：[`讲透Agent/Agent框架案例/MCP协议生态全景/`](讲透Agent/Agent框架案例/MCP协议生态全景/)——github.com/topics/mcp（64,438 仓）知识集成：双口径生态统计（top41 六赛道 + awesome 3,371 条收录对账）/ **2026-07-28 规范无状态化重构**（删 initialize 握手/session/ping，弃用 Sampling/Roots/Logging，MRTR 模式）/ 官方 org 与 SDK v2 格局（Registry 诞生、FastMCP 独立版）/ 项目内 MCP 知识互链网（手册/用例库/案例卡 10+ 处织网）⭐ 2026-08
+- MCP 生态观测锚点：[`讲透Agent/Agent框架案例/MCP协议生态全景/`](讲透Agent/Agent框架案例/MCP协议生态全景)——github.com/topics/mcp（64,438 仓）知识集成：双口径生态统计（top41 六赛道 + awesome 3,371 条收录对账）/ **2026-07-28 规范无状态化重构**（删 initialize 握手/session/ping，弃用 Sampling/Roots/Logging，MRTR 模式）/ 官方 org 与 SDK v2 格局（Registry 诞生、FastMCP 独立版）/ 项目内 MCP 知识互链网（手册/用例库/案例卡 10+ 处织网）⭐ 2026-08
 
-### 6b. Agent 上下文案例：[`Agent上下文案例/`](Agent上下文案例/)
+### 6b. Agent 上下文案例：[`Agent上下文案例/`](讲透Agent/Agent上下文案例)
 - 给 Agent 的代码智能（code intelligence for agents）领域全景：**六条技术路线**（无索引检索 / 词法符号索引 / 预构建代码知识图谱 / LSP 实时语义 / 嵌入向量 / LLM 蒸馏地图）+ 全项目速查（codegraph 66.4k★ · graphify 106k★ · Serena 28k★ · code-index-mcp · Aider repo map · Greptile · Cursor/Sourcegraph · Joern/CodeQL/Glean/Kythe/Stack Graphs 血统层）+ 领域演进时间线 + 选型决策树 ⭐ 2026-08
-- 案例一：[`codegraph代码知识图谱/`](Agent上下文案例/codegraph代码知识图谱/)——Rust 内核架构 / 三层 auto-sync / **基准方法论与诚实披露**（双臂封锁 0 污染 + residual context +80% 主动披露，与欺骗动力学互文），3 篇笔记
-- 案例二：[`graphify知识图谱skill/`](Agent上下文案例/graphify知识图谱skill/)——skill 交付路线（`/graphify`，20+ 平台接线矩阵）/ 七段管线 + **每条边三值置信标签**（EXTRACTED/INFERRED/AMBIGUOUS）/ 多模态语料（docs/PDF/音视频/why 注释进图）/ LOCOMO 基准（对照 mem0）与诚实报告自己落败指标，3 篇笔记 ⭐ 2026-08
-- 与 6a（harness 层）、[Agent记忆系统案例](Agent记忆系统案例/)（记忆层）构成三层：进程/信任 · 知识/检索 · 记忆
+- 案例一：[`codegraph代码知识图谱/`](讲透Agent/Agent上下文案例/codegraph代码知识图谱)——Rust 内核架构 / 三层 auto-sync / **基准方法论与诚实披露**（双臂封锁 0 污染 + residual context +80% 主动披露，与欺骗动力学互文），3 篇笔记
+- 案例二：[`graphify知识图谱skill/`](讲透Agent/Agent上下文案例/graphify知识图谱skill)——skill 交付路线（`/graphify`，20+ 平台接线矩阵）/ 七段管线 + **每条边三值置信标签**（EXTRACTED/INFERRED/AMBIGUOUS）/ 多模态语料（docs/PDF/音视频/why 注释进图）/ LOCOMO 基准（对照 mem0）与诚实报告自己落败指标，3 篇笔记 ⭐ 2026-08
+- 与 6a（harness 层）、[Agent记忆系统案例](讲透Agent/Agent记忆系统案例)（记忆层）构成三层：进程/信任 · 知识/检索 · 记忆
 
-### 6c. Agent 记忆系统案例 · 全量深读：[`Agent记忆系统案例/topics-memory-3Kplus/`](Agent记忆系统案例/topics-memory-3Kplus/)
+### 6c. Agent 记忆系统案例 · 全量深读：[`Agent记忆系统案例/topics-memory-3Kplus/`](讲透Agent/Agent记忆系统案例/topics-memory-3Kplus)
 - GitHub `topic:memory & stars>3K` **全量 44 仓**深读（2026-08-15）：**九族形态谱系**（Mem0 族/Graphiti 时序图族/Letta OS 族/Memory-as-File 族等）+ 六条收敛共识 + **基准反虚荣审计**（79K★ 的 Understand-Anything 判定零基准零评测）+ B 层跨域迁移，A 层 29 篇 + B 层 12 篇 + C 层 3 篇全部行号钉版 ⭐ 2026-08-15
-- 选型决策树已接入 44 仓实测修正 → [`讲透记忆/05-应用-记忆架构选型.md`](讲透记忆/05-应用-记忆架构选型.md)
+- 选型决策树已接入 44 仓实测修正 → `讲透记忆/05-应用-记忆架构选型.md`
 
-### 6d. Agent 多模态案例：[`Agent多模态案例/`](Agent多模态案例/)
+### 6d. Agent 多模态案例：[`Agent多模态案例/`](讲透Agent/Agent多模态案例)
 - GitHub `topic:multimodal & stars>2K` 全量 66 仓清单与 A/B1/B2/C 四层分层（2026-08-15 API 实测，含语义陷阱甄别）；A/B1 层深读笔记规划中 ⭐ 2026-08-15
 
 ### 6e. 专项领域工程库（2026-08-14/15 新增）
 | 库 | 领域 | 内容 |
 |---|---|---|
-| [`ad-mastery/`](ad-mastery/) | 自动驾驶 | 模块化栈→端到端→世界模型→VLA 全栈：11 段可跑代码 + 13 篇深读（UniAD/EMMA/OccWorld/π0）|
-| [`ecology/`](ecology/) | 生态学 | 六篇深度讲解 + 5 个已验证数值实验（May 稳定性 σ√(SC) 临界实测等）|
-| [`management_toolkit/`](management_toolkit/) | 管理学量化 | EMV/AHP/NPV/CAPM/Black-Scholes/排队论/ONA/前景理论/TOPSIS 全实跑（牛鞭 7177× 实测）+ 自包含 dashboard |
-| [`recommendation-system/`](recommendation-system/) | 推荐系统 | 召回→精排→重排全链路教学集：MF/FM/DSSM/DIN/MMoE/DPP 真实最小实现 |
-| [`notes/economics/`](notes/economics/) | 经济学 | 七篇全景综述（微观/博弈/宏观/计量因果/行为/2026 前沿/学派批判），数学结论全部 Python 验证 + arXiv 实时简报 |
-| [`notes/music-video-deep-dive/`](notes/music-video-deep-dive/) | 音乐与视频 | 七层金字塔深讲（物理→AI 生成），25 个实验代码 + 真实 wav 产物 + 4 架构精读（Wan2.1/混元/Sora/MusicGen）|
+| [`ad-mastery/`](ad-mastery) | 自动驾驶 | 模块化栈→端到端→世界模型→VLA 全栈：11 段可跑代码 + 13 篇深读（UniAD/EMMA/OccWorld/π0）|
+| [`ecology/`](ecology) | 生态学 | 六篇深度讲解 + 5 个已验证数值实验（May 稳定性 σ√(SC) 临界实测等）|
+| [`management_toolkit/`](management_toolkit) | 管理学量化 | EMV/AHP/NPV/CAPM/Black-Scholes/排队论/ONA/前景理论/TOPSIS 全实跑（牛鞭 7177× 实测）+ 自包含 dashboard |
+| [`recommendation-system/`](recommendation-system) | 推荐系统 | 召回→精排→重排全链路教学集：MF/FM/DSSM/DIN/MMoE/DPP 真实最小实现 |
+| [`notes/economics/`](notes/economics) | 经济学 | 七篇全景综述（微观/博弈/宏观/计量因果/行为/2026 前沿/学派批判），数学结论全部 Python 验证 + arXiv 实时简报 |
+| [`notes/music-video-deep-dive/`](notes/music-video-deep-dive) | 音乐与视频 | 七层金字塔深讲（物理→AI 生成），25 个实验代码 + 真实 wav 产物 + 4 架构精读（Wan2.1/混元/Sora/MusicGen）|
 
-### 6f. Agent 编排案例：[`Agent编排案例/`](Agent编排案例/) ⭐ 2026-08-15 新增
+### 6f. Agent 编排案例：[`Agent编排案例/`](讲透Agent/Agent编排案例) ⭐ 2026-08-15 新增
 - GitHub `topic:orchestration & stars>10K` **全量 25 仓**速览（三代谱系：数据管道→AI 工作流→编码 agent 舰队）+ **oh-my-openagent（67.9k★）**与 **wshobson/agents（38.8k★）**双精读（ultrawork 纪律循环 / Team Mode / hash 锚定编辑 / 单源五 harness 市场 / plugin-eval 三层质量门）
-- **精化合入 opencode**：3 个原生技能已落地本机（`orchestration-ultrawork` 目标持久化+完成审计、`orchestration-hyperplan` 五敌计划评审、`orchestration-fleet` 并行舰队编排），零依赖零遥测；后续 4 个（12factor/dag/governance/statemachine）一并合入，7 skill 使用说明见 [`orchestration精华合入-总入口.md`](orchestration精华合入-总入口.md)，可选整装路径见 [`Agent编排案例/04-opencode合入手册.md`](Agent编排案例/04-opencode合入手册.md)
+- **精化合入 opencode**：3 个原生技能已落地本机（`orchestration-ultrawork` 目标持久化+完成审计、`orchestration-hyperplan` 五敌计划评审、`orchestration-fleet` 并行舰队编排），零依赖零遥测；后续 4 个（12factor/dag/governance/statemachine）一并合入，7 skill 使用说明见 `orchestration精华合入-总入口.md`，可选整装路径见 [`Agent编排案例/04-opencode合入手册.md`](讲透Agent/Agent编排案例/04-opencode合入手册.md)
 
 ### 6g. Harness 精华合入 ⭐ 2026-08-15 新增
-- GitHub `topic:harness` 高星 37 仓（≥1K★）全量快照 + 20 仓 README 蒸馏：[`透视GitHub-Harness高星仓库全景.md`](透视GitHub-Harness高星仓库全景.md)（七赛道 + 概念卡：五子系统/四层栈/Anthropic 对照实验）+ [`harness精华笔记.md`](harness精华笔记.md) + [`harness精华合入-总入口.md`](harness精华合入-总入口.md)
+- GitHub `topic:harness` 高星 37 仓（≥1K★）全量快照 + 20 仓 README 蒸馏：[`透视GitHub-Harness高星仓库全景.md`](透视GitHub-Harness高星仓库全景.md)（七赛道 + 概念卡：五子系统/四层栈/Anthropic 对照实验）+ `harness精华笔记.md` + [`harness精华合入-总入口.md`](讲透Agent/harness精华合入-总入口.md)
 - **精化合入 opencode**：1 个新技能 `harness-engineering`（五子系统检查单 + 会话生命周期仪式 + 6 团队架构模式），与 `orchestration-*` 互补——**编排管流程，harness 管环境**
 
 ### 6h. 远程计算操作台：[`remote/`](remote/README.md) ⭐ 2026-08-26 新增
@@ -325,15 +351,16 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 
 ### 11. CS 名校课程整合：`algorithms/` · `database-systems/` · `network-systems/` · `cs224n/` · `*-cs-projects/`
 > 把同一主题在多所名校的"不同讲法"整合成对比矩阵，快速建立完整能力。⭐ 2026-08
+> **学习规划层**：[`top-cs-projects/CS学习规划-课程地图.md`](top-cs-projects/CS学习规划-课程地图.md)——按 [csdiy·CS学习规划](https://csdiy.wiki/CS%E5%AD%A6%E4%B9%A0%E8%A7%84%E5%88%92/) 的 23 领域逐项映射到本仓库资源（讲透宇宙理论侧+九校库实战侧），缺口如实标注；配套 [`CS必学工具箱.md`](top-cs-projects/CS必学工具箱.md)（工具+环境+镜像加速）。⭐ 2026-09
 
 **跨校整合模块（按主题/课程，多源对比）：**
 
 | 目录 | 主题 | 整合来源 | 核心文件 | 特色 |
 |---|---|---|---|---|
-| [`algorithms/`](algorithms/) | 算法设计 | Princeton COS 226 × MIT 6.006 × CMU 15-251 | `algo_integration.py` + `algo_weekly.py` | 可视化 / 数学严谨 / 思想史 三极 |
-| [`database-systems/`](database-systems/) | 数据库系统 | CMU 15-445 × MIT 6.830 × UCB CS186 × Stanford CS145 | `db_integration.py` + `db_weekly.py` | 实现 / 抽象 / 实战 / 分布 四视角 |
-| [`network-systems/`](network-systems/) | 网络系统 | Stanford CS144 × Berkeley CS162 × 路由(OSPF/BGP) | `mini_tcp.py` + `routing.py` | mini-TCP 项目 + 路由协议 |
-| [`cs224n/`](./top-cs-projects/cs224n/) | NLP + 深度学习 | Stanford CS224N **Winter 2026**（Diyi Yang + Yejin Choi）| `cs224n_assignments.py` + `gpt2_project.py` | 4 作业 + GPT-2 项目（2026最新版）|
+| [`algorithms/`](algorithms) | 算法设计 | Princeton COS 226 × MIT 6.006 × CMU 15-251 | `algo_integration.py` + `algo_weekly.py` | 可视化 / 数学严谨 / 思想史 三极 |
+| [`database-systems/`](database-systems) | 数据库系统 | CMU 15-445 × MIT 6.830 × UCB CS186 × Stanford CS145 | `db_integration.py` + `db_weekly.py` | 实现 / 抽象 / 实战 / 分布 四视角 |
+| [`network-systems/`](network-systems) | 网络系统 | Stanford CS144 × Berkeley CS162 × 路由(OSPF/BGP) | `mini_tcp.py` + `routing.py` | mini-TCP 项目 + 路由协议 |
+| [`cs224n/`](./top-cs-projects/cs224n) | NLP + 深度学习 | Stanford CS224N **Winter 2026**（Diyi Yang + Yejin Choi）| `cs224n_assignments.py` + `gpt2_project.py` | 4 作业 + GPT-2 项目（2026最新版）|
 
 每个模块含：① 整合层/作业层（可跑代码）② README（对比矩阵 + 学习路径）。纯标准库/numpy，零外部依赖。`cs224n/` 对应**最新 2026 schedule**（A4 改 LLM 评测、默认项目改 GPT-2），与 work4ai「讲透」系列深度互补。
 
@@ -341,22 +368,22 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 
 | 目录 | 学校 | 覆盖 |
 |---|---|---|
-| [`stanford-cs-projects/`](./top-cs-projects/stanford-cs-projects/) | Stanford | 13 主题 + **docs/ 103 篇覆盖 97 门课** + 60 微项目（含 CS329H/Z Agent 系列）|
-| [`cmu-cs-projects/`](./top-cs-projects/cmu-cs-projects/) | CMU | 12 主题（DB/分布式/ML/PGM/NLP/CV/机器人/HCI/理论）+ 本科/研究生补充 |
-| [`mit-cs-projects/`](./top-cs-projects/mit-cs-projects/) | MIT | 12 主题（DB/OS/性能/AI/ML/DL/机器人/安全）+ 补充 |
-| [`berkeley-cs-projects/`](./top-cs-projects/berkeley-cs-projects/) | UC Berkeley | 13 主题（SICP/DSA/架构/离散/AI/ML/RL/NLP/CV/OS/数据/优化/安全）|
-| [`princeton-cs-projects/`](./top-cs-projects/princeton-cs-projects/) | Princeton | 12 主题（Sedgewick 算法/ML 理论/公平性）+ 补充 |
-| [`cambridge-cs-projects/`](./top-cs-projects/cambridge-cs-projects/) | Cambridge | 同构 |
-| [`oxford-cs-projects/`](./top-cs-projects/oxford-cs-projects/) | Oxford | 同构（范畴论/自动推理/KR）|
-| [`eth-cs-projects/`](./top-cs-projects/eth-cs-projects/) | ETH Zürich | 同构 |
-| [`toronto-cs-projects/`](./top-cs-projects/toronto-cs-projects/) | Toronto | 同构（Hinton 母校，生成模型）|
-| [`cs61a-learning/`](./top-cs-projects/cs61a-learning/) | Berkeley CS 61A | 逐周学习笔记（week01 10 个 .py + 周记）|
+| [`stanford-cs-projects/`](./top-cs-projects/stanford-cs-projects) | Stanford | 13 主题 + **docs/ 103 篇覆盖 97 门课** + 60 微项目（含 CS329H/Z Agent 系列）|
+| [`cmu-cs-projects/`](./top-cs-projects/cmu-cs-projects) | CMU | 12 主题（DB/分布式/ML/PGM/NLP/CV/机器人/HCI/理论）+ 本科/研究生补充 |
+| [`mit-cs-projects/`](./top-cs-projects/mit-cs-projects) | MIT | 12 主题（DB/OS/性能/AI/ML/DL/机器人/安全）+ 补充 |
+| [`berkeley-cs-projects/`](./top-cs-projects/berkeley-cs-projects) | UC Berkeley | 13 主题（SICP/DSA/架构/离散/AI/ML/RL/NLP/CV/OS/数据/优化/安全）|
+| [`princeton-cs-projects/`](./top-cs-projects/princeton-cs-projects) | Princeton | 12 主题（Sedgewick 算法/ML 理论/公平性）+ 补充 |
+| [`cambridge-cs-projects/`](./top-cs-projects/cambridge-cs-projects) | Cambridge | 同构 |
+| [`oxford-cs-projects/`](./top-cs-projects/oxford-cs-projects) | Oxford | 同构（范畴论/自动推理/KR）|
+| [`eth-cs-projects/`](./top-cs-projects/eth-cs-projects) | ETH Zürich | 同构 |
+| [`toronto-cs-projects/`](./top-cs-projects/toronto-cs-projects) | Toronto | 同构（Hinton 母校，生成模型）|
+| [`cs61a-learning/`](./top-cs-projects/cs61a-learning) | Berkeley CS 61A | 逐周学习笔记（week01 10 个 .py + 周记）|
 
 > 2026-08-15 起九校库全部归拢至 [`top-cs-projects/`](./top-cs-projects/README.md)（9 校 × 12-13 主题 + ~250 微项目 + 60,567 行代码，含统一路线图与 4 跨迹计划）。
 
 > **两种用法**：想横向对比"同主题不同讲法" → 跨校整合模块；想纵深单校完整课程 → `top-cs-projects/*-cs-projects/`。两者衔接（整合模块的 README 标注了对应单校文件路径）。
 
-### 12. 数学家资源中心：[`top-math-courses/`](top-math-courses/) ⭐ 2026-08-13 新增
+### 12. 数学家资源中心：[`top-math-courses/`](top-math-courses) ⭐ 2026-08-13 新增
 
 为"成为顶级数学家"目标准备的**全栈资源中心**。20 文档覆盖：路径 / 教材 / 工具 / 社区 / 品味 / 现实路径。入口 [`top-math-courses/MATHEMATICIAN_MASTER_INDEX.md`](top-math-courses/MATHEMATICIAN_MASTER_INDEX.md)。
 
@@ -372,12 +399,14 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 | 品味 | `HISTORY_AND_TASTE`（数学史 / 传记 / taste 培养）|
 | 映射 | `CROSS_INDEX_WITH_WORK4AI`（数学↔讲透X 双向）· `CROSS_SCHOOL_INSIGHTS`（9 校对比）|
 
-**配套执行系列**（2026-08-13 新建，骨架 + 示范章）：
-- [`讲透Lean4数学/`](讲透Lean4数学/) — 把已有的 Lean4 OS 经验（ai-os-dd/law/neo-os）升级为数学武器。README + 00 范式变革 + 01 NNG 讲透（含完整 Lean 代码 + Python 实验跑通）+ 02-11 大纲
-- [`讲透实分析/`](讲透实分析/) — 配 Tao Analysis I + Lean companion。README + 00 实分析是什么 + 01 实数构造 + 02 极限ε-δ + 03 连续性 + 04 微分（含 Python 实验跑通）+ 05-10 大纲
-- [`讲透NLP/math/`](讲透NLP/math/) — NLP 每章用到的数学反向索引到 top-math-courses
+**数学宇宙总入口**（2026-09-06 合并）：[`讲透数学/`](讲透数学) — 14 个数学系列物理合并为一个宇宙（六书架分类 + 依赖图 + 三阶段路径 + 分支X光五问模板），含创刊的 [`讲透集合/`](讲透数学/讲透集合)（ZFC 公理地基，五章全）、[`讲透证明/`](讲透数学/讲透证明)（证明论+天书美学，五章全）、[`讲透应用数学/`](讲透数学/讲透应用数学)（**应用书架方法论总纲**：量纲/渐近/适定性 + SciML/PDE 基础模型/AI 气象业务化，五章全）、[`讲透分析/`](讲透数学/讲透分析)（**家族总纲+十支子目录穷尽分析学**：数学分析/实分析/复分析/泛函/调和/数值/变分/动力/PDE/进阶，家族五章+三实验）与 [`讲透计算复杂度/`](讲透数学/讲透计算复杂度)（**610 个复杂度类全量中文化图鉴**快照自 complexityzoo.net + 8 章讲透 + 5 实验跑通）
 
-### 12½. 教育学知识库：[`top-education-courses/`](top-education-courses/) ⭐ 2026-08-14 新增
+**配套执行系列**（2026-08-13 新建，骨架 + 示范章）：
+- [`讲透Lean4数学/`](讲透数学/讲透Lean4数学) — 把已有的 Lean4 OS 经验（ai-os-dd/law/neo-os）升级为数学武器。README + 00 范式变革 + 01 NNG 讲透（含完整 Lean 代码 + Python 实验跑通）+ 02-11 大纲
+- [`讲透实分析/`](讲透数学/讲透分析/讲透实分析) — 配 Tao Analysis I + Lean companion。README + 00 实分析是什么 + 01 实数构造 + 02 极限ε-δ + 03 连续性 + 04 微分（含 Python 实验跑通）+ 05-10 大纲
+- [`讲透NLP/math/`](讲透模型/讲透NLP/math) — NLP 每章用到的数学反向索引到 top-math-courses
+
+### 12½. 教育学知识库：[`top-education-courses/`](top-education-courses) ⭐ 2026-08-14 新增
 
 > **对标** `top-physics/math-courses` 的姐妹库。物理/数学建好了「自然科学地基」，本库补上「**人如何学习、如何教**」这块——它是整个 work4ai「AI 讲透系列」最该有却被忽略的**元学科**。
 >
@@ -397,7 +426,7 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 | **AI for Ed** ⭐ | `ai_for_education/`（ITS/自适应/Bloom 2σ/教育 LLM 对齐，接主线）|
 | 跨学科/专家 | `CROSS_DISCIPLINARY` · `CROSS_SCHOOL_INSIGHTS` · `EXPERT_PATH_2026` · `EXPERT_BENCHMARKS` · `READING_SCHEDULE` · `RESOURCES/` |
 
-**与主线的接口**：协同 [`讲透AIfor各学科/教育/`](讲透AIfor各学科/教育/)（已有 2024–2026 前沿）、[`讲透RL/`](讲透RL/)（学习=RL 的数学）、[`费曼学习法/`](费曼学习法/)（F1-F4 质量门=评估系统）、[`故事化学习法/`](故事化学习法/)（叙事记忆>>语义记忆）。
+**与主线的接口**：协同 [`讲透AIfor各学科/教育/`](实例/讲透AIfor各学科/教育)（已有 2024–2026 前沿）、[`讲透RL/`](讲透模型/讲透RL)（学习=RL 的数学）、[`费曼学习法/`](费曼学习法)（F1-F4 质量门=评估系统）、[`故事化学习法/`](故事化学习法)（叙事记忆>>语义记忆）。
 
 **入口**：[`top-education-courses/EDUCATION_FEYNMAN_NARRATIVE.md`](top-education-courses/EDUCATION_FEYNMAN_NARRATIVE.md)（先读，建主线直觉）→ [`UNIFIED_ROADMAP.md`](top-education-courses/UNIFIED_ROADMAP.md)（按角色选路径）。
 
@@ -407,11 +436,11 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 
 | 讲义 | 系列 | 已落盘内容 |
 |------|------|-----------|
-| **Tao Analysis I + Lean companion** | [`讲透实分析/`](讲透实分析/) | README + 00-04 章 + 4 实验（Leibniz 伪导数崩坏 / ε-δ / 连续性 / 微分）|
-| **Vershynin HDP** | [`讲透高维概率/`](讲透高维概率/) | README + 00 高维反直觉 + 01 集中不等式 + 2 实验（4 大高维反直觉 / Hoeffding vs Bernstein）|
-| **Milne Group Theory** | [`讲透群论/`](讲透群论/) | README + 00 群论是什么 + 01 Sylow 定理 + 实验（Z/12Z / S3 / Lagrange 验证）|
-| **Boyd Convex Optimization** | [`讲透优化理论/`](讲透优化理论/) | 已有 00-03，加 04 Lagrange 对偶 + SVM 强对偶实验 |
-| **Hatcher AT** | [`讲透代数拓扑/`](讲透代数拓扑/) | README + 00 代数拓扑是什么 + 实验（同调群表 / Euler 示性数 / TDA）|
+| **Tao Analysis I + Lean companion** | [`讲透实分析/`](讲透数学/讲透分析/讲透实分析) | README + 00-04 章 + 4 实验（Leibniz 伪导数崩坏 / ε-δ / 连续性 / 微分）|
+| **Vershynin HDP** | [`讲透高维概率/`](讲透数学/讲透高维概率) | README + 00 高维反直觉 + 01 集中不等式 + 2 实验（4 大高维反直觉 / Hoeffding vs Bernstein）|
+| **Milne Group Theory** | [`讲透群论/`](讲透数学/讲透群论) | README + 00 群论是什么 + 01 Sylow 定理 + 实验（Z/12Z / S3 / Lagrange 验证）|
+| **Boyd Convex Optimization** | [`讲透优化理论/`](讲透数学/讲透优化) | 已有 00-03，加 04 Lagrange 对偶 + SVM 强对偶实验 |
+| **Hatcher AT** | [`讲透代数拓扑/`](讲透数学/讲透代数拓扑) | README + 00 代数拓扑是什么 + 实验（同调群表 / Euler 示性数 / TDA）|
 
 每本实验均 `python3 -u experiments/*.py` 跑通，含反直觉发现。
 
@@ -425,8 +454,8 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 - 讲透优化理论：加 05 内点法 + log barrier 实验
 
 **B. 2 本新讲义系列**：
-- [`讲透数值线代/`](讲透数值线代/) — 基于 Trefethen & Bau。README + 00 数值线代是什么 + 01 SVD + Hilbert 条件数/低秩近似/LoRA 演示实验
-- [`讲透分析进阶/`](讲透分析进阶/) — 基于 Stein-Shakarchi 4 卷（Fourier / 复 / 实 / 泛函）。README + 00 全景
+- [`讲透数值线代/`](讲透数学/讲透数值线代) — 基于 Trefethen & Bau。README + 00 数值线代是什么 + 01 SVD + Hilbert 条件数/低秩近似/LoRA 演示实验
+- [`讲透分析进阶/`](讲透数学/讲透分析/讲透分析进阶) — 基于 Stein-Shakarchi 4 卷（Fourier / 复 / 实 / 泛函）。README + 00 全景
 
 至此 **7 本经典讲义内容化**（Tao / Vershynin / Milne / Boyd / Hatcher / Trefethen / Stein-Shakarchi），共 ~30 章节 + 12 实验，全部 bash 跑通。
 
@@ -445,28 +474,28 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 | 讲透分析进阶 | `01-08-合集.md` | Fourier / 复分析 / 测度 / 泛函（Stein-Shakarchi 4 卷）|
 | 讲透Lean4数学 | `02-11-合集.md` | 类型论 / Mathlib / tactic / 集合 / 实分析 / 线代 / 抽代 / PR / AI / 项目 |
 
-**B. 第 8 本讲义**：[`讲透Artin抽代/`](讲透Artin抽代/) — 基于 Artin《Algebra》2e（MIT 18.701/702）。README + 00-Artin抽代是什么（矩阵群 + 几何直觉 + Galois）
+**B. 第 8 本讲义**：[`讲透Artin抽代/`](讲透数学/讲透Artin抽代) — 基于 Artin《Algebra》2e（MIT 18.701/702）。README + 00-Artin抽代是什么（矩阵群 + 几何直觉 + Galois）
 
 **总计**：8 本讲义 × 平均 8-10 章 = **~70 章节**（含合集）+ 16 实验，全部 bash 跑通。
 
 ### 16. 姊妹资源库与根级资产（2026-08-15 复杂系统审计补挂）⭐
 
-> 来源：[`复杂系统迭代work4ai.md`](./复杂系统迭代work4ai.md) 8 指标审计（工具 `.agent/audit/audit_enhance.py`）发现以下资产已存在但未挂网——孤儿文件 = 死亡内容，本节一次性补桥。
+> 来源：[`复杂系统迭代work4ai.md`](./前沿与媒体/55-AI复杂系统与涌现专题.md) 8 指标审计（工具 `.agent/audit/audit_enhance.py`）发现以下资产已存在但未挂网——孤儿文件 = 死亡内容，本节一次性补桥。
 > **问题导向迭代**：断链 355→0、承诺债 121→0、误删恢复 4 件、陈旧宣称实测更新——完整清账见 [问题登记簿](.agent/audit/problems/REGISTRY.md)（活的迭代 backlog）。
 
 | 资产 | 内容 |
 |---|---|
-| [`top-math-courses/`](top-math-courses/) · [`top-physics-courses/`](top-physics-courses/) · [`top-education-courses/`](top-education-courses/) | 数学/物理/教育三大资源中心（已挂网，列此对照）|
+| [`top-math-courses/`](top-math-courses) · [`top-physics-courses/`](top-physics-courses) · [`top-education-courses/`](top-education-courses) | 数学/物理/教育三大资源中心（已挂网，列此对照）|
 | [`top-art-courses/`](top-art-courses/README.md) | 艺术院校课程资源库（BFA/CAA/CAFA/RCA/RISD/清华美院等 11 校）|
 | [`top-economics-finance-courses/`](top-economics-finance-courses/README.md) | 经济金融名校课程库（Harvard/MIT/Stanford/Chicago/LSE 系 11 校）|
 | [`工程化手册库/`](工程化手册库/README.md) | 13 份工程化 3 合 1 手册（RAG/MCP/Agents/Inference/ContextEng/Quantization/KG/Embedding/FineTuning/LoRA/SafetyAlign/Tokenization/VectorDB），总览另见 [`工程化手册总览.md`](工程化手册总览.md) |
-| [`prompt工程手册/`](prompt工程手册/README.md) | prompt 工程 11 文件完整版方法论 |
+| [`prompt工程手册/`](工程化手册库/prompt工程手册/README.md) | prompt 工程 11 文件完整版方法论 |
 | [`知识故事集/`](知识故事集/README.md) | 知识的故事化重述集 |
 | [`mermaid-render/`](mermaid-render/README.md) | mermaid 图渲染工具（配套渲染服务）|
-| [`§12-15 理论·形式化·安全·可信AI 整合.md`](§12-15%20理论·形式化·安全·可信AI%20整合.md) | LLM 理论/形式化/安全/可信四主题整合笔记 |
+| `§12-15 理论·形式化·安全·可信AI 整合.md` | LLM 理论/形式化/安全/可信四主题整合笔记 |
 | [`多角色审查报告.md`](多角色审查报告.md) | 多角色（多视角）审查方法与实践报告 |
 | [`最有价值.md`](最有价值.md) | 项目价值密度最高的内容筛选清单 |
-| [`黑格尔观念论核心视角-总入口.md`](黑格尔观念论核心视角-总入口.md) | 黑格尔观念论视角导航（概念卡在 [`视角库/`](视角库/README.md)）|
+| `黑格尔观念论核心视角-总入口.md` | 黑格尔观念论视角导航（概念卡在 [`视角库/`](视角库/README.md)）|
 
 ---
 
@@ -520,7 +549,7 @@ AI历史             ★               ★★               ★★★★★
 4. **离散 vs 连续分水岭**：从 MSE 跨到 CE 必须翻的坎
 5. **博士级标准**：论文挂载 + 数学严格 + 开放问题 + 批判性
 6. **本质探索**：不只是技术——反思每个学科的根本问题
-7. **费曼检验（发布前质量门）**：任何「讲透 X」发布前跑 4 道检验（F1 外行复述 / F2 卡壳自曝 / F3 术语黑名单 / F4 回炉记录），戳穿"自以为懂"。五层范式管**写得深不深**，费曼检验管**写得真不真懂**。（2026-08-10 起 `.费曼检验.md`/`.多视角.md` 衍生文件不再单独保存——经核查 958 个全是自动生成空壳、无原创内容；原版 md 即唯一版本，需自检时临时跑 `python3 费曼学习法/feynman-coach.py`。）详见 [`费曼学习法/`](费曼学习法/)。
+7. **费曼检验（发布前质量门）**：任何「讲透 X」发布前跑 4 道检验（F1 外行复述 / F2 卡壳自曝 / F3 术语黑名单 / F4 回炉记录），戳穿"自以为懂"。五层范式管**写得深不深**，费曼检验管**写得真不真懂**。（2026-08-10 起 `.费曼检验.md`/`.多视角.md` 衍生文件不再单独保存——经核查 958 个全是自动生成空壳、无原创内容；原版 md 即唯一版本，需自检时临时跑 `python3 费曼学习法/feynman-coach.py`。）详见 [`费曼学习法/`](费曼学习法)。
 
 ---
 
@@ -543,7 +572,7 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 ## ☯ 毛泽东哲学视角
 
-> 承接 [`毛泽东哲学视角-总入口.md`](毛泽东哲学视角-总入口.md)。
+> 承接 `毛泽东哲学视角-总入口.md`。
 
 | 三论 | 本主题的对应 |
 |------|------------|
@@ -553,14 +582,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：矛盾论定方向（找瓶颈），实践论定真伪（靠实验），反对本本主义定落地（靠调查）——三论闭环是认识本主题的最小完备认识纪律。
 
-**通用锚点**：[`毛泽东哲学视角-锚点块.md`](毛泽东哲学视角-锚点块.md)
+**通用锚点**：`毛泽东哲学视角-锚点块.md`
 
 
 ---
 
 ## ☯ 道教核心视角
 
-> 承接 [`道教核心视角-总入口.md`](道教核心视角-总入口.md)。
+> 承接 `道教核心视角-总入口.md`。
 
 | 道教视角 | 本主题的对应 |
 |---------|------------|
@@ -571,14 +600,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：认清道（根本规律）顺势，去掉妄为（减法/不折腾），在对立中守动态平衡（冲气求和、知物极必反），臻于依乎天理、游刃有余。
 
-**通用锚点**：[`道教核心视角-锚点块.md`](道教核心视角-锚点块.md)
+**通用锚点**：`道教核心视角-锚点块.md`
 
 
 ---
 
 ## 🪷 佛教核心视角
 
-> 承接 [`佛教核心视角-总入口.md`](佛教核心视角-总入口.md)。
+> 承接 `佛教核心视角-总入口.md`。
 
 | 佛教视角 | 本主题的对应 |
 |---------|------------|
@@ -589,14 +618,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：万法因缘生无自性（空=可塑性），用四圣谛诊断根因，以中道不落两边且知无常，对表象保持正念觉察、应无所住。
 
-**通用锚点**：[`佛教核心视角-锚点块.md`](佛教核心视角-锚点块.md)
+**通用锚点**：`佛教核心视角-锚点块.md`
 
 
 ---
 
 ## 🍵 禅宗核心视角
 
-> 承接 [`禅宗核心视角-总入口.md`](禅宗核心视角-总入口.md)。
+> 承接 `禅宗核心视角-总入口.md`。
 
 | 禅宗视角 | 本主题的对应 |
 |---------|------------|
@@ -607,14 +636,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：直指本质不拘形式（不立文字），照见本来面目与顿渐不二（见性顿悟），回归朴素不执着（平常心是道），始终辨清手段与目的（指月之指）。
 
-**通用锚点**：[`禅宗核心视角-锚点块.md`](禅宗核心视角-锚点块.md)
+**通用锚点**：`禅宗核心视角-锚点块.md`
 
 
 ---
 
 ## 💡 阳明心学视角
 
-> 承接 [`阳明心学-锚点块.md`](阳明心学-锚点块.md)（总入口未建，锚点块即入口）。
+> 承接 `阳明心学-锚点块.md`（总入口未建，锚点块即入口）。
 
 | 阳明心学视角 | 本主题的对应 |
 |---------|------------|
@@ -625,14 +654,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：理在心中（心即理），真知必行（知行合一），能力本具只需推充（致良知），在事上检验磨炼（事上磨炼）。
 
-**通用锚点**：[`阳明心学-锚点块.md`](阳明心学-锚点块.md)
+**通用锚点**：`阳明心学-锚点块.md`
 
 
 ---
 
 ## 🎋 玄学核心视角
 
-> 承接 [`玄学核心视角-总入口.md`](玄学核心视角-总入口.md)。
+> 承接 `玄学核心视角-总入口.md`。
 
 | 玄学视角 | 本主题的对应 |
 |---------|------------|
@@ -643,28 +672,28 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：认清'无'为本体（贵无），守意而超越工具（得意忘言），任自然而节名教（名教与自然），辨本末以崇本息末（本末体用）。
 
-**通用锚点**：[`玄学核心视角-锚点块.md`](玄学核心视角-锚点块.md)
+**通用锚点**：`玄学核心视角-锚点块.md`
 
 
 ---
 
 ## 🏛️ 诸子百家九家核心视角
 
-> 承接 [`诸子百家九家视角-设计总纲.md`](诸子百家九家视角-设计总纲.md) ｜ [`诸子百家九家-元理论重读.md`](诸子百家九家-元理论重读.md) ｜ [`诸子百家九家视角-完成报告.md`](诸子百家九家视角-完成报告.md)。
+> 承接 `诸子百家九家视角-设计总纲.md` ｜ `诸子百家九家-元理论重读.md` ｜ `诸子百家九家视角-完成报告.md`。
 
 用先秦诸子百家之**墨、法、道、兵、纵横、阴阳、名、杂、农**九家核心思想作为视角镜片，迭代整个项目。九家 = 一个完整工程姿态的九个切面：**守根基（墨·法·农）+ 循规律（道·阴阳）+ 善行动（兵·纵横）+ 精表征（名·杂）**。
 
 | 家 | 四命题 | 核心洞察 | 总入口 |
 |---|---|---|---|
-| 🪶 **墨家** | 兼爱/非攻/尚贤尚同/三表法 | 兼爱求公平、非攻守安全、尚贤重能力、三表法验实证——造利天下之器 | [`墨家核心视角-总入口.md`](墨家核心视角-总入口.md) |
-| 📜 **法家** | 法/术/势/信赏必罚 | 法立规则、势占结构、术设机制、信赏必罚——靠制度非靠贤人 | [`法家核心视角-总入口.md`](法家核心视角-总入口.md) |
-| 🏔️ **道家**（哲学义）| 道法自然/无为/阴阳反覆/齐物逍遥 | 与道教同源老庄，哲学本体义 | [`道家核心视角-总入口.md`](道家核心视角-总入口.md) |
-| ⚔️ **兵家** | 知己知彼/奇正相生/避实击虚/先胜后战 | 情报先行、避实击虚、以正合以奇胜、胜于未战 | [`兵家核心视角-总入口.md`](兵家核心视角-总入口.md) |
-| 🗺️ **纵横家** | 捭阖/揣摩/合纵连横/因势利导 | 门控、建模、联盟拓扑、权变——以信息与拓扑制胜 | [`纵横家核心视角-总入口.md`](纵横家核心视角-总入口.md) |
-| 🌗 **阴阳家** | 阴阳消长/五行生克/五德终始/天人整体观 | 二元 tradeoff、系统生克、相变终始、全局整体——循环动力学 | [`阴阳家核心视角-总入口.md`](阴阳家核心视角-总入口.md) |
-| 🏷️ **名家** | 名实相应/白马非马/离坚白/合同异 | 符号指称、泛化边界、属性解耦、聚类同异——直击符号与指称 | [`名家核心视角-总入口.md`](名家核心视角-总入口.md) |
-| 🧩 **杂家** | 兼收并蓄/贵生/贵因/大一统 | MoE博采、鲁棒贵生、迁移贵因、统一归一——融众长于一炉 | [`杂家核心视角-总入口.md`](杂家核心视角-总入口.md) |
-| 🌾 **农家** | 重本躬耕/顺天时/尽地利/精耕细作 | 基础设施、调度天时、资源效率、数据质量——能力从土地与工艺中来 | [`农家核心视角-总入口.md`](农家核心视角-总入口.md) |
+| 🪶 **墨家** | 兼爱/非攻/尚贤尚同/三表法 | 兼爱求公平、非攻守安全、尚贤重能力、三表法验实证——造利天下之器 | `墨家核心视角-总入口.md` |
+| 📜 **法家** | 法/术/势/信赏必罚 | 法立规则、势占结构、术设机制、信赏必罚——靠制度非靠贤人 | `法家核心视角-总入口.md` |
+| 🏔️ **道家**（哲学义）| 道法自然/无为/阴阳反覆/齐物逍遥 | 与道教同源老庄，哲学本体义 | `道家核心视角-总入口.md` |
+| ⚔️ **兵家** | 知己知彼/奇正相生/避实击虚/先胜后战 | 情报先行、避实击虚、以正合以奇胜、胜于未战 | `兵家核心视角-总入口.md` |
+| 🗺️ **纵横家** | 捭阖/揣摩/合纵连横/因势利导 | 门控、建模、联盟拓扑、权变——以信息与拓扑制胜 | `纵横家核心视角-总入口.md` |
+| 🌗 **阴阳家** | 阴阳消长/五行生克/五德终始/天人整体观 | 二元 tradeoff、系统生克、相变终始、全局整体——循环动力学 | `阴阳家核心视角-总入口.md` |
+| 🏷️ **名家** | 名实相应/白马非马/离坚白/合同异 | 符号指称、泛化边界、属性解耦、聚类同异——直击符号与指称 | `名家核心视角-总入口.md` |
+| 🧩 **杂家** | 兼收并蓄/贵生/贵因/大一统 | MoE博采、鲁棒贵生、迁移贵因、统一归一——融众长于一炉 | `杂家核心视角-总入口.md` |
+| 🌾 **农家** | 重本躬耕/顺天时/尽地利/精耕细作 | 基础设施、调度天时、资源效率、数据质量——能力从土地与工艺中来 | `农家核心视角-总入口.md` |
 
 **核心洞察**：九家叠加 = **守下限（墨）+ 立制度（法）+ 顺势减为（道）+ 情报先胜（兵）+ 拓扑制胜（纵横）+ 看相变循环（阴阳）+ 正名实辨泛化（名）+ 融众长（杂）+ 重基础精耕（农）**。连同 RL/毛泽东哲学/道教/佛教/禅宗/阳明/玄学，项目现拥有 **17 套可叠加视角**，覆盖根基/规律/行动/表征四维完备。
 
@@ -673,7 +702,7 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 ## 🪶 墨家核心视角
 
-> 承接 [`墨家核心视角-总入口.md`](墨家核心视角-总入口.md)。
+> 承接 `墨家核心视角-总入口.md`。
 
 | 墨家视角 | 本主题的对应 |
 |---------|------------|
@@ -684,14 +713,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：用兼爱求公平、非攻守安全、尚贤重能力、三表法验实证——造利天下之 AI。
 
-**通用锚点**：[`墨家核心视角-锚点块.md`](墨家核心视角-锚点块.md)
+**通用锚点**：`墨家核心视角-锚点块.md`
 
 
 ---
 
 ## 📜 法家核心视角
 
-> 承接 [`法家核心视角-总入口.md`](法家核心视角-总入口.md)。
+> 承接 `法家核心视角-总入口.md`。
 
 | 法家视角 | 本主题的对应 |
 |---------|------------|
@@ -702,14 +731,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：法立规则、势占结构、术设机制、信赏必罚稳 reward——靠制度非靠贤人。
 
-**通用锚点**：[`法家核心视角-锚点块.md`](法家核心视角-锚点块.md)
+**通用锚点**：`法家核心视角-锚点块.md`
 
 
 ---
 
 ## 🏔️ 道家核心视角
 
-> 承接 [`道家核心视角-总入口.md`](道家核心视角-总入口.md)。
+> 承接 `道家核心视角-总入口.md`。
 
 | 道家视角 | 本主题的对应 |
 |---------|------------|
@@ -720,14 +749,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：认清道顺势、去妄为、守阴阳平衡、齐物游刃——（同道教，哲学义）。
 
-**通用锚点**：[`道家核心视角-锚点块.md`](道家核心视角-锚点块.md)
+**通用锚点**：`道家核心视角-锚点块.md`
 
 
 ---
 
 ## ⚔️ 兵家核心视角
 
-> 承接 [`兵家核心视角-总入口.md`](兵家核心视角-总入口.md)。
+> 承接 `兵家核心视角-总入口.md`。
 
 | 兵家视角 | 本主题的对应 |
 |---------|------------|
@@ -738,14 +767,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：知己知彼立评估、奇正相生调探索、避实击虚攻弱点、先胜后战重规划——胜于未战。
 
-**通用锚点**：[`兵家核心视角-锚点块.md`](兵家核心视角-锚点块.md)
+**通用锚点**：`兵家核心视角-锚点块.md`
 
 
 ---
 
 ## 🗺️ 纵横家核心视角
 
-> 承接 [`纵横家核心视角-总入口.md`](纵横家核心视角-总入口.md)。
+> 承接 `纵横家核心视角-总入口.md`。
 
 | 纵横家视角 | 本主题的对应 |
 |---------|------------|
@@ -756,14 +785,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：捭阖门控、揣摩建模、合纵连横组联盟、因势利导善权变——以信息与拓扑制胜。
 
-**通用锚点**：[`纵横家核心视角-锚点块.md`](纵横家核心视角-锚点块.md)
+**通用锚点**：`纵横家核心视角-锚点块.md`
 
 
 ---
 
 ## 🌗 阴阳家核心视角
 
-> 承接 [`阴阳家核心视角-总入口.md`](阴阳家核心视角-总入口.md)。
+> 承接 `阴阳家核心视角-总入口.md`。
 
 | 阴阳家视角 | 本主题的对应 |
 |---------|------------|
@@ -774,14 +803,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：阴阳消长看 tradeoff、五行生克建系统、五德终始识相变、天人整体观全局——循环动力学。
 
-**通用锚点**：[`阴阳家核心视角-锚点块.md`](阴阳家核心视角-锚点块.md)
+**通用锚点**：`阴阳家核心视角-锚点块.md`
 
 
 ---
 
 ## 🏷️ 名家核心视角
 
-> 承接 [`名家核心视角-总入口.md`](名家核心视角-总入口.md)。
+> 承接 `名家核心视角-总入口.md`。
 
 | 名家视角 | 本主题的对应 |
 |---------|------------|
@@ -792,14 +821,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：名实相应对齐语义、白马非马辨泛化、离坚白解耦表征、合同异定聚类——直击符号与指称。
 
-**通用锚点**：[`名家核心视角-锚点块.md`](名家核心视角-锚点块.md)
+**通用锚点**：`名家核心视角-锚点块.md`
 
 
 ---
 
 ## 🧩 杂家核心视角
 
-> 承接 [`杂家核心视角-总入口.md`](杂家核心视角-总入口.md)。
+> 承接 `杂家核心视角-总入口.md`。
 
 | 杂家视角 | 本主题的对应 |
 |---------|------------|
@@ -810,14 +839,14 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：兼收并蓄博采、贵因顺势复用、贵生务实鲁棒、大一统归一——融众长于一炉。
 
-**通用锚点**：[`杂家核心视角-锚点块.md`](杂家核心视角-锚点块.md)
+**通用锚点**：`杂家核心视角-锚点块.md`
 
 
 ---
 
 ## 🌾 农家核心视角
 
-> 承接 [`农家核心视角-总入口.md`](农家核心视角-总入口.md)。
+> 承接 `农家核心视角-总入口.md`。
 
 | 农家视角 | 本主题的对应 |
 |---------|------------|
@@ -828,4 +857,4 @@ python3 费曼学习法/feynman-coach.py "注意力机制" --rounds 3
 
 **核心洞察**：重本躬耕筑基础、顺天时调调度、尽地利榨算力、精耕细作提质量——能力从土地与工艺中来。
 
-**通用锚点**：[`农家核心视角-锚点块.md`](农家核心视角-锚点块.md)
+**通用锚点**：`农家核心视角-锚点块.md`

@@ -16,35 +16,35 @@
 
 | # | 故事 | 嵌入概念 | work4ai 链接 |
 |---|---|---|---|
-| 01 | [神经网络的诞生与冰冻 30 年](01-神经网络的诞生与冰冻30年.md) | Perceptron、激活函数、反向传播、AI 寒冬 | [`../讲透激活函数`](../讲透激活函数/) / [`../讲透AI历史`](../讲透AI历史/) |
-| 02 | [深度学习的 ImageNet 时刻](02-深度学习的ImageNet时刻.md) | ReLU、Dropout、GPU、AlexNet | [`../讲透GPU与系统级`](../讲透GPU与系统级/) / [`../讲透泛化`](../讲透泛化/) |
+| 01 | [神经网络的诞生与冰冻 30 年](01-神经网络的诞生与冰冻30年.md) | Perceptron、激活函数、反向传播、AI 寒冬 | [`../讲透激活函数`](../讲透激活函数) / [`../讲透AI历史`](../讲透AI历史) |
+| 02 | [深度学习的 ImageNet 时刻](02-深度学习的ImageNet时刻.md) | ReLU、Dropout、GPU、AlexNet | [`../讲透GPU与系统级`](../讲透GPU与系统级) / [`../讲透泛化`](../讲透泛化) |
 
 ### 第二卷：感知、理解、生成（1989-2024）
 
 | # | 故事 | 嵌入概念 | work4ai 链接 |
 |---|---|---|---|
-| 03 | [让 AI 看见：CNN 与视觉革命](03-让AI看见-CNN与视觉革命.md) | CNN、卷积、ResNet、ViT | [`../讲透基础模型`](../讲透基础模型/) |
-| 04 | [Transformer 的诞生](04-Transformer的诞生.md) | Self-attention、Multi-head、Position encoding | [`../讲透Transformer`](../讲透Transformer/) |
-| 05 | [从 GPT-1 到 GPT-3：大模型的崛起](05-从GPT-1到GPT-3.md) | NTP、Scaling Laws、涌现、ICL | [`../讲透LLM`](../讲透LLM/) / [`../讲透基础模型`](../讲透基础模型/) |
-| 06 | [让 AI 听话：ChatGPT 与 RLHF 的诞生](06-ChatGPT与RLHF的诞生.md) | RLHF、reward model、PPO、对齐 | [`../讲透微调`](../讲透微调/) / [`../讲透RL`](../讲透RL/) |
-| 07 | [让 AI 创造：生成模型的故事](07-让AI创造-生成模型.md) | VAE、GAN、Flow、Diffusion、Score | [`../讲透生成模型`](../讲透生成模型/) |
-| 08 | [让 AI 决策：强化学习的王者归来](08-让AI决策-强化学习.md) | MDP、Q-learning、PPO、AlphaGo、RLHF | [`../讲透RL`](../讲透RL/) |
+| 03 | [让 AI 看见：CNN 与视觉革命](03-让AI看见-CNN与视觉革命.md) | CNN、卷积、ResNet、ViT | [`../讲透基础模型`](../讲透基础模型) |
+| 04 | [Transformer 的诞生](04-Transformer的诞生.md) | Self-attention、Multi-head、Position encoding | [`../讲透Transformer`](../讲透Transformer) |
+| 05 | [从 GPT-1 到 GPT-3：大模型的崛起](05-从GPT-1到GPT-3.md) | NTP、Scaling Laws、涌现、ICL | [`../讲透LLM`](../讲透LLM) / [`../讲透基础模型`](../讲透基础模型) |
+| 06 | [让 AI 听话：ChatGPT 与 RLHF 的诞生](06-ChatGPT与RLHF的诞生.md) | RLHF、reward model、PPO、对齐 | [`../讲透微调`](../讲透微调) / [`../讲透RL`](../讲透RL) |
+| 07 | [让 AI 创造：生成模型的故事](07-让AI创造-生成模型.md) | VAE、GAN、Flow、Diffusion、Score | [`../讲透生成模型`](../讲透生成模型) |
+| 08 | [让 AI 决策：强化学习的王者归来](08-让AI决策-强化学习.md) | MDP、Q-learning、PPO、AlphaGo、RLHF | [`../讲透RL`](../讲透RL) |
 
 ### 第三卷：让 AI 真正有用（2020-2026）
 
 | # | 故事 | 嵌入概念 | work4ai 链接 |
 |---|---|---|---|
-| 09 | [让 AI 知道：RAG 与知识的故事](09-让AI知道-RAG与知识.md) | 检索、embedding、向量空间、幻觉 | [`../讲透RAG`](../讲透RAG/) / [`../讲透Prompt`](../讲透Prompt/) |
-| 10 | [让 AI 省钱：高效 AI 的故事](10-让AI省钱-高效AI.md) | KV Cache、量化、LoRA、蒸馏、vLLM | [`../讲透KV Cache`](../讲透KV Cache/) / [`../讲透复用权重`](../讲透复用权重/) |
-| 11 | [让 AI 思考：推理模型与 AlphaProof](11-让AI思考-推理与AlphaProof.md) | Test-time scaling、o1、R1、Lean 4、形式化 | [`../讲透Lean4数学`](../讲透Lean4数学/) |
+| 09 | [让 AI 知道：RAG 与知识的故事](09-让AI知道-RAG与知识.md) | 检索、embedding、向量空间、幻觉 | [`../讲透RAG`](../讲透RAG) / [`../讲透Prompt`](../讲透Prompt) |
+| 10 | [让 AI 省钱：高效 AI 的故事](10-让AI省钱-高效AI.md) | KV Cache、量化、LoRA、蒸馏、vLLM | [`../讲透KV Cache`](../讲透KV Cache/) / [`../讲透复用权重`](../讲透复用权重) |
+| 11 | [让 AI 思考：推理模型与 AlphaProof](11-让AI思考-推理与AlphaProof.md) | Test-time scaling、o1、R1、Lean 4、形式化 | [`../讲透Lean4数学`](../讲透数学/讲透Lean4数学) |
 
 ### 第四卷：让 AI 深刻（2010-2026）
 
 | # | 故事 | 嵌入概念 | work4ai 链接 |
 |---|---|---|---|
-| 12 | [让 AI 可解释：Mech Interp 侦探故事](12-让AI可解释-Mech-Interp.md) | Circuits、SAE、refusal direction、attribution | [`../讲透可解释性`](../讲透可解释性/) |
-| 13 | [让 AI 数学化：理论与优化](13-让AI数学化-理论与优化.md) | 泛化界、双层下降、Scaling Laws、凸优化、信息论 | [`../讲透泛化`](../讲透泛化/) / [`../讲透优化理论`](../讲透优化理论/) |
-| 14 | [让 AI 系统化：分布式 + Agent + 世界模型](14-让AI系统化-分布式与Agent.md) | DDP、ZeRO、TP、PP、Agent、世界模型 | [`../讲透分布式AI系统`](../讲透分布式AI系统/) / [`../讲透Agent`](../讲透Agent/) / [`../讲透世界模型`](../讲透世界模型/) |
+| 12 | [让 AI 可解释：Mech Interp 侦探故事](12-让AI可解释-Mech-Interp.md) | Circuits、SAE、refusal direction、attribution | [`../讲透可解释性`](../讲透可解释性) |
+| 13 | [让 AI 数学化：理论与优化](13-让AI数学化-理论与优化.md) | 泛化界、双层下降、Scaling Laws、凸优化、信息论 | [`../讲透泛化`](../讲透泛化) / [`../讲透优化理论`](../讲透优化理论) |
+| 14 | [让 AI 系统化：分布式 + Agent + 世界模型](14-让AI系统化-分布式与Agent.md) | DDP、ZeRO、TP、PP、Agent、世界模型 | [`../讲透分布式AI系统`](../讲透分布式AI系统) / [`../讲透Agent`](../讲透Agent) / [`../讲透世界模型`](../讲透世界模型) |
 
 ### 终卷：你的故事（2026-2033）
 
