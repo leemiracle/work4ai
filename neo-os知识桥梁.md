@@ -1,6 +1,6 @@
 # neo-os 知识桥梁 —— 与本知识库的双向映射
 
-> 本文件记录 **neo-os 项目**（`../neo-os`，通用复杂软件可解释性基础设施）与 **work4ai 知识库**（本项目）的**双向**知识关系。
+> 本文件记录 **neo-os 项目**（[`code领域/07-软件可解释性/neo-os/`](code领域/07-软件可解释性/neo-os/README.md)，通用复杂软件可解释性基础设施；2026-09-10 收编入本仓库）与 **work4ai 知识库**（本项目）的**双向**知识关系。
 >
 > **关系一句话**：work4ai 是**方法论的源头**（"直觉→数学→代码→不足→应用"讲透范式 × 费曼门 × 17 视角）；neo-os 是**方法论的下游应用 + 反向回馈者**。neo-os 在立项探索中产出了 work4ai 缺失的前沿知识（→ 回流 work4ai），并把 work4ai 的"代码实证层"升级为"trace 实证层"（→ 回馈 work4ai 方法论）。
 >
@@ -14,8 +14,8 @@
 
 | 方向 | 桥梁文件 | 内容 |
 |------|---------|------|
-| **work4ai → neo-os**（方法论下行）| [`../neo-os/03-methodology/from-work4ai.md`](../neo-os/03-methodology/from-work4ai.md) | neo-os 那边维护的引用索引：work4ai 每个核心资产 → neo-os 哪一层 → 当前用途与状态（A-F 六类）|
-| **work4ai → neo-os**（方法论升级）| [`../neo-os/03-methodology/trace-native-upgrade.md`](../neo-os/03-methodology/trace-native-upgrade.md) | neo-os 的**原创贡献**：把 work4ai "代码实证层"升级为"trace 实证层"（见 [§七](#七neo-os-给-work4ai-的原创回馈trace-native-升级)）|
+| **work4ai → neo-os**（方法论下行）| [`code领域/07-软件可解释性/neo-os/03-methodology/from-work4ai.md`](code领域/07-软件可解释性/neo-os/03-methodology/from-work4ai.md) | neo-os 那边维护的引用索引：work4ai 每个核心资产 → neo-os 哪一层 → 当前用途与状态（A-F 六类）|
+| **work4ai → neo-os**（方法论升级）| [`code领域/07-软件可解释性/neo-os/03-methodology/trace-native-upgrade.md`](code领域/07-软件可解释性/neo-os/03-methodology/trace-native-upgrade.md) | neo-os 的**原创贡献**：把 work4ai "代码实证层"升级为"trace 实证层"（见 [§七](#七neo-os-给-work4ai-的原创回馈trace-native-升级)）|
 | **neo-os → work4ai**（知识回流）| 本文件 | 索引 neo-os 探索产出 → work4ai 讲透文件（见 [§二](#二已回流的通用知识gap-全表)）|
 
 > 📌 **关键**：neo-os 在 `03-methodology/` 显式建立了"方法论契约层"——结构本身就是契约（任何人 `ls 03-methodology/` 就懂 provenance）。本文件是 work4ai 这一侧的对应契约。
@@ -42,21 +42,21 @@ neo-os 的产物分两类，**只有"通用 AI 知识"才回流** work4ai：
 
 | neo-os 源文件（重组后路径） | 主题 | work4ai 原状 | gap | 回流到 |
 |--------------|------|-------------|-----|--------|
-| [`02-research/rl/02a-rl-formal-proof.md`](../neo-os/02-research/rl/02a-rl-formal-proof.md) | RL + 形式证明（AlphaProof 谱系）| 讲透RL 仅 00-03 基础 | 🔴 | [`讲透RL/04-RL与形式证明.md`](./讲透RL/04-RL与形式证明.md) |
-| [`02-research/rl/05-paper-limit-of-rlvr.md`](../neo-os/02-research/rl/05-paper-limit-of-rlvr.md) | **RLVR 的极限**（pass@k 反转，NeurIPS 2025 Oral）| ❌ 完全无 | 🔴 | [`讲透RL/05-RLVR的极限.md`](./讲透RL/05-RLVR的极限.md) |
-| [`02-research/rl/02c-rl-systems.md`](../neo-os/02-research/rl/02c-rl-systems.md) | RL + 系统软件（MLGO/AlphaEvolve/Cold-RL）| ❌ 完全无 | 🟡 | [`讲透RL/06-RL与系统软件.md`](./讲透RL/06-RL与系统软件.md) |
-| [`02-research/deep/R2-lean4-os-verification-sota.md`](../neo-os/02-research/deep/R2-lean4-os-verification-sota.md) | **Lean4 形式化 OS 验证 SOTA**（seL4/Verus/Atmosphere/seLe4n/Veil）| ❌ **完全无新主题** | 🔴 | [`讲透形式化验证/00-为什么形式化+Lean4SOTA.md`](./讲透形式化验证/00-为什么形式化+Lean4SOTA.md) |
-| [`02-research/deep/R5-neuro-symbolic-loop-sota.md`](../neo-os/02-research/deep/R5-neuro-symbolic-loop-sota.md) | **神经符号闭环 SOTA**（AlphaProof/Delta-Prover/KVerus/VERISPECGEN）| ❌ **完全无新主题** | 🔴 | [`讲透神经符号/00-神经符号循环为什么是新范式.md`](./讲透神经符号/00-神经符号循环为什么是新范式.md) |
-| [`02-research/deep/LEAN4_REWARD_BENCH.md`](../neo-os/02-research/deep/LEAN4_REWARD_BENCH.md) | Lean4 作为 RL reward verifier 的速度可行性（实测 sub-second）| ❌ 无 | 🟡 | [`讲透形式化验证/01-Lean4作为RL奖励验证器.md`](./讲透形式化验证/01-Lean4作为RL奖励验证器.md) |
-| [`02-research/deep/R4-ai-software-explainability-landscape.md`](../neo-os/02-research/deep/R4-ai-software-explainability-landscape.md) | AI 驱动的软件可解释性竞品全景（4类竞品 + 解释性幻觉71.2%）| 讲透可解释性 仅模型可解释性（00-01）| 🟡 | [`讲透可解释性/S1-AI驱动的软件可解释性.md`](./讲透可解释性/S1-AI驱动的软件可解释性.md) |
+| [`02-research/rl/02a-rl-formal-proof.md`](code领域/07-软件可解释性/neo-os/02-research/rl/02a-rl-formal-proof.md) | RL + 形式证明（AlphaProof 谱系）| 讲透RL 仅 00-03 基础 | 🔴 | [`讲透RL/04-RL与形式证明.md`](./讲透RL/04-RL与形式证明.md) |
+| [`02-research/rl/05-paper-limit-of-rlvr.md`](code领域/07-软件可解释性/neo-os/02-research/rl/05-paper-limit-of-rlvr.md) | **RLVR 的极限**（pass@k 反转，NeurIPS 2025 Oral）| ❌ 完全无 | 🔴 | [`讲透RL/05-RLVR的极限.md`](./讲透RL/05-RLVR的极限.md) |
+| [`02-research/rl/02c-rl-systems.md`](code领域/07-软件可解释性/neo-os/02-research/rl/02c-rl-systems.md) | RL + 系统软件（MLGO/AlphaEvolve/Cold-RL）| ❌ 完全无 | 🟡 | [`讲透RL/06-RL与系统软件.md`](./讲透RL/06-RL与系统软件.md) |
+| [`02-research/deep/R2-lean4-os-verification-sota.md`](code领域/07-软件可解释性/neo-os/02-research/deep/R2-lean4-os-verification-sota.md) | **Lean4 形式化 OS 验证 SOTA**（seL4/Verus/Atmosphere/seLe4n/Veil）| ❌ **完全无新主题** | 🔴 | [`讲透形式化验证/00-为什么形式化+Lean4SOTA.md`](./讲透形式化验证/00-为什么形式化+Lean4SOTA.md) |
+| [`02-research/deep/R5-neuro-symbolic-loop-sota.md`](code领域/07-软件可解释性/neo-os/02-research/deep/R5-neuro-symbolic-loop-sota.md) | **神经符号闭环 SOTA**（AlphaProof/Delta-Prover/KVerus/VERISPECGEN）| ❌ **完全无新主题** | 🔴 | [`讲透神经符号/00-神经符号循环为什么是新范式.md`](./讲透神经符号/00-神经符号循环为什么是新范式.md) |
+| [`02-research/deep/LEAN4_REWARD_BENCH.md`](code领域/07-软件可解释性/neo-os/02-research/deep/LEAN4_REWARD_BENCH.md) | Lean4 作为 RL reward verifier 的速度可行性（实测 sub-second）| ❌ 无 | 🟡 | [`讲透形式化验证/01-Lean4作为RL奖励验证器.md`](./讲透形式化验证/01-Lean4作为RL奖励验证器.md) |
+| [`02-research/deep/R4-ai-software-explainability-landscape.md`](code领域/07-软件可解释性/neo-os/02-research/deep/R4-ai-software-explainability-landscape.md) | AI 驱动的软件可解释性竞品全景（4类竞品 + 解释性幻觉71.2%）| 讲透可解释性 仅模型可解释性（00-01）| 🟡 | [`讲透可解释性/S1-AI驱动的软件可解释性.md`](./讲透可解释性/S1-AI驱动的软件可解释性.md) |
 
 ### 已评估结案（不回流，附理由）
 
 | neo-os 源文件 | 主题 | 不回流理由 |
 |--------------|------|-----------|
-| [`02-research/rl/02b-rl-scientific-discovery.md`](../neo-os/02-research/rl/02b-rl-scientific-discovery.md) | RL + 科学发现（GNoME/AI-Scientist）| 🟢 边际价值中：核心洞察（GNoME/AlphaFold 本质不是 RL）已在 [`讲透RL/04`](./讲透RL/04-RL与形式证明.md) 提及；剩余是应用综述 |
-| [`02-research/rl/06-pass-k-experiment-design.md`](../neo-os/02-research/rl/06-pass-k-experiment-design.md) | pass@k 实验设计 | 🟢 边际价值低：是**实验方案非知识**；核心 pass@k 反转论证已在 [`讲透RL/05`](./讲透RL/05-RLVR的极限.md) 完整覆盖 |
-| [`02-research/rl/04-rl-as-math-direction.md`](../neo-os/02-research/rl/04-rl-as-math-direction.md) | RL 作数学方向评估 | 🟢 不适合回流：高度**个人化**（基于个人画像的方向建议），非通用知识 |
+| [`02-research/rl/02b-rl-scientific-discovery.md`](code领域/07-软件可解释性/neo-os/02-research/rl/02b-rl-scientific-discovery.md) | RL + 科学发现（GNoME/AI-Scientist）| 🟢 边际价值中：核心洞察（GNoME/AlphaFold 本质不是 RL）已在 [`讲透RL/04`](./讲透RL/04-RL与形式证明.md) 提及；剩余是应用综述 |
+| [`02-research/rl/06-pass-k-experiment-design.md`](code领域/07-软件可解释性/neo-os/02-research/rl/06-pass-k-experiment-design.md) | pass@k 实验设计 | 🟢 边际价值低：是**实验方案非知识**；核心 pass@k 反转论证已在 [`讲透RL/05`](./讲透RL/05-RLVR的极限.md) 完整覆盖 |
+| [`02-research/rl/04-rl-as-math-direction.md`](code领域/07-软件可解释性/neo-os/02-research/rl/04-rl-as-math-direction.md) | RL 作数学方向评估 | 🟢 不适合回流：高度**个人化**（基于个人画像的方向建议），非通用知识 |
 
 ### 待回流（留给后续轮次）
 
@@ -78,7 +78,7 @@ python3 费曼学习法/feynman-coach.py "主题" --rounds 3   # 3 角色连环�
 
 ## 四、跨项目概念对照
 
-neo-os 的概念在 work4ai 里有对应讲透，便于交叉学习（对照 neo-os 的 [`from-work4ai.md`](../neo-os/03-methodology/from-work4ai.md) A-F 六类映射）：
+neo-os 的概念在 work4ai 里有对应讲透，便于交叉学习（对照 neo-os 的 [`from-work4ai.md`](code领域/07-软件可解释性/neo-os/03-methodology/from-work4ai.md) A-F 六类映射）：
 
 | neo-os 概念 | work4ai 对应 | 备注 |
 |------------|-------------|------|
@@ -108,17 +108,18 @@ neo-os 的概念在 work4ai 里有对应讲透，便于交叉学习（对照 neo
 ## 六、neo-os 项目快速索引（供 work4ai 读者深入）
 
 - **Gitee 仓库**：https://gitee.com/leemiracle/neo-os
-- **本地路径**：`../neo-os`（相对于本项目）
+- **本地路径**：`code领域/07-软件可解释性/neo-os/`（2026-09-10 起随仓，原 C:workspace
+eo-os 已删除）
 - **立项时间**：2026-08
 - **仓库结构**（2026-08-05 重组后）：`00-constitution`（立项宪法）/ `01-decisions`（决策）/ `02-research`（研究：deep + rl）/ `03-methodology`（work4ai 契约）/ `04-layers`（四层原型）/ `05-adapters` / `06-adversarial`（对抗层）/ `07-experiments`（pass-k）/ `90-archive`
 - **核心纪律**："深度上专精，方法上通用。永远 N=2 提取，N=1 不泛化。"
-- **必读（按顺序）**：[`00-constitution/CONSTITUTION.md`](../neo-os/00-constitution/CONSTITUTION.md) → [`00-constitution/POSITION.md`](../neo-os/00-constitution/POSITION.md) → [`03-methodology/from-work4ai.md`](../neo-os/03-methodology/from-work4ai.md) → [`02-research/EXPANDED_KNOWLEDGE.md`](../neo-os/02-research/EXPANDED_KNOWLEDGE.md) → [`00-constitution/ROADMAP.md`](../neo-os/00-constitution/ROADMAP.md)
+- **必读（按顺序）**：[`00-constitution/CONSTITUTION.md`](code领域/07-软件可解释性/neo-os/00-constitution/CONSTITUTION.md) → [`00-constitution/POSITION.md`](code领域/07-软件可解释性/neo-os/00-constitution/POSITION.md) → [`03-methodology/from-work4ai.md`](code领域/07-软件可解释性/neo-os/03-methodology/from-work4ai.md) → [`02-research/EXPANDED_KNOWLEDGE.md`](code领域/07-软件可解释性/neo-os/02-research/EXPANDED_KNOWLEDGE.md) → [`00-constitution/ROADMAP.md`](code领域/07-软件可解释性/neo-os/00-constitution/ROADMAP.md)
 
 ---
 
 ## 七、neo-os 给 work4ai 的原创回馈：trace-native 升级
 
-**这是双向知识流的关键**——neo-os 不只是 work4ai 的下游，它对 work4ai 的方法论有**一项 paper-grade 的原创升级**（见 [`../neo-os/03-methodology/trace-native-upgrade.md`](../neo-os/03-methodology/trace-native-upgrade.md)）：
+**这是双向知识流的关键**——neo-os 不只是 work4ai 的下游，它对 work4ai 的方法论有**一项 paper-grade 的原创升级**（见 [`code领域/07-软件可解释性/neo-os/03-methodology/trace-native-upgrade.md`](code领域/07-软件可解释性/neo-os/03-methodology/trace-native-upgrade.md)）：
 
 ### 升级内容
 
