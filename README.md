@@ -497,6 +497,10 @@ work4ai 的治理升级到**四视角合一**：还原论（细节）+ 动力学
 | [`最有价值.md`](最有价值.md) | 项目价值密度最高的内容筛选清单 |
 | `黑格尔观念论核心视角-总入口.md` | 黑格尔观念论视角导航（概念卡在 [`视角库/`](视角库/README.md)）|
 
+### 16a. code领域总宇宙（16 源收编）⭐ 2026-09-10
+
+> 把 C:\workspace 下 16 个项目/知识库/克隆仓（csdiy · LLVM研究+llvm_experiments+IT平台 · paper-os · math · math-expert-pro · leemiracle · ML-Interviews · deepseek-harness · infoq×2 · neo-os · essence · fastisslow · economy）收编为 **code 领域九区总宇宙**，~46,000 文件入库、逐源对账、原文件夹删除。总入口：[`code领域/README.md`](code领域/README.md)（九区导航 + 对账总表 + 4 张"不迁物"索引卡：LLVM monorepo 2.14GiB / csdiy github-repos 21G / csdiy books PDF / fastisslow 段永平 PDF）。配套：[`neo-os知识桥梁.md`](neo-os知识桥梁.md)（已改指新家）。
+
 ---
 
 ## 四、维度矩阵

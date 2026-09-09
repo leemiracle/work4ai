@@ -24,6 +24,8 @@ updated: 2026-08-15
 > **2026-08-15 全量深读完成**：A 层（自有 AI 项目）5 + B 层（自有知识库）8 + C 层（外部参考库）7 = 20 仓，每仓一张结构化用例卡（七大类字段 + 证据锚点），另加今日已合并的 deepseek-harness 共 21 仓。
 > 原始卡片：`.research/workspace-repos/results/*.json`（本文件是唯一入库入口，孤儿率为零）。
 
+> ⭐ **2026-09-10 收编落地**：本文件点名的 16 个源（csdiy/essence/neo-os/paper-os/math/math-expert-pro/leemiracle/LLVM项目研究/llvm_experiments/infoq×2/deepseek-harness/ML-Interviews/fastisslow/economy 等）已整体收编进 [`code领域/`](code领域/README.md)（九区总宇宙，~46,000 文件入库，逐源对账，原文件夹已删除；csdiy github-repos 21G、LLVM monorepo 2.14GiB、两批 PDF 按用户决策留索引卡不迁）。本文的下表对这 16 源而言已是**历史快照**；其余 5 仓（growth-hub/ai-atlas/mips-sim/world-ai4sci-math/gongwen-mastery 等）状态不变。
+
 ## 0. 一句话总纲
 
 **C:\workspace 不是 20 个孤立文件夹，是一个"AI 辅助知识生产实验室"的化石层**：几乎每个库都是 1-4 天单日冲刺的爆发产物，work4ai 是其中被显式依赖的方法论 hub——资产已经存在，缺的是边。
