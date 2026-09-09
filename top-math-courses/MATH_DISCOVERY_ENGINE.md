@@ -85,13 +85,24 @@ $$\text{发现引擎价值} = \underbrace{\text{生成多样性}}_{\text{模型�
 |----|------|------|------|------|
 | **T1** | TxGraffiti-mini：n≤7 全枚举图 × 9 不变量 × 4 模板族 → 幸存不等式 | 零 API | 穷举 | ✅ |
 | **T1.5/T2** | 地毯式：图论升级（+谱/Zagreb/直径 18 不变量）+ 整数序列域 + 数学预筛 + 文献查证 | 零 API + 4 次 websearch | 穷举+随机 10k+文献 | ✅ **产出 S 级候选 C1**（见下） |
-| **T4/T4b** | AI 数学域：矩阵不等式（log域，埋雷 8/8+det 恒等式独立发现）+ 熵锥（E3 校准 100% Shannon；E4 三层过滤 2820→378→0 真候选=扫描挖不到 non-Shannon，需符号推理） | 零 API | LP+反例库 | ✅ 完成（详见 [loops/experiments/discovery_T4_results_card.md](loops/experiments/discovery_T4_results_card.md)） |
+| **T4/T4b** | AI 数学域：矩阵不等式（log域，埋雷 8/8+det 恒等式独立发现）+ 熵锥（E3 校准 100% Shannon；E4 三层过滤 2820→378→0 真候选=扫描挖不到 non-Shannon，需符号推理） | 零 API | LP+反例库 | ✅ 完成（详见 loops/experiments/discovery_T4_results_card.md） |
 | **T2.5** | **C1 攻坚（③ 裁决锁定）**：(a)✅ 文献深查确认 open（E±λ1±α 组合文献空白；SDP 线走 χf/Hoffman 方向非加项）→ (b)✅ **121,196 图零违反**（含结构族/切换带；K_n 取等 gap=-2e-14；17.1% 图上强于已知界）→ (c)🔥 Lean 形式化（本地 Mathlib v4.14 全量构建中，C1 陈述已写：`/tmp/opencode/C1lean/C1lean.lean`，证明路径四案见注释） | 本地 | Lean 0 sorry | 🔥 (c) 进行中 |
 | **T3** | 完整四象限：FAR-lite 问题池 + 交叉匹配 + 攻坚 + 固化 | agent 编排 | 五件套+三守卫 | 待启 |
 
-## 六、T2 地毯式搜索结果（2026-08-26，S 级发现）
+## 五·B、持续进化完全体（2026-08-27 五闭环落地）
 
-**两域漏斗**：图论 26 万检查→4471 幸存→3 真候选；序列域 3 千检查→0 真候选。186 条已知 rediscover 作校准。详见 [loops/experiments/discovery_T2_carpet_search.md](loops/experiments/discovery_T2_carpet_search.md)。
+| 闭环 | 资产 | 首跑 |
+|------|------|------|
+| 固化 | loops/math_kb.md（分型知识库：7 约束/7 事实/2 轨迹） | 建库 |
+| 睡眠 | loops/sleep_cycle.py（NREM 复发整合 + REM 做梦 R1-R5×高价值卡） | F-002→4；**15 梦境猜想** |
+| 回归 | loops/experiments/regression_suite.py（R1-R7 含 bug 锚） | **6/6 PASS**，crond 每日 07:30 |
+| benefit | loops/experiments/flywheel_benefit_run.py | **首数字 1.7%**+激活溯源 |
+
+详见 loops/experiments/evolution_engine_results_card.md。设计框架见 [../讲透Agent/持续进化全景综合-2026-08.md](../讲透Agent/持续进化全景综合-2026-08.md) §九。
+
+## 六·旧、T2 地毯式搜索结果（2026-08-26，S 级发现）
+
+**两域漏斗**：图论 26 万检查→4471 幸存→3 真候选；序列域 3 千检查→0 真候选。186 条已知 rediscover 作校准。详见 loops/experiments/discovery_T2_carpet_search.md。
 
 **S 级候选 C1**：$\mathcal{E}(G) \geq n + \lambda_1 - \alpha$——
 - 证据：n≤7 全枚举 + n=8..11 随机图 10,000 张零违反 + 星族 n=8..15 全过；
@@ -142,7 +153,11 @@ $$\text{发现引擎价值} = \underbrace{\text{生成多样性}}_{\text{模型�
 
 ## 挂网
 
-- 上游：[MATH_LOOP_ENGINE.md](MATH_LOOP_ENGINE.md)（学习循环——本引擎的 L1-L4 内件）、[../讲透Loop/](../讲透Loop)（循环设计学——外循环规格与守卫）
+- 上游：[MATH_LOOP_ENGINE.md](MATH_LOOP_ENGINE.md)（学习循环——本引擎的 L1-L4 内件）、[../讲透Loop/](../讲透Loop/)（循环设计学——外循环规格与守卫）
+- **运行底座（08-28 新）**：[MATH_AGENT_HARNESS.md](MATH_AGENT_HARNESS.md)（已升格为独立项目 ~/ai/math-agent/——注册表与实施线在新家）
 - **总纲**：[BIDIRECTIONAL_FLYWHEEL.md](BIDIRECTIONAL_FLYWHEEL.md)（本引擎=飞轮的 AI→Math 环；引擎自举台账在总纲 §三）
 - 下游：loops/experiments/（试点实验线）、Prover harness（T2 攻坚手）
+- **种子层（08-27 新）**：../loops/seed_demos/（math-branches 27 卡深挖引导 → seed_queue 38 种子 → 随机执行+强制审计管线；**审计四陷阱清单**在此沉淀——wave1 实录 10 结果拦截 4 bug）
+- **机会层（08-27 新）**：[顶会数学研究机会地图-2026.md](顶会数学研究机会地图-2026.md)（顶会 best papers 信号→机会识别→八式方法论→种子；opp-001~005 已入队）——六系统先例表在 2026-08 已扩容为：Astra 十大进展/AlphaEvolve 67 问 23 改进/First Proof 挑战（见地图 §1）
+- **T5 候选域（08-27 晚登记）**：**"AI 难度学分"元问题**——给定问题特征（分支/陈述长度/所需工具深度），预测 AI 可解性与人类难度差；数据资产已扩至**四件套**（`loops/seed_demos/`：erdos_solved_log.txt 258 时间线 + opp001b_tags.json 43 存量 + opp001c_full.json 28 加速比 + **t5_features.jsonl 1213 题元数据**）；v1 发现：**三重互证**（Erdős 悬赏定价 primes $448 最贵 ↔ 存量最难 25.8% ↔ AI 加速 2.4×——人类直觉定价与 AI 攻坚方向一致）；标签→悬赏 R²≈0=**难度在题级**；v2=逐题抓 solved+题级特征（陈述算术深度/量词结构）→可解性元学习
 - 更新协议：每档试点点火/收官刷新 §五 §六；先例表新条目必须先过 papers 纪律（ID 现场核实）

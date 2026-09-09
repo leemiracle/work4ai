@@ -66,6 +66,8 @@
   BIDIRECTIONAL_FLYWHEEL.md ⭐⭐ ← 双向赋能总纲：AI→Math 发现环 × Math→AI 变现环 × 引擎自举耦合
   MATH_DISCOVERY_ENGINE.md ⭐   ← AI→Math 环（发现引擎 T1-T4，S级候选 C1）
   AI_MATH_FOREST.md ⭐          ← Math→AI 环原料库（v1.3 十八域 ~200 知识点×三层深度，带赋能管道）
+  数学分支直觉×反直觉总览.md ⭐  ← 27 分支双面卡总目录（skill 化：直觉×反直觉×深挖引导四件套，发现引擎接口；卡本体在 .opencode/skills/math-branches/）
+  顶会数学研究机会地图-2026.md ⭐ ← 2025-26 顶会 best papers×热门×27分支对接（八式方法论→bestpaper-methods skill；种子→seed_queue opp-*）
 ```
 
 ---
@@ -88,10 +90,11 @@
 | 文档 | 什么时候读 | 读完后能做什么 |
 |------|----------|--------------|
 | **[FAST_TRACK.md](FAST_TRACK.md)** | 学完阶段 0 后 | 看速成版 12 课 |
+| **[distilled_math/](distilled_math/README.md)** | 学任意数学课前/中 | 模型蒸馏版数学知识：16 域卡（直觉链/定理网/反例/验证），每条断言机器验证过——先读卡再读书，省踩坑 |
 | **[LEAN_MATH_TRACK.md](LEAN_MATH_TRACK.md)** | 与数学课并行 | 学数学同时练 Lean |
 | **[PRACTICE_LAB.md](PRACTICE_LAB.md)** | **动手周** | AI↔Math 双向实操：五级 AI4Math 阶梯 + 五个 Math4AI 最小实验（Muon/NTK/Chinchilla/QAT/长度泛化），每级有晋级标准 |
 | **[CROSS_INDEX_WITH_WORK4AI.md](CROSS_INDEX_WITH_WORK4AI.md)** | 学 ML 时 | 数学↔ML 双向验证 |
-| **[MATH_LOOP_ENGINE.md](MATH_LOOP_ENGINE.md)** ⭐ | 与数学课并行 | 七阶段循环 × BFS 遍历 63 类：学什么/怎么学/学得怎样的总调度（30 锚点卡在 [loops/](loops/ANCHOR_CARDS_30.md)） |
+| **[MATH_LOOP_ENGINE.md](MATH_LOOP_ENGINE.md)** ⭐ | 与数学课并行 | 七阶段循环 × BFS 遍历 63 类：学什么/怎么学/学得怎样的总调度（30 锚点卡在 loops/） |
 | **[HISTORY_AND_TASTE.md](HISTORY_AND_TASTE.md)** | 持续 | 培养 taste |
 
 ### 第三阶段：进阶 + 选方向（第 12-36 月）

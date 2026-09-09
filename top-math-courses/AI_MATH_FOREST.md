@@ -138,12 +138,14 @@ updated: 2026-08-26
 | **Neural ODE/流** | 连续深度 | ❌ 缺 | 流的正则性与可逆性的权衡 |
 | **逼近论（ReLU 空间/样条）** | 为什么深度>宽度 | ❌ 缺 | 高维 curse 的逼近下界（barron 空间） |
 
+> 供给侧锚（2026-08-27）：域六的教师模型知识快照已落库——[distilled_math](distilled_math/README.md) 的 DM-REAL-01（实分析/测度）、DM-CPLX-01（复分析）、DM-FUNC-01（泛函）三卡，L1 断言全过（★ 分层见卡内）。
+
 ## 七、数值方法/计算数学（AI 的手）
 
 | 知识点 | AI 锚点 | 库内覆盖 | L3 入口 |
 |--------|---------|---------|---------|
-| **浮点/数值稳定性** | softmax 溢出、fused kernel | 工程铁律散布 | bf16 训练的误差累积理论 |
-| **迭代法（Krylov/共轭梯度）** | 大规模线性求解、隐式架构 | ❌ 缺 | 注意力的 Krylov 近似（2025-2026 活跃） |
+| **浮点/数值稳定性** | softmax 溢出、fused kernel | 工程铁律散布 + [DM-NUMA-01](distilled_math/DM-NUMA-01-数值分析.md) | bf16 训练的误差累积理论 |
+| **迭代法（Krylov/共轭梯度）** | 大规模线性求解、隐式架构 | [DM-NUMA-01](distilled_math/DM-NUMA-01-数值分析.md) ✅（CG 有限终止+√κ） | 注意力的 Krylov 近似（2025-2026 活跃） |
 | **预条件** | Adam=对角预条件器 | 讲透优化器 提及 | 预条件 SGD 的统一收敛框架 |
 | **随机数值（Hutchinson/MC 线性代数）** | trace/det 估计、扩散采样 | ❌ 缺 | stochastic trace 估计的方差下界 |
 | **自动微分的工程数学** | checkpointing 的时空交换 | 讲透PyTorch ✅ | 最优 checkpoint 策略的闭式 |
@@ -200,6 +202,8 @@ LLM/深度学习研究的"几何转向"主战场（用户点名后补，此前�
 | **灾难性遗忘的数学** | 稳定性-可塑性权衡 | ❌ 缺 | 连续学习的信息论界（接域三） |
 | **谱条件下的训练速度** | 特征值 gap ↔ 收敛轮数 | 锚点关联（优化域） | 各向异性 Hessian 下的方向性收敛（2023-2026） |
 | **TTT/fast weights（测试时训练）** | Titans 神经长期记忆（2M+ 上下文）；"上下文=权重状态"范式 | ✅ v1.5-1.6 补（2026-08-26，KV 革新自查触发） | **精确边界（三篇一手核实 2026-08-26）**：①2602.21204（NVIDIA, ICML26）统一定理只覆盖 **TTT-KVB + 内环末层线性无偏置**——非线性末层/动态核是自认 open；29× 是简化终点吞吐，性能最优点是 Variant 1（只更新末层 ppl 15.93<16.43 基线）；②**TTT-E2E 线（2512.23675）不在射程且反超 KVB**（next-token 损失完胜 KV binding——内环目标设计是第一性 open）；③**E2-TTT（2608.21308）闭式核** $\mathcal{K}^W_t=\eta_t\tilde\beta_t R_t$ 解决表达力-效率两难，1.3B 从零训，8× 外推 >90% passkey；④真 open：softmax vs 线性注意力族的分离定理；KVB 为何次优的理论 |
+
+> 供给侧锚（2026-08-27）：本域的泛函语言户口——NTK=RKHS 投影定理、平均场=测度弱收敛、μP=算子范数标度——见 [distilled_math](distilled_math/DM-FUNC-01-泛函分析.md) DM-FUNC-01 §5（L1 断言全过）。
 
 ## 十二、统计学习理论深化（AI 的免疫学）——v1.3 新增
 
@@ -287,8 +291,8 @@ LLM/深度学习研究的"几何转向"主战场（用户点名后补，此前�
 
 | 知识点 | AI 锚点 | 库内覆盖 | L3 入口（研究级） |
 |--------|---------|---------|------------------|
-| **自动机/形式语言层级（正则↔CFL）** | RNN=正则、Transformer 表达力比较的参照系（Merrill-Sabharwal 线） | ❌ 缺（**大遗漏**） | soft-attention=TC0 上界→log-precision 障碍；CoT 步数×表达力层级（2024-2026 最热） |
-| **电路复杂度（TC0/NC1）** | transformer 一次前向=常数深度门电路 | ❌ 缺 | CoT 把 transformer 提升到哪层（P 完全问题 PARITY/排序——活跃） |
+| **自动机/形式语言层级（正则↔CFL）** | RNN=正则、Transformer 表达力比较的参照系（Merrill-Sabharwal 线） | [DM-LOGIC-01](distilled_math/DM-LOGIC-01-数理逻辑与计算理论.md) ✅（对角模板+DFA 物证补桥） | soft-attention=TC0 上界→log-precision 障碍；CoT 步数×表达力层级（2024-2026 最热） |
+| **电路复杂度（TC0/NC1）** | transformer 一次前向=常数深度门电路 | [DM-LOGIC-01](distilled_math/DM-LOGIC-01-数理逻辑与计算理论.md) ✅（Merrill-Sabharwal 陈述+CoT 升维） | CoT 把 transformer 提升到哪层（P 完全问题 PARITY/排序——活跃） |
 | **描述复杂度（Kolmogorov）** | LLM 压缩=解释器（"LM is compression" 线）；ICL=程序归纳 | ❌ 缺 | 压缩增益与泛化的桥（Solomonoff 先验视角） |
 | **SQ 统计查询模型** | 学习的计算硬度下界来源（parity 为什么难学） | ❌ 缺 | SQ 下界×GAN/扩散的可学性 |
 | **PAC/NP-hardness of learning** | "学习是 NP-hard"定理的精确形态 | 讲透统计学习理论 部分 | hardness 结果对过参数化现实的适用边界 |

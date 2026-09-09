@@ -1,6 +1,7 @@
 # 实战案例 · Prover 数学 Agent（DeepSeek-Prover-V2 逆向蒸馏）
 
 > **任务源**：逆向蒸馏 DeepSeek-Prover-V2-7B 关于数学发现的规律 → 生成 skill/harness/prompt → 融合到现有 math 相关 agent。
+> **全景挂网（2026-08-27）**：本案例十条规律已织入蒸馏全景卡的"数学域蒸馏"一节（D 线：非权重蒸馏）——[100-模型蒸馏全景2026-深读卡 §五](../../前沿与媒体/100-模型蒸馏全景2026-深读卡.md)。
 > **一手来源**：论文 arXiv:2504.21801（2025-04-30）+ [官方 repo](https://github.com/deepseek-ai/DeepSeek-Prover-V2) + [Damek Davis 独立解析](https://damek.github.io/random/deepseek-prover-v2-overview/)（2026-08-24 检索核实）。
 > **执行环境**：内网 DCU 服务器（2× 内网GPU 64G，工作容器 容器：模型 /work/models/DeepSeek-Prover-V2-7B 13G + transformers 5.12 + Lean 4.21.0 x86 于 /work/lean-4.21.0-linux/）。
 > **战绩背景**：MiniF2F-test 88.9%（Pass@8192，SOTA）、PutnamBench 49/658、AIME 15 题解 6（vs V3 informal 8——形式与非形式差距显著缩小）。
@@ -123,10 +124,13 @@ decompose（建筑师：API 大模型/glm-5.3 或本地）
 
 ## 五、融合挂网
 
+> **多 Agent 拓扑实验（2026-08-27，13 节点）**：`experiments/magent_run.py` + `magent_analyze.py` + `magent_results/`（470 事件轨迹）——Prover×lean 三拓扑等预算对比（manager/debate/indep+角色偏置），主报告见 [`../多Agent协作全景综合-2026-08.md §五`](../多Agent协作全景综合-2026-08.md)。
+
 - [讲透Lean4数学/README](../../讲透数学/讲透Lean4数学/README.md)：加"Prover 数学 Agent 实战"条目（NNG 学习者 → Prover 工具使用者 → harness 造物主三级跳）
 - [top-math-courses/AI_FOR_MATH_TOOLS.md](../../top-math-courses/AI_FOR_MATH_TOOLS.md)：AlphaProof/LeanCopilot 条目旁加 DeepSeek-Prover-V2 条目（十条规律+本地部署）
 - skill `oprover-math` 全局可用（opencode 自动加载）
 - 方法论互链：与 [实战案例-性能优化Agent](../实战案例-性能优化Agent/README.md) 的 guard/裁判哲学互认（R3/R5 与双测协议同构）
+- **蒸馏家族泛化（2026-08-27）**：十条规律已从"证明蒸馏"泛化到"数学知识蒸馏"——[top-math-courses/distilled_math/](../../top-math-courses/distilled_math/README.md)（16 域知识卡 + SymPy 断言验证，操作规程见其 [METHODOLOGY.md](../../top-math-courses/distilled_math/METHODOLOGY.md) §一 的 R1-R10 转译表）；网络最新方法论全景见 [100-模型蒸馏全景2026-深读卡](../../前沿与媒体/100-模型蒸馏全景2026-深读卡.md)
 
 ---
 
