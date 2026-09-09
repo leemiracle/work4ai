@@ -108,8 +108,7 @@ neo-os 的概念在 work4ai 里有对应讲透，便于交叉学习（对照 neo
 ## 六、neo-os 项目快速索引（供 work4ai 读者深入）
 
 - **Gitee 仓库**：https://gitee.com/leemiracle/neo-os
-- **本地路径**：`code领域/07-软件可解释性/neo-os/`（2026-09-10 起随仓，原 C:workspace
-eo-os 已删除）
+- **本地路径**：`code领域/07-软件可解释性/neo-os/`（2026-09-10 起随仓，原 C:/workspace/neo-os 已删除）
 - **立项时间**：2026-08
 - **仓库结构**（2026-08-05 重组后）：`00-constitution`（立项宪法）/ `01-decisions`（决策）/ `02-research`（研究：deep + rl）/ `03-methodology`（work4ai 契约）/ `04-layers`（四层原型）/ `05-adapters` / `06-adversarial`（对抗层）/ `07-experiments`（pass-k）/ `90-archive`
 - **核心纪律**："深度上专精，方法上通用。永远 N=2 提取，N=1 不泛化。"
