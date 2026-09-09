@@ -1,0 +1,53 @@
+# 讲透Xinference · DeepWiki 索引
+
+> 来源 https://deepwiki.com/xorbitsai/inference · 49 页
+
+- [1-overview](deepwiki/1-overview.md) — Overview
+- [10-glossary](deepwiki/10-glossary.md) — Glossary
+- [2-system-architecture](deepwiki/2-system-architecture.md) — System Architecture
+- [2.1-supervisor-and-worker-system](deepwiki/2.1-supervisor-and-worker-system.md) — Supervisor and Worker System
+- [2.2-model-actor-framework](deepwiki/2.2-model-actor-framework.md) — Model Actor Framework
+- [2.3-request-flow-and-lifecycle](deepwiki/2.3-request-flow-and-lifecycle.md) — Request Flow and Lifecycle
+- [2.4-model-registry-and-cache-management](deepwiki/2.4-model-registry-and-cache-management.md) — Model Registry and Cache Management
+- [2.5-gpu-resource-management](deepwiki/2.5-gpu-resource-management.md) — GPU Resource Management
+- [3-llm-serving-system](deepwiki/3-llm-serving-system.md) — LLM Serving System
+- [3.1-model-family-definitions](deepwiki/3.1-model-family-definitions.md) — Model Family Definitions
+- [3.2-backend-engines](deepwiki/3.2-backend-engines.md) — Backend Engines
+- [3.3-engine-selection-and-matching](deepwiki/3.3-engine-selection-and-matching.md) — Engine Selection and Matching
+- [3.4-continuous-batching-and-scheduling](deepwiki/3.4-continuous-batching-and-scheduling.md) — Continuous Batching and Scheduling
+- [3.5-reasoning-and-tool-calling](deepwiki/3.5-reasoning-and-tool-calling.md) — Reasoning and Tool Calling
+- [3.6-distributed-inference-and-multi-worker](deepwiki/3.6-distributed-inference-and-multi-worker.md) — Distributed Inference and Multi-Worker
+- [4-model-types](deepwiki/4-model-types.md) — Model Types
+- [4.1-large-language-models](deepwiki/4.1-large-language-models.md) — Large Language Models
+- [4.2-embedding-models](deepwiki/4.2-embedding-models.md) — Embedding Models
+- [4.3-image-generation-models](deepwiki/4.3-image-generation-models.md) — Image Generation Models
+- [4.4-audio-models](deepwiki/4.4-audio-models.md) — Audio Models
+- [4.5-reranking-models](deepwiki/4.5-reranking-models.md) — Reranking Models
+- [4.6-video-models](deepwiki/4.6-video-models.md) — Video Models
+- [5-restful-api](deepwiki/5-restful-api.md) — RESTful API
+- [5.1-model-management-endpoints](deepwiki/5.1-model-management-endpoints.md) — Model Management Endpoints
+- [5.2-inference-endpoints](deepwiki/5.2-inference-endpoints.md) — Inference Endpoints
+- [5.3-model-registration-endpoints](deepwiki/5.3-model-registration-endpoints.md) — Model Registration Endpoints
+- [5.4-openai-and-anthropic-compatibility](deepwiki/5.4-openai-and-anthropic-compatibility.md) — OpenAI and Anthropic Compatibility
+- [5.5-authentication-and-authorization](deepwiki/5.5-authentication-and-authorization.md) — Authentication and Authorization
+- [6-client-interfaces](deepwiki/6-client-interfaces.md) — Client Interfaces
+- [6.1-python-client-library](deepwiki/6.1-python-client-library.md) — Python Client Library
+- [6.2-command-line-interface](deepwiki/6.2-command-line-interface.md) — Command Line Interface
+- [6.3-web-ui](deepwiki/6.3-web-ui.md) — Web UI
+- [6.4-external-client-integration](deepwiki/6.4-external-client-integration.md) — External Client Integration
+- [7-deployment](deepwiki/7-deployment.md) — Deployment
+- [7.1-local-deployment](deepwiki/7.1-local-deployment.md) — Local Deployment
+- [7.2-distributed-deployment](deepwiki/7.2-distributed-deployment.md) — Distributed Deployment
+- [7.3-docker-and-kubernetes](deepwiki/7.3-docker-and-kubernetes.md) — Docker and Kubernetes
+- [7.4-environment-configuration](deepwiki/7.4-environment-configuration.md) — Environment Configuration
+- [7.5-observability:-metrics-dashboards-and-logging](deepwiki/7.5-observability:-metrics-dashboards-and-logging.md) — Observability: Metrics, Dashboards, and Logging
+- [8-customization-and-extension](deepwiki/8-customization-and-extension.md) — Customization and Extension
+- [8.1-custom-model-registration](deepwiki/8.1-custom-model-registration.md) — Custom Model Registration
+- [8.2-model-specifications-and-schemas](deepwiki/8.2-model-specifications-and-schemas.md) — Model Specifications and Schemas
+- [8.3-chat-templates-and-prompt-formatting](deepwiki/8.3-chat-templates-and-prompt-formatting.md) — Chat Templates and Prompt Formatting
+- [8.4-adding-custom-backend-engines](deepwiki/8.4-adding-custom-backend-engines.md) — Adding Custom Backend Engines
+- [9-development-and-testing](deepwiki/9-development-and-testing.md) — Development and Testing
+- [9.1-development-setup](deepwiki/9.1-development-setup.md) — Development Setup
+- [9.2-testing-and-cicd](deepwiki/9.2-testing-and-cicd.md) — Testing and CI/CD
+- [9.3-benchmarking](deepwiki/9.3-benchmarking.md) — Benchmarking
+- [9.4-code-organization](deepwiki/9.4-code-organization.md) — Code Organization

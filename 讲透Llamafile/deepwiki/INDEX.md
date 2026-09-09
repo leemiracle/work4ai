@@ -1,0 +1,60 @@
+# 讲透Llamafile · DeepWiki 索引
+
+> 来源 https://deepwiki.com/mozilla-ai/llamafile · 56 页
+
+- [1-overview](deepwiki/1-overview.md) — Overview
+- [1.1-project-architecture](deepwiki/1.1-project-architecture.md) — Project Architecture
+- [1.2-quick-start](deepwiki/1.2-quick-start.md) — Quick Start
+- [10-build-system](deepwiki/10-build-system.md) — Build System
+- [10.1-build-configuration](deepwiki/10.1-build-configuration.md) — Build Configuration
+- [10.2-compilation-pipeline](deepwiki/10.2-compilation-pipeline.md) — Compilation Pipeline
+- [10.3-architecture-specific-builds](deepwiki/10.3-architecture-specific-builds.md) — Architecture-Specific Builds
+- [11-debugging-and-diagnostics](deepwiki/11-debugging-and-diagnostics.md) — Debugging and Diagnostics
+- [11.1-floating-point-exception-debugging](deepwiki/11.1-floating-point-exception-debugging.md) — Floating-Point Exception Debugging
+- [11.2-performance-monitoring](deepwiki/11.2-performance-monitoring.md) — Performance Monitoring
+- [12-localscore-benchmarking](deepwiki/12-localscore-benchmarking.md) — LocalScore Benchmarking
+- [12.1-benchmark-metrics-and-scoring](deepwiki/12.1-benchmark-metrics-and-scoring.md) — Benchmark Metrics and Scoring
+- [12.2-hardware-detection-and-result-submission](deepwiki/12.2-hardware-detection-and-result-submission.md) — Hardware Detection and Result Submission
+- [13-developer-workflow](deepwiki/13-developer-workflow.md) — Developer Workflow
+- [13.1-cicd-pipeline](deepwiki/13.1-cicd-pipeline.md) — CI/CD Pipeline
+- [13.2-patch-management-and-submodule-updates](deepwiki/13.2-patch-management-and-submodule-updates.md) — Patch Management and Submodule Updates
+- [14-testing-infrastructure](deepwiki/14-testing-infrastructure.md) — Testing Infrastructure
+- [14.1-unit-tests](deepwiki/14.1-unit-tests.md) — Unit Tests
+- [14.2-integration-tests](deepwiki/14.2-integration-tests.md) — Integration Tests
+- [15-third-party-dependencies](deepwiki/15-third-party-dependencies.md) — Third-Party Dependencies
+- [15.1-tls-and-security-libraries](deepwiki/15.1-tls-and-security-libraries.md) — TLS and Security Libraries
+- [15.2-sqlite-and-media-libraries](deepwiki/15.2-sqlite-and-media-libraries.md) — SQLite and Media Libraries
+- [16-glossary](deepwiki/16-glossary.md) — Glossary
+- [2-configuration-system](deepwiki/2-configuration-system.md) — Configuration System
+- [2.1-model-and-runtime-flags](deepwiki/2.1-model-and-runtime-flags.md) — Model and Runtime Flags
+- [3-core-inference-engine](deepwiki/3-core-inference-engine.md) — Core Inference Engine
+- [3.1-model-and-context-management](deepwiki/3.1-model-and-context-management.md) — Model and Context Management
+- [3.2-tokenization-and-chat-templates](deepwiki/3.2-tokenization-and-chat-templates.md) — Tokenization and Chat Templates
+- [3.3-sampling-and-generation](deepwiki/3.3-sampling-and-generation.md) — Sampling and Generation
+- [4-compute-backends](deepwiki/4-compute-backends.md) — Compute Backends
+- [4.1-backend-architecture](deepwiki/4.1-backend-architecture.md) — Backend Architecture
+- [4.2-cpu-backend](deepwiki/4.2-cpu-backend.md) — CPU Backend
+- [4.2.1-cpu-gemm-optimization](deepwiki/4.2.1-cpu-gemm-optimization.md) — CPU GEMM Optimization
+- [4.2.2-quantized-matrix-multiplication](deepwiki/4.2.2-quantized-matrix-multiplication.md) — Quantized Matrix Multiplication
+- [4.3-gpu-backends](deepwiki/4.3-gpu-backends.md) — GPU Backends
+- [4.3.1-cuda-backend](deepwiki/4.3.1-cuda-backend.md) — CUDA Backend
+- [4.3.2-rocmhip-backend](deepwiki/4.3.2-rocmhip-backend.md) — ROCm/HIP Backend
+- [4.3.3-metal-backend](deepwiki/4.3.3-metal-backend.md) — Metal Backend
+- [4.3.4-gpu-gemm-kernels](deepwiki/4.3.4-gpu-gemm-kernels.md) — GPU GEMM Kernels
+- [5-http-server-and-api](deepwiki/5-http-server-and-api.md) — HTTP Server and API
+- [5.1-api-endpoints-and-compatibility](deepwiki/5.1-api-endpoints-and-compatibility.md) — API Endpoints and Compatibility
+- [5.2-security-and-sandboxing](deepwiki/5.2-security-and-sandboxing.md) — Security and Sandboxing
+- [6-multimodal-support-(llava)](deepwiki/6-multimodal-support-(llava).md) — Multimodal Support (LLaVA)
+- [6.1-image-processing-pipeline](deepwiki/6.1-image-processing-pipeline.md) — Image Processing Pipeline
+- [7-distribution-system](deepwiki/7-distribution-system.md) — Distribution System
+- [7.1-cosmopolitan-libc-integration](deepwiki/7.1-cosmopolitan-libc-integration.md) — Cosmopolitan Libc Integration
+- [7.2-embedded-model-format](deepwiki/7.2-embedded-model-format.md) — Embedded Model Format
+- [7.3-multi-architecture-support](deepwiki/7.3-multi-architecture-support.md) — Multi-Architecture Support
+- [8-command-line-interface](deepwiki/8-command-line-interface.md) — Command Line Interface
+- [8.1-bestline-library](deepwiki/8.1-bestline-library.md) — Bestline Library
+- [8.2-chatbot-repl-and-execution-modes](deepwiki/8.2-chatbot-repl-and-execution-modes.md) — Chatbot REPL and Execution Modes
+- [8.3-syntax-highlighting](deepwiki/8.3-syntax-highlighting.md) — Syntax Highlighting
+- [9-derived-tools](deepwiki/9-derived-tools.md) — Derived Tools
+- [9.1-whisperfile](deepwiki/9.1-whisperfile.md) — Whisperfile
+- [9.2-transcribefile](deepwiki/9.2-transcribefile.md) — Transcribefile
+- [9.3-diffusionfile](deepwiki/9.3-diffusionfile.md) — Diffusionfile

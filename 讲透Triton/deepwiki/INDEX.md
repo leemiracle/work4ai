@@ -1,0 +1,56 @@
+# 讲透Triton · DeepWiki 索引
+
+> 来源 https://deepwiki.com/triton-lang/triton · 52 页
+
+- [1-overview](deepwiki/1-overview.md) — Overview
+- [1.1-system-architecture-and-compilation-flow](deepwiki/1.1-system-architecture-and-compilation-flow.md) — System Architecture and Compilation Flow
+- [1.2-repository-structure](deepwiki/1.2-repository-structure.md) — Repository Structure
+- [2-python-frontend-and-language](deepwiki/2-python-frontend-and-language.md) — Python Frontend and Language
+- [2.1-triton-language-core-(triton.language)](deepwiki/2.1-triton-language-core-(triton.language).md) — Triton Language Core (triton.language)
+- [2.2-jit-compilation-and-caching](deepwiki/2.2-jit-compilation-and-caching.md) — JIT Compilation and Caching
+- [2.3-semantic-analysis-and-type-system](deepwiki/2.3-semantic-analysis-and-type-system.md) — Semantic Analysis and Type System
+- [2.4-code-generator-(ast-to-mlir)](deepwiki/2.4-code-generator-(ast-to-mlir).md) — Code Generator (AST to MLIR)
+- [2.5-interpreter-mode](deepwiki/2.5-interpreter-mode.md) — Interpreter Mode
+- [2.6-gluon-experimental-frontend](deepwiki/2.6-gluon-experimental-frontend.md) — Gluon Experimental Frontend
+- [2.6.1-gluon-type-system-and-memory-descriptors](deepwiki/2.6.1-gluon-type-system-and-memory-descriptors.md) — Gluon Type System and Memory Descriptors
+- [2.6.2-hardware-specific-operations-(hopper-blackwell)](deepwiki/2.6.2-hardware-specific-operations-(hopper-blackwell).md) — Hardware-Specific Operations (Hopper, Blackwell)
+- [2.6.3-amd-hardware-specific-gluon-operations-(cdnardna)](deepwiki/2.6.3-amd-hardware-specific-gluon-operations-(cdnardna).md) — AMD Hardware-Specific Gluon Operations (CDNA/RDNA)
+- [2.7-triton_kernels-reference-library](deepwiki/2.7-triton_kernels-reference-library.md) — triton_kernels Reference Library
+- [3-mlir-dialects-and-ir-system](deepwiki/3-mlir-dialects-and-ir-system.md) — MLIR Dialects and IR System
+- [3.1-triton-dialect-(ttir)](deepwiki/3.1-triton-dialect-(ttir).md) — Triton Dialect (TTIR)
+- [3.2-tritongpu-dialect-and-layout-system](deepwiki/3.2-tritongpu-dialect-and-layout-system.md) — TritonGPU Dialect and Layout System
+- [3.3-layout-encoding-attributes](deepwiki/3.3-layout-encoding-attributes.md) — Layout Encoding Attributes
+- [3.4-linearlayout-system](deepwiki/3.4-linearlayout-system.md) — LinearLayout System
+- [3.5-memory-descriptors-and-shared-memory-layouts](deepwiki/3.5-memory-descriptors-and-shared-memory-layouts.md) — Memory Descriptors and Shared Memory Layouts
+- [4-compiler-transformations-and-optimization-passes](deepwiki/4-compiler-transformations-and-optimization-passes.md) — Compiler Transformations and Optimization Passes
+- [4.1-layout-propagation-and-conversion-removal](deepwiki/4.1-layout-propagation-and-conversion-removal.md) — Layout Propagation and Conversion Removal
+- [4.2-matrix-multiplication-acceleration](deepwiki/4.2-matrix-multiplication-acceleration.md) — Matrix Multiplication Acceleration
+- [4.3-dot-operand-optimization](deepwiki/4.3-dot-operand-optimization.md) — Dot Operand Optimization
+- [4.4-loop-pipelining-and-software-pipelining](deepwiki/4.4-loop-pipelining-and-software-pipelining.md) — Loop Pipelining and Software Pipelining
+- [4.5-prefetching-and-asynchronous-operations](deepwiki/4.5-prefetching-and-asynchronous-operations.md) — Prefetching and Asynchronous Operations
+- [4.6-memory-coalescing-and-access-optimization](deepwiki/4.6-memory-coalescing-and-access-optimization.md) — Memory Coalescing and Access Optimization
+- [4.7-memory-analysis-and-allocation](deepwiki/4.7-memory-analysis-and-allocation.md) — Memory Analysis and Allocation
+- [4.8-warp-specialization](deepwiki/4.8-warp-specialization.md) — Warp Specialization
+- [5-backend-compilation-and-code-generation](deepwiki/5-backend-compilation-and-code-generation.md) — Backend Compilation and Code Generation
+- [5.1-tritongpu-to-llvm-lowering-framework](deepwiki/5.1-tritongpu-to-llvm-lowering-framework.md) — TritonGPU to LLVM Lowering Framework
+- [5.2-memory-operations-lowering](deepwiki/5.2-memory-operations-lowering.md) — Memory Operations Lowering
+- [5.3-layout-conversion-lowering](deepwiki/5.3-layout-conversion-lowering.md) — Layout Conversion Lowering
+- [5.4-reduction-and-scan-operations-lowering](deepwiki/5.4-reduction-and-scan-operations-lowering.md) — Reduction and Scan Operations Lowering
+- [5.5-mma-and-dot-operation-lowering](deepwiki/5.5-mma-and-dot-operation-lowering.md) — MMA and Dot Operation Lowering
+- [5.6-nvidia-cuda-backend](deepwiki/5.6-nvidia-cuda-backend.md) — NVIDIA CUDA Backend
+- [5.6.1-nvidia-specific-optimizations-and-passes](deepwiki/5.6.1-nvidia-specific-optimizations-and-passes.md) — NVIDIA-Specific Optimizations and Passes
+- [5.6.2-ptx-assembly-and-binary-generation](deepwiki/5.6.2-ptx-assembly-and-binary-generation.md) — PTX Assembly and Binary Generation
+- [5.7-amd-hip-backend](deepwiki/5.7-amd-hip-backend.md) — AMD HIP Backend
+- [5.7.1-amd-specific-optimizations-and-passes](deepwiki/5.7.1-amd-specific-optimizations-and-passes.md) — AMD-Specific Optimizations and Passes
+- [5.7.2-amd-loadstore-and-memory-operations](deepwiki/5.7.2-amd-loadstore-and-memory-operations.md) — AMD Load/Store and Memory Operations
+- [5.7.3-shuffle-and-warp-reduction-on-amd](deepwiki/5.7.3-shuffle-and-warp-reduction-on-amd.md) — Shuffle and Warp Reduction on AMD
+- [6-build-system-and-infrastructure](deepwiki/6-build-system-and-infrastructure.md) — Build System and Infrastructure
+- [6.1-python-package-setup-and-installation](deepwiki/6.1-python-package-setup-and-installation.md) — Python Package Setup and Installation
+- [6.2-cmake-build-system-and-llvm-integration](deepwiki/6.2-cmake-build-system-and-llvm-integration.md) — CMake Build System and LLVM Integration
+- [6.3-backend-plugin-system](deepwiki/6.3-backend-plugin-system.md) — Backend Plugin System
+- [7-testing-development-and-debugging](deepwiki/7-testing-development-and-debugging.md) — Testing, Development, and Debugging
+- [7.1-testing-framework-and-test-structure](deepwiki/7.1-testing-framework-and-test-structure.md) — Testing Framework and Test Structure
+- [7.2-cicd-pipeline-and-integration-tests](deepwiki/7.2-cicd-pipeline-and-integration-tests.md) — CI/CD Pipeline and Integration Tests
+- [7.3-debugging-and-profiling-tools](deepwiki/7.3-debugging-and-profiling-tools.md) — Debugging and Profiling Tools
+- [7.4-configuration-system-and-environment-variables](deepwiki/7.4-configuration-system-and-environment-variables.md) — Configuration System and Environment Variables
+- [8-glossary](deepwiki/8-glossary.md) — Glossary

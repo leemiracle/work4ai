@@ -1,7 +1,7 @@
 # work4ai 项目直觉（AGENTS.md）
 
 > work4ai = AI 学习知识库（600+ 文件，"讲透"系列宇宙）。治理框架：《复杂系统迭代work4ai.md》（复杂系统四视角：还原论/动力学/热力学/复杂系统）。
-> 全局直觉见 `~/.config/opencode/AGENTS.md`；本文件是项目专属增量。
+> 全局直觉见 `~/.claude/CLAUDE.md`（ai-mentor 人设）；本文件是项目专属增量。
 
 ## 项目是什么
 

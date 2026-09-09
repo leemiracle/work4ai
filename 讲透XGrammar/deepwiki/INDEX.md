@@ -1,0 +1,68 @@
+# 讲透XGrammar · DeepWiki 索引
+
+> 来源 https://deepwiki.com/mlc-ai/xgrammar · 64 页
+
+- [1-overview](deepwiki/1-overview.md) — Overview
+- [1.1-installation-and-setup](deepwiki/1.1-installation-and-setup.md) — Installation and Setup
+- [1.2-quick-start-guide](deepwiki/1.2-quick-start-guide.md) — Quick Start Guide
+- [10-system-architecture](deepwiki/10-system-architecture.md) — System Architecture
+- [10.1-core-components-and-data-flow](deepwiki/10.1-core-components-and-data-flow.md) — Core Components and Data Flow
+- [10.2-python-c++-architecture](deepwiki/10.2-python-c++-architecture.md) — Python-C++ Architecture
+- [10.3-key-data-structures](deepwiki/10.3-key-data-structures.md) — Key Data Structures
+- [11-c++-implementation-details](deepwiki/11-c++-implementation-details.md) — C++ Implementation Details
+- [11.1-grammar-internal-representation](deepwiki/11.1-grammar-internal-representation.md) — Grammar Internal Representation
+- [11.2-fsm-implementation](deepwiki/11.2-fsm-implementation.md) — FSM Implementation
+- [11.3-grammarmatcher-internal-architecture](deepwiki/11.3-grammarmatcher-internal-architecture.md) — GrammarMatcher Internal Architecture
+- [11.4-python-bindings-with-nanobind](deepwiki/11.4-python-bindings-with-nanobind.md) — Python Bindings with nanobind
+- [11.5-serialization-and-persistence](deepwiki/11.5-serialization-and-persistence.md) — Serialization and Persistence
+- [11.6-error-handling-and-result-types](deepwiki/11.6-error-handling-and-result-types.md) — Error Handling and Result Types
+- [12-developer-guide](deepwiki/12-developer-guide.md) — Developer Guide
+- [12.1-build-system-and-configuration](deepwiki/12.1-build-system-and-configuration.md) — Build System and Configuration
+- [12.2-project-dependencies](deepwiki/12.2-project-dependencies.md) — Project Dependencies
+- [12.3-testing-framework-and-practices](deepwiki/12.3-testing-framework-and-practices.md) — Testing Framework and Practices
+- [12.4-code-quality-and-pre-commit-hooks](deepwiki/12.4-code-quality-and-pre-commit-hooks.md) — Code Quality and Pre-commit Hooks
+- [12.5-cross-platform-wheel-building](deepwiki/12.5-cross-platform-wheel-building.md) — Cross-Platform Wheel Building
+- [12.6-release-process-and-versioning](deepwiki/12.6-release-process-and-versioning.md) — Release Process and Versioning
+- [12.7-contributing-guidelines](deepwiki/12.7-contributing-guidelines.md) — Contributing Guidelines
+- [2-core-concepts](deepwiki/2-core-concepts.md) — Core Concepts
+- [2.1-grammar-representation](deepwiki/2.1-grammar-representation.md) — Grammar Representation
+- [2.2-grammar-compilation](deepwiki/2.2-grammar-compilation.md) — Grammar Compilation
+- [2.3-grammar-matching](deepwiki/2.3-grammar-matching.md) — Grammar Matching
+- [3-python-api-reference](deepwiki/3-python-api-reference.md) — Python API Reference
+- [3.1-grammar-definition-and-construction](deepwiki/3.1-grammar-definition-and-construction.md) — Grammar Definition and Construction
+- [3.2-grammar-compilation](deepwiki/3.2-grammar-compilation.md) — Grammar Compilation
+- [3.3-grammar-matching-and-validation](deepwiki/3.3-grammar-matching-and-validation.md) — Grammar Matching and Validation
+- [3.4-batch-processing](deepwiki/3.4-batch-processing.md) — Batch Processing
+- [3.5-token-bitmask-operations](deepwiki/3.5-token-bitmask-operations.md) — Token Bitmask Operations
+- [3.6-tokenizer-integration](deepwiki/3.6-tokenizer-integration.md) — Tokenizer Integration
+- [3.7-testing-and-development-utilities](deepwiki/3.7-testing-and-development-utilities.md) — Testing and Development Utilities
+- [4-grammar-input-formats](deepwiki/4-grammar-input-formats.md) — Grammar Input Formats
+- [4.1-ebnf-grammar-specification](deepwiki/4.1-ebnf-grammar-specification.md) — EBNF Grammar Specification
+- [4.2-json-schema-conversion](deepwiki/4.2-json-schema-conversion.md) — JSON Schema Conversion
+- [4.3-regular-expression-grammars](deepwiki/4.3-regular-expression-grammars.md) — Regular Expression Grammars
+- [4.4-structural-tags-system](deepwiki/4.4-structural-tags-system.md) — Structural Tags System
+- [5-json-schema-converter-deep-dive](deepwiki/5-json-schema-converter-deep-dive.md) — JSON Schema Converter Deep Dive
+- [5.1-converter-architecture](deepwiki/5.1-converter-architecture.md) — Converter Architecture
+- [5.2-supported-json-schema-features](deepwiki/5.2-supported-json-schema-features.md) — Supported JSON Schema Features
+- [5.3-object-and-array-schema-processing](deepwiki/5.3-object-and-array-schema-processing.md) — Object and Array Schema Processing
+- [5.4-formatting-and-whitespace-control](deepwiki/5.4-formatting-and-whitespace-control.md) — Formatting and Whitespace Control
+- [5.5-string-formats-and-numeric-ranges](deepwiki/5.5-string-formats-and-numeric-ranges.md) — String Formats and Numeric Ranges
+- [6-structural-tags-deep-dive](deepwiki/6-structural-tags-deep-dive.md) — Structural Tags Deep Dive
+- [6.1-format-specification](deepwiki/6.1-format-specification.md) — Format Specification
+- [6.2-analysis-and-conversion-pipeline](deepwiki/6.2-analysis-and-conversion-pipeline.md) — Analysis and Conversion Pipeline
+- [6.3-triggered-tags-and-tool-calling](deepwiki/6.3-triggered-tags-and-tool-calling.md) — Triggered Tags and Tool Calling
+- [7-grammar-processing-pipeline](deepwiki/7-grammar-processing-pipeline.md) — Grammar Processing Pipeline
+- [7.1-ebnf-parser-and-grammar-construction](deepwiki/7.1-ebnf-parser-and-grammar-construction.md) — EBNF Parser and Grammar Construction
+- [7.2-grammar-optimization-passes](deepwiki/7.2-grammar-optimization-passes.md) — Grammar Optimization Passes
+- [7.3-finite-state-machine-generation](deepwiki/7.3-finite-state-machine-generation.md) — Finite State Machine Generation
+- [7.4-adaptive-token-mask-precomputation](deepwiki/7.4-adaptive-token-mask-precomputation.md) — Adaptive Token Mask Precomputation
+- [8-runtime-matching-engine](deepwiki/8-runtime-matching-engine.md) — Runtime Matching Engine
+- [8.1-earley-parser-implementation](deepwiki/8.1-earley-parser-implementation.md) — Earley Parser Implementation
+- [8.2-token-acceptance-and-state-management](deepwiki/8.2-token-acceptance-and-state-management.md) — Token Acceptance and State Management
+- [8.3-token-bitmask-generation](deepwiki/8.3-token-bitmask-generation.md) — Token Bitmask Generation
+- [8.4-hardware-acceleration-kernels](deepwiki/8.4-hardware-acceleration-kernels.md) — Hardware Acceleration Kernels
+- [8.5-llm-integration-patterns](deepwiki/8.5-llm-integration-patterns.md) — LLM Integration Patterns
+- [9-performance-and-optimization](deepwiki/9-performance-and-optimization.md) — Performance and Optimization
+- [9.1-multi-level-caching-strategy](deepwiki/9.1-multi-level-caching-strategy.md) — Multi-Level Caching Strategy
+- [9.2-multi-threaded-compilation-and-matching](deepwiki/9.2-multi-threaded-compilation-and-matching.md) — Multi-threaded Compilation and Matching
+- [9.3-memory-efficient-data-structures](deepwiki/9.3-memory-efficient-data-structures.md) — Memory-Efficient Data Structures

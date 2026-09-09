@@ -29,6 +29,7 @@
 | **05** | 创意 AI — AI 做内容 | 🟡 | ChatGPT / Midjourney / Sora / Suno + 创意工作流 |
 | **06** | 企业 AI 应用 — AI 做业务 | ✅ | RAG / Agent 在企业的落地（和讲透RAG/Agent 互补）|
 | **07** | [AI for AI](./07-AI for AI.md) — AI 应用到自己 | ✅ | **元应用**：AI Scientist/Lion/合成数据/Constitutional AI/LLM-as-judge/interpretability + 递归自我改进 |
+| 🧬 | [领域卡：Biology×AI](./domain-card-biology.md) | ✅ | @domain-expert 路由主卡：领域本体/任务谱系（AlphaFold/ESM/RFdiffusion）/五条编译规则（同源泄漏切分等）/湿实验错误成本（2026-09-04 挂网） |
 
 ---
 
