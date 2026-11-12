@@ -189,8 +189,8 @@ agent = Agent(
 ## 🔗 Related Examples
 
 - **[Streaming Voice](../streamed/README.md)**: Real-time voice interaction
-- **[Voice Pipeline Documentation](https://openai.github.io/openai-agents-python/voice/pipeline/)**: Official pipeline docs
-- **[Voice Quickstart](https://openai.github.io/openai-agents-python/voice/quickstart/)**: Basic voice setup
+- **[Voice Pipeline Documentation](https://openai.github.io/openai-agents-python/voice/pipeline)**: Official pipeline docs
+- **[Voice Quickstart](https://openai.github.io/openai-agents-python/voice/quickstart)**: Basic voice setup
 
 ## 🛠️ Customization Options
 
@@ -221,5 +221,5 @@ agent = Agent(
 
 After mastering static voice agents:
 - **[Streaming Voice](../streamed/README.md)**: Implement real-time voice interaction
-- **[Advanced Voice Pipelines](https://openai.github.io/openai-agents-python/voice/pipeline/)**: Custom pipeline configurations
+- **[Advanced Voice Pipelines](https://openai.github.io/openai-agents-python/voice/pipeline)**: Custom pipeline configurations
 - **Production Voice Apps**: Deploy voice agents in real applications

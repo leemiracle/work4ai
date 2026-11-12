@@ -38,7 +38,7 @@
 
 ## 致谢与许可
 
-本文基于 [SGLang v0.4.0](https://github.com/sgl-project/sglang/tree/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751) 版本的代码编写。特别感谢 [Chenyang Zhao](https://zhaochenyang20.github.io/Chayenne/)、[Wenxuan Tan](https://github.com/Edenzzzz)、[Simon Veitner](https://simveit.github.io/)、[Shuai Shi](https://shuaills.github.io/)、[Shizhe Diao](https://shizhediao.github.io/)、[Shending Hu](https://shengdinghu.github.io/)、[Xiaoyu Zhang](https://github.com/BBuf)、[agiping](https://github.com/agiping)、[Zhizhou Sha](https://jamessand.github.io/) 对本文档的贡献。
+本文基于 [SGLang v0.4.0](https://github.com/sgl-project/sglang/tree/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751) 版本的代码编写。特别感谢 [Chenyang Zhao](https://zhaochenyang20.github.io/Chayenne)、[Wenxuan Tan](https://github.com/Edenzzzz)、[Simon Veitner](https://simveit.github.io)、[Shuai Shi](https://shuaills.github.io)、[Shizhe Diao](https://shizhediao.github.io)、[Shending Hu](https://shengdinghu.github.io)、[Xiaoyu Zhang](https://github.com/BBuf)、[agiping](https://github.com/agiping)、[Zhizhou Sha](https://jamessand.github.io) 对本文档的贡献。
 
 **注意：本文档仍在编写中，以下部分将在后续加入：**
 
@@ -76,7 +76,7 @@ Server 使用 FastAPI 应用定义 API endpoint，通过 [v1_chat_completions](h
 
 ### [Initialization](https://github.com/sgl-project/sglang/blob/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751/python/sglang/srt/managers/tokenizer_manager.py#L88)
 
-1. 设置 [ZeroMQ](https://libzmq.readthedocs.io/en/latest/) 进行进程间通信，包括 TokenizerManager 与 DetokenizerManager 和 Scheduler 交互的 socket。
+1. 设置 [ZeroMQ](https://libzmq.readthedocs.io/en/latest) 进行进程间通信，包括 TokenizerManager 与 DetokenizerManager 和 Scheduler 交互的 socket。
 2. 配置 `server_args`，启用 `metrics`，并初始化 `model_config`、`tokenizer` 以及多模态图像处理器的 placeholders。
 
 ### [generate_request](https://github.com/sgl-project/sglang/blob/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751/python/sglang/srt/managers/tokenizer_manager.py#L173)
@@ -98,7 +98,7 @@ Server 使用 FastAPI 应用定义 API endpoint，通过 [v1_chat_completions](h
 
 ### [Initialization](https://github.com/sgl-project/sglang/blob/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751/python/sglang/srt/managers/scheduler.py#L97)
 
-1. 配置 [ZeroMQ](https://libzmq.readthedocs.io/en/latest/) 用于与 TokenizerManager 的通信。
+1. 配置 [ZeroMQ](https://libzmq.readthedocs.io/en/latest) 用于与 TokenizerManager 的通信。
 2. 设置 `server_args`、`port_args`、`model_config`、`sessions`，并根据重叠调度（overlap scheduling）的方式初始化 TpModelWorker 或 TpModelWorkerClient。
 3. 初始化分词器和处理器，使用 ChunkCache 或 RadixCache 进行缓存管理，配置 SchedulePolicy。
 4. 配置 chunk prefill 参数，并为 constraint decoding 请求初始化 GrammarBackend。
@@ -225,7 +225,7 @@ SGLang 支持多个 [Attention Backends](https://github.com/sgl-project/sglang/b
 
 ## [FastAPI 整理并输出 (FastAPI Wraps the Output)](https://github.com/sgl-project/sglang/blob/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751/python/sglang/srt/server.py#L287)
 
-1. DetokenizerManager 通过 [ZeroMQ](https://libzmq.readthedocs.io/en/latest/) 将 `BatchStrOut` 发送到 TokenizerManager。
+1. DetokenizerManager 通过 [ZeroMQ](https://libzmq.readthedocs.io/en/latest) 将 `BatchStrOut` 发送到 TokenizerManager。
 2. TokenizerManager 更新请求状态并为 FastAPI 准备 detokenized text。
 3. 最后，在 FastAPI 中，对于流式传输，使用异步生成器和 `StreamingResponse` 将响应发送给用户。
 4. 对于非流式传输，收集并使用 `ORJSONResponse` 发送完整响应，并返回给用户。

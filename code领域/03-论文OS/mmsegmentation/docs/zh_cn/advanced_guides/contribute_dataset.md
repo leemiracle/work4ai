@@ -23,7 +23,7 @@ conda activate openmmlab
 
 **安装 pytorch （如环境下已安装 pytorch，可跳过）**
 
-- 参考 [official instructions](https://pytorch.org/get-started/locally/) 安装 **PyTorch**
+- 参考 [official instructions](https://pytorch.org/get-started/locally) 安装 **PyTorch**
 
 **使用 mim 安装 mmcv、mmengine**
 

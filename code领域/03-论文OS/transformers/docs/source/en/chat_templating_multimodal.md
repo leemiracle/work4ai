@@ -114,7 +114,7 @@ The decoded output contains the full conversation so far, including the user mes
 Some vision models also support video inputs. The message format is very similar to the format for [image inputs](#image-inputs).
 
 - The content `"type"` should be `"video"` to indicate the content is a video.
-- For videos, it can be a link to the video (`"url"`) or it could be a file path (`"path"`). Videos loaded from a URL can only be decoded with [PyAV](https://pyav.basswood-io.com/docs/stable/) or [Decord](https://github.com/dmlc/decord).
+- For videos, it can be a link to the video (`"url"`) or it could be a file path (`"path"`). Videos loaded from a URL can only be decoded with [PyAV](https://pyav.basswood-io.com/docs/stable) or [Decord](https://github.com/dmlc/decord).
 - In addition to loading videos from a URL or file path, you can also pass decoded video data directly. This is useful if you've already preprocessed or decoded video frames elsewhere in memory (e.g., using OpenCV, decord, or torchvision). You don't need to save to files or store it in an URL.
 
 > [!WARNING]

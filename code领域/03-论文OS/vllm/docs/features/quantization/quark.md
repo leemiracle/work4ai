@@ -1,7 +1,7 @@
 # AMD Quark
 
 Quantization can effectively reduce memory and bandwidth usage, accelerate computation and improve
-throughput while with minimal accuracy loss. vLLM can leverage [Quark](https://quark.docs.amd.com/latest/),
+throughput while with minimal accuracy loss. vLLM can leverage [Quark](https://quark.docs.amd.com/latest),
 the flexible and powerful quantization toolkit, to produce performant quantized models to run on AMD GPUs. Quark has specialized support for quantizing large language models with weight,
 activation and kv-cache quantization and cutting-edge quantization algorithms like
 AWQ, GPTQ, Rotation and SmoothQuant.

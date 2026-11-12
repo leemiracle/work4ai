@@ -15,7 +15,7 @@
 ## 第一性原理层（最根本的"是什么"）
 
 ### Q1. 现实的本质是什么？
-**哲学根源**：[`ontology/`](../00-philosophy/ontology.md) + [`metaphysics/`](../00-philosophy/metaphysics/)
+**哲学根源**：[`ontology/`](../00-philosophy/ontology.md) + [`metaphysics/`](../00-philosophy/metaphysics)
 
 - 什么真实存在？（实在论 vs 唯心论）
 - 物理是否是基本的？（信息论 vs 物质论："It from bit"）
@@ -24,7 +24,7 @@
 ---
 
 ### Q2. "本质"本身是什么？
-**哲学根源**：[`metaphysics/`](../00-philosophy/metaphysics/) + [`epistemology/`](../00-philosophy/epistemology.md)
+**哲学根源**：[`metaphysics/`](../00-philosophy/metaphysics) + [`epistemology/`](../00-philosophy/epistemology.md)
 
 - 本质 = 必然属性（亚里士多德本质论）？
 - 本质 = 不变量（数学化）？
@@ -35,7 +35,7 @@
 ## 智能 / 心智层
 
 ### Q3. 什么是智能？
-**哲学根源**：[`philosophy-of-mind/`](../00-philosophy/philosophy-of-mind/) + [`epistemology/`](../00-philosophy/epistemology.md)
+**哲学根源**：[`philosophy-of-mind/`](../00-philosophy/philosophy-of-mind) + [`epistemology/`](../00-philosophy/epistemology.md)
 
 - 智能需要意识吗？（功能主义 vs 生物自然主义）
 - 中文房间：理解 vs 模拟
@@ -50,14 +50,14 @@
 - "理解"和"模式匹配"的区别
 
 ### Q5. 意识的本质是什么？
-**哲学根源**：[`philosophy-of-mind/`](../00-philosophy/philosophy-of-mind/)（Chalmers 硬问题）
+**哲学根源**：[`philosophy-of-mind/`](../00-philosophy/philosophy-of-mind)（Chalmers 硬问题）
 
 - 硬问题：为什么有主观体验
 - 哲学僵尸是否逻辑可能
 - 物理主义 / 二元论 / 泛心论 / 幻觉论
 
 ### Q6. 记忆的本质是什么？
-**哲学根源**：[`philosophy-of-mind/`](../00-philosophy/philosophy-of-mind/)（同一性、时间）
+**哲学根源**：[`philosophy-of-mind/`](../00-philosophy/philosophy-of-mind)（同一性、时间）
 
 - 洛克：记忆构成个人同一性
 - 记忆是重建还是储存？
@@ -68,7 +68,7 @@
 ## 系统层
 
 ### Q7. 为什么无序中会涌现秩序？
-**哲学根源**：[`metaphysics/`](../00-philosophy/metaphysics/)（涌现、因果）
+**哲学根源**：[`metaphysics/`](../00-philosophy/metaphysics)（涌现、因果）
 
 - 涌现 vs 还原
 - 弱涌现（可预测但简约不可推导）vs 强涌现（不可预测）
@@ -91,27 +91,27 @@
 ## 现实世界的硬通货
 
 ### Q10. 金钱的本质是什么？
-**哲学根源**：[`ethics/`](../00-philosophy/ethics/) + [`metaphysics/`](../00-philosophy/metaphysics/)（价值的本体论地位）
+**哲学根源**：[`ethics/`](../00-philosophy/ethics) + [`metaphysics/`](../00-philosophy/metaphysics)（价值的本体论地位）
 
 - 价值是客观还是主观？（劳动价值论 vs 主观价值论）
 - 价值是关系还是属性？
 - 信用 = 信念？金钱的本体论地位是"集体意向性"（Searle）
 
 ### Q11. 权力的本质是什么？
-**哲学根源**：[`ethics/`](../00-philosophy/ethics/)（合法性）+ [`philosophy-of-mind/`](../00-philosophy/philosophy-of-mind/)（意向性、集体意向）
+**哲学根源**：[`ethics/`](../00-philosophy/ethics)（合法性）+ [`philosophy-of-mind/`](../00-philosophy/philosophy-of-mind)（意向性、集体意向）
 
 - 合法性从何而来？（社会契约论 vs 神授 vs 功利主义）
 - 集体意向性（Searle《社会实在的构造》）：金钱、权力、国家都是集体意向的产物
 - 权力是关系还是属性？
 
 ### Q12. 地位的本质是什么？
-**哲学根源**：[`ethics/`](../00-philosophy/ethics/) + 社会哲学
+**哲学根源**：[`ethics/`](../00-philosophy/ethics) + 社会哲学
 
 - 黑格尔的主奴辩证法
 - 地位的本体论：是关系属性还是集体构造？
 
 ### Q13. 为什么有的国家富、有的国家穷？
-**哲学根源**：[`ethics/`](../00-philosophy/ethics/)（正义）+ [`epistemology/`](../00-philosophy/epistemology.md)（历史因果）
+**哲学根源**：[`ethics/`](../00-philosophy/ethics)（正义）+ [`epistemology/`](../00-philosophy/epistemology.md)（历史因果）
 
 - 罗尔斯正义论 vs 诺齐克权利论
 - 历史决定论 vs 偶然性
@@ -120,7 +120,7 @@
 ---
 
 ### Q24. 国家如何运行？
-**哲学根源**：[`ethics/`](../00-philosophy/ethics/)（合法性、政治义务）+ [`ontology/`](../00-philosophy/ontology.md)（国家作为集体意向性构造）
+**哲学根源**：[`ethics/`](../00-philosophy/ethics)（合法性、政治义务）+ [`ontology/`](../00-philosophy/ontology.md)（国家作为集体意向性构造）
 
 - **合法性问题**：国家凭什么统治？三种概念（统治自由权/规范权力/统治权利）——见 SEP "Authority" 条目（2025年修订版）
 - **政治义务问题**：公民凭什么服从？同意论/默许/功能主义/关联义务/工具主义（Raz NJT）——以及哲学无政府主义的反驳（Wolff, Huemer）
@@ -136,14 +136,14 @@
 ## 不确定性与决策
 
 ### Q14. 概率的本质是什么？
-**哲学根源**：[`epistemology/`](../00-philosophy/epistemology.md) + [`metaphysics/`](../00-philosophy/metaphysics/)
+**哲学根源**：[`epistemology/`](../00-philosophy/epistemology.md) + [`metaphysics/`](../00-philosophy/metaphysics)
 
 - **客观概率**（频率学派、倾向性理论）vs **主观概率**（贝叶斯）
 - 单次事件的概率是什么意思？（"明天 30% 下雨"）
 - 量子概率是基本的还是认知的？
 
 ### Q15. 在不确定中如何决策？
-**哲学根源**：[`ethics/`](../00-philosophy/ethics/)（决策伦理）+ [`epistemology/`](../00-philosophy/epistemology.md)（贝叶斯理性）
+**哲学根源**：[`ethics/`](../00-philosophy/ethics)（决策伦理）+ [`epistemology/`](../00-philosophy/epistemology.md)（贝叶斯理性）
 
 - 期望效用最大化是"理性"的定义吗？
 - 风险 vs 不确定性（Knight 的区分）
@@ -152,14 +152,14 @@
 ---
 
 ### Q25. 价值是客观的吗？
-**哲学根源**：[`ethics/`](../00-philosophy/ethics/)（价值论）+ [`metaphysics/`](../00-philosophy/metaphysics/)（价值的存在地位）
+**哲学根源**：[`ethics/`](../00-philosophy/ethics)（价值论）+ [`metaphysics/`](../00-philosophy/metaphysics)（价值的存在地位）
 
 - 劳动价值论（客观）vs 主观价值论（边际效用）vs 市场共识（建构）
 - 价值是**属性**（属于物体）还是**关系**（取决于交换者）？
 - 价格 vs 价值的自我指涉：用价格校准价值，再用价值批评价格——用尺子量尺子
 
 ### Q26. 金融系统为什么周期性崩溃？
-**哲学根源**：[`metaphysics/`](../00-philosophy/metaphysics/)（因果、目的论）+ 系统哲学
+**哲学根源**：[`metaphysics/`](../00-philosophy/metaphysics)（因果、目的论）+ 系统哲学
 
 - Minsky 的"稳定孕育不稳定"是否是**目的论**陈述？它在科学上合法吗？
 - 复杂系统的相变/临界：崩溃是**内禀属性**还是**外生冲击**？
@@ -173,7 +173,7 @@
 - Searle 的集体意向性：货币"存在"于集体的共同接受中
 
 ### Q28. 金融创造价值还是零和赌博？
-**哲学根源**：[`ethics/`](../00-philosophy/ethics/)（价值创造、正义）+ 政治哲学
+**哲学根源**：[`ethics/`](../00-philosophy/ethics)（价值创造、正义）+ 政治哲学
 
 - 罗尔斯无知之幕下，金融系统会被设计成什么样？
 - 金融活动的"正当性"——投机/做空/高利贷的伦理审视
@@ -205,14 +205,14 @@
 ## 生命与演化
 
 ### Q16. 生命的本质是什么？
-**哲学根源**：[`ontology/`](../00-philosophy/ontology.md)（生命的存在地位）+ [`metaphysics/`](../00-philosophy/metaphysics/)（目的论）
+**哲学根源**：[`ontology/`](../00-philosophy/ontology.md)（生命的存在地位）+ [`metaphysics/`](../00-philosophy/metaphysics)（目的论）
 
 - 生命是否有清晰本体论边界？
 - 目的论语言（"心脏是为了泵血"）在生物学合法吗？
 - 还原论 vs 涌现论
 
 ### Q17. 演化是"通用算法"吗？
-**哲学根源**：[`epistemology/`](../00-philosophy/epistemology.md)（解释模型）+ [`metaphysics/`](../00-philosophy/metaphysics/)（因果）
+**哲学根源**：[`epistemology/`](../00-philosophy/epistemology.md)（解释模型）+ [`metaphysics/`](../00-philosophy/metaphysics)（因果）
 
 - 演化的解释力边界（能解释意识吗？道德吗？）
 - 适应主义的批评（Gould & Lewontin "圣马可拱肩"）
@@ -223,21 +223,21 @@
 ## 跨学科本质
 
 ### Q18. 熵为什么横跨所有学科？
-**哲学根源**：[`metaphysics/`](../00-philosophy/metaphysics/)（时间）+ [`ontology/`](../00-philosophy/ontology.md)
+**哲学根源**：[`metaphysics/`](../00-philosophy/metaphysics)（时间）+ [`ontology/`](../00-philosophy/ontology.md)
 
 - 时间方向是否源于熵增？
 - 信息熵和热力学熵的本体论关系
 - 麦克斯韦妖与 Landauer 原理：信息与物理的绑定
 
 ### Q19. 博弈是宇宙基本结构吗？
-**哲学根源**：[`ethics/`](../00-philosophy/ethics/)（合作、契约）+ [`metaphysics/`](../00-philosophy/metaphysics/)（因果）
+**哲学根源**：[`ethics/`](../00-philosophy/ethics)（合作、契约）+ [`metaphysics/`](../00-philosophy/metaphysics)（因果）
 
 - 霍布斯：自然状态是所有人对所有人的战争
 - 博弈论伦理学：理性 = 自利？
 - 合作如何从自利涌现（Axelrod）
 
 ### Q20. 对称性为什么如此基本？
-**哲学根源**：[`metaphysics/`](../00-philosophy/metaphysics/)（同一性、不变性）
+**哲学根源**：[`metaphysics/`](../00-philosophy/metaphysics)（同一性、不变性）
 
 - Noether 定理的哲学意义：守恒 vs 对称
 - 对称性破缺：为什么宇宙不完美？
@@ -261,7 +261,7 @@
 - 乔姆斯基 vs 后期维特根斯坦：语言是天赋 vs 语言是社会实践
 
 ### Q23. 历史有规律吗？
-**哲学根源**：[`epistemology/`](../00-philosophy/epistemology.md)（历史解释）+ [`metaphysics/`](../00-philosophy/metaphysics/)（因果、目的论）
+**哲学根源**：[`epistemology/`](../00-philosophy/epistemology.md)（历史解释）+ [`metaphysics/`](../00-philosophy/metaphysics)（因果、目的论）
 
 - 历史决定论 vs 偶然性
 - 历史哲学（黑格尔 vs 马克思 vs 波普尔）

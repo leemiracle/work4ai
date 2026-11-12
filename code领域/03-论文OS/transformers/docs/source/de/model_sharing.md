@@ -37,7 +37,7 @@ Um ein Modell mit der Öffentlichkeit zu teilen, benötigen Sie ein Konto auf [h
 
 Jedes Repository im Model Hub verhält sich wie ein typisches GitHub-Repository. Unsere Repositorys bieten Versionierung, Commit-Historie und die Möglichkeit, Unterschiede zu visualisieren.
 
-Die integrierte Versionierung des Model Hub basiert auf Git und [git-lfs](https://git-lfs.github.com/). Mit anderen Worten: Sie können ein Modell als ein Repository behandeln, was eine bessere Zugriffskontrolle und Skalierbarkeit ermöglicht. Die Versionskontrolle ermöglicht *Revisionen*, eine Methode zum Anheften einer bestimmten Version eines Modells mit einem Commit-Hash, Tag oder Branch.
+Die integrierte Versionierung des Model Hub basiert auf Git und [git-lfs](https://git-lfs.github.com). Mit anderen Worten: Sie können ein Modell als ein Repository behandeln, was eine bessere Zugriffskontrolle und Skalierbarkeit ermöglicht. Die Versionskontrolle ermöglicht *Revisionen*, eine Methode zum Anheften einer bestimmten Version eines Modells mit einem Commit-Hash, Tag oder Branch.
 
 Folglich können Sie eine bestimmte Modellversion mit dem Parameter "Revision" laden:
 

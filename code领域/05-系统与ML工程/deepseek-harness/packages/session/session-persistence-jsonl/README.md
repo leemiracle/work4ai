@@ -8,7 +8,7 @@ The JSONL durable session-persistence backend — a concrete `SessionPersistence
 
 ```
 <root>/
-  --<normalized-cwd>--/          # readable project directory (or _no-cwd/)
+  --<normalized-cwd>--/          # readable project directory (or _no-cwd)
     <encoded-id>/                # session-owned directory
       session.jsonl.zstd         # default: checksummed header frame + append frames
       session.jsonl              # only with compression: 'none'

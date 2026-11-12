@@ -144,7 +144,7 @@ args = TrainingArguments(
 </hfoption>
 <hfoption id="tf32">
 
-[tf32](https://blogs.nvidia.com/blog/tensorfloat-32-precision-format/) is a mode on NVIDIA Ampere GPUs that convert the convolution and matrix multiplication inputs to tf32. All other storage and operations are kept in fp32. This allows tf32 to maintain the same range as fp32, the same precision as fp16 and more precision than bf16. Combining tf32 with fp16 or bf16 mixed precision training can improve throughput by 16x.
+[tf32](https://blogs.nvidia.com/blog/tensorfloat-32-precision-format) is a mode on NVIDIA Ampere GPUs that convert the convolution and matrix multiplication inputs to tf32. All other storage and operations are kept in fp32. This allows tf32 to maintain the same range as fp32, the same precision as fp16 and more precision than bf16. Combining tf32 with fp16 or bf16 mixed precision training can improve throughput by 16x.
 
 tf32 is enabled by default on NVIDIA Ampere GPUs, but you can also add the code below to your fp32 training or inference code to explicitly enable it.
 
@@ -276,7 +276,7 @@ Refer to the table below to help you choose the right backend for your training 
 | aot_cudagraphs | uses CUDA Graphs with AOTAutograd | training and inference |
 | ofi | uses TorchScripts [optimize_for_inference](https://pytorch.org/docs/stable/generated/torch.jit.optimize_for_inference.html#torch-jit-optimize-for-inference) | inference |
 | fx2trt | uses [Torch-TensorRT](https://pytorch.org/TensorRT/tutorials/getting_started_with_fx_path.html) | inference |
-| onnxrt | uses [ONNX-RT](https://onnxruntime.ai/) for CPU and GPU inference | inference |
+| onnxrt | uses [ONNX-RT](https://onnxruntime.ai) for CPU and GPU inference | inference |
 
 ### Scaled dot production attention
 

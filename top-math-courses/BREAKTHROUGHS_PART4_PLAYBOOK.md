@@ -57,7 +57,7 @@
 | **深度学习的几何** | loss landscape 的形状决定优化与泛化，但高维不可视 | information geometry；natural gradient；mode connectivity | [黎曼几何] + [优化](stanford-math-courses/cme364A_convex_optimization) |
 | **大模型的复杂性** | Transformer 表达力 vs 计算效率的根本权衡 | circuit complexity；TC⁰ 与 Transformer；length generalization | [逻辑/复杂性的数学化] |
 | **概率编程的语义** | measure theory 不可计算 | measure theory 的可计算化；quasi-Borel spaces | [测度论](harvard-math-courses/math114_measure_integration) |
-| **AI 系统形式化验证** | LLM 不可证明正确，但安全场景要求可证 | 神经符号闭环；Lean + LLM；Constitutional AI + 形式规则 | `work4ai/讲透形式化验证/` + `讲透神经符号/` |
+| **AI 系统形式化验证** | LLM 不可证明正确，但安全场景要求可证 | 神经符号闭环；Lean + LLM；Constitutional AI + 形式规则 | `work4ai/讲透形式化验证/` + `../讲透宇宙/01-学/讲透神经符号//` |
 | **Scaling Laws 的数学** | Kaplan 2020 / Chinchilla 2022 经验律，但缺数学根基 | 统计力学视角；variance decomposition；macroscopic limits | [动力系统] + [概率](mit-math-courses/18_175_probability) |
 
 > 🎯 **元洞察**：ML 时代的数学瓶颈几乎都是"**高维 + 非凸 + 随机**"的组合——经典数学（凸分析、低维几何、确定性 ODE）不够用。**未来 10 年最重要的数学突破可能就发生在 ML 理论**。
@@ -79,7 +79,7 @@
 ### 步骤 2：看历史（这个概念怎么诞生的）
 
 **操作**：读原始论文/历史书，看**最初的问题**——往往比抽象定义更易懂。
-**资源**：`work4ai/讲透AI历史/`；[LaTeX Project](https://www.latex-project.org/)；维基百科的"History of X"。
+**资源**：`work4ai/讲透AI历史/`；[LaTeX Project](https://www.latex-project.org)；维基百科的"History of X"。
 **例子**：Galois 理论不是从"群"开始的，是从"五次方程能不能公式求解"开始的——读 Galois 1831 原稿比读任何现代教材都震撼。
 
 ### 步骤 3：找反例（极限/退化/边界）
@@ -114,7 +114,7 @@
 ### 步骤 8：读原始论文（不是教科书）
 
 **操作**：突破者怎么想的？原始论文比任何科普都震撼。
-**资源**：[arXiv](https://arxiv.org)；[Clay Math Institute](https://www.claymath.org/)；`work4ai/讲透公开课/01` 的论文清单。
+**资源**：[arXiv](https://arxiv.org)；[Clay Math Institute](https://www.claymath.org)；`work4ai/讲透公开课/01` 的论文清单。
 **例子**：Wiles 1995 *Modular elliptic curves and FLT*（Annals）—— 一篇论文改写数论。
 
 ### 步骤 9：找对称性（Galois 启示）
@@ -160,11 +160,11 @@
 
 | 本系列章节 | 配套的 work4ai 资源 |
 |----------|-------------------|
-| Part I-II（分支瓶颈）| [`讲透AI历史/`](../讲透AI历史)（数学史）|
-| Part III（跨学科）| [`讲透AI应用全景/`](../讲透AI应用全景)（AI4Math / AI4Science）|
+| Part I-II（分支瓶颈）| [`../讲透宇宙/01-学/讲透AI历史//`](../讲透宇宙/01-学/讲透AI历史)（数学史）|
+| Part III（跨学科）| [`../讲透宇宙/01-学/讲透AI应用全景//`](../讲透宇宙/01-学/讲透AI应用全景)（AI4Math / AI4Science）|
 | Part III 元模式 | [`CROSS_SCHOOL_INSIGHTS.md`](./CROSS_SCHOOL_INSIGHTS.md) §九 15 元洞察 |
 | Part D（当下瓶颈）| [`LATEST_RESEARCH.md`](./LATEST_RESEARCH.md)（2024-2026 ML 理论前沿）|
-| Part D.2.3 Lean+AI | [`讲透形式化验证/`](../讲透形式化验证) + [`讲透神经符号/`](../讲透神经符号) + [`讲透RL/04`](../讲透RL/04-RL与形式证明.md) |
+| Part D.2.3 Lean+AI | [`../讲透宇宙/01-学/讲透形式化验证//`](../讲透宇宙/01-学/讲透形式化验证) + [`../讲透宇宙/01-学/讲透神经符号//`](../讲透宇宙/01-学/讲透神经符号) + [`讲透RL/04`](../讲透RL/04-RL与形式证明.md) |
 | Part E playbook | [`FEYNMAN_TEACHING_GUIDE.md`](./FEYNMAN_TEACHING_GUIDE.md)（费曼教学法）|
 | Part F ML × 数学 | [`THEORY_TO_PRACTICE.md`](./THEORY_TO_PRACTICE.md)（理论联系实际）|
 

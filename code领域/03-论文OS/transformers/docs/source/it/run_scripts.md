@@ -18,11 +18,11 @@ rendered properly in your Markdown viewer.
 
 Insieme ai [notebooks](./notebooks) 🤗 Transformers, ci sono anche esempi di script che dimostrano come addestrare un modello per un task con [PyTorch](https://github.com/huggingface/transformers/tree/main/examples/pytorch), [TensorFlow](https://github.com/huggingface/transformers/tree/main/examples/tensorflow), o [JAX/Flax](https://github.com/huggingface/transformers/tree/main/examples/flax).
 
-Troverai anche script che abbiamo usato nei nostri [progetti di ricerca](https://github.com/huggingface/transformers-research-projects/) e [precedenti esempi](https://github.com/huggingface/transformers/tree/main/examples/legacy) a cui contribuisce per lo più la comunità. Questi script non sono attivamente mantenuti e richiedono una specifica versione di 🤗 Transformers che sarà molto probabilmente incompatibile con l'ultima versione della libreria.
+Troverai anche script che abbiamo usato nei nostri [progetti di ricerca](https://github.com/huggingface/transformers-research-projects) e [precedenti esempi](https://github.com/huggingface/transformers/tree/main/examples/legacy) a cui contribuisce per lo più la comunità. Questi script non sono attivamente mantenuti e richiedono una specifica versione di 🤗 Transformers che sarà molto probabilmente incompatibile con l'ultima versione della libreria.
 
 Non è dato per scontato che gli script di esempio funzionino senza apportare modifiche per ogni problema, bensì potrebbe essere necessario adattare lo script al tuo caso specifico. Per aiutarti in ciò, la maggioranza degli script espone le modalità di pre-processamento dei dati, consentendoti di modificare lo script come preferisci.
 
-Per qualsiasi feature che vorresti implementare in uno script d'esempio, per favore discutine nel [forum](https://discuss.huggingface.co/) o in un'[issue](https://github.com/huggingface/transformers/issues) prima di inviare una Pull Request. Mentre accogliamo con piacere la correzione di bug, è più improbabile che faremo la stessa con una PR che aggiunge funzionalità sacrificando la leggibilità. 
+Per qualsiasi feature che vorresti implementare in uno script d'esempio, per favore discutine nel [forum](https://discuss.huggingface.co) o in un'[issue](https://github.com/huggingface/transformers/issues) prima di inviare una Pull Request. Mentre accogliamo con piacere la correzione di bug, è più improbabile che faremo la stessa con una PR che aggiunge funzionalità sacrificando la leggibilità. 
 
 Questa guida ti mostrerà come eseguire uno script di esempio relativo al task di summarization in [PyTorch](https://github.com/huggingface/transformers/tree/main/examples/pytorch/summarization) e [TensorFlow](https://github.com/huggingface/transformers/tree/main/examples/tensorflow/summarization). Tutti gli esempi funzioneranno con entrambi i framework a meno che non sia specificato altrimenti. 
 
@@ -85,7 +85,7 @@ pip install -r requirements.txt
 ## Esegui uno script
 
 
-Lo script di esempio scarica e pre-processa un dataset dalla libreria 🤗 [Datasets](https://huggingface.co/docs/datasets/). Successivamente, lo script esegue il fine-tuning su un dataset usando il [Trainer](https://huggingface.co/docs/transformers/main_classes/trainer) su un'architettura che supporta la summarization. Il seguente esempio mostra come eseguire il fine-tuning di [T5-small](https://huggingface.co/google-t5/t5-small) sul dataset [CNN/DailyMail](https://huggingface.co/datasets/cnn_dailymail). Il modello T5 richiede un parametro addizionale `source_prefix` a causa del modo in cui è stato addestrato. Questo prefisso permette a T5 di sapere che si tratta di un task di summarization.
+Lo script di esempio scarica e pre-processa un dataset dalla libreria 🤗 [Datasets](https://huggingface.co/docs/datasets). Successivamente, lo script esegue il fine-tuning su un dataset usando il [Trainer](https://huggingface.co/docs/transformers/main_classes/trainer) su un'architettura che supporta la summarization. Il seguente esempio mostra come eseguire il fine-tuning di [T5-small](https://huggingface.co/google-t5/t5-small) sul dataset [CNN/DailyMail](https://huggingface.co/datasets/cnn_dailymail). Il modello T5 richiede un parametro addizionale `source_prefix` a causa del modo in cui è stato addestrato. Questo prefisso permette a T5 di sapere che si tratta di un task di summarization.
 
 ```bash
 python examples/pytorch/summarization/run_summarization.py \

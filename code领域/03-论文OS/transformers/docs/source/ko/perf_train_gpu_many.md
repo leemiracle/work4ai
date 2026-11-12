@@ -112,7 +112,7 @@ DDP는 여러 대의 컴퓨터에서 사용할 수 있지만, DP의 경우는 �
 
 DP와 DDP 사이에는 다른 차이점이 있지만, 이 토론과는 관련이 없습니다.
 
-이 2가지 모드를 깊게 이해하고 싶다면, [이 문서](https://www.telesens.co/2019/04/04/distributed-data-parallel-training-using-pytorch-on-aws/)를 강력히 추천합니다. 이 문서는 멋진 다이어그램을 포함하고 있으며, 다양한 하드웨어에서 여러 벤치마크와 프로파일러 출력을 설명하여 필요한 세부 사항을 모두 설명합니다.
+이 2가지 모드를 깊게 이해하고 싶다면, [이 문서](https://www.telesens.co/2019/04/04/distributed-data-parallel-training-using-pytorch-on-aws)를 강력히 추천합니다. 이 문서는 멋진 다이어그램을 포함하고 있으며, 다양한 하드웨어에서 여러 벤치마크와 프로파일러 출력을 설명하여 필요한 세부 사항을 모두 설명합니다.
 
 실제 벤치마크를 살펴보겠습니다:
 
@@ -165,7 +165,7 @@ torchrun --nproc_per_node 2 examples/pytorch/language-modeling/run_clm.py \
 
 ## ZeRO 데이터 병렬화 [[zero-data-parallelism]]
 
-ZeRO를 기반으로 한 데이터 병렬화 (ZeRO-DP)는 다음 [블로그 글](https://www.microsoft.com/en-us/research/blog/zero-deepspeed-new-system-optimizations-enable-training-models-with-over-100-billion-parameters/)의 다음 다이어그램에서 설명되고 있습니다.
+ZeRO를 기반으로 한 데이터 병렬화 (ZeRO-DP)는 다음 [블로그 글](https://www.microsoft.com/en-us/research/blog/zero-deepspeed-new-system-optimizations-enable-training-models-with-over-100-billion-parameters)의 다음 다이어그램에서 설명되고 있습니다.
 ![DeepSpeed-Image-1](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/parallelism-zero.png)
 
 이 개념은 이해하기 어려울 수 있지만, 실제로는 매우 간단한 개념입니다. 이는 일반적인 `DataParallel` (DP)과 동일하지만, 전체 모델 매개변수, 그래디언트 및 옵티마이저 상태를 복제하는 대신 각 GPU는 그 중 일부만 저장합니다. 그리고 실행 시간에는 주어진 레이어에 대해 전체 레이어 매개변수가 필요할 때 각 GPU가 서로에게 필요한 부분을 제공하기 위해 동기화됩니다 - 그게 전부입니다.
@@ -240,7 +240,7 @@ ZeRO가 모델 가중치를 분할하는 방식을 자세히 살펴보면, 텐�
 
 구현:
 
-- [DeepSpeed](https://www.deepspeed.ai/tutorials/zero/)는 1단계 + 2단계 + 3단계의 ZeRO-DP를 제공합니다.
+- [DeepSpeed](https://www.deepspeed.ai/tutorials/zero)는 1단계 + 2단계 + 3단계의 ZeRO-DP를 제공합니다.
 - [Fairscale](https://github.com/facebookresearch/fairscale/#optimizer-state-sharding-zero)은 1단계 + 2단계 + 3단계의 ZeRO-DP를 제공합니다.
 - [`transformers` 통합](main_classes/trainer#trainer-integrations)
 
@@ -313,7 +313,7 @@ DP + PP 설정의 전역 배치 크기를 계산하려면 `mbs*chunks*dp_degree`
 구현:
 - [파이토치](https://pytorch.org/docs/stable/pipeline.html) (파이토치-1.8에서 초기 지원, 1.9에서 점진적으로 개선되고 1.10에서 더 개선됨). [예제](https://github.com/pytorch/pytorch/blob/master/benchmarks/distributed/pipeline/pipe.py)도 참고하세요.
 - [FairScale](https://fairscale.readthedocs.io/en/latest/tutorials/pipe.html)
-- [DeepSpeed](https://www.deepspeed.ai/tutorials/pipeline/)
+- [DeepSpeed](https://www.deepspeed.ai/tutorials/pipeline)
 - [Megatron-LM](https://github.com/NVIDIA/Megatron-LM)은 내부 구현을 가지고 있습니다 - API 없음.
 - [Varuna](https://github.com/microsoft/varuna)
 - [SageMaker](https://huggingface.co/papers/2111.05972) - 이는 AWS에서만 사용할 수 있는 소유 솔루션입니다.
@@ -373,11 +373,11 @@ SageMaker는 더 효율적인 처리를 위해 TP와 DP를 결합합니다.
 🤗 Transformers 현황:
 - core: 아직 핵심 부분에 구현되지 않음
 - 그러나 추론을 하려면 [parallelformers](https://github.com/tunib-ai/parallelformers)가 대부분의 모델을 지원합니다. 따라서 핵심 부분에 구현되기 전까지 그들의 것을 사용할 수 있습니다. 그리고 훈련 모드도 지원될 예정입니다.
-- Deepspeed-Inference는 CUDA 커널을 기반으로 하는 매우 빠른 추론 모드에서 BERT, GPT-2 및 GPT-Neo 모델을 지원합니다. 자세한 내용은 [여기](https://www.deepspeed.ai/tutorials/inference-tutorial/)를 참조하세요.
+- Deepspeed-Inference는 CUDA 커널을 기반으로 하는 매우 빠른 추론 모드에서 BERT, GPT-2 및 GPT-Neo 모델을 지원합니다. 자세한 내용은 [여기](https://www.deepspeed.ai/tutorials/inference-tutorial)를 참조하세요.
 
 ## DP+PP [[dppp]]
 
-DeepSpeed [pipeline tutorial](https://www.deepspeed.ai/tutorials/pipeline/)에서 다음 다이어그램은 DP와 PP를 결합하는 방법을 보여줍니다.
+DeepSpeed [pipeline tutorial](https://www.deepspeed.ai/tutorials/pipeline)에서 다음 다이어그램은 DP와 PP를 결합하는 방법을 보여줍니다.
 
 ![dp-pp-2d](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/parallelism-zero-dp-pp.png)
 
@@ -400,7 +400,7 @@ DeepSpeed [pipeline tutorial](https://www.deepspeed.ai/tutorials/pipeline/)에�
 
 ![dp-pp-tp-3d](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/parallelism-deepspeed-3d.png)
 
-이 다이어그램은 [3D parallelism: Scaling to trillion-parameter models](https://www.microsoft.com/en-us/research/blog/deepspeed-extreme-scale-model-training-for-everyone/)이라는 블로그 글에서 확인할 수 있습니다.
+이 다이어그램은 [3D parallelism: Scaling to trillion-parameter models](https://www.microsoft.com/en-us/research/blog/deepspeed-extreme-scale-model-training-for-everyone)이라는 블로그 글에서 확인할 수 있습니다.
 
 각 차원마다 적어도 2개의 GPU가 필요하므로 최소한 8개의 GPU가 필요합니다.
 

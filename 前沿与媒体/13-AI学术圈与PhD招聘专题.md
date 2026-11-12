@@ -36,10 +36,10 @@
 
 | 实验室 | 学校 | 强项 | 状态 |
 |---|---|---|---|
-| **MIT CSAIL** [csail.mit.edu](https://www.csail.mit.edu/) | MIT | 综合 No.1（Schwarzman College of Computing）| 🟢 ✅ 实抓 |
-| **Stanford HAI + SAIL** [hai.stanford.edu](https://hai.stanford.edu/) | Stanford | 李飞飞/吴恩达/Percy Liang（基础模型研究中心 CRFM，HELM 评测出品）| 🟢 ✅ 实抓 |
-| **Berkeley BAIR + RAIL** [bair.berkeley.edu](https://bair.berkeley.edu/) | UC Berkeley | 自我定位"world's most advanced academic AI research lab"，**RL/机器人 No.1**（Sergey Levine / Pieter Abbeel）| 🟢 ✅ 实抓 |
-| **CMU RI + LTI + MLD** [ri.cmu.edu](https://www.ri.cmu.edu/) | CMU | 机器人 No.1（RI）+ NLP（LTI）+ ML（MLD）| 🟢 ✅ 实抓 |
+| **MIT CSAIL** [csail.mit.edu](https://www.csail.mit.edu) | MIT | 综合 No.1（Schwarzman College of Computing）| 🟢 ✅ 实抓 |
+| **Stanford HAI + SAIL** [hai.stanford.edu](https://hai.stanford.edu) | Stanford | 李飞飞/吴恩达/Percy Liang（基础模型研究中心 CRFM，HELM 评测出品）| 🟢 ✅ 实抓 |
+| **Berkeley BAIR + RAIL** [bair.berkeley.edu](https://bair.berkeley.edu) | UC Berkeley | 自我定位"world's most advanced academic AI research lab"，**RL/机器人 No.1**（Sergey Levine / Pieter Abbeel）| 🟢 ✅ 实抓 |
+| **CMU RI + LTI + MLD** [ri.cmu.edu](https://www.ri.cmu.edu) | CMU | 机器人 No.1（RI）+ NLP（LTI）+ ML（MLD）| 🟢 ✅ 实抓 |
 | **Princeton NLP** | Princeton | **陈丹琦**所在，NLP 强 |
 | **UW NLP** | 华盛顿大学 | Noah Smith / Hannaneh Hajishirzi |
 | **NYU CILVR** | NYU | Kyunghyun Cho / Sam Bowman |
@@ -65,9 +65,9 @@
 
 | 机构 | 强项 | 状态 |
 |---|---|---|
-| **上海 AI Lab（SHLAB）** [shlab.org.cn](https://www.shlab.org.cn/) | 书生（InternVL/InternLM）/ 上海 AI Lab 智能体 / WAIC 主办 | 🟢 ✅ 实抓（WAIC 2026 论坛刚结束）|
-| **北京智源 BAAI** [baai.ac.cn](https://www.baai.ac.cn/) | 悟空大模型 / Aquila / 智源研究院（黄铁军）| 🟢 ✅ 实抓 |
-| **清华交叉信息院（姚班/智班/量班）** [iiis.tsinghua.edu.cn](https://iiis.tsinghua.edu.cn/) | **姚期智 / Andrew Yao**，姚班/智班/量班 | 🟢 ✅ 实抓 |
+| **上海 AI Lab（SHLAB）** [shlab.org.cn](https://www.shlab.org.cn) | 书生（InternVL/InternLM）/ 上海 AI Lab 智能体 / WAIC 主办 | 🟢 ✅ 实抓（WAIC 2026 论坛刚结束）|
+| **北京智源 BAAI** [baai.ac.cn](https://www.baai.ac.cn) | 悟空大模型 / Aquila / 智源研究院（黄铁军）| 🟢 ✅ 实抓 |
+| **清华交叉信息院（姚班/智班/量班）** [iiis.tsinghua.edu.cn](https://iiis.tsinghua.edu.cn) | **姚期智 / Andrew Yao**，姚班/智班/量班 | 🟢 ✅ 实抓 |
 | **清华人工智能研究院** | 张钹院士 / 集体 |
 | **北大信科 / 智能学院** | 黄铁军（前）/ 人工智能研究院 | ⚠️ 本轮抓空 |
 | **复旦 AI 学院 / 邱锡鹏团队** | MOSS / 孙剑等 | ⚠️ 本轮抓空 |

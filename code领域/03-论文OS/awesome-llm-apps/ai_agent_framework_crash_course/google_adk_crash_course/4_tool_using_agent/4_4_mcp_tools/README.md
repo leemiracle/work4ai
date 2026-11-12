@@ -230,7 +230,7 @@ After completing this tutorial:
 ## 📚 Additional Resources
 
 - **[MCP Specification](https://modelcontextprotocol.io/docs/spec)** - Protocol details
-- **[ADK MCP Documentation](https://google.github.io/adk-docs/tools/mcp-tools/)** - Integration guide
+- **[ADK MCP Documentation](https://google.github.io/adk-docs/tools/mcp-tools)** - Integration guide
 - **[Community MCP Servers](https://github.com/modelcontextprotocol/servers)** - Ready-to-use servers
 
 ## 🎯 Real-World Applications

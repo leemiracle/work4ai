@@ -39,7 +39,7 @@ ML coding module may or may not exist in particular companies interviews. The go
 
 ## Other 
   - Random int in range ([link1](https://leetcode.com/discuss/interview-question/125347/generate-uniform-random-integer
-), [link2](https://leetcode.com/articles/implement-rand10-using-rand7/))
+), [link2](https://leetcode.com/articles/implement-rand10-using-rand7))
   - Triangle closing 
   - Meeting point  
 

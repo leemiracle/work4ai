@@ -16,7 +16,7 @@
 ### 📘 教材优先（建立直觉）
 
 **视频课程**：
-- [MIT OCW 18.102 泛函分析](https://ocw.mit.edu/courses/18-102-introduction-to-functional-analysis-spring-2021/)
+- [MIT OCW 18.102 泛函分析](https://ocw.mit.edu/courses/18-102-introduction-to-functional-analysis-spring-2021)
 - [Frederic Schuller 量子力学几何讲座](https://www.youtube.com/@FSchuller)
 
 **经典论文/参考**：
@@ -31,7 +31,7 @@
 ### 🔬 研究员优先（形式化 + 社区）
 
 **Lean 形式化**：
-- [Mathlib.Analysis.Normed.Operator](https://leanprover-community.github.io/mathlib4_docs/)
+- [Mathlib.Analysis.Normed.Operator](https://leanprover-community.github.io/mathlib4_docs)
 
 **学术社区**：
 - [MathOverflow [fa.functional-analysis]](https://mathoverflow.net/questions/tagged/fa.functional-analysis)

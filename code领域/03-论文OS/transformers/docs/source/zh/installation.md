@@ -24,11 +24,11 @@ rendered properly in your Markdown viewer.
 
 🤗 Transformers 已在 Python 3.9+ 以及 PyTorch 2.2.0+ 上进行测试。针对你使用的深度学习框架，请参照以下安装说明进行安装：
 
-* [PyTorch](https://pytorch.org/get-started/locally/) 安装说明。
+* [PyTorch](https://pytorch.org/get-started/locally) 安装说明。
 
 ## 使用 pip 安装
 
-你应该使用 [虚拟环境](https://docs.python.org/3/library/venv.html) 安装 🤗 Transformers。如果你不熟悉 Python 虚拟环境，请查看此 [教程](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)。使用虚拟环境，你可以轻松管理不同项目，避免不同依赖项之间的兼容性问题。
+你应该使用 [虚拟环境](https://docs.python.org/3/library/venv.html) 安装 🤗 Transformers。如果你不熟悉 Python 虚拟环境，请查看此 [教程](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments)。使用虚拟环境，你可以轻松管理不同项目，避免不同依赖项之间的兼容性问题。
 
 首先，在项目目录中创建虚拟环境：
 
@@ -141,7 +141,7 @@ conda install conda-forge::transformers
 
 <Tip>
 
-通过设置环境变量 `HF_DATASETS_OFFLINE=1` 将 [🤗 Datasets](https://huggingface.co/docs/datasets/) 添加至你的离线训练工作流程中。
+通过设置环境变量 `HF_DATASETS_OFFLINE=1` 将 [🤗 Datasets](https://huggingface.co/docs/datasets) 添加至你的离线训练工作流程中。
 
 </Tip>
 

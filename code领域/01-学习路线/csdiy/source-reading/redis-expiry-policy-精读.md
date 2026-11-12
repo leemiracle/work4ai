@@ -2,7 +2,7 @@
 
 > Redis 怎么知道一个 key 过期了？什么时候删？内存不够了怎么办？
 >
-> 配套：[redis-data-structures-精读.md](redis-data-structures-精读.md) | [tinycache](../projects/tinycache/)
+> 配套：[redis-data-structures-精读.md](redis-data-structures-精读.md) | [tinycache](../projects/tinycache)
 > csdiy 对应：os §四(page cache/定时任务) + patterns §9(状态机)
 
 ---
@@ -265,4 +265,4 @@ class CacheDict:
 
 ---
 
-*配套：[redis-data-structures-精读.md](redis-data-structures-精读.md) | [tinycache](../projects/tinycache/) | [redis-eventloop-逐行拆解.md](redis-eventloop-逐行拆解.md)*
+*配套：[redis-data-structures-精读.md](redis-data-structures-精读.md) | [tinycache](../projects/tinycache) | [redis-eventloop-逐行拆解.md](redis-eventloop-逐行拆解.md)*

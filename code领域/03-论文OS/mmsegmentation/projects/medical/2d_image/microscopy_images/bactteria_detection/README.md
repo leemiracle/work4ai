@@ -16,7 +16,7 @@ It is highly imbalanced, so naive loss functions would work less properly
 
 | Dataset name                                                    | Anatomical region | Task type    | Modality   | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                         |
 | --------------------------------------------------------------- | ----------------- | ------------ | ---------- | ------------ | --------------------- | ---------------------- | ------------ | --------------------------------------------------------------- |
-| [Bactteria detection](https://tianchi.aliyun.com/dataset/94411) | bacteria          | segmentation | microscopy | 3            | 366/-/-               | yes/-/-                | 2017         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| [Bactteria detection](https://tianchi.aliyun.com/dataset/94411) | bacteria          | segmentation | microscopy | 3            | 366/-/-               | yes/-/-                | 2017         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
 |  Class Name  | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :----------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

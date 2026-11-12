@@ -13,11 +13,11 @@ Docker 是一个软件。它能把环境打包成**镜像(image)**。使用者�
 
 
 - 服务器上找不到 docker，可能使用 nerdctl 作为替代。nerdctl 完全兼容 docker 的命令。把指令替换成 nerdctl xxx 即可。
-- 如果确实需要手动安装，可参考 [Install | Docker Docs](https://docs.docker.com/engine/install/) 或询问 G 老师
+- 如果确实需要手动安装，可参考 [Install | Docker Docs](https://docs.docker.com/engine/install) 或询问 G 老师
 
 ## 3. 下载 docker 镜像
 
-绝大多数 docker 镜像被发布在 [Docker Hub ](https://hub.docker.com/)
+绝大多数 docker 镜像被发布在 [Docker Hub ](https://hub.docker.com)
 
 请使用 sglang 官方镜像 [lmsysorg/sglang Tags | Docker Hub](https://hub.docker.com/r/lmsysorg/sglang/tags) 
 

@@ -24,8 +24,8 @@
 
 | 公司 | 强项 | 状态 |
 |---|---|---|
-| **Scale AI** [scale.com](https://scale.com/) | **数据标注 No.1**（$14B 估值）/ Donovan 军用 / RLHF 一线供应商 | 🟢 |
-| **Surge AI** [surgehq.ai](https://www.surge.ai/) | 高质量 RLHF 标注 | 🟢 |
+| **Scale AI** [scale.com](https://scale.com) | **数据标注 No.1**（$14B 估值）/ Donovan 军用 / RLHF 一线供应商 | 🟢 |
+| **Surge AI** [surgehq.ai](https://www.surge.ai) | 高质量 RLHF 标注 | 🟢 |
 | **Labelbox** | 数据引擎 + 标注平台 | 🟢 |
 | **Snorkel AI** | **程序化标注**（弱监督） | 🟢 |
 | **Appen**（澳洲上市）| 老牌标注，规模大但增长乏力 | 🟡 |

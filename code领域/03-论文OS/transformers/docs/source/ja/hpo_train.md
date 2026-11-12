@@ -20,7 +20,7 @@ rendered properly in your Markdown viewer.
 ## Hyperparameter Search backend
 
 [`Trainer`]は現在、4つのハイパーパラメーター検索バックエンドをサポートしています：
-[optuna](https://optuna.org/)、[raytune](https://docs.ray.io/en/latest/tune/index.html)、および[wandb](https://wandb.ai/site/sweeps)。
+[optuna](https://optuna.org)、[raytune](https://docs.ray.io/en/latest/tune/index.html)、および[wandb](https://wandb.ai/site/sweeps)。
 
 これらを使用する前に、ハイパーパラメーター検索バックエンドをインストールする必要があります。
 ```bash

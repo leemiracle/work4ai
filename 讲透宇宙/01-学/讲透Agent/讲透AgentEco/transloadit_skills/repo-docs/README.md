@@ -1,0 +1,139 @@
+# Transloadit Skills
+
+This repo hosts agent skills for Transloadit.
+
+If you’re a developer/agent consuming this repo, start with the `transloadit` router skill and then jump into a specific `docs-*`, `transform-*`, or `integrate-*` skill.
+
+## Install / Use
+
+This repo is compatible with the `skills` installer CLI (https://skills.sh).
+
+Browse what’s available:
+```bash
+npx -y skills add https://github.com/transloadit/skills --list
+```
+
+Install into this project (or use `-g` for user-level):
+```bash
+npx -y skills add https://github.com/transloadit/skills --all
+```
+
+Install a single skill (direct path):
+```bash
+npx -y skills add https://github.com/transloadit/skills/tree/main/skills/docs-transloadit-robots
+```
+
+Local dev (already cloned):
+```bash
+npx -y skills add ./skills --list
+npx -y skills add ./skills --all
+```
+
+Manual option (symlink the `skills/` catalog into your agent’s skill directory):
+```bash
+git clone https://github.com/transloadit/skills
+ln -s /ABS/PATH/TO/THIS/REPO/skills ~/.codex/skills
+ln -s /ABS/PATH/TO/THIS/REPO/skills ~/.claude/skills
+ln -s /ABS/PATH/TO/THIS/REPO/skills ~/.gemini/skills
+```
+
+Note: this repo also contains developer-only skills under `.ai/dev-skills/` for working on this repo. The public catalog lives under `skills/`.
+
+## Skill Catalog
+
+Categories:
+- `docs-*`: offline reference lookups (no API calls)
+- `transform-*`: one-off transforms (CLI driven, outputs downloaded via `-o`)
+- `integrate-*`: real-world integration guides (validated via `scenarios/` + E2E, but not requiring any test harness)
+
+Examples:
+- `transform-generate-image-with-transloadit`
+- `transform-remove-background-with-transloadit`
+- `transform-describe-image-with-transloadit`
+- `transform-convert-markdown-to-pdf-with-transloadit`
+- `transform-build-polaroid-collage-with-transloadit`
+- `transform-build-mosaic-collage-with-transloadit`
+- `integrate-uppy-transloadit-s3-uploading-to-nextjs`
+
+The public catalog is whatever currently lives under [`skills/`](/Users/kvz/code/skills/skills).
+For a current list, use:
+
+```bash
+npx -y skills add https://github.com/transloadit/skills --list
+```
+
+Or inspect the directories under `skills/` directly.
+
+Builtin template discovery (token-efficient NDJSON, good for agents):
+```bash
+npx -y @transloadit/node templates list --include-builtin exclusively-latest --fields id,name --json
+```
+
+## Conventions (For Agents)
+
+- Prefer `npx -y @transloadit/node ...` for any Transloadit-side operations and use `-j/--json` when parsing output.
+- For one-off `transform-*` skills, prefer an explicit input/output contract and a final output-file existence check.
+- The `@transloadit/node` CLI resolves auth in this order: shell env, the current working directory `.env`, then `~/.transloadit/credentials`.
+- The `.env` lookup is cwd-only. If a repo-root `.env` lives above the current directory, export the vars into the shell instead of relying on parent-directory discovery.
+- When documenting user-level CLI usage, present `~/.transloadit/credentials` as the default fallback and note that a cwd `.env` still takes precedence.
+- Never expose `TRANSLOADIT_SECRET` to the browser; keep signing strictly server-side.
+- `integrate-*` skills are written as real app integration playbooks (framework-agnostic where possible).
+- `scenarios/` are internal reference implementations with E2E validation; they are not required by the skills.
+
+## Notes
+
+Repository layout:
+- `skills/`: skill catalog (`skills/<name>/SKILL.md`)
+- `scenarios/`: runnable reference implementations (E2E-validated)
+- `scripts/`: internal harness tooling (not a skill)
+- `starter-projects/`: starter templates used by the harness (not a skill)
+
+Skill discovery is `SKILL.md`-based, so it’s fine for `starter-projects/` and `scenarios/` to be siblings of `skills/` without being interpreted as skills.
+
+## Contributing
+
+### Scenarios
+
+`scenarios/` is for integration scenarios that can later be distilled into agent skills.
+
+Workflow (suggested):
+1. Create a scenario folder named after the intended skill.
+2. Research the current golden path (upstream docs, examples, and recent issues).
+3. Build a minimal, working project using latest dependencies.
+4. Prove it with an automated E2E test (real uploads, real processing).
+5. Condense into a `SKILL.md` with a narrow scope, clear inputs/outputs, and a runnable checklist.
+
+Conventions:
+- Each scenario is self-contained (own `package.json`).
+- Secrets are read from env vars. Do not commit `.env*` files.
+- Prefer `npx -y @transloadit/node ...` for Transloadit-side operations (template creation, robot docs).
+
+### Add A Skill
+
+1. Create `skills/<skill-name>/SKILL.md` with tight scope and a runnable checklist.
+2. If it’s an integration, create a matching `scenarios/<skill-name>/` reference implementation and validate it with an E2E test.
+3. Keep test-harness specifics out of the skill. The skill should read like guidance for a normal production app.
+
+### Try-Skill Harness
+
+Before committing, run:
+```bash
+yarn check
+```
+
+1. Provision a starter project under `starter-projects/<name>`.
+2. Each starter may include a `HARNESS.md` with starter-specific guidance for the agent-under-test.
+3. Verify the starter is in a clean, committed state (no `node_modules/`, build artifacts, or run output).
+4. Implement `scripts/try-skill.ts` with args `--skill <skill-name> --starter-project <name>`.
+5. `scripts/try-skill.ts` must copy the starter into an isolated run dir under `starter-projects/_runs/...` (excluding `node_modules`, `.next`, `dist`, `playwright-report`, `test-results`).
+6. `scripts/try-skill.ts` must load repo root `.env` and pass secrets to child processes via process environment (do not write `.env.local` into run dirs).
+7. `scripts/try-skill.ts` must run Codex fully autonomously inside the run dir, inject the selected skill content into the prompt, and instruct “no commits, only file changes”. Use `--dangerously-bypass-approvals-and-sandbox` so the agent can actually write files and run `npm` on the host filesystem (Codex sandbox can be too restrictive outside trusted git repos).
+8. `scripts/try-skill.ts` must capture all agent output to a transcript file and record wall time, and it must redact any secret values found in `.env` from saved transcripts.
+9. Run the trial: `node scripts/try-skill.ts --skill integrate-asset-delivery-with-transloadit-smartcdn-in-nextjs --starter-project nextjs16`
+10. The script must validate automatically in the run dir by running `npm ci` and `npm run test:e2e`.
+11. If tests fail, or the diff looks wrong, or the agent got stuck repeatedly, or runtime is too long: update the skill (dense + prescriptive), then rerun step 9.
+12. If a high-level assumption was wrong (starter layout, test harness, env loading): update this section in `README.md`, then rerun step 9.
+
+Important note (skills vs harness):
+- Skills are written as real-world integration guides. They must not require any specific test harness (Vitest/Playwright/etc).
+- E2E validation is an internal quality gate. The harness prompt can require “make `npm run test:e2e` pass” and let the agent add/adjust tests as needed, but that requirement must not live in the skills themselves.

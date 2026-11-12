@@ -26,7 +26,7 @@ When you add a model to Transformers, you'll learn:
 - about a models architecture
 - about Transformers' design principles
 - how to efficiently test large models
-- how to use Python utilities like [Black](https://black.readthedocs.io/en/stable/) and [Ruff](https://docs.astral.sh/ruff/) to create clean and readable code
+- how to use Python utilities like [Black](https://black.readthedocs.io/en/stable) and [Ruff](https://docs.astral.sh/ruff) to create clean and readable code
 
 It is a challenging but rewarding process.
 
@@ -104,7 +104,7 @@ In addition to learning more about your model, use the tips below to help you ad
 > [!TIP]
 > Each contributor has a unique style and workflow for adding models to Transformers. For an example, take a look at how [Gemma](https://github.com/huggingface/transformers/pull/29167) was added.
 
-- Don't reinvent the wheel! Take your time to explore existing models and tokenizers to see what you can copy and reuse. [Grep](https://www.gnu.org/software/grep/) and [ripgrep](https://github.com/BurntSushi/ripgrep) are great tools for this.
+- Don't reinvent the wheel! Take your time to explore existing models and tokenizers to see what you can copy and reuse. [Grep](https://www.gnu.org/software/grep) and [ripgrep](https://github.com/BurntSushi/ripgrep) are great tools for this.
 - This is more of an engineering than a science challenge. Focus on the more practical (setting up an efficient debugging environment for example) instead of the theorertical aspects of the model.
 - Don't be shy to ask for help! We are here to support you. 🤗
 
@@ -146,7 +146,7 @@ Return to your clone of Transformers to begin porting BrandNewLlama.
 cd transformers
 ```
 
-There are two possible debugging environments for running the original model, a notebook ([Google Colab](https://colab.research.google.com/notebooks/intro.ipynb) or [Jupyter](https://jupyter.org/)) or a local Python script.
+There are two possible debugging environments for running the original model, a notebook ([Google Colab](https://colab.research.google.com/notebooks/intro.ipynb) or [Jupyter](https://jupyter.org)) or a local Python script.
 
 > [!WARNING]
 > We don't recommend setting up a GPU environment to run the original model because it can be expensive. Instead, work in a CPU environment first to verify the model works in Transformers. Once it does, then you can verify it on a GPU.
@@ -211,7 +211,7 @@ Orient yourself with the original repository by doing the following.
 - Figure out how to run the tokenizer independently of the model.
 - Trace one forward pass to understand which classes and functions are required. These are probably the only classes and functions you'll have to implement.
 - Locate all the important components (model class, model subclasses, self-attention layer, etc.) of the model.
-- Figure out how to debug the model in the original repository. Add print statements, use interactive debuggers like [ipdb](https://github.com/gotcha/ipdb), or a efficient integrated development environment (IDE) like [PyCharm](https://www.jetbrains.com/pycharm/).
+- Figure out how to debug the model in the original repository. Add print statements, use interactive debuggers like [ipdb](https://github.com/gotcha/ipdb), or a efficient integrated development environment (IDE) like [PyCharm](https://www.jetbrains.com/pycharm).
 
 The last point is especially important because you'll need a thorough understanding of what's happening inside the original model before you can reimplement it in Transformers. Feel free to open issues and pull requests in the original repository if you encounter any issues.
 
@@ -484,7 +484,7 @@ And if you're stuck or struggling with this step, don't hesitate to ask for help
 
 While the model works, you still need to add tests to ensure it is compatible with Transformers. Tests are important because they help users understand your work by looking at specific tests, and because they prevent your model from breaking in the future if any changes are made.
 
-[Cookiecutter](https://cookiecutter.readthedocs.io/en/stable/) should have added a test file for your model. Run the test file below to make sure all common tests pass.
+[Cookiecutter](https://cookiecutter.readthedocs.io/en/stable) should have added a test file for your model. Run the test file below to make sure all common tests pass.
 
 ```bash
 pytest tests/models/brand_new_llama/test_modeling_brand_new_llama.py

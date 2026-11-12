@@ -1,0 +1,135 @@
+# DataMind
+
+**面向动态 Workspace 的 Codex 数据层。** Codex 负责理解任务、入库规划、关系抽取、
+SQL 生成和最终回答；DataMind 负责数据工具、证据、写入回执和版本一致性。
+
+[English](./README.md) · [个人用户插件](./plugins/datamind-context) ·
+[自动测试](https://github.com/OpenDCAI/DataMind/actions/workflows/python-ci.yml)
+
+```text
+个人：本地 Codex + 插件      企业：官方 Codex SDK + 应用宿主
+              └────── Codex 主 Agent ──────┘
+                       Skills + MCP
+                            │
+                  共用 DataMind 数据层
+                KB / SQL / KG / Skills / Memory
+                 证据 / 回执 / Workspace 版本
+```
+
+插件、官方 Codex SDK、CLI、HTTP 和 UI 现在共用同一个 Codex 宿主和数据层。
+StoreAgent／RetrieveAgent 类、角色 prompt 和 Claude SDK／CCR Agent 入口已删除。
+通用 native loop 仅保留作实验基线，产品入口不再组装它们。
+
+## 如何使用
+
+个人用户安装插件：
+
+```bash
+pip install -e .
+./scripts/install_codex_plugin.sh
+```
+
+在 Codex 中要求使用 DataMind 入库或查询。插件先开启操作上下文，再按需读取
+`workspace-ingest`、`source-update` 或 `workspace-retrieve` Skill。
+图、SQL、Skills 和 Memory 的直接操作不需要 DataMind 对话模型密钥。
+KB 仍需要 embedding 服务，例如：
+
+```bash
+export DATAMIND__EMBEDDING__API_KEY=...
+export DATAMIND__EMBEDDING__API_BASE=https://api.openai.com/v1
+export DATAMIND__EMBEDDING__MODEL=text-embedding-3-small
+```
+
+企业应用使用官方 Python Codex SDK：
+
+```bash
+pip install -e '.[codex]'
+```
+
+```python
+from datamind.codex import CodexSession
+
+async def run():
+    async with CodexSession(
+        workspace="/srv/workspaces/team-a",
+        data_root="/srv/datamind",
+        profile="team-a",
+    ) as session:
+        result = await session.run("读取入库 Skill，然后导入这个工作区。")
+        return result.final_response
+```
+
+宿主环境负责 Codex 登录以及企业鉴权、租户授权、调度和资源预算。默认继承 Codex
+模型配置。每个会话拥有自己的 Codex thread 和绑定 profile 的 MCP 进程。
+SDK 能并发运行会话，但当前 NetworkX JSON 的 live 图写入仍应使用单写入者；
+这次改造不包含分布式图存储。版本化构建可在单主机上并发，通过 CAS 决定最终发布。
+
+自定义网关、独立 embedding 和无人值守工具授权见
+[Codex 网关部署说明](./docs/CODEX_GATEWAY_DEPLOYMENT.md)。
+
+## 数据如何协同更新
+
+1. `datamind_operation_begin(mode="write")` 开启写操作，后续工具传同一个 operation_id。
+2. 读取入库 Skill，调用 `datamind_workspace_prepare` 获得源文件清单和哈希。
+3. Codex 分页读取文档并抽取关系，增量模式只为新增、修改的文档提交 `{uri, version, triples}`。
+   没有关系也提交空列表；抽取不完整时标记 `truncated=true`。
+4. `datamind_workspace_publish` 验证源文件哈希，构建选定的 KB、KG、DB，
+   复用未变化的源文件、向量和表，全部完成后发布一个 Workspace revision。
+5. `datamind_operation_begin(mode="read")` 固定当前发布版本。跨工具查询及原文取证
+   都使用该 operation_id；后续发布不会改变该读操作。新开读操作才能看到新版本。
+
+发布失败保留旧版本。删除源文件后重新发布，新版本会同步去除该文件的业务数据。
+增量模式使用本地 LanceDB、Dolt 和按来源存储的 SQLite 图；旧的完整快照仍可读取、显式迁移。
+新 Workspace 默认只保留最新版，可选择最近 N 版或全部历史，活动查询会保护原版本。
+Skills、Memory 属于实时上下文，不在业务数据快照中。
+
+独立 live 入库仍支持 `kb_add_path`、`db_import_path`、`graph_replace_source`。
+它们不会修改已发布快照。图更新由 Codex 提供三元组和预期源文件哈希，验证成功后
+才替换该源的支持关系；`graph_forget_source` 只撤回该源支持，不删除原文件，
+也不影响其他来源的证据。
+
+## 图里存什么，如何查询
+
+存有类型的实体和带来源证据的关系；业务关系名是可扩展字符串。
+图默认仍为 NetworkX + JSON。Codex 先用 `graph_schema` 查看实际类型和关系，
+再用 `graph_search_entities` 定位实体，通过 `graph_neighbors` 按方向找邻居，
+或用 `graph_traverse` 做有边数和跳数上限的遍历。原文放 KB，精确数值和系列放 SQL。
+最终回答由主 Codex 整合证据完成。
+
+## CLI／HTTP／UI 与测试
+
+旧插件的 ask/store/graph_query/workspace_ask 由主 Codex 直接调用数据工具代替；
+旧 workspace_update 改用 prepare → Codex 抽取 → publish。
+旧 Python 双 Agent API 已删除，替代方法见[2.0 迁移说明](./docs/LEGACY_RUNTIME.md)。
+CLI、HTTP 和 UI 已接入同一个 Codex 宿主；读请求在开始时固定版本，写请求走同一套数据工具和回执。
+
+```bash
+pip install -e '.[codex]'
+datamind info
+datamind ask "项目负责人是谁？"
+datamind store "导入这个文件"
+datamind chat  # /store 允许写入，/new 清空上下文
+python -m uvicorn datamind.server:app --host 127.0.0.1 --port 8000
+```
+
+API 支持指定 `revision` 读取保留的历史快照。查询只读限制、会话身份和固定版本
+通过 MCP 上下文在数据层执行。Codex 使用代码模式时，服务仍会收集真实数据调用的
+证据和回执。新版本使用 `DATAMIND__CODEX__*` 配置主 Agent。
+
+```bash
+pip install -e '.[dev,codex]'
+pytest -q datamind/tests plugins/datamind-context/tests
+python -m datamind.scripts.verify_sqlite_demo
+```
+
+CI 覆盖两版 Python、真实 MySQL/Dolt、本地版本与恢复、wheel 安装、直接 MCP 工具，
+以及官方 Codex SDK 的无模型推理握手和编排契约。通过自动测试证明已覆盖契约，
+不能保证所有模型回答或部署环境都正确。
+
+[Apache License 2.0](./LICENSE)
+
+## Workspace 增量存储与历史保留
+
+增量模式通过 LanceDB 版本、Dolt 提交、按来源存储的 SQLite 图和内容哈希文件复用历史数据。
+新 Workspace 默认只保留最新版，也可保留最近 N 版或全部历史；正在查询和手动保护的版本不会被清理。
+已有 Workspace 的历史不会自动删除，需要显式迁移。见[存储与迁移说明](docs/WORKSPACE_STORAGE.md)。

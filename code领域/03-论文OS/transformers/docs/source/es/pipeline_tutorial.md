@@ -182,7 +182,7 @@ continúa procesándolos en la GPU (dicho proceso utiliza [DataLoader](https://p
 
 Dado que la agrupación en lotes podría acelerar las cosas, puede ser útil intentar ajustar el parámetro `batch_size` aquí.
 
-La forma más sencilla de iterar sobre un conjunto de datos es cargandolo desde 🤗 [Datasets](https://github.com/huggingface/datasets/):
+La forma más sencilla de iterar sobre un conjunto de datos es cargandolo desde 🤗 [Datasets](https://github.com/huggingface/datasets):
 
 ```py
 # KeyDataset is a util that will just output the item we're interested in.
@@ -262,7 +262,7 @@ Por ejemplo, si usas esta [imagen de factura](https://huggingface.co/spaces/impi
 
 <Tip>
 
-Para ejecutar el ejemplo anterior, debe tener instalado [`pytesseract`](https://pypi.org/project/pytesseract/) además de 🤗 Transformers:
+Para ejecutar el ejemplo anterior, debe tener instalado [`pytesseract`](https://pypi.org/project/pytesseract) además de 🤗 Transformers:
 
 ```bash
 sudo apt install -y tesseract-ocr
@@ -301,7 +301,7 @@ Nota que puedes reemplazar el punto de control con cualquier modelo de Hugging F
 
 ## Crear demos web desde pipelines con `gradio`
 
-Los pipelines están automáticamente soportadas en [Gradio](https://github.com/gradio-app/gradio/), una biblioteca que hace que crear aplicaciones de aprendizaje automático hermosas y fáciles de usar en la web sea un proceso sencillo. Primero, asegúrate de tener Gradio instalado:
+Los pipelines están automáticamente soportadas en [Gradio](https://github.com/gradio-app/gradio), una biblioteca que hace que crear aplicaciones de aprendizaje automático hermosas y fáciles de usar en la web sea un proceso sencillo. Primero, asegúrate de tener Gradio instalado:
 
 ```
 pip install gradio

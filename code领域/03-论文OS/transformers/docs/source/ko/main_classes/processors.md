@@ -40,7 +40,7 @@ Transformers 라이브러리에서 프로세서는 두 가지 의미로 사용�
 
 ## GLUE[[transformers.glue_convert_examples_to_features]]
 
-[General Language Understanding Evaluation (GLUE)](https://gluebenchmark.com/)는 다양한 기존 NLU 작업에서 모델의 성능을 평가하는 벤치마크입니다. [GLUE: A multi-task benchmark and analysis platform for natural language understanding](https://openreview.net/pdf?id=rJ4km2R5t7) 논문과 함께 발표되었습니다.
+[General Language Understanding Evaluation (GLUE)](https://gluebenchmark.com)는 다양한 기존 NLU 작업에서 모델의 성능을 평가하는 벤치마크입니다. [GLUE: A multi-task benchmark and analysis platform for natural language understanding](https://openreview.net/pdf?id=rJ4km2R5t7) 논문과 함께 발표되었습니다.
 
 이 라이브러리는 MRPC, MNLI, MNLI (불일치), CoLA, SST2, STSB, QQP, QNLI, RTE, WNLI 총 10개 작업에 대한 프로세서를 제공합니다.
 
@@ -63,7 +63,7 @@ Transformers 라이브러리에서 프로세서는 두 가지 의미로 사용�
 
 ## XNLI[[xnli]]
 
-[The Cross-Lingual NLI Corpus (XNLI)](https://www.nyu.edu/projects/bowman/xnli/)는 교차언어 텍스트 표현의 품질을 평가하는 벤치마크입니다. XNLI는 [*MultiNLI*](http://www.nyu.edu/projects/bowman/multinli/)를 기반으로 한 크라우드소싱 데이터 세트입니다: 텍스트 쌍은 15개 언어(영어 같은 고자원 언어부터 스와힐리어 같은 저자원 언어까지)에 대해 텍스트 함의 어노테이션으로 레이블링됩니다.
+[The Cross-Lingual NLI Corpus (XNLI)](https://www.nyu.edu/projects/bowman/xnli)는 교차언어 텍스트 표현의 품질을 평가하는 벤치마크입니다. XNLI는 [*MultiNLI*](http://www.nyu.edu/projects/bowman/multinli)를 기반으로 한 크라우드소싱 데이터 세트입니다: 텍스트 쌍은 15개 언어(영어 같은 고자원 언어부터 스와힐리어 같은 저자원 언어까지)에 대해 텍스트 함의 어노테이션으로 레이블링됩니다.
 
 [XNLI: Evaluating Cross-lingual Sentence Representations](https://huggingface.co/papers/1809.05053) 논문과 함께 발표되었습니다.
 
@@ -78,7 +78,7 @@ Transformers 라이브러리에서 프로세서는 두 가지 의미로 사용�
 
 ## SQuAD[[squad]]
 
-[The Stanford Question Answering Dataset (SQuAD)](https://rajpurkar.github.io/SQuAD-explorer//)는 질문 답변에서 모델의 성능을 평가하는 벤치마크입니다. v1.1과 v2.0 두 가지 버전을 사용할 수 있습니다. 첫 번째 버전(v1.1)은 [SQuAD: 100,000+ Questions for Machine Comprehension of Text](https://huggingface.co/papers/1606.05250) 논문과 함께 발표되었습니다. 두 번째 버전(v2.0)은 [Know What You Don't Know: Unanswerable Questions for SQuAD](https://huggingface.co/papers/1806.03822) 논문과 함께 발표되었습니다.
+[The Stanford Question Answering Dataset (SQuAD)](https://rajpurkar.github.io/SQuAD-explorer)는 질문 답변에서 모델의 성능을 평가하는 벤치마크입니다. v1.1과 v2.0 두 가지 버전을 사용할 수 있습니다. 첫 번째 버전(v1.1)은 [SQuAD: 100,000+ Questions for Machine Comprehension of Text](https://huggingface.co/papers/1606.05250) 논문과 함께 발표되었습니다. 두 번째 버전(v2.0)은 [Know What You Don't Know: Unanswerable Questions for SQuAD](https://huggingface.co/papers/1806.03822) 논문과 함께 발표되었습니다.
 
 이 라이브러리는 두 버전 각각에 대한 프로세서를 호스팅합니다:
 

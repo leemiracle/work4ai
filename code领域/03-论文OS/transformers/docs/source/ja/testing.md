@@ -619,7 +619,7 @@ test_this1.py::TestMathUnitTest::test_floor_2_large_fraction
 pytest test_this1.py::TestMathUnitTest::test_floor_0_negative  test_this1.py::TestMathUnitTest::test_floor_1_integer
 ```
 
-`transformers`の開発者依存関係にすでに含まれているモジュール[parameterized](https://pypi.org/project/parameterized/) は、`unittests` と `pytest` テストの両方で機能します。
+`transformers`の開発者依存関係にすでに含まれているモジュール[parameterized](https://pypi.org/project/parameterized) は、`unittests` と `pytest` テストの両方で機能します。
 
 ただし、テストが `unittest` でない場合、`pytest.mark.parametrize` を使用することができます（または既存のテストのいくつかで、主に `examples` の下で使用されているのを見ることができます）。
 

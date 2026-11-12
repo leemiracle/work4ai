@@ -23,7 +23,7 @@ rendered properly in your Markdown viewer.
 
 このガイドでは、次の方法を説明します。
 
-1. [UCF101](https://www.crcv.ucf.edu/) のサブセットで [VideoMAE](https://huggingface.co/docs/transformers/main/en/model_doc/videomae) を微調整します。 data/UCF101.php) データセット。
+1. [UCF101](https://www.crcv.ucf.edu) のサブセットで [VideoMAE](https://huggingface.co/docs/transformers/main/en/model_doc/videomae) を微調整します。 data/UCF101.php) データセット。
 2. 微調整したモデルを推論に使用します。
 
 <Tip>
@@ -37,7 +37,7 @@ rendered properly in your Markdown viewer.
 pip install -q pytorchvideo transformers evaluate
 ```
 
-[PyTorchVideo](https://pytorchvideo.org/) (`pytorchvideo` と呼ばれます) を使用してビデオを処理し、準備します。
+[PyTorchVideo](https://pytorchvideo.org) (`pytorchvideo` と呼ばれます) を使用してビデオを処理し、準備します。
 
 モデルをアップロードしてコミュニティと共有できるように、Hugging Face アカウントにログインすることをお勧めします。プロンプトが表示されたら、トークンを入力してログインします。
 
@@ -172,7 +172,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 
 ## Prepare the datasets for training
 
-ビデオの前処理には、[PyTorchVideo ライブラリ](https://pytorchvideo.org/) を利用します。まず、必要な依存関係をインポートします。
+ビデオの前処理には、[PyTorchVideo ライブラリ](https://pytorchvideo.org) を利用します。まず、必要な依存関係をインポートします。
 
 
 ```py

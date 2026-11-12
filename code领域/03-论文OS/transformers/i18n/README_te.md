@@ -77,7 +77,7 @@ limitations under the License.
 
 🤗 ట్రాన్స్‌ఫార్మర్లు అందించిన టెక్స్ట్‌లో ప్రీట్రైన్డ్ మోడల్‌లను త్వరగా డౌన్‌లోడ్ చేయడానికి మరియు ఉపయోగించడానికి, వాటిని మీ స్వంత డేటాసెట్‌లలో ఫైన్-ట్యూన్ చేయడానికి మరియు వాటిని మా [మోడల్ హబ్](https://huggingface.co/models)లో సంఘంతో భాగస్వామ్యం చేయడానికి API లను అందిస్తుంది. అదే సమయంలో, ఆర్కిటెక్చర్‌ని నిర్వచించే ప్రతి పైథాన్ మాడ్యూల్ పూర్తిగా స్వతంత్రంగా ఉంటుంది మరియు త్వరిత పరిశోధన ప్రయోగాలను ప్రారంభించడానికి సవరించవచ్చు.
 
-🤗 ట్రాన్స్‌ఫార్మర్‌లకు మూడు అత్యంత ప్రజాదరణ పొందిన డీప్ లెర్నింగ్ లైబ్రరీలు ఉన్నాయి — [Jax](https://jax.readthedocs.io/en/latest/), [PyTorch](https://pytorch.org/) మరియు [TensorFlow](https://www.tensorflow.org/) — వాటి మధ్య అతుకులు లేని ఏకీకరణతో. మీ మోడల్‌లను ఒకదానితో మరొకదానితో అనుమితి కోసం లోడ్ చేసే ముందు వాటికి శిక్షణ ఇవ్వడం చాలా సులభం.
+🤗 ట్రాన్స్‌ఫార్మర్‌లకు మూడు అత్యంత ప్రజాదరణ పొందిన డీప్ లెర్నింగ్ లైబ్రరీలు ఉన్నాయి — [Jax](https://jax.readthedocs.io/en/latest), [PyTorch](https://pytorch.org) మరియు [TensorFlow](https://www.tensorflow.org) — వాటి మధ్య అతుకులు లేని ఏకీకరణతో. మీ మోడల్‌లను ఒకదానితో మరొకదానితో అనుమితి కోసం లోడ్ చేసే ముందు వాటికి శిక్షణ ఇవ్వడం చాలా సులభం.
 
 ## ఆన్‌లైన్ డెమోలు
 
@@ -250,12 +250,12 @@ limitations under the License.
 
 ఈ రిపోజిటరీ పైథాన్ 3.9+, ఫ్లాక్స్ 0.4.1+, PyTorch 2.1+ మరియు TensorFlow 2.6+లో పరీక్షించబడింది.
 
-మీరు [వర్చువల్ వాతావరణం](https://docs.python.org/3/library/venv.html)లో 🤗 ట్రాన్స్‌ఫార్మర్‌లను ఇన్‌స్టాల్ చేయాలి. మీకు పైథాన్ వర్చువల్ పరిసరాల గురించి తెలియకుంటే, [యూజర్ గైడ్](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) చూడండి.
+మీరు [వర్చువల్ వాతావరణం](https://docs.python.org/3/library/venv.html)లో 🤗 ట్రాన్స్‌ఫార్మర్‌లను ఇన్‌స్టాల్ చేయాలి. మీకు పైథాన్ వర్చువల్ పరిసరాల గురించి తెలియకుంటే, [యూజర్ గైడ్](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments) చూడండి.
 
 ముందుగా, మీరు ఉపయోగించబోతున్న పైథాన్ వెర్షన్‌తో వర్చువల్ వాతావరణాన్ని సృష్టించండి మరియు దానిని సక్రియం చేయండి.
 
 అప్పుడు, మీరు ఫ్లాక్స్, పైటార్చ్ లేదా టెన్సర్‌ఫ్లోలో కనీసం ఒకదానిని ఇన్‌స్టాల్ చేయాలి.
-దయచేసి [TensorFlow ఇన్‌స్టాలేషన్ పేజీ](https://www.tensorflow.org/install/), [PyTorch ఇన్‌స్టాలేషన్ పేజీ](https://pytorch.org/get-started/locally/#start-locally) మరియు/ని చూడండి లేదా మీ ప్లాట్‌ఫారమ్ కోసం నిర్దిష్ట ఇన్‌స్టాలేషన్ కమాండ్‌కు సంబంధించి [Flax](https://github.com/google/flax#quick-install) మరియు [Jax](https://github.com/google/jax#installation) ఇన్‌స్టాలేషన్ పేజీలు .
+దయచేసి [TensorFlow ఇన్‌స్టాలేషన్ పేజీ](https://www.tensorflow.org/install), [PyTorch ఇన్‌స్టాలేషన్ పేజీ](https://pytorch.org/get-started/locally/#start-locally) మరియు/ని చూడండి లేదా మీ ప్లాట్‌ఫారమ్ కోసం నిర్దిష్ట ఇన్‌స్టాలేషన్ కమాండ్‌కు సంబంధించి [Flax](https://github.com/google/flax#quick-install) మరియు [Jax](https://github.com/google/jax#installation) ఇన్‌స్టాలేషన్ పేజీలు .
 
 ఆ బ్యాకెండ్‌లలో ఒకటి ఇన్‌స్టాల్ చేయబడినప్పుడు, 🤗 ట్రాన్స్‌ఫార్మర్‌లను ఈ క్రింది విధంగా పిప్‌ని ఉపయోగించి ఇన్‌స్టాల్ చేయవచ్చు:
 
@@ -293,7 +293,7 @@ Flax, PyTorch లేదా TensorFlow యొక్క ఇన్‌స్టా�
 
 | విభాగం | వివరణ |
 |-|-|
-| [డాక్యుమెంటేషన్](https://huggingface.co/docs/transformers/) | పూర్తి API డాక్యుమెంటేషన్ మరియు ట్యుటోరియల్స్ |
+| [డాక్యుమెంటేషన్](https://huggingface.co/docs/transformers) | పూర్తి API డాక్యుమెంటేషన్ మరియు ట్యుటోరియల్స్ |
 | [టాస్క్ సారాంశం](https://huggingface.co/docs/transformers/task_summary) | 🤗 ట్రాన్స్‌ఫార్మర్‌ల ద్వారా సపోర్ట్ చేయబడిన విధులు |
 | [ప్రీప్రాసెసింగ్ ట్యుటోరియల్](https://huggingface.co/docs/transformers/preprocessing) | మోడల్‌ల కోసం డేటాను సిద్ధం చేయడానికి `Tokenizer` క్లాస్‌ని ఉపయోగించడం |
 | [ట్రైనింగ్ మరియు ఫైన్-ట్యూనింగ్](https://huggingface.co/docs/transformers/training) | PyTorch/TensorFlow ట్రైనింగ్ లూప్ మరియు `Trainer` APIలో 🤗 ట్రాన్స్‌ఫార్మర్లు అందించిన మోడల్‌లను ఉపయోగించడం |
@@ -302,7 +302,7 @@ Flax, PyTorch లేదా TensorFlow యొక్క ఇన్‌స్టా�
 
 ## అనులేఖనం
 
-🤗 ట్రాన్స్‌ఫార్మర్స్ లైబ్రరీ కోసం మీరు ఉదహరించగల [పేపర్](https://www.aclweb.org/anthology/2020.emnlp-demos.6/) ఇప్పుడు మా వద్ద ఉంది:
+🤗 ట్రాన్స్‌ఫార్మర్స్ లైబ్రరీ కోసం మీరు ఉదహరించగల [పేపర్](https://www.aclweb.org/anthology/2020.emnlp-demos.6) ఇప్పుడు మా వద్ద ఉంది:
 ```bibtex
 @inproceedings{wolf-etal-2020-transformers,
     title = "Transformers: State-of-the-Art Natural Language Processing",

@@ -248,7 +248,7 @@ torch.cuda.empty_cache()
 
 <Tip>
 
-如果没有 GPU，可以通过notebook平台如 [Colaboratory](https://colab.research.google.com/) 或 [SageMaker StudioLab](https://studiolab.sagemaker.aws/) 来免费获得云端GPU使用。
+如果没有 GPU，可以通过notebook平台如 [Colaboratory](https://colab.research.google.com) 或 [SageMaker StudioLab](https://studiolab.sagemaker.aws) 来免费获得云端GPU使用。
 
 </Tip>
 
@@ -256,7 +256,7 @@ torch.cuda.empty_cache()
 
 ### 训练循环
 
-为了跟踪训练进度，使用 [tqdm](https://tqdm.github.io/) 库来添加一个进度条，显示训练步数的进展：
+为了跟踪训练进度，使用 [tqdm](https://tqdm.github.io) 库来添加一个进度条，显示训练步数的进展：
 
 ```py
 >>> from tqdm.auto import tqdm

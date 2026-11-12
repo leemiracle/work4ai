@@ -769,7 +769,7 @@ Some models are supported only via the [Transformers modeling backend](#transfor
     Performance is not yet fully optimized mainly due to:
   
     - Both audio and vision MM encoders use `transformers.AutoModel` implementation.  
-    - There's no PLE caching or out-of-memory swapping support, as described in [Google's blog](https://developers.googleblog.com/en/introducing-gemma-3n/). These features might be too model-specific for vLLM, and swapping in particular may be better suited for constrained setups.
+    - There's no PLE caching or out-of-memory swapping support, as described in [Google's blog](https://developers.googleblog.com/en/introducing-gemma-3n). These features might be too model-specific for vLLM, and swapping in particular may be better suited for constrained setups.
 
 !!! note
     For `InternVLChatModel`, only InternVL2.5 with Qwen2.5 text backbone (`OpenGVLab/InternVL2.5-1B` etc.), InternVL3 and InternVL3.5 have video inputs support currently.

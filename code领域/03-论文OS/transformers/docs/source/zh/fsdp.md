@@ -16,7 +16,7 @@ rendered properly in your Markdown viewer.
 
 # 完全分片数据并行
 
-[完全分片数据并行（FSDP）](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api/)是一种数据并行方法，
+[完全分片数据并行（FSDP）](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api)是一种数据并行方法，
 它将模型的参数、梯度和优化器状态在可用 GPU（也称为 Worker 或 *rank*）的数量上进行分片。
 与[分布式数据并行（DDP）](https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html)不同，
 FSDP 减少了内存使用量，因为模型在每个 GPU 上都被复制了一次。这就提高了 GPU 内存效率，
@@ -157,5 +157,5 @@ FSDP 可以减少大规模训练的高成本。如果您希望了解更多信息
 
 - 深入参考 Accelerate 指南，了解有关
   [FSDP](https://huggingface.co/docs/accelerate/usage_guides/fsdp)的更多信息。
-- 阅读[介绍 PyTorch 完全分片数据并行（FSDP）API](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api/) 博文。
-- 阅读[使用 FSDP 在云 TPU 上扩展 PyTorch 模型](https://pytorch.org/blog/scaling-pytorch-models-on-cloud-tpus-with-fsdp/)博文。
+- 阅读[介绍 PyTorch 完全分片数据并行（FSDP）API](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api) 博文。
+- 阅读[使用 FSDP 在云 TPU 上扩展 PyTorch 模型](https://pytorch.org/blog/scaling-pytorch-models-on-cloud-tpus-with-fsdp)博文。

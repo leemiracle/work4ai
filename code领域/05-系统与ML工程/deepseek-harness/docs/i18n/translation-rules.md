@@ -40,7 +40,7 @@ The repo's Markdown conventions apply to `.zh.md` files unchanged: one physical 
 
 ## Typography
 
-These rules govern the Chinese side; the English side follows the repo's normal Markdown conventions (root `AGENTS.md`). The mixed-script rules below follow the cross-project consensus of the [MDN Simplified Chinese translation guide](https://github.com/mdn/translated-content/blob/main/docs/zh-cn/translation-guide.md), the [Kubernetes zh-cn localization guide](https://kubernetes.io/zh-cn/docs/contribute/localization_zh/), the [Vue.js Chinese translation conventions](https://github.com/vuejs-translations/docs-zh-cn/wiki/%E7%BF%BB%E8%AF%91%E9%A1%BB%E7%9F%A5), and [中文文案排版指北](https://github.com/sparanoid/chinese-copywriting-guidelines), which in turn ground in [W3C clreq](https://www.w3.org/TR/clreq/) and GB/T 15834—2011:
+These rules govern the Chinese side; the English side follows the repo's normal Markdown conventions (root `AGENTS.md`). The mixed-script rules below follow the cross-project consensus of the [MDN Simplified Chinese translation guide](https://github.com/mdn/translated-content/blob/main/docs/zh-cn/translation-guide.md), the [Kubernetes zh-cn localization guide](https://kubernetes.io/zh-cn/docs/contribute/localization_zh), the [Vue.js Chinese translation conventions](https://github.com/vuejs-translations/docs-zh-cn/wiki/%E7%BF%BB%E8%AF%91%E9%A1%BB%E7%9F%A5), and [中文文案排版指北](https://github.com/sparanoid/chinese-copywriting-guidelines), which in turn ground in [W3C clreq](https://www.w3.org/TR/clreq) and GB/T 15834—2011:
 
 - MUST put one half-width space between Chinese text and Latin words, and between Chinese text and numerals: `每个 plugin 注册 3 个 tool`。No space between a full-width punctuation mark and anything.
 - MUST use full-width (Chinese) punctuation in Chinese prose: `，。：；？！（）「」`. Half-width punctuation stays inside code spans, inside complete English sentences quoted as-is, and in numbers (`3.5`, `1,024`).
@@ -62,8 +62,8 @@ Authorities cited by these rules, for humans and agents who want the underlying 
 
 - [中文文案排版指北](https://github.com/sparanoid/chinese-copywriting-guidelines) — the de-facto community standard for mixed CJK/Latin spacing and punctuation.
 - [MDN zh-CN translation guide](https://github.com/mdn/translated-content/blob/main/docs/zh-cn/translation-guide.md) — an in-repo translation-rules file of the same shape as this one; spacing, punctuation, and glossary practice.
-- [Kubernetes zh-cn localization guide](https://kubernetes.io/zh-cn/docs/contribute/localization_zh/) — terminology-first-occurrence and punctuation practice from the largest zh localization team.
+- [Kubernetes zh-cn localization guide](https://kubernetes.io/zh-cn/docs/contribute/localization_zh) — terminology-first-occurrence and punctuation practice from the largest zh localization team.
 - [Vue.js docs-zh-cn 翻译须知](https://github.com/vuejs-translations/docs-zh-cn/wiki/%E7%BF%BB%E8%AF%91%E9%A1%BB%E7%9F%A5) — per-term translate/keep decisions and tone.
 - [zh-style-guide](https://zh-style-guide.readthedocs.io) — a community Chinese technical-writing style guide whose rule-level taxonomy (and RFC 2119 keyword levels) this file borrows; aggregates GB/T 15834/15835, clreq, and vendor guides.
-- [W3C clreq](https://www.w3.org/TR/clreq/) and the [Microsoft Simplified Chinese style guide](https://learn.microsoft.com/en-us/globalization/reference/microsoft-style-guides) — the formal typographic and vendor-localization baselines.
+- [W3C clreq](https://www.w3.org/TR/clreq) and the [Microsoft Simplified Chinese style guide](https://learn.microsoft.com/en-us/globalization/reference/microsoft-style-guides) — the formal typographic and vendor-localization baselines.
 - GB/T 19682-2005《翻译服务译文质量要求》 — the national standard whose three base requirements (忠实原文、术语统一、行文通顺) this file's Faithfulness and Terminology sections operationalize.

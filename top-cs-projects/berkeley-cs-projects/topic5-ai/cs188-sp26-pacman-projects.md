@@ -2,7 +2,7 @@
 
 > Berkeley CS 188 是全球 AI 入门课的事实标杆。其 **Pacman Projects** 自 Klein/DeNero/Abbeel 设计以来长期稳定，覆盖 AI 的 5 大基础：**搜索 / 对抗搜索 / 强化学习 / 概率推理 / 机器学习**——构成一条"从无智能到智能体"的完整迭代路径。
 >
-> 本文按 [Spring 2026](https://inst.eecs.berkeley.edu/~cs188/sp26/projects/) 的 6 个项目迭代组织，每个迭代给出：**目标 / 核心算法 / autograder 拆解 / 学生卡点 / 项目内连接**。配套代码：[`cs188_sp26_iterations.py`](./cs188_sp26_iterations.py)（5 个迭代核心算法全部跑通）。
+> 本文按 [Spring 2026](https://inst.eecs.berkeley.edu/~cs188/sp26/projects) 的 6 个项目迭代组织，每个迭代给出：**目标 / 核心算法 / autograder 拆解 / 学生卡点 / 项目内连接**。配套代码：[`cs188_sp26_iterations.py`](./cs188_sp26_iterations.py)（5 个迭代核心算法全部跑通）。
 >
 > 数据来源：实抓 SP26 projects/ 总览页（具体 proj 页面 2026-08 已下线，但 Pacman 项目结构长期不变，从总览 + 经典实现还原）。
 
@@ -440,8 +440,8 @@ Perceptron 学 AND：6 iter 收敛
 - [`cs188_sp26_iterations.py`](./cs188_sp26_iterations.py)（5 个迭代核心算法跑通）
 
 ### 📚 来源与参考
-- **官方 SP26 项目页**：[https://inst.eecs.berkeley.edu/~cs188/sp26/projects/](https://inst.eecs.berkeley.edu/~cs188/sp26/projects/)（具体 proj 页面 SP26 期末下线，2026-08 已 404，但结构从总览 + 经典实现还原）
-- **历版归档**：[FA23](https://inst.eecs.berkeley.edu/~cs188/fa23/)（与 SP26 高度一致）
+- **官方 SP26 项目页**：[https://inst.eecs.berkeley.edu/~cs188/sp26/projects/](https://inst.eecs.berkeley.edu/~cs188/sp26/projects)（具体 proj 页面 SP26 期末下线，2026-08 已 404，但结构从总览 + 经典实现还原）
+- **历版归档**：[FA23](https://inst.eecs.berkeley.edu/~cs188/fa23)（与 SP26 高度一致）
 - **教材**：Russell & Norvig **《AIMA》4th ed**（Pearson 2021）— §3 搜索 / §5 博弈 / §17 MDP/RL / §13 Bayes / §21 NN
 - **设计者**：John DeNero / Dan Klein / Pieter Abbeel（Berkeley）
 - ** NSF 资助**：CAREER grant 0643742
@@ -457,6 +457,6 @@ Perceptron 学 AND：6 iter 收敛
 **完成日期**：2026-08-12  ·  **作者**：AI Mentor (ai-mentor)  ·  **配套**：[Berkeley 项目主页](../README.md) + [讲透RL 全系列](../../../讲透RL/README.md)
 
 📌 **下一步**建议：
-- 想真正动手做 CS188 autograder → 从 [Berkeley CS 188 FA23](https://inst.eecs.berkeley.edu/~cs188/fa23/)（SP26 下线，FA23 仍可下）拉 starter code
+- 想真正动手做 CS188 autograder → 从 [Berkeley CS 188 FA23](https://inst.eecs.berkeley.edu/~cs188/fa23)（SP26 下线，FA23 仍可下）拉 starter code
 - 想深入 RL（P3 之后）→ 直接进 [`讲透RL/`](../../../讲透RL) 8 章
 - 想深入博弈论（P2 之后）→ CS188 不深入，可补 Stanford CS 269I（算法博弈论）

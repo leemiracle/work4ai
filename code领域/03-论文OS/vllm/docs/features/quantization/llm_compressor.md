@@ -1,6 +1,6 @@
 # LLM Compressor
 
-[LLM Compressor](https://docs.vllm.ai/projects/llm-compressor/en/latest/) is a library for optimizing models for deployment with vLLM.
+[LLM Compressor](https://docs.vllm.ai/projects/llm-compressor/en/latest) is a library for optimizing models for deployment with vLLM.
 It provides a comprehensive set of quantization algorithms, including support for techniques such as FP4, FP8, INT8, and INT4 quantization.
 
 ## Why use LLM Compressor?

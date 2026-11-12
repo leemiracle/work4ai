@@ -16,7 +16,7 @@ rendered properly in your Markdown viewer.
 
 # Accelerate
 
-[Accelerate](https://hf.co/docs/accelerate/index) is a library designed to simplify distributed training on any type of setup with PyTorch by uniting the most common frameworks ([Fully Sharded Data Parallel (FSDP)](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api/) and [DeepSpeed](https://www.deepspeed.ai/)) for it into a single interface. [`Trainer`] is powered by Accelerate under the hood, enabling loading big models and distributed training.
+[Accelerate](https://hf.co/docs/accelerate/index) is a library designed to simplify distributed training on any type of setup with PyTorch by uniting the most common frameworks ([Fully Sharded Data Parallel (FSDP)](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api) and [DeepSpeed](https://www.deepspeed.ai)) for it into a single interface. [`Trainer`] is powered by Accelerate under the hood, enabling loading big models and distributed training.
 
 This guide will show you two ways to use Accelerate with Transformers, using FSDP as the backend. The first method demonstrates distributed training with [`Trainer`], and the second method demonstrates adapting a PyTorch training loop. For more detailed information about Accelerate, please refer to the [documentation](https://hf.co/docs/accelerate/index).
 

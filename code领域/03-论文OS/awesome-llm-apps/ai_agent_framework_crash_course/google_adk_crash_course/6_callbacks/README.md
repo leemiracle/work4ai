@@ -81,7 +81,7 @@ By the end of this tutorial, you'll understand:
 - Basic understanding of Google ADK (Tutorials 1-5)
 
 ### **Setup**
-1. **Get API Key**: Visit [Google AI Studio](https://aistudio.google.com/)
+1. **Get API Key**: Visit [Google AI Studio](https://aistudio.google.com)
 2. **Create .env file**: Add `GOOGLE_API_KEY=your_key_here`
 3. **Install dependencies**: `pip install -r requirements.txt`
 
@@ -184,6 +184,6 @@ After completing this tutorial, you'll be ready for:
 
 ## 📚 Additional Resources
 
-- [Google ADK Documentation](https://google.github.io/adk-docs/)
-- [Callback API Reference](https://google.github.io/adk-docs/api-reference/python/)
-- [Best Practices Guide](https://google.github.io/adk-docs/best-practices/) 
+- [Google ADK Documentation](https://google.github.io/adk-docs)
+- [Callback API Reference](https://google.github.io/adk-docs/api-reference/python)
+- [Best Practices Guide](https://google.github.io/adk-docs/best-practices) 

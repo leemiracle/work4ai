@@ -198,7 +198,7 @@ You can easily log and monitor your runs code. The following are currently suppo
 
 * [TensorBoard](https://www.tensorflow.org/tensorboard)
 * [Weights & Biases](https://docs.wandb.ai/integrations/huggingface)
-* [Comet ML](https://www.comet.com/docs/v2/integrations/ml-frameworks/transformers/)
+* [Comet ML](https://www.comet.com/docs/v2/integrations/ml-frameworks/transformers)
 * [ClearML](https://clear.ml/docs/latest/docs/getting_started/ds/ds_first_steps)
 * [DVCLive](https://dvc.org/doc/dvclive/ml-frameworks/huggingface)
 

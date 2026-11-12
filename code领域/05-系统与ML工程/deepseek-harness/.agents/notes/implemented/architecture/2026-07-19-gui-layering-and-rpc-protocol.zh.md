@@ -39,7 +39,7 @@ apps/*  (applications: apps/web = vite app, apps/cli = bin dispatch)
 packages/host/*                      packages/client/*
   apiproxy   front layer: protocol     pure libs: ui-slots / web-react / ui-primitives
   runtime    assembly / host entity    dsh.client plugins ×8 (node half = empty apply,
-  webserver  Web HTTP carriage                              client half = src/client/)
+  webserver  Web HTTP carriage                              client half = src/client)
   │ ctx.plugin(...)                      ▲ import only apiproxy's /api /client subpaths
   ▼                                      │ (type-only + the client base class)
 harness core packages ──────────────────┘ (types reach the browser via import type)
@@ -60,7 +60,7 @@ TypeScript 以 solution 根引用的**两个聚合 program** 检查（`tsconfig.
 
 | 层 | 包 | 职责 | 关键纪律 |
 |---|---|---|---|
-| 前置层 | `dsh-host-apiproxy` | TS/zod 定义 (api/)+ fetch 抽象 (fetch/：handler + 客户端基类) | 做简单、每个消费方都要；Node/浏览器皆可 import；协议内容见下文「消息协议」起各节；client 不得经 ctx 绕开 api |
+| 前置层 | `dsh-host-apiproxy` | TS/zod 定义 (api)+ fetch 抽象 (fetch/：handler + 客户端基类) | 做简单、每个消费方都要；Node/浏览器皆可 import；协议内容见下文「消息协议」起各节；client 不得经 ctx 绕开 api |
 | 装配层 | `dsh-host-runtime` | 插件组合 + ApiProxy 集成 + web UI 插件挂载（覆盖八个 dsh.client 包的内存 Loader 树）；host 级配置归属地（defaults/persistenceRoot，将来用户 profile） | 装什么插件、给什么默认值只在这里定；壳不得改装配 |
 | 承载层 | `dsh-host-webserver` | Web HTTP 与 upgrade：静态服务 + `/api/*`→handler 转发 + WebSocket upgrade route + close 语义；插件 bundle 端点 + `__DSH_BOOT__` manifest（元数据清单）注入（由 web 插件注册表供给） | Web（浏览器访问）专用；零 workspace 依赖（注册表经结构注入到达）；Electron 不复用它 |
 | client 库 | `dsh-client-ui-slots` / `dsh-client-web-react` / `dsh-client-ui-primitives` | slot 注册表核心 / ctx↔React 胶合 / 纯 React 原子组件 | 组件零 cordis 运行时依赖；由壳播种进 loader 模块表 |

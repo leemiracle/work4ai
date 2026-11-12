@@ -5,7 +5,7 @@
 > CSAPP 告诉你"为什么 row-major 比 col-major 快 50×"（原理层）。
 > Agner Fog 告诉你"在 Skylake-Zen4 上，`idiv` 延迟 20-30 cycle，怎么用乘法倒近似替代它，怎么让 GCC 自动向量化，怎么用 CPU dispatch 在运行时选最优实现"（手法层）。
 >
-> **来源**：[agner.org/optimize/](https://www.agner.org/optimize/)（Agner Fog 个人维护 25+ 年，x86 微架构优化的全球公认圣经，5 卷手册 + 4 个配套工具，**2026 年仍在每周级更新**）。
+> **来源**：[agner.org/optimize/](https://www.agner.org/optimize)（Agner Fog 个人维护 25+ 年，x86 微架构优化的全球公认圣经，5 卷手册 + 4 个配套工具，**2026 年仍在每周级更新**）。
 >
 > **配套代码**：[`./cmu-cs-projects/topic2-systems/agner_optimization_demo.py`](./cmu-cs-projects/topic2-systems/agner_optimization_demo.py)（7 个可运行优化模式 demo）。
 >
@@ -42,9 +42,9 @@
 
 ### 相关外部资源（Agner 推荐）
 
-- **[uops.info](https://uops.info/)** —— 比 Agner Vol 4 更新更频繁的指令延迟数据库（机械测量）
-- **[instlatx64.atw.hu](http://instlatx64.atw.hu/)** —— 社区测量的指令延迟
-- **[Godbolt Compiler Explorer](https://godbolt.org/)** —— 在线看不同编译器怎么处理你的代码（支持 VCL）
+- **[uops.info](https://uops.info)** —— 比 Agner Vol 4 更新更频繁的指令延迟数据库（机械测量）
+- **[instlatx64.atw.hu](http://instlatx64.atw.hu)** —— 社区测量的指令延迟
+- **[Godbolt Compiler Explorer](https://godbolt.org)** —— 在线看不同编译器怎么处理你的代码（支持 VCL）
 - **[likwid](https://github.com/RRZE-HPC/likwid)** —— Linux 性能测量工具，比 `perf` 易用
 - **[Bit Twiddling Hacks](https://graphics.stanford.edu/~seander/bithacks.html)** —— 位运算技巧集
 
@@ -280,7 +280,7 @@ void (*kernel)(const float*, float*, size_t) =
 
 ## 🔬 第 3 部分：Intel / AMD 微架构家族对比
 
-> 数据来源：Agner Vol 3（2026-05）+ [uops.info](https://uops.info/)。**厂商手册里查不到**的细节都在这里。
+> 数据来源：Agner Vol 3（2026-05）+ [uops.info](https://uops.info)。**厂商手册里查不到**的细节都在这里。
 
 ### 3.1 现代 CPU 的关键参数（决定优化的天花板）
 
@@ -604,15 +604,15 @@ likwid-perfctr -g L3_CACHE ./a.out
 ## 📚 第 12 部分：核心参考资料
 
 ### 必读（免费 PDF）
-- ⭐ **Agner Vol 1-5**：[agner.org/optimize/](https://www.agner.org/optimize/)
+- ⭐ **Agner Vol 1-5**：[agner.org/optimize/](https://www.agner.org/optimize)
 - **Drepper "What Every Programmer Should Know About Memory"**（2007，lwn.net）—— 内存层次最权威长文
 - **Intel SDM Vol 2B（指令集参考）+ Vol 3A（系统编程）**
 - **Intel Optimization Reference Manual**
 
 ### 工具
-- **[Godbolt](https://godbolt.org/)**：在线编译器对比，**最高频使用工具**
-- **[uops.info](https://uops.info/)**：指令延迟在线数据库（机械测量）
-- **[Perf Wiki](https://perf.wiki.kernel.org/)**：Linux perf 完整文档
+- **[Godbolt](https://godbolt.org)**：在线编译器对比，**最高频使用工具**
+- **[uops.info](https://uops.info)**：指令延迟在线数据库（机械测量）
+- **[Perf Wiki](https://perf.wiki.kernel.org)**：Linux perf 完整文档
 - **[Likwid](https://github.com/RRZE-HPC/likwid)**：易用的 PMU 工具
 
 ### 经典论文（Agner 多次引用）

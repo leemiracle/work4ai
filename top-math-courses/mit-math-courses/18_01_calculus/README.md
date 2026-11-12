@@ -1,14 +1,14 @@
 # MIT 18.01 — Calculus
 
 > **学校**：MIT | **学院**：Mathematics (Course 18) | **学期**：Fall/Spring | **学分**：12 units (5-0-7)
-> **一手来源**：[catalog.mit.edu/subjects/18/#18.01](https://catalog.mit.edu/subjects/18/) + [OCW 18.01](https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/)（2026-08 核实）
+> **一手来源**：[catalog.mit.edu/subjects/18/#18.01](https://catalog.mit.edu/subjects/18) + [OCW 18.01](https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006)（2026-08 核实）
 
 ## 课程信息
 - **编号**：18.01 / 18.01A（含 IAP 延伸版）
 - **名称**：Single Variable Calculus
 - **先修**：高中微积分基础
 - **教材**：Strang, *Calculus*（Wellesley-Cambridge Press）+ Herman 等在线补充
-- **视频**：[OCW Prof. David Jerison 18.01](https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/)
+- **视频**：[OCW Prof. David Jerison 18.01](https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006)
 - **附属**：18.01A = 18.01 + IAP 复习（秋季入学的延伸版本）
 
 ## 教学大纲
@@ -27,9 +27,9 @@
 - **学完本课后**：能看懂 ML 论文里的 ∇/∂ 符号
 
 ## 参考资源
-- **教材（免费 PDF）**：[MIT OpenCourseWare 18.01 Strang](https://ocw.mit.edu/resources/18-01-single-variable-calculus-fall-2006/textbook/)
+- **教材（免费 PDF）**：[MIT OpenCourseWare 18.01 Strang](https://ocw.mit.edu/resources/18-01-single-variable-calculus-fall-2006/textbook)
 - **视频**：[OCW Jerison 35 讲](https://www.youtube.com/playlist?list=PL5900DBC7A7FE7C29)
-- **习题集**：[OCW 18.01 problem sets](https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/assignments/)
+- **习题集**：[OCW 18.01 problem sets](https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/assignments)
 - **配合**：3Blue1Brown *Essence of Calculus*（YouTube）
 
 ## 学习建议

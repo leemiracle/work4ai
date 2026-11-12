@@ -11,7 +11,7 @@
 
 | 版本 | 评分 | 评价人数 | 豆瓣链接 |
 |------|------|---------|---------|
-| 生活·读书·新知三联书店（2017） | **9.3 / 10** | 12,280 人 | [book.douban.com/subject/26901114](https://book.douban.com/subject/26901114/) |
+| 生活·读书·新知三联书店（2017） | **9.3 / 10** | 12,280 人 | [book.douban.com/subject/26901114](https://book.douban.com/subject/26901114) |
 
 ### 主要评价（豆瓣短评精选）
 
@@ -54,9 +54,9 @@
 
 | 版本 | 评分 | 评价人数 | 豆瓣链接 |
 |------|------|---------|---------|
-| 第二版（格致出版社 / 上海三联 / 上海人民，2017） | **9.2 / 10** | 4,610 人 | [book.douban.com/subject/27120243](https://book.douban.com/subject/27120243/) |
-| 第一版（格致出版社，2008） | **9.0 / 10** | 342 人 | [book.douban.com/subject/3347568](https://book.douban.com/subject/3347568/) |
-| 英文版 *Incentives and Governance*（Gale Asia，2009） | — | — | [book.douban.com/subject/5400803](https://book.douban.com/subject/5400803/) |
+| 第二版（格致出版社 / 上海三联 / 上海人民，2017） | **9.2 / 10** | 4,610 人 | [book.douban.com/subject/27120243](https://book.douban.com/subject/27120243) |
+| 第一版（格致出版社，2008） | **9.0 / 10** | 342 人 | [book.douban.com/subject/3347568](https://book.douban.com/subject/3347568) |
+| 英文版 *Incentives and Governance*（Gale Asia，2009） | — | — | [book.douban.com/subject/5400803](https://book.douban.com/subject/5400803) |
 
 ### 主要评价（豆瓣短评精选）
 
@@ -90,7 +90,7 @@
 
 | 版本 | 评分 | 评价人数 | 豆瓣链接 |
 |------|------|---------|---------|
-| 上海三联书店（2012） | **9.4 / 10** | 6,808 人 | [book.douban.com/subject/10587755](https://book.douban.com/subject/10587755/) |
+| 上海三联书店（2012） | **9.4 / 10** | 6,808 人 | [book.douban.com/subject/10587755](https://book.douban.com/subject/10587755) |
 
 ### 主要评价（豆瓣短评精选）
 
@@ -124,7 +124,7 @@
 
 | 版本 | 评分 | 评价人数 | 豆瓣链接 |
 |------|------|---------|---------|
-| 上海人民出版社（2020） | **9.2 / 10** | 7,009 人 | [book.douban.com/subject/35149551](https://book.douban.com/subject/35149551/) |
+| 上海人民出版社（2020） | **9.2 / 10** | 7,009 人 | [book.douban.com/subject/35149551](https://book.douban.com/subject/35149551) |
 
 ### 主要评价（豆瓣短评精选）
 
@@ -153,7 +153,7 @@
 
 | 版本 | 评分 | 评价人数 | 豆瓣链接 |
 |------|------|---------|---------|
-| 华东师范大学出版社（2024） | **8.2 / 10** | 3,476 人 | [book.douban.com/subject/36985251](https://book.douban.com/subject/36985251/) |
+| 华东师范大学出版社（2024） | **8.2 / 10** | 3,476 人 | [book.douban.com/subject/36985251](https://book.douban.com/subject/36985251) |
 
 ### 主要评价（豆瓣短评精选）
 
@@ -182,9 +182,9 @@
 
 | 版本 | 评分 | 评价人数 | 豆瓣链接 |
 |------|------|---------|---------|
-| 上海人民出版社（2009，杜汝楫/邱仁宗译） | **8.5 / 10** | 1,651 人 | [book.douban.com/subject/3803268](https://book.douban.com/subject/3803268/) |
-| 华夏出版社（1987） | **8.5 / 10** | 294 人 | [book.douban.com/subject/1433450](https://book.douban.com/subject/1433450/) |
-| 中国社会科学出版社《历史主义贫困论》（何林/赵平译，1998） | **8.6 / 10** | 685 人 | [book.douban.com/subject/1000952](https://book.douban.com/subject/1000952/) |
+| 上海人民出版社（2009，杜汝楫/邱仁宗译） | **8.5 / 10** | 1,651 人 | [book.douban.com/subject/3803268](https://book.douban.com/subject/3803268) |
+| 华夏出版社（1987） | **8.5 / 10** | 294 人 | [book.douban.com/subject/1433450](https://book.douban.com/subject/1433450) |
+| 中国社会科学出版社《历史主义贫困论》（何林/赵平译，1998） | **8.6 / 10** | 685 人 | [book.douban.com/subject/1000952](https://book.douban.com/subject/1000952) |
 
 ### 主要评价（豆瓣短评精选）
 
@@ -213,11 +213,11 @@
 
 | 版本 | 评分 | 评价人数 | 豆瓣链接 |
 |------|------|---------|---------|
-| 三联书店（2001） | **9.2 / 10** | 84,061 人 | [book.douban.com/subject/1003479](https://book.douban.com/subject/1003479/) |
-| 三联书店（2012） | **9.4 / 10** | 13,450 人 | [book.douban.com/subject/11229072](https://book.douban.com/subject/11229072/) |
-| 三联书店（2018） | **9.4 / 10** | 4,819 人 | [book.douban.com/subject/30206893](https://book.douban.com/subject/30206893/) |
-| 九州出版社（2012） | **9.3 / 10** | 18,163 人 | [book.douban.com/subject/10434849](https://book.douban.com/subject/10434849/) |
-| 岳麓书社（2024） | **9.4 / 10** | 1,712 人 | [book.douban.com/subject/36792415](https://book.douban.com/subject/36792415/) |
+| 三联书店（2001） | **9.2 / 10** | 84,061 人 | [book.douban.com/subject/1003479](https://book.douban.com/subject/1003479) |
+| 三联书店（2012） | **9.4 / 10** | 13,450 人 | [book.douban.com/subject/11229072](https://book.douban.com/subject/11229072) |
+| 三联书店（2018） | **9.4 / 10** | 4,819 人 | [book.douban.com/subject/30206893](https://book.douban.com/subject/30206893) |
+| 九州出版社（2012） | **9.3 / 10** | 18,163 人 | [book.douban.com/subject/10434849](https://book.douban.com/subject/10434849) |
+| 岳麓书社（2024） | **9.4 / 10** | 1,712 人 | [book.douban.com/subject/36792415](https://book.douban.com/subject/36792415) |
 
 > 注：本书多个版本合计评价人数超过 **12 万人**，是所有书目中读者最广的。
 

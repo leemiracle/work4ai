@@ -61,7 +61,7 @@ DiNAT は *バックボーン* として使用できます。 「output_hidden_�
 `hidden_​​states` と `reshaped_hidden_​​states` の両方を出力します。 `reshape_hidden_​​states` は、`(batch_size, height, width, num_channels)` ではなく、`(batch, num_channels, height, width)` の形状を持っています。
 
 ノート：
-- DiNAT は、[NATTEN](https://github.com/SHI-Labs/NATTEN/) による近隣アテンションと拡張近隣アテンションの実装に依存しています。
+- DiNAT は、[NATTEN](https://github.com/SHI-Labs/NATTEN) による近隣アテンションと拡張近隣アテンションの実装に依存しています。
 [shi-labs.com/natten](https://shi-labs.com/natten) を参照して、Linux 用のビルド済みホイールを使用してインストールするか、`pip install natten` を実行してシステム上に構築できます。
 後者はコンパイルに時間がかかる可能性があることに注意してください。 NATTEN はまだ Windows デバイスをサポートしていません。
 - 現時点ではパッチ サイズ 4 のみがサポートされています。

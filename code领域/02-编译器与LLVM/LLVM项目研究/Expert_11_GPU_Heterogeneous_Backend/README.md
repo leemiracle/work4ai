@@ -543,14 +543,14 @@ Hexagon/VE/SystemZ/AMDGPU/NVPTX/LoongArch 都是单点后端。**单点后端的
 7. **[实测-E18/codegen.h]** 本项目实测 `phytvm/src/relay/backend/contrib/phytium/codegen.h`（`PhytiumConfig`：`mapper_bin_path`="npu_compiler"、`gpu_compiler_bin_path`="gpu_compiler"）。访问 2026-07-07。
 8. **[实测-target_kind.cc]** 本项目实测 `phytvm/src/target/target_kind.cc:439-458`（7 个 phytium target kind 注册）。访问 2026-07-07。
 9. **[实测-offload]** 本项目实测 `offload/` 目录（libomptarget/ + liboffload/ + plugins-nextgen/amdgpu/ + plugins-nextgen/cuda/）+ `PluginManager.cpp:243`（sm_80/sm_89 CUDA 兼容）+ `plugins-nextgen/amdgpu/rtl.cpp:3241`（gfx942 MI300）。访问 2026-07-07。
-10. **[官方-Khronos]** Khronos Group, *SPIR-V Specification*（[khronos.org/registry/spir-v](https://www.khronos.org/registry/spir-v/)）——SPIR-V 规范，Kernel + Shader 双环境，本专家 §2.5 依据。
-11. **[官方-AMD ROCm]** AMD, *ROCm Documentation*（[rocmdocs.amd.com](https://rocdocs.amd.com/)）——AMDGPU 后端 + ROCm-Device-Libs 共生关系，§2.2.3 依据。
-12. **[官方-NVIDIA nvcc]** NVIDIA, *CUDA Compiler Driver NVCC*（[docs.nvidia.com/cuda](https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/)）——nvcc 基于 EDG 前端，§2.3.2 依据。
-13. **[社区-eBPF 基金会]** eBPF Foundation（Linux Foundation）（[ebpf.foundation](https://ebpf.foundation/)）——BPF 规范 + BTF + libbpf 基金会托管，§2.4.3 依据。
+10. **[官方-Khronos]** Khronos Group, *SPIR-V Specification*（[khronos.org/registry/spir-v](https://www.khronos.org/registry/spir-v)）——SPIR-V 规范，Kernel + Shader 双环境，本专家 §2.5 依据。
+11. **[官方-AMD ROCm]** AMD, *ROCm Documentation*（[rocmdocs.amd.com](https://rocdocs.amd.com)）——AMDGPU 后端 + ROCm-Device-Libs 共生关系，§2.2.3 依据。
+12. **[官方-NVIDIA nvcc]** NVIDIA, *CUDA Compiler Driver NVCC*（[docs.nvidia.com/cuda](https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc)）——nvcc 基于 EDG 前端，§2.3.2 依据。
+13. **[社区-eBPF 基金会]** eBPF Foundation（Linux Foundation）（[ebpf.foundation](https://ebpf.foundation)）——BPF 规范 + BTF + libbpf 基金会托管，§2.4.3 依据。
 14. **[论文-CO-RE]** Andrii Nakryiko, *BPF CO-RE (Compile Once – Run Everywhere)*, LWN.net 2020 —— BPF CO-RE 设计，§2.4.2 `BPFAbstractMemberAccess` 依据。
 15. **[论文-AMDGPU]** Stanislav M. Ivanov 等, *AMD GPU Code Generation in LLVM* 相关讨论，LLVM Dev Meeting 2017-2023 —— AMDGPU 后端演进，§2.2 依据。
 16. **[论文-OpenMP target]** Alexey Bataev 等（IBM/LLVM），*OpenMP Target Offloading in Clang and LLVM*，OpenMP Architecture Review Board —— OpenMP target offload 实现，§2.6 依据。
-17. **[Discourse-LLVM]** LLVM Discourse（[discourse.llvm.org](https://discourse.llvm.org/)）——SPIR-V 进主线讨论、AMDGPU GlobalISel 迁移、OpenMP target 治理，各 § 印证。
+17. **[Discourse-LLVM]** LLVM Discourse（[discourse.llvm.org](https://discourse.llvm.org)）——SPIR-V 进主线讨论、AMDGPU GlobalISel 迁移、OpenMP target 治理，各 § 印证。
 18. **[GitHub]** SPIRV-LLVM-Translator（[github.com/KhronosGroup/SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator)）——SPIR-V 进主线前的外挂翻译工具，§2.5.1 历史依据。
 19. **[GitHub]** MLIR GPU/SPIRV dialect（`mlir/include/mlir/Dialect/GPU/` + `SPIRV/`）——MLIR 异构抽象层，§2.8 依据。
 20. **[第三方报告]** Jon Peddie Research, *GPU Market Share Report 2024* —— NVIDIA GPU 市占 80%+，§2.6.2 判断依据。

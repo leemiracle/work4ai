@@ -16,7 +16,7 @@ rendered properly in your Markdown viewer.
 
 # DeepSpeed
 
-[DeepSpeed](https://www.deepspeed.ai/) is designed to optimize distributed training for large models with data, model, pipeline, and even a combination of all three [parallelism](./perf_train_gpu_many) strategies to provide better memory efficiency and faster training speeds. This is achieved with the [Zero Redundancy Optimizer (ZeRO)](https://hf.co/papers/1910.02054) which consists of three stages.
+[DeepSpeed](https://www.deepspeed.ai) is designed to optimize distributed training for large models with data, model, pipeline, and even a combination of all three [parallelism](./perf_train_gpu_many) strategies to provide better memory efficiency and faster training speeds. This is achieved with the [Zero Redundancy Optimizer (ZeRO)](https://hf.co/papers/1910.02054) which consists of three stages.
 
 | ZeRO stage | description |
 |---|---|
@@ -28,7 +28,7 @@ Each stage progressively saves more memory, allowing really large models to fit 
 
 This guide walks you through setting up a DeepSpeed config file, how to enable its features in [`Trainer`], and deploy for training.
 
-Install DeepSpeed from either PyPI or Transformers. For more detailed installation instructions, refer to the DeepSpeed [installation](https://www.deepspeed.ai/tutorials/advanced-install/) or GitHUB [README](https://github.com/microsoft/deepspeed#installation).
+Install DeepSpeed from either PyPI or Transformers. For more detailed installation instructions, refer to the DeepSpeed [installation](https://www.deepspeed.ai/tutorials/advanced-install) or GitHUB [README](https://github.com/microsoft/deepspeed#installation).
 
 <hfoptions id="installation">
 <hfoption id="PyPI">
@@ -94,7 +94,7 @@ Decide the type of performance you're optimizing for, speed or memory, and then 
 Once you've decided on a ZeRO stage, set up a config file to enable DeepSpeed with [`Trainer`]. The config file contains all the parameters for how to configure and set up your training. When the training script is executed, DeepSpeed logs the configuration from [`Trainer`] to the console so you can see exactly what's being used.
 
 > [!TIP]
-> Find a complete list of DeepSpeed configuration options on the [DeepSpeed Configuration JSON](https://www.deepspeed.ai/docs/config-json/) reference. There are also practical examples of various DeepSpeed configuration examples in the [DeepSpeedExamples](https://github.com/microsoft/DeepSpeedExamples) main [DeepSpeed](https://github.com/microsoft/DeepSpeed) repository. Run the command below to quickly find specific examples.
+> Find a complete list of DeepSpeed configuration options on the [DeepSpeed Configuration JSON](https://www.deepspeed.ai/docs/config-json) reference. There are also practical examples of various DeepSpeed configuration examples in the [DeepSpeedExamples](https://github.com/microsoft/DeepSpeedExamples) main [DeepSpeed](https://github.com/microsoft/DeepSpeed) repository. Run the command below to quickly find specific examples.
 >
 > ```bash
 > git clone https://github.com/microsoft/DeepSpeedExamples
@@ -155,7 +155,7 @@ There are two ways to modify the config parameters.
 
 Each ZeRO stage config is defined in `zero_optimization`.
 
-For a more detailed explanation of each parameter, refer to the [DeepSpeed Configuration JSON](https://www.deepspeed.ai/docs/config-json/) reference. These parameters must be set up with DeepSpeed because [`Trainer`] doesn't provide equivalent command line arguments.
+For a more detailed explanation of each parameter, refer to the [DeepSpeed Configuration JSON](https://www.deepspeed.ai/docs/config-json) reference. These parameters must be set up with DeepSpeed because [`Trainer`] doesn't provide equivalent command line arguments.
 
 > [!WARNING]
 > DeepSpeed doesn't validate parameter names and any typos will fallback on the parameters default setting. Observe the DeepSpeed engine startup log messages to see what values are being used.
@@ -371,7 +371,7 @@ The example ZeRO-3 and ZeRO-Infinity config below sets most of the parameter val
 
 DeepSpeed's ALST/Ulysses sequence parallelism enables training with very long sequences by splitting the sequence across multiple GPUs. This is particularly useful for training large language models with very long sequence lengths.
 
-Arctic Long Sequence Training (ALST) uses a combination of sharding inputs along the sequence dimension and attention head parallelism. With this approach, you can train models with sequence lengths up to 500K tokens on a single H100 GPU, 3.7M on a single node, or 15M tokens on just four nodes with Llama-8B. The implementation described here enables one component of the full ALST system. For additional optimizations like TiledMLP and activation checkpoint offloading, refer to the [DeepSpeed ALST tutorial](https://www.deepspeed.ai/tutorials/ulysses-alst-sequence-parallelism/).
+Arctic Long Sequence Training (ALST) uses a combination of sharding inputs along the sequence dimension and attention head parallelism. With this approach, you can train models with sequence lengths up to 500K tokens on a single H100 GPU, 3.7M on a single node, or 15M tokens on just four nodes with Llama-8B. The implementation described here enables one component of the full ALST system. For additional optimizations like TiledMLP and activation checkpoint offloading, refer to the [DeepSpeed ALST tutorial](https://www.deepspeed.ai/tutorials/ulysses-alst-sequence-parallelism).
 
 > [!TIP]
 > For more detailed information about sequence parallelism, see the Accelerate [Sequence Parallelism](https://huggingface.co/docs/accelerate/concept_guides/sequence_parallelism) guide.
@@ -1110,7 +1110,7 @@ The `OVERFLOW!` error below is a result of the DeepSpeed loss scaler unable to f
 
 ## Resources
 
-DeepSpeed is a powerful technology for scaling large model training. To learn more about DeepSpeed, take a look at their [blog posts](https://www.microsoft.com/en-us/research/search/?q=deepspeed), [documentation](https://www.deepspeed.ai/getting-started/), and [GitHub](https://github.com/microsoft/deepspeed).
+DeepSpeed is a powerful technology for scaling large model training. To learn more about DeepSpeed, take a look at their [blog posts](https://www.microsoft.com/en-us/research/search/?q=deepspeed), [documentation](https://www.deepspeed.ai/getting-started), and [GitHub](https://github.com/microsoft/deepspeed).
 
 The papers below provide additional details about ZeRO.
 

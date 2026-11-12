@@ -1,7 +1,7 @@
 # Princeton MAT 345 · 代数 I 精读笔记
 
 > **教材**：Artin, *Algebra* (2nd ed) — Princeton 使用 Artin 体系
-> **参考**：[math.princeton.edu](https://www.math.princeton.edu/)；Dummit-Foote 对照
+> **参考**：[math.princeton.edu](https://www.math.princeton.edu)；Dummit-Foote 对照
 > **定位**：与 [MIT 18.701](../../mit-math-courses/18_701_algebra_I)（同为 Artin 体系）和 [Harvard 122](../../harvard-math-courses/math122_algebra_I)（DF 体系）高度重叠
 
 ---

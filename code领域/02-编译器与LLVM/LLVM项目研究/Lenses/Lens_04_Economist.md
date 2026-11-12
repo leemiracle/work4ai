@@ -264,7 +264,7 @@ Samuelson/Olson 预言公共物品会供给不足。**LLVM 为什么不短缺？
 ## 7. 延伸阅读（项目内交叉引用）
 
 - [`Expert_02_LLVM_IR_Design`](../Expert_02_LLVM_IR_Design/README.md)（待建，阶段 C）—— IR 工程质量。**Lens_04 与 E02 是"同一 IR、两种眼光"：E02 看 IR 语义之美，Lens_04 看 IR 作为平台的经济学力量。**
-- [`Expert_03_Pass_Framework`](../Expert_03_Pass_Framework/) —— Pass 框架。**Lens_04 §2.2 引用其"10 年 New PM 迁移债"作为飞腾被动挨打的例证。**
+- [`Expert_03_Pass_Framework`](../Expert_03_Pass_Framework) —— Pass 框架。**Lens_04 §2.2 引用其"10 年 New PM 迁移债"作为飞腾被动挨打的例证。**
 - [`Expert_17_Governance_License`](../Expert_17_Governance_License/README.md)（待建，阶段 F）—— 治理与 License。**Lens_04 给 E17 的事实以经济机制（为什么公司寡头治理、为什么 Apache 而非 GPL）。**
 - [`Expert_18_Phytium_Adaptation`](../Expert_18_Phytium_Adaptation/README.md)（待建，阶段 B）—— 飞腾适配收口。**Lens_04 §2.2 给 E18 的"飞腾消费清单"以"零话语权"的权力账。**
 - [`Lenses/Lens_03_SupplyChain.md`](./Lens_03_SupplyChain.md) —— 后端养主依赖图。**Lens_03 的拓扑 + Lens_04 的动机 = 完整供应链经济图。**

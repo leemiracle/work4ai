@@ -451,7 +451,7 @@ MMSeg 1.x unifies the interfaces of dataset, models, evaluation, and visualizati
 
    - Support TverskyLoss function
 
-5. **More documentation and tutorials**. We add a bunch of documentation and tutorials to help users get started more smoothly. Read it [here](https://mmsegmentation.readthedocs.io/en/1.x/).
+5. **More documentation and tutorials**. We add a bunch of documentation and tutorials to help users get started more smoothly. Read it [here](https://mmsegmentation.readthedocs.io/en/1.x).
 
 ### Breaking Changes
 

@@ -912,7 +912,7 @@ from multiprocessing import Process # or use mp.spawn
 # 使用多进程可以绕过 GIL 限制
 processes = [Process(target=compute_intensive) for _ in range(4)]
 ```
-2. 使用其他 Python 实现，或者更高版本的 [Python 3.12](https://www.reddit.com/r/Python/comments/1bcggx9/disabling_the_gil_option_has_been_merged_into/)。
+2. 使用其他 Python 实现，或者更高版本的 [Python 3.12](https://www.reddit.com/r/Python/comments/1bcggx9/disabling_the_gil_option_has_been_merged_into)。
   
 3. 将计算密集型任务用 C/C++ 实现：通过扩展模块方式使用，在 C 代码中可以释放 GIL。
 
@@ -971,7 +971,7 @@ Claude 画的矢量图属实无敌了...
 
 ### Double Binary Tree Algorithm
 
-从 NCCL 2.4 版本开始，对于node数较多的跨节点通信使用 [Double Binary Tree](https://developer.nvidia.com/blog/massively-scale-deep-learning-training-nccl-2-4/) 算法。相比于传统的 Tree Algorithm，构造了两棵互补的二叉树用于平衡通信开销。
+从 NCCL 2.4 版本开始，对于node数较多的跨节点通信使用 [Double Binary Tree](https://developer.nvidia.com/blog/massively-scale-deep-learning-training-nccl-2-4) 算法。相比于传统的 Tree Algorithm，构造了两棵互补的二叉树用于平衡通信开销。
 ![Double Binary Tree](./DBTree.jpg)
 1. 互补结构：每个节点在一棵树中是内部节点（参与数据发送和计算），在另一棵树中是叶子节点（只参与数据接收），确保每个节点的工作负载大致相同。
 

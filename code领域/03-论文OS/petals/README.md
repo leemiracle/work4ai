@@ -63,7 +63,7 @@ sudo docker run -p 31330:31330 --ipc host --gpus all --volume petals-cache:/cach
     python -m petals.cli.run_server --port 31330 meta-llama/Meta-Llama-3.1-405B-Instruct
 ```
 
-🍏 **macOS + Apple M1/M2 GPU.** Install [Homebrew](https://brew.sh/), then run these commands:
+🍏 **macOS + Apple M1/M2 GPU.** Install [Homebrew](https://brew.sh), then run these commands:
 
 ```bash
 brew install python

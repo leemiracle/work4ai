@@ -426,7 +426,7 @@ LTCM          2.90   🟡  内生危机
 >
 > 那么问题不是"如何避免危机"，而是"**如何让自己在危机中不是受害者而是幸存者甚至受益者**"。这正是 [`risk-and-uncertainty.md`](./risk-and-uncertainty.md) §四 塔勒布"反脆弱"的命题。
 >
-> 把你的回答写进 [`insights/`](../../insights/)。
+> 把你的回答写进 [`insights/`](../../insights)。
 
 ---
 

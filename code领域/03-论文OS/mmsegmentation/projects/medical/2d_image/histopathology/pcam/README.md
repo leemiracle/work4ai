@@ -12,7 +12,7 @@ PatchCamelyon is an image classification dataset. It consists of 327680 color im
 
 | Dataset Name                         | Anatomical Region | Task Type    | Modality       | Num. Classes | Train/Val/Test images | Train/Val/Test Labeled | Release Date | License                                                       |
 | ------------------------------------ | ----------------- | ------------ | -------------- | ------------ | --------------------- | ---------------------- | ------------ | ------------------------------------------------------------- |
-| [Pcam](https://opendatalab.com/PCam) | throax            | segmentation | histopathology | 2            | 327680/-/-            | yes/-/-                | 2018         | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| [Pcam](https://opendatalab.com/PCam) | throax            | segmentation | histopathology | 2            | 327680/-/-            | yes/-/-                | 2018         | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0) |
 
 |    Class Name     | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :---------------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

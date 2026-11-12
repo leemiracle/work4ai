@@ -16,7 +16,7 @@ rendered properly in your Markdown viewer.
 
 # Machine learning apps
 
-[Gradio](https://www.gradio.app/), a fast and easy library for building and sharing machine learning apps, is integrated with [`Pipeline`] to quickly create a simple interface for inference.
+[Gradio](https://www.gradio.app), a fast and easy library for building and sharing machine learning apps, is integrated with [`Pipeline`] to quickly create a simple interface for inference.
 
 Before you begin, make sure Gradio is installed.
 

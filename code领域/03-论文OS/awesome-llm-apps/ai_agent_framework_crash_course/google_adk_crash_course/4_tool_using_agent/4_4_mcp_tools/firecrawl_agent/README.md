@@ -265,7 +265,7 @@ adk web --debug
 - **[Firecrawl Documentation](https://docs.firecrawl.dev)** - Complete API reference
 - **[Firecrawl MCP Server](https://github.com/mendableai/firecrawl-mcp-server)** - Source code and examples
 - **[MCP Specification](https://modelcontextprotocol.io/docs/spec)** - Protocol details
-- **[ADK MCP Documentation](https://google.github.io/adk-docs/tools/mcp-tools/)** - Integration guide
+- **[ADK MCP Documentation](https://google.github.io/adk-docs/tools/mcp-tools)** - Integration guide
 
 ## 🎯 Real-World Applications
 

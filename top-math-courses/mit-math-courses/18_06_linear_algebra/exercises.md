@@ -1,7 +1,7 @@
 # MIT 18.06 · 习题集（精选 + 解题思路）
 
 > **来源**：MIT OCW 18.06 Problem Sets（公开免费）+ Strang 6th ed 习题 + 自编
-> **参考**：[ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/assignments](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/assignments/)
+> **参考**：[ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/assignments](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/assignments)
 
 ---
 

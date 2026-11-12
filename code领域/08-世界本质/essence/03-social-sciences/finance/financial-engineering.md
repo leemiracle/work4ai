@@ -2,7 +2,7 @@
 
 > **位置**：`03-social-sciences/finance/financial-engineering.md`  
 > **关联**：[`derivatives.md`](./derivatives.md)（衍生品定价母题——本文是其"工程化"延伸）+ [`fixed-income.md`](./fixed-income.md)（利率模型与贴现）+ [`markets-and-pricing.md`](./markets-and-pricing.md)（无套利原理）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（模型风险与肥尾）+ [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（数学化的代价）  
-> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（数学模型能"捕获"市场吗？）+ [`02-formal-sciences/probability/`](../../02-formal-sciences/probability/)（随机分析的数学基础）  
+> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（数学模型能"捕获"市场吗？）+ [`02-formal-sciences/probability/`](../../02-formal-sciences/probability)（随机分析的数学基础）  
 > **核心问题**：**如何用数学与工程方法，把不确定性"切割"成可定价、可交易、可管理的金融产品？** 本文给出从伊藤引理到 XVA 的完整工程链，并诚实标注这条链在 2008 年和无数次危机中断裂的地方。
 
 > **方法论声明**：本文遵循 essence 三层讲解（直觉→数学→代码），所有数值结论由 Python 3 + numpy/scipy 实算复现。**金融工程的核心是数值方法——不跑代码的金融工程是"幻觉式理解"。**

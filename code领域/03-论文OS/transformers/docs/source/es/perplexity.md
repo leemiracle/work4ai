@@ -26,7 +26,7 @@ $$\text{PPL}(X) = \exp \left\{ {-\frac{1}{t}\sum_i^t \log p_\theta (x_i|x_{<i}) 
 
 donde \\(\log p_\theta (x_i|x_{<i})\\) es el log-likelihood del token i-ésimo condicionado a los tokens precedentes \\(x_{<i}\\) según nuestro modelo. De manera intuitiva, se puede pensar en esto como una evaluación de la capacidad del modelo para predecir de manera uniforme entre el conjunto de tokens especificados en un corpus. Es importante destacar que el procedimiento de tokenización tiene un impacto directo en la perplejidad de un modelo, lo cual siempre debe tenerse en cuenta al comparar diferentes modelos.
 
-Esto también es equivalente a la exponenciación de la entropía cruzada entre los datos y las predicciones del modelo. Para obtener más intuición sobre la perplejidad y su relación con los Bits Por Carácter (BPC) y la compresión de datos, echa un vistazo a esta [fantástica publicación en el blog de "The Gradient"](https://thegradient.pub/understanding-evaluation-metrics-for-language-models/).
+Esto también es equivalente a la exponenciación de la entropía cruzada entre los datos y las predicciones del modelo. Para obtener más intuición sobre la perplejidad y su relación con los Bits Por Carácter (BPC) y la compresión de datos, echa un vistazo a esta [fantástica publicación en el blog de "The Gradient"](https://thegradient.pub/understanding-evaluation-metrics-for-language-models).
 
 ## Cálculo de PPL con modelos de longitud fija
 

@@ -119,8 +119,8 @@ Open <http://127.0.0.1:8000/> in your browser to see it.
 
 For additional features and advanced configurations, refer to the:
 
-- [MkDocs documentation](https://www.mkdocs.org/)
-- [Material for MkDocs documentation](https://squidfunk.github.io/mkdocs-material/) (the MkDocs theme we use)
+- [MkDocs documentation](https://www.mkdocs.org)
+- [Material for MkDocs documentation](https://squidfunk.github.io/mkdocs-material) (the MkDocs theme we use)
 
 ### Testing
 

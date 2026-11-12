@@ -194,7 +194,7 @@ python main.py init
 
 - 查看 完整文档（`./ARCHITECTURE.md`）
 - 阅读 [API 文档](http://localhost:8000/docs)
-- 探索 [知识库](../knowledge-base/)
+- 探索 [知识库](../knowledge-base)
 - 学习 [计划方法论](../docs/planning-methodology.md)
 
 ## 支持

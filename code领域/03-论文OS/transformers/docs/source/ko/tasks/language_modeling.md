@@ -29,7 +29,7 @@ rendered properly in your Markdown viewer.
 
 이 가이드에서는 다음 작업을 수행하는 방법을 안내합니다:
 
-1. [DistilGPT2](https://huggingface.co/distilbert/distilgpt2) 모델을 [ELI5](https://huggingface.co/datasets/eli5) 데이터 세트의 [r/askscience](https://www.reddit.com/r/askscience/) 하위 집합으로 미세 조정
+1. [DistilGPT2](https://huggingface.co/distilbert/distilgpt2) 모델을 [ELI5](https://huggingface.co/datasets/eli5) 데이터 세트의 [r/askscience](https://www.reddit.com/r/askscience) 하위 집합으로 미세 조정
 2. 미세 조정된 모델을 추론에 사용
 
 <Tip>

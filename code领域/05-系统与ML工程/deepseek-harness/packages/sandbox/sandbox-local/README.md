@@ -2,7 +2,7 @@
 
 English | [中文](README.zh.md)
 
-Local implementation of the [`dsh-sandbox`](../sandbox/) seam. It selects and caches one platform runner: Linux prefers a working `bwrap` then Landlock; macOS uses Seatbelt; Windows uses the ACL restricted-token runner. Multiple candidates are probed in order, while a sole candidate is selected directly.
+Local implementation of the [`dsh-sandbox`](../sandbox) seam. It selects and caches one platform runner: Linux prefers a working `bwrap` then Landlock; macOS uses Seatbelt; Windows uses the ACL restricted-token runner. Multiple candidates are probed in order, while a sole candidate is selected directly.
 
 The package root exports the default and named `LocalSandboxProvider` plugin and `Config`; platform profile builders stay internal.
 
@@ -21,7 +21,7 @@ The Windows rung keeps one deterministic write SID and standing ACE per workspac
   name: '@deepseek-ai/dsh-sandbox-local'
 ```
 
-Consumers: [`@deepseek-ai/dsh-bash-sandbox`](../../shell/bash-sandbox/); see [the acp-agent example](../../../examples/acp-agent/) for the runnable default composition.
+Consumers: [`@deepseek-ai/dsh-bash-sandbox`](../../shell/bash-sandbox); see [the acp-agent example](../../../examples/acp-agent) for the runnable default composition.
 
 ## Model Experience
 

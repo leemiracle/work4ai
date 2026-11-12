@@ -31,7 +31,7 @@ export function apply(ctx: Context, config: Config) {
 }
 ```
 
-The exported `Config` is both a TypeScript interface and a runtime schema with the same name — consumers get the type, Cordis gets the validator. This repo uses [Schemastery](https://github.com/shigma/schemastery) for schemas; Cordis itself accepts any [Standard Schema](https://standardschema.dev/) validator, so a plain object exported as `Config` will not work.
+The exported `Config` is both a TypeScript interface and a runtime schema with the same name — consumers get the type, Cordis gets the validator. This repo uses [Schemastery](https://github.com/shigma/schemastery) for schemas; Cordis itself accepts any [Standard Schema](https://standardschema.dev) validator, so a plain object exported as `Config` will not work.
 
 Configure it:
 

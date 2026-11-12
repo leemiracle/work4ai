@@ -309,7 +309,7 @@
 - **Akerlof & Shiller**（2009）《动物精神》——心理学如何驱动经济
 
 ### 中文资源（项目已有）
-- **黄奇帆**《分析与思考》——中国金融体系的实战视角（见 [`analysis/`](../../analysis/) 政治书目交叉）
+- **黄奇帆**《分析与思考》——中国金融体系的实战视角（见 [`analysis/`](../../analysis) 政治书目交叉）
 - **兰小欢**《置身事内》——中国财政金融的微观机制（已有 EPUB 提取）
 - **陈云文选**——"鸟笼经济"的金融控制思想（见 [`analysis/chenyun-economic-thought.md`](../../analysis/chenyun-economic-thought.md)）
 
@@ -318,12 +318,12 @@
 ## 九、关联
 
 - 学科主笔记：[`_overview.md`](./_overview.md)
-- 哲学之根：[`00-philosophy/`](../../00-philosophy/)——尤其 [`ethics/`](../../00-philosophy/ethics/)（价值、正义）+ [`epistemology`](../../00-philosophy/epistemology.md)（不确定性、可预测性）
-- 金钱专题：[`07-worldly-power/money/`](../../07-worldly-power/money/)
-- 资本专题：[`07-worldly-power/capital/`](../../07-worldly-power/capital/)
+- 哲学之根：[`00-philosophy/`](../../00-philosophy)——尤其 [`ethics/`](../../00-philosophy/ethics)（价值、正义）+ [`epistemology`](../../00-philosophy/epistemology.md)（不确定性、可预测性）
+- 金钱专题：[`07-worldly-power/money/`](../../07-worldly-power/money)
+- 资本专题：[`07-worldly-power/capital/`](../../07-worldly-power/capital)
 - 大问题：[`questions/big-questions.md`](../../questions/big-questions.md)——Q10 金钱、Q14 概率、Q15 决策（+ 新增金融大问题）
-- 跨学科：[`08-cross-cutting/`](../../08-cross-cutting/)——与熵、反馈、博弈的连接
-- 系统论连接：[`06-systems/complexity/`](../../06-systems/complexity/) + [`06-systems/feedback/`](../../06-systems/feedback/)
+- 跨学科：[`08-cross-cutting/`](../../08-cross-cutting)——与熵、反馈、博弈的连接
+- 系统论连接：[`06-systems/complexity/`](../../06-systems/complexity) + [`06-systems/feedback/`](../../06-systems/feedback)
 - 政治学交叉：[`03-social-sciences/politics/_overview.md`](../politics/_overview.md)——政治经济学
 
 ---

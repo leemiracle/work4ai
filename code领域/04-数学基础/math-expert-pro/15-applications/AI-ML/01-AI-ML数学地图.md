@@ -1,7 +1,7 @@
 # AI/ML 数学地图：从数学概念到机器学习实践
 
 > 这份指南把"你学的数学"映射到"AI/ML 怎么用它"。学完一个数学概念，来这里查它在你熟悉的领域长什么样。
-> 配套代码案例：[代码库/](../代码库/)（PCA / PageRank / SVD / 梯度下降）
+> 配套代码案例：[代码库/](../代码库)（PCA / PageRank / SVD / 梯度下降）
 
 ---
 
@@ -37,7 +37,7 @@
 
 **立刻能跑**：[01-PCA](../代码库/01-PCA特征值_人脸压缩.py) + [03-SVD推荐](../代码库/03-SVD_推荐系统.py)
 
-**学习位置**：[01-track/stage-1](../../01-track/stage-1-本科核心/) 的 LADR（Linear Algebra Done Right）
+**学习位置**：[01-track/stage-1](../../01-track/stage-1-本科核心) 的 LADR（Linear Algebra Done Right）
 
 ### 2. 微积分 / 优化（⭐⭐⭐）
 **为什么核心**：训练 = 沿梯度方向最小化损失。
@@ -123,22 +123,22 @@
 ## 🚀 给 AI/ML 工程师的学习建议
 
 ### 如果你只想够用（2-3 月）
-1. 线性代数：LADR 全本（[01-track](../../01-track/stage-1-本科核心/)）
+1. 线性代数：LADR 全本（[01-track](../../01-track/stage-1-本科核心)）
 2. 微积分 + 优化：Spivak + Boyd 凸优化前 5 章
 3. 概率：Ross 前 8 章
-4. 跑通 [代码库/](../代码库/) 全部 6 个案例
+4. 跑通 [代码库/](../代码库) 全部 6 个案例
 
 ### 如果你想做 ML 理论研究（1-2 年）
 1. 上述基础 + 泛函分析（Royden）
 2. 信息论（Cover-Thomas）
 3. 随机过程（Karatzas-Shreve 选读）
-4. 关注 [14-frontier/热点方向追踪/](../../14-frontier/热点方向追踪/) 的"深度学习理论"方向
-5. 用 [17-decision/](../../17-decision/) 做方向决策
+4. 关注 [14-frontier/热点方向追踪/](../../14-frontier/热点方向追踪) 的"深度学习理论"方向
+5. 用 [17-decision/](../../17-decision) 做方向决策
 
 ### 如果你想用 AI 做数学（前沿）
 1. 学 [Lean 形式化](../../14-frontier/AI-for-Math/02-Lean形式化数学入门.md)
 2. 关注 AlphaProof 进展
-3. 看 [14-frontier/AI-for-Math/](../../14-frontier/AI-for-Math/)
+3. 看 [14-frontier/AI-for-Math/](../../14-frontier/AI-for-Math)
 
 ---
 
@@ -146,12 +146,12 @@
 
 | 你想... | 跳到 |
 |---------|------|
-| 学线性代数基础 | [01-track/stage-1-本科核心/](../../01-track/stage-1-本科核心/) 的 LADR |
-| 看数学概念的多重表征 | [04-concepts/](../../04-concepts/) |
-| 追 ML 理论前沿 | [14-frontier/热点方向追踪/](../../14-frontier/热点方向追踪/) |
-| 选 ML 研究方向 | [17-decision/](../../17-decision/) |
-| 看 ML 工程师的数学家透镜 | [03-lens-practitioners/](../../03-lens-practitioners/) |
-| 找 ML 数学教材 | [09-crosstext/](../../09-crosstext/) + [18-resources/](../../18-resources/) |
+| 学线性代数基础 | [01-track/stage-1-本科核心/](../../01-track/stage-1-本科核心) 的 LADR |
+| 看数学概念的多重表征 | [04-concepts/](../../04-concepts) |
+| 追 ML 理论前沿 | [14-frontier/热点方向追踪/](../../14-frontier/热点方向追踪) |
+| 选 ML 研究方向 | [17-decision/](../../17-decision) |
+| 看 ML 工程师的数学家透镜 | [03-lens-practitioners/](../../03-lens-practitioners) |
+| 找 ML 数学教材 | [09-crosstext/](../../09-crosstext) + [18-resources/](../../18-resources) |
 
 ---
 

@@ -29,7 +29,7 @@ the left. This means the model cannot see future tokens. GPT-2 is an example of 
 
 This guide will show you how to:
 
-1. Finetune [DistilGPT2](https://huggingface.co/distilbert/distilgpt2) on the [r/askscience](https://www.reddit.com/r/askscience/) subset of the [ELI5](https://huggingface.co/datasets/dany0407/eli5_category) dataset.
+1. Finetune [DistilGPT2](https://huggingface.co/distilbert/distilgpt2) on the [r/askscience](https://www.reddit.com/r/askscience) subset of the [ELI5](https://huggingface.co/datasets/dany0407/eli5_category) dataset.
 2. Use your finetuned model for inference.
 
 <Tip>

@@ -13,7 +13,7 @@ With this inference demo, you can explore the capabilities of the Segment Anythi
 
 ### Installation
 
-We assume that you have already installed PyTorch. If not, please follow the instructions on the [PyTorch website](https://pytorch.org/).
+We assume that you have already installed PyTorch. If not, please follow the instructions on the [PyTorch website](https://pytorch.org).
 
 **1. Install MMEngine & MMCV**
 

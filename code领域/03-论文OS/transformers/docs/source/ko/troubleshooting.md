@@ -24,7 +24,7 @@ rendered properly in your Markdown viewer.
 
 <Youtube id="S2EEG3JIt2A"/>
 
-1. [포럼](https://discuss.huggingface.co/)에서 도움을 요청하세요. [Beginners](https://discuss.huggingface.co/c/beginners/5) 또는 [🤗 Transformers](https://discuss.huggingface.co/c/transformers/9)와 같은 특정 카테고리에 질문을 게시할 수 있습니다. 재현 가능한 코드와 함께 잘 서술된 포럼 게시물을 작성하여 여러분의 문제가 해결될 가능성을 극대화하세요!
+1. [포럼](https://discuss.huggingface.co)에서 도움을 요청하세요. [Beginners](https://discuss.huggingface.co/c/beginners/5) 또는 [🤗 Transformers](https://discuss.huggingface.co/c/transformers/9)와 같은 특정 카테고리에 질문을 게시할 수 있습니다. 재현 가능한 코드와 함께 잘 서술된 포럼 게시물을 작성하여 여러분의 문제가 해결될 가능성을 극대화하세요!
 
 <Youtube id="_PAli-V4wj0"/>
 

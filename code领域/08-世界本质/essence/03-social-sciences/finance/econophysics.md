@@ -1,7 +1,7 @@
 # 金融物理 · Econophysics
 
 > **位置**：`03-social-sciences/finance/econophysics.md`  
-> **关联**：[`_overview.md`](./_overview.md)（金融地图 + 方法论表）+ [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（哲学锚点）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（肥尾 + Mandelbrot 批判）+ [`06-systems/complexity/`](../../06-systems/complexity/)（涌现、相变、SOC）+ [`01-natural-sciences/physics/`](../../01-natural-sciences/physics/)（统计力学、Ising 模型）  
+> **关联**：[`_overview.md`](./_overview.md)（金融地图 + 方法论表）+ [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（哲学锚点）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（肥尾 + Mandelbrot 批判）+ [`06-systems/complexity/`](../../06-systems/complexity)（涌现、相变、SOC）+ [`01-natural-sciences/physics/`](../../01-natural-sciences/physics)（统计力学、Ising 模型）  
 > **哲学根源**：[`00-philosophy/epistemology`](../../00-philosophy/epistemology.md)（规律的普适性 + 物理类比的认识论合法性）  
 > **核心问题**：**市场是物理系统吗？**——如果市场像气体、像磁铁、像地震，那么物理学的统计工具就能直接搬来用。本章用代码逐一验证这条赌注的得失。
 
@@ -740,9 +740,9 @@ M     α          σ/σ_rand    解读
 | **金融哲学** | [`_philosophy-of-finance.md`](./_philosophy-of-finance.md) 假设 3（方差有限）+ 极限 2（可预测性） | 金融物理直接挑战这些假设 |
 | **风险哲学** | [`risk-and-uncertainty.md`](./risk-and-uncertainty.md) §三（肥尾）+ §四（Mandelbrot 批判） | 本章是肥尾/狂野随机性的深度展开 |
 | **市场与定价** | [`markets-and-pricing.md`](./markets-and-pricing.md) | EMH 的统计检验（Hurst、ACF） |
-| **复杂系统** | [`06-systems/complexity/`](../../06-systems/complexity/) | 涌现、相变、SOC 是共同语言 |
-| **物理学** | [`01-natural-sciences/physics/`](../../01-natural-sciences/physics/) + [`_philosophy-of-physics.md`](../../01-natural-sciences/physics/_philosophy-of-physics.md) | 统计力学、Ising 模型的来源 |
-| **概率论** | [`02-formal-sciences/probability/`](../../02-formal-sciences/probability/) | 幂律、稳定分布、布朗运动的数学基础 |
+| **复杂系统** | [`06-systems/complexity/`](../../06-systems/complexity) | 涌现、相变、SOC 是共同语言 |
+| **物理学** | [`01-natural-sciences/physics/`](../../01-natural-sciences/physics) + [`_philosophy-of-physics.md`](../../01-natural-sciences/physics/_philosophy-of-physics.md) | 统计力学、Ising 模型的来源 |
+| **概率论** | [`02-formal-sciences/probability/`](../../02-formal-sciences/probability) | 幂律、稳定分布、布朗运动的数学基础 |
 | **认识论** | [`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md) | 物理类比的合法性 + Lucas 批判 |
 
 ### 阅读推荐

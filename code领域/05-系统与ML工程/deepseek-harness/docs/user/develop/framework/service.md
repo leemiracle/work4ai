@@ -25,7 +25,7 @@ export const inject = ['tools']
 
 export function apply(ctx: Context) {
   // ctx.tools exists and is ready here.
-  ctx.tools.register(/* ... */)
+  ctx.tools.register(/* ... *)
 }
 ```
 
@@ -145,4 +145,4 @@ The repository generates the service names, public methods, and source locations
 ## Next steps
 
 - [Event system](./events.md) — communicate between plugins without tight coupling
-- [Capability layering](../practice/) — use services as capability interfaces
+- [Capability layering](../practice) — use services as capability interfaces

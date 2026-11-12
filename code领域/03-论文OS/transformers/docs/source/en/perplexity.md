@@ -31,7 +31,7 @@ where $\log p_\theta (x_i|x_{<i})$ is the log-likelihood of the ith token condit
 
 This is also equivalent to the exponentiation of the cross-entropy between the data and model predictions. For more
 intuition about perplexity and its relationship to Bits Per Character (BPC) and data compression, check out this
-[fantastic blog post on The Gradient](https://thegradient.pub/understanding-evaluation-metrics-for-language-models/).
+[fantastic blog post on The Gradient](https://thegradient.pub/understanding-evaluation-metrics-for-language-models).
 
 ## Calculating PPL with fixed-length models
 

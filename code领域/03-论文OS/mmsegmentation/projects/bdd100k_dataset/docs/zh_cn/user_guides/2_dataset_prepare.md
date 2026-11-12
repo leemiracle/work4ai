@@ -1,6 +1,6 @@
 ## BDD100K
 
-- 可以从[官方网站](https://bdd-data.berkeley.edu/) 下载 BDD100K数据集（语义分割任务主要是10K数据集），按照官网要求注册并登陆后，数据可以在[这里](https://bdd-data.berkeley.edu/portal.html#download)找到。
+- 可以从[官方网站](https://bdd-data.berkeley.edu) 下载 BDD100K数据集（语义分割任务主要是10K数据集），按照官网要求注册并登陆后，数据可以在[这里](https://bdd-data.berkeley.edu/portal.html#download)找到。
 
 - 图像数据对应的名称是是`10K Images`, 语义分割标注对应的名称是`Segmentation`
 

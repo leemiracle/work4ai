@@ -44,7 +44,7 @@ uv pip install -e .
 
 !!! example "Troubleshooting"
     If the build fails with errors like the following where standard C++ headers cannot be found, try to remove and reinstall your
-    [Command Line Tools for Xcode](https://developer.apple.com/download/all/).
+    [Command Line Tools for Xcode](https://developer.apple.com/download/all).
 
     ```text
     [...] fatal error: 'map' file not found

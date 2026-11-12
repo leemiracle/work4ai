@@ -21,7 +21,7 @@ See the table below for additional torchao features.
 |--------|-------------|
 | **Quantization Aware Training (QAT)** | Train quantized models with minimal accuracy loss (see [QAT README](https://github.com/pytorch/ao/blob/main/torchao/quantization/qat/README.md)) |
 | **Float8 Training** | High-throughput training with float8 formats (see [torchtitan](https://github.com/pytorch/torchtitan/blob/main/docs/float8.md) and [Accelerate](https://huggingface.co/docs/accelerate/usage_guides/low_precision_training#configuring-torchao) docs) |
-| **Sparsity Support** | Semi-structured (2:4) sparsity for faster inference (see [Accelerating Neural Network Training with Semi-Structured (2:4) Sparsity](https://pytorch.org/blog/accelerating-neural-network-training/) blog post) |
+| **Sparsity Support** | Semi-structured (2:4) sparsity for faster inference (see [Accelerating Neural Network Training with Semi-Structured (2:4) Sparsity](https://pytorch.org/blog/accelerating-neural-network-training) blog post) |
 | **Optimizer Quantization** | Reduce optimizer state memory with 4 and 8-bit variants of Adam |
 | **KV Cache Quantization** | Enables long context inference with lower memory (see [KV Cache Quantization](https://github.com/pytorch/ao/blob/main/torchao/_models/llama/README.md)) |
 | **Custom Kernels Support** | use your own `torch.compile` compatible ops |

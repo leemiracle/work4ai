@@ -55,4 +55,4 @@ Euler 的精神（非原话，是后人概括）：**一个结论被多次独立
 - 阅读时多停顿，先自己想「我会怎么证」再看路径——Pólya 启发法的真正训练发生在「自己想」那几秒。
 - 看完一个项目后，回头问自己 Thurston 五模态问题：我能用语言、视觉、逻辑、算法、类比这五种方式分别解释这个结论吗？
 
-> 📖 配套阅读：[02-lens-mathematicians/过程层/问题驱动轴-Lockhart-Polya.md](../02-lens-mathematicians/过程层/)（Lockhart/Pólya 方法论透镜）、[05-history/01-无穷之争-芝诺到勒贝格.md](../05-history/01-无穷之争-芝诺到勒贝格.md)（历史脉络风格标杆）。
+> 📖 配套阅读：[02-lens-mathematicians/过程层/问题驱动轴-Lockhart-Polya.md](../02-lens-mathematicians/过程层)（Lockhart/Pólya 方法论透镜）、[05-history/01-无穷之争-芝诺到勒贝格.md](../05-history/01-无穷之争-芝诺到勒贝格.md)（历史脉络风格标杆）。

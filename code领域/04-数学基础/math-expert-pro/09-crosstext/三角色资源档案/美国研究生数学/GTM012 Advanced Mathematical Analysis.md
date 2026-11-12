@@ -17,11 +17,11 @@
 
 **视频课程**：
 - [3Blue1Brown《微积分的本质》](https://www.3blue1brown.com/topics/calculus)
-- [MIT OCW 18.01 单变量微积分](https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/)
+- [MIT OCW 18.01 单变量微积分](https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006)
 - [Khan Academy Calculus](https://www.khanacademy.org/math/calculus-1)
 
 **经典论文/参考**：
-- [Cauchy 1821 原始论文（Cours d'Analyse）](https://gallica.bnf.fr/)
+- [Cauchy 1821 原始论文（Cours d'Analyse）](https://gallica.bnf.fr)
 - [Wigner 1960《数学的不合理有效性》](https://www.maths.ed.ac.uk/~v1ranick/papers/wigner.pdf)
 
 ### 🔧 工程师优先（实战代码）
@@ -34,12 +34,12 @@
 ### 🔬 研究员优先（形式化 + 社区）
 
 **Lean 形式化**：
-- [Mathlib.Topology.Continuity](https://leanprover-community.github.io/mathlib4_docs/)
-- [Mathlib.Deriv](https://leanprover-community.github.io/mathlib4_docs/)
+- [Mathlib.Topology.Continuity](https://leanprover-community.github.io/mathlib4_docs)
+- [Mathlib.Deriv](https://leanprover-community.github.io/mathlib4_docs)
 
 **学术社区**：
 - [Math StackExchange [calculus]](https://math.stackexchange.com/questions/tagged/calculus)
-- [r/calculus](https://www.reddit.com/r/calculus/)
+- [r/calculus](https://www.reddit.com/r/calculus)
 
 ## 🎯 综合学习路径
 

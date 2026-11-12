@@ -634,7 +634,7 @@ test_this1.py::TestMathUnitTest::test_floor_2_large_fraction
 pytest test_this1.py::TestMathUnitTest::test_floor_0_negative  test_this1.py::TestMathUnitTest::test_floor_1_integer
 ```
 
-`transformers`의 개발자 종속성에 이미 있는 [parameterized](https://pypi.org/project/parameterized/) 모듈은
+`transformers`의 개발자 종속성에 이미 있는 [parameterized](https://pypi.org/project/parameterized) 모듈은
 `unittests`와 `pytest` 테스트 모두에서 작동합니다.
 
 그러나 테스트가 `unittest`가 아닌 경우 `pytest.mark.parametrize`를 사용할 수 있습니다(이미 있는 일부 테스트에서 사용되는 경우도 있습니다.

@@ -12,7 +12,7 @@ This regular-challenge dataset was provided by Sun Yat-sen Ophthalmic Center, Su
 
 | Dataset name                                                                        | Anatomical region | Task type    | Modality        | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                         |
 | ----------------------------------------------------------------------------------- | ----------------- | ------------ | --------------- | ------------ | --------------------- | ---------------------- | ------------ | --------------------------------------------------------------- |
-| [GammaTask3](https://aistudio.baidu.com/aistudio/competition/detail/121/0/datasets) | eye               | segmentation | fundus photophy | 3            | 100/-/100             | yes/-/-                | 2021         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| [GammaTask3](https://aistudio.baidu.com/aistudio/competition/detail/121/0/datasets) | eye               | segmentation | fundus photophy | 3            | 100/-/100             | yes/-/-                | 2021         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

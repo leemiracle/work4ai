@@ -13,13 +13,13 @@ https://github.com/user-attachments/assets/c12ee305-86fe-4f71-9219-57c7f438f291
 - **Streamlit Interface**: User-friendly interface for queries and document uploads.
 
 ## Technologies Used
-- **Programming Language**: [Python 3.10+](https://www.python.org/downloads/release/python-31011/)
-- **Framework**: [LangChain](https://www.langchain.com/)
-- **Database**: [ChromaDB](https://www.trychroma.com/)
+- **Programming Language**: [Python 3.10+](https://www.python.org/downloads/release/python-31011)
+- **Framework**: [LangChain](https://www.langchain.com)
+- **Database**: [ChromaDB](https://www.trychroma.com)
 - **Models**:
   - Embeddings: [Google Gemini API (embedding-001)](https://ai.google.dev/gemini-api/docs/embeddings)
   - Chat: [Google Gemini API (gemini-1.5-pro)](https://ai.google.dev/gemini-api/docs/models/gemini#gemini-1.5-pro)
-- **PDF Processing**: [PyPDFLoader](https://python.langchain.com/docs/integrations/document_loaders/pypdfloader/)
+- **PDF Processing**: [PyPDFLoader](https://python.langchain.com/docs/integrations/document_loaders/pypdfloader)
 - **Document Splitter**: [SentenceTransformersTokenTextSplitter](https://python.langchain.com/api_reference/text_splitters/sentence_transformers/langchain_text_splitters.sentence_transformers.SentenceTransformersTokenTextSplitter.html)
 
 ## Requirements

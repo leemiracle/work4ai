@@ -1,7 +1,7 @@
 # Harvard Math 122 · 抽象代数 I 精读笔记
 
 > **教材**：Dummit & Foote, *Abstract Algebra* (3rd ed) — Harvard 标准教材
-> **参考**：[Harvard Math 122](https://www.math.harvard.edu/)；Artin *Algebra* 对照
+> **参考**：[Harvard Math 122](https://www.math.harvard.edu)；Artin *Algebra* 对照
 > **特色**：Dummit-Foote 体系比 Artin 更全面，习题丰富，适合系统性学习
 
 ---

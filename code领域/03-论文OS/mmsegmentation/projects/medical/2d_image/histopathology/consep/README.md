@@ -2,7 +2,7 @@
 
 ## Description
 
-This project supports **`Colorectal Nuclear Segmentation and Phenotypes (CoNSeP) Dataset`**, which can be downloaded from [here](https://warwick.ac.uk/fac/cross_fac/tia/data/hovernet/).
+This project supports **`Colorectal Nuclear Segmentation and Phenotypes (CoNSeP) Dataset`**, which can be downloaded from [here](https://warwick.ac.uk/fac/cross_fac/tia/data/hovernet).
 
 ### Dataset Overview
 
@@ -12,7 +12,7 @@ The CoNSeP (Colon Segmentation and Phenotyping) dataset consists of 41 H&E stain
 
 | Dataset name                                             | Anatomical region | Task type    | Modality       | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License |
 | -------------------------------------------------------- | ----------------- | ------------ | -------------- | ------------ | --------------------- | ---------------------- | ------------ | ------- |
-| [CoNIC202](https://conic-challenge.grand-challenge.org/) | abdomen           | segmentation | histopathology | 7            | 4981/-/-              | yes/-/-                | 2022         | -       |
+| [CoNIC202](https://conic-challenge.grand-challenge.org) | abdomen           | segmentation | histopathology | 7            | 4981/-/-              | yes/-/-                | 2022         | -       |
 
 |           Class Name            | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :-----------------------------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

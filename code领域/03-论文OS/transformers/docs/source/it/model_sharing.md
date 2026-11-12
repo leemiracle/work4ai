@@ -37,7 +37,7 @@ Per condividere un modello con la community, hai bisogno di un account su [huggi
 
 Ogni repository nel Model Hub si comporta come un tipico repository di GitHub. I nostri repository offrono il versionamento, la cronologia dei commit, e la possibilità di visualizzare le differenze.
 
-Il versionamento all'interno del Model Hub è basato su git e [git-lfs](https://git-lfs.github.com/). In altre parole, puoi trattare un modello come un unico repository, consentendo un maggiore controllo degli accessi e maggiore scalabilità. Il controllo delle versioni consente *revisions*, un metodo per appuntare una versione specifica di un modello con un hash di commit, un tag o un branch.
+Il versionamento all'interno del Model Hub è basato su git e [git-lfs](https://git-lfs.github.com). In altre parole, puoi trattare un modello come un unico repository, consentendo un maggiore controllo degli accessi e maggiore scalabilità. Il controllo delle versioni consente *revisions*, un metodo per appuntare una versione specifica di un modello con un hash di commit, un tag o un branch.
 
 Come risultato, puoi caricare una specifica versione di un modello con il parametro `revision`:
 

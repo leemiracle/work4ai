@@ -249,7 +249,7 @@ The sun.</s>
 {{ eos_token }}
 ```
 
-如果你之前不了解[Jinja template](https://jinja.palletsprojects.com/en/3.1.x/templates/)。
+如果你之前不了解[Jinja template](https://jinja.palletsprojects.com/en/3.1.x/templates)。
 Jinja是一种模板语言，允许你编写简单的代码来生成文本。
 在许多方面，代码和语法类似于Python。在纯Python中，这个模板看起来会像这样：
 ```python

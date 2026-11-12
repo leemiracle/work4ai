@@ -57,7 +57,7 @@ $$
 - [Give me BF16 or Give Me Death，当下量化方法的全面评测](https://zhuanlan.zhihu.com/p/5485556270)
 - [AWQ：模型量化应当关注激活值](https://zhuanlan.zhihu.com/p/942485319)
 - [[原创][深度][PyTorch] DDP系列第一篇：入门教程](https://zhuanlan.zhihu.com/p/178402798)：虽然我没学明白 DDP 的内容，我只是借此学习了下 GIL 和 ring all reduce，这一步刊载于 [torch-distributed 的后记](./distributed/torch-distributed/readme.md#gil)。
-- [nvidia-smi命令详解和一些高阶技巧介绍](https://www.yourmetaverse.cn/deep_learning/199/)：主要是一些网络拓扑，在我本机的结果记录在 [nccl 部分](./distributed/nccl/readme.md#nvlink-查询)。
+- [nvidia-smi命令详解和一些高阶技巧介绍](https://www.yourmetaverse.cn/deep_learning/199)：主要是一些网络拓扑，在我本机的结果记录在 [nccl 部分](./distributed/nccl/readme.md#nvlink-查询)。
 
 
 ## 其他

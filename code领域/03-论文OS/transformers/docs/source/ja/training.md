@@ -257,7 +257,7 @@ PyTorchから[`AdamW`](https://pytorch.org/docs/stable/generated/torch.optim.Ada
 
 <Tip>
 
-クラウドGPUが利用できない場合、[Colaboratory](https://colab.research.google.com/)や[SageMaker StudioLab](https://studiolab.sagemaker.aws/)などのホストされたノートブックを使用して無料でGPUにアクセスできます。
+クラウドGPUが利用できない場合、[Colaboratory](https://colab.research.google.com)や[SageMaker StudioLab](https://studiolab.sagemaker.aws)などのホストされたノートブックを使用して無料でGPUにアクセスできます。
 
 </Tip>
 
@@ -265,7 +265,7 @@ PyTorchから[`AdamW`](https://pytorch.org/docs/stable/generated/torch.optim.Ada
 
 ### トレーニングループ
 
-トレーニングの進捗を追跡するために、[tqdm](https://tqdm.github.io/)ライブラリを使用してトレーニングステップの数に対して進行状況バーを追加します：
+トレーニングの進捗を追跡するために、[tqdm](https://tqdm.github.io)ライブラリを使用してトレーニングステップの数に対して進行状況バーを追加します：
 
 ```py
 >>> from tqdm.auto import tqdm

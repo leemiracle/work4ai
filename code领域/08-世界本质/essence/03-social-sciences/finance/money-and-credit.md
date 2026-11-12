@@ -1,7 +1,7 @@
 # 货币与信用 · Money and Credit
 
 > **位置**：`03-social-sciences/finance/money-and-credit.md`  
-> **关联**：哲学锚点 [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（§一 对象 1-2、§四 极限 3）+ 学科总图 [`_overview.md`](./_overview.md)（问题 3、问题 5）+ 金钱专题 [`07-worldly-power/money/`](../../07-worldly-power/money/) + 资本 [`07-worldly-power/capital/`](../../07-worldly-power/capital/)  
+> **关联**：哲学锚点 [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（§一 对象 1-2、§四 极限 3）+ 学科总图 [`_overview.md`](./_overview.md)（问题 3、问题 5）+ 金钱专题 [`07-worldly-power/money/`](../../07-worldly-power/money) + 资本 [`07-worldly-power/capital/`](../../07-worldly-power/capital)  
 > **哲学根源**：[`00-philosophy/ontology.md`](../../00-philosophy/ontology.md)（货币作为制度性事实）+ [`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（信用的可预测性）  
 > **大问题**：[`questions/big-questions.md`](../../questions/big-questions.md) **Q10 · 金钱的本质是什么**  
 > **已有洞察**：[`insights/2026-07/2026-07-12-four-pillars-of-money.md`](../../insights/2026-07/2026-07-12-four-pillars-of-money.md)（金钱四面镜）
@@ -348,7 +348,7 @@ plt.tight_layout(); plt.savefig("/tmp/yield_curve.png", dpi=110)
 | **挤兑** | 信心崩溃→承诺不可兑换 | 银行挤兑 = 纳什均衡的协调失败 | 每个人"理性地"取钱→集体毁灭 |
 | **通胀** | 货币贬值（信号噪声增大） | 信息熵增、测量仪器精度退化 | 计量单位本身在被侵蚀 |
 
-> **深层连接**：货币作为"集体意向性构造"和 [`06-systems/complexity/`](../../06-systems/complexity/) 的"涌现秩序"同构——没有任何个体设计了它的价值，但价值产生了。信用周期的正反馈崩塌，和 [`06-systems/feedback/`](../../06-systems/feedback/) 完全一致。
+> **深层连接**：货币作为"集体意向性构造"和 [`06-systems/complexity/`](../../06-systems/complexity) 的"涌现秩序"同构——没有任何个体设计了它的价值，但价值产生了。信用周期的正反馈崩塌，和 [`06-systems/feedback/`](../../06-systems/feedback) 完全一致。
 
 ---
 
@@ -403,9 +403,9 @@ plt.tight_layout(); plt.savefig("/tmp/yield_curve.png", dpi=110)
 - **学科总图**：[`_overview.md`](./_overview.md) 问题 3（货币本质）+ 问题 5（金融稳定）+ 货币银行学分支
 - **金面镜**：[`insights/2026-07/2026-07-12-four-pillars-of-money.md`](../../insights/2026-07/2026-07-12-four-pillars-of-money.md)——四大哲学支柱看金钱
 - **大问题**：[`questions/big-questions.md`](../../questions/big-questions.md) Q10（金钱本质）
-- **权力维度**：[`07-worldly-power/money/`](../../07-worldly-power/money/) + [`07-worldly-power/capital/`](../../07-worldly-power/capital/)——货币作为世俗权力
+- **权力维度**：[`07-worldly-power/money/`](../../07-worldly-power/money) + [`07-worldly-power/capital/`](../../07-worldly-power/capital)——货币作为世俗权力
 - **相邻主题**：[`markets-and-pricing.md`](./markets-and-pricing.md)（价格理论）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（信用风险的本质）+ [`china-financial-system.md`](./china-financial-system.md)（中国货币金融体系）
-- **系统论**：[`06-systems/complexity/`](../../06-systems/complexity/)（市场涌现）+ [`06-systems/feedback/`](../../06-systems/feedback/)（信用周期的正反馈）
+- **系统论**：[`06-systems/complexity/`](../../06-systems/complexity)（市场涌现）+ [`06-systems/feedback/`](../../06-systems/feedback)（信用周期的正反馈）
 - **跨学科**：[`knowledge-graph/connections.md`](../../knowledge-graph/connections.md)（货币↔国家↔婚姻的同构）
 
 ---

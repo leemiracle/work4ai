@@ -8,7 +8,7 @@ vLLM can be deployed with [LWS](https://github.com/kubernetes-sigs/lws) on Kuber
 ## Prerequisites
 
 * At least two Kubernetes nodes, each with 8 GPUs, are required.
-* Install LWS by following the instructions found [here](https://lws.sigs.k8s.io/docs/installation/).
+* Install LWS by following the instructions found [here](https://lws.sigs.k8s.io/docs/installation).
 
 ## Deploy and Serve
 

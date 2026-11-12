@@ -1,7 +1,7 @@
 # ETH 401-0131-00 — Linear Algebra I (Eng. Stream)
 
 > **学校**：ETH Zurich | **学院**：D-MATH
-> **一手来源**：[igl.ethz.ch/teaching/linear-algebra/la2022/](https://igl.ethz.ch/teaching/linear-algebra/la2022/) + [vvz.ethz.ch](https://www.vvz.ethz.ch)
+> **一手来源**：[igl.ethz.ch/teaching/linear-algebra/la2022/](https://igl.ethz.ch/teaching/linear-algebra/la2022) + [vvz.ethz.ch](https://www.vvz.ethz.ch)
 
 ## 课程信息
 - **编号**：401-0131-00L

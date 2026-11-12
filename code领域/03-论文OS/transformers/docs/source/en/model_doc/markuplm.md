@@ -31,7 +31,7 @@ performance, similar to [LayoutLM](layoutlm).
 The model can be used for tasks like question answering on web pages or information extraction from web pages. It obtains
 state-of-the-art results on 2 important benchmarks:
 
-- [WebSRC](https://x-lance.github.io/WebSRC/), a dataset for Web-Based Structural Reading Comprehension (a bit like SQuAD but for web pages)
+- [WebSRC](https://x-lance.github.io/WebSRC), a dataset for Web-Based Structural Reading Comprehension (a bit like SQuAD but for web pages)
 - [SWDE](https://www.researchgate.net/publication/221299838_From_one_tree_to_a_forest_a_unified_solution_for_structured_web_data_extraction), a dataset
 for information extraction from web pages (basically named-entity recognition on web pages)
 
@@ -82,7 +82,7 @@ xpaths are then provided to [`MarkupLMTokenizer`] or [`MarkupLMTokenizerFast`], 
 to token-level `input_ids`, `attention_mask`, `token_type_ids`, `xpath_subs_seq`, `xpath_tags_seq`.
 Optionally, one can provide node labels to the processor, which are turned into token-level `labels`.
 
-[`MarkupLMFeatureExtractor`] uses [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/), a Python library for
+[`MarkupLMFeatureExtractor`] uses [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc), a Python library for
 pulling data out of HTML and XML files, under the hood. Note that you can still use your own parsing solution of
 choice, and provide the nodes and xpaths yourself to [`MarkupLMTokenizer`] or [`MarkupLMTokenizerFast`].
 

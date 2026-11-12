@@ -39,7 +39,7 @@ This RAG Application demonstrates how to build a powerful Retrieval-Augmented Ge
 
 ### Prerequisites
 
-- [Ollama](https://ollama.ai/) installed locally
+- [Ollama](https://ollama.ai) installed locally
 - Python 3.8+
 - Qdrant running locally (via Docker) for vector storage
 - Exa API key (optional, for web search capability)

@@ -19,7 +19,7 @@ conda create --name openmmlab python=3.8 -y
 conda activate openmmlab
 ```
 
-**Step 2.** Install PyTorch following [official instructions](https://pytorch.org/get-started/locally/), e.g.
+**Step 2.** Install PyTorch following [official instructions](https://pytorch.org/get-started/locally), e.g.
 
 On GPU platforms:
 
@@ -234,7 +234,7 @@ The following table lists affected algorithms.
 
 #### Install on Google Colab
 
-[Google Colab](https://colab.research.google.com/) usually has PyTorch installed,
+[Google Colab](https://colab.research.google.com) usually has PyTorch installed,
 thus we only need to install MMEngine, MMCV, and MMDetection with the following commands.
 
 **Step 1.** Install [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv) using [MIM](https://github.com/open-mmlab/mim).
@@ -267,7 +267,7 @@ Within Jupyter, the exclamation mark `!` is used to call external executables an
 
 #### Use MMDetection with Docker
 
-We provide a [Dockerfile](../../docker/Dockerfile) to build an image. Ensure that your [docker version](https://docs.docker.com/engine/install/) >=19.03.
+We provide a [Dockerfile](../../docker/Dockerfile) to build an image. Ensure that your [docker version](https://docs.docker.com/engine/install) >=19.03.
 
 ```shell
 # build an image with PyTorch 1.9, CUDA 11.1

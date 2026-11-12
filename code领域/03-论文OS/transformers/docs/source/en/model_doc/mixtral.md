@@ -26,13 +26,13 @@ rendered properly in your Markdown viewer.
 
 ## Overview
 
-[Mixtral-8x7B](https://huggingface.co/papers/2401.04088) was introduced in the [Mixtral of Experts blogpost](https://mistral.ai/news/mixtral-of-experts/) by Albert Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford, Devendra Singh Chaplot, Diego de las Casas, Florian Bressand, Gianna Lengyel, Guillaume Lample, Lélio Renard Lavaud, Lucile Saulnier, Marie-Anne Lachaux, Pierre Stock, Teven Le Scao, Thibaut Lavril, Thomas Wang, Timothée Lacroix, William El Sayed.
+[Mixtral-8x7B](https://huggingface.co/papers/2401.04088) was introduced in the [Mixtral of Experts blogpost](https://mistral.ai/news/mixtral-of-experts) by Albert Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford, Devendra Singh Chaplot, Diego de las Casas, Florian Bressand, Gianna Lengyel, Guillaume Lample, Lélio Renard Lavaud, Lucile Saulnier, Marie-Anne Lachaux, Pierre Stock, Teven Le Scao, Thibaut Lavril, Thomas Wang, Timothée Lacroix, William El Sayed.
 
 The introduction of the blog post says:
 
 *Today, the team is proud to release Mixtral 8x7B, a high-quality sparse mixture of experts models (SMoE) with open weights. Licensed under Apache 2.0. Mixtral outperforms Llama 2 70B on most benchmarks with 6x faster inference. It is the strongest open-weight model with a permissive license and the best model overall regarding cost/performance trade-offs. In particular, it matches or outperforms GPT3.5 on most standard benchmarks.*
 
-Mixtral-8x7B is the second large language model (LLM) released by [mistral.ai](https://mistral.ai/), after [Mistral-7B](mistral).
+Mixtral-8x7B is the second large language model (LLM) released by [mistral.ai](https://mistral.ai), after [Mistral-7B](mistral).
 
 ### Architectural details
 
@@ -47,7 +47,7 @@ The following implementation details are shared with Mistral AI's first model [M
 - GQA (Grouped Query Attention) - allowing faster inference and lower cache size.
 - Byte-fallback BPE tokenizer - ensures that characters are never mapped to out of vocabulary tokens.
 
-For more details refer to the [release blog post](https://mistral.ai/news/mixtral-of-experts/).
+For more details refer to the [release blog post](https://mistral.ai/news/mixtral-of-experts).
 
 ### License
 

@@ -117,7 +117,7 @@ training_args = TrainingArguments(
 
 **混合精度トレーニング**は、モデルのトレーニングの計算効率を最適化する技術で、特定の変数に対して低精度の数値フォーマットを利用します。従来、ほとんどのモデルは変数を表現し処理するために32ビット浮動小数点精度（fp32またはfloat32）を使用しています。しかし、すべての変数が正確な結果を得るためにこの高精度のレベルを必要としない場合があります。一部の変数の精度を16ビット浮動小数点（fp16またはfloat16）などのより低い数値フォーマットに変更することで、計算を高速化できます。このアプローチでは、一部の計算は半精度で行われ、一部はまだ完全な精度で行われるため、このアプローチは混合精度トレーニングと呼ばれています。
 
-最も一般的に混合精度トレーニングは、fp16（float16）データ型を使用して実現されますが、一部のGPUアーキテクチャ（アンペアアーキテクチャなど）ではbf16およびtf32（CUDA内部データ型）データ型も提供されています。これらのデータ型の違いについて詳しく知りたい場合は、[NVIDIAのブログ](https://developer.nvidia.com/blog/accelerating-ai-training-with-tf32-tensor-cores/)を確認してください。
+最も一般的に混合精度トレーニングは、fp16（float16）データ型を使用して実現されますが、一部のGPUアーキテクチャ（アンペアアーキテクチャなど）ではbf16およびtf32（CUDA内部データ型）データ型も提供されています。これらのデータ型の違いについて詳しく知りたい場合は、[NVIDIAのブログ](https://developer.nvidia.com/blog/accelerating-ai-training-with-tf32-tensor-cores)を確認してください。
 
 ### fp16
 
@@ -159,7 +159,7 @@ torch.backends.cudnn.allow_tf32 = True
 
 使用されているGPUがアンペアシリーズであると仮定し、CUDAは可能な限りtf32を使用するように自動的に切り替えます。
 
-[NVIDIAの研究によれば](https://developer.nvidia.com/blog/accelerating-ai-training-with-tf32-tensor-cores/)、ほとんどの機械学習トレーニングワークロードはtf32トレーニングとfp32トレーニングで同じ難解度と収束を示します。すでにfp16またはbf16混合精度を使用している場合、スループットの向上に役立つこともあります。
+[NVIDIAの研究によれば](https://developer.nvidia.com/blog/accelerating-ai-training-with-tf32-tensor-cores)、ほとんどの機械学習トレーニングワークロードはtf32トレーニングとfp32トレーニングで同じ難解度と収束を示します。すでにfp16またはbf16混合精度を使用している場合、スループットの向上に役立つこともあります。
 
 🤗 Trainerでこのモードを有効にすることができます：
 
@@ -305,7 +305,7 @@ training_args = TrainingArguments(torch_compile=True, **default_args)
 ```
 
 `torch.compile`は、既存のPyTorchプログラムからグラフを自動的に作成するためにPythonのフレーム評価APIを使用します。グラフをキャプチャした後、異なるバックエンドを展開して最適化されたエンジンに変換できます。
-詳細およびベンチマークについては、[PyTorchドキュメント](https://pytorch.org/get-started/pytorch-2.0/)を参照してください。
+詳細およびベンチマークについては、[PyTorchドキュメント](https://pytorch.org/get-started/pytorch-2.0)を参照してください。
 
 `torch.compile`には、オプションの依存関係を持つ成長中のバックエンドのリストがあり、`torchdynamo.list_backends()`を呼び出して確認できます。最も一般的に使用される一部のバックエンドは次のとおりです。
 
@@ -322,7 +322,7 @@ training_args = TrainingArguments(torch_compile=True, **default_args)
 **推論専用バックエンド**：
 * `dynamo.optimize("ofi")` - Torchscriptの`optimize_for_inference`を使用します。 [詳細はこちら](https://pytorch.org/docs/stable/generated/torch.jit.optimize_for_inference.html)
 * `dynamo.optimize("fx2trt")` - Nvidia TensorRTを使用した推論の最適化にNvidia TensorRTを使用します。 [詳細はこちら](https://pytorch.org/TensorRT/tutorials/getting_started_with_fx_path.html)
-* `dynamo.optimize("onnxrt")` - CPU/GPUでの推論にONNX Runtimeを使用します。 [詳細はこちら](https://onnxruntime.ai/)
+* `dynamo.optimize("onnxrt")` - CPU/GPUでの推論にONNX Runtimeを使用します。 [詳細はこちら](https://onnxruntime.ai)
 * `dynamo.optimize("ipex")` - CPUでの推論にIPEXを使用します。 [詳細はこちら](https://github.com/intel/intel-extension-for-pytorch)
 
 🤗 Transformersを使用した`torch.compile`の使用例については、この[ブログ記事](https://www.philschmid.de/getting-started-pytorch-2-0-transformers)をご覧ください。
@@ -383,7 +383,7 @@ PyTorchの[pipとcondaビルド](https://pytorch.org/get-started/locally/#start-
 これらのシナリオに対処するために、PyTorchとNVIDIAはcuda拡張がすでに事前にビルドされているNGC dockerコンテナの新しいバージョンをリリースしました。プログラムをインストールするだけで、そのまま実行できます。
 
 このアプローチは、PyTorchのソースを調整したり、新しいカスタマイズされたビルドを作成したりしたい場合にも役立ちます。
-欲しいdockerイメージバージョンを見つけるには、まず[PyTorchのリリースノート](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/)から始め、最新の月次リリースのいずれかを選択します。希望のリリースのリリースノートに移動し、環境のコンポーネントが必要なものと一致していることを確認します（NVIDIA Driverの要件も含む！）、その文書の一番上に行き、対応するNGCページに移動します。なぜかわからない場合は、[すべてのPyTorch NGCイメージのインデックス](https://ngc.nvidia.com/catalog/containers/nvidia:pytorch)です。
+欲しいdockerイメージバージョンを見つけるには、まず[PyTorchのリリースノート](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes)から始め、最新の月次リリースのいずれかを選択します。希望のリリースのリリースノートに移動し、環境のコンポーネントが必要なものと一致していることを確認します（NVIDIA Driverの要件も含む！）、その文書の一番上に行き、対応するNGCページに移動します。なぜかわからない場合は、[すべてのPyTorch NGCイメージのインデックス](https://ngc.nvidia.com/catalog/containers/nvidia:pytorch)です。
 
 次に、dockerイメージをダウンロードして展開する手順に従います。
 
@@ -409,5 +409,5 @@ PyTorchの[pipとcondaビルド](https://pytorch.org/get-started/locally/#start-
 - [Switch Transformers: シンプルで効率的なスパース性を備えたトリリオンパラメータモデルへのスケーリング](https://huggingface.co/papers/2101.03961)
 - [GLaM: Generalist Language Model (GLaM)](https://ai.googleblog.com/2021/12/more-efficient-in-context-learning-with.html)
 
-PytorchにはDeepSpeedが構築したものもあります: [DeepSpeed-MoE: Advancing Mixture-of-Experts Inference and Training to Power Next-Generation AI Scale](https://huggingface.co/papers/2201.05596)、[Mixture of Experts](https://www.deepspeed.ai/tutorials/mixture-of-experts/) - ブログ記事: [1](https://www.microsoft.com/en-us/research/blog/deepspeed-powers-8x-larger-moe-model-training-with-high-performance/)、[2](https://www.microsoft.com/en-us/research/publication/scalable-and-efficient-moe-training-for-multitask-multilingual-models/)、大規模なTransformerベースの自然言語生成モデルの具体的な展開については、[ブログ記事](https://www.deepspeed.ai/2021/12/09/deepspeed-moe-nlg.html)、[Megatron-Deepspeedブランチ](https://github.com/microsoft/Megatron-DeepSpeed/tree/moe-training)を参照してください。
+PytorchにはDeepSpeedが構築したものもあります: [DeepSpeed-MoE: Advancing Mixture-of-Experts Inference and Training to Power Next-Generation AI Scale](https://huggingface.co/papers/2201.05596)、[Mixture of Experts](https://www.deepspeed.ai/tutorials/mixture-of-experts) - ブログ記事: [1](https://www.microsoft.com/en-us/research/blog/deepspeed-powers-8x-larger-moe-model-training-with-high-performance)、[2](https://www.microsoft.com/en-us/research/publication/scalable-and-efficient-moe-training-for-multitask-multilingual-models)、大規模なTransformerベースの自然言語生成モデルの具体的な展開については、[ブログ記事](https://www.deepspeed.ai/2021/12/09/deepspeed-moe-nlg.html)、[Megatron-Deepspeedブランチ](https://github.com/microsoft/Megatron-DeepSpeed/tree/moe-training)を参照してください。
 

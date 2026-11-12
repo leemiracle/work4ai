@@ -429,7 +429,7 @@ test_cfg = dict(type='TestLoop') # Use the default test loop.
 </tr>
 </table>
 
-In fact, in OpenMMLab 2.0, we introduced `Loop` to control the behaviors in training, validation and test. The functionalities of `Runner` are also changed. You can find more details of [runner tutorial](https://github.com/open-mmlab/mmengine/blob/main/docs/en/design/runner.md) in [MMEngine](https://github.com/open-mmlab/mmengine/).
+In fact, in OpenMMLab 2.0, we introduced `Loop` to control the behaviors in training, validation and test. The functionalities of `Runner` are also changed. You can find more details of [runner tutorial](https://github.com/open-mmlab/mmengine/blob/main/docs/en/design/runner.md) in [MMEngine](https://github.com/open-mmlab/mmengine).
 
 ### Runtime settings
 

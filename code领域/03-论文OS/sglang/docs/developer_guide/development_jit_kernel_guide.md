@@ -3,7 +3,7 @@
 ## Environment Setup
 
 We strongly recommend using `clangd` as the language server for JIT kernel development.
-For Ubuntu/Debian, you can download clangd from [apt.llvm.org](https://apt.llvm.org/).
+For Ubuntu/Debian, you can download clangd from [apt.llvm.org](https://apt.llvm.org).
 If you are using VS Code, we recommend installing the `clangd` extension for better IDE integration.
 
 All JIT-related files are located in `python/sglang/jit_kernel`.
@@ -20,7 +20,7 @@ C++ source code is located in `python/sglang/jit_kernel/csrc`.
 Reusable functions should be placed in `python/sglang/jit_kernel/include`.
 
 We use [tvm-ffi](https://github.com/apache/tvm-ffi) for efficient foreign language bindings.
-Refer to the [documentation](https://tvm.apache.org/ffi/) for advanced usage, such as exporting C++ objects.
+Refer to the [documentation](https://tvm.apache.org/ffi) for advanced usage, such as exporting C++ objects.
 Typically, `tvm::ffi::TensorView` is sufficient for passing PyTorch Tensors from Python.
 
 ### Python Interface
@@ -199,7 +199,7 @@ void add_constant(tvm::ffi::TensorView dst, tvm::ffi::TensorView src) {
   RuntimeCheck(num_elements > 0, "We only support non-empty tensors, got num_elements = ", num_elements);
 
   // 3. Launch the kernel. Error code will be automatically checked.
-  LaunchKernel(grid_size, kBlockSize, device /*, dynamic_smem*/)(
+  LaunchKernel(grid_size, kBlockSize, device /*, dynamic_smem*)(
       // kernel function
       add_constant_kernel<kConstant>,
       // kernel arguments

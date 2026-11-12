@@ -21,4 +21,4 @@ llm = Vllm(
 )
 ```
 
-Please refer to this [Tutorial](https://docs.llamaindex.ai/en/latest/examples/llm/vllm/) for more details.
+Please refer to this [Tutorial](https://docs.llamaindex.ai/en/latest/examples/llm/vllm) for more details.

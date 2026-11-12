@@ -107,13 +107,13 @@ Transformersは、テキスト、コンピュータビジョン、音声、動�
 
 [Hugging Face Hub](https://huggingface.com/models)には、100万を超えるTransformersの[モデルチェックポイント](https://huggingface.co/models?library=transformers&sort=trending)があり、すぐに使用できます。
 
-[Hub](https://huggingface.com/)を探索してモデルを見つけ、Transformersを使ってすぐに始めましょう。
+[Hub](https://huggingface.com)を探索してモデルを見つけ、Transformersを使ってすぐに始めましょう。
 
 ## インストール
 
-TransformersはPython 3.9以上、[PyTorch](https://pytorch.org/get-started/locally/) 2.1以上で動作します。
+TransformersはPython 3.9以上、[PyTorch](https://pytorch.org/get-started/locally) 2.1以上で動作します。
 
-[venv](https://docs.python.org/3/library/venv.html)または、高速なRustベースのPythonパッケージおよびプロジェクトマネージャーである[uv](https://docs.astral.sh/uv/)を使用して、仮想環境を作成し、有効化してください。
+[venv](https://docs.python.org/3/library/venv.html)または、高速なRustベースのPythonパッケージおよびプロジェクトマネージャーである[uv](https://docs.astral.sh/uv)を使用して、仮想環境を作成し、有効化してください。
 
 ```py
 # venv
@@ -346,7 +346,7 @@ Transformersの10万スターを記念して、Transformersで構築された100
 
 ## 引用
 
-🤗 Transformersライブラリについて引用できる[論文](https://www.aclweb.org/anthology/2020.emnlp-demos.6/)ができました:
+🤗 Transformersライブラリについて引用できる[論文](https://www.aclweb.org/anthology/2020.emnlp-demos.6)ができました:
 ```bibtex
 @inproceedings{wolf-etal-2020-transformers,
     title = "Transformers: State-of-the-Art Natural Language Processing",

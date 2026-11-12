@@ -12,13 +12,13 @@
       - [Amazon SageMaker](#amazon-sagemaker)
 
 The HTTP API is a RESTful API that allows you to interact with the text-generation-inference component. Two endpoints are available:
-* Text Generation Inference [custom API](https://huggingface.github.io/text-generation-inference/)
+* Text Generation Inference [custom API](https://huggingface.github.io/text-generation-inference)
 * OpenAI's [Messages API](#openai-messages-api)
 
 
 ## Text Generation Inference custom API
 
-Check the [API documentation](https://huggingface.github.io/text-generation-inference/) for more information on how to interact with the Text Generation Inference API.
+Check the [API documentation](https://huggingface.github.io/text-generation-inference) for more information on how to interact with the Text Generation Inference API.
 
 ## OpenAI Messages API
 

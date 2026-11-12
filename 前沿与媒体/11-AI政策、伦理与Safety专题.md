@@ -35,10 +35,10 @@
 
 | # | 法规 / 行动 | 立法方 | 状态 | 强项 |
 |---|---|---|---|---|
-| P1-1 | **EU AI Act** [artificialintelligenceact.eu](https://artificialintelligenceact.eu/) | 欧盟 | 🟢 ✅ 本轮实抓 | **全球首部综合 AI 法案**（2024-08 生效，2026 分阶段实施）；含 AI Act Explorer 工具 |
+| P1-1 | **EU AI Act** [artificialintelligenceact.eu](https://artificialintelligenceact.eu) | 欧盟 | 🟢 ✅ 本轮实抓 | **全球首部综合 AI 法案**（2024-08 生效，2026 分阶段实施）；含 AI Act Explorer 工具 |
 | P1-2 | **美国 NIST AI RMF** [nist.gov/itl/ai-risk-management-framework](https://www.nist.gov/itl/ai-risk-management-framework) | 美国 NIST | 🟢 ✅ 本轮实抓 | 自愿性风险管理框架（2023-01）|
 | P1-3 | **美国行政命令 14110** | Biden 政府 | 🟡（2025 后被 Trump 政府调整）| "Safe, Secure, and Trustworthy AI" |
-| P1-4 | **英国 AI Safety Institute (UK AISI)** [aiai.gov.uk](https://www.aiai.gov.uk/) | 英国 | 🟢 ⚠️本轮抓空 | 全球首个国家级 AI 安全研究所（2023-11）|
+| P1-4 | **英国 AI Safety Institute (UK AISI)** [aiai.gov.uk](https://www.aiai.gov.uk) | 英国 | 🟢 ⚠️本轮抓空 | 全球首个国家级 AI 安全研究所（2023-11）|
 | P1-5 | **中国生成式 AI 服务管理办法** | 国家网信办 | 🟢 | 2023-08 实施，全球最早的生成式 AI 专项法规 |
 | P1-6 | **新加坡 Model AI Governance** | Singapore IMDA | 🟢 | 东盟模板 |
 | P1-7 | **加拿大 AIDA** | 加拿大 | 🟡 进行中 | AIDA 法案 |
@@ -66,7 +66,7 @@
 | P3-1 | **Anthropic Alignment 团队** | Frontier lab 内 | Constitutional AI / Interpretability / Sleeper Agents（已在 [`01 A1`](./01-AI顶级信息源实时清单.md)）|
 | P3-2 | **Redwood Research** | 独立非营利 | 可解释/对抗（[`01 A2`](./01-AI顶级信息源实时清单.md)）|
 | P3-3 | **Apollo Research** | 独立 | Scheming / Situational Awareness（[`01 A3`](./01-AI顶级信息源实时清单.md)）|
-| P3-4 | **CAIS（Center for AI Safety）** [safe.ai](https://safe.ai/) | 独立 | 政策+研究+声明（[`01 A6`](./01-AI顶级信息源实时清单.md)），本轮实抓活跃 |
+| P3-4 | **CAIS（Center for AI Safety）** [safe.ai](https://safe.ai) | 独立 | 政策+研究+声明（[`01 A6`](./01-AI顶级信息源实时清单.md)），本轮实抓活跃 |
 | P3-5 | **MIRI（Machine Intelligence Research Institute）** | 独立 | Yudkowsky 派经典（[`01 A7`](./01-AI顶级信息源实时清单.md)）|
 | P3-6 | **Conjectural**（Connor Leahy）| 独立 | 反共识开源对齐（[`01 A4`](./01-AI顶级信息源实时清单.md)）|
 | P3-7 | **DeepMind Safety / OpenAI Superalignment** | Frontier lab 内 | Google + OpenAI 内部安全团队 |

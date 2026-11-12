@@ -28,8 +28,8 @@ pip install -r requirements.txt
 ```
 
 3. Get your API Keys
-- Sign up for [DeepSeek](https://platform.deepseek.com/) and obtain your API key
-- Sign up for [OpenAI](https://platform.openai.com/) and obtain your API key
+- Sign up for [DeepSeek](https://platform.deepseek.com) and obtain your API key
+- Sign up for [OpenAI](https://platform.openai.com) and obtain your API key
 
 4. Run the AI PyGame Visualizer
 ```bash

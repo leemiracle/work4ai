@@ -126,7 +126,7 @@ Usually, it is slow if you do not have high-speed networking like InfiniBand.
 
 ## Manage jobs with Slurm
 
-[Slurm](https://slurm.schedmd.com/) is a good job scheduling system for computing clusters.
+[Slurm](https://slurm.schedmd.com) is a good job scheduling system for computing clusters.
 On a cluster managed by Slurm, you can use `slurm_train.sh` to spawn training jobs. It supports both single-node and multi-node training.
 
 The basic usage is as follows.

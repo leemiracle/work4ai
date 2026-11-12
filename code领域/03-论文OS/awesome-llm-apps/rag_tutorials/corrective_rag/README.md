@@ -29,7 +29,7 @@ A sophisticated Retrieval-Augmented Generation (RAG) system that implements a co
    - [Anthropic API key](https://console.anthropic.com/settings/keys) (for Claude 4.5 sonnet as LLM)
    - [Tavily API key](https://app.tavily.com/home) (for web search)
    - Qdrant Cloud Setup
-      1. Visit [Qdrant Cloud](https://cloud.qdrant.io/)
+      1. Visit [Qdrant Cloud](https://cloud.qdrant.io)
       2. Create an account or sign in
       3. Create a new cluster
       4. Get your credentials:

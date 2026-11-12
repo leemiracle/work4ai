@@ -45,7 +45,7 @@ Model cards:
 
 This model was contributed by [Manal El Aidouni](https://huggingface.co/Manel). The original code can be found [here](https://github.com/zhenye234/xcodec) and original checkpoints for the five different models [here](https://github.com/zhenye234/xcodec?tab=readme-ov-file#available-models).
 
-Demos can be found on this [page](https://x-codec-audio.github.io/).
+Demos can be found on this [page](https://x-codec-audio.github.io).
 
 ## Usage example
 

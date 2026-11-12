@@ -21,7 +21,7 @@ limitations under the License.
 Based on the script [`run_glue.py`](https://github.com/huggingface/transformers/blob/main/examples/pytorch/text-classification/run_glue.py).
 
 Fine-tuning the library models for sequence classification on the GLUE benchmark: [General Language Understanding
-Evaluation](https://gluebenchmark.com/). This script can fine-tune any of the models on the [hub](https://huggingface.co/models)
+Evaluation](https://gluebenchmark.com). This script can fine-tune any of the models on the [hub](https://huggingface.co/models)
 and can also be used for a dataset hosted on our [hub](https://huggingface.co/datasets) or your own data in a csv or a JSON file
 (the script might need some tweaks in that case, refer to the comments inside for help).
 
@@ -223,7 +223,7 @@ Note that this library is in alpha release so your feedback is more than welcome
 
 Based on the script [`run_xnli.py`](https://github.com/huggingface/transformers/blob/main/examples/pytorch/text-classification/run_xnli.py).
 
-[XNLI](https://cims.nyu.edu/~sbowman/xnli/) is a crowd-sourced dataset based on [MultiNLI](https://cims.nyu.edu/~sbowman/multinli/). It is an evaluation benchmark for cross-lingual text representations. Pairs of text are labeled with textual entailment annotations for 15 different languages (including both high-resource language such as English and low-resource languages such as Swahili).
+[XNLI](https://cims.nyu.edu/~sbowman/xnli) is a crowd-sourced dataset based on [MultiNLI](https://cims.nyu.edu/~sbowman/multinli). It is an evaluation benchmark for cross-lingual text representations. Pairs of text are labeled with textual entailment annotations for 15 different languages (including both high-resource language such as English and low-resource languages such as Swahili).
 
 #### Fine-tuning on XNLI
 

@@ -29,7 +29,7 @@
         │                  │            Jupyter + nbconvert
         └──────────────────┴────────────────┘
                          │
-                   AI for Physics(见 ai_for_physics/)
+                   AI for Physics(见 ai_for_physics)
                    PyTorch / JAX / TensorFlow
 ```
 

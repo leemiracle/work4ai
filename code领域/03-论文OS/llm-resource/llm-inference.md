@@ -16,7 +16,7 @@
 
 ### llama.cpp
 
-- [Understanding how LLM inference works with llama.cpp](https://www.omrimallis.com/posts/understanding-how-llm-inference-works-with-llama-cpp/)
+- [Understanding how LLM inference works with llama.cpp](https://www.omrimallis.com/posts/understanding-how-llm-inference-works-with-llama-cpp)
 - [Llama.cpp 教程：高效 LLM 推理和实现的完整指南](https://blog.csdn.net/weixin_41863029/article/details/139456502)
 - [LLM如何通过llama.cpp进行推理](https://blog.csdn.net/Blaze_bxh/article/details/137054444)
 - [llama.cpp源码解析](https://mp.weixin.qq.com/s?__biz=MzA4MjY4NTk0NQ==&mid=2247519554&idx=1&sn=c619e9907fb515e88b6265cf7017b726&chksm=9f8337d4a8f4bec27c755148f904668a46c85322e6ba31bc6b0286887bbb30f8a24a49d2d918&mpshare=1&scene=23&srcid=1107jzAJDvx0GcmHJO92iIcA&sharer_shareinfo=3dc56c7e8fdbf855398ab67e34dfb5c7&sharer_shareinfo_first=3dc56c7e8fdbf855398ab67e34dfb5c7#rd)

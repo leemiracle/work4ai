@@ -28,7 +28,7 @@ pipeline("Hey how are you doing today?")
 
 ## 개요[[overview]]
 
-라마3 모델은 Meta AI 팀이 제안한 [메타 라마3 소개: 현재까지 가장 유능한 공개 가능 LLM](https://ai.meta.com/blog/meta-llama-3/)에서 소개되었습니다.
+라마3 모델은 Meta AI 팀이 제안한 [메타 라마3 소개: 현재까지 가장 유능한 공개 가능 LLM](https://ai.meta.com/blog/meta-llama-3)에서 소개되었습니다.
 
 해당 블로그 포스트의 초록입니다:
 
@@ -51,7 +51,7 @@ pipeline("Hey how are you doing today?")
 
 팁:
 
-- 라마3 모델을 위한 가중치는 [이 폼](https://ai.meta.com/resources/models-and-libraries/llama-downloads/)을 채우면서 얻어져야 합니다.
+- 라마3 모델을 위한 가중치는 [이 폼](https://ai.meta.com/resources/models-and-libraries/llama-downloads)을 채우면서 얻어져야 합니다.
 - 아키텍처는 라마2와 정확히 같습니다.
 - 토크나이저는 [tiktoken](https://github.com/openai/tiktoken) (sentencepiece 구현에 기반한 라마2 와는 다르게)에 기반한 BPE 모델입니다. tiktoken 기반 토크나이저가 sebtencepiece 기반 방식과 다른점은 입력 토큰이 vocab에 이미 존재할 때 BPE 병합 룰을 무시하고 싱글 토큰으로 토크나이징한다는 점에서 가장 큰 차이를 보입니다. 자세히 말하면 `"hugging"`이 vocab에 존재하고 기존에 병합이 존재하지 않으면, `["hug","ging"]` 처럼 두 토큰으로 더 작은 단위의 단어를 가지는 것이 아니라, 하나의 토큰만을 자동으로 리턴하는 것을 의미합니다.
 - 기본 모델은 패딩 토큰이 없다는 것을 의미하는 `pad_id = -1`을 사용합니다. 같은 로직을 사용할 수 없으니 `tokenizer.add_special_tokens({"pad_token":"<pad>"})`를 사용하여 토큰을 추가하고 임베딩 크기도 확실히 조정해야 합니다. `model.config.pad_token_id`도 설정이 필요합니다. 모델의 `embed_tokens` 레이어는 `self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, self.config.padding_idx)`로 초기화되며, 패딩 토큰을 인코딩하는 것이 0(zero)를 출력하게 할 것인지 그래서 초기화가 추천될때 이를 통화시킬 것인지를 정하게 합니다. 

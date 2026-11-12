@@ -41,7 +41,7 @@ DeBERTa モデルは、Pengcheng He、Xiaodong Liu、Jianfeng Gao、Weizhu Chen 
 次の情報は、[元の実装で直接表示されます リポジトリ](https://github.com/microsoft/DeBERTa)。 DeBERTa v2 は、DeBERTa モデルの 2 番目のバージョンです。それには以下が含まれます
 SuperGLUE 単一モデルの提出に使用された 1.5B モデルは、人間のベースライン 89.8 に対して 89.9 を達成しました。あなたはできる
 この投稿に関する詳細については、著者のドキュメントを参照してください。
-[ブログ](https://www.microsoft.com/en-us/research/blog/microsoft-deberta-surpasses-human-performance-on-the-superglue-benchmark/)
+[ブログ](https://www.microsoft.com/en-us/research/blog/microsoft-deberta-surpasses-human-performance-on-the-superglue-benchmark)
 
 v2 の新機能:
 

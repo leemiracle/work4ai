@@ -1,13 +1,13 @@
 # MIT 18.085 — Computational Science and Engineering I
 
 > **学校**：MIT | **学期**：Fall | **学分**：12 units
-> **一手来源**：[catalog.mit.edu/subjects/18/#18.085](https://catalog.mit.edu/subjects/18/) + [OCW 18.085 Prof. Strang](https://ocw.mit.edu/courses/18-085-computational-science-and-engineering-i-fall-2008/)
+> **一手来源**：[catalog.mit.edu/subjects/18/#18.085](https://catalog.mit.edu/subjects/18) + [OCW 18.085 Prof. Strang](https://ocw.mit.edu/courses/18-085-computational-science-and-engineering-i-fall-2008)
 
 ## 课程信息
 - **编号**：18.085 / 18.0851（研究生版本）
 - **先修**：18.06 线性代数（**强烈推荐**）
 - **教材**：**Strang, *Computational Science and Engineering* (Wellesley-Cambridge, 2007)** ★
-- **视频**：[OCW Strang 18.085 完整讲座](https://ocw.mit.edu/courses/18-085-computational-science-and-engineering-i-fall-2008/video_galleries/video-lectures/)
+- **视频**：[OCW Strang 18.085 完整讲座](https://ocw.mit.edu/courses/18-085-computational-science-and-engineering-i-fall-2008/video_galleries/video-lectures)
 - **配书**：Strang, *Introduction to Linear Algebra*（同作者，章节呼应）
 
 ## 教学大纲
@@ -30,10 +30,10 @@
 - **学完本课后**：能解释 Transformer 的 attention 为何是 $O(n^2)$ 与能否降到 $O(n)$
 
 ## 参考资源
-- **教材（免费 PDF 部分）**：[math.mit.edu/~gs/cse/](https://math.mit.edu/~gs/cse/)
+- **教材（免费 PDF 部分）**：[math.mit.edu/~gs/cse/](https://math.mit.edu/~gs/cse)
 - **视频**：[OCW Strang 18.085 30+ 讲](https://www.youtube.com/playlist?list=PLUHGAjyLQQ40qI80S8SQjyXgdO7SlZ7nO)
-- **习题集**：[OCW 18.085 assignments](https://ocw.mit.edu/courses/18-085-computational-science-and-engineering-i-fall-2008/assignments/)
-- **GitHub**：[ocw-18.085-resources](https://ocw.mit.edu/courses/18-085-computational-science-and-engineering-i-fall-2008/)
+- **习题集**：[OCW 18.085 assignments](https://ocw.mit.edu/courses/18-085-computational-science-and-engineering-i-fall-2008/assignments)
+- **GitHub**：[ocw-18.085-resources](https://ocw.mit.edu/courses/18-085-computational-science-and-engineering-i-fall-2008)
 
 ## 学习建议
 - **节奏**：每周 4-5 小时，10-12 周完成

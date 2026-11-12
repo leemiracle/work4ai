@@ -38,7 +38,7 @@ In this guide, Prometheus monitoring data will be consumed on a local computer. 
 * Use ssh [local port forwarding](https://www.ssh.com/academy/ssh/tunneling-example)
 * Use ngrok port tunneling
 
-For simplicity, we will use [Ngrok](https://ngrok.com/docs/) in this guide to tunnel Prometheus port from the TGI server to the outside world.
+For simplicity, we will use [Ngrok](https://ngrok.com/docs) in this guide to tunnel Prometheus port from the TGI server to the outside world.
 
 For that, you should follow the steps at https://dashboard.ngrok.com/get-started/setup/linux, and once Ngrok is installed, use:
 ```bash
@@ -52,7 +52,7 @@ As a sanity check, one can make sure that Prometheus server can be accessed at t
 Monitoring is typically done on an other machine than the server one. We use a Grafana dashboard to monitor TGI's server usage.
 
 Two options are available:
-* Use Grafana Cloud for an hosted dashboard solution (https://grafana.com/products/cloud/).
+* Use Grafana Cloud for an hosted dashboard solution (https://grafana.com/products/cloud).
 * Self-host a grafana dashboard.
 
 In this tutorial, for simplicity, we will self host the dashbard. We recommend installing Grafana Open-source edition following [the official install instructions](https://grafana.com/grafana/download?platform=linux&edition=oss), using the available Linux binaries. For example:
@@ -70,6 +70,6 @@ Once logged in, the Prometheus data source for Grafana needs to be configured, i
 
 Once Prometheus data source is configured, we can finally create our dashboard! From home, go to `Create your first dashboard` and then `Import dashboard`. There, we will use the recommended dashboard template [tgi_grafana.json](https://github.com/huggingface/text-generation-inference/blob/main/assets/tgi_grafana.json) for a dashboard ready to be used, but you may configure your own dashboard as you like.
 
-Community contributed dashboard templates are also available, for example [here](https://grafana.com/grafana/dashboards/19831-text-generation-inference-dashboard/) or [here](https://grafana.com/grafana/dashboards/20246-text-generation-inference/).
+Community contributed dashboard templates are also available, for example [here](https://grafana.com/grafana/dashboards/19831-text-generation-inference-dashboard) or [here](https://grafana.com/grafana/dashboards/20246-text-generation-inference).
 
 Load your dashboard configuration, and your TGI dashboard should be ready to go!

@@ -12,7 +12,7 @@ Semi automatically generated nuclei instance segmentation and classification dat
 
 | Dataset Name                                                                             | Anatomical Region | Task Type    | Modality       | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                         |
 | ---------------------------------------------------------------------------------------- | ----------------- | ------------ | -------------- | ------------ | --------------------- | ---------------------- | ------------ | --------------------------------------------------------------- |
-| [Pannuke](https://academictorrents.com/details/99f2c7b57b95500711e33f2ee4d14c9fd7c7366c) | full_body         | segmentation | histopathology | 6            | 7901/-/-              | yes/-/-                | 2019         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| [Pannuke](https://academictorrents.com/details/99f2c7b57b95500711e33f2ee4d14c9fd7c7366c) | full_body         | segmentation | histopathology | 6            | 7901/-/-              | yes/-/-                | 2019         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
 |        Class Name         | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :-----------------------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

@@ -406,7 +406,7 @@ $ rg -n "class SandboxUnavailableError" packages/sandbox/sandbox/src/index.ts
 
 # 证据 D: 升级审批的有序 fail-closed 序列（含测试：无审批服务即 throw）
 $ rg -n "no approval service is composed" packages/sandbox/sandbox/tests/escalation.spec.ts
-95:    await expect(approveEscalation(req(), ingredients({ approver: undefined }))).rejects.toThrow(/no approval service is composed/)
+95:    await expect(approveEscalation(req(), ingredients({ approver: undefined }))).rejects.toThrow(/no approval service is composed)
 
 # 证据 E: 重复调用提醒阈值默认 [3, 5, 8]
 $ rg -n "3, 5, 8" packages/guard/repeat-tool-reminder/src/index.ts

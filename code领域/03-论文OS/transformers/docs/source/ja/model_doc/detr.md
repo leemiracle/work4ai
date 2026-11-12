@@ -70,7 +70,7 @@ ResNet-50/ResNet-101)。バッチ ディメンションも追加すると仮定�
 (したがって、画像にオブジェクトが 4 つしか含まれていない場合、96 個の注釈にはクラスとして「オブジェクトなし」、およびクラスとして「境界ボックスなし」が含まれるだけになります。
 境界ボックス)。 [Hungarian matching algorithm](https://en.wikipedia.org/wiki/Hungarian_algorithm) は、検索に使用されます。
 N 個のクエリのそれぞれから N 個の注釈のそれぞれへの最適な 1 対 1 のマッピング。次に、標準クロスエントロピー (
-クラス)、および L1 と [generalized IoU loss](https://giou.stanford.edu/) の線形結合 (
+クラス)、および L1 と [generalized IoU loss](https://giou.stanford.edu) の線形結合 (
 境界ボックス) は、モデルのパラメーターを最適化するために使用されます。
 
 DETR は、パノプティック セグメンテーション (セマンティック セグメンテーションとインスタンスを統合する) を実行するように自然に拡張できます。

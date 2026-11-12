@@ -278,7 +278,7 @@ Additionally, if you want to locate the SGLang Python source code through the cu
 
 ## Profile with Nsight
 
-[Nsight systems](https://docs.nvidia.com/nsight-systems/) is an advanced tool that exposes more profiling details, such as register and shared memory usage, annotated code regions and low-level CUDA APIs and events.
+[Nsight systems](https://docs.nvidia.com/nsight-systems) is an advanced tool that exposes more profiling details, such as register and shared memory usage, annotated code regions and low-level CUDA APIs and events.
 
 1. Prerequisite:
 

@@ -1,6 +1,6 @@
 # 前沿与媒体 · 34 - AI 开源生态专题（HF / ModelScope / Replicate / OpenRouter）
 
-> 姊妹篇：[`02-后训练代码库`](./02-后训练信息源专题.md)｜ [`03-AI Infra 源码导读`](../讲透公开课/03-AI%20Infra%20源码导读清单.md)。
+> 姊妹篇：[`02-后训练代码库`](./02-后训练信息源专题.md)｜ [`03-AI Infra 源码导读`](../讲透宇宙/01-学/讲透公开课//03-AI%20Infra%20源码导读清单.md)。
 >
 > 本篇聚焦"**模型与开源代码的入口**"——Hugging Face / ModelScope / Replicate / OpenRouter / 各类 hub。给所有 AI 开发者。
 
@@ -24,12 +24,12 @@
 
 | 子平台 | 强项 |
 |---|---|
-| **HF Hub** [huggingface.co](https://huggingface.co/) | 模型托管（百万+）|
+| **HF Hub** [huggingface.co](https://huggingface.co) | 模型托管（百万+）|
 | **HF Datasets** | 数据集（30 万+）|
 | **HF Spaces** | ML 应用试玩（已在 [`20`](./20-AI艺术与创意社区专题.md)）|
 | **Transformers** | 模型定义库（16.3w ⭐）|
 | **PEFT / TRL / Diffusers / Accelerate** | 训练栈（已在 [`02`](./02-后训练信息源专题.md)）|
-| **HF Courses** | 免费课（已在 [`讲透公开课 01`](../讲透公开课/01-前沿课实时清单.md)）|
+| **HF Courses** | 免费课（已在 [`讲透公开课 01`](../讲透宇宙/01-学/讲透公开课//01-前沿课实时清单.md)）|
 | **HF Leaderboards** | Open LLM / Big Code 等 |
 | **HF Inference API / Endpoints** | 商业推理 |
 | **HF Hub Cloud (HF Pro / Enterprise)** | 私有部署 |
@@ -49,7 +49,7 @@
 
 ## 二、ModelScope（魔搭，阿里）
 
-- **入口**：[modelscope.cn](https://modelscope.cn/)
+- **入口**：[modelscope.cn](https://modelscope.cn)
 - **地位**：中国最大开源模型平台（与 HF 对标）
 - **优势**：国内带宽快，中文模型集中
 - **配套**：与 PAI / 函数计算 / 通义集成
@@ -60,12 +60,12 @@
 
 | 服务 | 强项 |
 |---|---|
-| **Replicate** [replicate.com](https://replicate.com/) | 一键跑模型，按秒计费 |
+| **Replicate** [replicate.com](https://replicate.com) | 一键跑模型，按秒计费 |
 | **Together AI** | 开源模型 API（含 Red Pajama）|
 | **Fireworks AI** | 高速推理 |
 | **Modal** | Serverless GPU（含 AI 模板）|
 | **Runway ML** | 视频 AI（已在 [`07`](./07-AI创意生成专题.md)）|
-| **OpenRouter** [openrouter.ai](https://openrouter.ai/) | **多模型统一 API**（开发者首选）|
+| **OpenRouter** [openrouter.ai](https://openrouter.ai) | **多模型统一 API**（开发者首选）|
 | **SiliconFlow 硅基流动** | 国内开源模型聚合 API |
 | **DeepInfra** | 国外便宜推理 |
 
@@ -117,4 +117,4 @@
 
 ---
 
-> 🔗 相关：[`02-后训练`](./02-后训练信息源专题.md) ｜ [`09-商业 API`](./09-AI商业产品与ToC应用专题.md) ｜ [`讲透公开课 03`](../讲透公开课/03-AI%20Infra%20源码导读清单.md)
+> 🔗 相关：[`02-后训练`](./02-后训练信息源专题.md) ｜ [`09-商业 API`](./09-AI商业产品与ToC应用专题.md) ｜ [`讲透公开课 03`](../讲透宇宙/01-学/讲透公开课//03-AI%20Infra%20源码导读清单.md)

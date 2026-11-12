@@ -56,7 +56,7 @@ mmdetection
 
 ### 2 COCO 2017
 
-The above configuration will evaluate the performance on the COCO 2017 dataset during the training process. Therefore, it is necessary to prepare the COCO 2017 dataset. You can download it from the [COCO](https://cocodataset.org/) official website or from [opendatalab](https://opendatalab.com/OpenDataLab/COCO_2017).
+The above configuration will evaluate the performance on the COCO 2017 dataset during the training process. Therefore, it is necessary to prepare the COCO 2017 dataset. You can download it from the [COCO](https://cocodataset.org) official website or from [opendatalab](https://opendatalab.com/OpenDataLab/COCO_2017).
 
 After downloading and unzipping, place the dataset or create a symbolic link to the `data/coco` directory. The directory structure is as follows:
 
@@ -95,7 +95,7 @@ mmdetection
 │   │   │   ├── ...
 ```
 
-Then download the [Flickr30k images](http://shannon.cs.illinois.edu/DenotationGraph/). You need to apply for access to this dataset and then download it using the provided link. After downloading and unzipping, place the dataset or create a symbolic link to them in the `data/flickr30k_entities` directory, with the following directory structure:
+Then download the [Flickr30k images](http://shannon.cs.illinois.edu/DenotationGraph). You need to apply for access to this dataset and then download it using the provided link. After downloading and unzipping, place the dataset or create a symbolic link to them in the `data/flickr30k_entities` directory, with the following directory structure:
 
 ```text
 mmdetection
@@ -1066,7 +1066,7 @@ mmdetection
 
 ### 6 Cityscapes
 
-Cityscapes is an urban street scene dataset. You can download it from [here](https://www.cityscapes-dataset.com/) or from opendatalab, and then extract it to the `data/cityscapes/` folder. The complete dataset structure is as follows:
+Cityscapes is an urban street scene dataset. You can download it from [here](https://www.cityscapes-dataset.com) or from opendatalab, and then extract it to the `data/cityscapes/` folder. The complete dataset structure is as follows:
 
 ```text
 mmdetection

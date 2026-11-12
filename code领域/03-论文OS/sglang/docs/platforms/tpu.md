@@ -90,7 +90,7 @@ uv pip install -e "python[all]"
 
 [SkyPilot](https://github.com/skypilot-org/skypilot) provides simplified deployment on Google Cloud TPU:
 
-1. Install SkyPilot and configure GCP access (see [SkyPilot documentation](https://skypilot.readthedocs.io/))
+1. Install SkyPilot and configure GCP access (see [SkyPilot documentation](https://skypilot.readthedocs.io))
 
 2. Create a SkyPilot configuration file:
 
@@ -472,6 +472,6 @@ For contributors who need TPU access for testing:
 
 ### External Resources
 
-- [JAX Documentation](https://jax.readthedocs.io/)
+- [JAX Documentation](https://jax.readthedocs.io)
 - [Google Cloud TPU Documentation](https://cloud.google.com/tpu/docs)
-- [SkyPilot Documentation](https://skypilot.readthedocs.io/)
+- [SkyPilot Documentation](https://skypilot.readthedocs.io)

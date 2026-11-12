@@ -103,7 +103,7 @@ NNODES=2 NODE_RANK=1 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR bash tools/dist_
 
 #### 5. 使用 Slurm 进行训练
 
-[Slurm](https://slurm.schedmd.com/)是一个用于计算集群的优秀作业调度系统。
+[Slurm](https://slurm.schedmd.com)是一个用于计算集群的优秀作业调度系统。
 在 Slurm 管理的集群上，您可以使用 `slurm_train.sh` 生成训练作业。
 它支持单节点和多节点训练。
 

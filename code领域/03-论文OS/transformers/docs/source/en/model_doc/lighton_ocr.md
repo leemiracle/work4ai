@@ -19,7 +19,7 @@ specific language governing permissions and limitations under the License. -->
 
 **LightOnOcr** is a compact, end-to-end vision–language model for Optical Character Recognition (OCR) and document understanding. It achieves state-of-the-art accuracy in its weight class while being several times faster and cheaper than larger general-purpose VLMs.
 
-📝 **[Read the full blog post](https://huggingface.co/blog/lightonai/lightonocr/)** | 📓 **[Finetuning notebook](https://colab.research.google.com/drive/1WjbsFJZ4vOAAlKtcCauFLn_evo5UBRNa?usp=sharing)**
+📝 **[Read the full blog post](https://huggingface.co/blog/lightonai/lightonocr)** | 📓 **[Finetuning notebook](https://colab.research.google.com/drive/1WjbsFJZ4vOAAlKtcCauFLn_evo5UBRNa?usp=sharing)**
 
 **Model Overview**
 

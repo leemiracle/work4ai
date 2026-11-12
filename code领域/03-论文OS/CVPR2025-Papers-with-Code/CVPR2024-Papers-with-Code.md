@@ -574,7 +574,7 @@ CVPR 2024 decisions are now available on OpenReview！
 
 **MaskINT: Video Editing via Interpolative Non-autoregressive Masked Transformers**
 
-- Homepage:  [https://maskint.github.io](https://maskint.github.io/) 
+- Homepage:  [https://maskint.github.io](https://maskint.github.io) 
 
 - Paper: https://arxiv.org/abs/2312.12468
 

@@ -209,7 +209,7 @@ Recommended flags: `--tool-call-parser llama3_json --chat-template {see_above}`
 
 VLLM also provides a pythonic and JSON-based chat template for Llama 4, but pythonic tool calling is recommended:
 
-* [examples/tool_chat_template_llama4_pythonic.jinja](../../examples/tool_chat_template_llama4_pythonic.jinja) - this is based on the [official chat template](https://www.llama.com/docs/model-cards-and-prompt-formats/llama4/) for the Llama 4 models.
+* [examples/tool_chat_template_llama4_pythonic.jinja](../../examples/tool_chat_template_llama4_pythonic.jinja) - this is based on the [official chat template](https://www.llama.com/docs/model-cards-and-prompt-formats/llama4) for the Llama 4 models.
 
 For Llama 4 model, use `--tool-call-parser llama4_pythonic --chat-template examples/tool_chat_template_llama4_pythonic.jinja`.
 

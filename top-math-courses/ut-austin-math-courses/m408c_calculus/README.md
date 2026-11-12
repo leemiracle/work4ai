@@ -1,7 +1,7 @@
 # UT Austin M 408C — Differential and Integral Calculus
 
 > **学校**：UT Austin | **学期**：Fall/Spring | **学分**：3
-> **一手来源**：[math.utexas.edu/academics/undergraduate-courses](https://math.utexas.edu/academics/undergraduate-courses) + [catalog.utexas.edu](https://catalog.utexas.edu/general-information/coursesatoz/m/)
+> **一手来源**：[math.utexas.edu/academics/undergraduate-courses](https://math.utexas.edu/academics/undergraduate-courses) + [catalog.utexas.edu](https://catalog.utexas.edu/general-information/coursesatoz/m)
 
 ## 课程信息
 - **编号**：M 408C（标准微积分序列第一学期）

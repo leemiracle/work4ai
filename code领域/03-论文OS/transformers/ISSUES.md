@@ -20,11 +20,11 @@ This is an Open Source Project so please be mindful that like in any other proje
 
 However, we want to encourage you to ask for help whenever you think it's needed! We are happy about every question we get because it allows us to better understand your needs, possible misunderstandings, and most importantly a way for you to help us make this library better. That being said, this document's main purpose is to provide guidelines at how you can formulate your requests to increase your chances to be understood and to get support.
 
-There are two main venues to receive support: [the forums](https://discuss.huggingface.co/) and [the GitHub issues](https://github.com/huggingface/transformers/issues).
+There are two main venues to receive support: [the forums](https://discuss.huggingface.co) and [the GitHub issues](https://github.com/huggingface/transformers/issues).
 
 ## The Forums
 
-[The user forums](https://discuss.huggingface.co/) are supported by the wide community of the library users and backed up by developers when needed.
+[The user forums](https://discuss.huggingface.co) are supported by the wide community of the library users and backed up by developers when needed.
 
 If you have a difficulty with deploying this library or some questions, or you'd like to discuss a new feature, please first consider discussing those things at the forums. Only when you feel your subject matter has been crystallized and you still need support from the library developers do proceed to file an [issue](https://github.com/huggingface/transformers/issues).
 
@@ -206,7 +206,7 @@ You are not required to read the following guidelines before opening an issue. H
 
    Do not despair if you can't figure it out from the beginning, just share what you can and perhaps someone else will be able to help you at the forums.
 
-   If your setup involves any custom datasets, the best way to help us reproduce the problem is to create a [Google Colab notebook](https://colab.research.google.com/) that demonstrates the issue and once you verify that the issue still exists, include a link to that notebook in the Issue. Just make sure that you don't copy and paste the location bar url of the open notebook - as this is private and we won't be able to open it. Instead, you need to click on `Share` in the right upper corner of the notebook, select `Get Link` and then copy and paste the public link it will give to you.
+   If your setup involves any custom datasets, the best way to help us reproduce the problem is to create a [Google Colab notebook](https://colab.research.google.com) that demonstrates the issue and once you verify that the issue still exists, include a link to that notebook in the Issue. Just make sure that you don't copy and paste the location bar url of the open notebook - as this is private and we won't be able to open it. Instead, you need to click on `Share` in the right upper corner of the notebook, select `Get Link` and then copy and paste the public link it will give to you.
 
 7. If you forked off some of this project's code or example applications, please, do not ask us to go into your code repository and figure out what you may have done. The code is already very complex and unless there is an easy way to do a diff and it's a small diff, it won't be possible to find someone with time on their hands to make a lengthy investigation. Albeit, you might find someone at the forums who will be generous to do this for you.
 

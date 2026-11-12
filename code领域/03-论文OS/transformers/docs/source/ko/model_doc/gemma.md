@@ -18,7 +18,7 @@ rendered properly in your Markdown viewer.
 
 ## 개요 [[overview]]
 
-Gemma 모델은 Google의 Gemma 팀이 작성한 [Gemma: Open Models Based on Gemini Technology and Research](https://blog.google/technology/developers/gemma-open-models/)에서 제안되었습니다.
+Gemma 모델은 Google의 Gemma 팀이 작성한 [Gemma: Open Models Based on Gemini Technology and Research](https://blog.google/technology/developers/gemma-open-models)에서 제안되었습니다.
 
 Gemma 모델은 6조 토큰으로 학습되었으며, 2b와 7b의 두 가지 버전으로 출시되었습니다.
 

@@ -248,7 +248,7 @@ python tools/analysis_tools/coco_error_analysis.py \
 
 ## 模型服务部署
 
-如果你想使用 [`TorchServe`](https://pytorch.org/serve/) 搭建一个 `MMDetection` 模型服务，可以参考以下步骤：
+如果你想使用 [`TorchServe`](https://pytorch.org/serve) 搭建一个 `MMDetection` 模型服务，可以参考以下步骤：
 
 ### 1. 安装 TorchServe
 

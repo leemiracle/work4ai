@@ -72,13 +72,13 @@ Transformers 是一個為最先進的機器學習模型（涵蓋文字、電腦�
 
 在 [Hugging Face Hub](https://huggingface.com/models) 上，有超過 100 萬個 Transformers [模型檢查點](https://huggingface.co/models?library=transformers&sort=trending) 供您使用。
 
-立即探索 [Hub](https://huggingface.com/)，尋找合適的模型，並使用 Transformers 幫助您快速上手。
+立即探索 [Hub](https://huggingface.com)，尋找合適的模型，並使用 Transformers 幫助您快速上手。
 
 ## 安裝
 
-Transformers 支援 Python 3.9+ 和 [PyTorch](https://pytorch.org/get-started/locally/) 2.1+。
+Transformers 支援 Python 3.9+ 和 [PyTorch](https://pytorch.org/get-started/locally) 2.1+。
 
-使用 [venv](https://docs.python.org/3/library/venv.html) 或基於 Rust 的高速 Python 套件及專案管理器 [uv](https://docs.astral.sh/uv/) 來建立並啟用虛擬環境。
+使用 [venv](https://docs.python.org/3/library/venv.html) 或基於 Rust 的高速 Python 套件及專案管理器 [uv](https://docs.astral.sh/uv) 來建立並啟用虛擬環境。
 
 ```py
 # venv
@@ -311,7 +311,7 @@ Transformers 不僅僅是一個使用預訓練模型的工具包，它還是一�
 
 ## 引用
 
-現在我們有一篇可供您引用的關於 🤗 Transformers 函式庫的 [論文](https://www.aclweb.org/anthology/2020.emnlp-demos.6/)：
+現在我們有一篇可供您引用的關於 🤗 Transformers 函式庫的 [論文](https://www.aclweb.org/anthology/2020.emnlp-demos.6)：
 ```bibtex
 @inproceedings{wolf-etal-2020-transformers,
     title = "Transformers: State-of-the-Art Natural Language Processing",

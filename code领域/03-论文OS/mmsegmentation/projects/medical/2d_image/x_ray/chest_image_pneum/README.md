@@ -15,7 +15,7 @@ The dataset is provided by the Society for Imaging Informatics in Medicine(SIIM)
 
 | Dataset name                                                          | Anatomical region | Task type    | Modality | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                            |
 | --------------------------------------------------------------------- | ----------------- | ------------ | -------- | ------------ | --------------------- | ---------------------- | ------------ | ------------------------------------------------------------------ |
-| [pneumothorax segmentation](https://tianchi.aliyun.com/dataset/83075) | thorax            | segmentation | x_ray    | 2            | 12089/-/3205          | yes/-/no               | -            | [CC-BY-SA-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| [pneumothorax segmentation](https://tianchi.aliyun.com/dataset/83075) | thorax            | segmentation | x_ray    | 2            | 12089/-/3205          | yes/-/no               | -            | [CC-BY-SA-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
 |    Class Name     | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :---------------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

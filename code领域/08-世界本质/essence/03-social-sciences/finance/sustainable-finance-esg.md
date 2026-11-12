@@ -2,7 +2,7 @@
 
 > **位置**：`03-social-sciences/finance/sustainable-finance-esg.md`  
 > **关联**：[`_overview.md`](./_overview.md) 总览 + [`_philosophy-of-finance.md`](./_philosophy-of-finance.md) 哲学锚点 + [`corporate-finance.md`](./corporate-finance.md) §9.4 ESG 与利益相关者 + [`asset-allocation.md`](./asset-allocation.md) ESG 配置 + `finance-ethics.md`（`./finance-ethics.md`）（金融伦理）  
-> **学科哲学锚点**：[`_philosophy-of-finance.md`](./_philosophy-of-finance.md) §"企业为谁存在"——规范前提之争 + [`00-philosophy/ethics/`](../../00-philosophy/ethics/)（代际正义、集体行动）  
+> **学科哲学锚点**：[`_philosophy-of-finance.md`](./_philosophy-of-finance.md) §"企业为谁存在"——规范前提之争 + [`00-philosophy/ethics/`](../../00-philosophy/ethics)（代际正义、集体行动）  
 > **思想家主线**：Friedman / Freeman / Elkington / Porter / Scholes / Carney  
 > **一句话**：可持续金融 = **把"外部性"从脚注搬进定价核心的金融范式革命**——它追问的不是"这笔投资能赚多少"，而是"这笔投资在赚钱的同时，创造了还是毁灭了什么"。
 
@@ -101,7 +101,7 @@ Freeman 的逻辑链条同样清晰：
 | 2021 | ISSB（国际可持续准则理事会）成立 | 全球统一披露标准的努力 |
 | 2023 | EU CSRD（企业可持续发展报告指令）生效 | 强制 ESG 披露时代开启 |
 
-> **洞察**：从 Friedman 到 Business Roundtable 转向，整整走了 49 年。**范式转变不是一夜之间发生的——它是无数小事件累积到临界点后的相变**。这与 essence 项目中 [`06-systems/complexity/`](../../06-systems/complexity/) 的"涌现与相变"高度同构。
+> **洞察**：从 Friedman 到 Business Roundtable 转向，整整走了 49 年。**范式转变不是一夜之间发生的——它是无数小事件累积到临界点后的相变**。这与 essence 项目中 [`06-systems/complexity/`](../../06-systems/complexity) 的"涌现与相变"高度同构。
 
 ---
 
@@ -1121,12 +1121,12 @@ ESG 整合组合优化：不同 ESG 约束下的有效前沿
 - **公司金融** → [`corporate-finance.md`](./corporate-finance.md) §9.4 ESG 与利益相关者理论——企业目标函数之争
 - **资产配置** → [`asset-allocation.md`](./asset-allocation.md) §ESG 配置——ESG 如何重塑配置决策
 - **风险理论** → [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)——气候风险的 Knight 不确定性本质
-- **伦理学** → [`00-philosophy/ethics/`](../../00-philosophy/ethics/)——代际正义、集体行动、分配正义
+- **伦理学** → [`00-philosophy/ethics/`](../../00-philosophy/ethics)——代际正义、集体行动、分配正义
 - **中国金融** → [`china-financial-system.md`](./china-financial-system.md)——绿色金融的中国路径
 - **央行与监管** → [`central-banking.md`](./central-banking.md)、[`financial-regulation.md`](./financial-regulation.md)——NGFS、气候监管
-- **系统科学** → [`06-systems/complexity/`](../../06-systems/complexity/)——气候临界点、系统性风险
+- **系统科学** → [`06-systems/complexity/`](../../06-systems/complexity)——气候临界点、系统性风险
 - **金融伦理** → `finance-ethics.md`（`./finance-ethics.md`）（待建）——ESG 伦理、碳定价伦理、漂绿伦理
-- **公共经济学** → [`03-social-sciences/economics/`](../../03-social-sciences/economics/)——外部性、公共物品、庇古税
+- **公共经济学** → [`03-social-sciences/economics/`](../../03-social-sciences/economics)——外部性、公共物品、庇古税
 
 ### 10.4 阅读路径
 

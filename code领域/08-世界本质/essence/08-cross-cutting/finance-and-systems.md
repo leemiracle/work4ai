@@ -1,7 +1,7 @@
 # 金融与系统 · Finance and Systems
 
 > **位置**：`08-cross-cutting/finance-and-systems.md`  
-> **关联**：[`06-systems/`](../06-systems/) + [`03-social-sciences/finance/`](../03-social-sciences/finance/)  
+> **关联**：[`06-systems/`](../06-systems) + [`03-social-sciences/finance/`](../03-social-sciences/finance)  
 > **核心命题**：金融市场是**最典型的复杂适应系统**——用系统科学的语言能看穿金融的"本质"。
 
 ---
@@ -49,7 +49,7 @@
 
 当**正反馈 > 负反馈**（贪婪 > 理性，或套利者资金耗尽），市场进入泡沫。LTCM 1998 就是"套利者破产→负反馈消失→正反馈失控"的经典案例。
 
-> **连接**：[`06-systems/feedback/`](../06-systems/feedback/)——金融是正负反馈博弈的完美案例。
+> **连接**：[`06-systems/feedback/`](../06-systems/feedback)——金融是正负反馈博弈的完美案例。
 
 ---
 
@@ -74,7 +74,7 @@
 
 这就是 2008 危机的根源：CDO 模型让所有机构持有相关性极高的资产。
 
-> **连接**：[`06-systems/networks/`](../06-systems/networks/) + [`06-systems/complexity/`](../06-systems/complexity/)
+> **连接**：[`06-systems/networks/`](../06-systems/networks) + [`06-systems/complexity/`](../06-systems/complexity)
 
 ---
 
@@ -104,7 +104,7 @@
 
 Mandelbrot 早就发现金融时间序列有这些特征——但主流金融学选择了"假装"它们是布朗运动（因为没有临界性的数学工具）。
 
-> **连接**：[`06-systems/chaos/`](../06-systems/chaos/) + [`06-systems/complexity/`](../06-systems/complexity/)
+> **连接**：[`06-systems/chaos/`](../06-systems/chaos) + [`06-systems/complexity/`](../06-systems/complexity)
 
 ---
 
@@ -217,8 +217,8 @@ EMH 说"市场有效"——但市场不是天生有效的，它是**演化出来
 
 ## 九、关联
 
-- 系统科学根目录：[`06-systems/`](../06-systems/)
-- 金融学根目录：[`03-social-sciences/finance/`](../03-social-sciences/finance/)
+- 系统科学根目录：[`06-systems/`](../06-systems)
+- 金融学根目录：[`03-social-sciences/finance/`](../03-social-sciences/finance)
 - 金融哲学：[`03-social-sciences/finance/_philosophy-of-finance.md`](../03-social-sciences/finance/_philosophy-of-finance.md)
 - 风险专题：[`03-social-sciences/finance/risk-and-uncertainty.md`](../03-social-sciences/finance/risk-and-uncertainty.md)
 - 熵（跨学科示范）：[`08-cross-cutting/entropy.md`](./entropy.md)

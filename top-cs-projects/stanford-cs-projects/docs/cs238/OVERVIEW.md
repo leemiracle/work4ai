@@ -4,7 +4,7 @@
 > Instructors: **Mykel J. Kochenderfer**（航空工程 + AI，FAA/NTSB 航空安全顾问）
 > Time: Tue/Thu 9:00–10:20 AM, NVIDIA Auditorium
 > Prerequisites: **CS109**（概率）+ **CS106A**（编程，课程用 Julia）
-> Textbook: Kochenderfer, *Algorithms for Decision Making*, MIT Press 2022（[免费 PDF](https://algorithmsbook.com/)）
+> Textbook: Kochenderfer, *Algorithms for Decision Making*, MIT Press 2022（[免费 PDF](https://algorithmsbook.com)）
 > Difficulty: ⭐⭐⭐⭐⭐
 > 官网：http://cs238.stanford.edu/ ｜ 镜像：https://aa228.stanford.edu/
 
@@ -140,7 +140,7 @@ python3 -c "from supplementary.grad_projects import cs238_demo; cs238_demo()"
 ### 🔴 P0（必读，奠基）
 1. **Bellman 1957** *Dynamic Programming* — DP 与最优性原理的开山之作
 2. **Sutton & Barto** *Reinforcement Learning: An Introduction*（[在线版](http://incompleteideas.net/book/RLbook2020.pdf)）— RL 圣经
-3. **Kochenderfer et al. 2022** *Algorithms for Decision Making*, MIT Press — 本课教材（[免费 PDF](https://algorithmsbook.com/)）
+3. **Kochenderfer et al. 2022** *Algorithms for Decision Making*, MIT Press — 本课教材（[免费 PDF](https://algorithmsbook.com)）
 4. **Kaelbling, Littman & Cassandra 1998** "Planning and acting in partially observable stochastic domains" *AIJ* — POMDP 经典综述
 
 ### 🟡 P1（重要方法）

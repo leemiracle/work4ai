@@ -25,8 +25,8 @@ pip install -r requirements.txt
 
 3. Get your Anthropic API and Ragie API Key
 
-- Sign up for an [Anthropic account](https://console.anthropic.com/) and get your API key
-- Sign up for an [Ragie account](https://www.ragie.ai/) and get your API key
+- Sign up for an [Anthropic account](https://console.anthropic.com) and get your API key
+- Sign up for an [Ragie account](https://www.ragie.ai) and get your API key
 
 4. Run the Streamlit app
 ```bash

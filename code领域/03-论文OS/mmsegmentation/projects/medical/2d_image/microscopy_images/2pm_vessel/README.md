@@ -14,7 +14,7 @@ The dataset contains a total of 12 volumetric stacks consisting images of mouse 
 
 | Dataset Name                                                 | Anatomical Region | Task Type    | Modality          | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                       |
 | ------------------------------------------------------------ | ----------------- | ------------ | ----------------- | ------------ | --------------------- | ---------------------- | ------------ | ------------------------------------------------------------- |
-| [2pm_vessel](https://opendatalab.org.cn/2-PM_Vessel_Dataset) | vessel            | segmentation | microscopy_images | 2            | 216/-/-               | yes/-/-                | 2021         | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| [2pm_vessel](https://opendatalab.org.cn/2-PM_Vessel_Dataset) | vessel            | segmentation | microscopy_images | 2            | 216/-/-               | yes/-/-                | 2021         | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

@@ -1,7 +1,7 @@
 # UT Austin M 340L — Matrices and Matrix Calculations
 
 > **学校**：UT Austin
-> **一手来源**：[catalog.utexas.edu](https://catalog.utexas.edu/general-information/coursesatoz/m/)
+> **一手来源**：[catalog.utexas.edu](https://catalog.utexas.edu/general-information/coursesatoz/m)
 
 ## 课程信息
 - **编号**：M 340L（应用线代；区别于 M 341 理论版）

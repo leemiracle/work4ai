@@ -18,13 +18,13 @@ rendered properly in your Markdown viewer.
 
 ## 개요[[overview]]
 
-미스트랄은 Albert Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford, Devendra Singh Chaplot, Diego de las Casas, Florian Bressand, Gianna Lengyel, Guillaume Lample, Lélio Renard Lavaud, Lucile Saulnier, Marie-Anne Lachaux, Pierre Stock, Teven Le Scao, Thibaut Lavril, Thomas Wang, Timothée Lacroix, William El Sayed가 작성한 [이 블로그 포스트](https://mistral.ai/news/announcing-mistral-7b/)에서 소개되었습니다.
+미스트랄은 Albert Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford, Devendra Singh Chaplot, Diego de las Casas, Florian Bressand, Gianna Lengyel, Guillaume Lample, Lélio Renard Lavaud, Lucile Saulnier, Marie-Anne Lachaux, Pierre Stock, Teven Le Scao, Thibaut Lavril, Thomas Wang, Timothée Lacroix, William El Sayed가 작성한 [이 블로그 포스트](https://mistral.ai/news/announcing-mistral-7b)에서 소개되었습니다.
 
 블로그 포스트의 서두는 다음과 같습니다:
 
 *미스트랄 AI팀은 현존하는 언어 모델 중 크기 대비 가장 강력한 미스트랄7B를 출시하게 되어 자랑스럽습니다.*
 
-미스트랄-7B는 [mistral.ai](https://mistral.ai/)에서 출시한 첫 번째 대규모 언어 모델(LLM)입니다.
+미스트랄-7B는 [mistral.ai](https://mistral.ai)에서 출시한 첫 번째 대규모 언어 모델(LLM)입니다.
 
 ### 아키텍처 세부사항[[architectural-details]]
 
@@ -34,7 +34,7 @@ rendered properly in your Markdown viewer.
 - GQA(Grouped Query Attention): 더 빠른 추론이 가능하고 더 작은 크기의 캐시를 사용합니다.
 - 바이트 폴백(Byte-fallback) BPE 토크나이저: 문자들이 절대 어휘 목록 외의 토큰으로 매핑되지 않도록 보장합니다.
 
-더 자세한 내용은 [출시 블로그 포스트](https://mistral.ai/news/announcing-mistral-7b/)를 참조하세요.
+더 자세한 내용은 [출시 블로그 포스트](https://mistral.ai/news/announcing-mistral-7b)를 참조하세요.
 
 ### 라이선스[[license]]
 

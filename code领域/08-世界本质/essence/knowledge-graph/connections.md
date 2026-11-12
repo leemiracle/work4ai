@@ -257,7 +257,7 @@
 
 ## 金融类连接（2026-07-16 扩展）
 
-> 来源：系统性建立金融学科后发现的跨学科同构。详见 [`03-social-sciences/finance/`](../03-social-sciences/finance/)
+> 来源：系统性建立金融学科后发现的跨学科同构。详见 [`03-social-sciences/finance/`](../03-social-sciences/finance)
 
 ### 同构关系（金融学概念 × 其他学科）
 

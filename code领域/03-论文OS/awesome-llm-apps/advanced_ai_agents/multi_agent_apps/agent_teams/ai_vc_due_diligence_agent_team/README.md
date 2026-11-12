@@ -1,6 +1,6 @@
 # 📊 AI VC Due Diligence Agent Team
 
-A multi-agent AI pipeline for startup investment analysis, built with [Google ADK](https://google.github.io/adk-docs/), Gemini 3 Pro, Gemini 3 Flash and Nano Banana Pro.
+A multi-agent AI pipeline for startup investment analysis, built with [Google ADK](https://google.github.io/adk-docs), Gemini 3 Pro, Gemini 3 Flash and Nano Banana Pro.
 
 **Works with any startup** - from early-stage unknowns to well-funded companies. Just provide a company name, website URL, or both.
 
@@ -326,7 +326,7 @@ outputs/
 
 ## Learn More
 
-- [Google ADK Documentation](https://google.github.io/adk-docs/)
-- [Multi Agent Patterns in ADK](https://developers.googleblog.com/developers-guide-to-multi-agent-patterns-in-adk/)
+- [Google ADK Documentation](https://google.github.io/adk-docs)
+- [Multi Agent Patterns in ADK](https://developers.googleblog.com/developers-guide-to-multi-agent-patterns-in-adk)
 - [Gemini API](https://ai.google.dev/gemini-api/docs)
 - [Gemini Image Generation](https://ai.google.dev/gemini-api/docs/image-generation)

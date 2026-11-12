@@ -20,7 +20,7 @@ The following example showcases how to train a CLIP-like vision-text dual encode
 using a pre-trained vision and text encoder.
 
 Such a model can be used for natural language image search and potentially zero-shot image classification.
-The model is inspired by [CLIP](https://openai.com/blog/clip/), introduced by Alec Radford et al.
+The model is inspired by [CLIP](https://openai.com/blog/clip), introduced by Alec Radford et al.
 The idea is to train a vision encoder and a text encoder jointly to project the representation of images and their
 captions into the same embedding space, such that the caption embeddings are located near the embeddings
 of the images they describe.

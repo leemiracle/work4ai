@@ -28,7 +28,7 @@ The output of Task 1 can be directly used to perform Task 2, but these can be tr
 
 | Dataset name                                             | Anatomical region | Task type    | Modality       | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                                                                      |
 | -------------------------------------------------------- | ----------------- | ------------ | -------------- | ------------ | --------------------- | ---------------------- | ------------ | ------------------------------------------------------------------------------------------------------------ |
-| [CoNIC202](https://conic-challenge.grand-challenge.org/) | abdomen           | segmentation | histopathology | 7            | 4981/-/-              | yes/-/-                | 2022         | [Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/) |
+| [CoNIC202](https://conic-challenge.grand-challenge.org) | abdomen           | segmentation | histopathology | 7            | 4981/-/-              | yes/-/-                | 2022         | [Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |
@@ -67,7 +67,7 @@ export PYTHONPATH=`pwd`:$PYTHONPATH
 
 ### Dataset preparing
 
-- download dataset from [here](https://drive.google.com/drive/folders/1il9jG7uA4-ebQ_lNmXbbF2eOK9uNwheb/) and move data to path `'data/CoNIC_Challenge'`. The directory should be like:
+- download dataset from [here](https://drive.google.com/drive/folders/1il9jG7uA4-ebQ_lNmXbbF2eOK9uNwheb) and move data to path `'data/CoNIC_Challenge'`. The directory should be like:
   ```shell
   data/CoNIC_Challenge
         ├── README.txt

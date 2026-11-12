@@ -17,49 +17,49 @@ Each skill contains:
 
 | Skill | Description |
 |-------|-------------|
-| [python-expert](python-expert/) | Senior Python developer with focus on clean, maintainable code |
-| [code-reviewer](code-reviewer/) | Thorough code review with security and performance focus |
-| [debugger](debugger/) | Systematic debugging and root cause analysis |
-| [fullstack-developer](fullstack-developer/) | Modern web development (React, Node.js, databases) |
+| [python-expert](python-expert) | Senior Python developer with focus on clean, maintainable code |
+| [code-reviewer](code-reviewer) | Thorough code review with security and performance focus |
+| [debugger](debugger) | Systematic debugging and root cause analysis |
+| [fullstack-developer](fullstack-developer) | Modern web development (React, Node.js, databases) |
 
 ### 🔍 Research
 
 | Skill | Description |
 |-------|-------------|
-| [deep-research](deep-research/) | Multi-source research with citations and synthesis |
-| [fact-checker](fact-checker/) | Verify claims and identify misinformation |
-| [academic-researcher](academic-researcher/) | Literature review and academic writing |
+| [deep-research](deep-research) | Multi-source research with citations and synthesis |
+| [fact-checker](fact-checker) | Verify claims and identify misinformation |
+| [academic-researcher](academic-researcher) | Literature review and academic writing |
 
 ### ✍️ Writing
 
 | Skill | Description |
 |-------|-------------|
-| [technical-writer](technical-writer/) | Clear documentation and technical content |
-| [content-creator](content-creator/) | Engaging blog posts and social media content |
-| [editor](editor/) | Professional editing and proofreading |
+| [technical-writer](technical-writer) | Clear documentation and technical content |
+| [content-creator](content-creator) | Engaging blog posts and social media content |
+| [editor](editor) | Professional editing and proofreading |
 
 ### 📋 Planning
 
 | Skill | Description |
 |-------|-------------|
-| [project-planner](project-planner/) | Break down projects into actionable tasks |
-| [sprint-planner](sprint-planner/) | Agile sprint planning and estimation |
-| [strategy-advisor](strategy-advisor/) | High-level strategic thinking and business decisions |
+| [project-planner](project-planner) | Break down projects into actionable tasks |
+| [sprint-planner](sprint-planner) | Agile sprint planning and estimation |
+| [strategy-advisor](strategy-advisor) | High-level strategic thinking and business decisions |
 
 ### 📊 Data Analysis
 
 | Skill | Description |
 |-------|-------------|
-| [data-analyst](data-analyst/) | SQL, pandas, and statistical analysis |
-| [visualization-expert](visualization-expert/) | Chart selection and data visualization |
+| [data-analyst](data-analyst) | SQL, pandas, and statistical analysis |
+| [visualization-expert](visualization-expert) | Chart selection and data visualization |
 
 ### ⚡ Productivity
 
 | Skill | Description |
 |-------|-------------|
-| [email-drafter](email-drafter/) | Professional email composition |
-| [meeting-notes](meeting-notes/) | Structured meeting summaries with action items |
-| [decision-helper](decision-helper/) | Structured decision-making frameworks |
+| [email-drafter](email-drafter) | Professional email composition |
+| [meeting-notes](meeting-notes) | Structured meeting summaries with action items |
+| [decision-helper](decision-helper) | Structured decision-making frameworks |
 
 ## Installation
 

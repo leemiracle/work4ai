@@ -32,7 +32,7 @@ For more pointers, see [Learning Lean](https://leanprover-community.github.io/le
 ## Documentation
 
 Besides the installation guides above and [Lean's general
-documentation](https://docs.lean-lang.org/lean4/doc/), the documentation
+documentation](https://docs.lean-lang.org/lean4/doc), the documentation
 of mathlib consists of:
 
 - [The mathlib4 docs](https://leanprover-community.github.io/mathlib4_docs/index.html): documentation [generated
@@ -43,10 +43,10 @@ of mathlib consists of:
 - Documentation for people who would like to [contribute to mathlib](https://leanprover-community.github.io/contribute/index.html)
 
 Much of the discussion surrounding mathlib occurs in a [Zulip chat
-room](https://leanprover.zulipchat.com/), and you are welcome to join, or read
+room](https://leanprover.zulipchat.com), and you are welcome to join, or read
 along without signing up.  Questions from users at all levels of expertise are
 welcome!  We also provide an [archive of the public
-discussions](https://leanprover-community.github.io/archive/), which is useful
+discussions](https://leanprover-community.github.io/archive), which is useful
 for quick reference.
 
 ## Contributing
@@ -54,7 +54,7 @@ for quick reference.
 The complete documentation for contributing to ``mathlib`` is located
 [on the community guide contribute to mathlib](https://leanprover-community.github.io/contribute/index.html)
 
-You may want to subscribe to the `mathlib4` channel on [Zulip](https://leanprover.zulipchat.com/) to introduce yourself and your plan to the community.
+You may want to subscribe to the `mathlib4` channel on [Zulip](https://leanprover.zulipchat.com) to introduce yourself and your plan to the community.
 Often you can find community members willing to help you get started and advise you on the fit and
 feasibility of your project.
 

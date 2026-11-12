@@ -59,7 +59,7 @@ python3 -m sglang.launch_server \
 
 ### Accuracy Test with `lm_eval`
 
-The accuracy on SGLang for both Llama4 Scout and Llama4 Maverick can match the [official benchmark numbers](https://ai.meta.com/blog/llama-4-multimodal-intelligence/).
+The accuracy on SGLang for both Llama4 Scout and Llama4 Maverick can match the [official benchmark numbers](https://ai.meta.com/blog/llama-4-multimodal-intelligence).
 
 Benchmark results on MMLU Pro dataset with 8*H100:
 |                    | Llama-4-Scout-17B-16E-Instruct | Llama-4-Maverick-17B-128E-Instruct  |

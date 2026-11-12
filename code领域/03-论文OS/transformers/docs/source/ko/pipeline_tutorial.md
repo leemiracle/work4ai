@@ -166,7 +166,7 @@ for out in pipe(data()):
 
 그리고 일괄 처리가 더 빠를 수 있기 때문에, `batch_size` 매개변수를 조정해봐도 좋아요.
 
-데이터세트를 순회하는 가장 간단한 방법은 🤗 [Datasets](https://github.com/huggingface/datasets/)를 활용하는 것인데요.
+데이터세트를 순회하는 가장 간단한 방법은 🤗 [Datasets](https://github.com/huggingface/datasets)를 활용하는 것인데요.
 
 ```py
 # KeyDataset is a util that will just output the item we're interested in.

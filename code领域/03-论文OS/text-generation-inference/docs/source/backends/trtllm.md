@@ -76,7 +76,7 @@ docker run \
 
 ## Development
 
-To develop TRTLLM backend, you can use [dev containers](https://containers.dev/) with the following `.devcontainer.json` file:
+To develop TRTLLM backend, you can use [dev containers](https://containers.dev) with the following `.devcontainer.json` file:
 ```json
 {
   "name": "CUDA",

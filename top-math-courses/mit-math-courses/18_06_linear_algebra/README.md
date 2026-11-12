@@ -1,15 +1,15 @@
 # MIT 18.06 — Linear Algebra
 
 > **学校**：MIT | **学期**：Spring | **学分**：12 units
-> **一手来源**：[catalog.mit.edu/subjects/18/#18.06](https://catalog.mit.edu/subjects/18/) + [math.mit.edu/~gs/linearalgebra/ila6/](https://math.mit.edu/~gs/linearalgebra/ila6/)（2026-08 核实）
+> **一手来源**：[catalog.mit.edu/subjects/18/#18.06](https://catalog.mit.edu/subjects/18) + [math.mit.edu/~gs/linearalgebra/ila6/](https://math.mit.edu/~gs/linearalgebra/ila6)（2026-08 核实）
 
 ## 课程信息
 - **编号**：18.06（也有 CI 版本 18.06CI；新变体 18.C06[J] Linear Algebra and Optimization）
 - **先修**：18.02 多变量微积分（不强制）
 - **教材**：**Strang, *Introduction to Linear Algebra* (6th edition, 2022, Wellesley-Cambridge Press)** ★
   - 注意：不是 *Linear Algebra and Its Applications*（1988 旧版，已退役）
-- **视频**：[OCW Strang 18.06 经典 34 讲](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/)
-- **GitHub**：[mitmath/1806](https://github.com/mitmath/1806/) (Spring 2025 现行版)
+- **视频**：[OCW Strang 18.06 经典 34 讲](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010)
+- **GitHub**：[mitmath/1806](https://github.com/mitmath/1806) (Spring 2025 现行版)
 
 ## 教学大纲（6th edition 目录）
 1. **Vectors and Matrices**（向量、矩阵、列空间、AB/CR 乘法）
@@ -31,10 +31,10 @@
 
 ## 参考资源
 - **教材（PDF）**：[math.mit.edu/~gs/linearalgebra/ila6/ila6outline.pdf](https://math.mit.edu/~gs/linearalgebra/ila6/ila6outline.pdf)
-- **视频**：[OCW 34 讲完整](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/video_galleries/video-lectures/)
-- **视频（新版）**：[OCW 18.06SC 2011](https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/)
-- **习题**：[OCW 18.06 problem sets + solutions](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/assignments/)
-- **MIT 现行版**：[github.com/mitmath/1806](https://github.com/mitmath/1806/)
+- **视频**：[OCW 34 讲完整](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/video_galleries/video-lectures)
+- **视频（新版）**：[OCW 18.06SC 2011](https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011)
+- **习题**：[OCW 18.06 problem sets + solutions](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/assignments)
+- **MIT 现行版**：[github.com/mitmath/1806](https://github.com/mitmath/1806)
 
 ## 学习建议
 - **节奏**：每周 3-4 小时，10-12 周完成

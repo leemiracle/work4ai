@@ -75,7 +75,7 @@ limitations under the License.
 
 🤗 Transformers предоставляет API для быстрой загрузки и использования предварительно обученных моделей, их тонкой настройки на собственных датасетах и последующего взаимодействия ими с сообществом на нашем [сайте](https://huggingface.co/models). В то же время каждый python модуль, определяющий архитектуру, полностью автономен и может быть модифицирован для проведения быстрых исследовательских экспериментов.
 
-🤗 Transformers опирается на три самые популярные библиотеки глубокого обучения - [Jax](https://jax.readthedocs.io/en/latest/), [PyTorch](https://pytorch.org/) и [TensorFlow](https://www.tensorflow.org/) - и легко интегрируется между ними. Это позволяет легко обучать модели с помощью одной из них, а затем загружать их для выводов с помощью другой.
+🤗 Transformers опирается на три самые популярные библиотеки глубокого обучения - [Jax](https://jax.readthedocs.io/en/latest), [PyTorch](https://pytorch.org) и [TensorFlow](https://www.tensorflow.org) - и легко интегрируется между ними. Это позволяет легко обучать модели с помощью одной из них, а затем загружать их для выводов с помощью другой.
 
 ## Онлайн демонстрация
 
@@ -248,12 +248,12 @@ Hugging Face Hub. Мы хотим, чтобы Transformers позволил ра
 
 Данный репозиторий протестирован на Python 3.9+, Flax 0.4.1+, PyTorch 2.1+ и TensorFlow 2.6+.
 
-Устанавливать 🤗 Transformers следует в [виртуальной среде](https://docs.python.org/3/library/venv.html). Если вы не знакомы с виртуальными средами Python, ознакомьтесь с [руководством пользователя](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
+Устанавливать 🤗 Transformers следует в [виртуальной среде](https://docs.python.org/3/library/venv.html). Если вы не знакомы с виртуальными средами Python, ознакомьтесь с [руководством пользователя](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments).
 
 Сначала создайте виртуальную среду с той версией Python, которую вы собираетесь использовать, и активируйте ее.
 
 Затем необходимо установить хотя бы один бекенд из Flax, PyTorch или TensorFlow.
-Пожалуйста, обратитесь к страницам [TensorFlow установочная страница](https://www.tensorflow.org/install/), [PyTorch установочная страница](https://pytorch.org/get-started/locally/#start-locally) и/или [Flax](https://github.com/google/flax#quick-install) и [Jax](https://github.com/google/jax#installation), где описаны команды установки для вашей платформы.
+Пожалуйста, обратитесь к страницам [TensorFlow установочная страница](https://www.tensorflow.org/install), [PyTorch установочная страница](https://pytorch.org/get-started/locally/#start-locally) и/или [Flax](https://github.com/google/flax#quick-install) и [Jax](https://github.com/google/jax#installation), где описаны команды установки для вашей платформы.
 
 После установки одного из этих бэкендов 🤗 Transformers может быть установлен с помощью pip следующим образом:
 
@@ -294,7 +294,7 @@ conda install conda-forge::transformers
 
 | Секция | Описание |
 |-|-|
-| [Документация](https://huggingface.co/docs/transformers/) | Полная документация по API и гайды |
+| [Документация](https://huggingface.co/docs/transformers) | Полная документация по API и гайды |
 | [Краткие описания задач](https://huggingface.co/docs/transformers/task_summary) | Задачи поддерживаются 🤗 Transformers |
 | [Пособие по предварительной обработке](https://huggingface.co/docs/transformers/preprocessing) | Использование класса `Tokenizer` для подготовки данных для моделей |
 | [Обучение и доработка](https://huggingface.co/docs/transformers/training) | Использование моделей, предоставляемых 🤗 Transformers, в цикле обучения PyTorch/TensorFlow и API `Trainer`. |
@@ -303,7 +303,7 @@ conda install conda-forge::transformers
 
 ## Цитирование
 
-Теперь у нас есть [статья](https://www.aclweb.org/anthology/2020.emnlp-demos.6/), которую можно цитировать для библиотеки 🤗 Transformers:
+Теперь у нас есть [статья](https://www.aclweb.org/anthology/2020.emnlp-demos.6), которую можно цитировать для библиотеки 🤗 Transformers:
 ```bibtex
 @inproceedings{wolf-etal-2020-transformers,
     title = "Transformers: State-of-the-Art Natural Language Processing",

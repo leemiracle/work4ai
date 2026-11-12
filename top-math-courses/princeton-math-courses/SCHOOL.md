@@ -127,7 +127,7 @@ Princeton 数学最独特的是**大一可选 4 个不同强度的序列**：
 
 ## 六、参考资源
 
-- Princeton Math: [math.princeton.edu](https://www.math.princeton.edu/)
+- Princeton Math: [math.princeton.edu](https://www.math.princeton.edu)
 - Undergraduate brochure: [math.princeton.edu/undergraduate](https://www.math.princeton.edu/undergraduate)
 - Course placement: [math.princeton.edu/undergraduate/placement](https://www.math.princeton.edu/undergraduate/placement)
 

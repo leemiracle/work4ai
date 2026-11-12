@@ -27,7 +27,7 @@ pip install -r requirements.txt
 
 3. Set up your Google Cloud project and enable the Gmail API:
 
-- Go to the [Google Cloud Console](https://console.cloud.google.com/) and create a new project.
+- Go to the [Google Cloud Console](https://console.cloud.google.com) and create a new project.
 - Navigate to "APIs & Services > OAuth consent screen" and configure the OAuth consent screen.
 - Publish the OAuth consent screen by providing the necessary app information.
 - Enable the Gmail API and create OAuth client ID credentials.
@@ -35,7 +35,7 @@ pip install -r requirements.txt
 
 4. Get your OpenAI API Key
 
-- Sign up for an [OpenAI account](https://platform.openai.com/) (or the LLM provider of your choice) and obtain your API key.
+- Sign up for an [OpenAI account](https://platform.openai.com) (or the LLM provider of your choice) and obtain your API key.
 
 4. Run the Streamlit App
 

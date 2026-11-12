@@ -637,8 +637,8 @@ print(f"alpha = {b[0]:.4f}, t = {t[0]:.2f}")
 - **→ [`behavioral-finance.md`](./behavioral-finance.md)**：前景理论投资组合是行为金融对组合理论的渗透
 - **→ [`econophysics.md`](./econophysics.md)**：肥尾分布让 Markowitz 方差优化的正态假设失效
 - **→ [`financial-history.md`](./financial-history.md)**：因子崩盘（2009 动量、2020 拥挤去杠杆）是金融史的关键事件
-- **→ [`06-systems/complexity/`](../../06-systems/complexity/)**：市场是复杂系统，因子是其涌现的统计模式
-- **→ [`02-formal-sciences/probability/`](../../02-formal-sciences/probability/)**：本文所有公式建立在概率论之上
+- **→ [`06-systems/complexity/`](../../06-systems/complexity)**：市场是复杂系统，因子是其涌现的统计模式
+- **→ [`02-formal-sciences/probability/`](../../02-formal-sciences/probability)**：本文所有公式建立在概率论之上
 
 ---
 

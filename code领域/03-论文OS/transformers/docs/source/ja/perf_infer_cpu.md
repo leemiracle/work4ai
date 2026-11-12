@@ -31,4 +31,4 @@ Intel® Extension for PyTorchは、Transformersシリーズモデルのjitモー
 
 #### IPEX installation:
 
-IPEXのリリースはPyTorchに従っています。[IPEXのインストール方法](https://intel.github.io/intel-extension-for-pytorch/)を確認してください。
+IPEXのリリースはPyTorchに従っています。[IPEXのインストール方法](https://intel.github.io/intel-extension-for-pytorch)を確認してください。

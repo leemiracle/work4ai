@@ -1,6 +1,6 @@
 # ProofWidgets
 
-ProofWidgets is a library of user interface components for [Lean 4](https://leanprover.github.io/). It
+ProofWidgets is a library of user interface components for [Lean 4](https://leanprover.github.io). It
 supports:
 - symbolic visualizations of mathematical objects and data structures
 - data visualization
@@ -84,8 +84,8 @@ See the `Jsx.lean` and `ExprPresentation.lean` demos.
 
 ### Support for libraries
 
-We have good support for building diagrams with [Penrose](https://penrose.cs.cmu.edu/), and expose
-some [Recharts](https://recharts.org/en-US/) components for plotting functions and other kinds of
+We have good support for building diagrams with [Penrose](https://penrose.cs.cmu.edu), and expose
+some [Recharts](https://recharts.org/en-US) components for plotting functions and other kinds of
 data. See the `Venn.lean` and `Plot.lean` demos.
 
 For more purpose-specific integrations of libraries see the `Rubiks.lean` and `RbTree.lean` demos.
@@ -142,7 +142,7 @@ which might take a while.
 
 ## Cite
 
-We have written [a paper describing the design of ProofWidgets4](https://drops.dagstuhl.de/opus/volltexte/2023/18399/).
+We have written [a paper describing the design of ProofWidgets4](https://drops.dagstuhl.de/opus/volltexte/2023/18399).
 
 If this work helps you in your own research, you can cite it as follows:
 ```bibtex

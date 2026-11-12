@@ -1,7 +1,7 @@
 # Oxford Part A A0 — Linear Algebra
 
 > **学校**：Oxford | **学期**：Part A (Year 2)
-> **一手来源**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk/)
+> **一手来源**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk)
 
 ## 课程信息
 - **编号**：A0

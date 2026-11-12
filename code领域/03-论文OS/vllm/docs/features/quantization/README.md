@@ -61,7 +61,7 @@ th:not(:first-child) {
 - All Intel Gaudi quantization support has been migrated to [vLLM-Gaudi](https://github.com/vllm-project/vllm-gaudi).
 
 !!! note
-    For information on quantization support on Google TPU, please refer to the [TPU-Inference Recommended Models and Features](https://docs.vllm.ai/projects/tpu/en/latest/recommended_models_features/) documentation.
+    For information on quantization support on Google TPU, please refer to the [TPU-Inference Recommended Models and Features](https://docs.vllm.ai/projects/tpu/en/latest/recommended_models_features) documentation.
 
 !!! note
     This compatibility chart is subject to change as vLLM continues to evolve and expand its support for different hardware platforms and quantization methods.

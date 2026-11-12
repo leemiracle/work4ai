@@ -104,7 +104,7 @@
 - **Pix2Text**（个人开发者 @bretholtz）：截图转 LaTeX 极简好用
 - **FunASR + OCR 联合**：阿里达摩院全栈
 
-**英文圈对应文档**：[Unstructured.io Blog](https://unstructured.io/)、[LlamaIndex Blog](https://www.llamaindex.ai/blog)（英文圈 Document AI 进展主战场）。
+**英文圈对应文档**：[Unstructured.io Blog](https://unstructured.io)、[LlamaIndex Blog](https://www.llamaindex.ai/blog)（英文圈 Document AI 进展主战场）。
 
 ---
 

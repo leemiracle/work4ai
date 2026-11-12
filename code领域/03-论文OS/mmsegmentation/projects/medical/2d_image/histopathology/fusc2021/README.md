@@ -2,7 +2,7 @@
 
 ## Description
 
-This project supports **`Foot Ulcer Segmentation Challenge 2021 (FUSC 2021) `**, which can be downloaded from [here](https://fusc.grand-challenge.org/).
+This project supports **`Foot Ulcer Segmentation Challenge 2021 (FUSC 2021) `**, which can be downloaded from [here](https://fusc.grand-challenge.org).
 
 ### Dataset Overview
 
@@ -13,7 +13,7 @@ with various backgrounds. The images (shown in Figure 1) are randomly split into
 
 | Dataset Name                                  | Anatomical Region | Task Type    | Modality       | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                       |
 | --------------------------------------------- | ----------------- | ------------ | -------------- | ------------ | --------------------- | ---------------------- | ------------ | ------------------------------------------------------------- |
-| [fusc2021](https://fusc.grand-challenge.org/) | lower limb        | segmentation | histopathology | 2            | 810/200/200           | yes/yes/no             | 2021         | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| [fusc2021](https://fusc.grand-challenge.org) | lower limb        | segmentation | histopathology | 2            | 810/200/200           | yes/yes/no             | 2021         | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |
@@ -61,7 +61,7 @@ export PYTHONPATH=`pwd`:$PYTHONPATH
 
 ### Dataset Preparing
 
-- download dataset from [here](https://fusc.grand-challenge.org/) and decompress data to path `'data/'`.
+- download dataset from [here](https://fusc.grand-challenge.org) and decompress data to path `'data/'`.
 - run script `"python tools/prepare_dataset.py"` to format data and change folder structure as below.
 - run script `"python ../../tools/split_seg_dataset.py"` to split dataset and generate `train.txt`, `val.txt` and `test.txt`. If the label of official validation set and test set cannot be obtained, we generate `train.txt` and `val.txt` from the training set randomly.
 

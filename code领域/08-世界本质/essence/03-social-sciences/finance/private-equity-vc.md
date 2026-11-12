@@ -1086,7 +1086,7 @@ PE 控股企业后，常见的操作包括：
 
 **争议**：Carry 本质上是 GP 的"服务报酬"（管理投资的服务费），而非"投资回报"（GP 自己只出了 1-2% 的钱）。为什么服务报酬能享受资本利得税率？
 
-> **政治哲学追问**：这个税收优惠是**合理激励**（鼓励长期投资）还是**利益集团的寻租**（PE 行业的游说力量）？这触及 [`00-philosophy/ethics/`](../../00-philosophy/ethics/) 的分配正义问题。
+> **政治哲学追问**：这个税收优惠是**合理激励**（鼓励长期投资）还是**利益集团的寻租**（PE 行业的游说力量）？这触及 [`00-philosophy/ethics/`](../../00-philosophy/ethics) 的分配正义问题。
 
 ### 10.6 "宇宙的主宰"——文化批判
 
@@ -1156,9 +1156,9 @@ PE/VC **既不是天使也不是恶魔**。它的价值取决于三个条件：
 - **风险哲学** → [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（VC 投资的 Knight 不确定性 vs 可度量风险）
 - **行为金融** → [`behavioral-finance.md`](./behavioral-finance.md)（LP 募资中的认知偏差、GP 的过度自信）
 - **中国金融体系** → [`china-financial-system.md`](./china-financial-system.md)（政府引导基金、人民币 vs 美元基金、金融控制）
-- **博弈论** → [`06-systems/game-theory/`](../../06-systems/game-theory/)（Term Sheet 谈判 = 不完全信息博弈）
-- **政治哲学** → [`00-philosophy/ethics/`](../../00-philosophy/ethics/)（分配正义、Carry 税收、金融化批判）
-- **复杂系统** → [`06-systems/complexity/`](../../06-systems/complexity/)（幂律分布、肥尾、涌现）
+- **博弈论** → [`06-systems/game-theory/`](../../06-systems/game-theory)（Term Sheet 谈判 = 不完全信息博弈）
+- **政治哲学** → [`00-philosophy/ethics/`](../../00-philosophy/ethics)（分配正义、Carry 税收、金融化批判）
+- **复杂系统** → [`06-systems/complexity/`](../../06-systems/complexity)（幂律分布、肥尾、涌现）
 
 ### 11.4 学习路径推荐
 

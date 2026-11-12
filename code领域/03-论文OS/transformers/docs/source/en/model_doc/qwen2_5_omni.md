@@ -25,7 +25,7 @@ rendered properly in your Markdown viewer.
 
 ## Overview
 
-The [Qwen2.5-Omni](https://qwenlm.github.io/blog/qwen2.5-omni/) model is a unified multiple modalities model proposed in [Qwen2.5-Omni Technical Report](https://huggingface.co/papers/2503.20215) from Qwen team, Alibaba Group.
+The [Qwen2.5-Omni](https://qwenlm.github.io/blog/qwen2.5-omni) model is a unified multiple modalities model proposed in [Qwen2.5-Omni Technical Report](https://huggingface.co/papers/2503.20215) from Qwen team, Alibaba Group.
 
 The abstract from the technical report is the following:
 

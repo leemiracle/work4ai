@@ -216,9 +216,9 @@ https://[URL]/philosophy/concepts/ontology.md
 ## 🔗 外部资源
 
 ### 权威参考
-- [Stanford Encyclopedia of Philosophy](https://plato.stanford.edu/)
-- [Routledge Encyclopedia of Philosophy](https://www.rep.routledge.com/)
-- [American Anthropological Association](https://www.americananthro.org/)
+- [Stanford Encyclopedia of Philosophy](https://plato.stanford.edu)
+- [Routledge Encyclopedia of Philosophy](https://www.rep.routledge.com)
+- [American Anthropological Association](https://www.americananthro.org)
 
 ### 中文学术资源
 - 中国知网 (CNKI)

@@ -19,7 +19,7 @@ cd awesome-llm-apps/advanced_tools_frameworks/local_chatgpt_clone
 ```bash
 pip install -r requirements.txt
 ```
-3. Download and install the [LM Studio desktop app](https://lmstudio.ai/). Download the Llama-3 instruct model.
+3. Download and install the [LM Studio desktop app](https://lmstudio.ai). Download the Llama-3 instruct model.
 
 4. Expose the Llama-3 model as an OpenAI API by starting the server in LM Studio. Watch this [video walkthrough](https://x.com/Saboo_Shubham_/status/1783715814790549683).
 

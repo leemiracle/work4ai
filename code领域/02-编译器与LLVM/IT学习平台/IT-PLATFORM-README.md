@@ -155,7 +155,7 @@ Apache License 2.0
 ## 联系方式
 
 - Issues: [GitHub Issues](https://github.com/llvm/llvm-project/issues)
-- Discussions: [Discourse](https://discourse.llvm.org/)
+- Discussions: [Discourse](https://discourse.llvm.org)
 
 ---
 

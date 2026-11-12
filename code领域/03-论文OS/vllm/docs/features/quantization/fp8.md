@@ -18,7 +18,7 @@ The FP8 types typically supported in hardware have two distinct representations,
 
 ## Installation
 
-To produce performant FP8 quantized models with vLLM, you'll need to install the [llm-compressor](https://github.com/vllm-project/llm-compressor/) library:
+To produce performant FP8 quantized models with vLLM, you'll need to install the [llm-compressor](https://github.com/vllm-project/llm-compressor) library:
 
 ```bash
 pip install llmcompressor

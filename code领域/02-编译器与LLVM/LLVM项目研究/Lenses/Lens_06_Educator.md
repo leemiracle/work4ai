@@ -236,18 +236,18 @@ CMU 15-411 的设计最具教育学自觉：6 个 Lab 让学生从 L1（直线�
 2. Shulman, L. S. (1986). "Those who understand: Knowledge growth in teaching." *Educational Researcher*, 15(2), 4-14. —— PCK 理论奠基 `[论文]`
 3. Sweller, J. (1988). "Cognitive load during problem solving: Effects on learning." *Cognitive Science*, 12(2), 257-285. —— 认知负荷理论 `[论文]`
 4. Bjork, R. A., & Bjork, E. L. (2011). "Making things hard on yourself, but in a good way: Creating desirable difficulties to enhance learning." *Psychology and the Real World*. —— 合意困难 `[教材]`
-5. CMU 15-411/611 Compiler Design（2026 Spring, Seth Copen Goldstein）. [cs.cmu.edu/~411](https://www.cs.cmu.edu/~411/) ; Lab 6 LLVM handout [lab6llvm.pdf](http://www.cs.cmu.edu/~janh/courses/411/23/labs/lab6llvm.pdf). 教材 Appel *Modern Compiler Implementation in ML*. 访问 2026-07-07. `[课程]`
-6. Cornell CS 6120: Advanced Compilers（Adrian Sampson, 2025fa）. [cs.cornell.edu/courses/cs6120](https://www.cs.cornell.edu/courses/cs6120/2025fa/) ; Lesson 7: LLVM. 访问 2026-07-07. `[课程]`
-7. MIT 6.110 Computer Language Engineering（原 6.035, 2025 Spring）. [6110-sp25.github.io](https://6110-sp25.github.io/) ; Decaf 项目. 访问 2026-07-07. `[课程]`
-8. Stanford CS143: Compilers. [web.stanford.edu/class/cs143](https://web.stanford.edu/class/cs143/) ; 龙书（紫龙书 2nd, 2006）[suif.stanford.edu/dragonbook](https://suif.stanford.edu/dragonbook/) ; Cool 语言 manual. 访问 2026-07-07. `[课程/教材]`
-9. UC Berkeley CS164: Programming Languages and Compilers（Schasins, 2025 Fall）. [schasins.com/berkeley-cs164-fall-2025](https://schasins.com/berkeley-cs164-fall-2025/) ; FAQ 明确"OCaml → x86，不用 LLVM". 访问 2026-07-07. `[课程]`
-10. LLVM Kaleidoscope Tutorial（官方）. [llvm.org/docs/tutorial/MyFirstLanguageFrontend](https://llvm.org/docs/tutorial/MyFirstLanguageFrontend/index.html). 连城中译 [llvm-tutorial-cn.readthedocs.io](https://llvm-tutorial-cn.readthedocs.io/). 访问 2026-07-07. `[官网]`
+5. CMU 15-411/611 Compiler Design（2026 Spring, Seth Copen Goldstein）. [cs.cmu.edu/~411](https://www.cs.cmu.edu/~411) ; Lab 6 LLVM handout [lab6llvm.pdf](http://www.cs.cmu.edu/~janh/courses/411/23/labs/lab6llvm.pdf). 教材 Appel *Modern Compiler Implementation in ML*. 访问 2026-07-07. `[课程]`
+6. Cornell CS 6120: Advanced Compilers（Adrian Sampson, 2025fa）. [cs.cornell.edu/courses/cs6120](https://www.cs.cornell.edu/courses/cs6120/2025fa) ; Lesson 7: LLVM. 访问 2026-07-07. `[课程]`
+7. MIT 6.110 Computer Language Engineering（原 6.035, 2025 Spring）. [6110-sp25.github.io](https://6110-sp25.github.io) ; Decaf 项目. 访问 2026-07-07. `[课程]`
+8. Stanford CS143: Compilers. [web.stanford.edu/class/cs143](https://web.stanford.edu/class/cs143) ; 龙书（紫龙书 2nd, 2006）[suif.stanford.edu/dragonbook](https://suif.stanford.edu/dragonbook) ; Cool 语言 manual. 访问 2026-07-07. `[课程/教材]`
+9. UC Berkeley CS164: Programming Languages and Compilers（Schasins, 2025 Fall）. [schasins.com/berkeley-cs164-fall-2025](https://schasins.com/berkeley-cs164-fall-2025) ; FAQ 明确"OCaml → x86，不用 LLVM". 访问 2026-07-07. `[课程]`
+10. LLVM Kaleidoscope Tutorial（官方）. [llvm.org/docs/tutorial/MyFirstLanguageFrontend](https://llvm.org/docs/tutorial/MyFirstLanguageFrontend/index.html). 连城中译 [llvm-tutorial-cn.readthedocs.io](https://llvm-tutorial-cn.readthedocs.io). 访问 2026-07-07. `[官网]`
 11. LLVM Discourse. "Kaleidoscope tutorial is out of date"（2013）[discourse.llvm.org/t/28226](https://discourse.llvm.org/t/kaleidoscope-tutorial-is-out-of-date/28226) ; "comments, corrections and Windows support"（2017）[discourse.llvm.org/t/43890](https://discourse.llvm.org/t/kaleidoscope-tutorial-comments-corrections-and-windows-support/43890). 访问 2026-07-07. `[Discourse]`
 12. LLVM PR #111289. "[doc] Fix Kaleidoscope tutorial chapter 3 code snippet discrepancies"（2024-10）. [lists.llvm.org/.../1471491](https://lists.llvm.org/pipermail/llvm-commits/Week-of-Mon-20241007/1471491.html). 访问 2026-07-07. `[GitHub PR]`
 13. llvm-commits. "Big update to Kaleidoscope tutorials"（Lang Hames, 2015-08）. [lists.llvm.org/.../295958](https://lists.llvm.org/pipermail/llvm-commits/Week-of-Mon-20150824/295958.html). 访问 2026-07-07. `[邮件列表]`
 14. Lopes, N. P., et al. (2022). "Alive2: Bounded Translation Validation for LLVM." *POPL 2022*. —— undef/poison 形式化验证 `[论文]`
 15. Cooper, K., & Torczon, L. (2022). *Engineering a Compiler* (3rd ed.). Morgan Kaufmann. Rice COMP 412 母教材. `[教材]`
-16. 一生一芯（"YSYX"，包云岗团队，2019-）. [ysyx.oscc.cc](https://ysyx.oscc.cc/) ; CCD2025 导教班 [ccf.org.cn/.../845752](https://www.ccf.org.cn/Focus/2025-06-19/845752.shtml). 访问 2026-07-07. `[官方]`
+16. 一生一芯（"YSYX"，包云岗团队，2019-）. [ysyx.oscc.cc](https://ysyx.oscc.cc) ; CCD2025 导教班 [ccf.org.cn/.../845752](https://www.ccf.org.cn/Focus/2025-06-19/845752.shtml). 访问 2026-07-07. `[官方]`
 17. 香山编译器 XSCC（基于 LLVM 的 RISC-V 编译器，2025-09）. [IT之家报道](https://www.ithome.com/0/883/720.htm). 访问 2026-07-07. `[报道]`
 18. mlirAgent（UC Berkeley）. [github.com/ucb-bar/mlirAgent](https://github.com/ucb-bar/mlirAgent). 访问 2026-07-07. `[GitHub]`
 19. LLVM Discourse. "Automated review with agents: ~30 bugs on 207 PRs"（2026-03）[discourse.llvm.org/t/90093](https://discourse.llvm.org/t/automated-review-with-agents-30-bugs-on-207-prs/90093). 访问 2026-07-07. `[Discourse]`

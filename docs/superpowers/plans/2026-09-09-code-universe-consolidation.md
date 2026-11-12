@@ -204,7 +204,7 @@ Expected: 累计对账 = Task 1 基线 paper-os 行；push 成功或走体积闸
 - Create: `code领域/05-系统与ML工程/leemiracle/`（4 子项目）、`…/Machine-Learning-Interviews/`、`…/deepseek-harness/`
 
 **Interfaces:**
-- Produces: 05 区完整内容；deepseek-harness 与仓库既有 `deepseek-universal-harness/`（harness 构建物）及 `讲透Agent/Agent框架案例/deepseek-harness插件化框架/` 互补不冲突
+- Produces: 05 区完整内容；deepseek-harness 与仓库既有 `deepseek-universal-harness/`（harness 构建物）及 `../../../讲透宇宙/01-学/讲透Agent//Agent框架案例/deepseek-harness插件化框架/` 互补不冲突
 
 - [ ] **Step 1: robocopy 六项**（leemiracle 的 4 个子目录各自 robocopy，/XD 同全局）
 - [ ] **Step 2: 对账 → 提交（leemiracle 一个 commit、ML-Interviews+deepseek-harness 各一个）**

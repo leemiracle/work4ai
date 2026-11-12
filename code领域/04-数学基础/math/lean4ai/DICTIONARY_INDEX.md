@@ -36,7 +36,7 @@ lean4ai/
 
 ## 核心词典模块
 
-### 1. AI & LLM 词典 → [docs/ai/](./docs/ai/)
+### 1. AI & LLM 词典 → [docs/ai/](./docs/ai)
 
 | 文件 | 内容 |
 |------|------|
@@ -46,7 +46,7 @@ lean4ai/
 | [AI_APP_DEVELOPMENT.md](./docs/ai/AI_APP_DEVELOPMENT.md) | Prompt工程、RAG、部署 |
 | [LEAN4_AI_DICTIONARY.md](./docs/ai/LEAN4_AI_DICTIONARY.md) | 形式化证明与AI |
 
-### 2. 数学词典 → [docs/math/](./docs/math/)
+### 2. 数学词典 → [docs/math/](./docs/math)
 
 12卷完整数学词典，包含：
 
@@ -68,7 +68,7 @@ lean4ai/
 
 索引: [MATH_DICTIONARY_INDEX.md](./docs/math/MATH_DICTIONARY_INDEX.md)
 
-### 3. 物理学词典 → [docs/physics/](./docs/physics/)
+### 3. 物理学词典 → [docs/physics/](./docs/physics)
 
 | 文件 | 主题 |
 |------|------|
@@ -81,28 +81,28 @@ lean4ai/
 | [PHYSICS_PARTICLE_PHYSICS.md](./docs/physics/PHYSICS_PARTICLE_PHYSICS.md) | 粒子物理 |
 | [PHYSICS_QUANTUM_INFO.md](./docs/physics/PHYSICS_QUANTUM_INFO.md) | 量子信息 |
 
-### 4. 哲学词典 → [docs/philosophy_dictionary/](./docs/philosophy_dictionary/)
+### 4. 哲学词典 → [docs/philosophy_dictionary/](./docs/philosophy_dictionary)
 
 8卷完整哲学词典：形而上学、认识论、伦理学、语言/逻辑、心灵、科学、历史、当代
 
 ### 5. 其他词典
 
 - [军事词典](./docs/military_dictionary.md)
-- [人类学词典](./docs/anthropology_dictionary/)
-- [百科全书](./docs/encyclopedia/)
+- [人类学词典](./docs/anthropology_dictionary)
+- [百科全书](./docs/encyclopedia)
 
 ---
 
 ## 技术文档
 
-### Lean4 相关 → [docs/lean4/](./docs/lean4/)
+### Lean4 相关 → [docs/lean4/](./docs/lean4)
 
 - [MATHLIB_GUIDE.md](./docs/lean4/MATHLIB_GUIDE.md) - Mathlib4指南
 - [LEAN4_PROJECTS_ANALYSIS.md](./docs/lean4/LEAN4_PROJECTS_ANALYSIS.md) - 项目分析
 - [LEAN4_REPO_MANAGEMENT.md](./docs/lean4/LEAN4_REPO_MANAGEMENT.md) - 仓库管理
 - [LEAN_ECOSYSTEM_REPORT.md](./docs/lean4/LEAN_ECOSYSTEM_REPORT.md) - 生态报告
 
-### 项目集成 → [docs/integrations/](./docs/integrations/)
+### 项目集成 → [docs/integrations/](./docs/integrations)
 
 - [FINAL_INTEGRATION.md](./docs/integrations/FINAL_INTEGRATION.md) - 最终整合
 - [LEANDOJO_INTEGRATION.md](./docs/integrations/LEANDOJO_INTEGRATION.md) - LeanDojo集成
@@ -110,7 +110,7 @@ lean4ai/
 - [AESOP_INTEGRATION.md](./docs/integrations/AESOP_INTEGRATION.md) - AESOP集成
 - 等16个集成文档
 
-### 综合概览 → [docs/overviews/](./docs/overviews/)
+### 综合概览 → [docs/overviews/](./docs/overviews)
 
 - EIGHT_IN_ONE_OVERVIEW.md（`./docs/overviews/EIGHT_IN_ONE_OVERVIEW.md`） - 八合一总览
 - NINETEEN_IN_ONE_OVERVIEW.md（`./docs/overviews/NINETEEN_IN_ONE_OVERVIEW.md`） - 十九合一总览
@@ -133,11 +133,11 @@ lean4ai/
 
 | 任务 | 推荐文档 |
 |------|----------|
-| 学习AI | [AI词典系列](./docs/ai/) |
+| 学习AI | [AI词典系列](./docs/ai) |
 | 学习数学 | [数学词典索引](./docs/math/MATH_DICTIONARY_INDEX.md) |
 | 学习物理 | [物理词典索引](./docs/physics/PHYSICS_INDEX.md) |
-| Lean4开发 | [Lean4文档](./docs/lean4/) |
-| 项目集成 | [集成文档](./docs/integrations/) |
+| Lean4开发 | [Lean4文档](./docs/lean4) |
+| 项目集成 | [集成文档](./docs/integrations) |
 
 ---
 

@@ -73,7 +73,7 @@ pip install transformers[deepspeed]
 ```
 
 或在 [DeepSpeed 的 GitHub 页面](https://github.com/deepspeedai/DeepSpeed#installation) 和
-[高级安装](https://www.deepspeed.ai/tutorials/advanced-install/) 中查找更多详细信息。
+[高级安装](https://www.deepspeed.ai/tutorials/advanced-install) 中查找更多详细信息。
 
 如果构建过程中仍然遇到问题，请首先确保阅读 [CUDA 扩展安装注意事项](trainer#cuda-extension-installation-notes)。
 
@@ -149,7 +149,7 @@ _CudaDeviceProperties(name='GeForce RTX 3090', major=8, minor=6, total_memory=24
 
 ### 多GPU启用
 
-为了启用DeepSpeed 集成，调整 [`Trainer`] 的命令行参数，添加一个新的参数 `--deepspeed ds_config.json`，其中 `ds_config.json` 是 DeepSpeed 配置文件，如文档 [这里](https://www.deepspeed.ai/docs/config-json/) 所述。文件命名由您决定。
+为了启用DeepSpeed 集成，调整 [`Trainer`] 的命令行参数，添加一个新的参数 `--deepspeed ds_config.json`，其中 `ds_config.json` 是 DeepSpeed 配置文件，如文档 [这里](https://www.deepspeed.ai/docs/config-json) 所述。文件命名由您决定。
 建议使用 DeepSpeed 的 `add_config_arguments` 程序将必要的命令行参数添加到您的代码中。
 有关更多信息，请参阅 [DeepSpeed 的参数解析](https://deepspeed.readthedocs.io/en/latest/initialize.html#argument-parsing) 文档。
 
@@ -469,7 +469,7 @@ deepspeed examples/pytorch/translation/run_translation.py ...
 
 ### 配置
 
-有关可以在 DeepSpeed 配置文件中使用的完整配置选项的详细指南，请参阅[以下文档](https://www.deepspeed.ai/docs/config-json/)。
+有关可以在 DeepSpeed 配置文件中使用的完整配置选项的详细指南，请参阅[以下文档](https://www.deepspeed.ai/docs/config-json)。
 
 您可以在 [DeepSpeedExamples 仓库](https://github.com/deepspeedai/DeepSpeedExamples)中找到解决各种实际需求的数十个 DeepSpeed 配置示例。
 
@@ -596,7 +596,7 @@ TrainingArguments(..., deepspeed=ds_config_dict)
 
 ### ZeRO
 
-[Zero Redundancy Optimizer (ZeRO)](https://www.deepspeed.ai/tutorials/zero/) 是 DeepSpeed 的工作核心。它支持3个不同级别（stages）的优化。Stage 1 对于扩展性来说不是很有趣，因此本文档重点关注Stage 2和Stage 3。Stage 3通过最新的 ZeRO-Infinity 进一步改进。你可以在 DeepSpeed 文档中找到更详细的信息。
+[Zero Redundancy Optimizer (ZeRO)](https://www.deepspeed.ai/tutorials/zero) 是 DeepSpeed 的工作核心。它支持3个不同级别（stages）的优化。Stage 1 对于扩展性来说不是很有趣，因此本文档重点关注Stage 2和Stage 3。Stage 3通过最新的 ZeRO-Infinity 进一步改进。你可以在 DeepSpeed 文档中找到更详细的信息。
 
 配置文件的 `zero_optimization` 部分是最重要的部分（[文档](https://www.deepspeed.ai/docs/config-json/#zero-optimizations-for-fp16-training)），因为在这里您定义了要启用哪些 ZeRO stages 以及如何配置它们。您可以在 DeepSpeed 文档中找到每个参数的解释。
 
@@ -1089,10 +1089,10 @@ ZeRO-Infinity 通过使用 NVMe 内存扩展 GPU 和 CPU 内存，从而允许�
 
 不要花费太多时间，但如果您即将开始一个为期3个月的训练 - 请花几天时间找到吞吐量方面最有效的设置。这样您的训练成本将最低，而且您会更快地完成训练。在当前快节奏的机器学习世界中，如果您花费一个额外的月份来训练某样东西，你很可能会错过一个黄金机会。当然，这只是我分享的一种观察，我并不是在催促你。在开始训练BLOOM-176B之前，我花了2天时间进行这个过程，成功将吞吐量从90 TFLOPs提高到150 TFLOPs！这一努力为我们节省了一个多月的训练时间。
 
-这些注释主要是为训练模式编写的，但它们在推理中也应该大部分适用。例如，在推理中，Gradient Checkpointing 是无用的，因为它只在训练过程中有用。此外，我们发现，如果你正在进行多GPU推理并且不使用 [DeepSpeed-Inference](https://www.deepspeed.ai/tutorials/inference-tutorial/)，[Accelerate](https://huggingface.co/blog/bloom-inference-pytorch-scripts) 应该提供更优越的性能。
+这些注释主要是为训练模式编写的，但它们在推理中也应该大部分适用。例如，在推理中，Gradient Checkpointing 是无用的，因为它只在训练过程中有用。此外，我们发现，如果你正在进行多GPU推理并且不使用 [DeepSpeed-Inference](https://www.deepspeed.ai/tutorials/inference-tutorial)，[Accelerate](https://huggingface.co/blog/bloom-inference-pytorch-scripts) 应该提供更优越的性能。
 
 其他与性能相关的快速注释：
-- 如果您从头开始训练某个模型，请尽量确保张量的形状可以被16整除（例如隐藏层大小）。对于批量大小，至少尝试可被2整除。如果您想从GPU中挤取更高性能，还有一些硬件特定的[wave和tile量化](https://developer.nvidia.com/blog/optimizing-gpu-performance-tensor-cores/)的可整除性。
+- 如果您从头开始训练某个模型，请尽量确保张量的形状可以被16整除（例如隐藏层大小）。对于批量大小，至少尝试可被2整除。如果您想从GPU中挤取更高性能，还有一些硬件特定的[wave和tile量化](https://developer.nvidia.com/blog/optimizing-gpu-performance-tensor-cores)的可整除性。
 
 
 
@@ -1755,7 +1755,7 @@ SW: Model with 2783M total params, 65M largest layer params.
 
   因此，如果问题明显与DeepSpeed相关，例如您可以看到有一个异常并且可以看到DeepSpeed模块涉及其中，请先重新测试没有DeepSpeed的设置。只有当问题仍然存在时，才向Deepspeed提供所有必需的细节。
 
-- 如果您明确问题是在Deepspeed核心中而不是集成部分，请直接向[Deepspeed](https://github.com/deepspeedai/DeepSpeed/)提交问题。如果您不确定，请不要担心，无论使用哪个issue跟踪问题都可以，一旦您发布问题，我们会弄清楚并将其重定向到另一个issue跟踪（如果需要的话）。
+- 如果您明确问题是在Deepspeed核心中而不是集成部分，请直接向[Deepspeed](https://github.com/deepspeedai/DeepSpeed)提交问题。如果您不确定，请不要担心，无论使用哪个issue跟踪问题都可以，一旦您发布问题，我们会弄清楚并将其重定向到另一个issue跟踪（如果需要的话）。
 
 
 
@@ -1855,7 +1855,7 @@ model = AutoModel.from_config(config)
 engine = deepspeed.initialize(model=model, config_params=ds_config, ...)
 ```
 
-请注意，如果您没有使用[`Trainer`]集成，您完全需要自己动手。基本上遵循[Deepspeed](https://www.deepspeed.ai/)网站上的文档。同时，您必须显式配置配置文件 - 不能使用`"auto"`值，而必须放入实际值。
+请注意，如果您没有使用[`Trainer`]集成，您完全需要自己动手。基本上遵循[Deepspeed](https://www.deepspeed.ai)网站上的文档。同时，您必须显式配置配置文件 - 不能使用`"auto"`值，而必须放入实际值。
 
 
 ## HfDeepSpeedConfig
@@ -2053,7 +2053,7 @@ RUN_SLOW=1 pytest tests/deepspeed
 ## 主要的DeepSpeed资源
 
 - [项目GitHub](https://github.com/deepspeedai/DeepSpeed)
-- [使用文档](https://www.deepspeed.ai/getting-started/)
+- [使用文档](https://www.deepspeed.ai/getting-started)
 - [API文档](https://deepspeed.readthedocs.io/en/latest/index.html)
 - [博客文章](https://www.microsoft.com/en-us/research/search/?q=deepspeed)
 

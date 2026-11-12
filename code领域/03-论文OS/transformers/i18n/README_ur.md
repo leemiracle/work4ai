@@ -76,7 +76,7 @@ limitations under the License.
 &#8207;🤗 Transformers ایسے APIs فراہم کرتا ہے جو آپ کو تیز رفتاری سے پری ٹرینڈ ماڈلز کو ایک دیے گئے متن پر ڈاؤن لوڈ اور استعمال کرنے، انہیں اپنے ڈیٹا سیٹس پر فائن ٹون کرنے، اور پھر ہمارے [ماڈل حب](https://huggingface.co/models) پر کمیونٹی کے ساتھ شیئر کرنے کی سہولت دیتا ہے۔ اسی وقت، ہر پائتھن ماڈیول جو ایک آرکیٹیکچر کو بیان کرتا ہے، مکمل طور پر خود مختار ہوتا ہے اور اسے تیز تحقیقاتی تجربات کے لیے تبدیل کیا جا سکتا ہے۔
 
 
-&#8207;🤗 Transformers تین سب سے مشہور ڈیپ لرننگ لائبریریوں — [Jax](https://jax.readthedocs.io/en/latest/)، [PyTorch](https://pytorch.org/) اور [TensorFlow](https://www.tensorflow.org/) — کی مدد سے تیار کردہ ہے، جن کے درمیان بے حد ہموار انضمام ہے۔ اپنے ماڈلز کو ایک کے ساتھ تربیت دینا اور پھر دوسرے کے ساتھ inference کے لیے لوڈ کرنا انتہائی سادہ ہے۔
+&#8207;🤗 Transformers تین سب سے مشہور ڈیپ لرننگ لائبریریوں — [Jax](https://jax.readthedocs.io/en/latest)، [PyTorch](https://pytorch.org) اور [TensorFlow](https://www.tensorflow.org) — کی مدد سے تیار کردہ ہے، جن کے درمیان بے حد ہموار انضمام ہے۔ اپنے ماڈلز کو ایک کے ساتھ تربیت دینا اور پھر دوسرے کے ساتھ inference کے لیے لوڈ کرنا انتہائی سادہ ہے۔
 
 ## آن لائن ڈیمو
 
@@ -263,12 +263,12 @@ limitations under the License.
 
 یہ ریپوزٹری Python 3.9+، Flax 0.4.1+، PyTorch 2.1+، اور TensorFlow 2.6+ پر ٹیسٹ کی گئی ہے۔
 
-آپ کو 🤗 Transformers کو ایک [ورچوئل ماحول](https://docs.python.org/3/library/venv.html) میں انسٹال کرنا چاہیے۔ اگر آپ Python ورچوئل ماحول سے واقف نہیں ہیں، تو [یوزر گائیڈ](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) دیکھیں۔
+آپ کو 🤗 Transformers کو ایک [ورچوئل ماحول](https://docs.python.org/3/library/venv.html) میں انسٹال کرنا چاہیے۔ اگر آپ Python ورچوئل ماحول سے واقف نہیں ہیں، تو [یوزر گائیڈ](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments) دیکھیں۔
 
 پہلے، Python کے اس ورژن کے ساتھ ایک ورچوئل ماحول بنائیں جو آپ استعمال کر رہے ہیں اور اسے ایکٹیویٹ کریں۔
 
 پھر، آپ کو کم از کم Flax، PyTorch، یا TensorFlow میں سے کسی ایک کو انسٹال کرنے کی ضرورت ہوگی۔
-براہ کرم اپنے پلیٹ فارم کے لیے مخصوص انسٹالیشن کمانڈ کے حوالے سے [TensorFlow انسٹالیشن صفحہ](https://www.tensorflow.org/install/)، [PyTorch انسٹالیشن صفحہ](https://pytorch.org/get-started/locally/#start-locally) اور/یا [Flax](https://github.com/google/flax#quick-install) اور [Jax](https://github.com/google/jax#installation) انسٹالیشن صفحات دیکھیں۔
+براہ کرم اپنے پلیٹ فارم کے لیے مخصوص انسٹالیشن کمانڈ کے حوالے سے [TensorFlow انسٹالیشن صفحہ](https://www.tensorflow.org/install)، [PyTorch انسٹالیشن صفحہ](https://pytorch.org/get-started/locally/#start-locally) اور/یا [Flax](https://github.com/google/flax#quick-install) اور [Jax](https://github.com/google/jax#installation) انسٹالیشن صفحات دیکھیں۔
 
 جب ان میں سے کوئی ایک بیک اینڈ انسٹال ہو جائے، تو 🤗 Transformers کو pip کے ذریعے مندرجہ ذیل طریقے سے انسٹال کیا جا سکتا ہے:
 
@@ -309,7 +309,7 @@ Flax، PyTorch، یا TensorFlow کو conda کے ساتھ انسٹال کرنے 
 
 | سیکشن | تفصیل |
 |-|-|
-| [دستاویزات](https://huggingface.co/docs/transformers/) | مکمل API دستاویزات اور ٹیوٹوریلز |
+| [دستاویزات](https://huggingface.co/docs/transformers) | مکمل API دستاویزات اور ٹیوٹوریلز |
 | [ٹاسک کا خلاصہ](https://huggingface.co/docs/transformers/task_summary) | 🤗 Transformers کے ذریعہ سپورٹ کردہ ٹاسک |
 | [پری پروسیسنگ ٹیوٹوریل](https://huggingface.co/docs/transformers/preprocessing) | ماڈلز کے لیے ڈیٹا تیار کرنے کے لیے `Tokenizer` کلاس کا استعمال |
 | [ٹریننگ اور فائن ٹیوننگ](https://huggingface.co/docs/transformers/training) | PyTorch/TensorFlow ٹریننگ لوپ میں 🤗 Transformers کی طرف سے فراہم کردہ ماڈلز کا استعمال اور `Trainer` API |
@@ -318,7 +318,7 @@ Flax، PyTorch، یا TensorFlow کو conda کے ساتھ انسٹال کرنے 
 
 ## استشہاد
 
-ہم نے اب ایک [تحقیقی مقالہ](https://www.aclweb.org/anthology/2020.emnlp-demos.6/) تیار کیا ہے جسے آپ 🤗 Transformers لائبریری کے لیے حوالہ دے سکتے ہیں:
+ہم نے اب ایک [تحقیقی مقالہ](https://www.aclweb.org/anthology/2020.emnlp-demos.6) تیار کیا ہے جسے آپ 🤗 Transformers لائبریری کے لیے حوالہ دے سکتے ہیں:
 
 ```bibtex
 @inproceedings{wolf-etal-2020-transformers،

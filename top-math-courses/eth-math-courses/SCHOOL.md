@@ -150,8 +150,8 @@ ETH 课程编号格式：`401-XXXX-XXL`，其中 `401` 是数学系代码。
 - ETH D-MATH: [math.ethz.ch](https://math.ethz.ch)
 - Course list: [math.ethz.ch/studies/course-websites/course-list-d-math.html](https://math.ethz.ch/studies/course-websites/course-list-d-math.html)
 - Course Catalogue (VVZ): [vvz.ethz.ch](https://www.vvz.ethz.ch)
-- Linear Algebra I 讲义: [igl.ethz.ch/teaching/linear-algebra/la2022/](https://igl.ethz.ch/teaching/linear-algebra/la2022/)
-- Analysis I 历史: [metaphor.ethz.ch/x/2017/hs/401-0261-GXL/](https://metaphor.ethz.ch/x/2017/hs/401-0261-GXL/)
+- Linear Algebra I 讲义: [igl.ethz.ch/teaching/linear-algebra/la2022/](https://igl.ethz.ch/teaching/linear-algebra/la2022)
+- Analysis I 历史: [metaphor.ethz.ch/x/2017/hs/401-0261-GXL/](https://metaphor.ethz.ch/x/2017/hs/401-0261-GXL)
 - CSE Master: [cse.ethz.ch](https://cse.ethz.ch)
 
 ## 八、推荐的 ETH "数学书架"

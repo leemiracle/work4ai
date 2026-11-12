@@ -37,7 +37,7 @@ picture-in-picture" allowfullscreen></iframe>
 
 Model Hub上的每个仓库都像是一个典型的GitHub仓库。我们的仓库提供版本控制、提交历史记录以及可视化差异的能力。
 
-Model Hub的内置版本控制基于git和[git-lfs](https://git-lfs.github.com/)。换句话说，您可以将一个模型视为一个仓库，从而实现更好的访问控制和可扩展性。版本控制允许使用*修订*方法来固定特定版本的模型，可以使用提交哈希值、标签或分支来标记。
+Model Hub的内置版本控制基于git和[git-lfs](https://git-lfs.github.com)。换句话说，您可以将一个模型视为一个仓库，从而实现更好的访问控制和可扩展性。版本控制允许使用*修订*方法来固定特定版本的模型，可以使用提交哈希值、标签或分支来标记。
 
 因此，您可以通过`revision`参数加载特定的模型版本：
 

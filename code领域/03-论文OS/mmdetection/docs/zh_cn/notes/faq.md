@@ -1,6 +1,6 @@
 # 常见问题解答
 
-我们在这里列出了使用时的一些常见问题及其相应的解决方案。 如果您发现有一些问题被遗漏，请随时提 PR 丰富这个列表。 如果您无法在此获得帮助，请使用 [issue模板](https://github.com/open-mmlab/mmdetection/blob/main/.github/ISSUE_TEMPLATE/error-report.md/)创建问题，但是请在模板中填写所有必填信息，这有助于我们更快定位问题。
+我们在这里列出了使用时的一些常见问题及其相应的解决方案。 如果您发现有一些问题被遗漏，请随时提 PR 丰富这个列表。 如果您无法在此获得帮助，请使用 [issue模板](https://github.com/open-mmlab/mmdetection/blob/main/.github/ISSUE_TEMPLATE/error-report.md)创建问题，但是请在模板中填写所有必填信息，这有助于我们更快定位问题。
 
 ## PyTorch 2.0 支持
 
@@ -74,7 +74,7 @@ export DYNAMO_CACHE_SIZE_LIMIT = 4
 
 - 在 Windows 环境下安装过程中遇到 "Microsoft Visual C++ 14.0 or graeter is required" error .
 
-  这个错误发生在 pycotools 的 'pycocotools.\_mask' 扩展构建过程，其原因是缺少了对应 C++ 环境依赖。你需要到微软官方下载[对应工具](https://visualstudio.microsoft.com/zh-hans/visual-cpp-build-tools/)，选择“使用 C++ 的桌面开发”选项安装最小依赖，随后重新安装 pycocotools。
+  这个错误发生在 pycotools 的 'pycocotools.\_mask' 扩展构建过程，其原因是缺少了对应 C++ 环境依赖。你需要到微软官方下载[对应工具](https://visualstudio.microsoft.com/zh-hans/visual-cpp-build-tools)，选择“使用 C++ 的桌面开发”选项安装最小依赖，随后重新安装 pycocotools。
 
 - 使用 albumentations
 

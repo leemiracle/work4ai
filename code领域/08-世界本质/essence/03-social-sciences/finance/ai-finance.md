@@ -2,8 +2,8 @@
 
 > **位置**：`03-social-sciences/finance/ai-finance.md`
 > **关联**：[`_overview.md`](./_overview.md)（金融总览）+ [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（哲学锚点）+ [`markets-and-pricing.md`](./markets-and-pricing.md)（价格理论）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（风险）
-> **上游**：[`05-intelligence/`](../../05-intelligence/)（机器学习本质）+ [`02-formal-sciences/probability/`](../../02-formal-sciences/probability/)
-> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（可预测性、归纳问题、黑箱认识论）+ [`00-philosophy/ethics/`](../../00-philosophy/ethics/)（算法偏见、系统性风险、责任归属）
+> **上游**：[`05-intelligence/`](../../05-intelligence)（机器学习本质）+ [`02-formal-sciences/probability/`](../../02-formal-sciences/probability)
+> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（可预测性、归纳问题、黑箱认识论）+ [`00-philosophy/ethics/`](../../00-philosophy/ethics)（算法偏见、系统性风险、责任归属）
 > **大问题**：[Q15 决策](../../questions/big-questions.md) + 当 AI 交易者主导市场时，"价格反映信息"还是"价格反映算法"？
 
 ---
@@ -593,7 +593,7 @@ for h in headlines:
 
 这正是 2010 闪崩和 1987 程序化交易崩盘（组合保险 Portfolio Insurance）的机制。**模型的同质性制造了系统性相关性**——平时各自独立，危机时高度同步。BIS（国际清算银行）反复警告：AI 在金融中的扩散可能创造新的系统性风险。
 
-> **essence 洞察**：这是**涌现**（emergence）的危险面。单个 AI 是理性的、可控的；但大量 AI 的交互会涌现出**无法预测的集体行为**。这与复杂系统的相变、与羊群效应，在数学结构上同构。详见 [`06-systems/complexity/`](../../06-systems/complexity/)。
+> **essence 洞察**：这是**涌现**（emergence）的危险面。单个 AI 是理性的、可控的；但大量 AI 的交互会涌现出**无法预测的集体行为**。这与复杂系统的相变、与羊群效应，在数学结构上同构。详见 [`06-systems/complexity/`](../../06-systems/complexity)。
 
 ---
 
@@ -680,7 +680,7 @@ FinGPT 主张**轻量化、开源**路线——不强求从头训练巨型模型
 - **与 [`behavioral-finance.md`](./behavioral-finance.md)**：AI 是否"更理性"？还是它学习了人类的非理性（如动量效应），从而延续偏差？
 - **与 [`econophysics.md`](./econophysics.md)**：闪崩的相变模型，复杂系统的临界点。
 - **与 [`crypto-and-defi.md`](./crypto-and-defi.md)**：DeFi 上的 MEV（最大可提取价值）和套利机器人 = 纯算法市场的极端案例。
-- **与 [`05-intelligence/`](../../05-intelligence/)**：强化学习、深度学习的本质，在 AI 金融专题中落地。
+- **与 [`05-intelligence/`](../../05-intelligence)**：强化学习、深度学习的本质，在 AI 金融专题中落地。
 
 ---
 

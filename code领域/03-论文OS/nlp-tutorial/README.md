@@ -81,4 +81,4 @@
 
 - Tae Hwan Jung(Jeff Jung) @graykode
 - Author Email : nlkey2022@gmail.com
-- Acknowledgements to [mojitok](http://mojitok.com/) as NLP Research Internship.
+- Acknowledgements to [mojitok](http://mojitok.com) as NLP Research Internship.

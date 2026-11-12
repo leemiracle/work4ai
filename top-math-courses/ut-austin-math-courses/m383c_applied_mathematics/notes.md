@@ -2,7 +2,7 @@
 
 > **课程**：Applied Mathematics (Graduate, M 383C)
 > **教材**：Logan, *Applied Mathematics*；Strang, *Computational Science and Engineering*
-> **参考**：[utexas.edu/math](https://www.ma.utexas.edu/)；Bender & Orszag, *Advanced Mathematical Methods*
+> **参考**：[utexas.edu/math](https://www.ma.utexas.edu)；Bender & Orszag, *Advanced Mathematical Methods*
 
 ---
 

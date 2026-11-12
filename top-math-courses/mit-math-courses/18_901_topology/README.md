@@ -1,7 +1,7 @@
 # MIT 18.901 — Introduction to Topology
 
 > **学校**：MIT | **学期**：Fall | **学分**：12 units
-> **一手来源**：[catalog.mit.edu/subjects/18/#18.901](https://catalog.mit.edu/subjects/18/)
+> **一手来源**：[catalog.mit.edu/subjects/18/#18.901](https://catalog.mit.edu/subjects/18)
 
 ## 课程信息
 - **编号**：18.901（本科纯数学核心）

@@ -21,11 +21,11 @@
 
 | 文件 | 内容 | 何时查 |
 |------|------|--------|
-| [arXiv地图/](arXiv地图/) | arXiv math 分类树 + 各领域活跃度 + 怎么订阅 | 想追某方向的最新论文 |
-| [顶刊与奖项/](顶刊与奖项/) | Annals/Inventiones/JAMS/Acta 发表规律 + Fields/Abel/突破奖得主工作 | 想知道"谁是当下权威" |
-| [conjecture进展/](conjecture进展/) | 7 大千禧问题 + 50 个重要猜想 的最新进展追踪表 | 想看"人类知识的边界在哪" |
-| [AI-for-Math/](AI-for-Math/) | AlphaProof/Lean/FunSearch/Auto-TPS 全图谱 + 形式化数学革命 | 想了解 AI 如何改变数学 |
-| [热点方向追踪/](热点方向追踪/) | 2024-2026 最热 10 方向（深度学习理论/加性组合/...）+ 入口文献 | 想选研究方向 / 找论文选题 |
+| [arXiv地图/](arXiv地图) | arXiv math 分类树 + 各领域活跃度 + 怎么订阅 | 想追某方向的最新论文 |
+| [顶刊与奖项/](顶刊与奖项) | Annals/Inventiones/JAMS/Acta 发表规律 + Fields/Abel/突破奖得主工作 | 想知道"谁是当下权威" |
+| [conjecture进展/](conjecture进展) | 7 大千禧问题 + 50 个重要猜想 的最新进展追踪表 | 想看"人类知识的边界在哪" |
+| [AI-for-Math/](AI-for-Math) | AlphaProof/Lean/FunSearch/Auto-TPS 全图谱 + 形式化数学革命 | 想了解 AI 如何改变数学 |
+| [热点方向追踪/](热点方向追踪) | 2024-2026 最热 10 方向（深度学习理论/加性组合/...）+ 入口文献 | 想选研究方向 / 找论文选题 |
 
 ---
 
@@ -80,7 +80,7 @@ Tier C（低可信，仅作线索）
 | 每天 | 扫 AK 推特 + arXiv 你订阅的 2-3 个分类 | 10 min |
 | 每周 | 读 1 篇 Quanta 数学文 + 翻 Tao 博客标题 | 30 min |
 | 每月 | 精读 1 篇 hot direction 的综述/survey | 2 h |
-| 每季度 | 更新 [conjecture进展表](conjecture进展/) | 1 h |
+| 每季度 | 更新 [conjecture进展表](conjecture进展) | 1 h |
 | 每年（ICM 年）| 看 Fields 得主工作 + ICM 邀请报告列表 | 1 周 |
 
 ---
@@ -89,12 +89,12 @@ Tier C（低可信，仅作线索）
 
 | 你想... | 跳到 |
 |---------|------|
-| 把前沿与主轨学习结合 | [01-track/stage-3-研究方向/](../01-track/stage-3-研究方向/) |
-| 看某个前沿方向需要哪些基础 | [17-decision/方向决策/](../17-decision/方向决策/) |
-| 找某个前沿方向的教材 | [09-crosstext/](../09-crosstext/) + [18-resources/](../18-resources/) |
+| 把前沿与主轨学习结合 | [01-track/stage-3-研究方向/](../01-track/stage-3-研究方向) |
+| 看某个前沿方向需要哪些基础 | [17-decision/方向决策/](../17-decision/方向决策) |
+| 找某个前沿方向的教材 | [09-crosstext/](../09-crosstext) + [18-resources/](../18-resources) |
 | 形式化验证你的证明 | [AI-for-Math/02-Lean形式化数学入门.md](AI-for-Math/02-Lean形式化数学入门.md) |
 | 看 Tao 如何实践 AI 数学（PFR/Equational Theories）| [AI-for-Math/03-Tao的AI数学实践.md](AI-for-Math/03-Tao的AI数学实践.md) ⭐ |
-| 看数学家怎么追前沿 | [02-lens-mathematicians/反思层/开放记录轴.md](../02-lens-mathematicians/反思层/) |
+| 看数学家怎么追前沿 | [02-lens-mathematicians/反思层/开放记录轴.md](../02-lens-mathematicians/反思层) |
 
 ---
 

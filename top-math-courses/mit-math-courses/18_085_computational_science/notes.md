@@ -1,7 +1,7 @@
 # MIT 18.085 · 费曼三层讲透：计算科学与工程
 
 > **教材**：Strang, *Computational Science and Engineering* (2007) ★
-> **视频**：[OCW Strang 18.085](https://ocw.mit.edu/courses/18-085-computational-science-and-engineering-i-fall-2008/)
+> **视频**：[OCW Strang 18.085](https://ocw.mit.edu/courses/18-085-computational-science-and-engineering-i-fall-2008)
 > **特色**：Strang 的应用数学——**图拉普拉斯 / FFT / 有限元**，用线代统一
 
 ---

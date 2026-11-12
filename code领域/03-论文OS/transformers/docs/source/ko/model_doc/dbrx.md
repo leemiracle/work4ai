@@ -14,7 +14,7 @@ specific language governing permissions and limitations under the License.
 
 ## 개요[[overview]]
 
-DBRX는 [트랜스포머 기반의](https://www.isattentionallyouneed.com/) 다음 토큰을 예측하는 디코더 전용 LLM 모델입니다.
+DBRX는 [트랜스포머 기반의](https://www.isattentionallyouneed.com) 다음 토큰을 예측하는 디코더 전용 LLM 모델입니다.
 총 132B 매개변수를 가진 *세밀한* 전문가 혼합(MoE) 아키텍처를 사용하며, 이 중 36B 매개변수가 입력마다 활성화됩니다.
 12T 토큰의 텍스트와 코드 데이터로 사전 학습되었습니다.
 

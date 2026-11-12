@@ -20,7 +20,7 @@ rendered properly in your Markdown viewer.
 
 ## 超参数搜索后端
 
-[`Trainer`] 目前支持四种超参数搜索后端：[optuna](https://optuna.org/)，[raytune](https://docs.ray.io/en/latest/tune/index.html)，[wandb](https://wandb.ai/site/sweeps)
+[`Trainer`] 目前支持四种超参数搜索后端：[optuna](https://optuna.org)，[raytune](https://docs.ray.io/en/latest/tune/index.html)，[wandb](https://wandb.ai/site/sweeps)
 
 在使用它们之前，您应该先安装它们作为超参数搜索后端。
 

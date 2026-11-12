@@ -273,7 +273,7 @@ We also train [Faster R-CNN](https://github.com/open-mmlab/mmdetection/blob/main
 
 We provide [analyze_logs.py](https://github.com/open-mmlab/mmdetection/blob/main/tools/analysis_tools/analyze_logs.py) to get average time of iteration in training. You can find examples in [Log Analysis](https://mmdetection.readthedocs.io/en/latest/useful_tools.html#log-analysis).
 
-We compare the training speed of Mask R-CNN with some other popular frameworks (The data is copied from [detectron2](https://github.com/facebookresearch/detectron2/blob/main/docs/notes/benchmarks.md/)).
+We compare the training speed of Mask R-CNN with some other popular frameworks (The data is copied from [detectron2](https://github.com/facebookresearch/detectron2/blob/main/docs/notes/benchmarks.md)).
 For mmdetection, we benchmark with [mask-rcnn_r50-caffe_fpn_poly-1x_coco_v1.py](https://github.com/open-mmlab/mmdetection/blob/main/configs/mask_rcnn/mask-rcnn_r50-caffe_fpn_poly-1x_coco_v1.py), which should have the same setting with [mask_rcnn_R_50_FPN_noaug_1x.yaml](https://github.com/facebookresearch/detectron2/blob/main/configs/Detectron1-Comparisons/mask_rcnn_R_50_FPN_noaug_1x.yaml) of detectron2.
 We also provide the [checkpoint](https://download.openmmlab.com/mmdetection/v2.0/benchmark/mask_rcnn_r50_caffe_fpn_poly_1x_coco_no_aug/mask_rcnn_r50_caffe_fpn_poly_1x_coco_no_aug_compare_20200518-10127928.pth) and [training log](https://download.openmmlab.com/mmdetection/v2.0/benchmark/mask_rcnn_r50_caffe_fpn_poly_1x_coco_no_aug/mask_rcnn_r50_caffe_fpn_poly_1x_coco_no_aug_20200518_105755.log.json) for reference. The throughput is computed as the average throughput in iterations 100-500 to skip GPU warmup time.
 
@@ -281,11 +281,11 @@ We also provide the [checkpoint](https://download.openmmlab.com/mmdetection/v2.0
 | -------------------------------------------------------------------------------------- | ------------------ |
 | [Detectron2](https://github.com/facebookresearch/detectron2)                           | 62                 |
 | [MMDetection](https://github.com/open-mmlab/mmdetection)                               | 61                 |
-| [maskrcnn-benchmark](https://github.com/facebookresearch/maskrcnn-benchmark/)          | 53                 |
+| [maskrcnn-benchmark](https://github.com/facebookresearch/maskrcnn-benchmark)          | 53                 |
 | [tensorpack](https://github.com/tensorpack/tensorpack/tree/master/examples/FasterRCNN) | 50                 |
-| [simpledet](https://github.com/TuSimple/simpledet/)                                    | 39                 |
+| [simpledet](https://github.com/TuSimple/simpledet)                                    | 39                 |
 | [Detectron](https://github.com/facebookresearch/Detectron)                             | 19                 |
-| [matterport/Mask_RCNN](https://github.com/matterport/Mask_RCNN/)                       | 14                 |
+| [matterport/Mask_RCNN](https://github.com/matterport/Mask_RCNN)                       | 14                 |
 
 ### Inference Speed Benchmark
 

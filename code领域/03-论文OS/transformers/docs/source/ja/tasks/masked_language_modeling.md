@@ -26,7 +26,7 @@ rendered properly in your Markdown viewer.
 
 このガイドでは、次の方法を説明します。
 
-1. [ELI5](https://huggingface.co/distilbert/distilroberta-base) の [r/askscience](https://www.reddit.com/r/askscience/) サブセットで [DistilRoBERTa](https://huggingface.co/distilbert/distilroberta-base) を微調整します。 ://huggingface.co/datasets/eli5) データセット。
+1. [ELI5](https://huggingface.co/distilbert/distilroberta-base) の [r/askscience](https://www.reddit.com/r/askscience) サブセットで [DistilRoBERTa](https://huggingface.co/distilbert/distilroberta-base) を微調整します。 ://huggingface.co/datasets/eli5) データセット。
 2. 微調整したモデルを推論に使用します。
 
 <Tip>

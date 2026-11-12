@@ -27,7 +27,7 @@ rendered properly in your Markdown viewer.
 
 ## Overview
 
-[Gemma3n](https://developers.googleblog.com/en/introducing-gemma-3n/) is a multimodal model with pretrained and instruction-tuned variants, available in E4B and E2B sizes. While
+[Gemma3n](https://developers.googleblog.com/en/introducing-gemma-3n) is a multimodal model with pretrained and instruction-tuned variants, available in E4B and E2B sizes. While
 large portions of the language model architecture are shared with prior Gemma releases, there are many new additions in
 this model, including [Alternating Updates][altup] (AltUp), [Learned Augmented Residual Layer][laurel] (LAuReL),
 [MatFormer][matformer], Per-Layer Embeddings (PLE), [Activation Sparsity with Statistical Top-k][spark-transformer], and KV cache sharing. The language model uses

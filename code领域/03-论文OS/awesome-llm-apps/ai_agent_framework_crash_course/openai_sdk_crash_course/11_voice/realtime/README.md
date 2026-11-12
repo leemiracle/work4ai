@@ -20,7 +20,7 @@ Realtime agents provide **ultra-low latency voice conversation** using OpenAI's 
 - Support real-time tool execution and agent handoffs
 - Apply safety guardrails during live generation
 
-Based on the [official documentation](https://openai.github.io/openai-agents-python/realtime/quickstart/), realtime agents enable natural voice conversations with the lowest possible latency.
+Based on the [official documentation](https://openai.github.io/openai-agents-python/realtime/quickstart), realtime agents enable natural voice conversations with the lowest possible latency.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -79,7 +79,7 @@ Based on the [official documentation](https://openai.github.io/openai-agents-pyt
 ## 🧪 What This Example Includes
 
 ### **Core Realtime Components**
-Based on the [official guide](https://openai.github.io/openai-agents-python/realtime/guide/):
+Based on the [official guide](https://openai.github.io/openai-agents-python/realtime/guide):
 - **RealtimeAgent**: Agent with instructions, tools, and handoffs
 - **RealtimeRunner**: Manages configuration and returns sessions  
 - **RealtimeSession**: Single conversation session with event streaming
@@ -108,7 +108,7 @@ Based on the [official guide](https://openai.github.io/openai-agents-python/real
 
 ## 🔧 Key Implementation Patterns
 
-Based on the [official guide](https://openai.github.io/openai-agents-python/realtime/guide/):
+Based on the [official guide](https://openai.github.io/openai-agents-python/realtime/guide):
 
 ### **1. Create RealtimeAgent**
 ```python
@@ -150,7 +150,7 @@ async with session:
 
 ## 💡 Basic Realtime Concepts
 
-From the [official guide](https://openai.github.io/openai-agents-python/realtime/guide/):
+From the [official guide](https://openai.github.io/openai-agents-python/realtime/guide):
 
 1. **Session Flow**: Create agents → Set up runner → Start session → Handle events
 2. **Event Handling**: Listen for audio transcripts, tool calls, and errors
@@ -184,7 +184,7 @@ From the [official guide](https://openai.github.io/openai-agents-python/realtime
 - **Multi-Modal Support**: Text and audio modalities
 
 ### **Real-Time Guardrails**
-Based on the [guide documentation](https://openai.github.io/openai-agents-python/realtime/guide/), realtime guardrails are:
+Based on the [guide documentation](https://openai.github.io/openai-agents-python/realtime/guide), realtime guardrails are:
 - **Debounced**: Run periodically (not on every word) for performance
 - **Configurable**: Adjustable debounce length (default 100 characters)
 - **Non-Blocking**: Don't raise exceptions, generate events instead
@@ -288,7 +288,7 @@ def sensitive_data_guardrail(ctx, agent, output: str) -> GuardrailFunctionOutput
 
 ## 🚨 Beta Considerations
 
-As noted in the [official documentation](https://openai.github.io/openai-agents-python/realtime/quickstart/), realtime agents are currently in beta. Consider:
+As noted in the [official documentation](https://openai.github.io/openai-agents-python/realtime/quickstart), realtime agents are currently in beta. Consider:
 
 - **API Stability**: Expect potential breaking changes as the API evolves
 - **Feature Development**: New capabilities may be added regularly
@@ -305,8 +305,8 @@ As noted in the [official documentation](https://openai.github.io/openai-agents-
 
 ## 🔗 Related Documentation
 
-- **[Realtime Quickstart](https://openai.github.io/openai-agents-python/realtime/quickstart/)**: Official getting started guide
-- **[Realtime Guide](https://openai.github.io/openai-agents-python/realtime/guide/)**: Comprehensive realtime documentation
+- **[Realtime Quickstart](https://openai.github.io/openai-agents-python/realtime/quickstart)**: Official getting started guide
+- **[Realtime Guide](https://openai.github.io/openai-agents-python/realtime/guide)**: Comprehensive realtime documentation
 - **[Voice Agents](../README.md)**: Overview of all voice agent capabilities
 - **[Agent Fundamentals](../../1_starter_agent/README.md)**: Basic agent concepts
 

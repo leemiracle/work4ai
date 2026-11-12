@@ -480,7 +480,7 @@ trainer.train()
 ```
 ## تسريع ومدرب
 
-يتم تشغيل فئة [`Trainer`] بواسطة [تسريع](https://hf.co/docs/accelerate)، وهي مكتبة لتدريب نماذج PyTorch بسهولة في بيئات موزعة مع دعم عمليات التكامل مثل [FullyShardedDataParallel (FSDP)](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api/) و [DeepSpeed](https://www.deepspeed.ai/).
+يتم تشغيل فئة [`Trainer`] بواسطة [تسريع](https://hf.co/docs/accelerate)، وهي مكتبة لتدريب نماذج PyTorch بسهولة في بيئات موزعة مع دعم عمليات التكامل مثل [FullyShardedDataParallel (FSDP)](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api) و [DeepSpeed](https://www.deepspeed.ai).
 
 <Tip>
 

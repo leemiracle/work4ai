@@ -51,7 +51,7 @@ Create a `.env` file in the `8_simple_multi_agent` folder:
 echo "GOOGLE_API_KEY=your_ai_studio_key_here" > .env
 ```
 
-**Important**: Replace `your_ai_studio_key_here` with your actual Google AI Studio API key from [https://aistudio.google.com/](https://aistudio.google.com/)
+**Important**: Replace `your_ai_studio_key_here` with your actual Google AI Studio API key from [https://aistudio.google.com/](https://aistudio.google.com)
 
 ### 3. Run with ADK Web (Recommended)
 From the `8_simple_multi_agent` folder:

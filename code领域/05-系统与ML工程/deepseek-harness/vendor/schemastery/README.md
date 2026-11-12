@@ -130,7 +130,7 @@ Assert that the value is an instance of the given constructor.
 const validate = Schema.is(RegExp)
 
 validate()            // undefined
-validate(/foo/)       // /foo/
+validate(/foo)       // /foo/
 validate('foo')       // TypeError
 ```
 

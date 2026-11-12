@@ -21,7 +21,7 @@ If you plan to add some new features that involve large changes, it is encourage
 
 ### Python
 
-We adopt [PEP8](https://www.python.org/dev/peps/pep-0008/) as the preferred code style.
+We adopt [PEP8](https://www.python.org/dev/peps/pep-0008) as the preferred code style.
 
 We use the following tools for linting and formatting:
 
@@ -34,7 +34,7 @@ We use the following tools for linting and formatting:
 
 Style configurations of yapf and isort can be found in [setup.cfg](./setup.cfg).
 
-We use [pre-commit hook](https://pre-commit.com/) that checks and formats for `flake8`, `yapf`, `isort`, `trailing whitespaces`, `markdown files`,
+We use [pre-commit hook](https://pre-commit.com) that checks and formats for `flake8`, `yapf`, `isort`, `trailing whitespaces`, `markdown files`,
 fixes `end-of-files`, `double-quoted-strings`, `python-encoding-pragma`, `mixed-line-ending`, sorts `requirments.txt` automatically on every commit.
 The config for a pre-commit hook is stored in [.pre-commit-config](./.pre-commit-config.yaml).
 

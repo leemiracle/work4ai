@@ -19,7 +19,7 @@ conda create --name openmmlab python=3.8 -y
 conda activate openmmlab
 ```
 
-**步骤 2.** 基于 [PyTorch 官方说明](https://pytorch.org/get-started/locally/)安装 PyTorch。
+**步骤 2.** 基于 [PyTorch 官方说明](https://pytorch.org/get-started/locally)安装 PyTorch。
 
 在 GPU 平台上：
 
@@ -169,7 +169,7 @@ MMDetection 可以在 CPU 环境中构建。在 CPU 模式下，可以进行模�
 
 #### 在 Google Colab 中安装
 
-[Google Colab](https://colab.research.google.com/) 通常已经包含了 PyTorch 环境，因此我们只需要安装 MMEngine，MMCV 和 MMDetection 即可，命令如下：
+[Google Colab](https://colab.research.google.com) 通常已经包含了 PyTorch 环境，因此我们只需要安装 MMEngine，MMCV 和 MMDetection 即可，命令如下：
 
 **步骤 1.** 使用 [MIM](https://github.com/open-mmlab/mim) 安装 [MMEngine](https://github.com/open-mmlab/mmengine) 和 [MMCV](https://github.com/open-mmlab/mmcv)。
 
@@ -201,7 +201,7 @@ print(mmdet.__version__)
 
 #### 通过 Docker 使用 MMDetection
 
-我们提供了一个 [Dockerfile](../../docker/Dockerfile) 来构建一个镜像。请确保你的 [docker 版本](https://docs.docker.com/engine/install/) >=19.03。
+我们提供了一个 [Dockerfile](../../docker/Dockerfile) 来构建一个镜像。请确保你的 [docker 版本](https://docs.docker.com/engine/install) >=19.03。
 
 ```shell
 # 基于 PyTorch 1.9，CUDA 11.1 构建镜像

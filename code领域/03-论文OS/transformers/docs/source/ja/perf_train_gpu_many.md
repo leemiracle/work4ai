@@ -109,7 +109,7 @@ DDPは複数のマシン間で使用できますが、DPの場合はそうでは
 
 DPとDDPの他にも違いがありますが、この議論には関係ありません。
 
-これら2つのモードを深く理解したい場合、この[記事](https://www.telesens.co/2019/04/04/distributed-data-parallel-training-using-pytorch-on-aws/)を強くお勧めします。素晴らしいダイアグラムを含み、さまざまなハードウェアでの複数のベンチマークとプロファイラの出力を示し、知っておく必要があるすべての微妙なニュアンスを説明しています。
+これら2つのモードを深く理解したい場合、この[記事](https://www.telesens.co/2019/04/04/distributed-data-parallel-training-using-pytorch-on-aws)を強くお勧めします。素晴らしいダイアグラムを含み、さまざまなハードウェアでの複数のベンチマークとプロファイラの出力を示し、知っておく必要があるすべての微妙なニュアンスを説明しています。
 
 実際のベンチマークを見てみましょう：
 
@@ -164,7 +164,7 @@ torchrun --nproc_per_node 2 examples/pytorch/language-modeling/run_clm.py \
 
 ## ZeRO Data Parallelism
 
-ZeROパワードデータ並列処理（ZeRO-DP）は、次の[ブログ投稿](https://www.microsoft.com/en-us/research/blog/zero-deepspeed-new-system-optimizations-enable-training-models-with-over-100-billion-parameters/)のダイアグラムで説明されています。
+ZeROパワードデータ並列処理（ZeRO-DP）は、次の[ブログ投稿](https://www.microsoft.com/en-us/research/blog/zero-deepspeed-new-system-optimizations-enable-training-models-with-over-100-billion-parameters)のダイアグラムで説明されています。
 ![DeepSpeed-Image-1](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/parallelism-zero.png)
 
 これは理解が難しいかもしれませんが、実際にはこの概念は非常にシンプルです。これは通常の`DataParallel`（DP）ですが、完全なモデルパラメータ、勾配、およびオプティマイザの状態を複製する代わりに、各GPUはそれぞれのスライスのみを保存します。そして、実行時に、特定のレイヤーに必要な完全なレイヤーパラメータが必要な場合、すべてのGPUが同期して、お互いに不足している部分を提供します。それがすべてです。
@@ -242,7 +242,7 @@ ZeROがモデルの重みを分割する方法に注意を払うと、これは�
 
 Implementations:
 
-- [DeepSpeed](https://www.deepspeed.ai/tutorials/zero/) ZeRO-DP stages 1+2+3
+- [DeepSpeed](https://www.deepspeed.ai/tutorials/zero) ZeRO-DP stages 1+2+3
 - [`transformers` integration](main_classes/trainer#trainer-integrations)
 
 
@@ -314,7 +314,7 @@ VarunaとSageMakerとの実験はまだ行っていませんが、彼らの論�
 実装：
 
 - [Pytorch](https://pytorch.org/docs/stable/pipeline.html) (initial support in pytorch-1.8, and progressively getting improved in 1.9 and more so in 1.10). Some [examples](https://github.com/pytorch/pytorch/blob/master/benchmarks/distributed/pipeline/pipe.py)
-- [DeepSpeed](https://www.deepspeed.ai/tutorials/pipeline/)
+- [DeepSpeed](https://www.deepspeed.ai/tutorials/pipeline)
 - [Megatron-LM](https://github.com/NVIDIA/Megatron-LM) has an internal implementation - no API.
 - [Varuna](https://github.com/microsoft/varuna)
 - [SageMaker](https://huggingface.co/papers/2111.05972) - this is a proprietary solution that can only be used on AWS.
@@ -371,11 +371,11 @@ SageMakerは、より効率的な処理のためにTPとDPを組み合わせて�
 🤗 Transformersの状況:
 - コア: まだコアには実装されていません。
 - ただし、推論が必要な場合、[parallelformers](https://github.com/tunib-ai/parallelformers)はほとんどのモデルに対してサポートを提供します。これがコアに実装されるまで、これを使用できます。そして、トレーニングモードもサポートされることを期待しています。
-- Deepspeed-Inferenceでは、BERT、GPT-2、およびGPT-NeoモデルをCUDAカーネルベースの高速推論モードでサポートしています。詳細は[こちら](https://www.deepspeed.ai/tutorials/inference-tutorial/)をご覧ください。
+- Deepspeed-Inferenceでは、BERT、GPT-2、およびGPT-NeoモデルをCUDAカーネルベースの高速推論モードでサポートしています。詳細は[こちら](https://www.deepspeed.ai/tutorials/inference-tutorial)をご覧ください。
 
 ## DP+PP
 
-DeepSpeedの[パイプラインチュートリアル](https://www.deepspeed.ai/tutorials/pipeline/)からの次の図は、DPをPPと組み合わせる方法を示しています。
+DeepSpeedの[パイプラインチュートリアル](https://www.deepspeed.ai/tutorials/pipeline)からの次の図は、DPをPPと組み合わせる方法を示しています。
 
 ![dp-pp-2d](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/parallelism-zero-dp-pp.png)
 
@@ -398,7 +398,7 @@ DeepSpeedの[パイプラインチュートリアル](https://www.deepspeed.ai/t
 
 ![dp-pp-tp-3d](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/parallelism-deepspeed-3d.png)
 
-この図は[3Dパラレリズム：兆パラメータモデルへのスケーリング](https://www.microsoft.com/en-us/research/blog/deepspeed-extreme-scale-model-training-for-everyone/)というブログ投稿から取得されたもので、おすすめの読み物です。
+この図は[3Dパラレリズム：兆パラメータモデルへのスケーリング](https://www.microsoft.com/en-us/research/blog/deepspeed-extreme-scale-model-training-for-everyone)というブログ投稿から取得されたもので、おすすめの読み物です。
 
 各次元には少なくとも2つのGPUが必要ですので、ここでは少なくとも8つのGPUが必要です。
 

@@ -49,12 +49,12 @@
 
 | 你想... | 跳转到 |
 |---------|--------|
-| 读 Perelman 拒奖 / Wiles 七年孤军 / Tao 的故事 | [02-lens-mathematicians/](../../02-lens-mathematicians/) |
-| 把猜想放进数学发展的历史脉络 | [05-history/](../../05-history/) |
-| 亲手挑战一个"迷你版"大问题（练习用）| [08-projects/](../../08-projects/) |
-| 了解 AI 是否能帮助攻克这些猜想 | [14-frontier/AI-for-Math/](../AI-for-Math/) |
-| 判断哪些前沿方向值得追 | [14-frontier/热点方向追踪/](../热点方向追踪/) |
-| 看顶刊发表规律和奖项体系 | [14-frontier/顶刊与奖项/](../顶刊与奖项/) |
+| 读 Perelman 拒奖 / Wiles 七年孤军 / Tao 的故事 | [02-lens-mathematicians/](../../02-lens-mathematicians) |
+| 把猜想放进数学发展的历史脉络 | [05-history/](../../05-history) |
+| 亲手挑战一个"迷你版"大问题（练习用）| [08-projects/](../../08-projects) |
+| 了解 AI 是否能帮助攻克这些猜想 | [14-frontier/AI-for-Math/](../AI-for-Math) |
+| 判断哪些前沿方向值得追 | [14-frontier/热点方向追踪/](../热点方向追踪) |
+| 看顶刊发表规律和奖项体系 | [14-frontier/顶刊与奖项/](../顶刊与奖项) |
 
 ---
 

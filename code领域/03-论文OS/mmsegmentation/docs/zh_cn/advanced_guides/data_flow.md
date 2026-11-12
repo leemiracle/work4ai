@@ -26,7 +26,7 @@ test_cfg = dict(type='TestLoop')
 ### 数据加载器到数据预处理器
 
 数据加载器（DataLoader）是 MMEngine 的训练和测试流程中的一个重要组件。
-从概念上讲，它源于 [PyTorch](https://pytorch.org/) 并保持一致。DataLoader 从文件系统加载数据，原始数据通过数据准备流程后被发送给数据预处理器。
+从概念上讲，它源于 [PyTorch](https://pytorch.org) 并保持一致。DataLoader 从文件系统加载数据，原始数据通过数据准备流程后被发送给数据预处理器。
 
 MMSegmentation 在 [PackSegInputs](https://github.com/open-mmlab/mmsegmentation/blob/main/mmseg/datasets/transforms/formatting.py#L12) 中定义了默认数据格式， 它是 `train_pipeline` 和 `test_pipeline` 的最后一个组件。有关数据转换 `pipeline` 的更多信息，请参阅[数据转换文档](./transforms.md)。
 

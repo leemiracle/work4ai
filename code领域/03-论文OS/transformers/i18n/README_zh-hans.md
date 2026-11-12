@@ -101,9 +101,9 @@ Transformers 充当跨文本、计算机视觉、音频、视频与多模态的�
 
 ## 安装
 
-Transformers 支持 Python 3.9+，以及 [PyTorch](https://pytorch.org/get-started/locally/) 2.1+。
+Transformers 支持 Python 3.9+，以及 [PyTorch](https://pytorch.org/get-started/locally) 2.1+。
 
-使用 [venv](https://docs.python.org/3/library/venv.html) 或 [uv](https://docs.astral.sh/uv/)（一个基于 Rust 的快速 Python 包与项目管理器）创建并激活虚拟环境：
+使用 [venv](https://docs.python.org/3/library/venv.html) 或 [uv](https://docs.astral.sh/uv)（一个基于 Rust 的快速 Python 包与项目管理器）创建并激活虚拟环境：
 
 ```py
 # venv
@@ -337,7 +337,7 @@ Transformers 不止是一个使用预训练模型的工具包，它还是围绕 
 
 ## 引用
 
-我们已将此库的[论文](https://www.aclweb.org/anthology/2020.emnlp-demos.6/)正式发表，如果你使用了 🤗 Transformers 库，请引用:
+我们已将此库的[论文](https://www.aclweb.org/anthology/2020.emnlp-demos.6)正式发表，如果你使用了 🤗 Transformers 库，请引用:
 ```bibtex
 @inproceedings{wolf-etal-2020-transformers,
     title = "Transformers: State-of-the-Art Natural Language Processing",

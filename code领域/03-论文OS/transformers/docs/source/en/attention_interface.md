@@ -207,6 +207,6 @@ def custom_attention_mask(
 ) -> Optional[torch.Tensor]:
 ```
 
-The `mask_function` argument is a `Callable` that mimics PyTorch's [mask_mod](https://pytorch.org/blog/flexattention/) functions. It takes 4 indices as input and returns a boolean. This boolean indicates if the position contributes to the attention computation.
+The `mask_function` argument is a `Callable` that mimics PyTorch's [mask_mod](https://pytorch.org/blog/flexattention) functions. It takes 4 indices as input and returns a boolean. This boolean indicates if the position contributes to the attention computation.
 
 Use this [workaround](https://github.com/huggingface/transformers/blob/main/src/transformers/integrations/executorch.py) for torch export if `mask_function` fails to create a mask.

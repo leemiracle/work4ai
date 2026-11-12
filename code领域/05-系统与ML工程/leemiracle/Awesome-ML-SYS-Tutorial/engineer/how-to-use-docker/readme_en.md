@@ -10,11 +10,11 @@ Please note that the development environment for sglang is a Linux system.
 
 - Typically, server administrators pre-install Docker, so manual installation is not required. You do not need sudo privileges to install the software.
 - If Docker is not found on the server, `nerdctl` may be used as a replacement. `nerdctl` is fully compatible with Docker commands; simply replace the command with `nerdctl xxx`.
-- If manual installation is necessary, refer to [Install | Docker Docs](https://docs.docker.com/engine/install/) or consult GPT.
+- If manual installation is necessary, refer to [Install | Docker Docs](https://docs.docker.com/engine/install) or consult GPT.
 
 ## 3. Downloading Docker Images
 
-Most Docker images are published on [Docker Hub](https://hub.docker.com/).
+Most Docker images are published on [Docker Hub](https://hub.docker.com).
 
 Please use the official sglang image: [lmsysorg/sglang Tags | Docker Hub](https://hub.docker.com/r/lmsysorg/sglang/tags).
 

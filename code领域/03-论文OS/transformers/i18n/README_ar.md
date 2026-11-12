@@ -75,7 +75,7 @@ limitations under the License.
 
 يوفر 🤗 Transformers واجهات برمجة التطبيقات (APIs) لتحميل تلك النماذج المُدربة مسبقًا واستخدامها على نص معين، وضبطها بدقة على مجموعات البيانات الخاصة بك، ثم مشاركتها مع المجتمع على [مركز النماذج](https://huggingface.co/models) الخاص بنا. وفي الوقت نفسه، فإن كل وحدة نمطية Python التي تحدد بنية هي وحدة مستقلة تمامًا ويمكن تعديلها لتمكين تجارب البحث السريعة.
 
-يتم دعم 🤗 Transformers بواسطة مكتبات التعلم العميق الثلاث الأكثر شيوعًا - [Jax](https://jax.readthedocs.io/en/latest/) و [PyTorch](https://pytorch.org/) و [TensorFlow](https://www.tensorflow.org/) - مع تكامل سلس بينها. من السهل تدريب نماذجك باستخدام واحدة قبل تحميلها للاستنتاج باستخدام الأخرى.
+يتم دعم 🤗 Transformers بواسطة مكتبات التعلم العميق الثلاث الأكثر شيوعًا - [Jax](https://jax.readthedocs.io/en/latest) و [PyTorch](https://pytorch.org) و [TensorFlow](https://www.tensorflow.org) - مع تكامل سلس بينها. من السهل تدريب نماذجك باستخدام واحدة قبل تحميلها للاستنتاج باستخدام الأخرى.
 
 ## العروض التوضيحية عبر الإنترنت
 
@@ -249,12 +249,12 @@ limitations under the License.
 
 تم اختبار هذا المستودع على Python 3.9+، Flax 0.4.1+، PyTorch 2.1+، و TensorFlow 2.6+.
 
-يجب تثبيت 🤗 Transformers في [بيئة افتراضية](https://docs.python.org/3/library/venv.html). إذا كنت غير معتاد على البيئات الافتراضية Python، فراجع [دليل المستخدم](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
+يجب تثبيت 🤗 Transformers في [بيئة افتراضية](https://docs.python.org/3/library/venv.html). إذا كنت غير معتاد على البيئات الافتراضية Python، فراجع [دليل المستخدم](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments).
 
 أولاً، قم بإنشاء بيئة افتراضية بالإصدار Python الذي تنوي استخدامه وقم بتنشيطه.
 
 بعد ذلك، ستحتاج إلى تثبيت واحدة على الأقل من Flax أو PyTorch أو TensorFlow.
-يرجى الرجوع إلى [صفحة تثبيت TensorFlow](https://www.tensorflow.org/install/)، و [صفحة تثبيت PyTorch](https://pytorch.org/get-started/locally/#start-locally) و/أو [صفحة تثبيت Flax](https://github.com/google/flax#quick-install) و [صفحة تثبيت Jax](https://github.com/google/jax#installation) بشأن أمر التثبيت المحدد لمنصتك.
+يرجى الرجوع إلى [صفحة تثبيت TensorFlow](https://www.tensorflow.org/install)، و [صفحة تثبيت PyTorch](https://pytorch.org/get-started/locally/#start-locally) و/أو [صفحة تثبيت Flax](https://github.com/google/flax#quick-install) و [صفحة تثبيت Jax](https://github.com/google/jax#installation) بشأن أمر التثبيت المحدد لمنصتك.
 
 عندما يتم تثبيت إحدى هذه المكتبات الخلفية، يمكن تثبيت 🤗 Transformers باستخدام pip كما يلي:
 
@@ -295,7 +295,7 @@ conda install conda-forge::transformers
 
 | القسم | الوصف |
 |-|-|
-| [وثائق](https://huggingface.co/docs/transformers/) | وثائق واجهة برمجة التطبيقات (API) الكاملة والبرامج التعليمية |
+| [وثائق](https://huggingface.co/docs/transformers) | وثائق واجهة برمجة التطبيقات (API) الكاملة والبرامج التعليمية |
 | [ملخص المهام](https://huggingface.co/docs/transformers/task_summary) | المهام التي يدعمها 🤗 Transformers |
 | [برنامج تعليمي لمعالجة مسبقة](https://huggingface.co/docs/transformers/preprocessing) | استخدام فئة `Tokenizer` لإعداد البيانات للنماذج |
 | [التدريب والضبط الدقيق](https://huggingface.co/docs/transformers/training) | استخدام النماذج التي يوفرها 🤗 Transformers في حلقة تدريب PyTorch/TensorFlow وواجهة برمجة تطبيقات `Trainer` |
@@ -304,7 +304,7 @@ conda install conda-forge::transformers
 
 ## الاستشهاد
 
-لدينا الآن [ورقة](https://www.aclweb.org/anthology/2020.emnlp-demos.6/) يمكنك الاستشهاد بها لمكتبة 🤗 Transformers:
+لدينا الآن [ورقة](https://www.aclweb.org/anthology/2020.emnlp-demos.6) يمكنك الاستشهاد بها لمكتبة 🤗 Transformers:
 ```bibtex
 @inproceedings{wolf-etal-2020-transformers،
     title = "Transformers: State-of-the-Art Natural Language Processing"،

@@ -21,7 +21,7 @@ specific language governing permissions and limitations under the License.
 
 ## Overview
 
-DBRX is a [transformer-based](https://www.isattentionallyouneed.com/) decoder-only large language model (LLM) that was trained using next-token prediction.
+DBRX is a [transformer-based](https://www.isattentionallyouneed.com) decoder-only large language model (LLM) that was trained using next-token prediction.
 It uses a *fine-grained* mixture-of-experts (MoE) architecture with 132B total parameters of which 36B parameters are active on any input.
 It was pre-trained on 12T tokens of text and code data.
 Compared to other open MoE models like Mixtral-8x7B and Grok-1, DBRX is fine-grained, meaning it uses a larger number of smaller experts. DBRX has 16 experts and chooses 4, while Mixtral-8x7B and Grok-1 have 8 experts and choose 2.

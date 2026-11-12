@@ -2,7 +2,7 @@
 
 > **位置**：`03-social-sciences/politics/`  
 > **关联**：[`analysis/state-operation-manual-v2.md`](../../analysis/state-operation-manual-v2.md)（国家运行说明书 v2）+ [`reading-list/political-books-index.md`](../../reading-list/political-books-index.md)（51 本书索引）  
-> **哲学根源**：[`00-philosophy/ethics/`](../../00-philosophy/ethics/)（合法性、政治义务）  
+> **哲学根源**：[`00-philosophy/ethics/`](../../00-philosophy/ethics)（合法性、政治义务）  
 > **大问题**：[Q11 权力的本质](../../questions/big-questions.md) + [Q24 国家如何运行](../../questions/big-questions.md)
 
 ---

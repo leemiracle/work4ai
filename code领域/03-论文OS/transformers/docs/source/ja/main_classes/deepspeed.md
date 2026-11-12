@@ -79,7 +79,7 @@ pip install transformers[deepspeed]
 ```
 
 または、[DeepSpeed の GitHub ページ](https://github.com/deepspeedai/DeepSpeed#installation) で詳細を確認してください。
-[高度なインストール](https://www.deepspeed.ai/tutorials/advanced-install/)。
+[高度なインストール](https://www.deepspeed.ai/tutorials/advanced-install)。
 
 それでもビルドに苦労する場合は、まず [CUDA 拡張機能のインストール ノート](trainer#cuda-extension-installation-notes) を必ず読んでください。
 
@@ -161,7 +161,7 @@ _CudaDeviceProperties(name='GeForce RTX 3090', major=8, minor=6, total_memory=24
 ### Deployment with multiple GPUs
 
 DeepSpeed 統合をデプロイするには、[`Trainer`] コマンド ライン引数を調整して新しい引数 `--deepspeed ds_config.json` を含めます。ここで、`ds_config.json` は DeepSpeed 構成ファイルです。
-   [こちら](https://www.deepspeed.ai/docs/config-json/)に記載されています。ファイル名はあなた次第です。
+   [こちら](https://www.deepspeed.ai/docs/config-json)に記載されています。ファイル名はあなた次第です。
    DeepSpeed の`add_config_arguments`ユーティリティを使用して、必要なコマンド ライン引数をコードに追加することをお勧めします。
    詳細については、[DeepSpeed の引数解析](https://deepspeed.readthedocs.io/en/latest/initialize.html#argument-parsing) ドキュメントを参照してください。
 
@@ -479,7 +479,7 @@ deepspeed examples/pytorch/translation/run_translation.py ...
 ### Configuration
 
 設定ファイルで使用できる DeepSpeed 設定オプションの完全なガイドについては、次を参照してください。
-[次のドキュメント](https://www.deepspeed.ai/docs/config-json/) にアクセスしてください。
+[次のドキュメント](https://www.deepspeed.ai/docs/config-json) にアクセスしてください。
 
 さまざまな実際のニーズに対応する数十の DeepSpeed 構成例を [DeepSpeedExamples](https://github.com/deepspeedai/DeepSpeedExamples)で見つけることができます。
 リポジトリ:
@@ -626,7 +626,7 @@ DeepSpeed のみに固有の値や、それに合わせて手動で設定する�
 
 ### ZeRO
 
-[Zero Redundancy Optimizer (ZeRO)](https://www.deepspeed.ai/tutorials/zero/) は、DeepSpeed の主力製品です。それ
+[Zero Redundancy Optimizer (ZeRO)](https://www.deepspeed.ai/tutorials/zero) は、DeepSpeed の主力製品です。それ
 3 つの異なるレベル (段階) の最適化をサポートします。最初のものは、スケーラビリティの観点からはあまり興味深いものではありません。
 したがって、このドキュメントではステージ 2 と 3 に焦点を当てます。ステージ 3 は、最新の ZeRO-Infinity の追加によってさらに改善されています。
 詳細については、DeepSpeed のドキュメントを参照してください。
@@ -1166,11 +1166,11 @@ OOM を引き起こさないバッチ サイズ 1 を取得したら、実効ス
 
 永遠にこれに費やす必要はありませんが、3 か月のトレーニングを開始しようとしている場合は、スループットに関して最も効果的な設定を見つけるために数日かけてください。そのため、トレーニングのコストが最小限になり、トレーニングをより早く完了できます。現在の目まぐるしく変化する ML の世界では、何かをトレーニングするのにさらに 1 か月かかる場合、絶好の機会を逃す可能性があります。もちろん、これは私が意見を共有しているだけであり、決してあなたを急かそうとしているわけではありません。 BLOOM-176B のトレーニングを開始する前に、このプロセスに 2 日間費やし、スループットを 90 TFLOP から 150 TFLOP に向上させることができました。この取り組みにより、トレーニング時間を 1 か月以上節約できました。
 
-これらのメモは主にトレーニング モード用に書かれたものですが、ほとんどの場合は推論にも適用されるはずです。たとえば、勾配チェックポイントはトレーニング中にのみ役立つため、推論中は何も行われません。さらに、マルチ GPU 推論を実行していて、[DeepSpeed-Inference](https://www.deepspeed.ai/tutorials/inference-tutorial/)、[Accelerate](https://ハグフェイス.co/blog/bloom-inference-pytorch-scripts) は優れたパフォーマンスを提供するはずです。
+これらのメモは主にトレーニング モード用に書かれたものですが、ほとんどの場合は推論にも適用されるはずです。たとえば、勾配チェックポイントはトレーニング中にのみ役立つため、推論中は何も行われません。さらに、マルチ GPU 推論を実行していて、[DeepSpeed-Inference](https://www.deepspeed.ai/tutorials/inference-tutorial)、[Accelerate](https://ハグフェイス.co/blog/bloom-inference-pytorch-scripts) は優れたパフォーマンスを提供するはずです。
 
 
 その他のパフォーマンス関連の簡単なメモ:
-- 何かを最初からトレーニングしている場合は、常に 16 で割り切れる形状のテンソル (隠れたサイズなど) を使用するようにしてください。バッチ サイズについては、少なくとも 2 で割り切れるようにしてください。 GPU からさらに高いパフォーマンスを引き出したい場合は、ハードウェア固有の [波とタイルの量子化](https://developer.nvidia.com/blog/optimizing-gpu-performance-tensor-cores/) の可分性があります。
+- 何かを最初からトレーニングしている場合は、常に 16 で割り切れる形状のテンソル (隠れたサイズなど) を使用するようにしてください。バッチ サイズについては、少なくとも 2 で割り切れるようにしてください。 GPU からさらに高いパフォーマンスを引き出したい場合は、ハードウェア固有の [波とタイルの量子化](https://developer.nvidia.com/blog/optimizing-gpu-performance-tensor-cores) の可分性があります。
 
 ### Activation Checkpointing or Gradient Checkpointing
 
@@ -1897,7 +1897,7 @@ SW: Model with 2783M total params, 65M largest layer params.
   問題が解決しない場合にのみ、Deepspeed について言及し、必要な詳細をすべて提供してください。
 
 - 問題が統合部分ではなく DeepSpeed コアにあることが明らかな場合は、問題を提出してください。
-  [Deepspeed](https://github.com/deepspeedai/DeepSpeed/) を直接使用します。よくわからない場合でも、ご安心ください。
+  [Deepspeed](https://github.com/deepspeedai/DeepSpeed) を直接使用します。よくわからない場合でも、ご安心ください。
   どちらの問題トラッカーでも問題ありません。投稿されたらそれを判断し、次の場合は別の問題トラッカーにリダイレクトします。
   そうである必要がある。
 
@@ -2005,7 +2005,7 @@ model = AutoModel.from_config(config)
 engine = deepspeed.initialize(model=model, config_params=ds_config, ...)
 ```
 
-[`Trainer`] 統合を使用していない場合は、完全に独力で行うことになることに注意してください。基本的には、[Deepspeed](https://www.deepspeed.ai/) Web サイトのドキュメントに従ってください。また、設定ファイルを明示的に設定する必要があります。`"auto"`値は使用できず、代わりに実際の値を入力する必要があります。
+[`Trainer`] 統合を使用していない場合は、完全に独力で行うことになることに注意してください。基本的には、[Deepspeed](https://www.deepspeed.ai) Web サイトのドキュメントに従ってください。また、設定ファイルを明示的に設定する必要があります。`"auto"`値は使用できず、代わりに実際の値を入力する必要があります。
 
 ## HfDeepSpeedConfig
 
@@ -2203,7 +2203,7 @@ RUN_SLOW=1 pytest tests/deepspeed
 ## Main DeepSpeed Resources
 
 - [プロジェクトの github](https://github.com/deepspeedai/DeepSpeed)
-- [使用方法ドキュメント](https://www.deepspeed.ai/getting-started/)
+- [使用方法ドキュメント](https://www.deepspeed.ai/getting-started)
 - [API ドキュメント](https://deepspeed.readthedocs.io/en/latest/index.html)
 - [ブログ投稿](https://www.microsoft.com/en-us/research/search/?q=deepspeed)
 

@@ -10,10 +10,10 @@
 
 | 目录 | 层 | 状态 | Phase |
 |---|---|---|---|
-| [`l1-event-ontology/`](./l1-event-ontology/) | **L1 Event Ontology** | ⚠️ 设计占位（无代码）| Phase 1 |
-| [`l2-world-model/`](./l2-world-model/) | **L2 System World Model** | 🟢 C1 命门已达标（sglang+Raft+kernel 三域）| Phase 0/1 |
-| [`l2_5-formal-rules/`](./l2_5-formal-rules/) | **L2.5 Formal Rules** | 🟢 C2 命门已达标（spinlock+Raft 3 定理 sorry=0）| Phase 0/1 |
-| [`l3-explain/`](./l3-explain/) | **L3 English Interface** | 🟢 prototype 跑通（4 规则三层讲解）| Phase 0/1 |
+| [`l1-event-ontology/`](./l1-event-ontology) | **L1 Event Ontology** | ⚠️ 设计占位（无代码）| Phase 1 |
+| [`l2-world-model/`](./l2-world-model) | **L2 System World Model** | 🟢 C1 命门已达标（sglang+Raft+kernel 三域）| Phase 0/1 |
+| [`l2_5-formal-rules/`](./l2_5-formal-rules) | **L2.5 Formal Rules** | 🟢 C2 命门已达标（spinlock+Raft 3 定理 sorry=0）| Phase 0/1 |
+| [`l3-explain/`](./l3-explain) | **L3 English Interface** | 🟢 prototype 跑通（4 规则三层讲解）| Phase 0/1 |
 
 L0（Hardware）暂无代码，由 L1 的 eBPF + 硬件 PT adapter 覆盖（Phase 1 才接入）。
 

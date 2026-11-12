@@ -21,7 +21,7 @@ rendered properly in your Markdown viewer.
 
 # Hardware ottimizzato per l'addestramento
 
-L'hardware utilizzato per eseguire l'addestramento del modello e l'inferenza può avere un grande effetto sulle prestazioni. Per un analisi approfondita delle GPUs, assicurati di dare un'occhiata all'eccellente [blog post](https://timdettmers.com/2020/09/07/which-gpu-for-deep-learning/) di Tim Dettmer.
+L'hardware utilizzato per eseguire l'addestramento del modello e l'inferenza può avere un grande effetto sulle prestazioni. Per un analisi approfondita delle GPUs, assicurati di dare un'occhiata all'eccellente [blog post](https://timdettmers.com/2020/09/07/which-gpu-for-deep-learning) di Tim Dettmer.
 
 Diamo un'occhiata ad alcuni consigli pratici per la configurazione della GPU.
 

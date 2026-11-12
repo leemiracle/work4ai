@@ -143,8 +143,8 @@
 
 ## 八、关联
 
-- 学科主笔记：[`01-natural-sciences/physics/`](./)
+- 学科主笔记：[`01-natural-sciences/physics/`](.)
 - 哲学之根：[`00-philosophy/README.md`](../../00-philosophy/README.md)
 - 本体论：[`00-philosophy/ontology.md`](../../00-philosophy/ontology.md) — 时空、物质、关系的存在地位
-- 形而上学：[`00-philosophy/metaphysics/`](../../00-philosophy/metaphysics/) — 因果、决定论、时间
+- 形而上学：[`00-philosophy/metaphysics/`](../../00-philosophy/metaphysics) — 因果、决定论、时间
 - 跨学科熵：[`08-cross-cutting/entropy.md`](../../08-cross-cutting/entropy.md) — 时间之箭

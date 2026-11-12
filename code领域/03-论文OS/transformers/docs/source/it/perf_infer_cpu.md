@@ -32,4 +32,4 @@ Vedi maggiori informazioni per [IPEX Graph Optimization](https://intel.github.io
 
 #### Installazione di IPEX
 
-I rilasci di IPEX seguono PyTorch, verifica i vari approcci per [IPEX installation](https://intel.github.io/intel-extension-for-pytorch/).
+I rilasci di IPEX seguono PyTorch, verifica i vari approcci per [IPEX installation](https://intel.github.io/intel-extension-for-pytorch).

@@ -22,7 +22,7 @@ rendered properly in your Markdown viewer.
 
 각각 서로 다른 토큰화 방법을 사용하는 두 모델:
 
-- MeCab와 WordPiece를 사용하여 토큰화합니다. 이를 위해 추가 의존성 [fugashi](https://github.com/polm/fugashi)이 필요합니다. (이는 [MeCab](https://taku910.github.io/mecab/)의 래퍼입니다.)
+- MeCab와 WordPiece를 사용하여 토큰화합니다. 이를 위해 추가 의존성 [fugashi](https://github.com/polm/fugashi)이 필요합니다. (이는 [MeCab](https://taku910.github.io/mecab)의 래퍼입니다.)
 - 문자 단위로 토큰화합니다.
 
 *MecabTokenizer*를 사용하려면, 의존성을 설치하기 위해 `pip install transformers["ja"]` (또는 소스에서 설치하는 경우 `pip install -e .["ja"]`) 명령을 실행해야 합니다.

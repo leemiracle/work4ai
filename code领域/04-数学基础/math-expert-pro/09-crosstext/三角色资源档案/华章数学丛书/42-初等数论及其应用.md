@@ -17,7 +17,7 @@
 
 **视频课程**：
 - [Numberphile](https://www.youtube.com/@numberphile)
-- [MIT OCW 18.781 数论](https://ocw.mit.edu/courses/18-781-theory-of-numbers-spring-2012/)
+- [MIT OCW 18.781 数论](https://ocw.mit.edu/courses/18-781-theory-of-numbers-spring-2012)
 - [3Blue1Brown 模形式](https://www.youtube.com/watch?v=KTJ4zr1HGj0)
 
 **经典论文/参考**：
@@ -28,18 +28,18 @@
 
 **Python/代码实现**：
 - [SymPy Number Theory](https://docs.sympy.org/latest/modules/ntheory.html)
-- [SageMath 数论](https://doc.sagemath.org/)
-- [PARI/GP](https://pari.math.u-bordeaux.fr/)
+- [SageMath 数论](https://doc.sagemath.org)
+- [PARI/GP](https://pari.math.u-bordeaux.fr)
 
 ### 🔬 研究员优先（形式化 + 社区）
 
 **Lean 形式化**：
-- [Mathlib.NumberTheory](https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/)
+- [Mathlib.NumberTheory](https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory)
 
 **学术社区**：
 - [Math StackExchange [number-theory]](https://math.stackexchange.com/questions/tagged/number-theory)
 - [MathOverflow 数论](https://mathoverflow.net/questions/tagged/nt.number-theory)
-- [LMFDB 数据库](https://www.lmfdb.org/)
+- [LMFDB 数据库](https://www.lmfdb.org)
 
 ## 🎯 综合学习路径
 

@@ -70,7 +70,7 @@ The ONNX export succeeded and the exported model was saved at: distilbert_base_u
 optimum-cli export onnx --model local_path --task question-answering distilbert_base_uncased_squad_onnx/
 ```
 
-يمكن بعد ذلك تشغيل ملف `model.onnx` الناتج على أحد [المسرعات](https://onnx.ai/supported-tools.html#deployModel) العديدة التي تدعم معيار ONNX. على سبيل المثال، يمكننا تحميل النموذج وتشغيله باستخدام [ONNX Runtime](https://onnxruntime.ai/) كما يلي:
+يمكن بعد ذلك تشغيل ملف `model.onnx` الناتج على أحد [المسرعات](https://onnx.ai/supported-tools.html#deployModel) العديدة التي تدعم معيار ONNX. على سبيل المثال، يمكننا تحميل النموذج وتشغيله باستخدام [ONNX Runtime](https://onnxruntime.ai) كما يلي:
 
 ```python
 >>> from transformers import AutoTokenizer

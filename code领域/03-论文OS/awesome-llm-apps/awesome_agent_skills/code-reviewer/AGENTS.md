@@ -288,5 +288,5 @@ When performing reviews, structure as:
 ## References
 
 - Individual rule files in `rules/` directory
-- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
-- [Clean Code by Robert Martin](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)
+- [OWASP Top 10](https://owasp.org/www-project-top-ten)
+- [Clean Code by Robert Martin](https://www.oreilly.com/library/view/clean-code-a/9780136083238)

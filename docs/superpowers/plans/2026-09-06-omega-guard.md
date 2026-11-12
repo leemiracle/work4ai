@@ -2427,7 +2427,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 
 **Files:**
 - Modify: `omega-guard/README.md`（`<!-- METRICS_TABLE -->` 处填入实验 03 输出）
-- Modify: `讲透形式化验证/README.md`（追加"配套工具"节）
+- Modify: `../../../讲透宇宙/01-学/讲透形式化验证//README.md`（追加"配套工具"节）
 - Modify: `本地仓库全景-Cworkspace迭代索引.md`（加一行）
 
 **Interfaces:**
@@ -2444,7 +2444,7 @@ Expected: 矩阵 + `results/metrics.json`
 
 - [ ] **Step 3: 挂网两个索引**
 
-`讲透形式化验证/README.md` 文末追加：
+`../../../讲透宇宙/01-学/讲透形式化验证//README.md` 文末追加：
 ```markdown
 ## 配套工具
 

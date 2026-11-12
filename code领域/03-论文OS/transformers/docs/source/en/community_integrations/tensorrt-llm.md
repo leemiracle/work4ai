@@ -37,5 +37,5 @@ TensorRT-LLM extracts the model graph with `torch.export` and applies optimizati
 
 ## Resources
 
-- [TensorRT-LLM docs](https://nvidia.github.io/TensorRT-LLM/) for more detailed usage guides.
+- [TensorRT-LLM docs](https://nvidia.github.io/TensorRT-LLM) for more detailed usage guides.
 - [AutoDeploy guide](https://nvidia.github.io/TensorRT-LLM/torch/auto_deploy/auto-deploy.html) explains how it works with advanced examples.

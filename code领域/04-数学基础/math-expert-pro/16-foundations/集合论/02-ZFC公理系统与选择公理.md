@@ -66,7 +66,7 @@ ZFC 不够强 → 添加"大基数公理"来增强：
 - 基础争议 → [01-基础论战与多元主义.md](../基础争议/01-基础论战与多元主义.md)
 - ZFC 最终公理争议 → [14-frontier/热点方向追踪/2026年最新数学突破.md](../../14-frontier/热点方向追踪/2026年最新数学突破.md)（Quanta 2026.04 ZFC 文章）
 - 形式化 → [14-frontier/AI-for-Math/02-Lean形式化数学入门.md](../../14-frontier/AI-for-Math/02-Lean形式化数学入门.md)
-- Gödel → [07-critique/](../../07-critique/)
+- Gödel → [07-critique/](../../07-critique)
 
 ## 自测
 

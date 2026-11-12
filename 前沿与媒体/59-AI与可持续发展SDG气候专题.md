@@ -29,7 +29,7 @@
 
 | 项目 | 强项 |
 |---|---|
-| **Climate Change AI** [climatechange.ai](https://www.climatechange.ai/) | 学术+产业联盟 |
+| **Climate Change AI** [climatechange.ai](https://www.climatechange.ai) | 学术+产业联盟 |
 | **Climate Trace**（Al Gore）| 卫星 AI 排放追踪（已在 [`27`](./27-AI%20+%20实体产业（制造+物流+能源+农业+建筑）.md)）|
 | **DeepMind GraphCast / GenCast** | 天气预测超 ECMWF（已在 [`15`](./15-AI%20for%20Science%20专题.md)）|
 | **Google Research"Traffic Light"** | 全球城市红绿灯 AI 减排 |

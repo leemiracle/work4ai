@@ -145,7 +145,7 @@ model.quantize(calibration_dataset, batch_size=2) # quantize
 model.save(quant_path) # save model
 ```
 
-#### Using [LLM Compressor](https://github.com/vllm-project/llm-compressor/)
+#### Using [LLM Compressor](https://github.com/vllm-project/llm-compressor)
 
 ```bash
 # install
@@ -385,8 +385,8 @@ Other layers (e.g. projections in the attention layers) have their weights quant
 ## Reference
 
 - [GPTQModel](https://github.com/ModelCloud/GPTQModel)
-- [LLM Compressor](https://github.com/vllm-project/llm-compressor/)
+- [LLM Compressor](https://github.com/vllm-project/llm-compressor)
 - [NVIDIA Model Optimizer (ModelOpt)](https://github.com/NVIDIA/Model-Optimizer)
 - [Torchao: PyTorch Architecture Optimization](https://github.com/pytorch/ao)
-- [vLLM Quantization](https://docs.vllm.ai/en/latest/quantization/)
+- [vLLM Quantization](https://docs.vllm.ai/en/latest/quantization)
 - [auto-round](https://github.com/intel/auto-round)

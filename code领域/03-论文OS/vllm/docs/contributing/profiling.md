@@ -235,7 +235,7 @@ with cprofile_context("another_function.prof"):
 ### Analyzing Profile Results
 
 There are multiple tools available that can help analyze the profile results.
-One example is [snakeviz](https://jiffyclub.github.io/snakeviz/).
+One example is [snakeviz](https://jiffyclub.github.io/snakeviz).
 
 ```bash
 pip install snakeviz

@@ -1,7 +1,7 @@
 # 风险与不确定性 · Risk and Uncertainty
 
 > **位置**：`03-social-sciences/finance/risk-and-uncertainty.md`  
-> **关联**：[`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（哲学锚点 §一 对象 3 + §四 极限 2）+ [`_overview.md`](./_overview.md)（金融地图 + 关键思想家）+ [`02-formal-sciences/probability/`](../../02-formal-sciences/probability/)（数学基础）  
+> **关联**：[`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（哲学锚点 §一 对象 3 + §四 极限 2）+ [`_overview.md`](./_overview.md)（金融地图 + 关键思想家）+ [`02-formal-sciences/probability/`](../../02-formal-sciences/probability)（数学基础）  
 > **大问题**：[Q14 概率的本质](../../questions/big-questions.md) + [Q15 在不确定中如何决策](../../questions/big-questions.md)  
 > **核心问题**：**风险能被量化吗？** Knight 的回答是——能被量化的叫风险，不能被量化的叫不确定性。金融学的原罪，是把后者假装成前者。
 
@@ -551,7 +551,7 @@ Sharpe 的 CAPM 把风险劈成两半：
 | **CoVaR**（Adrian-Brunnermeier） | 某机构陷困时**整个系统**的 VaR | 仍是分位数，尾部盲 |
 | **SRISK**（Acharya-Engle） | 机构在危机中**缺多少资本** | 依赖模型假设 |
 
-> **本质洞察**：系统性风险的根源是**网络结构**——谁欠谁多少、连锁反应如何传导。这是复杂系统科学的领地（见 [`06-systems/complexity/`](../../06-systems/complexity/)）。单个机构看起来安全，但它是网络的关键节点——它倒下会拖垮一片。这是 2008 雷曼问题的核心：问题不在雷曼本身的 VaR，而在它是衍生品网络的枢纽。
+> **本质洞察**：系统性风险的根源是**网络结构**——谁欠谁多少、连锁反应如何传导。这是复杂系统科学的领地（见 [`06-systems/complexity/`](../../06-systems/complexity)）。单个机构看起来安全，但它是网络的关键节点——它倒下会拖垮一片。这是 2008 雷曼问题的核心：问题不在雷曼本身的 VaR，而在它是衍生品网络的枢纽。
 
 ---
 
@@ -595,18 +595,18 @@ Sharpe 的 CAPM 把风险劈成两半：
 
 > 你现在被要求给一个 25 岁的年轻人做一生的财富规划。你会用 VaR、凯利公式、杠铃策略中的哪一个？或者——**你会告诉他，这些模型都救不了真正的黑天鹅，唯一可靠的是降低自己对金钱的依赖？**
 >
-> 想清楚这个问题，你就理解了本章。把你的回答写进 [`insights/`](../../insights/)。
+> 想清楚这个问题，你就理解了本章。把你的回答写进 [`insights/`](../../insights)。
 
 ---
 
 ## 十、关联
 
 - **学科主笔记**：[`_overview.md`](./_overview.md)（金融地图）+ [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（哲学锚点，尤其 §一 对象 3 + §四 极限 2）
-- **概率之根**：[`02-formal-sciences/probability/`](../../02-formal-sciences/probability/)（频率学派 vs 贝叶斯之争）
+- **概率之根**：[`02-formal-sciences/probability/`](../../02-formal-sciences/probability)（频率学派 vs 贝叶斯之争）
 - **大问题**：[`questions/big-questions.md`](../../questions/big-questions.md) Q14 概率 + Q15 不确定中的决策
 - **定价专题**：[`markets-and-pricing.md`](./markets-and-pricing.md)（风险溢价的来源）
-- **复杂系统**：[`06-systems/complexity/`](../../06-systems/complexity/)（相变、级联失效、涌现）+ [`06-systems/feedback/`](../../06-systems/feedback/)（正反馈=泡沫）
-- **跨学科映射**：[`08-cross-cutting/`](../../08-cross-cutting/)（熵、反馈、博弈与金融的连接）
+- **复杂系统**：[`06-systems/complexity/`](../../06-systems/complexity)（相变、级联失效、涌现）+ [`06-systems/feedback/`](../../06-systems/feedback)（正反馈=泡沫）
+- **跨学科映射**：[`08-cross-cutting/`](../../08-cross-cutting)（熵、反馈、博弈与金融的连接）
 - **投资哲学**：`/mnt/c/workspace/fastisslow/`（凯利公式、反脆弱的实战应用）
 - **关键思想家**：Knight（1921）· Markowitz（1952）· Kelly（1956）· Kahneman-Tversky（1979）· Mandelbrot（1963/2004）· Minsky（1986）· Taleb（2001/2007/2012）
 

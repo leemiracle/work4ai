@@ -78,7 +78,7 @@
 
 ### 渠道 4：Papers With Code（最结构化）
 
-- **地址**：[paperswithcode.com](https://paperswithcode.com/)
+- **地址**：[paperswithcode.com](https://paperswithcode.com)
 - **特点**：论文 + 代码 + benchmark 一体
 - **适合**：ML / 优化 / TDA 这类有实验的方向
 - **缺点**：纯理论方向覆盖差
@@ -118,12 +118,12 @@
 ### 作者过滤
 
 - 建立你的「必读作者清单」（5-10 位），他们出新论文无条件读 intro
-- 工具：[arxiv-sanity-preserver](http://www.arxiv-sanity-preserver.com/)（Karpathy 开发，按作者 / 关键词排序）
-- 进阶：[Semantic Scholar](https://www.semanticscholar.org/) 可订阅作者，新论文邮件提醒
+- 工具：[arxiv-sanity-preserver](http://www.arxiv-sanity-preserver.com)（Karpathy 开发，按作者 / 关键词排序）
+- 进阶：[Semantic Scholar](https://www.semanticscholar.org) 可订阅作者，新论文邮件提醒
 
 ### 引用过滤
 
-- 新论文出现后 1-2 个月，查 [Inspire-HEP](https://inspirehep.net/)（物理）/ [MathSciNet](https://mathscinet.ams.org/)（需订阅）/ [Semantic Scholar](https://www.semanticscholar.org/) 看被引次数
+- 新论文出现后 1-2 个月，查 [Inspire-HEP](https://inspirehep.net)（物理）/ [MathSciNet](https://mathscinet.ams.org)（需订阅）/ [Semantic Scholar](https://www.semanticscholar.org) 看被引次数
 - 被引 >10 篇 = 值得回看；被引 >50 篇 = 必读
 
 ---
@@ -143,10 +143,10 @@
 | 平台 | 角色 | 何时用 |
 |------|------|--------|
 | **arXiv** | 一手论文源 | 想读原始工作 |
-| **Quanta Magazine** | [quantamagazine.org/mathematics](https://www.quantamagazine.org/mathematics/) | 想知道"哪些工作被主流认为重要"——Quanta 的选题 = 编辑筛选过的 Tier A 信号 |
-| **MathOverflow** | [mathoverflow.net](https://mathoverflow.net/) | 想问具体技术问题 / 看专家对某概念的争论 |
-| **Tao 博客** | [terrytao.wordpress.com](https://terrytao.wordpress.com/) | 想看 Fields 得主级别的"二手解读" |
-| **Gowers 博客** | [gowers.wordpress.com](https://gowers.wordpress.com/) | 同上，偏组合 / Polymath |
+| **Quanta Magazine** | [quantamagazine.org/mathematics](https://www.quantamagazine.org/mathematics) | 想知道"哪些工作被主流认为重要"——Quanta 的选题 = 编辑筛选过的 Tier A 信号 |
+| **MathOverflow** | [mathoverflow.net](https://mathoverflow.net) | 想问具体技术问题 / 看专家对某概念的争论 |
+| **Tao 博客** | [terrytao.wordpress.com](https://terrytao.wordpress.com) | 想看 Fields 得主级别的"二手解读" |
+| **Gowers 博客** | [gowers.wordpress.com](https://gowers.wordpress.com) | 同上，偏组合 / Polymath |
 
 **黄金互补**：读到 arXiv 一篇看不懂 → 搜 Tao 博客有没有写解读 → 再不懂去 MathOverflow 提问。
 
@@ -168,13 +168,13 @@
 
 ### 路线 C：形式化数学 / Lean
 - **arXiv**：cs.LO, math.LO + 搜 "Lean" / "formalization"
-- **必关注**：[Lean Zulip](https://leanprover.zulipchat.com/)（实时讨论）、Buzzard 主页、mathlib GitHub releases
-- **媒体**：[Xena Project Blog](https://xenaproject.wordpress.com/)
+- **必关注**：[Lean Zulip](https://leanprover.zulipchat.com)（实时讨论）、Buzzard 主页、mathlib GitHub releases
+- **媒体**：[Xena Project Blog](https://xenaproject.wordpress.com)
 - **每周时间**：2-3 h
 
 ### 路线 D：跨学科（数学物理 / TDA）
 - **arXiv**：math.MP, math.AT, math.DG + hep-th
-- **必关注**：Frenkel 主页、Carlsson 主页、[Quanta physics 板块](https://www.quantamagazine.org/physics/)
+- **必关注**：Frenkel 主页、Carlsson 主页、[Quanta physics 板块](https://www.quantamagazine.org/physics)
 - **每周时间**：3-4 h
 
 ---

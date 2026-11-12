@@ -40,7 +40,7 @@ formulation. Furthermore, XLNet integrates ideas from Transformer-XL, the state-
 pretraining. Empirically, under comparable experiment settings, XLNet outperforms BERT on 20 tasks, often by a large
 margin, including question answering, natural language inference, sentiment analysis, and document ranking.*
 
-This model was contributed by [thomwolf](https://huggingface.co/thomwolf). The original code can be found [here](https://github.com/zihangdai/xlnet/).
+This model was contributed by [thomwolf](https://huggingface.co/thomwolf). The original code can be found [here](https://github.com/zihangdai/xlnet).
 
 ## Usage tips
 

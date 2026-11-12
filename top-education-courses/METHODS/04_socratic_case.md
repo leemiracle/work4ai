@@ -39,7 +39,7 @@
 5. 始终把学生留在"恰好够难"的区域。
 ```
 
-> 🎯 **Khanmigo 的核心 prompt 就是这个**。详见 [`../../讲透Prompt/`]、[`../ai_for_education/`]。
+> 🎯 **Khanmigo 的核心 prompt 就是这个**。详见 [`../../讲透宇宙/01-学/讲透Prompt//`]、[`../ai_for_education/`]。
 
 ---
 

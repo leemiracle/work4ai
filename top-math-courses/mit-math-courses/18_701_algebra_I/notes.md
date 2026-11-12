@@ -1,7 +1,7 @@
 # MIT 18.701 · 费曼三层讲透：抽象代数 I（群与环）
 
 > **教材**：Artin, *Algebra* (2nd ed, 2017) ★ — Michael Artin 亲写
-> **视频**：[OCW 18.701-702 Artin](https://ocw.mit.edu/courses/18-701-algebra-i-fall-2010/)
+> **视频**：[OCW 18.701-702 Artin](https://ocw.mit.edu/courses/18-701-algebra-i-fall-2010)
 > **特色**：MIT 本科纯数学核心——**群 / 环 / 域 / 群作用**
 
 ---

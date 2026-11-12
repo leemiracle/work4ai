@@ -17,7 +17,7 @@ rendered properly in your Markdown viewer.
 
 [tiny-agents](https://huggingface.co/blog/python-tiny-agents) offers a minimal pattern for building tool-using agents. A small Python loop connects an MCP client to tools from MCP servers. Hugging Face Spaces work as MCP servers. Find more compatible Spaces on the [Hub](https://huggingface.co/spaces?filter=mcp-server).
 
-Create a config file that points to your local model and the tool server. This example uses an image generation [Space](https://evalstate-flux1-schnell.hf.space/).
+Create a config file that points to your local model and the tool server. This example uses an image generation [Space](https://evalstate-flux1-schnell.hf.space).
 
 ```json
 {

@@ -98,7 +98,7 @@ $$\text{发现引擎价值} = \underbrace{\text{生成多样性}}_{\text{模型�
 | 回归 | loops/experiments/regression_suite.py（R1-R7 含 bug 锚） | **6/6 PASS**，crond 每日 07:30 |
 | benefit | loops/experiments/flywheel_benefit_run.py | **首数字 1.7%**+激活溯源 |
 
-详见 loops/experiments/evolution_engine_results_card.md。设计框架见 [../讲透Agent/持续进化全景综合-2026-08.md](../讲透Agent/持续进化全景综合-2026-08.md) §九。
+详见 loops/experiments/evolution_engine_results_card.md。设计框架见 [../讲透Agent/持续进化全景综合-2026-08.md](../讲透宇宙/01-学/讲透Agent//持续进化全景综合-2026-08.md) §九。
 
 ## 六·旧、T2 地毯式搜索结果（2026-08-26，S 级发现）
 
@@ -153,7 +153,7 @@ $$\text{发现引擎价值} = \underbrace{\text{生成多样性}}_{\text{模型�
 
 ## 挂网
 
-- 上游：[MATH_LOOP_ENGINE.md](MATH_LOOP_ENGINE.md)（学习循环——本引擎的 L1-L4 内件）、[../讲透Loop/](../讲透Loop/)（循环设计学——外循环规格与守卫）
+- 上游：[MATH_LOOP_ENGINE.md](MATH_LOOP_ENGINE.md)（学习循环——本引擎的 L1-L4 内件）、[../讲透Loop/](../讲透宇宙/01-学/讲透Loop)（循环设计学——外循环规格与守卫）
 - **运行底座（08-28 新）**：[MATH_AGENT_HARNESS.md](MATH_AGENT_HARNESS.md)（已升格为独立项目 ~/ai/math-agent/——注册表与实施线在新家）
 - **总纲**：[BIDIRECTIONAL_FLYWHEEL.md](BIDIRECTIONAL_FLYWHEEL.md)（本引擎=飞轮的 AI→Math 环；引擎自举台账在总纲 §三）
 - 下游：loops/experiments/（试点实验线）、Prover harness（T2 攻坚手）

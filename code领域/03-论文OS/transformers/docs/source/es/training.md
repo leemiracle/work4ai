@@ -203,7 +203,7 @@ Carguemos un modelo TensorFlow con el número esperado de labels:
 >>> model = TFAutoModelForSequenceClassification.from_pretrained("google-bert/bert-base-cased", num_labels=5)
 ```
 
-A continuación, compila y aplica fine-tuning a tu modelo con [`fit`](https://keras.io/api/models/model_training_apis/) como lo harías con cualquier otro modelo de Keras:
+A continuación, compila y aplica fine-tuning a tu modelo con [`fit`](https://keras.io/api/models/model_training_apis) como lo harías con cualquier otro modelo de Keras:
 
 ```py
 >>> model.compile(
@@ -311,7 +311,7 @@ Por último, especifica el `device` o entorno de ejecución para utilizar una GP
 
 <Tip>
 
-Consigue acceso gratuito a una GPU en la nube si es que no tienes este recurso de forma local con un notebook alojado en [Colaboratory](https://colab.research.google.com/) o [SageMaker StudioLab](https://studiolab.sagemaker.aws/).
+Consigue acceso gratuito a una GPU en la nube si es que no tienes este recurso de forma local con un notebook alojado en [Colaboratory](https://colab.research.google.com) o [SageMaker StudioLab](https://studiolab.sagemaker.aws).
 
 </Tip>
 
@@ -319,7 +319,7 @@ Genial, ¡ahora podemos entrenar! 🥳
 
 ### Ciclo de entrenamiento
 
-Para hacer un seguimiento al progreso del entrenamiento, utiliza la biblioteca [tqdm](https://tqdm.github.io/) para añadir una barra de progreso sobre el número de pasos de entrenamiento:
+Para hacer un seguimiento al progreso del entrenamiento, utiliza la biblioteca [tqdm](https://tqdm.github.io) para añadir una barra de progreso sobre el número de pasos de entrenamiento:
 
 ```py
 >>> from tqdm.auto import tqdm

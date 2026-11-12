@@ -56,7 +56,7 @@ Text Generation Inference (TGI) is a toolkit for deploying and serving Large Lan
   - [EETQ](https://github.com/NetEase-FuXi/EETQ)
   - [AWQ](https://github.com/casper-hansen/AutoAWQ)
   - [Marlin](https://github.com/IST-DASLab/marlin)
-  - [fp8](https://developer.nvidia.com/blog/nvidia-arm-and-intel-publish-fp8-specification-for-standardization-as-an-interchange-format-for-ai/)
+  - [fp8](https://developer.nvidia.com/blog/nvidia-arm-and-intel-publish-fp8-specification-for-standardization-as-an-interchange-format-for-ai)
 - [Safetensors](https://github.com/huggingface/safetensors) weight loading
 - Watermarking with [A Watermark for Large Language Models](https://arxiv.org/abs/2301.10226)
 - Logits warper (temperature scaling, top-p, top-k, repetition penalty, more details see [transformers.LogitsProcessor](https://huggingface.co/docs/transformers/internal/generation_utils#transformers.LogitsProcessor))
@@ -209,7 +209,7 @@ git clone https://github.com/huggingface/text-generation-inference
 cd text-generation-inference
 ```
 
-Then [install Rust](https://rustup.rs/) and create a Python virtual environment with at least
+Then [install Rust](https://rustup.rs) and create a Python virtual environment with at least
 Python 3.9, e.g. using `conda` or `python venv`:
 
 ```shell

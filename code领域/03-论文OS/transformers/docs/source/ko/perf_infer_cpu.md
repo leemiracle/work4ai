@@ -24,4 +24,4 @@ Intel® Extension for PyTorch(IPEX)는 Transformers 계열 모델의 jit 모드�
 
 #### IPEX 설치: [[ipex-installation]]
 
-IPEX 배포 주기는 PyTorch를 따라서 이루어집니다. 자세한 정보는 [IPEX 설치 방법](https://intel.github.io/intel-extension-for-pytorch/)을 확인하세요.
+IPEX 배포 주기는 PyTorch를 따라서 이루어집니다. 자세한 정보는 [IPEX 설치 방법](https://intel.github.io/intel-extension-for-pytorch)을 확인하세요.

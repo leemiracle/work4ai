@@ -53,4 +53,4 @@ model = AutoModelForCausalLM.from_pretrained(quant_path, device_map="auto")
 
 ## Resources
 
-Read the [Open-sourcing FBGEMM for state-of-the-art server-side inference](https://engineering.fb.com/2018/11/07/ml-applications/fbgemm/) blog post for more details on FBGEMM.
+Read the [Open-sourcing FBGEMM for state-of-the-art server-side inference](https://engineering.fb.com/2018/11/07/ml-applications/fbgemm) blog post for more details on FBGEMM.

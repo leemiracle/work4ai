@@ -62,7 +62,7 @@ Compared with other backbone networks, Res2Net requires fewer parameters and FLO
 | R2-101-FPN | pytorch |   20e   |    -     |       -        |  47.5  |  41.6   | [config](./htc_res2net-101_fpn_20e_coco.py) | [model](https://download.openmmlab.com/mmdetection/v2.0/res2net/htc_r2_101_fpn_20e_coco/htc_r2_101_fpn_20e_coco-3a8d2112.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/res2net/htc_r2_101_fpn_20e_coco/htc_r2_101_fpn_20e_coco_20200515_150029.log.json) |
 
 - Res2Net ImageNet pretrained models are in [Res2Net-PretrainedModels](https://github.com/Res2Net/Res2Net-PretrainedModels).
-- More applications of Res2Net are in [Res2Net-Github](https://github.com/Res2Net/).
+- More applications of Res2Net are in [Res2Net-Github](https://github.com/Res2Net).
 
 ## Citation
 

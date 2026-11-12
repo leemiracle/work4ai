@@ -10,7 +10,7 @@ RWKV-7 "Goose" is the strongest **linear-time** & **constant-space** (no kv-cach
 
 RWKV-7 is a [meta-in-context learner](https://raw.githubusercontent.com/BlinkDL/RWKV-LM/main/RWKV-v7.png), test-time-training its state on the context via in-context gradient descent at every token.
 
-RWKV is a [Linux Foundation AI project](https://lfaidata.foundation/projects/rwkv/), so totally free. RWKV runtime is [already in Windows & Office](https://x.com/BlinkDL_AI/status/1831012419508019550).
+RWKV is a [Linux Foundation AI project](https://lfaidata.foundation/projects/rwkv), so totally free. RWKV runtime is [already in Windows & Office](https://x.com/BlinkDL_AI/status/1831012419508019550).
 
 You are welcome to ask the RWKV community (such as [RWKV discord](https://discord.gg/bDSBUMeFpc)) for advice on upgrading your attention/ssm models to rwkv7 models :)
 
@@ -61,7 +61,7 @@ RWKV-8:
 
 ===
 
-History of RWKV (from v1 to v7): [https://wiki.rwkv.com](https://wiki.rwkv.com/) (note: AI-written. might contain errors)
+History of RWKV (from v1 to v7): [https://wiki.rwkv.com](https://wiki.rwkv.com) (note: AI-written. might contain errors)
 
 Gradio Demo 1: https://huggingface.co/spaces/BlinkDL/RWKV-Gradio-1
 
@@ -675,7 +675,7 @@ Moreover it's using a number of my tricks, such as:
 
 * Better initilization: I init most of the matrices to ZERO (see RWKV_Init in https://github.com/BlinkDL/RWKV-LM/blob/main/RWKV-v2-RNN/src/model.py).
 
-* You can transfer some parameters from a small model to a large model (note: I sort & smooth them too), for faster and better convergence (see https://www.reddit.com/r/MachineLearning/comments/umq908/r_rwkvv2rnn_a_parallelizable_rnn_with/).
+* You can transfer some parameters from a small model to a large model (note: I sort & smooth them too), for faster and better convergence (see https://www.reddit.com/r/MachineLearning/comments/umq908/r_rwkvv2rnn_a_parallelizable_rnn_with).
 
 * My CUDA kernel: https://github.com/BlinkDL/RWKV-CUDA to speedup training.
 

@@ -12,7 +12,7 @@ Two architectural guarantees currently live only in prose: (1) nothing depends o
 
 **dependency-cruiser** with rules:
 
-- `packages/*` (except agent-loop's own tests and examples/) must not import `@deepseek-ai/dsh-agent-loop`.
+- `packages/*` (except agent-loop's own tests and examples) must not import `@deepseek-ai/dsh-agent-loop`.
 - No cross-package deep imports (`@deepseek-ai/dsh-*/src/...` paths) — public entry points only.
 - No import cycles anywhere in packages/.
 - `vendor/*` must not import from `packages/*`.

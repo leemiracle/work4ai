@@ -22,7 +22,7 @@ BERT モデルは日本語テキストでトレーニングされました。
 
 2 つの異なるトークン化方法を備えたモデルがあります。
 
-- MeCab と WordPiece を使用してトークン化します。これには、[MeCab](https://taku910.github.io/mecab/) のラッパーである [fugashi](https://github.com/polm/fugashi) という追加の依存関係が必要です。
+- MeCab と WordPiece を使用してトークン化します。これには、[MeCab](https://taku910.github.io/mecab) のラッパーである [fugashi](https://github.com/polm/fugashi) という追加の依存関係が必要です。
 - 文字にトークン化します。
 
 *MecabTokenizer* を使用するには、`pip installTransformers["ja"]` (または、インストールする場合は `pip install -e .["ja"]`) する必要があります。

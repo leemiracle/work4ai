@@ -300,7 +300,7 @@ Note: Remember when using this design flow during an interview to be flexible. A
       - Data parallel DT, RPC based DT   
     - Scaling data collection 
       - [MT for 1000 languages](https://arxiv.org/abs/2205.03983)
-      - [NLLB](https://research.facebook.com/publications/no-language-left-behind/)
+      - [NLLB](https://research.facebook.com/publications/no-language-left-behind)
     - Monitoring, failure tolerance, updating (below)
     - Auto ML (soft: HP tuning, hard: arch search (NAS))
 - Monitoring:
@@ -466,10 +466,10 @@ I observed there are certain sets of topics that are frequently brought up or ca
 
 - Image classification
   - VGG, ResNET
-- [Object detection](https://viso.ai/deep-learning/object-detection/) 
+- [Object detection](https://viso.ai/deep-learning/object-detection) 
   - Two stage models (R-CNN, Fast R-CNN, Faster R-CNN)
   - One stage models  (YOLO, SSD)
-  - [Vision Transformer (ViT)](https://viso.ai/deep-learning/vision-transformer-vit/)
+  - [Vision Transformer (ViT)](https://viso.ai/deep-learning/vision-transformer-vit)
   - NMS algorithm 
 - Object Tracking
 <!-- - Popular architectures (AlexNet, VGG, ResNET, R-CNN, YOLO) -->
@@ -486,7 +486,7 @@ Once you learn about the basics, I highly recommend checking out different compa
 # More resources 
 
 - For more insight on different components above you can check out the following resources):
-  - [Full Stack Deep Learning course](https://fall2019.fullstackdeeplearning.com/)
+  - [Full Stack Deep Learning course](https://fall2019.fullstackdeeplearning.com)
   - [Production Level Deep Learning](https://github.com/alirezadir/Production-Level-Deep-Learning)
   - [Machine Learning Systems Design](https://github.com/chiphuyen/machine-learning-systems-design)
   - [Stanford course on ML system design](https://online.stanford.edu/courses/cs329s-machine-learning-systems-design)

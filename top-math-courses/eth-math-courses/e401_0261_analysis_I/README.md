@@ -1,7 +1,7 @@
 # ETH 401-0261 — Analysis I
 
 > **学校**：ETH Zurich | **学院**：D-MATH
-> **一手来源**：[metaphor.ethz.ch/x/2017/hs/401-0261-GXL/](https://metaphor.ethz.ch/x/2017/hs/401-0261-GXL/) + [vvz.ethz.ch](https://www.vvz.ethz.ch)
+> **一手来源**：[metaphor.ethz.ch/x/2017/hs/401-0261-GXL/](https://metaphor.ethz.ch/x/2017/hs/401-0261-GXL) + [vvz.ethz.ch](https://www.vvz.ethz.ch)
 
 ## 课程信息
 - **编号**：401-0261-00L (德语授课；英语版编号 401-0262)

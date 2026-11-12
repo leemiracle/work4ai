@@ -3,9 +3,9 @@
 *Guided Responses Chatbot*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
-[![Electron](https://img.shields.io/badge/Electron-27+-blue.svg)](https://electronjs.org/)
-[![Ollama](https://img.shields.io/badge/Ollama-Compatible-orange.svg)](https://ollama.ai/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org)
+[![Electron](https://img.shields.io/badge/Electron-27+-blue.svg)](https://electronjs.org)
+[![Ollama](https://img.shields.io/badge/Ollama-Compatible-orange.svg)](https://ollama.ai)
 
 > **Stop over-generating. Start thinking strategically.**
 
@@ -73,8 +73,8 @@ ThinkPath AI revolutionizes how you interact with language models by introducing
 ## 🛠 **Installation**
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [Ollama](https://ollama.ai/) installed and running
+- [Node.js](https://nodejs.org) (v18 or higher)
+- [Ollama](https://ollama.ai) installed and running
 - At least one language model downloaded
 
 ### Quick Start

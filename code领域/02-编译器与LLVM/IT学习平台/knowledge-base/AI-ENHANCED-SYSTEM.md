@@ -630,14 +630,14 @@ def ai_assisted_learning_workflow(topic):
 ## 参考资源
 
 ### GLM模型文档
-- [GLM-4 API 文档](https://open.bigmodel.cn/)
-- [CodeGeeX4 文档](https://codegeex.ai/)
-- [Cognify 文档](https://cogvideox.github.io/)
+- [GLM-4 API 文档](https://open.bigmodel.cn)
+- [CodeGeeX4 文档](https://codegeex.ai)
+- [Cognify 文档](https://cogvideox.github.io)
 
 ### AI工作流最佳实践
-- [提示词工程指南](https://promptingguide.ai/)
-- [AI辅助学习方法论](https://learnwithai.org/)
-- [人机协作设计模式](https://aipatterns.org/)
+- [提示词工程指南](https://promptingguide.ai)
+- [AI辅助学习方法论](https://learnwithai.org)
+- [人机协作设计模式](https://aipatterns.org)
 
 ---
 

@@ -16,11 +16,11 @@ rendered properly in your Markdown viewer.
 
 # Training scripts
 
-Transformers provides many example training scripts for PyTorch and tasks in [transformers/examples](https://github.com/huggingface/transformers/tree/main/examples). There are additional scripts in [transformers/research projects](https://github.com/huggingface/transformers-research-projects/) and [transformers/legacy](https://github.com/huggingface/transformers/tree/main/examples/legacy), but these aren't actively maintained and requires a specific version of Transformers.
+Transformers provides many example training scripts for PyTorch and tasks in [transformers/examples](https://github.com/huggingface/transformers/tree/main/examples). There are additional scripts in [transformers/research projects](https://github.com/huggingface/transformers-research-projects) and [transformers/legacy](https://github.com/huggingface/transformers/tree/main/examples/legacy), but these aren't actively maintained and requires a specific version of Transformers.
 
 Example scripts are only examples and you may need to adapt the script to your use-case. To help you with this, most scripts are very transparent in how data is preprocessed, allowing you to edit it as necessary.
 
-For any feature you'd like to implement in an example script, please discuss it on the [forum](https://discuss.huggingface.co/) or in an [issue](https://github.com/huggingface/transformers/issues) before submitting a pull request. While we welcome contributions, it is unlikely a pull request that adds more functionality is added at the cost of readability.
+For any feature you'd like to implement in an example script, please discuss it on the [forum](https://discuss.huggingface.co) or in an [issue](https://github.com/huggingface/transformers/issues) before submitting a pull request. While we welcome contributions, it is unlikely a pull request that adds more functionality is added at the cost of readability.
 
 This guide will show you how to run an example summarization training script in [PyTorch](https://github.com/huggingface/transformers/tree/main/examples/pytorch/summarization).
 
@@ -65,7 +65,7 @@ Resuming training from a checkpoint is very useful if training is interrupted be
 
 * `--resume_from_checkpoint path_to_specific_checkpoint` resumes training from a specific checkpoint folder.
 
-Share your model on the [Hub](https://huggingface.co/) with the `--push_to_hub` parameter. It creates a repository and uploads the model to the folder name specified in `--output_dir`. You could also use the `--push_to_hub_model_id` parameter to specify the repository name.
+Share your model on the [Hub](https://huggingface.co) with the `--push_to_hub` parameter. It creates a repository and uploads the model to the folder name specified in `--output_dir`. You could also use the `--push_to_hub_model_id` parameter to specify the repository name.
 
 ```bash
 python examples/pytorch/summarization/run_summarization.py \

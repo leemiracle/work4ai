@@ -1,8 +1,8 @@
 # S3 — LLVM 安全审计专题：编译器供应链安全的十个硬问题
 
-> **角色定位**：编译器供应链安全审计员 + 形式化验证评估师。这位专家不是写优化 Pass（那是 [Expert_04](../Expert_04_Middle_End_Opt/)）也不是写 sanitizer 运行时（那是 [Expert_14](../Expert_14_CompilerRT_Sanitizers_JIT/)），他站在**编译器作为"可信计算基（TCB）"的对立面**——LLVM 把源代码翻译成机器码，若这个翻译本身有错（miscompilation）或被投毒（supply chain attack），那么建在其上的所有软件安全保证（ASLR、CFI、SELinux、密钥隔离）全部归零。他要在两个维度拷问 LLVM：(1) **正确性维度**——miscompilation CVE 史、Alive2 翻译验证覆盖率、CompCert 形式化证明的对照；(2) **攻防维度**——xz utils 后门（CVE-2024-3094）的攻击链、LLVM 自身的供应链攻击面、AI 辅助审查 PR 能否守住正确性。
+> **角色定位**：编译器供应链安全审计员 + 形式化验证评估师。这位专家不是写优化 Pass（那是 [Expert_04](../Expert_04_Middle_End_Opt)）也不是写 sanitizer 运行时（那是 [Expert_14](../Expert_14_CompilerRT_Sanitizers_JIT)），他站在**编译器作为"可信计算基（TCB）"的对立面**——LLVM 把源代码翻译成机器码，若这个翻译本身有错（miscompilation）或被投毒（supply chain attack），那么建在其上的所有软件安全保证（ASLR、CFI、SELinux、密钥隔离）全部归零。他要在两个维度拷问 LLVM：(1) **正确性维度**——miscompilation CVE 史、Alive2 翻译验证覆盖率、CompCert 形式化证明的对照；(2) **攻防维度**——xz utils 后门（CVE-2024-3094）的攻击链、LLVM 自身的供应链攻击面、AI 辅助审查 PR 能否守住正确性。
 >
-> **专题定位**：本文是 [改造蓝图 §5 断层 ③ "编译器供应链安全"](../改造蓝图_LLVM.md#5) 的第二期纵深展开。第一期的承载者是 [Expert_14 §2.11](../Expert_14_CompilerRT_Sanitizers_JIT/)（从 sanitizer 运行时角度切入），本文则**从编译器本体（miscompilation + 形式化验证 + 供应链投毒 + AI 审查）角度**做完整的安全审计，两者互补：E14 关心"运行时能不能查到错"，本文关心"编译器自己有没有把对的编错、会不会被人偷偷改错"。
+> **专题定位**：本文是 [改造蓝图 §5 断层 ③ "编译器供应链安全"](../改造蓝图_LLVM.md#5) 的第二期纵深展开。第一期的承载者是 [Expert_14 §2.11](../Expert_14_CompilerRT_Sanitizers_JIT)（从 sanitizer 运行时角度切入），本文则**从编译器本体（miscompilation + 形式化验证 + 供应链投毒 + AI 审查）角度**做完整的安全审计，两者互补：E14 关心"运行时能不能查到错"，本文关心"编译器自己有没有把对的编错、会不会被人偷偷改错"。
 >
 > **核心思维模型**：
 > 1. **TCB（Trusted Computing Base）思维**——一个系统的安全强度等于其最弱的可信组件。编译器是几乎所有软件的 TCB：你用 Rust 的类型系统保证内存安全，但若 LLVM 的 codegen 把边界检查删了，安全保证归零。Nuno Lopes 在 *A Decade Verifying LLVM* 里直接点破："Miscompilations can introduce security vulnerability in safe programs"，并援引学术界 2015 年用一个 LLVM bug 在 `sudo` 里植入后门的案例 `[论文-Lopes]`。
@@ -645,7 +645,7 @@ MSan `[Expert_14 §2.2/§2.9]` 检测**未初始化内存读取**——这在安
 
 ## 6. 延伸阅读
 
-- **项目内**：[Expert_02](../Expert_02_LLVM_IR_Design/)（poison/undef miscompilation 上游）、[Expert_14](../Expert_14_CompilerRT_Sanitizers_JIT/)（sanitizer 运行时 + 供应链断层 ③）、[Expert_08](../Expert_08_AArch64_Backend/)（ARM 后端 CVE）、[Expert_17](../Expert_17_Governance_License/)（AI 贡献政策）、[改造蓝图 §5 断层 ③](../改造蓝图_LLVM.md)、[Lens_03 供应链](../Lenses/Lens_03_SupplyChain.md)（形式化验证 < 20%）。
+- **项目内**：[Expert_02](../Expert_02_LLVM_IR_Design)（poison/undef miscompilation 上游）、[Expert_14](../Expert_14_CompilerRT_Sanitizers_JIT)（sanitizer 运行时 + 供应链断层 ③）、[Expert_08](../Expert_08_AArch64_Backend)（ARM 后端 CVE）、[Expert_17](../Expert_17_Governance_License)（AI 贡献政策）、[改造蓝图 §5 断层 ③](../改造蓝图_LLVM.md)、[Lens_03 供应链](../Lenses/Lens_03_SupplyChain.md)（形式化验证 < 20%）。
 - **外部**：Alive2 在线验证器 https://alive2.llvm.org/ce/ ；CompCert 官网 http://compcert.org/ ；LLVM Security Transparency Reports；OSS-Fuzz；Regehr 博客 https://blog.regehr.org/ ；xz 时间线 https://research.swtch.com/xz-timeline 。
 
 ---

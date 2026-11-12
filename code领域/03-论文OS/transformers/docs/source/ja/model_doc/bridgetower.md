@@ -21,7 +21,7 @@ rendered properly in your Markdown viewer.
 BridgeTower モデルは、Xiao Xu、Chenfei Wu、Shachar Rosenman、Vasudev Lal、Wanxiang Che、Nan Duan [BridgeTower: Building Bridges Between Encoders in Vision-Language Representative Learning](https://huggingface.co/papers/2206.08657) で提案されました。ドゥアン。このモデルの目標は、
 各ユニモーダル エンコーダとクロスモーダル エンコーダの間のブリッジにより、クロスモーダル エンコーダの各層での包括的かつ詳細な対話が可能になり、追加のパフォーマンスと計算コストがほとんど無視できる程度で、さまざまな下流タスクで優れたパフォーマンスを実現します。
 
-この論文は [AAAI'23](https://aaai.org/Conferences/AAAI-23/) 会議に採択されました。
+この論文は [AAAI'23](https://aaai.org/Conferences/AAAI-23) 会議に採択されました。
 
 論文の要約は次のとおりです。
 

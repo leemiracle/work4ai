@@ -232,9 +232,9 @@ render_ascii()
 ### 推荐教材与资源
 
 - **Shirley**. [*Ray Tracing in One Weekend*](https://raytracing.github.io/books/RayTracingInOneWeekend.html) — **强烈推荐**，免费在线，CS148 光线追踪作业的直接参考
-- **Pharr, Jakob, Humphrey**. [*Physically Based Rendering: From Theory to Implementation*](http://www.pbr-book.org/) (PBRT). — 渲染领域的圣经，免费在线
+- **Pharr, Jakob, Humphrey**. [*Physically Based Rendering: From Theory to Implementation*](http://www.pbr-book.org) (PBRT). — 渲染领域的圣经，免费在线
 - **Marschner & Shirley**. *Fundamentals of Computer Graphics*. — 经典教材
-- **Blender 官方文档** & [Blender Guru 教程](https://www.blenderguru.com/) — Blender 实战
+- **Blender 官方文档** & [Blender Guru 教程](https://www.blenderguru.com) — Blender 实战
 
 ---
 

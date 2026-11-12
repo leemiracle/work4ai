@@ -389,7 +389,7 @@ osaca_mini.py（算法可复现）
 - **[ibench](https://github.com/RRZE-HPC/ibench)** —— OSACA 配套微基准
 - **[asmbench](https://github.com/RRZE-HPC/asmbench)** —— LLVM-based 微基准
 - **[kerncraft](https://github.com/RRZE-HPC/kerncraft)** —— 自动 marker 插入
-- **[uops.info](https://uops.info/)** —— OSACA 数据的主要来源之一
+- **[uops.info](https://uops.info)** —— OSACA 数据的主要来源之一
 
 ### 学习路径
 1. 跑 [`osaca_data.py`](./cmu-cs-projects/topic2-systems/osaca_data.py) 看热点指令跨架构对比

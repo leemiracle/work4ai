@@ -16,7 +16,7 @@ rendered properly in your Markdown viewer.
 
 # HQQ
 
-[Half-Quadratic Quantization (HQQ)](https://github.com/mobiusml/hqq/) supports fast on-the-fly quantization for 8, 4, 3, 2, and even 1-bits. It doesn't require calibration data, and it is compatible with any model modality (LLMs, vision, etc.).
+[Half-Quadratic Quantization (HQQ)](https://github.com/mobiusml/hqq) supports fast on-the-fly quantization for 8, 4, 3, 2, and even 1-bits. It doesn't require calibration data, and it is compatible with any model modality (LLMs, vision, etc.).
 
 HQQ further supports fine-tuning with [PEFT](https://huggingface.co/docs/peft) and is fully compatible with [torch.compile](https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html) for even faster inference and training.
 
@@ -98,4 +98,4 @@ Refer to the [Backend](https://github.com/mobiusml/hqq/#backend) guide for more 
 
 ## Resources
 
-Read the [Half-Quadratic Quantization of Large Machine Learning Models](https://mobiusml.github.io/hqq_blog/) blog post for more details about HQQ.
+Read the [Half-Quadratic Quantization of Large Machine Learning Models](https://mobiusml.github.io/hqq_blog) blog post for more details about HQQ.

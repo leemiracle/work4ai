@@ -24,9 +24,9 @@ En esta guía puedes encontrar información para instalar 🤗 Transformers para
 
 🤗 Transformers ha sido probada en Python 3.6+, PyTorch 1.1.0+, TensorFlow 2.0+, y Flax. Para instalar la biblioteca de deep learning con la que desees trabajar, sigue las instrucciones correspondientes listadas a continuación:
 
-* [PyTorch](https://pytorch.org/get-started/locally/)
+* [PyTorch](https://pytorch.org/get-started/locally)
 * [TensorFlow 2.0](https://www.tensorflow.org/install/pip)
-* [Flax](https://flax.readthedocs.io/en/latest/)
+* [Flax](https://flax.readthedocs.io/en/latest)
 
 ## Instalación con pip
 
@@ -152,7 +152,7 @@ Los modelos preentrenados se descargan y almacenan en caché localmente en: `~/.
 
 <Tip>
 
-Puedes añadir [🤗 Datasets](https://huggingface.co/docs/datasets/) al flujo de entrenamiento offline declarando la variable de entorno  `HF_DATASETS_OFFLINE=1`.
+Puedes añadir [🤗 Datasets](https://huggingface.co/docs/datasets) al flujo de entrenamiento offline declarando la variable de entorno  `HF_DATASETS_OFFLINE=1`.
 
 </Tip>
 

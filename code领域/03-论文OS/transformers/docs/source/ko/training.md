@@ -250,7 +250,7 @@ torch.cuda.empty_cache()
 
 <Tip>
 
-[Colaboratory](https://colab.research.google.com/) 또는 [SageMaker StudioLab](https://studiolab.sagemaker.aws/)과 같은 호스팅 노트북이 없는 경우 클라우드 GPU에 무료로 액세스할 수 있습니다.
+[Colaboratory](https://colab.research.google.com) 또는 [SageMaker StudioLab](https://studiolab.sagemaker.aws)과 같은 호스팅 노트북이 없는 경우 클라우드 GPU에 무료로 액세스할 수 있습니다.
 
 </Tip>
 
@@ -258,7 +258,7 @@ torch.cuda.empty_cache()
 
 ### 훈련 루프[[training-loop]]
 
-훈련 진행 상황을 추적하려면 [tqdm](https://tqdm.github.io/) 라이브러리를 사용하여 트레이닝 단계 수에 진행률 표시줄을 추가하세요:
+훈련 진행 상황을 추적하려면 [tqdm](https://tqdm.github.io) 라이브러리를 사용하여 트레이닝 단계 수에 진행률 표시줄을 추가하세요:
 
 ```py
 >>> from tqdm.auto import tqdm

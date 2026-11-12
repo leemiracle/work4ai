@@ -251,7 +251,7 @@ NEFTune se desactiva después del entrenamiento para restaurar la capa de incrus
 
 ## Accelerate y Trainer
 
-La clase [`Trainer`] está impulsada por [Accelerate](https://hf.co/docs/accelerate), una biblioteca para entrenar fácilmente modelos de PyTorch en entornos distribuidos con soporte para integraciones como [FullyShardedDataParallel (FSDP)](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api/) y [DeepSpeed](https://www.deepspeed.ai/).
+La clase [`Trainer`] está impulsada por [Accelerate](https://hf.co/docs/accelerate), una biblioteca para entrenar fácilmente modelos de PyTorch en entornos distribuidos con soporte para integraciones como [FullyShardedDataParallel (FSDP)](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api) y [DeepSpeed](https://www.deepspeed.ai).
 
 <Tip>
 

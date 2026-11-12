@@ -17,7 +17,7 @@ A comprehensive ablation study at component level is conducted to find the best 
 ## Introduction
 
 By Leonardo Rossi, Akbar Karimi and Andrea Prati from
-[IMPLab](http://implab.ce.unipr.it/).
+[IMPLab](http://implab.ce.unipr.it).
 
 We provide configs to reproduce the results in the paper for
 "*A novel Region of Interest Extraction Layer for Instance Segmentation*"
@@ -69,4 +69,4 @@ If you use this work or benchmark in your research, please cite this project.
 ## Contact
 
 The implementation of GRoIE is currently maintained by
-[Leonardo Rossi](https://github.com/hachreak/).
+[Leonardo Rossi](https://github.com/hachreak).

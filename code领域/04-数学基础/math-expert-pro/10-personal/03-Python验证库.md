@@ -1,7 +1,7 @@
 # Python 验证库：用代码做数学实验
 
 > 现有 12 个学习包的全部 .py 索引 + "用代码做数学实验"的方法论。
-> 这是 [02-lens-mathematicians/过程层/计算实验轴](../02-lens-mathematicians/)（Wolfram 计算实验）的落地。
+> 这是 [02-lens-mathematicians/过程层/计算实验轴](../02-lens-mathematicians)（Wolfram 计算实验）的落地。
 > 配合 [02-AI锚点法](02-AI锚点法-数学落到工程.md)：直觉→公式→代码三闭环。
 
 ---

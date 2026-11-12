@@ -25,7 +25,7 @@ C2 council 验收：**非平凡 Lean4 规则可证，sorry 清零**。
 
 ## 当前实现
 
-### [`formal-seed/`](./formal-seed/) — Lean4 项目
+### [`formal-seed/`](./formal-seed) — Lean4 项目
 
 ```
 formal-seed/
@@ -59,7 +59,7 @@ lake build    # ✅ 通过
 | 方向 | 契约 |
 |---|---|
 | **上游输入** | L2 蒸馏规则（`data/l2_distilled_rules*.lean`）→ 形式化验证（通过则保留，否则丢弃）|
-| **下游输出** | 已验证规则 → [`l3-explain/`](../l3-explain/) Intuition/Formal/Trace 三层讲解的 Formal 层 |
+| **下游输出** | 已验证规则 → [`l3-explain/`](../l3-explain) Intuition/Formal/Trace 三层讲解的 Formal 层 |
 
 ---
 

@@ -1,7 +1,7 @@
 # ETH 401-2611 · CSE 数值方法 精读笔记
 
 > **课程**：Numerical Methods for CSE (Computational Science and Engineering)
-> **参考**：[ETH Course Catalog](https://www.vvz.ethz.ch/)；Quarteroni, *Numerical Models for Differential Problems*
+> **参考**：[ETH Course Catalog](https://www.vvz.ethz.ch)；Quarteroni, *Numerical Models for Differential Problems*
 > **特色**：ETH CSE 方向，重点在**PDE 数值解** + **高性能计算**
 
 ---

@@ -1,7 +1,7 @@
 # Harvard Math 112 — Introductory Real Analysis
 
 > **学校**：Harvard | **学期**：Spring
-> **一手来源**：[math.harvard.edu/course/mathematics-112-spring](https://www.math.harvard.edu/course/mathematics-112-spring/)
+> **一手来源**：[math.harvard.edu/course/mathematics-112-spring](https://www.math.harvard.edu/course/mathematics-112-spring)
 
 ## 课程信息
 - **编号**：Math 112

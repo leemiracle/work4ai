@@ -4,7 +4,7 @@
 <Youtube id="S2EEG3JIt2A"/>
 
 
-1. اطلب المساعدة على [المنتديات](https://discuss.huggingface.co/). هناك فئات محددة يمكنك نشر سؤالك فيها، مثل [المبتدئين](https://discuss.huggingface.co/c/beginners/5) أو [🤗 Transformers](https://discuss.huggingface.co/c/transformers/9). تأكد من كتابة منشور جيد وواضح على المنتدى مع بعض التعليمات البرمجية القابلة للتكرار لزيادة احتمالية حل مشكلتك!
+1. اطلب المساعدة على [المنتديات](https://discuss.huggingface.co). هناك فئات محددة يمكنك نشر سؤالك فيها، مثل [المبتدئين](https://discuss.huggingface.co/c/beginners/5) أو [🤗 Transformers](https://discuss.huggingface.co/c/transformers/9). تأكد من كتابة منشور جيد وواضح على المنتدى مع بعض التعليمات البرمجية القابلة للتكرار لزيادة احتمالية حل مشكلتك!
 <Youtube id="_PAli-V4wj0"/>
 
 2. قم بإنشاء [مشكلة](https://github.com/huggingface/transformers/issues/new/choose) في مستودع 🤗 Transformers إذا كانت هناك مشكلة متعلقة بالمكتبة. حاول تضمين أكبر قدر ممكن من المعلومات التي تصف المشكلة لمساعدتنا في معرفة ما هو الخطأ وكيفية إصلاحه.

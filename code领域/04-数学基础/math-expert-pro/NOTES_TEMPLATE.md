@@ -2,7 +2,7 @@
 
 > 每次写新笔记照此模板。八重视角 = 把数学从"单向切片"升级为"棱镜"。
 > 来源：融合 Thurston 多模态 + Lakatos 证明动力学 + 26数学家方法论 + 12从业者透镜。
-> 透镜速查：[02-lens-mathematicians/](00-META/../02-lens-mathematicians/) | [03-lens-practitioners/](00-META/../03-lens-practitioners/)
+> 透镜速查：[02-lens-mathematicians/](00-META/../02-lens-mathematicians) | [03-lens-practitioners/](00-META/../03-lens-practitioners)
 
 ---
 
@@ -39,7 +39,7 @@ status: draft                                 # draft / reviewed / mastered
 ## §2 历史发生学（Lakatos 定理演变）
 
 > 谁在什么时代、为解决什么问题想出来的？走过哪些弯路、遇到哪些反例、定义如何被"修补"？
-> 来源参考：[05-history/](05-history/)、柯朗、数学天书、GTM 序言。
+> 来源参考：[05-history/](05-history)、柯朗、数学天书、GTM 序言。
 
 - **原始困境**：
 - **关键人物与时刻**：
@@ -51,7 +51,7 @@ status: draft                                 # draft / reviewed / mastered
 
 ## §3 多重表征（Thurston 五模态）
 
-> 同一概念用 5 种方式理解。对应 [04-concepts/](04-concepts/) 概念切片。
+> 同一概念用 5 种方式理解。对应 [04-concepts/](04-concepts) 概念切片。
 
 | 模态 | 表征 |
 |------|------|
@@ -79,7 +79,7 @@ status: draft                                 # draft / reviewed / mastered
 
 ## §5 对比与反例（Lakatos 证明即反驳）
 
-> 与相似概念辨析 + 经典反例。来源：[06-counterexamples/](06-counterexamples/)。
+> 与相似概念辨析 + 经典反例。来源：[06-counterexamples/](06-counterexamples)。
 
 **易混概念辨析表**：
 | 概念 A | vs | 概念 B | 关键差异 |
@@ -97,7 +97,7 @@ status: draft                                 # draft / reviewed / mastered
 ## §6 边界与批判（Wildberger + 不可能性边界）
 
 > 这个理论的局限在哪？有什么替代范式？有没有不可能性定理？
-> 来源：[07-critique/](07-critique/)、[03-lens-practitioners/横切轴/F-不可能性边界.md](03-lens-practitioners/横切轴/)。
+> 来源：[07-critique/](07-critique)、[03-lens-practitioners/横切轴/F-不可能性边界.md](03-lens-practitioners/横切轴)。
 
 - **理论的边界**：（什么时候失效？）
 - **替代范式**：（如 ε-δ vs 非标准分析；经典逻辑 vs 直觉主义）
@@ -109,7 +109,7 @@ status: draft                                 # draft / reviewed / mastered
 ## §7 跨学科出口（维度3b 从业者透镜）
 
 > 这个概念在物理/金融/控制/密码/ML/编译器/... 里长什么样？
-> 来源：[03-lens-practitioners/](03-lens-practitioners/) 的 14×12 概念透镜矩阵。挑 2-3 个最相关的。
+> 来源：[03-lens-practitioners/](03-lens-practitioners) 的 14×12 概念透镜矩阵。挑 2-3 个最相关的。
 
 | 从业者视角 | 这个概念在他们眼里 |
 |-----------|------------------|

@@ -14,7 +14,7 @@ https://physionet.org/content/ct-ich/1.0.0/
 
 | Dataset Name                                                                        | Anatomical Region | Task Type    | Modality | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                   |
 | ----------------------------------------------------------------------------------- | ----------------- | ------------ | -------- | ------------ | --------------------- | ---------------------- | ------------ | --------------------------------------------------------- |
-| [Cranium](https://www.kaggle.com/datasets/vbookshelf/computed-tomography-ct-images) | head_and_neck     | segmentation | ct       | 2            | 2501/-/-              | yes/-/-                | 2020         | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| [Cranium](https://www.kaggle.com/datasets/vbookshelf/computed-tomography-ct-images) | head_and_neck     | segmentation | ct       | 2            | 2501/-/-              | yes/-/-                | 2020         | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

@@ -8,7 +8,7 @@ JSONL 持久会话存储后端：`SessionPersistence` 的一个具体实现（`d
 
 ```
 <root>/
-  --<normalized-cwd>--/          # readable project directory (or _no-cwd/)
+  --<normalized-cwd>--/          # readable project directory (or _no-cwd)
     <encoded-id>/                # session-owned directory
       session.jsonl.zstd         # default: checksummed header frame + append frames
       session.jsonl              # only with compression: 'none'

@@ -119,7 +119,7 @@ vLLM project leads consult with an informal advisory board that is composed of m
 
 ### Project Roadmap
 
-Project Leads publish quarterly roadmaps as GitHub issues. These clarify current priorities. Unlisted topics aren't excluded but may get less review attention. See [https://roadmap.vllm.ai/](https://roadmap.vllm.ai/).
+Project Leads publish quarterly roadmaps as GitHub issues. These clarify current priorities. Unlisted topics aren't excluded but may get less review attention. See [https://roadmap.vllm.ai/](https://roadmap.vllm.ai).
 
 ### Decision Making
 

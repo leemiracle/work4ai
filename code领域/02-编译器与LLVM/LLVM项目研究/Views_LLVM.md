@@ -23,43 +23,43 @@
 
 | # | 专家角色 | 一句话定位 | 关键 LLVM 锚点 | 阶段 |
 |:-:|---------|-----------|--------------|:--:|
-| 1 | [**Clang 前端**](./Expert_01_Clang_Frontend/) | C/C++/ObjC/Sema/AST/静态分析 | Clang AST vs GCC GENERIC、PhyCC LLVM 13 | C |
-| 2 | [**LLVM IR 设计**](./Expert_02_LLVM_IR_Design/) | SSA/undef/poison/类型系统/内存模型 | undef→poison 演进、LangRef、miscompilation CVE | C |
-| 3 | [**Pass 框架**](./Expert_03_Pass_Framework/) | Legacy PM → New PM 10 年迁移 | opt -passes=、analysis invalidation | C |
-| 4 | [**中端优化**](./Expert_04_Middle_End_Opt/) | GVN/SCCP/InstCombine + Polly + MLIR 融合 | 2026 边际收益、Polly 为何没进 -O3 | F |
-| 5 | [**代码生成**](./Expert_05_CodeGen_SelectionDAG_GlobalISel/) | SelectionDAG + GlobalISel + TableGen | GISel 覆盖率、AArch64.td 实例 | C |
-| 6 | [**寄存器分配与调度**](./Expert_06_RegAlloc_Scheduler/) | Greedy/Basic/Fast/PBQP + MISched + MC | 飞腾 31 寄存器红利、Pre/Post-RA Sched | C |
-| 7 | [**自动向量化**](./Expert_07_Auto_Vectorization/) | Loop Vec + SLP + Vector Predication | VP 扩展、对偶 GCC tree-vectorizer | C |
+| 1 | [**Clang 前端**](./Expert_01_Clang_Frontend) | C/C++/ObjC/Sema/AST/静态分析 | Clang AST vs GCC GENERIC、PhyCC LLVM 13 | C |
+| 2 | [**LLVM IR 设计**](./Expert_02_LLVM_IR_Design) | SSA/undef/poison/类型系统/内存模型 | undef→poison 演进、LangRef、miscompilation CVE | C |
+| 3 | [**Pass 框架**](./Expert_03_Pass_Framework) | Legacy PM → New PM 10 年迁移 | opt -passes=、analysis invalidation | C |
+| 4 | [**中端优化**](./Expert_04_Middle_End_Opt) | GVN/SCCP/InstCombine + Polly + MLIR 融合 | 2026 边际收益、Polly 为何没进 -O3 | F |
+| 5 | [**代码生成**](./Expert_05_CodeGen_SelectionDAG_GlobalISel) | SelectionDAG + GlobalISel + TableGen | GISel 覆盖率、AArch64.td 实例 | C |
+| 6 | [**寄存器分配与调度**](./Expert_06_RegAlloc_Scheduler) | Greedy/Basic/Fast/PBQP + MISched + MC | 飞腾 31 寄存器红利、Pre/Post-RA Sched | C |
+| 7 | [**自动向量化**](./Expert_07_Auto_Vectorization) | Loop Vec + SLP + Vector Predication | VP 扩展、对偶 GCC tree-vectorizer | C |
 
 ### 1.2 轴二·Target 后端矩阵（4 个 P0，"深"）
 
 | # | 专家角色 | 一句话定位 | 关键锚点 | 阶段 |
 |:-:|---------|-----------|---------|:--:|
-| 8 | [**AArch64 后端**](./Expert_08_AArch64_Backend/) | ⭐ **飞腾直接命脉** | 主线 LLVM 无 FTC86x 调度模型 | D |
-| 9 | [**x86 后端**](./Expert_09_x86_Backend/) | 性能标杆对照 | lea 7 用途、AVX-512 mask、Intel-AMD 分裂 | D |
-| 10 | [**RISC-V 后端**](./Expert_10_RISCV_Backend/) | 国产对偶 | RVV 可变长、香山/玄铁调度模型 | D |
-| 11 | [**GPU/异构后端**](./Expert_11_GPU_Heterogeneous_Backend/) | ⭐ **服务器命脉级断层** | AMDGPU/NVPTX/BPF 对齐债 | D |
+| 8 | [**AArch64 后端**](./Expert_08_AArch64_Backend) | ⭐ **飞腾直接命脉** | 主线 LLVM 无 FTC86x 调度模型 | D |
+| 9 | [**x86 后端**](./Expert_09_x86_Backend) | 性能标杆对照 | lea 7 用途、AVX-512 mask、Intel-AMD 分裂 | D |
+| 10 | [**RISC-V 后端**](./Expert_10_RISCV_Backend) | 国产对偶 | RVV 可变长、香山/玄铁调度模型 | D |
+| 11 | [**GPU/异构后端**](./Expert_11_GPU_Heterogeneous_Backend) | ⭐ **服务器命脉级断层** | AMDGPU/NVPTX/BPF 对齐债 | D |
 
 ### 1.3 轴三·工具链与运行时（4 个，"链"）
 
 | # | 专家角色 | 一句话定位 | 关键锚点 | 阶段 |
 |:-:|---------|-----------|---------|:--:|
-| 12 | [**LLD + BOLT**](./Expert_12_LLD_BOLT/) | 链接器 + 后链接优化 | ThinLTO、BOLT PGO 反向 | E |
-| 13 | [**LLDB 调试器**](./Expert_13_LLDB_Debugger/) | LLDB vs GDB | DWARF 解析、嵌入式 RTOS | E |
-| 14 | [**Sanitizers + JIT**](./Expert_14_CompilerRT_Sanitizers_JIT/) | ASan/MSan/CFI + ORC JIT | shadow memory NUMA、V8/PG/MySQL JIT | E |
-| 15 | [**C++ 运行时栈**](./Expert_15_Runtimes_libcxx/) | libcxx/libcxxabi/libunwind/openmp | libcxx vs libstdc++ ABI、libunwind 战争 | E |
+| 12 | [**LLD + BOLT**](./Expert_12_LLD_BOLT) | 链接器 + 后链接优化 | ThinLTO、BOLT PGO 反向 | E |
+| 13 | [**LLDB 调试器**](./Expert_13_LLDB_Debugger) | LLDB vs GDB | DWARF 解析、嵌入式 RTOS | E |
+| 14 | [**Sanitizers + JIT**](./Expert_14_CompilerRT_Sanitizers_JIT) | ASan/MSan/CFI + ORC JIT | shadow memory NUMA、V8/PG/MySQL JIT | E |
+| 15 | [**C++ 运行时栈**](./Expert_15_Runtimes_libcxx) | libcxx/libcxxabi/libunwind/openmp | libcxx vs libstdc++ ABI、libunwind 战争 | E |
 
 ### 1.4 轴四·宏观与生态（3 个，"大"）
 
 | # | 专家角色 | 一句话定位 | 关键锚点 | 阶段 |
 |:-:|---------|-----------|---------|:--:|
-| 16 | [**Flang Fortran**](./Expert_16_Flang_Fortran/) | HPC 现代化（f18/FIR/MLIR） | gfortran 差距、国产量子/气象/CFD | F |
-| 17 | [**治理与 License**](./Expert_17_Governance_License/) | Apache 2.0 w/ LLVM Exception / 公司化 | 6 月 release vs GCC 年度、commit 份额 | F |
-| 18 | [**⭐ 飞腾/国产化收口**](./Expert_18_Phytium_Adaptation/) | phytvm diff + phytium_repos 45 目录实证 | ⚠️ vanilla TVM 误判纠正 + 国产 CPU LLVM fork 对照 | **B（先行）** |
+| 16 | [**Flang Fortran**](./Expert_16_Flang_Fortran) | HPC 现代化（f18/FIR/MLIR） | gfortran 差距、国产量子/气象/CFD | F |
+| 17 | [**治理与 License**](./Expert_17_Governance_License) | Apache 2.0 w/ LLVM Exception / 公司化 | 6 月 release vs GCC 年度、commit 份额 | F |
+| 18 | [**⭐ 飞腾/国产化收口**](./Expert_18_Phytium_Adaptation) | phytvm diff + phytium_repos 45 目录实证 | ⚠️ vanilla TVM 误判纠正 + 国产 CPU LLVM fork 对照 | **B（先行）** |
 
 ---
 
-## 2. 7 异质思维透镜（[`Lenses/`](./Lenses/)）
+## 2. 7 异质思维透镜（[`Lenses/`](./Lenses)）
 
 > 破"编译器工程师同质化"。每个用非从业者的眼睛看 LLVM，给出命运预测/下注判断。
 
@@ -178,4 +178,4 @@ LLVM项目研究/
 
 ---
 
-📌 **下一步**：从 [Expert_18 Phytium Adaptation](./Expert_18_Phytium_Adaptation/)（B 阶段先行）或 [Lenses/](./Lenses/)（A 阶段透镜）开始。
+📌 **下一步**：从 [Expert_18 Phytium Adaptation](./Expert_18_Phytium_Adaptation)（B 阶段先行）或 [Lenses/](./Lenses)（A 阶段透镜）开始。

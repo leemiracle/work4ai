@@ -2,7 +2,7 @@
 
 ## Description
 
-This project support **`RAVIR: A Dataset and Methodology for the Semantic Segmentation and Quantitative Analysis of Retinal Arteries and Veins in Infrared Reflectance Imaging`**, and the dataset used in this project can be downloaded from [here](https://ravir.grand-challenge.org/).
+This project support **`RAVIR: A Dataset and Methodology for the Semantic Segmentation and Quantitative Analysis of Retinal Arteries and Veins in Infrared Reflectance Imaging`**, and the dataset used in this project can be downloaded from [here](https://ravir.grand-challenge.org).
 
 ### Dataset Overview
 
@@ -12,7 +12,7 @@ The retinal vasculature provides important clues in the diagnosis and monitoring
 
 | Dataset name                                | Anatomical region | Task type    | Modality                     | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                         |
 | ------------------------------------------- | ----------------- | ------------ | ---------------------------- | ------------ | --------------------- | ---------------------- | ------------ | --------------------------------------------------------------- |
-| [Ravir](https://ravir.grand-challenge.org/) | eye               | segmentation | infrared reflectance imaging | 3            | 23/-/19               | yes/-/-                | 2022         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| [Ravir](https://ravir.grand-challenge.org) | eye               | segmentation | infrared reflectance imaging | 3            | 23/-/19               | yes/-/-                | 2022         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |
@@ -62,7 +62,7 @@ export PYTHONPATH=`pwd`:$PYTHONPATH
 
 ### Dataset preparing
 
-- download dataset from [here](https://ravir.grand-challenge.org/) and decompression data to path `'data/ravir/'`.
+- download dataset from [here](https://ravir.grand-challenge.org) and decompression data to path `'data/ravir/'`.
 - run script `"python tools/prepare_dataset.py"` to split dataset and change folder structure as below.
 - run script `"python ../../tools/split_seg_dataset.py --data_root data/ravir"` to split dataset and generate `train.txt`, `val.txt` and `test.txt`. If the label of official validation set and test set can't be obtained, we generate `train.txt` and `val.txt` from the training set randomly.
 

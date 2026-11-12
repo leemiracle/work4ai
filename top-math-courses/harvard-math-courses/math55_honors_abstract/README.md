@@ -20,7 +20,7 @@
 
 ## 参考资源
 - 历年教学大纲
-- [Math 55 课程网页](https://www.math.harvard.edu/~elkies/M55a.02/)
+- [Math 55 课程网页](https://www.math.harvard.edu/~elkies/M55a.02)
 - 替代：[Math 25](../math25_honors_multivariable)（同难度，更友好）
 
 ## 学习建议

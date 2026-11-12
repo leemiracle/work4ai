@@ -1,0 +1,83 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+
+# Bonus B — Texture to PBR
+![](images/preview.png)
+
+## Overview
+
+This workflow turns a single texture into a full PBR material set. Use Lotus to extract Normal, Depth, and Height information, and Marigold Light + Marigold Appearance for Albedo, Roughness, and Metallic maps through intrinsic image decomposition.
+
+## The Problem It Solves
+
+This workflow offers a complete set of PBR textures from a single image, with no specialized hardware or manual capture required.
+
+## ComfyUI Canvas
+
+![Bonus B node graph](../../docs/comfyui_workflow_bonus-b.png)
+
+## Key Features
+
+- **G-Buffer Map Creation:** Smooth, consistent Depth and Height maps via Lotus.
+- **Full PBR Extraction:** Roughness, Metallic, Albedo, and lighting passes via Marigold.
+- **Quality Optimization:** Padding, cropping, and adjustment strategies for correct gradient fidelity.
+
+## How It Works
+
+```
+Input Texture -> Lotus Depth -> Lotus Height -> Marigold Appearance -> Marigold Lighting -> PBR Outputs
+```
+
+## How to Use
+
+1. Open `bonus-b-texture-to-pbr` from the ComfyUI Template Browswer or Workflow Browser
+2. Connect your input texture and click **Run**
+
+
+
+## Sample Input
+
+A sample input image is provided in the `input/` folder. You can also use output from [Bonus A — Texture Extraction](../bonus-a-texture-extraction).
+
+
+## Requirements
+
+| Requirement | Value |
+|-------------|-------|
+| **VRAM Min. Rec. Windows** | 24 GB |
+| **VRAM Min. Rec. Linux** | 32 GB |
+| **Custom Nodes** | 4 packages |
+| **Models** | 4 files + Marigold (auto-downloaded) |
+| **Disk Space** | ~10 GB |
+
+## Required Models
+
+| Model | Type | Size |
+|-------|------|------|
+| `lotus-depth-g-v2-1-disparity-fp16.safetensors` | Lotus Depth Model | ~2 GB |
+| `lotus-normal-g-v1-0.safetensors` | Lotus Normal Model | ~2 GB |
+| `lotus-normal-d-v1-0.safetensors` | Lotus Normal Model | ~2 GB |
+| `LotusVAE.safetensors` | VAE | ~300 MB |
+
+> **Note:** Marigold models download automatically from HuggingFace when first used via the ComfyUI-Marigold node.
+
+## Required Custom Nodes
+
+- [ComfyUI-TextureAlchemy](https://github.com/amtarr/ComfyUI-TextureAlchemy) (Sandbox branch)
+- [ComfyUI-Easy-Use](https://github.com/yolain/ComfyUI-Easy-Use)
+- [ComfyUI-Lotus](https://github.com/kijai/ComfyUI-Lotus)
+- [ComfyUI-Marigold](https://github.com/kijai/ComfyUI-Marigold)
+
+## Troubleshooting
+
+### Install key for --modules
+Use `bonus-b` (not `bonus_b` or `b`). To install both bonus modules together: `--modules bonus-a,bonus-b`.
+
+### Marigold models not found on first run
+Marigold downloads its models automatically from HuggingFace when first used. Ensure you have an internet connection and run the workflow once — it will download ~2–4 GB and cache locally.
+
+### ComfyUI-Marigold import error / numpy
+The installer patches Marigold for numpy 2.0 compatibility. If installed manually via Manager, apply the patch: in `ComfyUI-Marigold/nodes.py`, replace all instances of `.tostring()` with `.tobytes()`.
+
+### Run Bonus A first for best results
+Bonus B is designed to work with seamless tiled textures as input. Running Bonus A → Bonus B gives the cleanest PBR results. You can also use any tileable texture image as input.

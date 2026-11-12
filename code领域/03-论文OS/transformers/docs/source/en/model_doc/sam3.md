@@ -27,7 +27,7 @@ rendered properly in your Markdown viewer.
 
 ## Overview
 
-SAM3 (Segment Anything Model 3) was introduced in [SAM 3: Segment Anything with Concepts](https://ai.meta.com/research/publications/sam-3-segment-anything-with-concepts/).
+SAM3 (Segment Anything Model 3) was introduced in [SAM 3: Segment Anything with Concepts](https://ai.meta.com/research/publications/sam-3-segment-anything-with-concepts).
 
 SAM3 performs **Promptable Concept Segmentation (PCS)** on images. PCS takes text and/or image exemplars as input (e.g., "yellow school bus"), and predicts instance and semantic masks for **every single object** matching the concept.
 

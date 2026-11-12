@@ -2,7 +2,7 @@
 
 > **位置**：`03-social-sciences/finance/central-banking.md`  
 > **关联**：学科总图 [`_overview.md`](./_overview.md)（分支地图 §货币银行学）+ 哲学锚点 [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（§四 极限——货币主权）+ 货币本体 [`money-and-credit.md`](./money-and-credit.md)（§三 法币=央行负债）+ 国际维度 [`international-finance.md`](./international-finance.md)（§三元悖论/swap lines）+ 中国实践 [`china-financial-system.md`](./china-financial-system.md)（§五 PBOC）+ 商业银行[`banking.md`](./banking.md)（待建：货币创造/部分准备金）  
-> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（货币政策可预测性、卢卡斯批判）+ [`00-philosophy/politics/`](../../00-philosophy/)（中央集权 vs 自发秩序）  
+> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（货币政策可预测性、卢卡斯批判）+ [`00-philosophy/politics/`](../../00-philosophy)（中央集权 vs 自发秩序）  
 > **大问题**：[`questions/big-questions.md`](../../questions/big-questions.md) **Q10 金钱** · **Q15 决策（货币政策应否由专家独裁？）**  
 > **核心命题**：中央银行是**法币时代的"价值中枢"**——它不生产任何商品，却能通过一个数字（利率）和一张资产负债表，重塑全社会的消费、投资、就业与分配。**央行是现代社会最强大的、却最少被民主问责的经济权力。**
 
@@ -899,13 +899,13 @@ PBOC 工具谱系
 
 | 学科 | 央行问题的形态 | 关联 |
 |------|---------------|------|
-| **控制论** | 央行=反馈控制器，通胀=被控量，利率=控制信号；ZLB=执行器饱和 | [`06-systems/feedback/`](../../06-systems/feedback/) |
-| **博弈论** | 央行 vs 公众的预期博弈；时间不一致=动态博弈的非子博弈完美 | [`06-systems/game-theory/`](../../06-systems/game-theory/) |
-| **复杂系统** | 货币传导是多主体涌现；金融危机=相变/级联失效 | [`06-systems/complexity/`](../../06-systems/complexity/) |
-| **信息论** | 通胀预期=市场对央行信号的解码；FG=编码理论问题 | [`02-formal-sciences/`](../../02-formal-sciences/) |
-| **政治哲学** | 央行独立=民主 vs 技术官僚的张力；MMT=货币主权之争 | [`00-philosophy/politics/`](../../00-philosophy/) + [`07-worldly-power/`](../../07-worldly-power/) |
-| **历史学** | 央行是历史产物——Bagehot/沃尔克/Bernanke 三次范式跃迁 | [`04-humanities/history/`](../../04-humanities/history/) |
-| **认知科学** | "通胀预期"是集体心智模型；FG 是认知引导 | [`05-intelligence/`](../../05-intelligence/) |
+| **控制论** | 央行=反馈控制器，通胀=被控量，利率=控制信号；ZLB=执行器饱和 | [`06-systems/feedback/`](../../06-systems/feedback) |
+| **博弈论** | 央行 vs 公众的预期博弈；时间不一致=动态博弈的非子博弈完美 | [`06-systems/game-theory/`](../../06-systems/game-theory) |
+| **复杂系统** | 货币传导是多主体涌现；金融危机=相变/级联失效 | [`06-systems/complexity/`](../../06-systems/complexity) |
+| **信息论** | 通胀预期=市场对央行信号的解码；FG=编码理论问题 | [`02-formal-sciences/`](../../02-formal-sciences) |
+| **政治哲学** | 央行独立=民主 vs 技术官僚的张力；MMT=货币主权之争 | [`00-philosophy/politics/`](../../00-philosophy) + [`07-worldly-power/`](../../07-worldly-power) |
+| **历史学** | 央行是历史产物——Bagehot/沃尔克/Bernanke 三次范式跃迁 | [`04-humanities/history/`](../../04-humanities/history) |
+| **认知科学** | "通胀预期"是集体心智模型；FG 是认知引导 | [`05-intelligence/`](../../05-intelligence) |
 
 ### 11.2 开放问题（哲学张力）
 
@@ -927,9 +927,9 @@ PBOC 工具谱系
 | 金融危机史 | [`financial-history.md`](./financial-history.md) | 大萧条→2008→2020 的央行演化 |
 | 利率与债券 | [`fixed-income.md`](./fixed-income.md) | 期限结构、QE 对收益率曲线的影响 |
 | 加密货币挑战 | [`crypto-and-defi.md`](./crypto-and-defi.md) | 去中心化货币对央行垄断的挑战 |
-| 货币主权/霸权 | [`07-worldly-power/money/`](../../07-worldly-power/money/) | 美元体系、铸币税、货币权力 |
+| 货币主权/霸权 | [`07-worldly-power/money/`](../../07-worldly-power/money) | 美元体系、铸币税、货币权力 |
 | 哲学——不确定性 | [`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md) | 货币政策可预测性、卢卡斯批判 |
-| 哲学——权力与民主 | [`00-philosophy/`](../../00-philosophy/) | 央行独立性的政治哲学 |
+| 哲学——权力与民主 | [`00-philosophy/`](../../00-philosophy) | 央行独立性的政治哲学 |
 
 ### 11.4 关键思想家
 

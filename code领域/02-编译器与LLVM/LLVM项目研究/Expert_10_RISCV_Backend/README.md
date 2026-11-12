@@ -553,9 +553,9 @@ Lens_07 §2.3 已论证"自研 ISA + upstream 框架 + 自家 maintainer 是现�
 - **[E18 Phytium Adaptation](../Expert_18_Phytium_Adaptation/README.md)**：飞腾零 fork 实证 + 国产 CPU 厂商 LLVM fork 生态。
 
 ### 外部
-- RISC-V V 扩展规范（[riscv.org](https://riscv.org/technical/specifications/)）
+- RISC-V V 扩展规范（[riscv.org](https://riscv.org/technical/specifications)）
 - LLVM RISC-V 后端文档（[llvm.org/docs](https://llvm.org/docs/WritingAnLLVMBackend.html)）
-- Compiler Explorer（[godbolt.org](https://godbolt.org/)，可在线对比 RVV/SVE/NEON 汇编）
+- Compiler Explorer（[godbolt.org](https://godbolt.org)，可在线对比 RVV/SVE/NEON 汇编）
 - 香山开源项目（[github.com/OpenXiangShan](https://github.com/OpenXiangShan/XiangShan)）
 
 通用编译器资源见 [`领域资源库_LLVM.md`](../领域资源库_LLVM.md)。

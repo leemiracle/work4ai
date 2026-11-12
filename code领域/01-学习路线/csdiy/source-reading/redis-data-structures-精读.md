@@ -3,7 +3,7 @@
 > Redis 不只用一种数据结构——它为每种场景设计了最优结构。
 > 这篇精读拆解 5 种核心结构，回答"为什么 Redis 单线程还能这么快"。
 >
-> 配套：[redis-eventloop-逐行拆解.md](redis-eventloop-逐行拆解.md) | [tinycache](../projects/tinycache/) | [tinydb/btree.py](../projects/tinydb/btree.py)
+> 配套：[redis-eventloop-逐行拆解.md](redis-eventloop-逐行拆解.md) | [tinycache](../projects/tinycache) | [tinydb/btree.py](../projects/tinydb/btree.py)
 > csdiy 对应：csapp Ch2(位级) + Ch6(cache) + patterns §7(享元/对象池)
 
 ---
@@ -418,4 +418,4 @@ csdiy 交叉：csapp Ch6（存储器层次结构）—— 紧凑数组 → cache
 
 ---
 
-*配套：[redis-eventloop-逐行拆解.md](redis-eventloop-逐行拆解.md) | [tinycache](../projects/tinycache/) | [tinydb/btree.py](../projects/tinydb/btree.py)*
+*配套：[redis-eventloop-逐行拆解.md](redis-eventloop-逐行拆解.md) | [tinycache](../projects/tinycache) | [tinydb/btree.py](../projects/tinydb/btree.py)*

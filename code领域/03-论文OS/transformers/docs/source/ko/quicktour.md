@@ -389,7 +389,7 @@ tensor([[0.0021, 0.0018, 0.0115, 0.2121, 0.7725],
 
 ## TensorFlow로 훈련시키기 [[train-with-tensorflow]]
 
-모든 모델은 [`tf.keras.Model`](https://www.tensorflow.org/api_docs/python/tf/keras/Model)이므로 [Keras](https://keras.io/) API를 통해 TensorFlow에서 훈련시킬 수 있습니다. 🤗 Transformers는 데이터셋을 쉽게 `tf.data.Dataset` 형태로 쉽게 로드할 수 있는 [`~TFPreTrainedModel.prepare_tf_dataset`] 메소드를 제공하기 때문에, Keras의 [`compile`](https://keras.io/api/models/model_training_apis/#compile-method) 및 [`fit`](https://keras.io/api/models/model_training_apis/#fit-method) 메소드로 바로 훈련을 시작할 수 있습니다.
+모든 모델은 [`tf.keras.Model`](https://www.tensorflow.org/api_docs/python/tf/keras/Model)이므로 [Keras](https://keras.io) API를 통해 TensorFlow에서 훈련시킬 수 있습니다. 🤗 Transformers는 데이터셋을 쉽게 `tf.data.Dataset` 형태로 쉽게 로드할 수 있는 [`~TFPreTrainedModel.prepare_tf_dataset`] 메소드를 제공하기 때문에, Keras의 [`compile`](https://keras.io/api/models/model_training_apis/#compile-method) 및 [`fit`](https://keras.io/api/models/model_training_apis/#fit-method) 메소드로 바로 훈련을 시작할 수 있습니다.
 
 1. [`TFPreTrainedModel`] 또는 [`tf.keras.Model`](https://www.tensorflow.org/api_docs/python/tf/keras/Model)로 시작합니다:
 

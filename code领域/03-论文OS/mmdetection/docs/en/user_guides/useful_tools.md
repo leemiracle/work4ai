@@ -255,7 +255,7 @@ python tools/analysis_tools/coco_error_analysis.py \
 
 ## Model Serving
 
-In order to serve an `MMDetection` model with [`TorchServe`](https://pytorch.org/serve/), you can follow the steps:
+In order to serve an `MMDetection` model with [`TorchServe`](https://pytorch.org/serve), you can follow the steps:
 
 ### 1. Install TorchServe
 

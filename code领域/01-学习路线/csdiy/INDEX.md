@@ -38,7 +38,7 @@
 | 亲手做 xv6 lab | [labs/xv6-6.S081-从零跑起来](labs/xv6-6.S081-从零跑起来.md) |
 | 亲手做 CMU 数据库 lab | [labs/bustub-15-445-从零跑起来](labs/bustub-15-445-从零跑起来.md) |
 | 亲手做 MIT 分布式 Raft | [labs/mit6.824-raft-从零跑起来](labs/mit6.824-raft-从零跑起来.md) |
-| 选一条完整学习路径 | [paths/](paths/) (系统/AI/全栈/理论/图形 5 条) |
+| 选一条完整学习路径 | [paths/](paths) (系统/AI/全栈/理论/图形 5 条) |
 
 ### 📖 我要精读真实源码（59 篇，逐行/逐函数拆；完整索引见 [RESOURCES-INDEX.md](RESOURCES-INDEX.md)）
 
@@ -111,31 +111,31 @@ python3 tools/ask.py "Raft 和 Paxos 的区别"
 
 | 项目 | 参照 | 一句话 |
 |------|------|--------|
-| [tinyproxy](projects/tinyproxy/) | frp/nginx | TCP 负载均衡代理（epoll+桥接+LB算法） |
-| [tinyhttpd](projects/tinyhttpd/) | nginx | HTTP 服务器（路由+静态文件+API） |
-| [tinydns](projects/tinydns/) | CoreDNS | DNS 服务器（UDP+RFC 1035） |
-| [tinyrpc](projects/tinyrpc/) | gRPC | RPC 框架（Stub+序列化） |
-| [tinytls](projects/tinytls/) | OpenSSL | TLS 握手+记录层 |
+| [tinyproxy](projects/tinyproxy) | frp/nginx | TCP 负载均衡代理（epoll+桥接+LB算法） |
+| [tinyhttpd](projects/tinyhttpd) | nginx | HTTP 服务器（路由+静态文件+API） |
+| [tinydns](projects/tinydns) | CoreDNS | DNS 服务器（UDP+RFC 1035） |
+| [tinyrpc](projects/tinyrpc) | gRPC | RPC 框架（Stub+序列化） |
+| [tinytls](projects/tinytls) | OpenSSL | TLS 握手+记录层 |
 | （+ tinydhcp/icmp/arp/route/ratelimit/websocket/pipe/stream/eventloop） | | 详见 PROJECTS.md |
 
 **💾 存储层（9 个 / 2,956 行）**
 
 | 项目 | 参照 | 一句话 |
 |------|------|--------|
-| [tinydb](projects/tinydb/) | SQLite | KV 存储（page+B-tree+WAL） |
-| [tinycache](projects/tinycache/) | Redis | 内存缓存（RESP协议+dict+过期） |
-| [tinysql](projects/tinysql/) | PostgreSQL | SQL 解析+执行 |
+| [tinydb](projects/tinydb) | SQLite | KV 存储（page+B-tree+WAL） |
+| [tinycache](projects/tinycache) | Redis | 内存缓存（RESP协议+dict+过期） |
+| [tinysql](projects/tinysql) | PostgreSQL | SQL 解析+执行 |
 | （+ tinybitcask/blob/wal/fs/index/cachesim） | | 详见 PROJECTS.md |
 
-**🌍 分布式（8 个 / 987 行）** — [tinyraft](projects/tinyraft/)（etcd/6.824）· [tinykafka](projects/tinykafka/)（Kafka）· tiny2pc/mapreduce/gossip/ring/mesi/clock
+**🌍 分布式（8 个 / 987 行）** — [tinyraft](projects/tinyraft)（etcd/6.824）· [tinykafka](projects/tinykafka)（Kafka）· tiny2pc/mapreduce/gossip/ring/mesi/clock
 
-**🐧 操作系统（12 个 / 1,760 行）** — [tinyshell](projects/tinyshell/)（bash/xv6）· [tinydocker](projects/tinydocker/)（Docker）· tinymmu/interrupt/gc/alloc/pool/sched/trace/tx/signal/seq
+**🐧 操作系统（12 个 / 1,760 行）** — [tinyshell](projects/tinyshell)（bash/xv6）· [tinydocker](projects/tinydocker)（Docker）· tinymmu/interrupt/gc/alloc/pool/sched/trace/tx/signal/seq
 
-**⚙️ 编译/语言（6 个 / 1,475 行）** — [tinycompiler](projects/tinycompiler/)（Crafting Interpreters）· [tinyjson](projects/tinyjson/)（simdjson）· tinyregex/asm/linker/symtab
+**⚙️ 编译/语言（6 个 / 1,475 行）** — [tinycompiler](projects/tinycompiler)（Crafting Interpreters）· [tinyjson](projects/tinyjson)（simdjson）· tinyregex/asm/linker/symtab
 
-**🖥️ 体系结构（3 个 / 714 行）** — [tinycpu](projects/tinycpu/)（RISC-V）· tinydma/vm
+**🖥️ 体系结构（3 个 / 714 行）** — [tinycpu](projects/tinycpu)（RISC-V）· tinydma/vm
 
-**🤖 AI/LLM（5 个 / 3,435 行）⭐** — [tinytorch](projects/tinytorch/)（929 行 PyTorch 简化版）· [tinyllm](projects/tinyllm/)（870 行 LLM 推理引擎）· [tinyrag](projects/tinyrag/)（695 行端到端 RAG）· tinyrl/gen
+**🤖 AI/LLM（5 个 / 3,435 行）⭐** — [tinytorch](projects/tinytorch)（929 行 PyTorch 简化版）· [tinyllm](projects/tinyllm)（870 行 LLM 推理引擎）· [tinyrag](projects/tinyrag)（695 行端到端 RAG）· tinyrl/gen
 
 **🔐 安全（2 个）** · **🛠️ 工具（3 个）** · **📐 算法（4 个）** · **🔧 杂项（2 个）** — 详见 [PROJECTS.md](projects/PROJECTS.md)
 

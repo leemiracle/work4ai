@@ -110,7 +110,7 @@
 | 11 | **Docker & Kubernetes** |
 | 12 | **Puppet & CUDA** |
 
-**学习建议**：部分作业需 UCB 内部账号，可用虚拟机替代。csdiy 推荐 [bandit](https://overthewire.org/wargames/bandit/) 作为远程操作练习的补充。
+**学习建议**：部分作业需 UCB 内部账号，可用虚拟机替代。csdiy 推荐 [bandit](https://overthewire.org/wargames/bandit) 作为远程操作练习的补充。
 
 ---
 
@@ -469,7 +469,7 @@
 | 难度 | 🌟🌟🌟 |
 | 学时 | 40 小时 |
 | 课程网站 | https://github.com/kaist-cp/cs220 |
-| 教材 | 推荐 [Rust Book](https://doc.rust-lang.org/book/) + [slides](https://docs.google.com/presentation/d/17G3SwkE_tq0H3lTt9N0ysIbHhqDZBfHkoWD5LwwAKSo/edit) |
+| 教材 | 推荐 [Rust Book](https://doc.rust-lang.org/book) + [slides](https://docs.google.com/presentation/d/17G3SwkE_tq0H3lTt9N0ysIbHhqDZBfHkoWD5LwwAKSo/edit) |
 
 **定位**：CS110L 的**习题补充**。完善测试系统，适合作为 Rust 练手课。
 

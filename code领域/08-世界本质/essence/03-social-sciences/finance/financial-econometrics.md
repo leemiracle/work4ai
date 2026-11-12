@@ -2,7 +2,7 @@
 
 > **位置**：`03-social-sciences/finance/financial-econometrics.md`  
 > **关联**：[`_overview.md`](./_overview.md)（金融地图 + 方法论表）+ [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（哲学锚点）+ [`markets-and-pricing.md`](./markets-and-pricing.md)（定价三流派 + EMH 检验）+ [`portfolio-theory.md`](./portfolio-theory.md)（CAPM/FF 因子 + β）+ [`econophysics.md`](./econophysics.md)（肥尾 + 标度律 + Mandelbrot 批判）+ [`behavioral-finance.md`](./behavioral-finance.md)（异象的计量检测）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（波动率 = Knight 风险的度量）  
-> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（归纳问题 + 可证伪性 + 数据挖掘的认识论罪）+ [`02-formal-sciences/probability/`](../../02-formal-sciences/probability/)（统计推断的数学基础）  
+> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（归纳问题 + 可证伪性 + 数据挖掘的认识论罪）+ [`02-formal-sciences/probability/`](../../02-formal-sciences/probability)（统计推断的数学基础）  
 > **核心问题**：**我们能用历史数据"提取"出金融市场的统计规律吗？如果能，这些规律是"发现的"还是"挖掘的"？** —— 本章用代码逐一拷问这条赌注。
 
 ---
@@ -839,14 +839,14 @@ LASSO系数[:5]: [0.166 -0.199 0.038 -0. -0.] (真值 [0.3,-0.2,0.15,0,0])
 
 | 学科 | 金融计量学的对应/启发 |
 |------|---------------------|
-| **概率论** | 全部基础——估计/检验/置信区间都是统计推断。见 [`02-formal-sciences/probability/`](../../02-formal-sciences/probability/) |
+| **概率论** | 全部基础——估计/检验/置信区间都是统计推断。见 [`02-formal-sciences/probability/`](../../02-formal-sciences/probability) |
 | **信息论** | EMH = 价格是信息充分统计量；协整 = 共享信息维度 |
 | **物理学（统计力学）** | 程式化特征的普适性、RV 的二次变差 ↔ 物理涨落。见 [`econophysics.md`](./econophysics.md) |
 | **信号处理** | 高频降噪（子采样/核估计）= 数字信号处理；滤波（Kalman）用于潜在波动率 |
 | **因果科学（CS/统计）** | Pearl 的 do-演算 ↔ IV/DID；反事实框架统一两者 |
 | **机器学习** | 高维预测、正则化、表示学习——但低信噪比是噩梦 |
 | **认识论** | 归纳问题（Hume）+ 可证伪性（Popper）+ 数据挖掘的认识论罪。见 [`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md) |
-| **复杂系统** | 波动率聚集、相关性突变、相变式崩盘。见 [`06-systems/complexity/`](../../06-systems/complexity/) |
+| **复杂系统** | 波动率聚集、相关性突变、相变式崩盘。见 [`06-systems/complexity/`](../../06-systems/complexity) |
 
 ### 11.2 开放问题
 

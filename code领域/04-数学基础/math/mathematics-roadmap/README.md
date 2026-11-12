@@ -59,4 +59,4 @@ Each topic has multiple books. This is since any two books in a single topic are
 The file [mathematics-roadmap-topics.md](mathematics-roadmap-topics.md) contains all the topics of the roadmap with the books in text format if it suits you better, which can also help if you want to arrange your own roadmap. 
 
 ## Software
-The software used to create these diagrams is [draw.io](https://www.draw.io/). Just open the file `mathematics-roadmap.html` and you can start editing.
+The software used to create these diagrams is [draw.io](https://www.draw.io). Just open the file `mathematics-roadmap.html` and you can start editing.

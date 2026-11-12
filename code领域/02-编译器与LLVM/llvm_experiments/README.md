@@ -76,7 +76,7 @@ opt -dot-cfg simple.ll
 - [LLVM Language Reference](https://llvm.org/docs/LangRef.html)
 - [Writing an LLVM Pass](https://llvm.org/docs/WritingAnLLVMPass.html)
 - [LLVM Optimization Passes](https://llvm.org/docs/Passes.html)
-- [Kaleidoscope Tutorial](https://llvm.org/docs/tutorial/)
+- [Kaleidoscope Tutorial](https://llvm.org/docs/tutorial)
 
 ## 下一步
 

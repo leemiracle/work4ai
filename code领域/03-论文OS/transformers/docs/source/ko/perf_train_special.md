@@ -59,4 +59,4 @@ python examples/pytorch/text-classification/run_glue.py \
 
 `gloco`와 `nccl`과 같은 [분산 학습 백엔드](https://pytorch.org/docs/stable/distributed.html#backends)는 `mps` 장치에서 지원되지 않으므로, MPS 백엔드에서는 단일 GPU로만 학습이 가능합니다.
 
-Mac에서 가속된 PyTorch 학습에 대한 더 자세한 내용은 [Introducing Accelerated PyTorch Training on Mac](https://pytorch.org/blog/introducing-accelerated-pytorch-training-on-mac/) 블로그 게시물에서 확인할 수 있습니다.
+Mac에서 가속된 PyTorch 학습에 대한 더 자세한 내용은 [Introducing Accelerated PyTorch Training on Mac](https://pytorch.org/blog/introducing-accelerated-pytorch-training-on-mac) 블로그 게시물에서 확인할 수 있습니다.

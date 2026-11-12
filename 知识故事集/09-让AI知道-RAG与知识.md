@@ -177,7 +177,7 @@ ChatGPT 发布后，所有公司想做"企业 AI 助手"——但要基于**企�
 
 ### work4ai 系列
 - [`../讲透RAG/`](../讲透RAG)：检索数学 + 工程 + 高级架构 + 评估
-- [`../讲透Prompt/`](../讲透Prompt)：怎么 prompt RAG 模型
+- [`../讲透宇宙/01-学/讲透Prompt//`](../讲透宇宙/01-学/讲透Prompt)：怎么 prompt RAG 模型
 
 ### 必读
 - **Lewis et al. 2020 "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"**（RAG 起源）

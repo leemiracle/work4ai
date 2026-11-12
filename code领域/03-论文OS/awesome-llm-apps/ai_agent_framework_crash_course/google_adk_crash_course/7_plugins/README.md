@@ -91,7 +91,7 @@ By the end of this tutorial, you'll understand:
 - Basic understanding of Google ADK (Tutorials 1-6)
 
 ### **Setup**
-1. **Get API Key**: Visit [Google AI Studio](https://aistudio.google.com/)
+1. **Get API Key**: Visit [Google AI Studio](https://aistudio.google.com)
 2. **Create .env file**: Create a file named `.env` in this directory with:
    ```
    GOOGLE_API_KEY=your_google_ai_studio_api_key_here
@@ -195,6 +195,6 @@ After completing this tutorial, you can:
 
 ## 🔗 Additional Resources
 
-- [Google ADK Plugins Documentation](https://google.github.io/adk-docs/plugins/)
+- [Google ADK Plugins Documentation](https://google.github.io/adk-docs/plugins)
 - [Plugin Callback Hooks](https://google.github.io/adk-docs/plugins/#plugin-callback-hooks)
 - [BasePlugin API Reference](https://google.github.io/adk-docs/api/python/google.adk.plugins.base_plugin.BasePlugin)

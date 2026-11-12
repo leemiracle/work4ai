@@ -51,7 +51,7 @@ limitations under the License.
 
 🤗 Transformers 라이브러리는 사용 중에 겪는 문제를 보고해주는 사용자들 덕분에 더욱 견고해지고 신뢰할 수 있게 되었습니다.
 
-이슈를 보고하기 전에, 버그가 이미 **보고되지 않았는지** 확인해주세요. (GitHub의 이슈 탭 아래의 검색 바를 사용하세요). 이슈는 라이브러리 자체에서 발생한 버그어야 하며, 코드의 다른 부분과 관련된 것이 아니어야 합니다. 버그가 라이브러리의 문제로 발생하였는지 확실하지 않은 경우 먼저 [포럼](https://discuss.huggingface.co/)에서 질문해 주세요. 이렇게 하면 일반적인 질문보다 라이브러리와 관련된 문제를 더 빠르게 해결할 수 있습니다.
+이슈를 보고하기 전에, 버그가 이미 **보고되지 않았는지** 확인해주세요. (GitHub의 이슈 탭 아래의 검색 바를 사용하세요). 이슈는 라이브러리 자체에서 발생한 버그어야 하며, 코드의 다른 부분과 관련된 것이 아니어야 합니다. 버그가 라이브러리의 문제로 발생하였는지 확실하지 않은 경우 먼저 [포럼](https://discuss.huggingface.co)에서 질문해 주세요. 이렇게 하면 일반적인 질문보다 라이브러리와 관련된 문제를 더 빠르게 해결할 수 있습니다.
 
 버그가 이미 보고되지 않았다는 것을 확인했다면, 다음 정보를 포함하여 이슈를 제출해 주세요. 그러면 우리가 빠르게 해결할 수 있습니다:
 
@@ -203,7 +203,7 @@ python src/transformers/commands/transformers_cli.py env
    git commit
    ```
 
-   [좋은 커밋 메시지](https://chris.beams.io/posts/git-commit/)를 작성하여 변경 사항을 명확하게 전달하세요!
+   [좋은 커밋 메시지](https://chris.beams.io/posts/git-commit)를 작성하여 변경 사항을 명확하게 전달하세요!
 
    변경 사항을 프로젝트 원본 저장소와 동기화하려면, PR을 *열기 전에* 브랜치를 `upstream/branch`로 리베이스(rebase)하세요. 또는 관리자의 요청에 이 작업이 필요할 수 있습니다:
 
@@ -295,7 +295,7 @@ python -m unittest discover -s examples -t examples -v
 
 ### Windows에서 개발 [[develop-on-windows]]
 
-Windows에서 개발할 경우([Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/) 또는 WSL에서 작업하지 않는 한) Windows `CRLF` 줄 바꿈을 Linux `LF` 줄 바꿈으로 변환하도록 git을 구성해야 합니다:
+Windows에서 개발할 경우([Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl) 또는 WSL에서 작업하지 않는 한) Windows `CRLF` 줄 바꿈을 Linux `LF` 줄 바꿈으로 변환하도록 git을 구성해야 합니다:
 
 ```bash
 git config core.autocrlf input
@@ -303,7 +303,7 @@ git config core.autocrlf input
 
 Windows에서 `make` 명령을 실행하는 한 가지 방법은 MSYS2를 사용하는 것입니다:
 
-1. [MSYS2](https://www.msys2.org/)를 다운로드합니다. `C:\msys64`에 설치되었다고 가정합니다.
+1. [MSYS2](https://www.msys2.org)를 다운로드합니다. `C:\msys64`에 설치되었다고 가정합니다.
 2. CLI에서 `C:\msys64\msys2.exe`를 엽니다 (시작 메뉴에서 사용 가능해야 함).
 3. 쉘에서 다음을 실행하여: `pacman -Syu` 및 `pacman -S make`로 `make`를 설치합니다.
 4. 환경 변수 PATH에 `C:\msys64\usr\bin`을 추가하세요.

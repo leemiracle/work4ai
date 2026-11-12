@@ -31,5 +31,5 @@ Text Generation Inference implements many optimizations and features, such as:
 Text Generation Inference is used in production by multiple projects, such as:
 
 - [Hugging Chat](https://github.com/huggingface/chat-ui), an open-source interface for open-access models, such as Open Assistant and Llama
-- [OpenAssistant](https://open-assistant.io/), an open-source community effort to train LLMs in the open
-- [nat.dev](http://nat.dev/), a playground to explore and compare LLMs.
+- [OpenAssistant](https://open-assistant.io), an open-source community effort to train LLMs in the open
+- [nat.dev](http://nat.dev), a playground to explore and compare LLMs.

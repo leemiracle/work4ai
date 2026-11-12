@@ -2,7 +2,7 @@
 
 - GID 数据集可在[此处](https://x-ytong.github.io/project/GID.html)进行下载。
 - GID 数据集包含 150 张 6800x7200 的大尺寸图像，标签为 RGB 标签。
-- 根据[文献](https://ieeexplore.ieee.org/document/9343296/)，此处选择 15 张图像生成训练集和验证集，该 15 张图像包含了所有六类信息。所选的图像名称如下：
+- 根据[文献](https://ieeexplore.ieee.org/document/9343296)，此处选择 15 张图像生成训练集和验证集，该 15 张图像包含了所有六类信息。所选的图像名称如下：
 
 ```None
   GF2_PMS1__L1A0000647767-MSS1

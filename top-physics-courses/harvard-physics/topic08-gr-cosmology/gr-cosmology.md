@@ -2,7 +2,7 @@
 
 > **课程**：Phys 210 (General Theory of Relativity) · Phys 212 (Physical Cosmology) · Phys 211r (Black Holes from A to Z)
 > **教材**：Carroll *Spacetime and Geometry: An Introduction to General Relativity* (2004) · Dodelson *Modern Cosmology* 2ed (2020)
-> **一手来源**：[Harvard 2025-26 SPS Guide](https://www.physics.harvard.edu/resource/sps-guide-physics-2025-2026) + [Dvorkin Teaching Page](https://dvorkin.physics.harvard.edu/teaching-and-outreach/)（2026-08 核实）
+> **一手来源**：[Harvard 2025-26 SPS Guide](https://www.physics.harvard.edu/resource/sps-guide-physics-2025-2026) + [Dvorkin Teaching Page](https://dvorkin.physics.harvard.edu/teaching-and-outreach)（2026-08 核实）
 
 > ⚠️ **核实说明**：用户原文指定 "Phys 210/232"。经核实，**Phys 232 = Advanced Classical Electromagnetism**（Jackson 经典电动力学），并非宇宙学。宇宙学研究生课为 **Phys 212 (Physical Cosmology)**，由 Cora Dvorkin 教授自 2016 年起开设并持续教授至今（经其个人教学主页确认）。Phys 211r (Black Holes) 与 GR 密切相关。
 

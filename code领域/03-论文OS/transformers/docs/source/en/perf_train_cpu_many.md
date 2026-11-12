@@ -91,11 +91,11 @@ python3 run_qa.py \
 
 ## Kubernetes
 
-Distributed training with CPUs can also be deployed to a Kubernetes cluster with [PyTorchJob](https://www.kubeflow.org/docs/components/training/user-guides/pytorch/). Before you get started, you should perform the following setup steps.
+Distributed training with CPUs can also be deployed to a Kubernetes cluster with [PyTorchJob](https://www.kubeflow.org/docs/components/training/user-guides/pytorch). Before you get started, you should perform the following setup steps.
 
-1. Ensure you have access to a Kubernetes cluster with [Kubeflow](https://www.kubeflow.org/docs/started/installing-kubeflow/) installed.
+1. Ensure you have access to a Kubernetes cluster with [Kubeflow](https://www.kubeflow.org/docs/started/installing-kubeflow) installed.
 1. Install and configure [kubectl](https://kubernetes.io/docs/tasks/tools) to interact with the cluster.
-1. Set up a [PersistentVolumeClaim (PVC)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to store datasets and model files. There are multiple options to choose from, including a [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) or a cloud storage bucket.
+1. Set up a [PersistentVolumeClaim (PVC)](https://kubernetes.io/docs/concepts/storage/persistent-volumes) to store datasets and model files. There are multiple options to choose from, including a [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes) or a cloud storage bucket.
 1. Set up a Docker container for the training script and all required dependencies such as PyTorch, Transformers, and OpenSSH to facilitate communication between containers.
 
 The example Dockerfile below uses a base image that supports distributed training with CPUs, and extracts Transformers to the `/workspace` directory to include the training scripts in the image. The image needs to be built and copied to the clusters nodes or pushed to a container registry prior to deployment.
@@ -120,7 +120,7 @@ RUN pip install --no-cache-dir \
 
 ### PyTorchJob
 
-[PyTorchJob](https://www.kubeflow.org/docs/components/training/user-guides/pytorch/) is an extension of the Kubernetes API for running PyTorch training jobs on Kubernetes. It includes a yaml file that defines the training jobs parameters such as the name of the PyTorchJob, number of workers, types of resources for each worker, and more.
+[PyTorchJob](https://www.kubeflow.org/docs/components/training/user-guides/pytorch) is an extension of the Kubernetes API for running PyTorch training jobs on Kubernetes. It includes a yaml file that defines the training jobs parameters such as the name of the PyTorchJob, number of workers, types of resources for each worker, and more.
 
 The volume mount parameter is a path to where the PVC is mounted in the container for each worker pod. The PVC is typically used to hold the dataset, checkpoint files, and the model after it has finished training.
 

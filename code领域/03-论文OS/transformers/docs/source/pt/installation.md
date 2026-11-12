@@ -27,14 +27,14 @@ configurar o 🤗 Transformers para execução em modo offline (opcional).
 🤗 Transformers foi testado com Python 3.6+, PyTorch 1.1.0+, TensorFlow 2.0+, e Flax. Para instalar a biblioteca de
 deep learning com que deseja trabalhar, siga as instruções correspondentes listadas a seguir:
 
-* [PyTorch](https://pytorch.org/get-started/locally/)
+* [PyTorch](https://pytorch.org/get-started/locally)
 * [TensorFlow 2.0](https://www.tensorflow.org/install/pip)
-* [Flax](https://flax.readthedocs.io/en/latest/)
+* [Flax](https://flax.readthedocs.io/en/latest)
 
 ## Instalação pelo Pip
 
 É sugerido instalar o 🤗 Transformers num [ambiente virtual](https://docs.python.org/3/library/venv.html). Se precisar
-de mais informações sobre ambientes virtuais em Python, consulte este [guia](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
+de mais informações sobre ambientes virtuais em Python, consulte este [guia](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments).
 Um ambiente virtual facilitará a manipulação e organização de projetos e evita problemas de compatibilidade entre dependências.
 
 Comece criando um ambiente virtual no diretório do seu projeto:
@@ -169,7 +169,7 @@ Para tal, configure a variável de ambiente de modo que `HF_HUB_OFFLINE=1`.
 
 <Tip>
 
-Você pode adicionar o [🤗 Datasets](https://huggingface.co/docs/datasets/) ao pipeline de treinamento offline declarando
+Você pode adicionar o [🤗 Datasets](https://huggingface.co/docs/datasets) ao pipeline de treinamento offline declarando
     a variável de ambiente `HF_DATASETS_OFFLINE=1`.
 
 </Tip>

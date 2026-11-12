@@ -27,7 +27,7 @@ This guide combines [DINOv3 with ConvNext architecture](https://huggingface.co/f
 > [!NOTE]
 > This model requires access approval. Visit [the model repository](https://huggingface.co/facebook/dinov3-convnext-large-pretrain-lvd1689m) to request access.
 
-Install [trackio](https://github.com/gradio-app/trackio) for experiment tracking and [albumentations](https://albumentations.ai/) for data augmentation. Use the latest transformers version.
+Install [trackio](https://github.com/gradio-app/trackio) for experiment tracking and [albumentations](https://albumentations.ai) for data augmentation. Use the latest transformers version.
 
 ```bash
 pip install -Uq albumentations trackio transformers datasets

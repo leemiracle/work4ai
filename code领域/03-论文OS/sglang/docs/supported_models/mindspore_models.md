@@ -148,4 +148,4 @@ export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python  # to avoid protobuf binary
 ## Support
 For MindSpore-specific issues:
 
-- Refer to the [MindSpore documentation](https://www.mindspore.cn/)
+- Refer to the [MindSpore documentation](https://www.mindspore.cn)

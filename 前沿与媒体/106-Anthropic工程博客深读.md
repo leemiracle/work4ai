@@ -38,7 +38,7 @@
 - **生产**：有状态错误复利→checkpoint 恢复+告知 agent 工具故障让它自适应；rainbow deployment 防打断运行中 agent；监控决策模式不监控内容（隐私）。
 - **可落地**：子代理产物**直写文件系统**只回引用（防"传话游戏"损耗）；对状态改变型任务用**终态评测**而非逐步骤评测。
 - **局限**：同步执行瓶颈（lead 等子代理）；依赖多的任务（多数编码）不适合。
-- **锚点**：本次 x-kernel 审计即此架构实战（4 路并行深读）；`讲透Agent/Topics全链路全景` L4 执行机制篇。
+- **锚点**：本次 x-kernel 审计即此架构实战（4 路并行深读）；`../讲透宇宙/01-学/讲透Agent//Topics全链路全景` L4 执行机制篇。
 
 ## 4. Effective Harnesses for Long-Running Agents（2025-11-26）
 
@@ -140,6 +140,6 @@
 
 ## refs
 - 十一篇全文 webfetch 2026-08-20（主会话 6 篇一手 + 子代理 5 篇逐字读取，数字均出自原文；best-practices 已按官方 308 跳转取现行版）
-- 配套：`105-Anthropic官方技术文章全集（sitemap实测）.md`（全量索引）；`107`（interp 线）；`harness工程手册/`（12-15 章）；`讲透Agent/Topics全链路全景/notes/01`（L4 执行机制）
+- 配套：`105-Anthropic官方技术文章全集（sitemap实测）.md`（全量索引）；`107`（interp 线）；`harness工程手册/`（12-15 章）；`../讲透宇宙/01-学/讲透Agent//Topics全链路全景/notes/01`（L4 执行机制）
 
 *updated: 2026-08-20*

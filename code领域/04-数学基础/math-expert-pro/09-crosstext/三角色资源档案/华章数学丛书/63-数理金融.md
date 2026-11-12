@@ -16,9 +16,9 @@
 ### 📘 教材优先（建立直觉）
 
 **视频课程**：
-- [MIT OCW 18.S096 金融数学](https://ocw.mit.edu/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013/)
+- [MIT OCW 18.S096 金融数学](https://ocw.mit.edu/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013)
 - [Quantopian Lectures](https://www.quantopian.com/lectures)
-- [Wolfram 量化金融](https://www.wolfram.com/wolfram-u/)
+- [Wolfram 量化金融](https://www.wolfram.com/wolfram-u)
 
 **经典论文/参考**：
 - [Black-Scholes 1973 原始论文](https://www.cs.princeton.edu/courses/archive/fall09/cos323/papers/black_scholes73.pdf)
@@ -28,19 +28,19 @@
 ### 🔧 工程师优先（实战代码）
 
 **Python/代码实现**：
-- [QuantLib](https://www.quantlib.org/)
-- [zipline 量化回测](https://zipline.io/)
+- [QuantLib](https://www.quantlib.org)
+- [zipline 量化回测](https://zipline.io)
 - [yfinance 股票数据](https://github.com/ranaroussi/yfinance)
 
 ### 🔬 研究员优先（形式化 + 社区）
 
 **Lean 形式化**：
-- [Mathlib.Probability.Stochastic](https://leanprover-community.github.io/mathlib4_docs/)
+- [Mathlib.Probability.Stochastic](https://leanprover-community.github.io/mathlib4_docs)
 
 **学术社区**：
-- [Quant Stack Exchange](https://quant.stackexchange.com/)
-- [r/algotrading](https://www.reddit.com/r/algotrading/)
-- [Wilmott Forum](https://forum.wilmott.com/)
+- [Quant Stack Exchange](https://quant.stackexchange.com)
+- [r/algotrading](https://www.reddit.com/r/algotrading)
+- [Wilmott Forum](https://forum.wilmott.com)
 
 ## 🎯 综合学习路径
 

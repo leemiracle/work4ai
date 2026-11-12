@@ -85,7 +85,7 @@ model.config  # model has access to its config
 
 경험상 모델을 추가할 때 주의해야 할 가장 중요한 사항은 다음과 같습니다:
 
--  같은 일을 반복하지 마세요! 새로운 🤗 Transformers 모델을 위해 추가할 코드의 대부분은 이미 🤗 Transformers 어딘가에 존재합니다. 이미 존재하는 복사할 수 있는 유사한 모델과 토크나이저를 찾는데 시간을 투자하세요. [grep](https://www.gnu.org/software/grep/)와 [rg](https://github.com/BurntSushi/ripgrep)를 참고하세요. 모델의 토크나이저가 한 모델을 기반으로 하고 모델링 코드가 다른 모델을 기반으로 하는 경우가 존재할 수도 있습니다. 예를 들어 FSMT의 모델링 코드는 BART를 기반으로 하고 FSMT의 토크나이저 코드는 XLM을 기반으로 합니다.
+-  같은 일을 반복하지 마세요! 새로운 🤗 Transformers 모델을 위해 추가할 코드의 대부분은 이미 🤗 Transformers 어딘가에 존재합니다. 이미 존재하는 복사할 수 있는 유사한 모델과 토크나이저를 찾는데 시간을 투자하세요. [grep](https://www.gnu.org/software/grep)와 [rg](https://github.com/BurntSushi/ripgrep)를 참고하세요. 모델의 토크나이저가 한 모델을 기반으로 하고 모델링 코드가 다른 모델을 기반으로 하는 경우가 존재할 수도 있습니다. 예를 들어 FSMT의 모델링 코드는 BART를 기반으로 하고 FSMT의 토크나이저 코드는 XLM을 기반으로 합니다.
 -  이것은 과학적인 도전보다는 공학적인 도전입니다. 논문의 모델의 모든 이론적 측면을 이해하려는 것보다 효율적인 디버깅 환경을 만드는 데 더 많은 시간을 소비해야 합니다.
 -  막힐 때 도움을 요청하세요! 모델은 🤗 Transformers의 핵심 구성 요소이므로 Hugging Face의 우리는 당신이 모델을 추가하는 각 단계에서 기꺼이 도움을 줄 준비가 되어 있습니다. 진전이 없다고 느끼면 주저하지 말고 도움을 요청하세요.
 
@@ -189,7 +189,7 @@ pip install -e .
 
 일반적으로, 원래 모델을 실행하기 위한 두 가지 가능한 디버깅 환경이 있습니다.
 
-- [Jupyter 노트북](https://jupyter.org/) / [Google Colab](https://colab.research.google.com/notebooks/intro.ipynb)
+- [Jupyter 노트북](https://jupyter.org) / [Google Colab](https://colab.research.google.com/notebooks/intro.ipynb)
 - 로컬 Python 스크립트
 
 Jupyter 노트북의 장점은 셀 단위로 실행할 수 있다는 것입니다. 이는 논리적인 구성 요소를 더 잘 분리하고 중간 결과를 저장할 수 있으므로 디버깅 사이클이 더 빨라질 수 있습니다. 또한, 노트북은 다른 기여자와 쉽게 공유할 수 있으므로 Hugging Face 팀의 도움을 요청하려는 경우 매우 유용할 수 있습니다. Jupyter 노트북에 익숙하다면 이를 사용하는 것을 강력히 추천합니다.

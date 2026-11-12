@@ -287,7 +287,7 @@ The encoded versions have different lengths:
 
 ### Natural language generation (NLG)
 
-テキストを生成する関連するすべてのタスク（たとえば、[Transformersで書く](https://transformer.huggingface.co/)、翻訳など）。
+テキストを生成する関連するすべてのタスク（たとえば、[Transformersで書く](https://transformer.huggingface.co)、翻訳など）。
 
 ### Natural language processing (NLP)
 

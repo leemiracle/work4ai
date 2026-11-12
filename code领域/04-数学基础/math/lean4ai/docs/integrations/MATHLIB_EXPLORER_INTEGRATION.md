@@ -695,7 +695,7 @@ if __name__ == "__main__":
 
 ![Module Dependencies](./images/module_graph.png)
 
-使用 [MathlibExplorer](./MathlibExplorer/) 交互式探索模块依赖。
+使用 [MathlibExplorer](./MathlibExplorer) 交互式探索模块依赖。
 ```
 
 ### 2. 集成到 YC-Killer Agent

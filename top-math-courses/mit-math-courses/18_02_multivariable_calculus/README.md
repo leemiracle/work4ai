@@ -1,13 +1,13 @@
 # MIT 18.02 — Multivariable Calculus
 
 > **学校**：MIT | **学期**：Fall/Spring | **学分**：12 units
-> **一手来源**：[catalog.mit.edu/subjects/18/#18.02](https://catalog.mit.edu/subjects/18/) + [OCW 18.02 Prof. Denis Auroux](https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/)
+> **一手来源**：[catalog.mit.edu/subjects/18/#18.02](https://catalog.mit.edu/subjects/18) + [OCW 18.02 Prof. Denis Auroux](https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007)
 
 ## 课程信息
 - **编号**：18.02 / 18.02A
 - **先修**：18.01 单变量微积分
 - **教材**：Edwards & Penney, *Multivariable Calculus*；OCW Auroux 讲义
-- **视频**：[Auroux 18.02 双语字幕](https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/video_galleries/video-lectures/)
+- **视频**：[Auroux 18.02 双语字幕](https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/video_galleries/video-lectures)
 
 ## 教学大纲
 1. **Vectors and matrices**（点积、叉积、矩阵）
@@ -27,9 +27,9 @@
 - **学完本课后**：能读懂反向传播的链式法则证明
 
 ## 参考资源
-- **教材**：[OCW 18.02 Readings](https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/readings/)
+- **教材**：[OCW 18.02 Readings](https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/readings)
 - **视频**：[Auroux 完整 35 讲](https://www.youtube.com/playlist?list=PL4C4C8A7D06566F38)
-- **习题**：[OCW 18.02 assignments](https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/assignments/)
+- **习题**：[OCW 18.02 assignments](https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/assignments)
 
 ## 学习建议
 - **重点**：偏导 + 梯度 + 链式法则（ML 必备）

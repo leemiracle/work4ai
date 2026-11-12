@@ -283,8 +283,8 @@ main_agent = Agent(
 
 ## 🔗 Related Documentation
 
-- **[Voice Quickstart](https://openai.github.io/openai-agents-python/voice/quickstart/)**: Official voice agent setup guide
-- **[Voice Pipelines](https://openai.github.io/openai-agents-python/voice/pipeline/)**: Advanced pipeline configuration
+- **[Voice Quickstart](https://openai.github.io/openai-agents-python/voice/quickstart)**: Official voice agent setup guide
+- **[Voice Pipelines](https://openai.github.io/openai-agents-python/voice/pipeline)**: Advanced pipeline configuration
 - **[Agent Fundamentals](../1_starter_agent/README.md)**: Basic agent concepts
 - **[Multi-Agent Systems](../9_multi_agent_orchestration/README.md)**: Agent handoffs and orchestration
 

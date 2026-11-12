@@ -1,6 +1,6 @@
 # CVPR 2022 论文和开源项目合集(Papers with Code)
 
-[CVPR 2022](https://cvpr2022.thecvf.com/) 论文和开源项目合集(papers with code)！
+[CVPR 2022](https://cvpr2022.thecvf.com) 论文和开源项目合集(papers with code)！
 
 CVPR 2022 收录列表ID：https://drive.google.com/file/d/15JFhfPboKdUcIH9LdbCMUFmGq_JhaxhC/view
 

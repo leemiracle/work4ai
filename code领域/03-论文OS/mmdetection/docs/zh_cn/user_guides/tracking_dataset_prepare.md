@@ -4,12 +4,12 @@
 
 - 多目标跟踪
 
-  - [MOT Challenge](https://motchallenge.net/)
-  - [CrowdHuman](https://www.crowdhuman.org/)
+  - [MOT Challenge](https://motchallenge.net)
+  - [CrowdHuman](https://www.crowdhuman.org)
 
 - 视频实例分割
 
-  - [YouTube-VIS](https://youtube-vos.org/dataset/vis/)
+  - [YouTube-VIS](https://youtube-vos.org/dataset/vis)
 
 ### 1. 下载数据集
 
@@ -19,7 +19,7 @@
 
 - 对于多目标跟踪任务的训练和测试，需要下载MOT Challenge数据集之一（例如MOT17、MOT20），CrowdHuman数据集可以作为补充数据集。
 
-- 对于中国的用户，可以从 [OpenDataLab](https://opendatalab.com/) 上高速下载如下数据集：
+- 对于中国的用户，可以从 [OpenDataLab](https://opendatalab.com) 上高速下载如下数据集：
 
   - [MOT17](https://opendatalab.com/MOT17/download)
   - [MOT20](https://opendatalab.com/MOT20/download)

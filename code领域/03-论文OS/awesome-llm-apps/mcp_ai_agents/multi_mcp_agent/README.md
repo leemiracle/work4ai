@@ -53,7 +53,7 @@ Follow these steps to set up and run the application:
     npm --version
     npx --version
     ```
-    If Node.js is not installed, download it from [nodejs.org](https://nodejs.org/)
+    If Node.js is not installed, download it from [nodejs.org](https://nodejs.org)
 
 4. **Set up your API keys**:
     Create a `.env` file in the project directory with the following variables:

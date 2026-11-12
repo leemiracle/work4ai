@@ -1,7 +1,7 @@
 # Oxford Part B B8.1 — Probability, Measure and Martingales
 
 > **学校**：Oxford | **学院**：Statistics
-> **一手来源**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk/)
+> **一手来源**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk)
 
 ## 课程信息
 - **编号**：B8.1

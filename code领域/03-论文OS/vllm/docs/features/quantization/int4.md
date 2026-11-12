@@ -9,7 +9,7 @@ Please visit the HF collection of [quantized INT4 checkpoints of popular LLMs re
 
 ## Prerequisites
 
-To use INT4 quantization with vLLM, you'll need to install the [llm-compressor](https://github.com/vllm-project/llm-compressor/) library:
+To use INT4 quantization with vLLM, you'll need to install the [llm-compressor](https://github.com/vllm-project/llm-compressor) library:
 
 ```bash
 pip install llmcompressor

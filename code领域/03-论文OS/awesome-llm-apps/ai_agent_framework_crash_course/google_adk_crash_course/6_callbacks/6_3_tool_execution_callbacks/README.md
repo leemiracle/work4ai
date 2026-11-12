@@ -250,5 +250,5 @@ After completing this tutorial, you'll be ready for:
 ## 📚 Additional Resources
 
 - [Google ADK Tool Callbacks](https://google.github.io/adk-docs/callbacks/types-of-callbacks/#tool-execution-callbacks)
-- [Tool Development Guide](https://google.github.io/adk-docs/tools/)
-- [FunctionTool Documentation](https://google.github.io/adk-docs/tools/function-tools/) 
+- [Tool Development Guide](https://google.github.io/adk-docs/tools)
+- [FunctionTool Documentation](https://google.github.io/adk-docs/tools/function-tools) 

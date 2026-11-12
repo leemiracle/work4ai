@@ -239,7 +239,7 @@ La plantilla de chat para un modelo se almacena en el atributo `tokenizer.chat_t
 {{ eos_token }}
 ```
 
-Si nunca has visto uno de estos antes, esto es una [plantilla de Jinja](https://jinja.palletsprojects.com/en/3.1.x/templates/). Jinja es un lenguaje de plantillas que te permite escribir código simple que genera texto. En muchos aspectos, el código y la sintaxis se asemejan a Python. En Python puro, esta plantilla se vería algo así:
+Si nunca has visto uno de estos antes, esto es una [plantilla de Jinja](https://jinja.palletsprojects.com/en/3.1.x/templates). Jinja es un lenguaje de plantillas que te permite escribir código simple que genera texto. En muchos aspectos, el código y la sintaxis se asemejan a Python. En Python puro, esta plantilla se vería algo así:
 
 ```python
 for idx, message in enumerate(messages):

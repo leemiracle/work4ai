@@ -245,6 +245,6 @@ Eager Loading (1 query):
 ## References
 
 - [Django select_related/prefetch_related](https://docs.djangoproject.com/en/stable/ref/models/querysets/#select-related)
-- [Sequelize Eager Loading](https://sequelize.org/docs/v6/advanced-association-concepts/eager-loading/)
+- [Sequelize Eager Loading](https://sequelize.org/docs/v6/advanced-association-concepts/eager-loading)
 - [DataLoader for GraphQL](https://github.com/graphql/dataloader)
 - [Bullet gem (Rails)](https://github.com/flyerhzm/bullet)

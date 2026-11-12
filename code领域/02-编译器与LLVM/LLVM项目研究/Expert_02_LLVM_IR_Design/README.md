@@ -1,7 +1,7 @@
 # Expert_02 — LLVM IR 设计与语义专家视角
 
 > **角色定位**：LLVM IR 形式语义学家 / 编译器正确性工程师。
-> 这位专家不是写前端（那是 [Expert_01](../Expert_01_Clang_Frontend/)）也不是写 Pass（那是 [Expert_03](../Expert_03_Pass_Framework/)），
+> 这位专家不是写前端（那是 [Expert_01](../Expert_01_Clang_Frontend)）也不是写 Pass（那是 [Expert_03](../Expert_03_Pass_Framework)），
 > 他把 **LLVM IR 当作一门"有严格操作语义的编程语言"** 来审视——它的类型系统是否健全？它的"未定义值"语义是否自洽？
 > 它的并发内存模型能否映射到 ARM/x86 硬件？它的每一版演进是被哪场 miscompilation 逼出来的？
 > 他的日常工具是 [LangRef](https://llvm.org/docs/LangRef.html)、[Alive2](https://github.com/AliveToolkit/alive2) 和 `llvm/lib/IR/` 源码，
@@ -444,22 +444,22 @@ Bitcode（`.bc`）是 LLVM IR 的二进制序列化格式。设计初衷是"**�
 
 ## 5. 与其他视角对偶（强制）
 
-### 5.1 与 [Expert_03 Pass Framework](../Expert_03_Pass_Framework/) 对偶
+### 5.1 与 [Expert_03 Pass Framework](../Expert_03_Pass_Framework) 对偶
 
 - **一致**：IR 的语义分层（poison/noundef）直接决定 Pass 的合法性。本文讲的 miscompilation，E03 讲的是"哪个 Pass 在哪个 pipeline 位置犯的错"。两者互补：E02 给出语义约束，E03 给出工程流水线。
 - **冲突**：E02 倾向"语义严格优先"，E03 的 Pass 工程师倾向"性能优先，bug 再补"。New PM vs Legacy PM 的 10 年迁移债（E03 的核心）在 E02 看来，部分原因就是"Pass 边界不清导致语义假设传递不全"。
 
-### 5.2 与 [Expert_04 Middle-End Optimization](../Expert_04_Middle_End_Opt/) 对偶
+### 5.2 与 [Expert_04 Middle-End Optimization](../Expert_04_Middle_End_Opt) 对偶
 
 - **一致**：InstCombine/GVN/LICM/SROA 这些中端 Pass 是本文 miscompilation 的主战场。E04 讲"这些 Pass 怎么优化"，E02 讲"这些优化在什么语义下合法"。
 - **冲突**：E04 关心"边际收益"（2026 中端优化是否还有油水），E02 关心"边际正确性"（每多一条 InstCombine 规则就多一个 miscompile 风险）。E04 想加优化，E02 想减优化——这是 LLVM 社区永恒的张力。
 
-### 5.3 与 [Expert_05 CodeGen](../Expert_05_CodeGen_SelectionDAG_GlobalISel/) 对偶
+### 5.3 与 [Expert_05 CodeGen](../Expert_05_CodeGen_SelectionDAG_GlobalISel) 对偶
 
 - **一致**：IR 的类型系统（ScalableVectorType）直接决定 CodeGen 的 Legalize 难度。飞腾无 SVE 的"向量天花板"在 E02 是"IR 类型债"，在 E05 是"Legalize 拒绝 `<vscale x ...>`"。
 - **冲突**：E02 的语义是 target-independent 的，但 CodeGen 是 target-specific 的。poison 在 IR 层是抽象的，落到 ARM 的 `LDAR`/x86 的 `MOV` 上需要具体化。两者之间的"语义落差"是 miscompilation 的另一个来源。
 
-### 5.4 与 [Expert_14 Sanitizers](../Expert_14_CompilerRT_Sanitizers_JIT/) 对偶
+### 5.4 与 [Expert_14 Sanitizers](../Expert_14_CompilerRT_Sanitizers_JIT) 对偶
 
 - **一致**：`noundef` + MSan 是抓未初始化的黄金组合（issue #52930 的工程落点）。E14 的 ASan/MSan/UBSan 是 E02 语义错误的运行时检测器。
 - **冲突**：Sanitizer 有运行时开销（MSan 2-3x 慢），不能上生产。E02 的形式语义验证（Alive2）是编译期、无运行时开销，但只能验证被喂进去的 IR 变换。两者是"理论 + 实践"的互补。
@@ -501,11 +501,11 @@ Bitcode（`.bc`）是 LLVM IR 的二进制序列化格式。设计初衷是"**�
 ## 7. 延伸阅读
 
 ### 项目内引用
-- [Expert_03 Pass Framework](../Expert_03_Pass_Framework/) —— Pass 框架与 New PM 迁移债。
-- [Expert_04 Middle-End Optimization](../Expert_04_Middle_End_Opt/) —— InstCombine/GVN/LICM 的优化战场。
-- [Expert_05 CodeGen](../Expert_05_CodeGen_SelectionDAG_GlobalISel/) —— IR 类型系统的 Legalize 落地。
-- [Expert_14 Sanitizers](../Expert_14_CompilerRT_Sanitizers_JIT/) —— MSan + noundef 抓未初始化。
-- [Lens_02 Christensen](../Lenses/) —— LLVM IR 的模块化设计是否低端颠覆。
+- [Expert_03 Pass Framework](../Expert_03_Pass_Framework) —— Pass 框架与 New PM 迁移债。
+- [Expert_04 Middle-End Optimization](../Expert_04_Middle_End_Opt) —— InstCombine/GVN/LICM 的优化战场。
+- [Expert_05 CodeGen](../Expert_05_CodeGen_SelectionDAG_GlobalISel) —— IR 类型系统的 Legalize 落地。
+- [Expert_14 Sanitizers](../Expert_14_CompilerRT_Sanitizers_JIT) —— MSan + noundef 抓未初始化。
+- [Lens_02 Christensen](../Lenses) —— LLVM IR 的模块化设计是否低端颠覆。
 - [领域资源库_LLVM.md](../领域资源库_LLVM.md) §3.3 进阶教材（SSA Book / Alive2）、§3.5 经典论文谱系。
 
 ### 外部

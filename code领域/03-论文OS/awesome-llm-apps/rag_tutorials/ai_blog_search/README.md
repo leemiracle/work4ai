@@ -18,15 +18,15 @@ https://github.com/user-attachments/assets/cee07380-d3dc-45f4-ad26-7d944ba9c32b
 - **Graph-Based Workflow:** Implements a structured state graph using LangGraph for efficient decision-making.
 
 ## Technologies Used
-- **Programming Language**: [Python 3.10+](https://www.python.org/downloads/release/python-31011/)
-- **Framework**: [LangChain](https://www.langchain.com/) and [LangGraph](https://langchain-ai.github.io/langgraph/tutorials/introduction/)
-- **Database**: [Qdrant](https://qdrant.tech/)
+- **Programming Language**: [Python 3.10+](https://www.python.org/downloads/release/python-31011)
+- **Framework**: [LangChain](https://www.langchain.com) and [LangGraph](https://langchain-ai.github.io/langgraph/tutorials/introduction)
+- **Database**: [Qdrant](https://qdrant.tech)
 - **Models**:
   - Embeddings: [Google Gemini API (embedding-001)](https://ai.google.dev/gemini-api/docs/embeddings)
   - Chat: [Google Gemini API (gemini-2.0-flash)](https://ai.google.dev/gemini-api/docs/models/gemini#gemini-2.0-flash)
-- **Blogs Loader**: [Langchain WebBaseLoader](https://python.langchain.com/docs/integrations/document_loaders/web_base/)
-- **Document Splitter**: [RecursiveCharacterTextSplitter](https://python.langchain.com/v0.1/docs/modules/data_connection/document_transformers/recursive_text_splitter/)
-- **User Interface (UI)**: [Streamlit](https://docs.streamlit.io/)
+- **Blogs Loader**: [Langchain WebBaseLoader](https://python.langchain.com/docs/integrations/document_loaders/web_base)
+- **Document Splitter**: [RecursiveCharacterTextSplitter](https://python.langchain.com/v0.1/docs/modules/data_connection/document_transformers/recursive_text_splitter)
+- **User Interface (UI)**: [Streamlit](https://docs.streamlit.io)
 
 ## Requirements
 1. **Install Dependencies**:

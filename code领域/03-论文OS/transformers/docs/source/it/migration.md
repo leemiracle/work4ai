@@ -198,7 +198,7 @@ Ecco un breve riepilogo di ciò a cui prestare attenzione durante la migrazione 
 
 La principale modifica di rilievo durante la migrazione da `pytorch-pretrained-bert` a 🤗 Transformers è che il metodo dei modelli di previsione dà sempre una `tupla` con vari elementi a seconda del modello e dei parametri di configurazione.
 
-Il contenuto esatto delle tuple per ciascun modello è mostrato in dettaglio nelle docstring dei modelli e nella [documentazione](https://huggingface.co/transformers/).
+Il contenuto esatto delle tuple per ciascun modello è mostrato in dettaglio nelle docstring dei modelli e nella [documentazione](https://huggingface.co/transformers).
 
 In quasi tutti i casi, andrà bene prendendo il primo elemento dell'output come quello che avresti precedentemente utilizzato in `pytorch-pretrained-bert`.
 

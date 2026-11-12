@@ -2,7 +2,7 @@
 
 > **课程**：Numerical Analysis (Part A, Year 2)
 > **教材**：Süli & Mayers, *An Introduction to Numerical Analysis* (CUP) — Oxford 标准教材
-> **参考**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk/)
+> **参考**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk)
 
 ---
 

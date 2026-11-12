@@ -276,7 +276,7 @@ python3 -c "import csv,sys; [print(r[2]) for r in csv.reader(sys.stdin)]" < data
 echo "a=1 b=2 c=3" | grep -oE '\b\w+=\w+\b'
 
 # 13. 校验整列是不是都是数字
-awk -F',' '{if ($2 !~ /^[0-9]+$/) print NR": "$2}' data.csv
+awk -F',' '{if ($2 !~ /^[0-9]+$) print NR": "$2}' data.csv
 
 # 14. 行号重排（重置 1..N）
 awk 'BEGIN{n=0} {n++; print n","$0}' data.txt

@@ -77,13 +77,13 @@ simple, customizable, and efficient.
 
 There are over 1M+ Transformers [model checkpoints](https://huggingface.co/models?library=transformers&sort=trending) on the [Hugging Face Hub](https://huggingface.com/models) you can use.
 
-Explore the [Hub](https://huggingface.com/) today to find a model and use Transformers to help you get started right away.
+Explore the [Hub](https://huggingface.com) today to find a model and use Transformers to help you get started right away.
 
 ## Installation
 
-Transformers works with Python 3.9+, and [PyTorch](https://pytorch.org/get-started/locally/) 2.4+.
+Transformers works with Python 3.9+, and [PyTorch](https://pytorch.org/get-started/locally) 2.4+.
 
-Create and activate a virtual environment with [venv](https://docs.python.org/3/library/venv.html) or [uv](https://docs.astral.sh/uv/), a fast Rust-based Python package and project manager.
+Create and activate a virtual environment with [venv](https://docs.python.org/3/library/venv.html) or [uv](https://docs.astral.sh/uv), a fast Rust-based Python package and project manager.
 
 ```py
 # venv
@@ -320,7 +320,7 @@ Expand each modality below to see a few example models for various use cases.
 
 ## Citation
 
-We now have a [paper](https://www.aclweb.org/anthology/2020.emnlp-demos.6/) you can cite for the 🤗 Transformers library:
+We now have a [paper](https://www.aclweb.org/anthology/2020.emnlp-demos.6) you can cite for the 🤗 Transformers library:
 ```bibtex
 @inproceedings{wolf-etal-2020-transformers,
     title = "Transformers: State-of-the-Art Natural Language Processing",

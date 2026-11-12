@@ -176,7 +176,7 @@ for out in pipe(data()):
 
 バッチ処理は処理を高速化できる可能性があるため、ここで`batch_size`パラメータを調整して試すことが役立つかもしれません。
 
-データセットを反復処理する最も簡単な方法は、🤗 [Datasets](https://github.com/huggingface/datasets/)からデータセットを読み込むことです：
+データセットを反復処理する最も簡単な方法は、🤗 [Datasets](https://github.com/huggingface/datasets)からデータセットを読み込むことです：
 
 ```py
 # KeyDataset is a util that will just output the item we're interested in.
@@ -257,7 +257,7 @@ for out in pipe(KeyDataset(dataset, "audio")):
 
 <Tip>
 
-上記の例を実行するには、🤗 Transformersに加えて [`pytesseract`](https://pypi.org/project/pytesseract/) がインストールされている必要があります。
+上記の例を実行するには、🤗 Transformersに加えて [`pytesseract`](https://pypi.org/project/pytesseract) がインストールされている必要があります。
 
 ```bash
 sudo apt install -y tesseract-ocr

@@ -21,7 +21,7 @@ rendered properly in your Markdown viewer.
 
 CodeGen モデルは、[A Conversational Paradigm for Program Synthesis](https://huggingface.co/papers/2203.13474) で Erik Nijkamp、Bo Pang、林宏明、Lifu Tu、Huan Wang、Yingbo Zhou、Silvio Savarese、Caiming Xiong およびカイミン・ションさん。
 
-CodeGen は、[The Pile](https://pile.eleuther.ai/)、BigQuery、BigPython で順次トレーニングされたプログラム合成用の自己回帰言語モデルです。
+CodeGen は、[The Pile](https://pile.eleuther.ai)、BigQuery、BigPython で順次トレーニングされたプログラム合成用の自己回帰言語モデルです。
 
 論文の要約は次のとおりです。
 

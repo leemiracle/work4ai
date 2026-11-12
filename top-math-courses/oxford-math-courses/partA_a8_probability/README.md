@@ -1,7 +1,7 @@
 # Oxford Part A A8 — Probability
 
 > **学校**：Oxford | **学院**：Statistics
-> **一手来源**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk/)
+> **一手来源**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk)
 
 ## 课程信息
 - **编号**：A8

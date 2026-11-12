@@ -413,8 +413,8 @@ BSM 假设 $\sigma$ 是常数。但实测中，**不同行权价的期权隐含�
 | [`risk-and-uncertainty.md`](./risk-and-uncertainty.md) | 平行 | 风险 vs 不确定性——为什么定价模型在"不确定性"面前失效（§六） |
 | [`money-and-credit.md`](./money-and-credit.md) | 平行 | 货币本体论——价格的"计价单位"本身是什么？（链到货币哲学） |
 | [`knowledge-graph/connections.md`](../../knowledge-graph/connections.md) | 网络 | §五 跨学科映射的登记处——市场均衡↔纳什均衡↔力学均衡 |
-| [`06-systems/complexity/`](../../06-systems/complexity/) | 跨学科 | 市场作为复杂系统——涌现、相变、崩盘 |
-| [`06-systems/feedback/`](../../06-systems/feedback/) | 跨学科 | 正反馈（泡沫）与负反馈（均值回归） |
+| [`06-systems/complexity/`](../../06-systems/complexity) | 跨学科 | 市场作为复杂系统——涌现、相变、崩盘 |
+| [`06-systems/feedback/`](../../06-systems/feedback) | 跨学科 | 正反馈（泡沫）与负反馈（均值回归） |
 | `fastisslow/`（`../../../../fastisslow/`） | 外部项目 | 投资哲学——格雷厄姆、市场先生的实战展开 |
 
 ---

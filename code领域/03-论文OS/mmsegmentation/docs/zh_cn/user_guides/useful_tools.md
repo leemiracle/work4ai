@@ -291,7 +291,7 @@ python tools/model_converters/vit2mmseg.py ${SRC} ${DST}
 
 ## 模型服务
 
-为了用 [`TorchServe`](https://pytorch.org/serve/) 服务 `MMSegmentation` 的模型 ， 您可以遵循如下流程:
+为了用 [`TorchServe`](https://pytorch.org/serve) 服务 `MMSegmentation` 的模型 ， 您可以遵循如下流程:
 
 ### 1. 将 model 从　MMSegmentation 转换到 TorchServe
 

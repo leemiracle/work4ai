@@ -26,7 +26,7 @@ $$\text{PPL}(X) = \exp \left\{ {-\frac{1}{t}\sum_i^t \log p_\theta (x_i|x_{<i}) 
 
 ここで、\\(\log p_\theta (x_i|x_{<i})\\) はモデルによる前のトークン \\(x_{<i}\\) に対する第iトークンの対数尤度です。直感的には、これはモデルがコーパス内の指定されたトークンの集合に対して一様に予測する能力の評価と考えることができます。重要なのは、これによってトークン化手法がモデルのパープレキシティに直接影響を与えるため、異なるモデルを比較する際には常に考慮すべきであるということです。
 
-これはまた、データとモデルの予測との間の交差エントロピーの指数化と同等です。パープレキシティおよびビット・パー・キャラクター（BPC）とデータ圧縮との関係についての詳細な情報については、この[素晴らしい The Gradient のブログ記事](https://thegradient.pub/understanding-evaluation-metrics-for-language-models/)を参照してください。
+これはまた、データとモデルの予測との間の交差エントロピーの指数化と同等です。パープレキシティおよびビット・パー・キャラクター（BPC）とデータ圧縮との関係についての詳細な情報については、この[素晴らしい The Gradient のブログ記事](https://thegradient.pub/understanding-evaluation-metrics-for-language-models)を参照してください。
 
 ## Calculating PPL with fixed-length models
 

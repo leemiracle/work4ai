@@ -29,7 +29,7 @@ $$\text{PPL}(X) = \exp \left\{ {-\frac{1}{t}\sum_i^t \log p_\theta (x_i|x_{<i}) 
 
 이는 데이터와 모델 예측 간의 cross-entropy 값에 지수를 취한 것과 동일합니다.
 펄플렉서티와 문자당 비트 수(BPC) 및 데이터 압축과의 관계에 대해 더 직관적인 이해를 원하신다면 다음 글
-[fantastic blog post on The Gradient](https://thegradient.pub/understanding-evaluation-metrics-for-language-models/)을 확인하세요.
+[fantastic blog post on The Gradient](https://thegradient.pub/understanding-evaluation-metrics-for-language-models)을 확인하세요.
 
 ## 고정 길이 모델의 펄플렉서티(PPL) 계산하기[[calculating-ppl-with-fixedlength-models]]
 

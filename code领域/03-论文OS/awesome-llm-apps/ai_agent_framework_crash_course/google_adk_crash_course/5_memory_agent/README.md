@@ -144,7 +144,7 @@ This tutorial is divided into three progressive levels:
 Before starting this tutorial, ensure you have:
 
 - **Python 3.11+** installed
-- **Google AI API Key** from [Google AI Studio](https://aistudio.google.com/)
+- **Google AI API Key** from [Google AI Studio](https://aistudio.google.com)
 - **SQLite** (usually comes with Python)
 - Basic understanding of databases (for tutorial 5_2)
 

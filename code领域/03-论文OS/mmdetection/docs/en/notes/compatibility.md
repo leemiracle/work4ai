@@ -84,7 +84,7 @@ To easily use backbones implemented in other OpenMMLab projects, MMDetection v2.
 ### Mask AP evaluation
 
 Before [PR 4898](https://github.com/open-mmlab/mmdetection/pull/4898) and V2.12.0, the mask AP of small, medium, and large instances is calculated based on the bounding box area rather than the real mask area. This leads to higher `APs` and `APm` but lower `APl` but will not affect the overall mask AP. [PR 4898](https://github.com/open-mmlab/mmdetection/pull/4898) change it to use mask areas by deleting `bbox` in mask AP calculation.
-The new calculation does not affect the overall mask AP evaluation and is consistent with [Detectron2](https://github.com/facebookresearch/detectron2/).
+The new calculation does not affect the overall mask AP evaluation and is consistent with [Detectron2](https://github.com/facebookresearch/detectron2).
 
 ## Compatibility with MMDetection 1.x
 
@@ -94,7 +94,7 @@ The major differences are in four folds: coordinate system, codebase conventions
 
 ### Coordinate System
 
-The new coordinate system is consistent with [Detectron2](https://github.com/facebookresearch/detectron2/) and treats the center of the most left-top pixel as (0, 0) rather than the left-top corner of that pixel.
+The new coordinate system is consistent with [Detectron2](https://github.com/facebookresearch/detectron2) and treats the center of the most left-top pixel as (0, 0) rather than the left-top corner of that pixel.
 Accordingly, the system interprets the coordinates in COCO bounding box and segmentation annotations as coordinates in range `[0, width]` or `[0, height]`.
 This modification affects all the computation related to the bbox and pixel selection,
 which is more natural and accurate.

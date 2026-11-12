@@ -37,7 +37,7 @@
 
 | 产品 | 强项 |
 |---|---|
-| **Julius AI** [julius.ai](https://julius.ai/) | 上传 CSV + 自然语言分析 |
+| **Julius AI** [julius.ai](https://julius.ai) | 上传 CSV + 自然语言分析 |
 | **ChatGPT Advanced Data Analysis** | OpenAI 内置（旧 Code Interpreter）|
 | **Claude Artifacts + 数据分析** | Anthropic |
 | **Hex Magic** | Hex 的 AI 系（数据科学平台）|
@@ -59,7 +59,7 @@
 | **Observable Plot / Framework** | 现代 JS |
 | **matplotlib / seaborn** | 经典（不变）|
 | **PyViz / HoloViz / Panel** | 仪表盘 |
-| **Streamlit** | 数据应用 MVP（已在 [`讲透公开课 03`](../讲透公开课/03-AI%20Infra%20源码导读清单.md)）|
+| **Streamlit** | 数据应用 MVP（已在 [`讲透公开课 03`](../讲透宇宙/01-学/讲透公开课//03-AI%20Infra%20源码导读清单.md)）|
 | **Gradio** | ML 模型 demo（HF 集成）|
 
 ---
@@ -79,7 +79,7 @@
 |---|---|
 | **Edward Tufte**（《The Visual Display of Quantitative Information》）| 经典 |
 | **Alberto Cairo**（可视化专家）|
-| **Nathan Yau（FlowingData）** [flowingdata.com](https://flowingdata.com/) |
+| **Nathan Yau（FlowingData）** [flowingdata.com](https://flowingdata.com) |
 | **The Pudding / FiveThirtyEight** | 数据新闻 |
 | **NYT Upshot / FT Graphics** | 媒体可视化 |
 | **中文：数据可视化 101 / 图之工作室** |
@@ -95,4 +95,4 @@
 
 ---
 
-> 🔗 相关：[`37-MLOps`](./37-AI%20MLOps与工程化专题.md) ｜ [`09-商业`](./09-AI商业产品与ToC应用专题.md) ｜ [`讲透公开课 03`](../讲透公开课/03-AI%20Infra%20源码导读清单.md)
+> 🔗 相关：[`37-MLOps`](./37-AI%20MLOps与工程化专题.md) ｜ [`09-商业`](./09-AI商业产品与ToC应用专题.md) ｜ [`讲透公开课 03`](../讲透宇宙/01-学/讲透公开课//03-AI%20Infra%20源码导读清单.md)

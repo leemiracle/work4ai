@@ -12,7 +12,7 @@ The RITE (Retinal Images vessel Tree Extraction) is a database that enables comp
 
 | Dataset Name                         | Anatomical Region | Task Type    | Modality           | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                         |
 | ------------------------------------ | ----------------- | ------------ | ------------------ | ------------ | --------------------- | ---------------------- | ------------ | --------------------------------------------------------------- |
-| [Rite](https://opendatalab.com/RITE) | head_and_neck     | segmentation | fundus_photography | 2            | 20/-/20               | yes/-/yes              | 2013         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| [Rite](https://opendatalab.com/RITE) | head_and_neck     | segmentation | fundus_photography | 2            | 20/-/20               | yes/-/yes              | 2013         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

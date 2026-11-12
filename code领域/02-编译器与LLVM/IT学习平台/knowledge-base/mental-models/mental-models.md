@@ -1688,9 +1688,9 @@
 
 ### 网站
 
-- [Farnam Street](https://fs.blog/) - 思维模型博客
-- [Mental Models](https://fs.blog/mental-models/) - 思维模型百科
-- [LessWrong](https://www.lesswrong.com/) - 理性思维
+- [Farnam Street](https://fs.blog) - 思维模型博客
+- [Mental Models](https://fs.blog/mental-models) - 思维模型百科
+- [LessWrong](https://www.lesswrong.com) - 理性思维
 
 ---
 

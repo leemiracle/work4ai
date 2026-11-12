@@ -2,12 +2,12 @@
 
 ## Articles
 
-- [Understanding Mathematics](http://www.math.utah.edu/~pa/math.html), a study guide by [Peter Alfeld](http://www.math.utah.edu/~pa/)
-- [How to Develop a Mindset for Math](https://betterexplained.com/articles/how-to-develop-a-mindset-for-math/) at [BetterExplained](https://betterexplained.com)
-- [Understanding Math Concepts](https://allkindsofminds.org/understanding-math-concepts/) at [AllKindsOfMinds](http://www.allkindsofminds.org/)
+- [Understanding Mathematics](http://www.math.utah.edu/~pa/math.html), a study guide by [Peter Alfeld](http://www.math.utah.edu/~pa)
+- [How to Develop a Mindset for Math](https://betterexplained.com/articles/how-to-develop-a-mindset-for-math) at [BetterExplained](https://betterexplained.com)
+- [Understanding Math Concepts](https://allkindsofminds.org/understanding-math-concepts) at [AllKindsOfMinds](http://www.allkindsofminds.org)
 - [What is conceptual understanding?](https://web.archive.org/web/20221218055631/https://www.maa.org/external_archive/devlin/devlin_09_07.html) by Keith Devlin
-- [Learning to Learn: Math Abstraction](https://betterexplained.com/articles/learning-to-learn-math-abstraction/) at [BetterExplained](https://betterexplained.com/)
-- [How to study math](http://tutorial.math.lamar.edu/Extras/StudyMath/HowToStudyMath.aspx) by [Paul](http://tutorial.math.lamar.edu/)
+- [Learning to Learn: Math Abstraction](https://betterexplained.com/articles/learning-to-learn-math-abstraction) at [BetterExplained](https://betterexplained.com)
+- [How to study math](http://tutorial.math.lamar.edu/Extras/StudyMath/HowToStudyMath.aspx) by [Paul](http://tutorial.math.lamar.edu)
 
 
 ## Papers
@@ -37,7 +37,7 @@
 
 ## Online Questions
 
-- [How to study math to really understand it and have a healthy lifestyle with free time?](http://math.stackexchange.com/questions/44704/how-to-study-math-to-really-understand-it-and-have-a-healthy-lifestyle-with-free) at [Math StackExchange](http://math.stackexchange.com/)
+- [How to study math to really understand it and have a healthy lifestyle with free time?](http://math.stackexchange.com/questions/44704/how-to-study-math-to-really-understand-it-and-have-a-healthy-lifestyle-with-free) at [Math StackExchange](http://math.stackexchange.com)
 
 ---
 
@@ -52,14 +52,14 @@ Links to resources talking about "the mathematical language" and how to overcome
 - [Mathematical Words: Origins and Sources](http://web.archive.org/web/20191204152854/http://www.economics.soton.ac.uk/staff/aldrich/Mathematical%20Words.htm) by John Aldrich
 - [Communicating in the Language of Mathematics](https://web.archive.org/web/20191202000933/http://iae-pedia.org/Communicating_in_the_Language_of_Mathematics) by David Moursund and edited by Dick Ricketts
 - [How to write mathematics clearly](https://workinginuncertainty.co.uk/clearmaths.shtml) by Matthew Leitch
-- [How to understand math formulas](http://www.intmath.com/blog/how-to-understand-math-formulas) at [Interactive Mathematics](http://www.intmath.com/)
+- [How to understand math formulas](http://www.intmath.com/blog/how-to-understand-math-formulas) at [Interactive Mathematics](http://www.intmath.com)
 - [The symbolic language of math](https://abstractmath.org/MM/MMSymLang.htm) by Charles Wells
 
 
 #### Papers
 
 - [The Language and Grammar of Mathematics](https://www.dpmms.cam.ac.uk/~wtg10/grammar.pdf) by Timothy Gowers
-- [Reading Mathematics](https://pi.math.cornell.edu/~hubbard/readingmath.pdf) by [John Hamal Hubbard](https://pi.math.cornell.edu/~hubbard/)
+- [Reading Mathematics](https://pi.math.cornell.edu/~hubbard/readingmath.pdf) by [John Hamal Hubbard](https://pi.math.cornell.edu/~hubbard)
 - [A Guide to Writing Mathematics](http://web.cs.ucdavis.edu/~amenta/w10/writingman.pdf) by Dr. Kevin P. Lee
 - [Mathematics and the Language of Nature](http://www.fdavidpeat.com/bibliography/essays/maths.htm) by F. David Peat
 - [Learning the Language of Mathematics](http://wac.colostate.edu/llad/v4n1/jamison.pdf) by Robert E. Jamison
@@ -82,7 +82,7 @@ Links to resources talking about "the mathematical language" and how to overcome
 #### Articles
 
 - [History of mathematical notation](https://en.wikipedia.org/wiki/History_of_mathematical_notation) at Wikipedia
-- [Mathematical and scientific symbols](http://www.uefap.com/speaking/symbols/symbols.htm) at [http://www.uefap.com/](http://www.uefap.com/)
+- [Mathematical and scientific symbols](http://www.uefap.com/speaking/symbols/symbols.htm) at [http://www.uefap.com/](http://www.uefap.com)
 - [LaTeX Math Symbols](https://web.archive.org/web/20190423203742/http://www-ph.postech.ac.kr/~bimin/Latex.htm) prepared by L. Kocbach (on the basis of [another document](https://web.archive.org/web/20190810123256/http://web.ift.uib.no/Fysisk/Teori/KURS/WRK/TeX/latexsource.html) by David Carlisle, Manchester University)
 
 ##### Wikipedia
@@ -142,17 +142,17 @@ Links to resources talking about "the mathematical language" and how to overcome
 #### Online Questions
 
 - [All questions about mathematical **notation** _sorted in descending order of votes_](http://math.stackexchange.com/questions/tagged/notation?sort=votes&pageSize=30) at [Math StackExchange](http://math.stackexchange.com)
-- [All questions about mathematical **notation** _sorted in descending order of votes_](http://stackoverflow.com/questions/tagged/mathematical-notation?sort=votes&pageSize=50)  at [Stack Overflow](http://stackoverflow.com/)
+- [All questions about mathematical **notation** _sorted in descending order of votes_](http://stackoverflow.com/questions/tagged/mathematical-notation?sort=votes&pageSize=50)  at [Stack Overflow](http://stackoverflow.com)
 - [All questions about mathematical **terminology** _sorted in descending order of votes_](http://math.stackexchange.com/questions/tagged/terminology?sort=votes&pageSize=30) at [Math StackExchange](http://math.stackexchange.com)
 - [Where can I learn about mathematical notation?](http://math.stackexchange.com/questions/70080/where-can-i-learn-about-mathematical-notation) at [Math StackExchange](http://math.stackexchange.com)
-- [How to become comfortable with mathematical notation?](http://ask.metafilter.com/117088/How-to-become-comfortable-with-mathematical-notation) at [Ask MetaFilter](http://ask.metafilter.com/)
-- [What is the status of generating LaTeX from handwriting](http://tex.stackexchange.com/questions/1443/what-is-the-status-of-generating-latex-from-handwriting-i-e-ocr) at [Tex StackExchange](http://tex.stackexchange.com/)
+- [How to become comfortable with mathematical notation?](http://ask.metafilter.com/117088/How-to-become-comfortable-with-mathematical-notation) at [Ask MetaFilter](http://ask.metafilter.com)
+- [What is the status of generating LaTeX from handwriting](http://tex.stackexchange.com/questions/1443/what-is-the-status-of-generating-latex-from-handwriting-i-e-ocr) at [Tex StackExchange](http://tex.stackexchange.com)
 
 
 #### Websites
 
-- [Wolfram Alpha](http://www.wolframalpha.com/)
-- [Math Words](http://www.mathwords.com/)
+- [Wolfram Alpha](http://www.wolframalpha.com)
+- [Math Words](http://www.mathwords.com)
 
 
 #### Github

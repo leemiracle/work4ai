@@ -60,7 +60,7 @@ please refer to this [document](../../docs/en/user_guides/tracking_train_test.md
 
 ### 4. Testing and evaluation
 
-If you want to get the results of the [YouTube-VOS](https://youtube-vos.org/dataset/vis/) val/test set, please use the following command to generate result files that can be used for submission. It will be stored in `./youtube_vis_results.submission_file.zip`, you can modify the saved path in `test_evaluator` of the config.
+If you want to get the results of the [YouTube-VOS](https://youtube-vos.org/dataset/vis) val/test set, please use the following command to generate result files that can be used for submission. It will be stored in `./youtube_vis_results.submission_file.zip`, you can modify the saved path in `test_evaluator` of the config.
 
 ```shell
 # The number after config file represents the number of GPUs used.

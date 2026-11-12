@@ -259,14 +259,14 @@ git commit -m "123"
 ### 学习资源
 
 - [Git教程](https://git-scm.com/book/zh/v2)
-- [Markdown指南](https://www.markdownguide.org/)
-- [GitHub Flow](https://guides.github.com/introduction/flow/)
+- [Markdown指南](https://www.markdownguide.org)
+- [GitHub Flow](https://guides.github.com/introduction/flow)
 
 ### 相关项目
 
 - [Lean4](https://github.com/leanprover/lean4)
 - [Mathlib4](https://github.com/leanprover-community/mathlib4)
-- [LeanDojo](https://leandojo.org/)
+- [LeanDojo](https://leandojo.org)
 
 ---
 

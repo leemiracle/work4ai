@@ -20,7 +20,7 @@ In this example, we launch an SGLang engine and feed a batch of inputs for embed
 
 ### [Custom Server](./custom_server.py)
 
-This example demonstrates how to create a custom server on top of the SGLang Engine. We use [Sanic](https://sanic.dev/en/) as an example. The server supports both non-streaming and streaming endpoints.
+This example demonstrates how to create a custom server on top of the SGLang Engine. We use [Sanic](https://sanic.dev/en) as an example. The server supports both non-streaming and streaming endpoints.
 
 #### Steps
 

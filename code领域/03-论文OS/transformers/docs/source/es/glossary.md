@@ -288,7 +288,7 @@ Una tarea que combina textos con otro tipo de entradas (por ejemplo: imágenes).
 
 ### Natural language generation (NLG)
 
-Todas las tareas relacionadas con la generación de texto (por ejemplo: [Escribe con Transformers](https://transformer.huggingface.co/) o traducción).
+Todas las tareas relacionadas con la generación de texto (por ejemplo: [Escribe con Transformers](https://transformer.huggingface.co) o traducción).
 
 ### Natural language processing (NLP)
 

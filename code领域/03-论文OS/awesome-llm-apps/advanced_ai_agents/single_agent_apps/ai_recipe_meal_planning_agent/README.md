@@ -48,7 +48,7 @@ pip install -r requirements.txt
 
 3. Get your OpenAI API Key
 
-- Sign up for an [OpenAI account](https://platform.openai.com/) and obtain your API key.
+- Sign up for an [OpenAI account](https://platform.openai.com) and obtain your API key.
 
 4. Get your Spoonacular API Key
 

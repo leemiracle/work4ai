@@ -23,7 +23,7 @@ rendered properly in your Markdown viewer.
 
 ## Overview
 
-[LFM2-VL](https://www.liquid.ai/blog/lfm2-vl-efficient-vision-language-models) first series of vision-language foundation models developed by [Liquid AI](https://liquid.ai/). These multimodal models are designed for low-latency and device-aware deployment. LFM2-VL extends the LFM2 family of open-weight Liquid Foundation Models (LFMs) into the vision-language space, supporting both text and image inputs with variable resolutions.
+[LFM2-VL](https://www.liquid.ai/blog/lfm2-vl-efficient-vision-language-models) first series of vision-language foundation models developed by [Liquid AI](https://liquid.ai). These multimodal models are designed for low-latency and device-aware deployment. LFM2-VL extends the LFM2 family of open-weight Liquid Foundation Models (LFMs) into the vision-language space, supporting both text and image inputs with variable resolutions.
 
 ## Architecture
 

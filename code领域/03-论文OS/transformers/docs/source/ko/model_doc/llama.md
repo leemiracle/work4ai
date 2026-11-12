@@ -65,7 +65,7 @@ LLaMA를 시작하는 데 도움이 될 Hugging Face 및 커뮤니티(🌎로 �
 
 <PipelineTag pipeline="question-answering"/>
 
-- [Stack Exchange](https://stackexchange.com/)에서 질문에 답하는 LLaMA를 훈련하는 방법을 위한 [StackLLaMA: RLHF로 LLaMA를 훈련하는 실전 가이드](https://huggingface.co/blog/stackllama#stackllama-a-hands-on-guide-to-train-llama-with-rlhf) 🌎
+- [Stack Exchange](https://stackexchange.com)에서 질문에 답하는 LLaMA를 훈련하는 방법을 위한 [StackLLaMA: RLHF로 LLaMA를 훈련하는 실전 가이드](https://huggingface.co/blog/stackllama#stackllama-a-hands-on-guide-to-train-llama-with-rlhf) 🌎
 
 ⚗️ 최적화
 - 제한된 메모리를 가진 GPU에서 xturing 라이브러리를 사용하여 LLaMA 모델을 미세 조정하는 방법에 대한 [노트북](https://colab.research.google.com/drive/1SQUXq1AMZPSLD4mk3A3swUIc6Y2dclme?usp=sharing) 🌎

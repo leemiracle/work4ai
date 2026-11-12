@@ -14,7 +14,7 @@ Certain special stains selectively bind to specific components and can be used t
 
 | Dataset name                                                                                 | Anatomical region | Task type    | Modality       | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                         |
 | -------------------------------------------------------------------------------------------- | ----------------- | ------------ | -------------- | ------------ | --------------------- | ---------------------- | ------------ | --------------------------------------------------------------- |
-| [breastCancerCellSegmentation](https://www.heywhale.com/mw/dataset/5e9e9b35ebb37f002c625423) | cell              | segmentation | histopathology | 2            | 58/-/-                | yes/-/-                | 2020         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| [breastCancerCellSegmentation](https://www.heywhale.com/mw/dataset/5e9e9b35ebb37f002c625423) | cell              | segmentation | histopathology | 2            | 58/-/-                | yes/-/-                | 2020         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
 |    Class Name    | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

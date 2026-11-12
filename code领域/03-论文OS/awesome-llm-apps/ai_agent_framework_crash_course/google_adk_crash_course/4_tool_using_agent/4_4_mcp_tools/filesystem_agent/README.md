@@ -183,6 +183,6 @@ After trying this example:
 
 ## 📚 Related Documentation
 
-- **[ADK MCP Tools](https://google.github.io/adk-docs/tools/mcp-tools/)** - Official documentation
+- **[ADK MCP Tools](https://google.github.io/adk-docs/tools/mcp-tools)** - Official documentation
 - **[MCP Filesystem Server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem)** - Server details
-- **[Model Context Protocol](https://modelcontextprotocol.io/)** - Protocol specification
+- **[Model Context Protocol](https://modelcontextprotocol.io)** - Protocol specification

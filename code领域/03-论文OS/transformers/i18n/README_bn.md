@@ -73,14 +73,14 @@ Transformers মডেলের ডেফিনিশন এক জায়গা�
 
 এখন পর্যন্ত [Hugging Face Hub](https://huggingface.com/models)-এ ১০ লাখেরও বেশি Transformers [মডেল চেকপয়েন্ট](https://huggingface.co/models?library=transformers&sort=trending) আছে, যেগুলো যেকোনো সময় ব্যবহার করা যায়।
 
-আজই [Hub](https://huggingface.com/) থেকে একটা মডেল বেছে নিন আর Transformers দিয়ে শুরু করুন।
+আজই [Hub](https://huggingface.com) থেকে একটা মডেল বেছে নিন আর Transformers দিয়ে শুরু করুন।
 
 
 ## ইনস্টলেশন
 
-Transformers Python 3.9+ সহ কাজ করে, এবং সমর্থিত ফ্রেমওয়ার্কগুলো হলো [PyTorch](https://pytorch.org/get-started/locally/) 2.1+, [TensorFlow](https://www.tensorflow.org/install/pip) 2.6+, এবং [Flax](https://flax.readthedocs.io/en/latest/) 0.4.1+।
+Transformers Python 3.9+ সহ কাজ করে, এবং সমর্থিত ফ্রেমওয়ার্কগুলো হলো [PyTorch](https://pytorch.org/get-started/locally) 2.1+, [TensorFlow](https://www.tensorflow.org/install/pip) 2.6+, এবং [Flax](https://flax.readthedocs.io/en/latest) 0.4.1+।
 
-[venv](https://docs.python.org/3/library/venv.html) বা [uv](https://docs.astral.sh/uv/) ব্যবহার করে একটি ভার্চুয়াল এনভায়রনমেন্ট তৈরি এবং সক্রিয় করুন।
+[venv](https://docs.python.org/3/library/venv.html) বা [uv](https://docs.astral.sh/uv) ব্যবহার করে একটি ভার্চুয়াল এনভায়রনমেন্ট তৈরি এবং সক্রিয় করুন।
 
 ```py
 # venv
@@ -318,7 +318,7 @@ Transformers 100,000 স্টার উদযাপন করতে আমর�
 </details>
 
 ## সাইটেশন
-আমাদের [একটি পেপার](https://www.aclweb.org/anthology/2020.emnlp-demos.6/) আছে যা আপনি 🤗 Transformers লাইব্রেরির জন্য রেফারেন্স হিসেবে ব্যবহার করতে পারেন।
+আমাদের [একটি পেপার](https://www.aclweb.org/anthology/2020.emnlp-demos.6) আছে যা আপনি 🤗 Transformers লাইব্রেরির জন্য রেফারেন্স হিসেবে ব্যবহার করতে পারেন।
 
 ```bibtex
 @inproceedings{wolf-etal-2020-transformers,

@@ -948,29 +948,29 @@ Apache 2.0 **不授予商标权**——这是 license 的明确边界。LLVM 和
 6. **[实测-grep]** 本项目 grep 全树 Maintainers.md/CODE_OWNERS 无 `@phytium`/`@ft` —— 飞腾零 code-owner（纯消费者）。`clang/Maintainers.md:332` 唯一命中 `hanwei62@huawei.com`（华为）。访问 2026-07-07。
 7. **[实测-git log 2026-07-07]** 本项目 bash 实测：`git -C .../llvm-project log --since="1 year ago"` 返回**仅 1 commit**（squashed mirror），`rev-list --count HEAD = 1`，唯一 commit `552e68d6a` 作者 Raphael Isemann（apple.com）—— 证实本地仓库不可用于 commit 统计，公司化数据走 .mailmap + 年报三方交叉。
 8. **[官方-docs.kernel.org]** Linux Kernel docs, *Building Linux with Clang/LLVM*, [docs.kernel.org/kbuild/llvm.html](https://docs.kernel.org/kbuild/llvm.html) —— 内核 Clang 构建架构支持矩阵 + "Android/ChromeOS/OpenMandriva/Chimera + Google/Meta 数据中心用 Clang 内核"声明 + kernel.org 预编译 PGO LLVM。访问 2026-07-07。
-9. **[官方-clangbuiltlinux.github.io]** ClangBuiltLinux, *Build status & Architecture Support*, [clangbuiltlinux.github.io](https://clangbuiltlinux.github.io/) —— clang-13 到 clang-23(android) 跨 5.10/5.15/6.1/6.6/6.12/7.0 内核版本构建状态 + arm/arm64/hexagon/s390/x86 完整支持、mips/powerpc/riscv/um 有限、loongarch 新增。访问 2026-07-07。
+9. **[官方-clangbuiltlinux.github.io]** ClangBuiltLinux, *Build status & Architecture Support*, [clangbuiltlinux.github.io](https://clangbuiltlinux.github.io) —— clang-13 到 clang-23(android) 跨 5.10/5.15/6.1/6.6/6.12/7.0 内核版本构建状态 + arm/arm64/hexagon/s390/x86 完整支持、mips/powerpc/riscv/um 有限、loongarch 新增。访问 2026-07-07。
 10. **[邮件列表-linux-kernel]** Nathan Chancellor, *kbuild: Bump minimum version of LLVM for building the kernel to 17.0.1*, [lists.openwall.net/linux-kernel/2026/05/05/1891], 2026-05-05 —— 内核 Clang 最小版本从 15.0.0 升到 17.0.1，含各发行版 clang 版本对照表 + bindgen 0.71.1 要求。访问 2026-07-07。
-11. **[社区-nathanchance.dev]** Nathan Chancellor, *January 2026 / April 2026 ClangBuiltLinux Work*, [nathanchance.dev](https://nathanchance.dev/), 2026-01/04 —— CBL 日常 CI（每天 linux-next rebase + SolidRun Honeycomb LX2 ARM / Ampere Altra ARM / Intel / AMD 多设备启动测试）、稳定树 5.15/6.1/6.6/6.12/6.18/7.0 backport、clang-22→23 更新。访问 2026-07-07。
-12. **[官方-foundation.llvm.org]** LLVM Foundation, *About / Annual Report / Sponsors / Board*, [foundation.llvm.org](https://foundation.llvm.org/) —— 501(c)(3) 非营利治理结构、Board of Directors（7-9 人）、Officers（Tanya Lattner 为 Foundation Director）、赞助商名单（Premier: Apple/Google/ARM/AMD/NVIDIA；Major: Huawei/Meta/Intel/SiFive/Synopsys）。访问 2026-07-07。
+11. **[社区-nathanchance.dev]** Nathan Chancellor, *January 2026 / April 2026 ClangBuiltLinux Work*, [nathanchance.dev](https://nathanchance.dev), 2026-01/04 —— CBL 日常 CI（每天 linux-next rebase + SolidRun Honeycomb LX2 ARM / Ampere Altra ARM / Intel / AMD 多设备启动测试）、稳定树 5.15/6.1/6.6/6.12/6.18/7.0 backport、clang-22→23 更新。访问 2026-07-07。
+12. **[官方-foundation.llvm.org]** LLVM Foundation, *About / Annual Report / Sponsors / Board*, [foundation.llvm.org](https://foundation.llvm.org) —— 501(c)(3) 非营利治理结构、Board of Directors（7-9 人）、Officers（Tanya Lattner 为 Foundation Director）、赞助商名单（Premier: Apple/Google/ARM/AMD/NVIDIA；Major: Huawei/Meta/Intel/SiFive/Synopsys）。访问 2026-07-07。
 13. **[官方-gcc.gnu.org]** GCC Steering Committee, *GCC Steering Committee / GNU Compiler Collection governance*, [gcc.gnu.org/gccsteering](https://gcc.gnu.org/gccsteering.html) + *GPLv3+ license* —— GCC 治理（FSF stewardship + SC + 版权转让 CLA）、GPLv3+ 与 LLVM Apache 2.0 对比依据。访问 2026-07-07。
 14. **[官方-llvm.org/releases]** LLVM Project, *LLVM Releases*（6 月 cadence，每年 3+9 月双发）—— LLVM 22.1.0→23.1.0 发版节奏，与 GCC 年度对照。访问 2026-07-07。
 15. **[官方-llvm.org/docs/CodeOfConduct]** LLVM Community, *LLVM Code of Conduct*, [llvm.org/docs/CodeOfConduct.html](https://llvm.org/docs/CodeOfConduct.html) —— CoC 条款 + CoC Committee 执行机制。访问 2026-07-07。
-16. **[社区-LLVM Discourse]** LLVM Discourse, *License migration discussions / Relicensing to Apache 2.0 threads / 公司化 commit 份额争论*, [discourse.llvm.org](https://discourse.llvm.org/) —— 2018-2019 年 license 迁移社区讨论、code-owner 治理辩论、Apple/Google commit 份额公开数据。访问 2026-07-07。
+16. **[社区-LLVM Discourse]** LLVM Discourse, *License migration discussions / Relicensing to Apache 2.0 threads / 公司化 commit 份额争论*, [discourse.llvm.org](https://discourse.llvm.org) —— 2018-2019 年 license 迁移社区讨论、code-owner 治理辩论、Apple/Google commit 份额公开数据。访问 2026-07-07。
 17. **[官方-Apache License 2.0]** Apache Software Foundation, *Apache License Version 2.0*, [apache.org/licenses/LICENSE-2.0](https://www.apache.org/licenses/LICENSE-2.0) —— Apache 2.0 全文（§2 版权 §3 专利+报复 §4 归属 §9 免责），LLVM LICENSE.TXT 第一层的权威来源。访问 2026-07-07。
 18. **[官方-LLVM Developer Policy]** LLVM Project, *LLVM Developer Policy - License / Copyright / Patent*, [llvm.org/docs/DeveloperPolicy.html#license](https://llvm.org/docs/DeveloperPolicy.html#license) —— DCO 签署要求、无 CLA 政策、copyright 保留原则、Legacy UIUC/NCSA 说明。访问 2026-07-07。
-19. **[官方-rust-lang.org]** Rust Foundation, *Rust License (Apache 2.0 + MIT dual)*, [rust-lang.org](https://www.rust-lang.org/) + *Rust for Linux*, [rust-for-linux.com](https://rust-for-linux.com/) —— Rust 双许可与 LLVM Apache 2.0 同源兼容 + Rust for Linux 强制依赖 rustc(LLVM 后端) + bindgen(libclang)。访问 2026-07-07。
-20. **[官方-swift.org]** Apple/Swift Community, *Swift License (Apache 2.0)*, [swift.org/blog/swift-licenses](https://www.swift.org/blog/swift-licenses/) —— Swift Apache 2.0 与 LLVM 同源，Apple 双主导，SIL→LLVM IR 管线。访问 2026-07-07。
-21. **[官方-ziglang.org]** Zig Foundation, *Zig License (MIT)*, [ziglang.org](https://ziglang.org/) —— Zig MIT 与 LLVM Apache 2.0 + Exception 完全兼容，编译产物免归属。访问 2026-07-07。
+19. **[官方-rust-lang.org]** Rust Foundation, *Rust License (Apache 2.0 + MIT dual)*, [rust-lang.org](https://www.rust-lang.org) + *Rust for Linux*, [rust-for-linux.com](https://rust-for-linux.com) —— Rust 双许可与 LLVM Apache 2.0 同源兼容 + Rust for Linux 强制依赖 rustc(LLVM 后端) + bindgen(libclang)。访问 2026-07-07。
+20. **[官方-swift.org]** Apple/Swift Community, *Swift License (Apache 2.0)*, [swift.org/blog/swift-licenses](https://www.swift.org/blog/swift-licenses) —— Swift Apache 2.0 与 LLVM 同源，Apple 双主导，SIL→LLVM IR 管线。访问 2026-07-07。
+21. **[官方-ziglang.org]** Zig Foundation, *Zig License (MIT)*, [ziglang.org](https://ziglang.org) —— Zig MIT 与 LLVM Apache 2.0 + Exception 完全兼容，编译产物免归属。访问 2026-07-07。
 22. **[官方-GNU license-list]** Free Software Foundation, *Various Licenses and Comments about Them (GPL compatibility list)*, [gnu.org/licenses/license-list.html](https://www.gnu.org/licenses/license-list.html) —— FSF 明确将 Apache 2.0 列入 GPLv3 兼容清单（"Apache 2.0 与 GPLv3 兼容"），但与 GPLv2 不兼容（需 LLVM Exception §2 补丁）。访问 2026-07-07。
-23. **[官方-SPDX]** Linux Foundation, *SPDX License List - Apache-2.0-with-LLVM-exception*, [spdx.org/licenses](https://spdx.org/licenses/) —— 标准化 license 标识 `Apache-2.0-with-LLVM-exception`，用于 SBOM（软件物料清单）合规审计。访问 2026-07-07。
-24. **[书籍-Karl Fogel]** Karl Fogel, *Producing Open Source Software*（开源软件生产）, [producingoss.com](https://producingoss.com/) —— 开源治理框架（BDFL vs Meritocracy vs Foundation 模型对比），LLVM Foundation 属于"基金会托管 + 公司化贡献"混合模式的方法论依据。访问 2026-07-07。
+23. **[官方-SPDX]** Linux Foundation, *SPDX License List - Apache-2.0-with-LLVM-exception*, [spdx.org/licenses](https://spdx.org/licenses) —— 标准化 license 标识 `Apache-2.0-with-LLVM-exception`，用于 SBOM（软件物料清单）合规审计。访问 2026-07-07。
+24. **[书籍-Karl Fogel]** Karl Fogel, *Producing Open Source Software*（开源软件生产）, [producingoss.com](https://producingoss.com) —— 开源治理框架（BDFL vs Meritocracy vs Foundation 模型对比），LLVM Foundation 属于"基金会托管 + 公司化贡献"混合模式的方法论依据。访问 2026-07-07。
 
 ---
 
 ## 7. 延伸阅读
 
-- **项目内**：[`Lens_03_SupplyChain.md`](../Lenses/Lens_03_SupplyChain.md) §2.1 公司化养育地图（.mailmap + 调度模型双重证据）｜[`Lens_07_China_Localization.md`](../Lenses/Lens_07_China_Localization.md) 国产化 license 自主可控｜[`Expert_18_Phytium_Adaptation/飞腾SDK_LLVM版本矩阵.md`](../Expert_18_Phytium_Adaptation/飞腾SDK_LLVM版本矩阵.md) 版本实证｜[`Expert_15_Runtimes_libcxx`](../Expert_15_Runtimes_libcxx/) libcxx ABI + license 段。
-- **项目外**：[Apache License 2.0 全文](https://www.apache.org/licenses/LICENSE-2.0)｜[LLVM Developer Policy - License](https://llvm.org/docs/DeveloperPolicy.html#license)｜[Rust for Linux](https://rust-for-linux.com/)｜[Swift License](https://www.swift.org/blog/swift-licenses/)｜ClangBuiltLinux [kernel.org prebuilt LLVM](https://kernel.org/pub/tools/llvm/)｜[SPDX Apache-2.0-with-LLVM-exception](https://spdx.org/licenses/Apache-2.0-with-LLVM-exception.html)｜[GNU GPL 兼容性清单](https://www.gnu.org/licenses/license-list.html)。
+- **项目内**：[`Lens_03_SupplyChain.md`](../Lenses/Lens_03_SupplyChain.md) §2.1 公司化养育地图（.mailmap + 调度模型双重证据）｜[`Lens_07_China_Localization.md`](../Lenses/Lens_07_China_Localization.md) 国产化 license 自主可控｜[`Expert_18_Phytium_Adaptation/飞腾SDK_LLVM版本矩阵.md`](../Expert_18_Phytium_Adaptation/飞腾SDK_LLVM版本矩阵.md) 版本实证｜[`Expert_15_Runtimes_libcxx`](../Expert_15_Runtimes_libcxx) libcxx ABI + license 段。
+- **项目外**：[Apache License 2.0 全文](https://www.apache.org/licenses/LICENSE-2.0)｜[LLVM Developer Policy - License](https://llvm.org/docs/DeveloperPolicy.html#license)｜[Rust for Linux](https://rust-for-linux.com)｜[Swift License](https://www.swift.org/blog/swift-licenses)｜ClangBuiltLinux [kernel.org prebuilt LLVM](https://kernel.org/pub/tools/llvm)｜[SPDX Apache-2.0-with-LLVM-exception](https://spdx.org/licenses/Apache-2.0-with-LLVM-exception.html)｜[GNU GPL 兼容性清单](https://www.gnu.org/licenses/license-list.html)。
 
 ---
 
@@ -1017,11 +1017,11 @@ Apache 2.0 **不授予商标权**——这是 license 的明确边界。LLVM 和
 
 ### 开源治理/license 资源
 
-- **License 对照**：[SPDX License List](https://spdx.org/licenses/)（标准化 license 标识，含 `Apache-2.0-with-LLVM-exception`）、[Choose a License](https://choosealicense.com/)
+- **License 对照**：[SPDX License List](https://spdx.org/licenses)（标准化 license 标识，含 `Apache-2.0-with-LLVM-exception`）、[Choose a License](https://choosealicense.com)
 - **兼容性矩阵**：GNU [license compatibility list](https://www.gnu.org/licenses/license-list.html)、Apache [GPL compatibility FAQ](https://www.apache.org/licenses/GPL-compatibility.html)
-- **治理框架**：[Foundation Model](https://www.linuxfoundation.org/)（Linux Foundation 托管模式）、[BDFL vs Meritocracy vs Foundation](https://producingoss.com/)（*Producing Open Source Software* by Karl Fogel）
-- **公司化审计**：GitHub contributor graph、`git shortlog -sne`、`.mailmap` 解析、[OpenSSF](https://openssf.org/)（开源安全基金会供应链安全）
-- **社区活动**：[LLVM Dev Meeting](https://llvm.org/devmtg/)、[EuroLLVM](https://llvm.org/devmtg/#eurollvm)、[GSoC](https://summerofcode.withgoogle.com/)
+- **治理框架**：[Foundation Model](https://www.linuxfoundation.org)（Linux Foundation 托管模式）、[BDFL vs Meritocracy vs Foundation](https://producingoss.com)（*Producing Open Source Software* by Karl Fogel）
+- **公司化审计**：GitHub contributor graph、`git shortlog -sne`、`.mailmap` 解析、[OpenSSF](https://openssf.org)（开源安全基金会供应链安全）
+- **社区活动**：[LLVM Dev Meeting](https://llvm.org/devmtg)、[EuroLLVM](https://llvm.org/devmtg/#eurollvm)、[GSoC](https://summerofcode.withgoogle.com)
 
 ### 给治理/license 分析师的通用建议
 

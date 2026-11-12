@@ -31,7 +31,7 @@ GitHub documentation [here](https://docs.github.com/en/repositories/creating-and
 To tailor this template to your specific project, follow these steps:
 
 1. If you don't have a Python environment, you can install one by following the instructions in the
-[Python installation guide](https://www.python.org/downloads/).
+[Python installation guide](https://www.python.org/downloads).
 1. Verify your Python installation by running:
     ```bash
     python3 --version
@@ -108,10 +108,10 @@ Lean projects.
 
 ### 0. Selected Collaborative Projects
 
-- [Fermat's Last Theorem for Exponent 3](https://pitmonticone.github.io/FLT3/) by Riccardo Brasca et al.
+- [Fermat's Last Theorem for Exponent 3](https://pitmonticone.github.io/FLT3) by Riccardo Brasca et al.
 - [Polynomial Freiman-Ruzsa Conjecture](https://github.com/teorth/pfr) by Terence Tao et al.
-- [Fermat's Last Theorem](https://imperialcollegelondon.github.io/FLT/) by Kevin Buzzard et al.
-- [Carleson Operators on Doubling Metric Measure Spaces](http://florisvandoorn.com/carleson/) by Floris van Doorn et al.
+- [Fermat's Last Theorem](https://imperialcollegelondon.github.io/FLT) by Kevin Buzzard et al.
+- [Carleson Operators on Doubling Metric Measure Spaces](http://florisvandoorn.com/carleson) by Floris van Doorn et al.
 - [Bonn Collaborative Formalization Seminar Series in Analysis](https://github.com/fpvandoorn/BonnAnalysis) by Floris van Doorn et al.
 - [Prime Number Theorem and More](https://github.com/AlexKontorovich/PrimeNumberTheoremAnd) by Alex Kontorovich et al.
 - [Infinity Cosmos](https://github.com/emilyriehl/infinity-cosmos) by Emily Riehl et al.

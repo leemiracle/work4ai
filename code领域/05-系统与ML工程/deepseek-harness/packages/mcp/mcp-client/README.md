@@ -2,7 +2,7 @@
 
 English | [中文](README.zh.md)
 
-MCP client bridge plugin: connects to external [Model Context Protocol](https://modelcontextprotocol.io/) servers and registers their tools on `ctx.tools`, making them available to the model as native tools under server-qualified names (`mcp__<serverName>__<rawName>`).
+MCP client bridge plugin: connects to external [Model Context Protocol](https://modelcontextprotocol.io) servers and registers their tools on `ctx.tools`, making them available to the model as native tools under server-qualified names (`mcp__<serverName>__<rawName>`).
 
 ## Usage
 

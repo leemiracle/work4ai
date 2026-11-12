@@ -9,7 +9,7 @@ To see the available options, take a look at the [CLI Reference](../cli/README.m
 
 ## Configuration file
 
-You can load CLI arguments via a [YAML](https://yaml.org/) config file.
+You can load CLI arguments via a [YAML](https://yaml.org) config file.
 The argument names must be the long form of those outlined [above](serve_args.md).
 
 For example:

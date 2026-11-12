@@ -250,7 +250,7 @@ Geben Sie schließlich `device` an, um einen Grafikprozessor zu verwenden, wenn 
 
 <Tip>
 
-Holen Sie sich mit einem gehosteten Notebook wie [Colaboratory](https://colab.research.google.com/) oder [SageMaker StudioLab](https://studiolab.sagemaker.aws/) kostenlosen Zugang zu einem Cloud-GPU, wenn Sie noch keinen haben.
+Holen Sie sich mit einem gehosteten Notebook wie [Colaboratory](https://colab.research.google.com) oder [SageMaker StudioLab](https://studiolab.sagemaker.aws) kostenlosen Zugang zu einem Cloud-GPU, wenn Sie noch keinen haben.
 
 </Tip>
 
@@ -258,7 +258,7 @@ Großartig, Sie sind bereit für das Training! 🥳
 
 ### Trainingsschleife
 
-Um Ihren Trainingsfortschritt zu verfolgen, verwenden Sie die [tqdm](https://tqdm.github.io/) Bibliothek, um einen Fortschrittsbalken über die Anzahl der Trainingsschritte hinzuzufügen:
+Um Ihren Trainingsfortschritt zu verfolgen, verwenden Sie die [tqdm](https://tqdm.github.io) Bibliothek, um einen Fortschrittsbalken über die Anzahl der Trainingsschritte hinzuzufügen:
 
 ```py
 >>> from tqdm.auto import tqdm

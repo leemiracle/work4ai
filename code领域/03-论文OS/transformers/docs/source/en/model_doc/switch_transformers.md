@@ -80,7 +80,7 @@ echo -e "The capital of France is <extra_id_0>." | transformers run --task text2
 
 Quantization reduces the memory burden of large models by representing the weights in a lower precision. Refer to the [Quantization](../quantization/overview) overview for more available quantization backends.
 
-The example below uses [bitsandbytes](../quantization/bitsandbytes/) to only quantize the weights to 8-bits.
+The example below uses [bitsandbytes](../quantization/bitsandbytes) to only quantize the weights to 8-bits.
 
 ```py
 # pip install bitsandbytes

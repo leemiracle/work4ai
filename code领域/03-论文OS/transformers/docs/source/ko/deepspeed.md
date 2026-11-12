@@ -16,7 +16,7 @@ rendered properly in your Markdown viewer.
 
 # DeepSpeed[[deepspeed]]
 
-[DeepSpeed](https://www.deepspeed.ai/)는 분산 학습 메모리를 효율적이고 빠르게 만드는 PyTorch 최적화 라이브러리입니다. 그 핵심은 대규모 모델을 규모에 맞게 훈련할 수 있는 [Zero Redundancy Optimizer(ZeRO)](https://hf.co/papers/1910.02054)입니다. ZeRO는 여러 단계로 작동합니다:
+[DeepSpeed](https://www.deepspeed.ai)는 분산 학습 메모리를 효율적이고 빠르게 만드는 PyTorch 최적화 라이브러리입니다. 그 핵심은 대규모 모델을 규모에 맞게 훈련할 수 있는 [Zero Redundancy Optimizer(ZeRO)](https://hf.co/papers/1910.02054)입니다. ZeRO는 여러 단계로 작동합니다:
 
 * ZeRO-1, GPU 간 최적화 상태 분할
 * ZeRO-2, GPU 간 그레이디언트 분할
@@ -28,7 +28,7 @@ GPU가 제한된 환경에서 ZeRO는 최적화 메모리와 계산을 GPU에서
 
 ## 설치[[installation]]
 
-DeepSpeed는 PyPI 또는 Transformers에서 설치할 수 있습니다(자세한 설치 옵션은 DeepSpeed [설치 상세사항](https://www.deepspeed.ai/tutorials/advanced-install/) 또는 GitHub [README](https://github.com/deepspeedai/DeepSpeed#installation)를 참조하세요).
+DeepSpeed는 PyPI 또는 Transformers에서 설치할 수 있습니다(자세한 설치 옵션은 DeepSpeed [설치 상세사항](https://www.deepspeed.ai/tutorials/advanced-install) 또는 GitHub [README](https://github.com/deepspeedai/DeepSpeed#installation)를 참조하세요).
 
 <Tip>
 
@@ -114,7 +114,7 @@ DeepSpeed는 트레이닝 실행 방법을 구성하는 모든 매개변수가 �
 
 <Tip>
 
-DeepSpeed 구성 옵션의 전체 목록은 [DeepSpeed Configuration JSON](https://www.deepspeed.ai/docs/config-json/)에서 확인할 수 있습니다. 또한 [DeepSpeedExamples](https://github.com/deepspeedai/DeepSpeedExamples) 리포지토리 또는 기본 [DeepSpeed](https://github.com/deepspeedai/DeepSpeed) 리포지토리에서 다양한 DeepSpeed 구성 예제에 대한 보다 실용적인 예제를 찾을 수 있습니다. 구체적인 예제를 빠르게 찾으려면 다음과 같이 하세요:
+DeepSpeed 구성 옵션의 전체 목록은 [DeepSpeed Configuration JSON](https://www.deepspeed.ai/docs/config-json)에서 확인할 수 있습니다. 또한 [DeepSpeedExamples](https://github.com/deepspeedai/DeepSpeedExamples) 리포지토리 또는 기본 [DeepSpeed](https://github.com/deepspeedai/DeepSpeed) 리포지토리에서 다양한 DeepSpeed 구성 예제에 대한 보다 실용적인 예제를 찾을 수 있습니다. 구체적인 예제를 빠르게 찾으려면 다음과 같이 하세요:
 
 ```bash
 git clone https://github.com/deepspeedai/DeepSpeedExamples
@@ -166,7 +166,7 @@ DeepSpeed 구성을 수정하고 [`TrainingArguments`]를 편집할 수도 있�
 
 ### ZeRO 구성[[zero-configuration]]
 
-세 가지 구성이 있으며, 각 구성은 서로 다른 ZeRO 단계에 해당합니다. 1단계는 확장성 측면에서 그다지 눈여겨볼만하지 않으므로 이 가이드에서는 2단계와 3단계에 중점을 둡니다. `zero_optimization` 구성에는 활성화할 항목과 구성 방법에 대한 모든 옵션이 포함되어 있습니다. 각 매개변수에 대한 자세한 설명은 [DeepSpeed 구성 JSON](https://www.deepspeed.ai/docs/config-json/) 참조를 참조하세요.
+세 가지 구성이 있으며, 각 구성은 서로 다른 ZeRO 단계에 해당합니다. 1단계는 확장성 측면에서 그다지 눈여겨볼만하지 않으므로 이 가이드에서는 2단계와 3단계에 중점을 둡니다. `zero_optimization` 구성에는 활성화할 항목과 구성 방법에 대한 모든 옵션이 포함되어 있습니다. 각 매개변수에 대한 자세한 설명은 [DeepSpeed 구성 JSON](https://www.deepspeed.ai/docs/config-json) 참조를 참조하세요.
 
 <Tip warning={true}>
 DeepSpeed는 매개변수 이름의 유효성을 검사하지 않으며 오타가 있으면 매개변수의 기본 설정으로 대체합니다. DeepSpeed 엔진 시작 로그 메시지를 보고 어떤 값을 사용할지 확인할 수 있습니다.
@@ -919,7 +919,7 @@ DeepSpeed는 [`Trainer`] 클래스가 없는 트랜스포머에서도 작동합�
 
 <Tip>
 
-모든 것이 자동으로 처리되기를 원한다면, [`Trainer`]와 함께 DeepSpeed를 사용해 보세요! [DeepSpeed 문서](https://www.deepspeed.ai/)를 참조하여 설정 파일에서 매개변수 값을 수동으로 구성해야 합니다(`"auto"` 값은 사용할 수 없음).
+모든 것이 자동으로 처리되기를 원한다면, [`Trainer`]와 함께 DeepSpeed를 사용해 보세요! [DeepSpeed 문서](https://www.deepspeed.ai)를 참조하여 설정 파일에서 매개변수 값을 수동으로 구성해야 합니다(`"auto"` 값은 사용할 수 없음).
 
 </Tip>
 
@@ -1199,7 +1199,7 @@ NVMe 및 ZeRO-3를 설정한 경우 NVMe로 오프로드를 실험해 보세요(
 
 ## 리소스[[resources]]
 
-DeepSpeed ZeRO는 제한된 GPU 리소스로 추론을 위해 매우 큰 모델을 훈련하고 로드하는 강력한 기술로, 누구나 쉽게 사용할 수 있습니다. DeepSpeed에 대해 자세히 알아보려면 [블로그 포스트](https://www.microsoft.com/en-us/research/search/?q=deepspeed), [공식 문서](https://www.deepspeed.ai/getting-started/), [깃허브 리포지토리](https://github.com/deepspeedai/DeepSpeed)를 참조하세요.
+DeepSpeed ZeRO는 제한된 GPU 리소스로 추론을 위해 매우 큰 모델을 훈련하고 로드하는 강력한 기술로, 누구나 쉽게 사용할 수 있습니다. DeepSpeed에 대해 자세히 알아보려면 [블로그 포스트](https://www.microsoft.com/en-us/research/search/?q=deepspeed), [공식 문서](https://www.deepspeed.ai/getting-started), [깃허브 리포지토리](https://github.com/deepspeedai/DeepSpeed)를 참조하세요.
 
 다음 문서도 ZeRO에 대해 자세히 알아볼 수 있는 훌륭한 자료입니다:
 

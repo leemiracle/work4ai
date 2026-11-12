@@ -1,6 +1,6 @@
 # 👨🏻‍💼 AI Sales Intelligence Agent Team 
 
-A multi-agent AI pipeline that generates competitive sales battle cards in real-time, built with [Google ADK](https://google.github.io/adk-docs/) and Gemini 3.
+A multi-agent AI pipeline that generates competitive sales battle cards in real-time, built with [Google ADK](https://google.github.io/adk-docs) and Gemini 3.
 
 **Give it a competitor + your product** → Get a complete battle card with positioning strategies, objection handling scripts, and visual comparisons.
 
@@ -309,7 +309,7 @@ The generated HTML battle card includes:
 
 ## Learn More
 
-- [Google ADK Documentation](https://google.github.io/adk-docs/)
-- [Multi-Agent Patterns in ADK](https://developers.googleblog.com/developers-guide-to-multi-agent-patterns-in-adk/)
+- [Google ADK Documentation](https://google.github.io/adk-docs)
+- [Multi-Agent Patterns in ADK](https://developers.googleblog.com/developers-guide-to-multi-agent-patterns-in-adk)
 - [Gemini API](https://ai.google.dev/gemini-api/docs)
 

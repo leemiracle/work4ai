@@ -20,7 +20,7 @@ rendered properly in your Markdown viewer.
 ## 하이퍼파라미터 탐색 백엔드 [[hyperparameter-search-backend]]
 
 [`Trainer`]는 현재 아래 4가지 하이퍼파라미터 탐색 백엔드를 지원합니다:
-[optuna](https://optuna.org/)와, [raytune](https://docs.ray.io/en/latest/tune/index.html), [wandb](https://wandb.ai/site/sweeps) 입니다.
+[optuna](https://optuna.org)와, [raytune](https://docs.ray.io/en/latest/tune/index.html), [wandb](https://wandb.ai/site/sweeps) 입니다.
 
 하이퍼파라미터 탐색 백엔드로 사용하기 전에 아래의 명령어를 사용하여 라이브러리들을 설치하세요.
 ```bash

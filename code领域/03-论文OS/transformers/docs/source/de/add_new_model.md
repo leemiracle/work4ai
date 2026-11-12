@@ -15,7 +15,7 @@ rendered properly in your Markdown viewer.
 
 # Wie kann ich ein Modell zu 🤗 Transformers hinzufügen?
 
-Die 🤗 Transformers-Bibliothek ist dank der Beiträge der Community oft in der Lage, neue Modelle anzubieten. Aber das kann ein anspruchsvolles Projekt sein und erfordert eine eingehende Kenntnis der 🤗 Transformers-Bibliothek und des zu implementierenden Modells. Bei Hugging Face versuchen wir, mehr Mitgliedern der Community die Möglichkeit zu geben, aktiv Modelle hinzuzufügen, und wir haben diese Anleitung zusammengestellt, die Sie durch den Prozess des Hinzufügens eines PyTorch-Modells führt (stellen Sie sicher, dass Sie [PyTorch installiert haben](https://pytorch.org/get-started/locally/)).
+Die 🤗 Transformers-Bibliothek ist dank der Beiträge der Community oft in der Lage, neue Modelle anzubieten. Aber das kann ein anspruchsvolles Projekt sein und erfordert eine eingehende Kenntnis der 🤗 Transformers-Bibliothek und des zu implementierenden Modells. Bei Hugging Face versuchen wir, mehr Mitgliedern der Community die Möglichkeit zu geben, aktiv Modelle hinzuzufügen, und wir haben diese Anleitung zusammengestellt, die Sie durch den Prozess des Hinzufügens eines PyTorch-Modells führt (stellen Sie sicher, dass Sie [PyTorch installiert haben](https://pytorch.org/get-started/locally)).
 
 Auf dem Weg dorthin, werden Sie:
 
@@ -121,7 +121,7 @@ Aus Erfahrung können wir Ihnen sagen, dass die wichtigsten Dinge, die Sie beim 
 
 - Erfinden Sie das Rad nicht neu! Die meisten Teile des Codes, den Sie für das neue 🤗 Transformers-Modell hinzufügen werden, existieren bereits
   irgendwo in 🤗 Transformers. Nehmen Sie sich etwas Zeit, um ähnliche, bereits vorhandene Modelle und Tokenizer zu finden, die Sie kopieren können
-  von. [grep](https://www.gnu.org/software/grep/) und [rg](https://github.com/BurntSushi/ripgrep) sind Ihre
+  von. [grep](https://www.gnu.org/software/grep) und [rg](https://github.com/BurntSushi/ripgrep) sind Ihre
   Freunde. Beachten Sie, dass es sehr gut möglich ist, dass der Tokenizer Ihres Modells auf einer Modellimplementierung basiert und
   und der Modellierungscode Ihres Modells auf einer anderen. *Z.B.* Der Modellierungscode von FSMT basiert auf BART, während der Tokenizer-Code von FSMT
   auf XLM basiert.
@@ -268,7 +268,7 @@ Modell auch auf der GPU wie erwartet funktioniert.
 
 Im Allgemeinen gibt es zwei mögliche Debugging-Umgebungen für die Ausführung des Originalmodells
 
-- [Jupyter notebooks](https://jupyter.org/) / [google colab](https://colab.research.google.com/notebooks/intro.ipynb)
+- [Jupyter notebooks](https://jupyter.org) / [google colab](https://colab.research.google.com/notebooks/intro.ipynb)
 - Lokale Python-Skripte.
 
 Jupyter-Notebooks haben den Vorteil, dass sie eine zellenweise Ausführung ermöglichen, was hilfreich sein kann, um logische Komponenten besser voneinander zu trennen und

@@ -131,7 +131,7 @@ Ci sono differenti modi per aggiungere un modello a Hugging Face. Qui trovi una 
 Per esperienza, possiamo dirti che quando si aggiunge un modello é meglio tenere a mente le seguenti considerazioni:
 
 -  Non sfondare una porta giá aperta! La maggior parte del codice che aggiungerai per un nuovo modello 🤗 Transformers
-  esiste già da qualche parte in 🤗 Transformers. Prendi un po' di tempo per trovare codici simili in modelli e tokenizers esistenti e fare un copia-incolla. Ricorda che [grep](https://www.gnu.org/software/grep/) e [rg](https://github.com/BurntSushi/ripgrep) sono tuoi buoni amici. Inoltre, ricorda che puó essere molto probabile che il tokenizer per il tuo modello sia basato sull'implementazione di un altro modello, e il codice del tuo modello stesso su un altro ancora. *Per esempio* il modello FSMT é basato su BART, mentre il tokenizer di FSMT é basato su XLM.
+  esiste già da qualche parte in 🤗 Transformers. Prendi un po' di tempo per trovare codici simili in modelli e tokenizers esistenti e fare un copia-incolla. Ricorda che [grep](https://www.gnu.org/software/grep) e [rg](https://github.com/BurntSushi/ripgrep) sono tuoi buoni amici. Inoltre, ricorda che puó essere molto probabile che il tokenizer per il tuo modello sia basato sull'implementazione di un altro modello, e il codice del tuo modello stesso su un altro ancora. *Per esempio* il modello FSMT é basato su BART, mentre il tokenizer di FSMT é basato su XLM.
 -  Ricorda che qui é piu una sfida ingegneristica che scientifica. Spendi piú tempo per create un efficiente ambiente di debugging piuttosto che cercare di capire tutti gli aspetti teorici dell'articolo del modello.
 -  Chiedi aiuto se sei in panne! I modelli sono la parte principale di 🤗 Transformers, perciò qui a Hugging Face siamo più che contenti di aiutarti in ogni passo per aggiungere il tuo modello. Non esitare a chiedere se vedi che non riesci a progredire.
 
@@ -232,7 +232,7 @@ A questo punto, sta a te decidere quale ambiente per debug vuoi usare. Noi consi
 
 In generale ci sono due possibili ambienti di debug per il testare il modello originale:
 
-- [Jupyter notebooks](https://jupyter.org/) / [google colab](https://colab.research.google.com/notebooks/intro.ipynb)
+- [Jupyter notebooks](https://jupyter.org) / [google colab](https://colab.research.google.com/notebooks/intro.ipynb)
 - Scripts locali in Python
 
 Il vantaggio dei Jupyter notebooks é la possibilità di eseguire cella per cella, il che può essere utile per decomporre tutte le componenti logiche, cosi da a vere un ciclo di debug più rapido, siccome si possono salvare i risultati da steps intermedi. Inoltre, i notebooks spesso sono molto facili da condividere con altri contributors, il che può essere molto utile se vuoi chiedere aiuto al team di Hugging Face. Se sei famigliare con Jupyter notebooks allora racommandiamo di lavorare in questa maniera.

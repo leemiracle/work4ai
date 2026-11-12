@@ -11,8 +11,8 @@ The best way to prepare for this interview is to review your notes from ML cours
 If you already know the concepts, the following resources are pretty useful for a quick review of different concepts:
 - [StatQuest Machine Learning videos](https://www.youtube.com/watch?v=Gv9_4yMHFhI&list=PLblh5JKOoLUICTaGLRoHQDuF_7q2GfuJF)
 - [StatQuest Statistics](https://www.youtube.com/watch?v=qBigTkBLU6g&list=PLblh5JKOoLUK0FLuzwntyYI10UQFUhsY9) (for statistics review - most useful for Data Science roles)
-- [Machine Learning cheatsheets](https://ml-cheatsheet.readthedocs.io/en/latest/)
-- [Chris Albon's ML falshcards](https://machinelearningflashcards.com/)
+- [Machine Learning cheatsheets](https://ml-cheatsheet.readthedocs.io/en/latest)
+- [Chris Albon's ML falshcards](https://machinelearningflashcards.com)
 
 # 2. ML Fundamentals Topics 
 
@@ -128,7 +128,7 @@ Below are the most important topics to cover:
 - Attention
   - self-attention
 - * Transformer architecture (in details, no kidding!)
-  - [Illustrated transformer](http://jalammar.github.io/illustrated-transformer/) 
+  - [Illustrated transformer](http://jalammar.github.io/illustrated-transformer) 
 - Embeddings (word embeddings)
 
 

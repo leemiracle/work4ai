@@ -33,7 +33,7 @@ Mask generation task is supported by [Segment Anything Model (SAM)](../model_doc
 </div>
 
 SAM serves as a powerful foundation model for segmentation as it has large data coverage. It is trained on
-[SA-1B](https://ai.meta.com/datasets/segment-anything/), a dataset with 1 million images and 1.1 billion masks.
+[SA-1B](https://ai.meta.com/datasets/segment-anything), a dataset with 1 million images and 1.1 billion masks.
 
 In this guide, you will learn how to:
 

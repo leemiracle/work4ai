@@ -114,7 +114,7 @@ images_processed = processor(images, return_tensors="pt", device="cuda")
 <details>
 <summary>Benchmarks</summary>
 
-The benchmarks are obtained from an [AWS EC2 g5.2xlarge](https://aws.amazon.com/ec2/instance-types/g5/) instance with a NVIDIA A10G Tensor Core GPU.
+The benchmarks are obtained from an [AWS EC2 g5.2xlarge](https://aws.amazon.com/ec2/instance-types/g5) instance with a NVIDIA A10G Tensor Core GPU.
 
 <div class="flex">
   <img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/benchmark_results_full_pipeline_detr_fast_padded.png" />

@@ -16,7 +16,7 @@ rendered properly in your Markdown viewer.
 
 # Video Processor
 
-A **Video Processor** is a utility responsible for preparing input features for video models, as well as handling the post-processing of their outputs. It provides transformations such as resizing, normalization, and conversion into PyTorch. Along ith transformations the `VideoProcessor` class handles video decoding from local paths or URLs (requires [`torchcodec`](https://pypi.org/project/torchcodec/)) and frame sampling according to model-specific strategies.
+A **Video Processor** is a utility responsible for preparing input features for video models, as well as handling the post-processing of their outputs. It provides transformations such as resizing, normalization, and conversion into PyTorch. Along ith transformations the `VideoProcessor` class handles video decoding from local paths or URLs (requires [`torchcodec`](https://pypi.org/project/torchcodec)) and frame sampling according to model-specific strategies.
 
 The video processor extends the functionality of image processors by allowing Vision Large Language Models (VLMs) to handle videos with a distinct set of arguments compared to images. It serves as the bridge between raw video data and the model, ensuring that input features are optimized for the VLM.
 
@@ -55,7 +55,7 @@ The video processor can also sample video frames using the technique best suited
 
 - Specifying `num_frames` does not guarantee the output will contain exactly that number of frames. Depending on the model, the sampler may enforce minimum or maximum frame limits.
 
-- The default decoder is [`torchcodec`](https://pypi.org/project/torchcodec/), which must be installed.
+- The default decoder is [`torchcodec`](https://pypi.org/project/torchcodec), which must be installed.
 
 </Tip>
 

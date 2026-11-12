@@ -252,7 +252,7 @@ Par exemple, si vous utilisez cette [image de facture](https://huggingface.co/sp
 
 <Tip>
 
-Pour exécuter l'exemple ci-dessus, vous devez avoir [`pytesseract`](https://pypi.org/project/pytesseract/) installé en plus de 🤗 Transformers :
+Pour exécuter l'exemple ci-dessus, vous devez avoir [`pytesseract`](https://pypi.org/project/pytesseract) installé en plus de 🤗 Transformers :
 
 ```bash
 sudo apt install -y tesseract-ocr
@@ -290,7 +290,7 @@ output = pipe("This is a cool example!", do_sample=True, top_p=0.95)
 ## Création de démonstrations web à partir de pipelines avec `gradio`
 
 Hugging Face prenant en charge le chargement de grands modèles, comme BLOOM.
-Les pipelines sont automatiquement pris en charge dans [Gradio](https://github.com/gradio-app/gradio/), une bibliothèque qui facilite la création d'applications d'apprentissage automatique belles et conviviales sur le web. Tout d'abord, assurez-vous que Gradio est installé :
+Les pipelines sont automatiquement pris en charge dans [Gradio](https://github.com/gradio-app/gradio), une bibliothèque qui facilite la création d'applications d'apprentissage automatique belles et conviviales sur le web. Tout d'abord, assurez-vous que Gradio est installé :
 
 ```
 pip install gradio

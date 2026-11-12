@@ -1,8 +1,8 @@
 # 加密货币与去中心化金融 · Crypto and DeFi
 
 > **位置**：`03-social-sciences/finance/crypto-and-defi.md`  
-> **关联**：学科总图 [`_overview.md`](./_overview.md)（分支地图·金融科技 + 问题 3 货币本质）+ 货币本体 [`money-and-credit.md`](./money-and-credit.md)（§二 四大立场·算法主义 + §八 反例 3）+ 哲学锚点 [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（§四 极限 3 货币本体论 + §七 开放问题）+ 金钱专题 [`07-worldly-power/money/`](../../07-worldly-power/money/)  
-> **哲学根源**：[`00-philosophy/ontology.md`](../../00-philosophy/ontology.md)（货币/产权作为制度性事实）+ [`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（信任、可验证性）+ [`00-philosophy/ethics/`](../../00-philosophy/ethics/)（抗审查、去中心化的价值）  
+> **关联**：学科总图 [`_overview.md`](./_overview.md)（分支地图·金融科技 + 问题 3 货币本质）+ 货币本体 [`money-and-credit.md`](./money-and-credit.md)（§二 四大立场·算法主义 + §八 反例 3）+ 哲学锚点 [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（§四 极限 3 货币本体论 + §七 开放问题）+ 金钱专题 [`07-worldly-power/money/`](../../07-worldly-power/money)  
+> **哲学根源**：[`00-philosophy/ontology.md`](../../00-philosophy/ontology.md)（货币/产权作为制度性事实）+ [`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（信任、可验证性）+ [`00-philosophy/ethics/`](../../00-philosophy/ethics)（抗审查、去中心化的价值）  
 > **大问题**：[`questions/big-questions.md`](../../questions/big-questions.md) **Q10 · 金钱的本质**（比特币是进化还是泡沫？）+ **Q26 · 金融系统为何周期崩溃**  
 > **已有洞察**：[`insights/2026-07/2026-07-12-four-pillars-of-money.md`](../../insights/2026-07/2026-07-12-four-pillars-of-money.md)（算法主义立场）
 
@@ -526,7 +526,7 @@ class Attacker:
 2. 当市场恐慌抛售 UST → UST 跌破 1 美元 → 人们用 UST 换 Luna 并抛售 → Luna 供给暴增 → Luna 暴跌 → 1 UST 能换的 Luna 更不值钱 → 更多恐慌抛售 UST → ……**正反馈死亡螺旋**。
 3. Luna 单日增发百万倍，价格从 $120 跌到 $0.000001。400 亿美元蒸发。
 
-> **系统科学视角**：这是典型的**正反馈崩塌**（和挤兑、Minsky 时刻同构，见 [`money-and-credit.md`](./money-and-credit.md) §四·挤兑 + [`06-systems/feedback/`](../../06-systems/feedback/)）。算法稳定币的"锚定"完全依赖市场信心——信心一断，死亡螺旋不可逆。**没有真实抵押物的稳定机制，本质上是庞氏结构。**
+> **系统科学视角**：这是典型的**正反馈崩塌**（和挤兑、Minsky 时刻同构，见 [`money-and-credit.md`](./money-and-credit.md) §四·挤兑 + [`06-systems/feedback/`](../../06-systems/feedback)）。算法稳定币的"锚定"完全依赖市场信心——信心一断，死亡螺旋不可逆。**没有真实抵押物的稳定机制，本质上是庞氏结构。**
 
 ### 8.3 杠杆与清算 Cascade
 
@@ -593,7 +593,7 @@ CBDC 和加密货币虽然都叫"数字货币"，但**哲学方向完全相反**
 | **代码即法律** | 合约自动执行 | 法治（rule of law）vs 人治 | 规则的确定性 vs 裁量的弹性 |
 | **通缩货币** | 2100 万枚上限 | 金本位、魏玛通胀的反面教训 | 货币供给弹性 vs 价值储藏稳定 |
 
-> **深层连接**：区块链是 [`06-systems/complexity/`](../../06-systems/complexity/) 的完美实例——没有中心设计者，秩序从成千上万节点的简单规则中涌现（共识算法 = 局部规则，区块链 = 涌现的全局账本）。稳定币崩盘是 [`06-systems/feedback/`](../../06-systems/feedback/) 正反馈失控的经典案例。NFT 的价值本体和 [`00-philosophy/ontology.md`](../../00-philosophy/ontology.md) 的制度性事实直接对接。
+> **深层连接**：区块链是 [`06-systems/complexity/`](../../06-systems/complexity) 的完美实例——没有中心设计者，秩序从成千上万节点的简单规则中涌现（共识算法 = 局部规则，区块链 = 涌现的全局账本）。稳定币崩盘是 [`06-systems/feedback/`](../../06-systems/feedback) 正反馈失控的经典案例。NFT 的价值本体和 [`00-philosophy/ontology.md`](../../00-philosophy/ontology.md) 的制度性事实直接对接。
 
 ---
 
@@ -619,8 +619,8 @@ CBDC 和加密货币虽然都叫"数字货币"，但**哲学方向完全相反**
 - **金钱专题**：[`07-worldly-power/money/_overview.md`](../../07-worldly-power/money/_overview.md)（四大哲学立场表 + 开放问题·比特币）
 - **大问题**：[`questions/big-questions.md`](../../questions/big-questions.md) Q10（金钱本质）+ Q26（金融系统为何周期崩溃——死亡螺旋/清算 cascade 是 Minsky 时刻的链上版本）
 - **相邻主题**：[`markets-and-pricing.md`](./markets-and-pricing.md)（AMM 定价 vs 传统订单簿定价）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（智能合约漏洞 = Knight 不确定性，无法用历史频率量化）+ [`china-financial-system.md`](./china-financial-system.md)（数字人民币 DCEP）
-- **系统论**：[`06-systems/complexity/`](../../06-systems/complexity/)（区块链涌现秩序）+ [`06-systems/feedback/`](../../06-systems/feedback/)（死亡螺旋/清算 cascade 的正反馈）+ [`06-systems/game-theory/`](../../06-systems/game-theory/)（PoW 是纳什均衡——诚实挖矿是占优策略）
-- **哲学**：[`00-philosophy/ontology.md`](../../00-philosophy/ontology.md)（NFT/货币作为制度性事实）+ [`00-philosophy/ethics/`](../../00-philosophy/ethics/)（抗审查 vs 合规的正义冲突）+ [`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（"可验证性"——区块链的信任来自密码学可验证性）
+- **系统论**：[`06-systems/complexity/`](../../06-systems/complexity)（区块链涌现秩序）+ [`06-systems/feedback/`](../../06-systems/feedback)（死亡螺旋/清算 cascade 的正反馈）+ [`06-systems/game-theory/`](../../06-systems/game-theory)（PoW 是纳什均衡——诚实挖矿是占优策略）
+- **哲学**：[`00-philosophy/ontology.md`](../../00-philosophy/ontology.md)（NFT/货币作为制度性事实）+ [`00-philosophy/ethics/`](../../00-philosophy/ethics)（抗审查 vs 合规的正义冲突）+ [`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（"可验证性"——区块链的信任来自密码学可验证性）
 - **跨学科**：[`knowledge-graph/connections.md`](../../knowledge-graph/connections.md)（区块链↔涌现↔共识↔法治的同构）
 
 ---

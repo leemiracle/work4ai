@@ -60,7 +60,7 @@ def us_president_example(s):
 
 ### Unconditional Likelihood Normalized
 
-Unconditional likelihood normalized selects the option with the highest average token logprob once normalized by the unconditional token logprobs, as described in [this EleutherAI blogpost](https://blog.eleuther.ai/multiple-choice-normalization/). This method incurs an additional LLM call to obtain the unconditional likelihoods.
+Unconditional likelihood normalized selects the option with the highest average token logprob once normalized by the unconditional token logprobs, as described in [this EleutherAI blogpost](https://blog.eleuther.ai/multiple-choice-normalization). This method incurs an additional LLM call to obtain the unconditional likelihoods.
 
 Usage example:
 ```python

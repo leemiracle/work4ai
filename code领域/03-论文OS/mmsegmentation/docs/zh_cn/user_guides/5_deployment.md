@@ -17,7 +17,7 @@
 
 ______________________________________________________________________
 
-[MMSegmentation](https://github.com/open-mmlab/mmsegmentation/tree/main) 又称`mmseg`，是一个基于 PyTorch 的开源对象分割工具箱。它是 [OpenMMLab](https://openmmlab.com/) 项目的一部分。
+[MMSegmentation](https://github.com/open-mmlab/mmsegmentation/tree/main) 又称`mmseg`，是一个基于 PyTorch 的开源对象分割工具箱。它是 [OpenMMLab](https://openmmlab.com) 项目的一部分。
 
 ## 安装
 

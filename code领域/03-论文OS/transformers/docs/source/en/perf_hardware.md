@@ -17,7 +17,7 @@ rendered properly in your Markdown viewer.
 
 One of the most important considerations when building a machine for deep learning is the GPU choice. GPUs are the standard workhorse for deep learning owing to their tensor cores for performing very efficient matrix multiplication and high memory bandwidth. To train large models, you either need a more powerful GPU, multiple GPUs, or take advantage of techniques that offload some of the load to the CPU or NVMe.
 
-This guide provides some practical tips for setting up a GPU for deep learning. For a more detailed discussion and comparison of GPUs, take a look at the [Which GPU(s) to Get for Deep Learning](https://timdettmers.com/2023/01/30/which-gpu-for-deep-learning/) blog post.
+This guide provides some practical tips for setting up a GPU for deep learning. For a more detailed discussion and comparison of GPUs, take a look at the [Which GPU(s) to Get for Deep Learning](https://timdettmers.com/2023/01/30/which-gpu-for-deep-learning) blog post.
 
 ## Power
 
@@ -33,7 +33,7 @@ An overheated GPU throttles its performance and can even shutdown if it's too ho
 
 ## Multi-GPU connectivity
 
-When your setup uses multiple GPUs, it is important to consider how they're connected. [NVLink](https://www.nvidia.com/en-us/design-visualization/nvlink-bridges/) connections are faster than PCIe bridges, but you should also consider the [parallelism](./perf_train_gpu_many) strategy you're using. For example, in DistributedDataParallel, GPUs communicate less frequently compared to ZeRO-DP. In this case, a slower connection is not as important.
+When your setup uses multiple GPUs, it is important to consider how they're connected. [NVLink](https://www.nvidia.com/en-us/design-visualization/nvlink-bridges) connections are faster than PCIe bridges, but you should also consider the [parallelism](./perf_train_gpu_many) strategy you're using. For example, in DistributedDataParallel, GPUs communicate less frequently compared to ZeRO-DP. In this case, a slower connection is not as important.
 
 Run the command below to check how your GPUs are connected.
 
@@ -44,7 +44,7 @@ nvidia-smi topo -m
 <hfoptions id="nvlink">
 <hfoption id="NVLink">
 
-[NVLink](https://www.nvidia.com/en-us/design-visualization/nvlink-bridges/) is a high-speed communication system designed by NVIDIA for connecting multiple NVIDIA GPUs. Training [openai-community/gpt2](https://huggingface.co/openai-community/gpt2) on a small sample of the [wikitext](https://huggingface.co/datasets/Salesforce/wikitext) dataset is ~23% faster with NVLink.
+[NVLink](https://www.nvidia.com/en-us/design-visualization/nvlink-bridges) is a high-speed communication system designed by NVIDIA for connecting multiple NVIDIA GPUs. Training [openai-community/gpt2](https://huggingface.co/openai-community/gpt2) on a small sample of the [wikitext](https://huggingface.co/datasets/Salesforce/wikitext) dataset is ~23% faster with NVLink.
 
 On a machine with two GPUs connected with NVLink, an example output of `nvidia-smi topo -m` is shown below.
 

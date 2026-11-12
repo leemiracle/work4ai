@@ -29,7 +29,7 @@ pip install -r requirements.txt
 
 4. Get your SerpAPI Key
 
-- Sign up for an [SerpAPI account](https://serpapi.com/) and obtain your API key.
+- Sign up for an [SerpAPI account](https://serpapi.com) and obtain your API key.
 
 5. Run the Streamlit App
 ```bash

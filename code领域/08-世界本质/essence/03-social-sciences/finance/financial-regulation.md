@@ -2,7 +2,7 @@
 
 > **位置**：`03-social-sciences/finance/financial-regulation.md`  
 > **关联**：[`_overview.md`](./_overview.md)（金融地图 §风险管理）+ [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（金融的极限问题）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（风险 vs 不确定性——监管的认识论根源）+ [`china-financial-system.md`](./china-financial-system.md)（中国监管 §十）+ [`financial-history.md`](./financial-history.md)（危机编年史）  
-> **权威来源**：[BIS 巴塞尔框架](https://www.bis.org/bcbs/basel3.htm) + [FSB 后危机改革](https://www.fsb.org/work-of-the-fsb/market-and-institutional-resilience/post-2008-financial-crisis-reforms/)  
+> **权威来源**：[BIS 巴塞尔框架](https://www.bis.org/bcbs/basel3.htm) + [FSB 后危机改革](https://www.fsb.org/work-of-the-fsb/market-and-institutional-resilience/post-2008-financial-crisis-reforms)  
 > **核心命题**：**金融监管不是"限制金融"——它是金融存在的条件。没有监管的金融不是"自由金融"，而是"自我毁灭的金融"。** 监管与市场是共生关系，不是对立关系。
 
 ---
@@ -563,7 +563,7 @@ print("=" * 70)
 
 ### 4.2 SIFI 的分类框架
 
-> **来源**：[FSB G-SIFI 框架](https://www.fsb.org/work-of-the-fsb/market-and-institutional-resilience/global-systemically-important-financial-institutions-g-sifis/)
+> **来源**：[FSB G-SIFI 框架](https://www.fsb.org/work-of-the-fsb/market-and-institutional-resilience/global-systemically-important-financial-institutions-g-sifis)
 
 ```
 SIFI 分层：
@@ -728,7 +728,7 @@ Volcker Rule 的核心禁令：
 
 ### 5.3 FSB 的"更安全、更简单、更公平"
 
-> **来源**：[FSB 后危机改革总结](https://www.fsb.org/work-of-the-fsb/market-and-institutional-resilience/post-2008-financial-crisis-reforms/)
+> **来源**：[FSB 后危机改革总结](https://www.fsb.org/work-of-the-fsb/market-and-institutional-resilience/post-2008-financial-crisis-reforms)
 
 FSB 用三个词总结全球改革：
 
@@ -1638,9 +1638,9 @@ print("=" * 75)
 | 固定收益 | [`fixed-income.md`](./fixed-income.md) | 回购市场、债券市场监管 |
 | 中国治理（"三周"框架） | [`../politics/china-governance.md`](../politics/china-governance.md) | 中国监管的政治逻辑 |
 | 房地产系统危机 | [`../../insights/2026-07/2026-07-12-real-estate-system-crisis.md`](../../insights/2026-07/2026-07-12-real-estate-system-crisis.md) | 监管去杠杆与房地产危机 |
-| 复杂系统 | [`../../06-systems/complexity/`](../../06-systems/complexity/) | 系统性风险的数学基础 |
-| 反馈 | [`../../06-systems/feedback/`](../../06-systems/feedback/) | 顺周期性 = 正反馈 |
-| 博弈论 | [`../../06-systems/game-theory/`](../../06-systems/game-theory/) | 大而不能倒 = 博弈困境 |
+| 复杂系统 | [`../../06-systems/complexity/`](../../06-systems/complexity) | 系统性风险的数学基础 |
+| 反馈 | [`../../06-systems/feedback/`](../../06-systems/feedback) | 顺周期性 = 正反馈 |
+| 博弈论 | [`../../06-systems/game-theory/`](../../06-systems/game-theory) | 大而不能倒 = 博弈困境 |
 | 认识论 | [`../../00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md) | 监管的认识论基础 |
 
 ---

@@ -14,9 +14,9 @@ This guide will help you quickly get started with vLLM to perform:
 
 === "NVIDIA CUDA"
 
-    If you are using NVIDIA GPUs, you can install vLLM using [pip](https://pypi.org/project/vllm/) directly.
+    If you are using NVIDIA GPUs, you can install vLLM using [pip](https://pypi.org/project/vllm) directly.
 
-    It's recommended to use [uv](https://docs.astral.sh/uv/), a very fast Python environment manager, to create and manage Python environments. Please follow the [documentation](https://docs.astral.sh/uv/#getting-started) to install `uv`. After installing `uv`, you can create a new Python environment and install vLLM using the following commands:
+    It's recommended to use [uv](https://docs.astral.sh/uv), a very fast Python environment manager, to create and manage Python environments. Please follow the [documentation](https://docs.astral.sh/uv/#getting-started) to install `uv`. After installing `uv`, you can create a new Python environment and install vLLM using the following commands:
 
     ```bash
     uv venv --python 3.12 --seed
@@ -45,7 +45,7 @@ This guide will help you quickly get started with vLLM to perform:
 
     If you are using AMD GPUs, you can install vLLM using `uv`.
 
-    It's recommended to use [uv](https://docs.astral.sh/uv/), as it gives the extra index [higher priority than the default index](https://docs.astral.sh/uv/pip/compatibility/#packages-that-exist-on-multiple-indexes). `uv` is also a very fast Python environment manager, to create and manage Python environments. Please follow the [documentation](https://docs.astral.sh/uv/#getting-started) to install `uv`. After installing `uv`, you can create a new Python environment and install vLLM using the following commands:
+    It's recommended to use [uv](https://docs.astral.sh/uv), as it gives the extra index [higher priority than the default index](https://docs.astral.sh/uv/pip/compatibility/#packages-that-exist-on-multiple-indexes). `uv` is also a very fast Python environment manager, to create and manage Python environments. Please follow the [documentation](https://docs.astral.sh/uv/#getting-started) to install `uv`. After installing `uv`, you can create a new Python environment and install vLLM using the following commands:
 
     ```bash
     uv venv --python 3.12 --seed
@@ -68,7 +68,7 @@ This guide will help you quickly get started with vLLM to perform:
     ```
 
     !!! note
-        For more detailed instructions, including Docker, installing from source, and troubleshooting, please refer to the [vLLM on TPU documentation](https://docs.vllm.ai/projects/tpu/en/latest/).
+        For more detailed instructions, including Docker, installing from source, and troubleshooting, please refer to the [vLLM on TPU documentation](https://docs.vllm.ai/projects/tpu/en/latest).
 
 !!! note
     For more detail and non-CUDA platforms, please refer to the [installation guide](installation/README.md) for specific instructions on how to install vLLM.
@@ -110,7 +110,7 @@ llm = LLM(model="facebook/opt-125m")
 ```
 
 !!! note
-    By default, vLLM downloads models from [Hugging Face](https://huggingface.co/). If you would like to use models from [ModelScope](https://www.modelscope.cn), set the environment variable `VLLM_USE_MODELSCOPE` before initializing the engine.
+    By default, vLLM downloads models from [Hugging Face](https://huggingface.co). If you would like to use models from [ModelScope](https://www.modelscope.cn), set the environment variable `VLLM_USE_MODELSCOPE` before initializing the engine.
 
     ```shell
     export VLLM_USE_MODELSCOPE=True
@@ -293,4 +293,4 @@ Some of the available backend options include:
 - On AMD ROCm: `TRITON_ATTN`, `ROCM_ATTN`, `ROCM_AITER_FA`, `ROCM_AITER_UNIFIED_ATTN`, `TRITON_MLA`, `ROCM_AITER_MLA` or `ROCM_AITER_TRITON_MLA`.
 
 !!! warning
-    There are no pre-built vllm wheels containing Flash Infer, so you must install it in your environment first. Refer to the [Flash Infer official docs](https://docs.flashinfer.ai/) or see [docker/Dockerfile](../../docker/Dockerfile) for instructions on how to install it.
+    There are no pre-built vllm wheels containing Flash Infer, so you must install it in your environment first. Refer to the [Flash Infer official docs](https://docs.flashinfer.ai) or see [docker/Dockerfile](../../docker/Dockerfile) for instructions on how to install it.

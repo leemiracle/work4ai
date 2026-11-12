@@ -38,7 +38,7 @@ The goal for the model is to predict raw pixel values for the masked patches, us
 
 Here we show how to pre-train a `ViT` from scratch for masked image modeling on the [cifar10](https://huggingface.co/datasets/cifar10) dataset.
 
-Alternatively, one can decide to further pre-train an already pre-trained (or fine-tuned) checkpoint from the [hub](https://huggingface.co/). This can be done by setting the `model_name_or_path` argument to "google/vit-base-patch16-224-in21k" for example (and not specifying the `model_type` argument).
+Alternatively, one can decide to further pre-train an already pre-trained (or fine-tuned) checkpoint from the [hub](https://huggingface.co). This can be done by setting the `model_name_or_path` argument to "google/vit-base-patch16-224-in21k" for example (and not specifying the `model_type` argument).
 
 ```bash
 !python run_mim.py \
@@ -189,7 +189,7 @@ alt="drawing" width="300"/>
 
 <small> Original hyperparameters. Taken from the <a href="https://huggingface.co/papers/2111.06377">original paper</a>. </small>
 
-Alternatively, one can decide to further pre-train an already pre-trained (or fine-tuned) checkpoint from the [hub](https://huggingface.co/). This can be done by setting the `model_name_or_path` argument to "facebook/vit-mae-base" for example.
+Alternatively, one can decide to further pre-train an already pre-trained (or fine-tuned) checkpoint from the [hub](https://huggingface.co). This can be done by setting the `model_name_or_path` argument to "facebook/vit-mae-base" for example.
 
 
 ### Using your own data

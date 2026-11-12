@@ -17,7 +17,7 @@
 
 ______________________________________________________________________
 
-[MMSegmentation](https://github.com/open-mmlab/mmsegmentation/tree/main), also known as `mmseg`, is an open source semantic segmentation toolbox based on Pytorch. It's a part of the [OpenMMLab](<(https://openmmlab.com/)>) object.
+[MMSegmentation](https://github.com/open-mmlab/mmsegmentation/tree/main), also known as `mmseg`, is an open source semantic segmentation toolbox based on Pytorch. It's a part of the [OpenMMLab](<(https://openmmlab.com)>) object.
 
 ## Installation
 

@@ -42,7 +42,7 @@ Specifically, requests flow through the following process to get responses:
 
 <!-- [TODO: offical 可以不用 Acknowledge，仅供内部传阅，和宣传稿平级] -->
 
-All the discussions are based on release [v0.4.0](https://github.com/sgl-project/sglang/tree/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751). We sincerely appreciate [Chenyang Zhao](https://zhaochenyang20.github.io/Chayenne/), [Wenxuan Tan](https://github.com/Edenzzzz),  [Simon Veitner](https://simveit.github.io/), [Shuai Shi](https://shuaills.github.io/), [Shizhe Diao](https://shizhediao.github.io/), [Shending Hu](https://shengdinghu.github.io/), [Xiaoyu Zhang](https://github.com/BBuf), [agiping](https://github.com/agiping)、[Zhizhou Sha](https://jamessand.github.io/) for their contribution to this document.
+All the discussions are based on release [v0.4.0](https://github.com/sgl-project/sglang/tree/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751). We sincerely appreciate [Chenyang Zhao](https://zhaochenyang20.github.io/Chayenne), [Wenxuan Tan](https://github.com/Edenzzzz),  [Simon Veitner](https://simveit.github.io), [Shuai Shi](https://shuaills.github.io), [Shizhe Diao](https://shizhediao.github.io), [Shending Hu](https://shengdinghu.github.io), [Xiaoyu Zhang](https://github.com/BBuf), [agiping](https://github.com/agiping)、[Zhizhou Sha](https://jamessand.github.io) for their contribution to this document.
 
 **Note that this document is under construction and these parts will be included in the future.**
 
@@ -78,7 +78,7 @@ The Server employs a FastAPI app to define API endpoints, forwarding [`/v1/chat/
 
 ### [Initialization](https://github.com/sgl-project/sglang/blob/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751/python/sglang/srt/managers/tokenizer_manager.py#L88)
 
-1. Set up [ZeroMQ](https://libzmq.readthedocs.io/en/latest/) for inter-process communication, including sockets for the communication with DetokenizerManager and Scheduler.
+1. Set up [ZeroMQ](https://libzmq.readthedocs.io/en/latest) for inter-process communication, including sockets for the communication with DetokenizerManager and Scheduler.
 2. Configure `server_args`, enable `metrics`, and initialize `model_config`, `tokenizer`, and placeholders for multi-modal image processors.
 
 ### [generate_request](https://github.com/sgl-project/sglang/blob/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751/python/sglang/srt/managers/tokenizer_manager.py#L173)
@@ -99,7 +99,7 @@ Here is the overview of the Scheduler:
 
 ### [Initialization](https://github.com/sgl-project/sglang/blob/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751/python/sglang/srt/managers/scheduler.py#L97)
 
-1. Set up [ZeroMQ](https://libzmq.readthedocs.io/en/latest/) for communication with TokenizerManager.
+1. Set up [ZeroMQ](https://libzmq.readthedocs.io/en/latest) for communication with TokenizerManager.
 2. Configure `server_args`, `port_args`, `model_config`, `sessions`, and initialize TpModelWorker or TpModelWorkerClient based on overlap scheduling.
 3. Initialize tokenizer and processor, manage caching using ChunkCache or RadixCache and configure SchedulePolicy.
 4. Set up chunk prefill parameters and GrammarBackend for constraint decoding.
@@ -227,7 +227,7 @@ Sets up ZeroMQ communication sockets and the tokenizer. Manages decoding status 
 
 ## [FastAPI Wraps the Output](https://github.com/sgl-project/sglang/blob/f8b0326934bacb7a7d4eba68fb6eddebaa6ff751/python/sglang/srt/server.py#L287)
 
-1. DetokenizerManager sends `BatchStrOut` to TokenizerManager via [ZeroMQ](https://libzmq.readthedocs.io/en/latest/).
+1. DetokenizerManager sends `BatchStrOut` to TokenizerManager via [ZeroMQ](https://libzmq.readthedocs.io/en/latest).
 2. TokenizerManager updates request states and prepares detokenized text for FastAPI.
 3. Finally in FastAPI, for streaming, use an async generator and `StreamingResponse` to send the response to the user.
 4. For non-streaming, collect and send the complete response using `ORJSONResponse` and return to the user.

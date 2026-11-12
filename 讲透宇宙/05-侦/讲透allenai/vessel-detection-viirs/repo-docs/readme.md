@@ -1,0 +1,112 @@
+This repository contains a computer vision model along with a containerized restful API (FastAPI) for serving streaming detections of vessels in near real time. See [docs/openapi.json](./docs/openapi.json) for the API specification. This model was built for [Skylight](https://www.skylight.global), a product of Ai2 that supports maritime transparency through actionable intelligence to help protect our oceans. This model processes data from all three VIIRS equipped satellites from NASA/NOAA (Suomi-NPP, NOAA-20, and NOAA-21). 
+
+See https://arxiv.org/abs/2312.03207 for details about the modeling architecture and performance. This paper was awarded "best paper" and a spotlight talk at the inaugural computational sustianability workshop at NeurIPS. 
+
+<p float="center">
+  <img src="images/summary.png" width=700 >
+</p>
+
+---
+
+# Getting started
+
+Note that the model and API are designed to run in resource constrained environments. The hardware requirements are a CPU and at least 4 GB of RAM. Note that a GPU is not needed including for fast inference. Results are returned in under a second if you are not uploading/downloading from the cloud.
+
+## Prerequisites
+
+- Python 3.10
+- Docker: https://docs.docker.com/get-docker/
+- Docker Compose: https://docs.docker.com/compose/install/ (note that Docker compose may already be installed depending on how you installed docker)
+- git-lfs: https://git-lfs.com/ Test files used for development are stored on GitHub with git-lfs. Tu run the tests (pytest), please install git-lfs and retrieve the files in test_files with git-lfs.
+
+## Installation
+
+### Using the existing package
+
+Pull the latest package from [GitHub](https://github.com/allenai/vessel-detection-viirs/pkgs/container/vessel-detection-viirs)
+
+```bash
+docker pull ghcr.io/allenai/vessel-detection-viirs:sha-d345c61
+```
+
+Once the package is downloaded, start the service with:
+
+```bash
+docker run -d -p 5555:5555 -v ABS_PATH_TO_REPO/tests/test_files:/test_files/ ghcr.io/allenai/vessel-detection-viirs:latest
+```
+
+Test the service by executing the example request in example/sample_request.py
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements/requirements-inference.txt
+python example/sample_request.py
+```
+
+### Build from source
+
+```bash
+docker compose up
+```
+
+The service will now be running on port 5555 (verify with `docker ps -a`). You may override the port number (default=5555) by passing in your preferred port in the docker run command as an environment variable e.g. `-e VVD_PORT=PORT`. Set that environment variable in your shell as well in order to use the example requests.
+To query the API with an example request, install `requirements/requirements-inference.txt` on the host.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements/requirements-inference.txt
+```
+
+## Usage
+
+Note that the sample request depends on sample data that is stored on GitHub in example/\*.nc
+
+Start the service with that directory available in the container. E.g.
+
+```bash
+docker run -d -p 5555:5555 -v ABS_PATH_TO_REPO/example:/example/ ghcr.io/allenai/vessel-detection-viirs:latest
+```
+
+```bash
+$ python examples/sample_request.py
+```
+
+## Tests
+
+Unit and integration tests (see tests) are run as part of CICD via GitHub actions. Note that to run the tests, it is required to download the test files which are stored on GitHub via git-lfs.
+To manually run these tests (after installing git-lfs and downloading the files stored in tests/test_files), execute:
+
+```bash
+$ pytest tests -vv
+```
+
+Test files are stored on GitHub (test/test_files) using git-lfs (retrieve these files via `git lfs fetch`). Since these are large files they are excluded from the inference docker container.
+
+## Development notes
+
+There are many parameters that can be modified to control precision and recall and tune the model to other desired use cases. See src/config/config.yml for the parameters that can be modified and how to do so.
+
+
+## Acknowledgements
+
+- NASA for making the raw satellite data freely accessible from [earthdata](https://www.earthdata.nasa.gov/.)
+- NOAA and NASA for launching and maintaining the satellites (Suomi-NPP, NOAA-20, NOAA-21).
+- [Defense Innovation Unit](https://www.diu.mil) for funding this work
+- [SSEC](https://sips.ssec.wisc.edu/#) for VIIRS Level 2 cloud and aerosol products
+- [Earth Observation Group](https://payneinstitute.mines.edu/eog-2/viirs) for extensive research on VIIRS and their prior work on vessel detection.
+
+## Contributing
+
+We are grateful for your feedback and contributions are appreciated. Please see CONTRIBUTING.md for details on contributing.
+
+## Limitations
+
+While we do our best to ensure high precision and recall across the planet every night, the model does not get everything right. The largest source of error occurs around full moons due to the interaction of moonlight and clouds. We control for that source of error by measuring the background glow of clouds and only surfacing detections that are not underneath clouds and above the background glow of clouds. This conditional processing only occurs on and around full moons (+/- 2 days).
+
+Note that the repository only contains the model and service to create streaming vessel detections from raw VIIRS data. There are tools within this repository to download the raw data from NASA's servers but this application does not do so automatically. To create a fully automated streaming service of vessel detections, one would need to add logic to poll NASA's servers, copy new data, and inference that data (using this service).
+
+## Contact
+
+support@skylight.org

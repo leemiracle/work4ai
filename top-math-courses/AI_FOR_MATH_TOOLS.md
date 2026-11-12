@@ -396,9 +396,9 @@ AlphaZero 式搜索
 
 | 你做的事 | 在哪做 | 产出 |
 |---------|-------|------|
-| 学 Lean 数学 | [`../讲透Lean4数学/`](../讲透数学/讲透Lean4数学) | Lean 证明能力 |
-| 学实分析 + Lean | [`../讲透实分析/`](../讲透数学/讲透分析/讲透实分析) | Tao companion 填 sorry |
-| 形式化 ML 理论 | [`../讲透统计学习理论/`](../讲透数学/讲透统计学习理论) | 把泛化界写进 Lean |
+| 学 Lean 数学 | [`../讲透Lean4数学/`](../讲透宇宙/01-学/讲透数学//讲透Lean4数学) | Lean 证明能力 |
+| 学实分析 + Lean | [`../讲透宇宙/03-查/讲透实分析//`](../讲透宇宙/01-学/讲透数学//讲透分析/讲透实分析) | Tao companion 填 sorry |
+| 形式化 ML 理论 | [`../讲透统计学习理论/`](../讲透宇宙/01-学/讲透数学//讲透统计学习理论) | 把泛化界写进 Lean |
 | 跑 AI4Math 实验 | 本方向 | blog + 论文 |
 
 ---
@@ -456,7 +456,7 @@ AlphaZero 式搜索
 2. **precise notation**——符号先精确定义
 3. **counterexample-first reasoning**——先试着找反例再试图证明
 
-**与你的实战互链**：[讲透Agent/实战案例-Prover数学Agent](../讲透Agent/实战案例-Prover数学Agent/README.md) 的"逆向蒸馏十条规律"（R1-R10）与 ZIB 的"十条戒律"是**同一哲学的独立实现**——你从 DeepSeek-Prover-V2 论文逆向，ZIB 从 1.5 年 MATH+ 项目实践提炼。两边对读 = 该方向的 double coverage。他们的五级 taxonomy（从无 AI 到 Level 4 "AI as Research Associate"：研究者只给研究问题+工具+先验知识，Agent 自主跑"形式化→实现→评估→记录→更新报告"循环）比 Haase & Pokutta 四层更贴研究实操。
+**与你的实战互链**：[讲透Agent/实战案例-Prover数学Agent](../讲透宇宙/01-学/讲透Agent//实战案例-Prover数学Agent/README.md) 的"逆向蒸馏十条规律"（R1-R10）与 ZIB 的"十条戒律"是**同一哲学的独立实现**——你从 DeepSeek-Prover-V2 论文逆向，ZIB 从 1.5 年 MATH+ 项目实践提炼。两边对读 = 该方向的 double coverage。他们的五级 taxonomy（从无 AI 到 Level 4 "AI as Research Associate"：研究者只给研究问题+工具+先验知识，Agent 自主跑"形式化→实现→评估→记录→更新报告"循环）比 Haase & Pokutta 四层更贴研究实操。
 
 ### 14.3 Williamson 2026 Chauvenet 奖：DL 对纯数学家的诚实定位
 

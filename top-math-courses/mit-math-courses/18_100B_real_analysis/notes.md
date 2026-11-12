@@ -2,7 +2,7 @@
 
 > **教材**：Walter Rudin, *Principles of Mathematical Analysis* (3rd ed, McGraw-Hill, 1976) — "Baby Rudin"
 > **一手核实**：ISBN 978-0070542358；全球数学本科实分析标准教材
-> **视频**：[OCW 18.100A Arthur Mattuck](https://ocw.mit.edu/courses/18-100a-real-analysis-fall-2020/)
+> **视频**：[OCW 18.100A Arthur Mattuck](https://ocw.mit.edu/courses/18-100a-real-analysis-fall-2020)
 
 ---
 

@@ -95,7 +95,7 @@ My learning notes/codes for ML SYS.  English version is under development and on
   [[中文版](https://zhuanlan.zhihu.com/p/178402798)]：A beginner's guide to PyTorch Distributed Data Parallel (DDP).
 
 - **Detailed Explanation of nvidia-smi Command and Some Advanced Techniques**  
-   [[中文版](https://www.yourmetaverse.cn/deep_learning/199/)]：Advanced techniques for using `nvidia-smi`.
+   [[中文版](https://www.yourmetaverse.cn/deep_learning/199)]：Advanced techniques for using `nvidia-smi`.
 
 ---
 

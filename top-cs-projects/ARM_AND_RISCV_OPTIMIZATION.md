@@ -23,10 +23,10 @@
 | **[ARM ARM](https://developer.arm.com/architecture/archive/architecture-reference-manual)**（Architecture Reference Manual）| 官方 | ARMv8-A / ARMv9-A 指令集 + 异常模型 + 内存模型（最权威）|
 | ⭐⭐ **[OSACA](https://github.com/RRZE-HPC/OSACA)** | 开源工具 | **ARM 生态的 Agner**：跨 x86+AArch64 的指令级性能分析器，集成进 Godbolt，支持 Cortex-A72/N1/V2/ThunderX2/A64FX/TaiShan/**Apple M1 Firestorm**/NVIDIA Grace |
 | **[Dougall's Apple Silicon tables](https://dougallj.appspot.com/apple/firestorm.html)** | 个人逆向 | Apple 不公开微架构，Dougall Johnson 通过微基准**逆向出 M1 Firestorm 的指令延迟表** |
-| **[Instlatx64](http://instlatx64.atw.hu/)** | 社区 | 实测指令延迟，含 Apple Silicon / Cortex / Neoverse |
-| **[Cloudflare Graviton blog](https://blog.cloudflare.com/tag/aws-graviton/)** | 实战 | 在 Graviton 上做 TLS/HTTP/防火墙优化的真实案例 |
+| **[Instlatx64](http://instlatx64.atw.hu)** | 社区 | 实测指令延迟，含 Apple Silicon / Cortex / Neoverse |
+| **[Cloudflare Graviton blog](https://blog.cloudflare.com/tag/aws-graviton)** | 实战 | 在 Graviton 上做 TLS/HTTP/防火墙优化的真实案例 |
 | **[AWS Graviton Performance Runbook](https://github.com/aws/aws-graviton-getting-started)** | 实战 | AWS 官方的 Graviton 应用迁移+优化 cookbook |
-| **[Linaro](https://www.linaro.org/)** | 生态 | ARM Linux 工具链核心组织（Linaro Toolchain / OP-TEE / 96Boards）|
+| **[Linaro](https://www.linaro.org)** | 生态 | ARM Linux 工具链核心组织（Linaro Toolchain / OP-TEE / 96Boards）|
 
 ### RISC-V 阵营（更年轻、更开放、更分散）
 
@@ -36,8 +36,8 @@
 | ⭐ **[RISC-V Vector spec v1.0](https://github.com/riscvarchive/riscv-v-spec)** | 官方（已 frozen）| V 扩展完整 spec，含 `vfrec7.adoc`/`vfrsqrt7.adoc` 硬件倒数 + `recip.c` Newton-Raphson 参考 |
 | ⭐ **[RVV Intrinsic](https://github.com/riscv-non-isa/rvv-intrinsic-doc)** | 官方 | C 层 vector intrinsic（**Clang 19 + GCC 14 支持 v1.0**）|
 | **[SiFive Performance Guide](https://www.sifive.com/docs)** | 厂商 | SiFive U7/U8/X系列优化指南（最成熟商用 RISC-V）|
-| **[Andes (晶心) Docs](https://www.andestech.com/)** | 厂商 | Andes N/X 系列优化（RISC-V + DSP 扩展）|
-| **[T-Head (平头哥)玄铁](https://www.t-head.cn/)** | 厂商 | C910/C920（开源 RTL）|
+| **[Andes (晶心) Docs](https://www.andestech.com)** | 厂商 | Andes N/X 系列优化（RISC-V + DSP 扩展）|
+| **[T-Head (平头哥)玄铁](https://www.t-head.cn)** | 厂商 | C910/C920（开源 RTL）|
 | **[BOOM (Berkeley Out-of-Order Machine)](https://github.com/riscv-boom/riscv-boom)** | 学术 | Berkeley 开源的 RISC-V OoO 核心，研究用 |
 | ⭐ **[Spike / riscv-isa-sim](https://github.com/riscv-software-src/riscv-isa-sim)** | 官方 ISA 仿真器 | 支持 RVV 1.0，调试 RISC-V 代码的金标准 |
 | **[QEMU RISC-V](https://www.qemu.org/docs/master/system/riscv.html)** | 仿真 | 系统级 RISC-V 仿真，跨开发必备 |
@@ -496,7 +496,7 @@ arm_riscv_optimization_demo.py        ← 可跑对比
 - **[OSACA 论文](https://arxiv.org/abs/1910.00214)**（PMBS19）
 
 ### 实战博客（持续更新）
-- **[Cloudflare Graviton blog](https://blog.cloudflare.com/tag/aws-graviton/)**
+- **[Cloudflare Graviton blog](https://blog.cloudflare.com/tag/aws-graviton)**
 - **[AWS Graviton getting started](https://github.com/aws/aws-graviton-getting-started)**
 - **[Dougall's Apple Silicon tables](https://dougallj.appspot.com/apple/firestorm.html)**
 - **[SiFive blog](https://www.sifive.com/blog)**
@@ -505,7 +505,7 @@ arm_riscv_optimization_demo.py        ← 可跑对比
 - ⭐ **[OSACA](https://github.com/RRZE-HPC/OSACA)** —— ARM/Apple 优化的核心分析器
 - ⭐ **[Highway](https://github.com/google/highway)** —— 跨平台 SIMD 库
 - **[Spike](https://github.com/riscv-software-src/riscv-isa-sim)** —— RISC-V 官方仿真器
-- **[SLEEF](https://sleef.org/)** —— 跨平台数学库
+- **[SLEEF](https://sleef.org)** —— 跨平台数学库
 - **[godbolt.org](https://godbolt.org)** —— 集成 OSACA，在线分析汇编
 
 ### 课程

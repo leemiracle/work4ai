@@ -61,8 +61,8 @@ This model was contributed by [nielsr](https://huggingface.co/nielsr). The origi
 - Both the patch resolution and image resolution used during pre-training or fine-tuning are reflected in the name of
   each checkpoint. For example, `microsoft/beit-base-patch16-224` refers to a base-sized architecture with patch
   resolution of 16x16 and fine-tuning resolution of 224x224. All checkpoints can be found on the [hub](https://huggingface.co/models?search=microsoft/beit).
-- The available checkpoints are either (1) pre-trained on [ImageNet-22k](http://www.image-net.org/) (a collection of
-  14 million images and 22k classes) only, (2) also fine-tuned on ImageNet-22k or (3) also fine-tuned on [ImageNet-1k](http://www.image-net.org/challenges/LSVRC/2012/) (also referred to as ILSVRC 2012, a collection of 1.3 million
+- The available checkpoints are either (1) pre-trained on [ImageNet-22k](http://www.image-net.org) (a collection of
+  14 million images and 22k classes) only, (2) also fine-tuned on ImageNet-22k or (3) also fine-tuned on [ImageNet-1k](http://www.image-net.org/challenges/LSVRC/2012) (also referred to as ILSVRC 2012, a collection of 1.3 million
   images and 1,000 classes).
 - BEiT uses relative position embeddings, inspired by the T5 model. During pre-training, the authors shared the
   relative position bias among the several self-attention layers. During fine-tuning, each layer's relative position

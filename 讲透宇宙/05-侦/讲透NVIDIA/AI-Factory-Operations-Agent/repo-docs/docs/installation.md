@@ -1,0 +1,751 @@
+# AI Factory Operations Agent Helm Deployment
+
+AI Factory Operations Agent is installed with Helm. This guide documents the shared upgrade, LLM, module, UI, and headless workflows.
+
+## Install AI Factory Operations Agent
+
+For a bare Kubernetes cluster, follow the complete [Kind installation guide](kind_installation.md).
+
+For an NVIDIA Mission Control managed cluster, follow the complete [NMC installation guide](nmc_installation.md).
+
+Optionally, use the [installation builder](installation_builder.md) to select modules and generate your Helm command.
+
+## Custom Installation
+
+### 1. Create The Namespace And Registry Access
+
+Ask your NVIDIA contact to invite the email address you will use with NGC to
+the AI Factory Operations Agent `afoa-release` team in the private registry. Accept the invitation while
+signed in with that account; use a private browser window if another NGC
+account is already signed in. Then create an NGC personal API key from
+[NGC Setup > API Keys](https://org.ngc.nvidia.com/setup/api-keys) with the
+Private Registry service enabled.
+
+```bash
+MOSAIC_CHART=oci://nvcr.io/0948643769302270/afoa-release/mosaic-stack
+# Remove --devel for the latest stable release, or replace it with --version 0.0.1 to pin that release.
+
+read -rsp 'NGC API key: ' NGC_API_KEY; echo
+printf '%s' "$NGC_API_KEY" | helm registry login nvcr.io \
+  --username '$oauthtoken' \
+  --password-stdin
+
+kubectl create namespace mosaic --dry-run=client -o yaml | kubectl apply -f -
+kubectl -n mosaic create secret docker-registry nvcr-image-pull-secret \
+  --docker-server=nvcr.io \
+  --docker-username='$oauthtoken' \
+  --docker-password="$NGC_API_KEY" \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+unset NGC_API_KEY
+```
+
+Persistent storage must be available through the cluster’s default StorageClass. The chart uses that default for the agent workspace and UI audit log; set `openclaw.pvc.storageClassName` or `mosaicUi.auditPvc.storageClassName` only when selecting another class.
+
+### 2. Choose An LLM
+
+Choose one inference path below. Both paths install the same agent stack.
+
+- [External inference](#external-inference): use an existing OpenAI-compatible endpoint, whether hosted by a provider or on your own infrastructure.
+- [On-prem inference](#on-prem-inference): deploy a model with vLLM through this chart on your cluster GPUs.
+
+#### External Inference
+
+To install AI Factory Operations Agent with an external OpenAI-compatible LLM, set the provider URL and model, enter its API key, and run:
+
+```bash
+export EXTERNAL_LLM_BASE_URL='https://integrate.api.nvidia.com/v1'
+export EXTERNAL_LLM_MODEL='nvidia/nemotron-3.5-super-vl-120b-a12b'
+read -rsp 'External LLM API key: ' EXTERNAL_LLM_API_KEY; echo
+
+kubectl -n mosaic create secret generic mosaic-external-llm \
+  --from-literal=apiKey="$EXTERNAL_LLM_API_KEY" \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+helm upgrade --install mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --set 'global.imagePullSecrets[0].name=nvcr-image-pull-secret' \
+  --set llm.mode=external \
+  --set-string llm.external.baseUrl="$EXTERNAL_LLM_BASE_URL" \
+  --set-string llm.external.model="$EXTERNAL_LLM_MODEL" \
+  --set llm.external.existingSecret=mosaic-external-llm \
+  --set modules.ui.enabled=true \
+  --set modules.execution.enabled=true \
+  --set modules.kubernetes.enabled=false \
+  --set modules.observability.enabled=false \
+  --set modules.grafana.enabled=false \
+  --set modules.bcm.enabled=false \
+  --set modules.slurm.enabled=false \
+  --set modules.diagnostics.enabled=false \
+  --set modules.research.enabled=false \
+  --set modules.terminal.enabled=false \
+  --reset-values \
+  --atomic \
+  --wait \
+  --timeout 12m
+
+unset EXTERNAL_LLM_API_KEY
+```
+
+The [NVIDIA API Catalog example](https://build.nvidia.com/nvidia/nemotron-3.5-super-vl-120b-a12b/deploy) uses the public API base URL above. `build.nvidia.com` hosts the catalog; it is not the inference API base URL. Hosted inference requires your explicitly approved NVIDIA API key. For OpenAI, use `EXTERNAL_LLM_BASE_URL=https://api.openai.com/v1` and a model available to the account. Do not put provider keys in committed values files.
+
+AI Factory Operations Agent requests `reasoning_effort: none` from external endpoints. For an independently managed vLLM server, also set its server default:
+
+```bash
+vllm serve MODEL --default-chat-template-kwargs '{"enable_thinking":false}'
+```
+
+After installing with your external endpoint, skip the on-prem inference instructions and continue to [3. Add Extensions](#3-add-extensions).
+
+#### On-Prem Inference
+
+This path deploys the inference server on your cluster. Choose one model profile below. If you already have an inference endpoint, use [External inference](#external-inference) instead.
+
+To use the bundled on-prem inference profiles, the GPU nodes must belong to the same Kubernetes cluster as the agent's Helm release. For NMC deployments with separate admin and GPU workload clusters, use the [standalone inference example](nmc_installation.md#self-hosted-inference) and connect the agent with external inference settings.
+
+For chart-managed vLLM profiles, unpack the published chart once:
+
+```bash
+MOSAIC_CHART_WORKDIR=$(mktemp -d)
+helm pull "$MOSAIC_CHART" \
+  --devel \
+  --untar \
+  --untardir "$MOSAIC_CHART_WORKDIR"
+MOSAIC_CHART_PATH="$MOSAIC_CHART_WORKDIR/mosaic-stack"
+```
+
+The chart defaults to Nemotron 3.5 Super VL NVFP4 on one compatible GPU, with 64 GiB of requested host memory and a 500 GiB model cache. GPU count alone does not establish compatibility: verify the GPU memory, architecture, driver, and pinned runtime against the model requirements.
+
+##### Nemotron 3.5 Super VL
+
+To install AI Factory Operations Agent with Nemotron 3.5 Super VL running on 1 GPU in vLLM, run:
+
+```bash
+helm upgrade --install mosaic "$MOSAIC_CHART_PATH" \
+  -n mosaic \
+  -f "$MOSAIC_CHART_PATH/profiles/vllm-super-1gpu.yaml" \
+  --set 'global.imagePullSecrets[0].name=nvcr-image-pull-secret' \
+  --set modules.ui.enabled=true \
+  --set modules.execution.enabled=true \
+  --set modules.kubernetes.enabled=false \
+  --set modules.observability.enabled=false \
+  --set modules.grafana.enabled=false \
+  --set modules.bcm.enabled=false \
+  --set modules.slurm.enabled=false \
+  --set modules.diagnostics.enabled=false \
+  --set modules.research.enabled=false \
+  --set modules.terminal.enabled=false \
+  --reset-values \
+  --atomic \
+  --wait \
+  --timeout 30m
+```
+
+The Super profile pins the [Nemotron 3.5 Super VL checkpoint](https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-NVFP4) and compatible vLLM image. It was validated on one B200 for text generation and automatic tool calling with 262,144-token context and 16 maximum concurrent sequences. Image/video input and production concurrency were not tested; the agent retains its existing text-input configuration.
+
+When upgrading from Nemotron 3 Super, preserve existing module and site values and the model-cache size, then apply `profiles/vllm-super-1gpu.yaml` last. The served model name changes to `nemotron-3.5-super-vl`; update external clients that used `nemotron-super-120b`. Restarting inference interrupts requests until the new checkpoint is ready. For shared endpoints, validate a separate inference release before switching clients.
+
+##### Nemotron Ultra
+
+To install AI Factory Operations Agent with Nemotron Ultra running on four Blackwell GPUs on one node, run:
+
+The [Ultra model card](https://build.nvidia.com/nvidia/nemotron-3-ultra-550b-a55b/modelcard) specifies four B200/GB200/B300/GB300 GPUs or eight H100 GPUs as the minimum. For H100, override both `llm.vllm.gpuCount=8` and `llm.vllm.tensorParallelSize=8` on one node. Set `llm.vllm.nodeSelector` to keep inference on compatible hardware in mixed clusters. The distributed Ray option and `vllm-ultra-16gpu.yaml` profile have been removed; replace old values instead of reusing them during upgrades.
+
+When upgrading an existing release, preserve its `llm.vllm.modelCache.size` override. Kubernetes does not allow changing the StatefulSet volume claim template in place, and the smaller Super default does not shrink an existing cache.
+
+```bash
+helm upgrade --install mosaic "$MOSAIC_CHART_PATH" \
+  -n mosaic \
+  -f "$MOSAIC_CHART_PATH/profiles/vllm-ultra-4gpu.yaml" \
+  --set 'global.imagePullSecrets[0].name=nvcr-image-pull-secret' \
+  --set modules.ui.enabled=true \
+  --set modules.execution.enabled=true \
+  --set modules.kubernetes.enabled=false \
+  --set modules.observability.enabled=false \
+  --set modules.grafana.enabled=false \
+  --set modules.bcm.enabled=false \
+  --set modules.slurm.enabled=false \
+  --set modules.diagnostics.enabled=false \
+  --set modules.research.enabled=false \
+  --set modules.terminal.enabled=false \
+  --reset-values \
+  --atomic \
+  --wait \
+  --timeout 30m
+```
+
+### 3. Add Extensions
+
+The minimal installation includes the UI, headless interfaces, OpenClaw, OpenShell, and key-free [web search](#web-search). Configure the modules needed for your cluster using the [Extensions](#extensions) instructions, then continue to [Usage](#usage).
+
+## Usage
+
+After installing with either inference path, open the UI by running:
+
+```bash
+kubectl -n mosaic port-forward svc/mosaic-ui 3000:3000
+```
+
+By default, the chart creates the `mosaic-ui-auth` Secret and generates both the UI password and an internal machine token. Leave `mosaicUi.auth.password` and `mosaicUi.auth.machineToken` empty; users do not need to provide either value. The generated credentials are preserved across upgrades.
+
+Retrieve the browser login with:
+
+```bash
+kubectl -n mosaic get secret mosaic-ui-auth -o jsonpath='{.data.username}' | base64 --decode; echo
+kubectl -n mosaic get secret mosaic-ui-auth -o jsonpath='{.data.password}' | base64 --decode; echo
+```
+
+`username` and `password` are browser credentials. `machineToken` is used automatically by OpenClaw when it calls protected AI Factory Operations Agent UI APIs; it is never entered in the browser.
+
+`mosaicUi.auth.existingSecret` is only for installations that manage credentials outside this chart. When it is set, the chart does not create or modify the Secret, so the externally managed Secret must provide `username`, `password`, and `machineToken`.
+
+Open `http://localhost:3000` and sign in with the username and password above.
+
+## Extensions
+
+All module changes below update an existing AI Factory Operations Agent release and preserve its current site configuration.
+
+### Observability
+
+Connect to an existing Prometheus or VictoriaMetrics service with
+`observability.prometheusUrl`. Choose the query base URL for your backend:
+
+| Backend | Example base URL |
+| --- | --- |
+| Prometheus | `http://kube-prometheus-stack-prometheus.prometheus.svc.cluster.local:9090` |
+| Single-node VictoriaMetrics | `http://victoriametrics.monitoring.svc.cluster.local:8428` |
+| VictoriaMetrics cluster | `http://vmselect.monitoring.svc.cluster.local:8481/select/0/prometheus` |
+
+Replace `0` with your tenant ID for a VictoriaMetrics cluster. Include any proxy
+prefix and omit `/api/v1`. Set `PROMETHEUS_URL` to your endpoint:
+
+```bash
+export PROMETHEUS_URL='http://kube-prometheus-stack-prometheus.prometheus.svc.cluster.local:9090'
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.observability.enabled=true \
+  --set-string observability.prometheusUrl="$PROMETHEUS_URL" \
+  --wait \
+  --timeout 12m
+```
+
+### Read-only Loki logs
+
+To connect Mosaic to an existing Loki service, run:
+
+```bash
+export LOKI_URL='https://logs.example.com'
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.observability.enabled=true \
+  --set-string observability.loki.url="$LOKI_URL" \
+  --wait \
+  --timeout 12m
+```
+
+Mosaic queries existing logs; it does not install Loki or a collector. For endpoints
+requiring authentication or a tenant ID, see [Loki connection options](loki.md#connection-options).
+Verify access by asking Mosaic to show 10 log entries from the past 15 minutes.
+
+### Alertmanager
+
+AI Factory Operations Agent defaults to the Alertmanager service installed by NMC at `http://kube-prometheus-stack-alertmanager.prometheus.svc.cluster.local:9093`. To use another Alertmanager endpoint, run:
+
+```bash
+export ALERTMANAGER_URL='https://alerts.example.com/alertmanager'
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set-string observability.alertmanagerUrl="$ALERTMANAGER_URL" \
+  --wait \
+  --timeout 12m
+```
+
+`alertmanagerUrl` is the Alertmanager API base URL. AI Factory Operations Agent reads active alerts from its `/api/v2/alerts` endpoint.
+
+### Grafana
+
+To connect AI Factory Operations Agent to an existing Grafana service, run:
+
+```bash
+export GRAFANA_URL='http://kube-prometheus-stack-grafana.prometheus.svc.cluster.local/grafana'
+export GRAFANA_DATASOURCE_UID='prometheus'
+export GRAFANA_DATASOURCE_TYPE='prometheus'
+export GRAFANA_USERNAME='admin'
+read -rsp 'Grafana password: ' GRAFANA_PASSWORD; echo
+
+kubectl -n mosaic create secret generic mosaic-grafana-auth \
+  --from-literal=username="$GRAFANA_USERNAME" \
+  --from-literal=password="$GRAFANA_PASSWORD" \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.grafana.enabled=true \
+  --set-string observability.grafanaUrl="$GRAFANA_URL" \
+  --set-string observability.grafanaDatasourceUid="$GRAFANA_DATASOURCE_UID" \
+  --set-string observability.grafanaDatasourceType="$GRAFANA_DATASOURCE_TYPE" \
+  --set observability.grafanaAuth.existingSecret=mosaic-grafana-auth \
+  --wait \
+  --timeout 12m
+
+unset GRAFANA_PASSWORD
+```
+
+`grafanaUrl` includes Grafana's configured serving path. Use the service root for a root-served Grafana or `/grafana` for the NMC deployment.
+
+For an installed [native VictoriaMetrics datasource](https://docs.victoriametrics.com/victoriametrics/integrations/grafana/datasource),
+set `GRAFANA_DATASOURCE_UID` to its UID and
+`GRAFANA_DATASOURCE_TYPE=victoriametrics-metrics-datasource`.
+For a Prometheus datasource, keep `prometheus`.
+
+### Terminal
+
+To enable the optional browser terminal service, run:
+
+```bash
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.terminal.enabled=true \
+  --wait \
+  --timeout 12m
+```
+
+### Access Modes
+
+Enable guarded write operations with the Edit module:
+
+```yaml
+modules:
+  edit:
+    enabled: true
+    hitl: true
+    kubernetes:
+      enabled: true
+```
+
+Every interactive conversation starts in **View**. Users can switch that conversation to **Edit** for approval-gated changes or **Auto** for validated changes without approval. Auto requires confirmation through a warning dialog. Other conversations remain in View, and automated alert and cluster-health sessions are always read-only. When the module is disabled, the access control is not shown.
+
+Native Slack users remain read-only unless their verified Slack user ID is listed under `openclaw.slack.editUserIds`. Edit users approve their own mutations with Slack buttons. The broader `openclaw.slack.allowedUserIds` list controls who may use AI Factory Operations Agent through DMs, group DMs, and channel mentions.
+
+Privileges are attached to separate tools and credentials. Read-only infrastructure tools and sandbox-local execution run automatically in View. OpenShell enforces local execution boundaries; the diagnostic command allowlist applies to remote SSH. Mutating Kubernetes, Base Command Manager, and SSH operations are blocked in View, approval-gated in Edit when `hitl: true`, and automatic in Auto. Kubernetes RBAC, request validation, configured SSH hosts, and audit logging apply in every mode.
+
+Read [the AI Factory Operations Agent security model](security_model.md) before enabling Edit or Auto.
+
+### Managed MCP servers
+
+The chart can deploy private MCP services and register their cluster-local
+endpoints with OpenClaw. Each enabled server uses a digest-pinned image,
+ClusterIP Service, hardened pod security settings, and existing Kubernetes
+Secrets for credentials. An ingress policy limits the service to OpenClaw.
+
+```yaml
+managedMcpServers:
+  servers:
+    example:
+      enabled: true
+      image:
+        repository: registry.example.com/example-mcp
+        digest: sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+      args: ["--read-only"]
+      env:
+        API_BASE_URL: https://api.example.com
+      secretEnv:
+        API_TOKEN:
+          name: example-mcp-credentials
+          key: token
+      mcp:
+        headers:
+          X-Organization: operations
+        secretHeaders:
+          Authorization:
+            name: example-mcp-caller
+            key: token
+            prefix: "Bearer "
+      toolPolicy:
+        defaultAccess: edit
+        viewTools: [status, search]
+```
+
+The resulting endpoint is registered as `example` at
+`http://mcp-example:8080/mcp`. Use `port`, `path`, or `transport` to override
+those connection defaults. For a private CA, set `tls.existingSecret`; the
+Secret must contain `ca.crt` unless `tls.key` is overridden. Do not place
+credentials in `env`.
+
+`args` are passed to the container entrypoint. `mcp.headers` use OpenClaw's
+native HTTP MCP configuration. Put sensitive header values in
+`mcp.secretHeaders`; the chart injects the referenced Secret only into OpenClaw
+and substitutes it into the header at startup. Managed-server tools require Edit
+by default. Set `toolPolicy.defaultAccess: view` only when every tool exposed by
+the server is safe in View, or list individual safe tool names in `viewTools`.
+Tools from unconfigured servers remain fail-closed.
+
+### Externally managed MCP servers
+
+Installers can register an existing MCP endpoint without deploying it or
+changing the UI image. Add the connection to the Helm values file and keep
+credentials in an existing Kubernetes Secret:
+
+```yaml
+externalMcpServers:
+  inventory:
+    url: https://mcp.example.com/mcp
+    transport: streamable-http
+    secretHeaders:
+      Authorization:
+        name: inventory-credentials
+        key: token
+        prefix: "Bearer "
+    toolPolicy:
+      defaultAccess: edit
+      viewTools: [lookup]
+```
+
+The chart injects the Secret value only into OpenClaw and references it in the
+MCP header. External tools require Edit by default. List verified read-only
+tools in `viewTools`, or set `defaultAccess: view` only when every tool is safe
+in View. URLs must use HTTPS, except for cluster-local service URLs under
+`svc.cluster.local`; credentials and query strings are not permitted in URLs.
+The chart does not create, proxy, or authenticate the external server itself.
+
+#### Run:ai
+
+Run:ai is included as a disabled managed MCP module. Provision a dedicated
+Viewer application's `clientId` and `clientSecret` as a Kubernetes Secret,
+then enable it in the installer's tracked values file:
+
+```yaml
+managedMcpServers:
+  servers:
+    runai:
+      enabled: true
+      env:
+        RUNAI_BASE_URL: https://runai.example.com
+      oauth:
+        tokenUrl: https://runai.example.com/auth/realms/runai/protocol/openid-connect/token
+        clientIdSecret:
+          name: runai-credentials
+        clientSecretSecret:
+          name: runai-credentials
+```
+
+The chart's sidecar renews a Viewer application's OAuth token; the Run:ai
+server exposes only read tools. For a private CA, set
+`managedMcpServers.servers.runai.tls.existingSecret` to a Secret containing
+`ca.crt`.
+
+### Base Command Manager
+
+To enable the Base Command Manager extension, provide the Base Command Manager head host and SSH key:
+
+```bash
+export CLUSTER_MANAGER_HEAD_HOST='bcm-head.example.com'
+export CLUSTER_MANAGER_SSH_KEY_PATH='/root/.ssh/id_ecdsa'
+test -r "$CLUSTER_MANAGER_SSH_KEY_PATH"
+
+kubectl -n mosaic create secret generic bcm-host-ssh-key \
+  --from-file=id_ecdsa="$CLUSTER_MANAGER_SSH_KEY_PATH" \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.bcm.enabled=true \
+  --set bcmMcp.enabled=true \
+  --set bcmMcp.mode=ssh-adapter \
+  --set-string bcmMcp.headHost="$CLUSTER_MANAGER_HEAD_HOST" \
+  --set bcmMcp.hostSshKeySecretName=bcm-host-ssh-key \
+  --wait \
+  --timeout 12m
+```
+
+The SSH identity must be allowed to create or update the dedicated read-only CMSH user during startup.
+
+### Research
+
+To deploy the Research Agent and OpenSearch, set the embedding API key, active
+model, and corpus path, then run:
+
+```bash
+read -rsp 'NVIDIA embedding API key: ' NVIDIA_API_KEY; echo
+export IRAOP_API_KEY="$(openssl rand -hex 32)"
+export MOSAIC_CHAT_MODEL='nvidia/nemotron-3.5-super-vl-120b-a12b'
+export IRA_CORPUS_PATH='/cm/shared/iraop-corpus'
+
+kubectl -n mosaic create secret generic iraop-secrets \
+  --from-literal=NVIDIA_API_KEY="$NVIDIA_API_KEY" \
+  --from-literal=NVIDIA_CHAT_API_KEY=EMPTY \
+  --from-literal=IRAOP_API_KEY="$IRAOP_API_KEY" \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.research.enabled=true \
+  --set modules.research.secrets.create=false \
+  --set-string researchAgent.iraop.config.NVIDIA_CHAT_MODEL="$MOSAIC_CHAT_MODEL" \
+  --set-string researchAgent.iraop.corpus.hostPath="$IRA_CORPUS_PATH" \
+  --wait \
+  --timeout 12m
+
+unset NVIDIA_API_KEY IRAOP_API_KEY
+```
+
+### Hardware Agent
+
+The Hardware Agent reuses the Base Command Manager head address and `bcm-host-ssh-key` configured above. The chart exposes the required Base Command Manager lookup inside the cluster and generates its internal credentials. It uses NVDebug evidence and generic analysis.
+
+```bash
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.diagnostics.enabled=true \
+  --wait \
+  --timeout 12m
+
+```
+
+### Web search
+
+Web search is **enabled by default**. It gives the agent OpenClaw's read-only `web_search` and `web_fetch` tools, using DuckDuckGo, which needs no API key or account. The agent uses them for components without bundled documentation, such as Grafana, Loki, GPU Operator, Network Operator, vLLM, and upstream Slurm, and for error codes or XIDs that local references do not cover. It cites the URL it relied on and is instructed never to put hostnames, IP addresses, serial numbers, or secrets in a query.
+
+The `openclaw` pod needs HTTPS egress to `duckduckgo.com` and to the sites `web_fetch` retrieves. The chart applies no NetworkPolicy to the `openclaw` pod. If your cluster restricts egress with its own NetworkPolicy, firewall, or proxy, allow those destinations. `modules.webSearch.maxResults` (default `5`, maximum `10`) sets the default number of results per search.
+
+DuckDuckGo support in OpenClaw is experimental: it reads DuckDuckGo's HTML results rather than an official API, so bot challenges or page changes can occasionally break searches. Switch to an API-backed provider if you need a dependable search service.
+
+#### Disable web search
+
+For air-gapped installations, or to keep the agent from making external requests, disable the module. The tools are then not registered at all.
+
+```bash
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.webSearch.enabled=false \
+  --wait \
+  --timeout 12m
+```
+
+#### Use Brave Search instead
+
+Brave Search is an API-backed provider. It needs a paid Brave account; at the time of writing, the **Search** plan costs $5 per 1,000 requests and includes $5 of free usage each month. Check Brave's page for current terms.
+
+1. Create a Brave Search API account at [api.search.brave.com](https://api.search.brave.com). Brave requests a credit card at signup to prevent abuse.
+2. Subscribe to the **Search** plan and create an API key in the [API keys dashboard](https://api-dashboard.search.brave.com/app/keys).
+3. Store the key in the release namespace:
+
+   ```bash
+   read -rsp 'Brave Search API key: ' WEB_SEARCH_KEY; echo
+   kubectl -n mosaic create secret generic mosaic-web-search \
+     --from-literal=WEB_SEARCH_KEY="$WEB_SEARCH_KEY" \
+     --dry-run=client -o yaml | kubectl apply -f -
+   unset WEB_SEARCH_KEY
+   ```
+
+4. Select the provider:
+
+   ```bash
+   helm upgrade mosaic "$MOSAIC_CHART" \
+     --devel \
+     -n mosaic \
+     --reuse-values \
+     --set modules.webSearch.enabled=true \
+     --set modules.webSearch.provider=brave \
+     --set modules.webSearch.existingSecret=mosaic-web-search \
+     --wait \
+     --timeout 12m
+   ```
+
+OpenClaw `2026.6.10` does not bundle the Brave provider. When `provider=brave`, an init container downloads `@openclaw/brave-plugin` at `modules.webSearch.brave.pluginVersion` from `registry.npmjs.org`, verifies it against `modules.webSearch.brave.pluginSha256`, and installs it before the gateway starts. The `openclaw` pod then also needs HTTPS egress to `registry.npmjs.org` and `api.search.brave.com`. To rotate the key, update the Secret and run `kubectl -n mosaic rollout restart deployment/openclaw`. Updating only the Secret does not restart the pod.
+
+After enabling the required plugins, use the earlier port-forward to open the UI.
+
+## Upgrade An Existing Installation
+
+Retain the working site configuration with:
+
+```bash
+MOSAIC_CHART=oci://nvcr.io/0948643769302270/afoa-release/mosaic-stack
+# Remove --devel for the latest stable release, or replace it with --version 0.0.1 to pin that release.
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --atomic \
+  --wait \
+  --timeout 12m
+```
+
+If Helm is not already authenticated to NVCR, run the registry login command from custom installation step 1 first.
+
+## Headless Mode
+
+The AI Factory Operations Agent UI service also exposes a headless API:
+
+```bash
+export MOSAIC_URL=http://127.0.0.1:3000
+export MOSAIC_UI_MACHINE_TOKEN="$(kubectl -n mosaic get secret mosaic-ui-auth \
+  -o jsonpath='{.data.machineToken}' | base64 --decode)"
+curl -sS "$MOSAIC_URL/api/headless/chat" \
+  --header @<(printf 'Authorization: Bearer %s\n' "$MOSAIC_UI_MACHINE_TOKEN") \
+  -H 'content-type: application/json' \
+  -d '{"prompt":"summarize whether the cluster is healthy","sessionKey":"headless"}'
+```
+
+Invoke the packaged CLI inside the `mosaic-ui` pod with:
+
+```bash
+kubectl -n mosaic exec deploy/mosaic-ui -- \
+  mosaic --session headless "summarize whether the cluster is healthy"
+```
+
+The AI Factory Operations Agent HTTP service is not itself an MCP endpoint. Install the stdio MCP bridge on the client machine (Node.js 18 or newer is required):
+
+```bash
+git clone https://github.com/NVIDIA/AI-Factory-Operations-Agent.git
+cd AI-Factory-Operations-Agent
+install -d ~/.local/bin
+install -m 0755 utils/mosaic-mcp.mjs ~/.local/bin/mosaic-mcp
+```
+
+Point the bridge at any reachable AI Factory Operations Agent UI URL. For Claude Code:
+
+```bash
+claude mcp add mosaic \
+  -e MOSAIC_URL=http://localhost:3000 \
+  -- ~/.local/bin/mosaic-mcp
+```
+
+For Codex, add the following to your user `~/.codex/config.toml`, replacing the command with the absolute installed path:
+
+```toml
+[mcp_servers.mosaic]
+command = "/home/USER/.local/bin/mosaic-mcp"
+env_vars = ["MOSAIC_URL", "MOSAIC_UI_MACHINE_TOKEN"]
+```
+
+Start the MCP client from the shell where `MOSAIC_URL` and `MOSAIC_UI_MACHINE_TOKEN` are exported.
+
+Replace `http://localhost:3000` with the deployed AI Factory Operations Agent URL when it is reachable directly. The bridge exposes `ai_factory_operations_agent_chat`, `ai_factory_operations_agent_history`, `ai_factory_operations_agent_commands`, and the AI Factory Operations Agent/OpenClaw tools enabled by the chart over stdio MCP. See `docs/skills/ai-factory-operations-agent-headless/SKILL.md` for the complete agent workflow.
+
+## Vanilla Slurm RCA
+
+The public Slurm workflow is evidence based. By default, the chart deploys a read-only Slurm evidence collector. The collector mounts the host filesystem read-only inside the collector pod, exposes bounded HTTP tools to OpenClaw, and keeps broad host filesystem access out of the LLM sandbox.
+
+Default collector roots:
+
+- `/var/log`
+- `/cm/shared`
+- `/slurm`
+- `/etc/slurm`
+- `/cm/shared/apps/slurm/etc`
+- `/run/log/journal`
+- `/var/log/journal`
+
+The Slurm skill first calls `slurm_job_evidence`, then falls back to read-only `sacct`/`scontrol` and any mounted evidence available in the sandbox. Missing paths are expected on many clusters; the skill continues with whatever evidence is present.
+
+To use the vanilla collector with a site-specific evidence root, run:
+
+```bash
+export SLURM_EVIDENCE_ROOT='/shared/slurm'
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.slurm.enabled=true \
+  --set modules.slurm.backend=vanilla \
+  --set-json "slurmEvidenceCollector.roots=[\"$SLURM_EVIDENCE_ROOT\"]" \
+  --wait \
+  --timeout 12m
+```
+
+The Slurm backend defaults to `auto`. When Base Command Manager and Slurm are both enabled, AI Factory Operations Agent uses Base Command Manager WLM's read-only job metadata, stdout, and stderr interface and does not deploy the node-local collector. Without Base Command Manager, it uses the vanilla collector. Set `modules.slurm.backend` to `bcm` or `vanilla` only to require one backend explicitly.
+
+After enabling the Base Command Manager extension, enable Slurm through it with:
+
+```bash
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.slurm.enabled=true \
+  --set modules.slurm.backend=auto \
+  --wait \
+  --timeout 12m
+```
+
+## Kubernetes Access
+
+AI Factory Operations Agent exposes one read-only OpenClaw tool, `run_kubectl`. The tool invokes a pinned kubectl binary with an argument array, never a shell command. It rejects mutation, pod execution, port forwarding, Secret reads, impersonation, raw kubeconfig output, and credential or API endpoint overrides before launching kubectl. Kubernetes RBAC independently denies those operations.
+
+The local cluster is registered by default using the `openclaw` ServiceAccount. Its token and kubeconfig are mounted only in the OpenClaw pod; OpenShell sandboxes receive neither Kubernetes credentials nor kubectl.
+
+Enable read-only access to the local cluster with:
+
+```bash
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.kubernetes.enabled=true \
+  --wait \
+  --timeout 12m
+```
+
+To register another cluster, first create a kubeconfig for a read-only identity on that cluster. Store it as a Secret in the AI Factory Operations Agent namespace:
+
+```bash
+kubectl -n mosaic create secret generic production-west-kubeconfig \
+  --from-file=config=/path/to/read-only-kubeconfig
+```
+
+Register that Secret with AI Factory Operations Agent by running:
+
+```bash
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set modules.kubernetes.enabled=true \
+  --set-json 'kubernetes.clusters=[{"name":"production-west","kubeconfigSecretRef":{"name":"production-west-kubeconfig","key":"config"}}]' \
+  --wait \
+  --timeout 12m
+```
+
+The model selects only the registered name. It cannot provide a kubeconfig path, context, token, or server address. Removing the list entry on upgrade removes the corresponding credential mount. A missing Secret leaves the OpenClaw pod unready with the Kubernetes volume error from the kubelet.
+
+## OpenShell Dependency
+
+The published chart includes the pinned official OpenShell OCI dependency from `ghcr.io/nvidia/openshell`. It uses the official gateway, supervisor, and unprivileged base sandbox images. The pinned `kubernetes-sigs/agent-sandbox` prerequisite required by OpenShell's Kubernetes driver is included as well:
+
+- `CustomResourceDefinition` resources are placed under chart `crds/` so Helm installs them before templates.
+- The controller namespace, RBAC, service, and StatefulSet are rendered as normal templates when `agentSandbox.install=true`.
+
+If the cluster already provides a compatible `agent-sandbox` installation, run:
+
+```bash
+helm upgrade mosaic "$MOSAIC_CHART" \
+  --devel \
+  -n mosaic \
+  --reuse-values \
+  --set agentSandbox.install=false \
+  --wait \
+  --timeout 12m
+```
+
+The packaged chart includes the tracked `agent-sandbox` CRD and controller templates.

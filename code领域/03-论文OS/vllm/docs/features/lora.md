@@ -62,7 +62,7 @@ vllm serve meta-llama/Llama-3.2-3B-Instruct \
 
 The server entrypoint accepts all other LoRA configuration parameters (`max_loras`, `max_lora_rank`, `max_cpu_loras`,
 etc.), which will apply to all forthcoming requests. Upon querying the `/models` endpoint, we should see our LoRA along
-with its base model (if `jq` is not installed, you can follow [this guide](https://jqlang.org/download/) to install it.):
+with its base model (if `jq` is not installed, you can follow [this guide](https://jqlang.org/download) to install it.):
 
 ??? console "Command"
 

@@ -131,7 +131,7 @@ neo-os/
 - **DTrace/eBPF** → 可观测性从工具升为 OS 根
 - **seL4** → 形式化从验证代码扩到验证解释规则
 - **AlphaProof** → 神经符号闭环（LLM 生成 + Lean4 验证）
-- **work4ai 费曼学习法** → "讲透任意领域"方法论运行时化（详见 [`03-methodology/`](./03-methodology/)）
+- **work4ai 费曼学习法** → "讲透任意领域"方法论运行时化（详见 [`03-methodology/`](./03-methodology)）
 - **Bloom 2-sigma** → 一对一辅导的可扩展化
 
 ---
@@ -145,7 +145,7 @@ neo-os/
 | **继承** | 三层讲解 × 17 视角 × 费曼门（→ L3 英文接口） |
 | **借鉴** | 38 个讲透系列（→ 各层理论弹药） |
 | **原创升级** | work4ai "代码实证层" → Neo-OS "trace 实证层"（可证伪性升级） |
-| **契约层** | [`03-methodology/`](./03-methodology/) —— 不复制 work4ai 内容，只建引用映射 |
+| **契约层** | [`03-methodology/`](./03-methodology) —— 不复制 work4ai 内容，只建引用映射 |
 
 **完整资产映射**：[`02-research/LOCAL_ASSETS.md`](./02-research/LOCAL_ASSETS.md)（work4ai 60+ 主题 → Neo-OS 各层用途）
 **升级设计**：[`03-methodology/trace-native-upgrade.md`](./03-methodology/trace-native-upgrade.md)（Neo-OS paper-grade 贡献声明）

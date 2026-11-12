@@ -185,7 +185,7 @@ for out in pipe(data()):
 
 由于批处理可以加速处理，因此在这里尝试调整 `batch_size` 参数可能会很有用。
 
-迭代数据集的最简单方法就是从🤗 [Datasets](https://github.com/huggingface/datasets/) 中加载数据集：
+迭代数据集的最简单方法就是从🤗 [Datasets](https://github.com/huggingface/datasets) 中加载数据集：
 
 
 ```py
@@ -268,7 +268,7 @@ for out in pipe(KeyDataset(dataset, "audio")):
 
 <Tip>
 
-要运行上面的示例，除了🤗 Transformers之外，您需要安装[`pytesseract`](https://pypi.org/project/pytesseract/)。
+要运行上面的示例，除了🤗 Transformers之外，您需要安装[`pytesseract`](https://pypi.org/project/pytesseract)。
 
 
 ```bash

@@ -57,4 +57,4 @@
 - **6:5:4 时间切分**：输入 6h : 输出 5h : 应用 4h（避免只读不写）
 - **趣味性是燃料不是装饰**：可视化/历史/工程锚点/难题，防 6-8 年倦怠
 
-> 📖 完整路径见 [00-META/ROADMAP.md](../00-META/ROADMAP.md)。方法论文献见 [00-META/research/](../00-META/research/)。
+> 📖 完整路径见 [00-META/ROADMAP.md](../00-META/ROADMAP.md)。方法论文献见 [00-META/research/](../00-META/research)。

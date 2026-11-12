@@ -38,7 +38,7 @@ LLM全栈优质资源汇总
 - [Transformer的结构是什么样的？各个子模块各有什么作用？](https://blog.csdn.net/m0_54929869/article/details/118881804)
 - [以Transformer结构为基础的大模型参数量、计算量、中间激活以及KV cache剖析](https://mp.weixin.qq.com/s/3JYz6yrLeBr5ujip3LZe6w)
 - [Transformer 一起动手编码学原理](https://mp.weixin.qq.com/s/NgUNuWhvp2SqG-XWYv2PGQ)
-- [为什么transformer(Bert)的多头注意力要对每一个head进行降维？](http://www.sniper97.cn/index.php/note/deep-learning/note-deep-learning/4002/)
+- [为什么transformer(Bert)的多头注意力要对每一个head进行降维？](http://www.sniper97.cn/index.php/note/deep-learning/note-deep-learning/4002)
 - [Decoder-Only Transformers: The Workhorse of Generative LLMs](https://cameronrwolfe.substack.com/p/decoder-only-transformers-the-workhorse)
 
 
@@ -127,7 +127,7 @@ Efficient-Multimodal-LLMs-Survey：https://github.com/lijiannuist/Efficient-Mult
 - [OPT-175B是如何炼成的](https://zhuanlan.zhihu.com/p/622061951)
 - [全网最全-混合精度训练原理](https://zhuanlan.zhihu.com/p/441591808)
 - [飞桨分布式训练4D混合并行可训千亿级AI模型](https://ai.baidu.com/forum/topic/show/987996)
-- [Transformer Math 101](https://blog.eleuther.ai/transformer-math/) - 如何计算显存消耗?
+- [Transformer Math 101](https://blog.eleuther.ai/transformer-math) - 如何计算显存消耗?
 - [Megatron-LM 第三篇Paper总结——Sequence Parallelism & Selective Checkpointing](https://zhuanlan.zhihu.com/p/522198082)
 - [大模型训练踩坑](https://zhuanlan.zhihu.com/p/660759033)
 
@@ -139,7 +139,7 @@ Efficient-Multimodal-LLMs-Survey：https://github.com/lijiannuist/Efficient-Mult
 
 ### LLM微调
 
-- [Adapting P-Tuning to Solve Non-English Downstream Tasks](https://developer.nvidia.com/blog/adapting-p-tuning-to-solve-non-english-downstream-tasks/)
+- [Adapting P-Tuning to Solve Non-English Downstream Tasks](https://developer.nvidia.com/blog/adapting-p-tuning-to-solve-non-english-downstream-tasks)
 
 
 ### LLM对齐
@@ -147,7 +147,7 @@ Efficient-Multimodal-LLMs-Survey：https://github.com/lijiannuist/Efficient-Mult
 - [MOSS-RLHF](https://github.com/OpenLMLab/MOSS-RLHF)
 - [模型调优（RLHF/DPO/ORPO）- 终极指南](https://zhuanlan.zhihu.com/p/692594519)
 - [DPO: Direct Preference Optimization 论文解读及代码实践](https://zhuanlan.zhihu.com/p/642569664)
-- [强化学习入门：基本思想和经典算法](https://imzhanghao.com/2022/02/10/reinforcement-learning/)
+- [强化学习入门：基本思想和经典算法](https://imzhanghao.com/2022/02/10/reinforcement-learning)
 - [人人都能看懂的PPO原理与源码解读](https://zhuanlan.zhihu.com/p/677607581)
 - [关于Instruct GPT复现的一些细节与想法](https://zhuanlan.zhihu.com/p/609078527)
 - [【RLHF】RL 究竟是如何与 LLM 做结合的？](https://zhuanlan.zhihu.com/p/675329917)
@@ -327,7 +327,7 @@ KV Cache：
 
 - [CUDA编程入门（一）CUDA编程模型](https://zhuanlan.zhihu.com/p/97044592)
 - [CUDA编程入门（二）GPU硬件基础](https://zhuanlan.zhihu.com/p/97131966)
-- [GPU编程（CUDA）](https://face2ai.com/program-blog/)
+- [GPU编程（CUDA）](https://face2ai.com/program-blog)
 - [CUDA编程入门极简教程](https://zhuanlan.zhihu.com/p/34587739)
 
 
@@ -344,7 +344,7 @@ KV Cache：
 - [动手学大模型应用开发](https://github.com/datawhalechina/llm-universe)
 - [langchain java](https://github.com/HamaWhiteGG/langchain-java)
 - [大模型主流应用RAG的介绍——从架构到技术细节](https://luxiangdong.com/2023/09/25/ragone/#/%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2)
-- [基于检索的大语言模型和应用（陈丹琦）](https://acl2023-retrieval-lm.github.io/)
+- [基于检索的大语言模型和应用（陈丹琦）](https://acl2023-retrieval-lm.github.io)
 - [大模型bad case修复方案思考](https://mp.weixin.qq.com/s/xqFkfzHVnePf1ub_sCk9iw)
 - [《综述：全新大语言模型驱动的Agent》——4.5万字详细解读复旦NLP和米哈游最新Agent Survey](https://zhuanlan.zhihu.com/p/656676717)
 
@@ -379,9 +379,9 @@ KV Cache：
 - [nanoGPT](https://github.com/karpathy/nanoGPT)
 - [Baby-Llama2-Chinese](https://github.com/DLLXW/baby-llama2-chinese)
 - [从0到1构建一个MiniLLM](https://github.com/Tongjilibo/build_MiniLLM_from_scratch)
-- [gpt-fast](https://github.com/pytorch-labs/gpt-fast) 、[blog](https://pytorch.org/blog/accelerating-generative-ai-2/)
-- [CSE 234: Data Systems for Machine Learning](https://hao-ai-lab.github.io/cse234-w25/)
-- [DSC 291: Machine Learning Systems](https://hao-ai-lab.github.io/dsc291-s24/)
+- [gpt-fast](https://github.com/pytorch-labs/gpt-fast) 、[blog](https://pytorch.org/blog/accelerating-generative-ai-2)
+- [CSE 234: Data Systems for Machine Learning](https://hao-ai-lab.github.io/cse234-w25)
+- [DSC 291: Machine Learning Systems](https://hao-ai-lab.github.io/dsc291-s24)
 
 
 ## 大模型汇总资料

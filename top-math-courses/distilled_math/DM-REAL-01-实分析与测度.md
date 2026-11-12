@@ -20,7 +20,7 @@ updated: 2026-08-27
 - **置信统计**：★11 条 / ☆14 条 / ⚠1 条（§2+§3 正文标记；§4 表格引用行另计）
 - **断言-脚本映射**：★ 条目在 `experiments/dm_real_check.py` 中有同号断言（R1-R13）；☆ 为教师高置信陈述，升级路径见 [METHODOLOGY.md](METHODOLOGY.md) §三。
 - **运行方式**：`python3 experiments/dm_real_check.py`（numpy+sympy，~20s，R1b 构造 2²⁰ 区间占大头）。
-- **姊妹单元**：[../../讲透实分析/README.md](../../讲透实分析/README.md)（00 实数构造 / 01 Cantor / 02 ε-δ 已完成）——本卡正是其路线图中"08-Lebesgue 导引"的教师侧全景；Lean 形式化线见 [../../讲透Lean4数学/README.md](../../讲透Lean4数学/README.md)
+- **姊妹单元**：[../../讲透实分析/README.md](../../讲透宇宙/03-查/讲透实分析//README.md)（00 实数构造 / 01 Cantor / 02 ε-δ 已完成）——本卡正是其路线图中"08-Lebesgue 导引"的教师侧全景；Lean 形式化线见 [../../讲透Lean4数学/README.md](../../讲透Lean4数学/README.md)
 
 ## 1. 直觉链（这个域为什么存在）
 
@@ -116,5 +116,5 @@ Lebesgue 微分定理 ← 极大函数方法；绝对连续 ⟺ NL ← Cantor �
 ## 7. 教材锚点
 
 - [../TEXTBOOK_LIBRARY.md](../TEXTBOOK_LIBRARY.md) **§1.1 实分析/单变量**（Tao / Baby Rudin / Abbott / Pugh）与 **§1.3 测度论/实变函数**（Folland / Royden / Stein-Shakarchi III / Tao 测度论）。
-- 执行层（做题+实验+Lean）：[../../讲透实分析/README.md](../../讲透实分析/README.md)；学习方法论：[../RESEARCH_METHODOLOGY.md](../RESEARCH_METHODOLOGY.md)。
+- 执行层（做题+实验+Lean）：[../../讲透实分析/README.md](../../讲透宇宙/03-查/讲透实分析//README.md)；学习方法论：[../RESEARCH_METHODOLOGY.md](../RESEARCH_METHODOLOGY.md)。
 - 概念三层（直觉→公式→代码）调用方式：[./METHODOLOGY.md](METHODOLOGY.md) §一 R8（双模式呈现）；泛函延伸：[DM-FUNC-01-泛函分析.md](DM-FUNC-01-泛函分析.md)、[DM-CPLX-01-复分析.md](DM-CPLX-01-复分析.md)。

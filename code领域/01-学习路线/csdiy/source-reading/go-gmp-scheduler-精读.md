@@ -208,4 +208,4 @@ G3 重新进入 P 的队列 → 被 M 执行 → Read 返回数据
 
 ---
 
-*配套：[eventloop-evolution-redis-nginx-go.md](eventloop-evolution-redis-nginx-go.md) | [tinyrpc](../projects/tinyrpc/)*
+*配套：[eventloop-evolution-redis-nginx-go.md](eventloop-evolution-redis-nginx-go.md) | [tinyrpc](../projects/tinyrpc)*

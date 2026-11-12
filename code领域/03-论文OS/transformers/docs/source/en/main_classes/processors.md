@@ -48,7 +48,7 @@ All processors follow the same architecture which is that of the
 
 ## GLUE
 
-[General Language Understanding Evaluation (GLUE)](https://gluebenchmark.com/) is a benchmark that evaluates the
+[General Language Understanding Evaluation (GLUE)](https://gluebenchmark.com) is a benchmark that evaluates the
 performance of models across a diverse set of existing NLU tasks. It was released together with the paper [GLUE: A
 multi-task benchmark and analysis platform for natural language understanding](https://openreview.net/pdf?id=rJ4km2R5t7)
 
@@ -74,8 +74,8 @@ Additionally, the following method can be used to load values from a data file a
 
 ## XNLI
 
-[The Cross-Lingual NLI Corpus (XNLI)](https://www.nyu.edu/projects/bowman/xnli/) is a benchmark that evaluates the
-quality of cross-lingual text representations. XNLI is crowd-sourced dataset based on [*MultiNLI*](http://www.nyu.edu/projects/bowman/multinli/): pairs of text are labeled with textual entailment annotations for 15
+[The Cross-Lingual NLI Corpus (XNLI)](https://www.nyu.edu/projects/bowman/xnli) is a benchmark that evaluates the
+quality of cross-lingual text representations. XNLI is crowd-sourced dataset based on [*MultiNLI*](http://www.nyu.edu/projects/bowman/multinli): pairs of text are labeled with textual entailment annotations for 15
 different languages (including both high-resource language such as English and low-resource languages such as Swahili).
 
 It was released together with the paper [XNLI: Evaluating Cross-lingual Sentence Representations](https://huggingface.co/papers/1809.05053)
@@ -90,7 +90,7 @@ An example using these processors is given in the [run_xnli.py](https://github.c
 
 ## SQuAD
 
-[The Stanford Question Answering Dataset (SQuAD)](https://rajpurkar.github.io/SQuAD-explorer//) is a benchmark that
+[The Stanford Question Answering Dataset (SQuAD)](https://rajpurkar.github.io/SQuAD-explorer) is a benchmark that
 evaluates the performance of models on question answering. Two versions are available, v1.1 and v2.0. The first version
 (v1.1) was released together with the paper [SQuAD: 100,000+ Questions for Machine Comprehension of Text](https://huggingface.co/papers/1606.05250). The second version (v2.0) was released alongside the paper [Know What You Don't
 Know: Unanswerable Questions for SQuAD](https://huggingface.co/papers/1806.03822).

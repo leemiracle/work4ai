@@ -115,7 +115,7 @@ images_processed = processor(images, return_tensors="pt", device="cuda")
 <details>
 <summary>Benchmarks</summary>
 
-이 벤치마크는 NVIDIA A10G Tensor Core GPU가 장착된 [AWS EC2 g5.2xlarge](https://aws.amazon.com/ec2/instance-types/g5/) 인스턴스에서 측정된 결과입니다.
+이 벤치마크는 NVIDIA A10G Tensor Core GPU가 장착된 [AWS EC2 g5.2xlarge](https://aws.amazon.com/ec2/instance-types/g5) 인스턴스에서 측정된 결과입니다.
 
 <div class="flex">
   <img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/benchmark_results_full_pipeline_detr_fast_padded.png" />

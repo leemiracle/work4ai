@@ -2,7 +2,7 @@
 
 ## Description
 
-This project supports **`Chest Radiograph Anatomical Structure Segmentation (CRASS) `**, which can be downloaded from [here](https://crass.grand-challenge.org/).
+This project supports **`Chest Radiograph Anatomical Structure Segmentation (CRASS) `**, which can be downloaded from [here](https://crass.grand-challenge.org).
 
 ### Dataset Overview
 
@@ -13,7 +13,7 @@ The current data is still incomplete and to be added later.
 
 | Dataset Name                                | Anatomical Region | Task Type    | Modality | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                       |
 | ------------------------------------------- | ----------------- | ------------ | -------- | ------------ | --------------------- | ---------------------- | ------------ | ------------------------------------------------------------- |
-| [crass](https://crass.grand-challenge.org/) | pulmonary         | segmentation | x_ray    | 2            | 299/-/234             | yes/-/no               | 2021         | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| [crass](https://crass.grand-challenge.org) | pulmonary         | segmentation | x_ray    | 2            | 299/-/234             | yes/-/no               | 2021         | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |
@@ -60,7 +60,7 @@ export PYTHONPATH=`pwd`:$PYTHONPATH
 
 ### Dataset Preparing
 
-- download dataset from [here](https://crass.grand-challenge.org/) and decompress data to path `'data/'`.
+- download dataset from [here](https://crass.grand-challenge.org) and decompress data to path `'data/'`.
 - run script `"python tools/prepare_dataset.py"` to format data and change folder structure as below.
 - run script `"python ../../tools/split_seg_dataset.py"` to split dataset and generate `train.txt`, `val.txt` and `test.txt`. If the label of official validation set and test set cannot be obtained, we generate `train.txt` and `val.txt` from the training set randomly.
 

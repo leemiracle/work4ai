@@ -96,7 +96,7 @@ label: POSITIVE, with score: 0.9998
 label: NEGATIVE, with score: 0.5309
 ```
 
-Die [`pipeline`] kann auch über einen ganzen Datensatz iterieren. Starten wir mit der Installation der [🤗 Datasets](https://huggingface.co/docs/datasets/) Bibliothek:
+Die [`pipeline`] kann auch über einen ganzen Datensatz iterieren. Starten wir mit der Installation der [🤗 Datasets](https://huggingface.co/docs/datasets) Bibliothek:
 
 ```bash
 pip install datasets
@@ -256,7 +256,7 @@ Funktion (wie Softmax) aus, da die endgültige Aktivierungsfunktion oft mit dem 
 
 </Tip>
 
-Modelle sind ein standardmäßiges [`torch.nn.Module`](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) oder ein [`tf.keras.Model`](https://www.tensorflow.org/api_docs/python/tf/keras/Model), sodass Sie sie in Ihrer üblichen Trainingsschleife verwenden können. Um jedoch die Dinge einfacher zu machen, bietet 🤗 Transformers eine [`Trainer`]-Klasse für PyTorch, die Funktionalität für verteiltes Training, gemischte Präzision und mehr bietet. Für TensorFlow können Sie die Methode `fit` aus [Keras](https://keras.io/) verwenden. Siehe das [training tutorial](./training) für weitere Details.
+Modelle sind ein standardmäßiges [`torch.nn.Module`](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) oder ein [`tf.keras.Model`](https://www.tensorflow.org/api_docs/python/tf/keras/Model), sodass Sie sie in Ihrer üblichen Trainingsschleife verwenden können. Um jedoch die Dinge einfacher zu machen, bietet 🤗 Transformers eine [`Trainer`]-Klasse für PyTorch, die Funktionalität für verteiltes Training, gemischte Präzision und mehr bietet. Für TensorFlow können Sie die Methode `fit` aus [Keras](https://keras.io) verwenden. Siehe das [training tutorial](./training) für weitere Details.
 
 <Tip>
 

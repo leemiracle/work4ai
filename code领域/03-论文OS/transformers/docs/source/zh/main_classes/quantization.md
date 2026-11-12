@@ -32,7 +32,7 @@ AWQ方法已经在[*AWQ: Activation-aware Weight Quantization for LLM Compressio
 - Intel neural compressor，来自Intel - 通过[`optimum-intel`](https://huggingface.co/docs/optimum/main/en/intel/optimization_inc)使用
 
 生态系统中可能存在许多其他工具，请随时提出PR将它们添加到列表中。
-目前与🤗 Transformers的集成仅适用于使用`autoawq`和`llm-awq`量化后的模型。大多数使用`auto-awq`量化的模型可以在🤗 Hub的[`TheBloke`](https://huggingface.co/TheBloke)命名空间下找到，要使用`llm-awq`对模型进行量化，请参阅[`llm-awq`](https://github.com/mit-han-lab/llm-awq/)的示例文件夹中的[`convert_to_hf.py`](https://github.com/mit-han-lab/llm-awq/blob/main/examples/convert_to_hf.py)脚本。
+目前与🤗 Transformers的集成仅适用于使用`autoawq`和`llm-awq`量化后的模型。大多数使用`auto-awq`量化的模型可以在🤗 Hub的[`TheBloke`](https://huggingface.co/TheBloke)命名空间下找到，要使用`llm-awq`对模型进行量化，请参阅[`llm-awq`](https://github.com/mit-han-lab/llm-awq)的示例文件夹中的[`convert_to_hf.py`](https://github.com/mit-han-lab/llm-awq/blob/main/examples/convert_to_hf.py)脚本。
 
 
 ### 加载一个量化的模型

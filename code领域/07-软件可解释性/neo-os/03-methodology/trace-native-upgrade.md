@@ -120,13 +120,13 @@ LLM 输出（candidate explanation）
 
 ## 五、Phase 1 prototype 现状与差距
 
-**已实现**（[`04-layers/l3-explain/`](../04-layers/l3-explain/)）：
+**已实现**（[`04-layers/l3-explain/`](../04-layers/l3-explain)）：
 - ✅ 三层结构输出（Intuition / Formal / Trace evidence）
 - ✅ Formal 层接 L2.5 Lean4 规则
 - ⚠️ Trace 层是 **GLM 构造的示例**，非真实 eBPF 采集（标记为局限）
 
 **Phase 1 完整路线**：
-1. 接 [`04-layers/l1-event-ontology/`](../04-layers/l1-event-ontology/) 的 eBPF trace → Trace evidence 用真实采集
+1. 接 [`04-layers/l1-event-ontology/`](../04-layers/l1-event-ontology) 的 eBPF trace → Trace evidence 用真实采集
 2. 实现 trace 复核探针（lean_trace_check）：把 L3 输出的因果链对回 trace 段
 3. 费曼门 F1-F4 + 17 视角护栏自动化
 4. CTC 度量实证（对标 Bloom 2-sigma，≥3 工程师用户研究）

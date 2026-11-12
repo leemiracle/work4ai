@@ -15,7 +15,7 @@ docker run --runtime nvidia --gpus all \
     --model Qwen/Qwen3-0.6B
 ```
 
-This image can also be used with other container engines such as [Podman](https://podman.io/).
+This image can also be used with other container engines such as [Podman](https://podman.io).
 
 ```bash
 podman run --device nvidia.com/gpu=all \

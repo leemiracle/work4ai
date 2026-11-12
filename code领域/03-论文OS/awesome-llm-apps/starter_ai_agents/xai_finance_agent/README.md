@@ -27,7 +27,7 @@ pip install -r requirements.txt
 
 3. Get your OpenAI API Key
 
-- Sign up for an [xAI API account](https://console.x.ai/)
+- Sign up for an [xAI API account](https://console.x.ai)
 - Set your XAI_API_KEY environment variable.
 ```bash
 export XAI_API_KEY='your-api-key-here'

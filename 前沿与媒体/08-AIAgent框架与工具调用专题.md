@@ -35,7 +35,7 @@
 
 | # | 框架 | 公司/作者 | 强项 | 状态 |
 |---|---|---|---|---|
-| A1-1 | **LangChain + LangGraph** [langchain.com](https://www.langchain.com/) | Harrison Chase | ✅ 本轮实抓确认 "Interrupt 2026 大会"（伦敦 + 纽约），LangSmith 是商业化 | 🟢 |
+| A1-1 | **LangChain + LangGraph** [langchain.com](https://www.langchain.com) | Harrison Chase | ✅ 本轮实抓确认 "Interrupt 2026 大会"（伦敦 + 纽约），LangSmith 是商业化 | 🟢 |
 | A1-2 | **AutoGen** | Microsoft | 多 Agent 对话框架 | 🟢 |
 | A1-3 | **CrewAI** | João Moura | 角色化多 Agent 协作 | 🟢 |
 | A1-4 | **LlamaIndex** | Jerry Liu | RAG 起家，扩到 Agent | 🟢 |
@@ -51,7 +51,7 @@
 
 | # | 协议 / 标准 | 提出者 | 强项 |
 |---|---|---|---|
-| A2-1 | **MCP（Model Context Protocol）** [modelcontextprotocol.io](https://modelcontextprotocol.io/) | Anthropic 2024-11 | **2025 起 Agent 工具调用事实标准**（被 OpenAI/Google 跟进）|
+| A2-1 | **MCP（Model Context Protocol）** [modelcontextprotocol.io](https://modelcontextprotocol.io) | Anthropic 2024-11 | **2025 起 Agent 工具调用事实标准**（被 OpenAI/Google 跟进）|
 | A2-2 | **Function Calling** | OpenAI 2023 | 最早工具调用 API，各家 LLM 已通用 |
 | A2-3 | **OpenAI Responses API** | OpenAI | 升级版 Function Calling |
 | A2-4 | **Computer Use** | Anthropic | Claude 操作电脑（鼠标/键盘/截图）|
@@ -121,4 +121,4 @@
 
 ---
 
-> 🔗 相关：[`../横向打通-能力获取决策框架.md`](../横向打通-能力获取决策框架.md)（什么时候用 Agent vs RAG vs Prompt）｜ [`../讲透Agent/`](../讲透Agent)（教程）
+> 🔗 相关：[`../横向打通-能力获取决策框架.md`](../横向打通-能力获取决策框架.md)（什么时候用 Agent vs RAG vs Prompt）｜ [`../讲透宇宙/01-学/讲透Agent//`](../讲透宇宙/01-学/讲透Agent)（教程）

@@ -154,7 +154,7 @@ model = AutoModelForCausalLM.from_pretrained(checkpoint)
 ```
 ## Evaluate
 
-画像キャプション モデルは通常、[Rouge Score](https://huggingface.co/spaces/evaluate-metric/rouge) または [Word Error Rate](https://huggingface.co/spaces/evaluate-metric/) で評価されます。そうだった）。このガイドでは、Word Error Rate (WER) を使用します。
+画像キャプション モデルは通常、[Rouge Score](https://huggingface.co/spaces/evaluate-metric/rouge) または [Word Error Rate](https://huggingface.co/spaces/evaluate-metric) で評価されます。そうだった）。このガイドでは、Word Error Rate (WER) を使用します。
 
 これを行うには 🤗 Evaluate ライブラリを使用します。 WER の潜在的な制限やその他の問題点については、[このガイド](https://huggingface.co/spaces/evaluate-metric/wer) を参照してください。
 

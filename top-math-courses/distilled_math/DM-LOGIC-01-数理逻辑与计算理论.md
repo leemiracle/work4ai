@@ -140,7 +140,7 @@ FOREST [域十九·B（计算与表达力理论）](../AI_MATH_FOREST.md)逐条�
 - **Kolmogorov/描述复杂度** → "LM is compression"线（B4 quine 与 Berry 型论证是其技术核；与 DM-INFO-01 桥）。
 - **SQ 统计查询模型** → parity 为什么难学（SQ 下界）——B10 的"验证便宜求解贵"是其直观核（FOREST：parity 学习硬度）。
 互链 [../../讲透Lean4数学/README.md](../../讲透Lean4数学/README.md)：Lean/Mathlib 是活的"递归可枚举公理系统"——Gödel 天花板不碍工程实践（mathlib 定理都是有限可查证对象）；
-[../../讲透Agent/实战案例-Prover数学Agent/README.md](../../讲透Agent/实战案例-Prover数学Agent/README.md)：Prover=把"可证性"外包给机器的当代实验（本库 L3 验证阶梯的血缘）。
+[../../讲透Agent/实战案例-Prover数学Agent/README.md](../../讲透宇宙/01-学/讲透Agent//实战案例-Prover数学Agent/README.md)：Prover=把"可证性"外包给机器的当代实验（本库 L3 验证阶梯的血缘）。
 
 ## 6. ZPD 学习路径
 - **入门**：Sipser《Introduction to the Theory of Computation》（可计算性+复杂性前半，讲得最像故事）。

@@ -142,4 +142,4 @@ Raft 集群通常固定节点数。如果动态增减节点（如 etcd 的 membe
 
 ---
 
-*配套：[tinykafka](../projects/tinykafka/) | [tinyraft](../projects/tinyraft/)*
+*配套：[tinykafka](../projects/tinykafka) | [tinyraft](../projects/tinyraft)*

@@ -326,7 +326,7 @@ Kuhn 的革命从不发生在旧范式的核心维护者内部（他们在做常
 
 - **必读书**：**Chris Miller《Chip War》**（半导体 60 年史，"商业模式决定技术命运"框架最佳入门）、Carlota Perez《技术革命与金融资本》(2002)（长波五阶段，本透镜辅助框架）、Hennessy & Patterson 架构史（ISA 周期原型）。
 - **方法论论文**：**Brian Arthur 1989**（锁定）、**Bresnahan & Malerba 1999**（产业演化三要素）、**Christensen 1997**（破坏式创新）、**Kuhn 1962**（范式转移）、**Lattner & Adve 2004**（LLVM 奠基，编译器史一手锚点）、**Lattner et al 2021**（MLIR 宣告）。
-- **编译器史一手**：llvm.org 官方博客、Chris Lattner 个人主页 [nondot.org/sabre](http://nondot.org/sabre/)、gcc.gnu.org、各 release notes、LLVM Dev Meeting 历年演讲。
+- **编译器史一手**：llvm.org 官方博客、Chris Lattner 个人主页 [nondot.org/sabre](http://nondot.org/sabre)、gcc.gnu.org、各 release notes、LLVM Dev Meeting 历年演讲。
 - **跨产业案例库**：ARM 兴衰（Miller Ch.8）、DEC Alpha 商业消亡（技术好但房东不会经营）、Transmeta/Mill Computing（技术好但无金主消亡）、PowerPC（被主流客户抛弃后退守保护市场）——**这些是编译器史模式匹配的"先例池"**。
 - **项目内对偶**：[`Lens_02_Christensen.md`](./Lens_02_Christensen.md)（理论演绎，与本透镜历史归纳对偶）、[`Lens_03_SupplyChain.md`](./Lens_03_SupplyChain.md)（空间养育图 vs 本透镜时间接力棒）、[`Lens_07_China_Localization.md`](./Lens_07_China_Localization.md)（应然 vs 本透镜实然）。
 

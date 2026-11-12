@@ -14,7 +14,7 @@ Please visit the HF collection of [quantized INT8 checkpoints of popular LLMs re
 
 ## Prerequisites
 
-To use INT8 quantization with vLLM, you'll need to install the [llm-compressor](https://github.com/vllm-project/llm-compressor/) library:
+To use INT8 quantization with vLLM, you'll need to install the [llm-compressor](https://github.com/vllm-project/llm-compressor) library:
 
 ```bash
 pip install llmcompressor

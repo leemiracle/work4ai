@@ -26,7 +26,7 @@ rendered properly in your Markdown viewer.
     </div>
 </div>
 
-Meta에서 개발한 [Llama 4](https://ai.meta.com/blog/llama-4-multimodal-intelligence/)는 새로운 자기회귀 Mixture-of-Experts (MoE) 아키텍처를 도입합니다.
+Meta에서 개발한 [Llama 4](https://ai.meta.com/blog/llama-4-multimodal-intelligence)는 새로운 자기회귀 Mixture-of-Experts (MoE) 아키텍처를 도입합니다.
 이 세대는 두 가지 모델로 나뉩니다:
 - 128개의 전문가(expert)를 사용하여 총 약 400B 매개변수 중 17B 활성 매개변수를 갖는 고성능 Llama 4 Maverick
 - 16개의 전문가만 사용하여 총 약 109B 매개변수 중 17B 활성 매개변수를 갖는 경량화된 Llama 4 Scout

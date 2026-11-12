@@ -66,7 +66,7 @@ mmdetection
 │   │   ├── test2017
 ```
 
-The [cityscapes](https://www.cityscapes-dataset.com/) annotations need to be converted into the coco format using `tools/dataset_converters/cityscapes.py`:
+The [cityscapes](https://www.cityscapes-dataset.com) annotations need to be converted into the coco format using `tools/dataset_converters/cityscapes.py`:
 
 ```shell
 pip install cityscapesscripts
@@ -213,7 +213,7 @@ data
 
 ### ADE20K 2016 Dataset Preparation
 
-The images and annotations of [ADE20K](https://groups.csail.mit.edu/vision/datasets/ADE20K/) dataset can be download by running `tools/misc/download_dataset.py`:
+The images and annotations of [ADE20K](https://groups.csail.mit.edu/vision/datasets/ADE20K) dataset can be download by running `tools/misc/download_dataset.py`:
 
 ```shell
 python tools/misc/download_dataset.py --dataset-name ade20k_2016 --save-dir data --unzip
@@ -283,7 +283,7 @@ The above folders include all data of ADE20K's semantic segmentation, instance s
 
 ### Download from OpenDataLab
 
-By using [OpenDataLab](https://opendatalab.com/), researchers can obtain free formatted datasets in various fields. Through the search function of the platform, researchers may address the dataset they look for quickly and easily. Using the formatted datasets from the platform, researchers can efficiently conduct tasks across datasets.
+By using [OpenDataLab](https://opendatalab.com), researchers can obtain free formatted datasets in various fields. Through the search function of the platform, researchers may address the dataset they look for quickly and easily. Using the formatted datasets from the platform, researchers can efficiently conduct tasks across datasets.
 
 Currently, MIM supports downloading VOC and COCO datasets from OpenDataLab with one command line. More datasets will be supported in the future. You can also directly download the datasets you need from the OpenDataLab platform and then convert them to the format required by MMDetection.
 

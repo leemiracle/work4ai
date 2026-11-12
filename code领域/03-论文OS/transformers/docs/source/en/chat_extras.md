@@ -178,7 +178,7 @@ print(schema)
 }
 ```
 
-We won't go into the details of JSON schema itself here, since it's already [very well documented](https://json-schema.org/) elsewhere. We will, however, mention that you can pass JSON schema dicts to the `tools` argument of [`~PreTrainedTokenizerBase.apply_chat_template`] instead of Python functions:
+We won't go into the details of JSON schema itself here, since it's already [very well documented](https://json-schema.org) elsewhere. We will, however, mention that you can pass JSON schema dicts to the `tools` argument of [`~PreTrainedTokenizerBase.apply_chat_template`] instead of Python functions:
 
 ```py
 # A simple function that takes no arguments

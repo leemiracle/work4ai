@@ -234,7 +234,7 @@ trainer = Trainer(
 
 ## Accelerate
 
-[Accelerate](https://hf.co/docs/accelerate/index) is a library that simplifies training in distributed environments and across different hardware. Its integration with [`Trainer`] means [`Trainer`] supports distributed training frameworks like [Fully Sharded Data Parallel (FSDP)](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api/) and [DeepSpeed](https://www.deepspeed.ai/).
+[Accelerate](https://hf.co/docs/accelerate/index) is a library that simplifies training in distributed environments and across different hardware. Its integration with [`Trainer`] means [`Trainer`] supports distributed training frameworks like [Fully Sharded Data Parallel (FSDP)](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api) and [DeepSpeed](https://www.deepspeed.ai).
 
 > [!TIP]
 > Learn more about FSDP sharding strategies, CPU offloading, and more with [`Trainer`] in the [Fully Sharded Data Parallel](./fsdp) guide.

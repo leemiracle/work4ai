@@ -2,7 +2,7 @@
 
 > nginx 能扛 10 万 QPS，不只是因为 epoll——它的 HTTP 解析器也是世界级的。
 >
-> 配套：[eventloop-evolution-redis-nginx-go.md](eventloop-evolution-redis-nginx-go.md) | [tinyhttpd](../projects/tinyhttpd/)
+> 配套：[eventloop-evolution-redis-nginx-go.md](eventloop-evolution-redis-nginx-go.md) | [tinyhttpd](../projects/tinyhttpd)
 > csdiy 对应：network §三(粘包/协议解析) + patterns §9(状态机)
 
 ---
@@ -246,4 +246,4 @@ class HTTPStateMachine:
 
 ---
 
-*配套：[eventloop-evolution-redis-nginx-go.md](eventloop-evolution-redis-nginx-go.md) | [tinyhttpd](../projects/tinyhttpd/)*
+*配套：[eventloop-evolution-redis-nginx-go.md](eventloop-evolution-redis-nginx-go.md) | [tinyhttpd](../projects/tinyhttpd)*

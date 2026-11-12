@@ -347,7 +347,7 @@ Give a helpful hint (not the full solution) to guide them.
   }
 
   private extractTheorem(code: string): string {
-    const match = code.match(/theorem\s+(\w+)/);
+    const match = code.match(/theorem\s+(\w+));
     return match ? match[1] : 'unknown';
   }
 

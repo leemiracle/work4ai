@@ -34,7 +34,7 @@ pipeline("Hey how are you doing today?")
 
 ## Overview
 
-The [Llama3](https://huggingface.co/papers/2407.21783) model was proposed in [Introducing Meta Llama 3: The most capable openly available LLM to date](https://ai.meta.com/blog/meta-llama-3/) by the meta AI team.
+The [Llama3](https://huggingface.co/papers/2407.21783) model was proposed in [Introducing Meta Llama 3: The most capable openly available LLM to date](https://ai.meta.com/blog/meta-llama-3) by the meta AI team.
 
 The abstract from the blogpost is the following:
 
@@ -58,7 +58,7 @@ Training the model in `float16` is not recommended and is known to produce `nan`
 
 Tips:
 
-- Weights for the Llama3 models can be obtained by filling out [this form](https://ai.meta.com/resources/models-and-libraries/llama-downloads/)
+- Weights for the Llama3 models can be obtained by filling out [this form](https://ai.meta.com/resources/models-and-libraries/llama-downloads)
 - The architecture is exactly the same as Llama2.
 - The tokenizer is a BPE model based on [tiktoken](https://github.com/openai/tiktoken) (vs the one based on sentencepiece implementation for Llama2). The main difference that it ignores BPE merge rules when an input token is part of the vocab. This means that if no merge exist to produce `"hugging"`, instead of having the smallest units, like `["hug","ging"]` form 2 tokens, if `"hugging"` is part of the vocab, it will be automatically returned as a token.
 - The original model uses `pad_id = -1` which means that there is no padding token. We can't have the same logic, make sure to add a padding token using `tokenizer.add_special_tokens({"pad_token":"<pad>"})` and resize the token embedding accordingly. You should also set the `model.config.pad_token_id`. The `embed_tokens` layer of the model is initialized with `self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, self.config.padding_idx)`, which makes sure that encoding the padding token will output zeros, so passing it when initializing is recommended.

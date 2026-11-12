@@ -2,7 +2,7 @@
 
 It is recommended to symlink the dataset root to `$MMSEGMENTATION/data`.
 If your folder structure is different, you may need to change the corresponding paths in config files.
-For users in China, we also recommend you get the dsdl dataset from our opensource platform [OpenDataLab](https://opendatalab.com/), for better download and use experience，here is an example: [DSDLReadme](../../../configs/dsdl/README.md)， welcome to try.
+For users in China, we also recommend you get the dsdl dataset from our opensource platform [OpenDataLab](https://opendatalab.com), for better download and use experience，here is an example: [DSDLReadme](../../../configs/dsdl/README.md)， welcome to try.
 
 ```none
 mmsegmentation
@@ -237,7 +237,7 @@ mim download mmsegmentation --dataset ade20k
 
 ## Cityscapes
 
-The data could be found [here](https://www.cityscapes-dataset.com/downloads/) after registration.
+The data could be found [here](https://www.cityscapes-dataset.com/downloads) after registration.
 
 By convention, `**labelTrainIds.png` are used for cityscapes training.
 We provided a [script](https://github.com/open-mmlab/mmsegmentation/blob/1.x/tools/dataset_converters/cityscapes.py) based on [cityscapesscripts](https://github.com/mcordts/cityscapesScripts)to generate `**labelTrainIds.png`.
@@ -336,7 +336,7 @@ The script will make directory structure automatically.
 
 ## DRIVE
 
-The training and validation set of DRIVE could be download from [here](https://drive.grand-challenge.org/). Before that, you should register an account. Currently '1st_manual' is not provided officially.
+The training and validation set of DRIVE could be download from [here](https://drive.grand-challenge.org). Before that, you should register an account. Currently '1st_manual' is not provided officially.
 
 To convert DRIVE dataset to MMSegmentation format, you should run the following command:
 
@@ -421,9 +421,9 @@ In our default setting, it will generate 3456 images for training and 2016 image
 
 ## ISPRS Vaihingen
 
-The [Vaihingen](https://www2.isprs.org/commissions/comm2/wg4/benchmark/2d-sem-label-vaihingen/) dataset is for urban semantic segmentation used in the 2D Semantic Labeling Contest - Vaihingen.
+The [Vaihingen](https://www2.isprs.org/commissions/comm2/wg4/benchmark/2d-sem-label-vaihingen) dataset is for urban semantic segmentation used in the 2D Semantic Labeling Contest - Vaihingen.
 
-The dataset can be requested at the challenge [homepage](https://www2.isprs.org/commissions/comm2/wg4/benchmark/data-request-form/).
+The dataset can be requested at the challenge [homepage](https://www2.isprs.org/commissions/comm2/wg4/benchmark/data-request-form).
 Or [BaiduNetdisk](https://pan.baidu.com/s/109D3WLrLafsuYtLeerLiiA?pwd=mseg)，password：mseg, [Google Drive](https://drive.google.com/drive/folders/1w3NhvLVA2myVZqOn2pbiDXngNC7NTP_t?usp=sharing).
 The 'ISPRS_semantic_labeling_Vaihingen.zip' and 'ISPRS_semantic_labeling_Vaihingen_ground_truth_eroded_COMPLETE.zip' are required.
 
@@ -511,7 +511,7 @@ The contents of LIP datasets include:
 
 ## Synapse dataset
 
-This dataset could be download from [this page](https://www.synapse.org/#!Synapse:syn3193805/wiki/).
+This dataset could be download from [this page](https://www.synapse.org/#!Synapse:syn3193805/wiki).
 
 To follow the data preparation setting of [TransUNet](https://arxiv.org/abs/2102.04306), which splits original training set (30 scans) into new training (18 scans) and validation set (12 scans). Please run the following command to prepare the dataset.
 
@@ -681,9 +681,9 @@ It includes 400 images for training, 400 images for validation and 400 images fo
 
 ## LEVIR-CD
 
-[LEVIR-CD](https://justchenhao.github.io/LEVIR/) Large-scale Remote Sensing Change Detection Dataset for Building.
+[LEVIR-CD](https://justchenhao.github.io/LEVIR) Large-scale Remote Sensing Change Detection Dataset for Building.
 
-Download the dataset from [here](https://justchenhao.github.io/LEVIR/).
+Download the dataset from [here](https://justchenhao.github.io/LEVIR).
 
 The supplement version of the dataset can be requested on the [homepage](https://github.com/S2Looking/Dataset)
 
@@ -711,7 +711,7 @@ The size of cropped image is 256x256, which is consistent with the original pape
 
 ## BDD100K
 
-- You could download BDD100k datasets from  [here](https://bdd-data.berkeley.edu/) after  registration.
+- You could download BDD100k datasets from  [here](https://bdd-data.berkeley.edu) after  registration.
 
 - You can download images and masks by clicking  `10K Images` button and `Segmentation` button.
 

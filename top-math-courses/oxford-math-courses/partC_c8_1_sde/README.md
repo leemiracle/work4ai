@@ -1,7 +1,7 @@
 # Oxford Part C C8.1 — Stochastic Differential Equations
 
 > **学校**：Oxford | **学院**：Mathematical Institute
-> **一手来源**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk/)
+> **一手来源**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk)
 
 ## 课程信息
 - **编号**：C8.1

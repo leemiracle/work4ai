@@ -51,7 +51,7 @@ Tun Sie Ihr Bestes, diesen Richtlinien zu folgen, wenn Sie ein fehlerspezifische
 
 Die 🤗 Transformers-Bibliothek verdankt ihre Robustheit und Zuverlässigkeit aller Nutzer, die frisch entdeckte Probleme melden.
 
-Wir würden es wirklich schätzen, wenn Sie **sicherstellen könnten, dass der Fehler noch nicht gemeldet wurde** (verwenden Sie die Suchleiste auf GitHub unter Issues), bevor Sie ein Issue erstellen. Ihr Problem sollte sich auch auf Fehler in der Bibliothek selbst und nicht auf Ihren eigenen Code beziehen. Wenn Sie sich nicht sicher sind, ob der Fehler in Ihrem eigenen Code oder der Bibliothek liegt, fragen Sie bitte zuerst im [Forum](https://discuss.huggingface.co/) nach. Das hilft uns, schneller auf Probleme im Zusammenhang mit der Bibliothek zu reagieren, anstatt auf allgemeine Fragen.
+Wir würden es wirklich schätzen, wenn Sie **sicherstellen könnten, dass der Fehler noch nicht gemeldet wurde** (verwenden Sie die Suchleiste auf GitHub unter Issues), bevor Sie ein Issue erstellen. Ihr Problem sollte sich auch auf Fehler in der Bibliothek selbst und nicht auf Ihren eigenen Code beziehen. Wenn Sie sich nicht sicher sind, ob der Fehler in Ihrem eigenen Code oder der Bibliothek liegt, fragen Sie bitte zuerst im [Forum](https://discuss.huggingface.co) nach. Das hilft uns, schneller auf Probleme im Zusammenhang mit der Bibliothek zu reagieren, anstatt auf allgemeine Fragen.
 
 Wenn Sie sich vergewissert haben, dass der Fehler noch nicht gemeldet wurde, geben Sie bitte die folgenden Informationen in Ihrem Issue an, damit wir es schnell beheben können:
 
@@ -201,7 +201,7 @@ Sie benötigen **[Python 3.9](https://github.com/huggingface/transformers/blob/m
    git commit
    ```
 
-   Bitte achten Sie darauf, [gute Commit-Nachrichten](https://chris.beams.io/posts/git-commit/) zu schreiben, um die von Ihnen vorgenommenen Änderungen klar zu kommunizieren!
+   Bitte achten Sie darauf, [gute Commit-Nachrichten](https://chris.beams.io/posts/git-commit) zu schreiben, um die von Ihnen vorgenommenen Änderungen klar zu kommunizieren!
 
    Um Ihre Kopie des Codes auf dem aktuellen Stand des ursprünglichen Repositorys zu halten, rebasen Sie Ihren Branch auf `upstream/branch` *bevor* Sie eine Pull-Anfrage öffnen oder falls Sie von einem Maintainer dazu aufgefordert werden:
 
@@ -296,7 +296,7 @@ Lesen Sie unseren [Leitfaden zum Schreiben von Dokumentationen](https://github.c
 
 ### Entwickeln unter Windows
 
-Unter Windows (falls Sie nicht im [Windows-Subsystem für Linux](https://learn.microsoft.com/en-us/windows/wsl/) oder WSL arbeiten) müssen Sie git so konfigurieren, dass Windows `CRLF` in Linux `LF` Zeilenenden umgewandelt werden:
+Unter Windows (falls Sie nicht im [Windows-Subsystem für Linux](https://learn.microsoft.com/en-us/windows/wsl) oder WSL arbeiten) müssen Sie git so konfigurieren, dass Windows `CRLF` in Linux `LF` Zeilenenden umgewandelt werden:
 
 ```bash
 git config core.autocrlf input
@@ -304,7 +304,7 @@ git config core.autocrlf input
 
 Eine Möglichkeit, den `make`-Befehl unter Windows auszuführen, ist mit MSYS2:
 
-1. Laden Sie [MSYS2](https://www.msys2.org/) herunter und installieren Sie es nach `C:\msys64`.
+1. Laden Sie [MSYS2](https://www.msys2.org) herunter und installieren Sie es nach `C:\msys64`.
 1. Öffnen Sie die Kommandozeile `C:\msys64\msys2.exe` (sie sollte vom **Start**-Menü aus verfügbar sein).
 1. Führen Sie den Befehl in der Shell aus: `pacman -Syu` und installieren Sie `make` mit `pacman -S make`.
 1. Fügen Sie `C:\msys64\usr\bin` an Ihrer PATH-Umgebungsvariable an.

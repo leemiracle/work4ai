@@ -55,7 +55,7 @@ ollama pull llama3.2
 ```
 
 ### 2. Qdrant Cloud Setup (for RAG Mode)
-1. Visit [Qdrant Cloud](https://cloud.qdrant.io/)
+1. Visit [Qdrant Cloud](https://cloud.qdrant.io)
 2. Create an account or sign in
 3. Create a new cluster
 4. Get your credentials:

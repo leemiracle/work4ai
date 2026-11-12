@@ -34,7 +34,7 @@ Bi-direction Encoders for Transformers (BERT) のフランス語版である Cam
 検討されているほとんどのタスクに対応します。私たちは、研究と
 フランス語 NLP の下流アプリケーション。*
 
-このモデルは [camembert](https://huggingface.co/camembert) によって提供されました。元のコードは [ここ](https://camembert-model.fr/) にあります。
+このモデルは [camembert](https://huggingface.co/camembert) によって提供されました。元のコードは [ここ](https://camembert-model.fr) にあります。
 
 
 <Tip>

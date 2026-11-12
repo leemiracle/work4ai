@@ -195,7 +195,7 @@ valgrind --tool=massif ./simple
 - [LLVM Language Reference](https://llvm.org/docs/LangRef.html)
 - [Writing an LLVM Pass](https://llvm.org/docs/WritingAnLLVMPass.html)
 - [LLVM Programmer's Manual](https://llvm.org/docs/ProgrammersManual.html)
-- [Kaleidoscope Tutorial](https://llvm.org/docs/tutorial/)
+- [Kaleidoscope Tutorial](https://llvm.org/docs/tutorial)
 - [LLVM Passes](https://llvm.org/docs/Passes.html)
 
 ## 推荐阅读

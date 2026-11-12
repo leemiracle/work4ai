@@ -197,7 +197,7 @@
 ## §8 诚实标注与方法论
 
 - **历史事实**：年代/人物/论文基于公开文献一手核实（Wiles 1995 Annals；Perelman arXiv:math/0211159 等）；不确定的标 ⚠️。
-- **千禧年问题**：基于 [Clay Math Institute 官网](https://www.claymath.org/millennium/)。
+- **千禧年问题**：基于 [Clay Math Institute 官网](https://www.claymath.org/millennium)。
 - **ML 理论前沿**：基于 [`LATEST_RESEARCH.md`](./LATEST_RESEARCH.md)（项目内已整理，arXiv ID 一手核实）。
 - **AlphaProof**：Nature 2025-11 发表（DOI 10.1038/s41586-025-09833-y 已核实 ✅）。
 - **方法论**：本系列遵循 work4ai 铁律——不编造 arXiv ID（不确定标 ⚠️）；不偏向任一校；费曼风格（比喻+反例+故事）。

@@ -14,7 +14,7 @@
 | **数（Number）** | 数论、代数 | 数有哪些结构和性质？ | [07数论](#七数论) / [03代数](#三代数学) |
 | **形（Shape）** | 几何、拓扑 | 空间如何描述和分类？ | [05几何](#五几何学) / [06拓扑](#六拓扑学) |
 | **变（Change）** | 分析、动力系统 | 连续变化如何刻画？ | [04分析](#四分析学) / [12动力系统](#十二动力系统) |
-| **结构（Structure）** | 抽象代数、范畴论 | 对象间的共同规律？ | [03代数](#三代数学) / [16-foundations/范畴论](../16-foundations/范畴论/) |
+| **结构（Structure）** | 抽象代数、范畴论 | 对象间的共同规律？ | [03代数](#三代数学) / [16-foundations/范畴论](../16-foundations/范畴论) |
 | **不确定性** | 概率、统计 | 随机如何建模推断？ | [09概率统计](#九概率统计) |
 | **最优（Optim）** | 优化理论 | 约束下最佳方案？ | [11优化](#十一优化理论) |
 | **计算（Compute）** | 计算数学、离散 | 如何高效求解？ | [10计算数学](#十计算数学) / [08离散](#八离散数学) |
@@ -26,28 +26,28 @@
 
 | 知识点 | 状态 | 项目位置 |
 |--------|------|---------|
-| 自然数 N → 整数 Z → 有理数 Q → 实数 R → 复数 C | 📄 | [04-concepts/](../04-concepts/) |
+| 自然数 N → 整数 Z → 有理数 Q → 实数 R → 复数 C | 📄 | [04-concepts/](../04-concepts) |
 | 四元数 H / 八元数 O / p进数 / 超实数 | 📄 | 待补 |
-| 集合论（ZFC/选择公理/连续统假设/大基数）| 📄 | [16-foundations/集合论/](../16-foundations/集合论/) ✅2文件 |
+| 集合论（ZFC/选择公理/连续统假设/大基数）| 📄 | [16-foundations/集合论/](../16-foundations/集合论) ✅2文件 |
 | 数系发展（N→Z→Q→R→C→H→O→p进→超实）| 📄 | 待补 |
 
 ## 二、逻辑与数学基础（Foundations）
 
 | 知识点 | 状态 | 项目位置 |
 |--------|------|---------|
-| 命题逻辑（真值表/德摩根律）| 📄 | [16-foundations/基础争议/](../16-foundations/基础争议/) |
-| 一阶逻辑（∀∃/模型/证明）| 📄 | [16-foundations/类型论/](../16-foundations/类型论/) |
+| 命题逻辑（真值表/德摩根律）| 📄 | [16-foundations/基础争议/](../16-foundations/基础争议) |
+| 一阶逻辑（∀∃/模型/证明）| 📄 | [16-foundations/类型论/](../16-foundations/类型论) |
 | 高阶逻辑（Lambda/类型论/依赖类型）| 📄 | [16-foundations/类型论/02-Martin-Löf](../16-foundations/类型论/02-Martin-Löf依赖类型论.md) |
-| 元数学（一致性/完备性/哥德尔定理）| 📄 | [07-critique/](../07-critique/) |
-| 范畴论（函子/自然变换/伴随/Topos）| 📄 | [16-foundations/范畴论/](../16-foundations/范畴论/) ✅2文件 |
-| Curry-Howard 同构 | 📄 | [16-foundations/Curry-Howard/](../16-foundations/Curry-Howard/) ✅2文件 |
+| 元数学（一致性/完备性/哥德尔定理）| 📄 | [07-critique/](../07-critique) |
+| 范畴论（函子/自然变换/伴随/Topos）| 📄 | [16-foundations/范畴论/](../16-foundations/范畴论) ✅2文件 |
+| Curry-Howard 同构 | 📄 | [16-foundations/Curry-Howard/](../16-foundations/Curry-Howard) ✅2文件 |
 | HoTT（同伦类型论）| 📄 | [16-foundations/类型论/02-Martin-Löf](../16-foundations/类型论/02-Martin-Löf依赖类型论.md) |
 
 ## 三、代数学（Algebra）
 
 | 知识点 | 状态 | 项目位置 |
 |--------|------|---------|
-| 初等代数（多项式/因式/方程/不等式）| 📄 | [01-track/stage-1](../01-track/stage-1-本科核心/) |
+| 初等代数（多项式/因式/方程/不等式）| 📄 | [01-track/stage-1](../01-track/stage-1-本科核心) |
 | 线性代数：向量空间/基/维 | ✅ | [代码库 01-PCA](../15-applications/代码库/01-PCA特征值_人脸压缩.py) |
 | 线性代数：矩阵运算/LU/QR/SVD/Jordan | ✅ | [代码库 03-SVD](../15-applications/代码库/03-SVD_推荐系统.py) / [19-QR](../15-applications/代码库/19-数值线性代数_最小二乘.py) |
 | 线性代数：特征值/谱理论 | ✅ | [代码库 31-谱理论](../15-applications/代码库/31-矩阵谱理论.py) |
@@ -76,7 +76,7 @@
 
 | 知识点 | 状态 | 项目位置 |
 |--------|------|---------|
-| 欧氏几何/解析几何 | 📄 | [01-track/stage-1](../01-track/stage-1-本科核心/) |
+| 欧氏几何/解析几何 | 📄 | [01-track/stage-1](../01-track/stage-1-本科核心) |
 | 射影几何 | 📄 | 待补 |
 | 微分几何（曲率/测地线/Gauss定理）| ✅ | [代码库 21-微分几何](../15-applications/代码库/21-微分几何_曲线与曲面.py) |
 | 黎曼几何（度量/Riemann张量/Ricci流）| 📄 | 待补 |
@@ -89,8 +89,8 @@
 
 | 知识点 | 状态 | 项目位置 |
 |--------|------|---------|
-| 点集拓扑（开集/紧致/连通/分离公理）| 📄 | [01-track/stage-1](../01-track/stage-1-本科核心/) |
-| 代数拓扑（同调/同伦/基本群）| 📄 | [05-history/](../05-history/) / [02-lens-mathematicians/](../02-lens-mathematicians/) |
+| 点集拓扑（开集/紧致/连通/分离公理）| 📄 | [01-track/stage-1](../01-track/stage-1-本科核心) |
+| 代数拓扑（同调/同伦/基本群）| 📄 | [05-history/](../05-history) / [02-lens-mathematicians/](../02-lens-mathematicians) |
 | 微分拓扑（流形/横截/Morse理论）| 📄 | 待补 |
 | 低维拓扑（3-流形/4-流形/纽结）| 📄 | 待补 |
 | 纤维丛/特征类 | 📄 | 待补 |
@@ -101,24 +101,24 @@
 | 知识点 | 状态 | 项目位置 |
 |--------|------|---------|
 | 初等数论（素数/同余/丢番图）| ✅ | [代码库 09-RSA](../15-applications/代码库/09-数论_RSA加密.py) |
-| 解析数论（素数定理/Riemann ζ/L函数）| 📄 | [14-frontier/conjecture进展/](../14-frontier/conjecture进展/) |
+| 解析数论（素数定理/Riemann ζ/L函数）| 📄 | [14-frontier/conjecture进展/](../14-frontier/conjecture进展) |
 | 代数数论（理想/类域论/local fields）| 📄 | 待补 |
 | 几何数论 | 📄 | 待补 |
-| 椭圆曲线 | 📄 | [15-applications/密码学/](../15-applications/密码学与信息安全/) |
-| 模形式/L函数 | 📄 | [14-frontier/conjecture进展/](../14-frontier/conjecture进展/) |
-| Langlands纲领 | 📄 | [14-frontier/热点方向追踪/](../14-frontier/热点方向追踪/) |
+| 椭圆曲线 | 📄 | [15-applications/密码学/](../15-applications/密码学与信息安全) |
+| 模形式/L函数 | 📄 | [14-frontier/conjecture进展/](../14-frontier/conjecture进展) |
+| Langlands纲领 | 📄 | [14-frontier/热点方向追踪/](../14-frontier/热点方向追踪) |
 
 ## 八、离散数学（Discrete Mathematics）
 
 | 知识点 | 状态 | 项目位置 |
 |--------|------|---------|
-| 组合数学（计数/生成函数/容斥）| 📄 | [14-frontier/热点方向追踪/](../14-frontier/热点方向追踪/) #2加性组合 |
+| 组合数学（计数/生成函数/容斥）| 📄 | [14-frontier/热点方向追踪/](../14-frontier/热点方向追踪) #2加性组合 |
 | 图论（最短路/匹配/着色/网络流）| ✅ | [代码库 08-图论](../15-applications/代码库/08-图论_最短路算法.py) |
 | 复杂网络（小世界/无标度/社区）| ✅ | [代码库 30-网络科学](../15-applications/代码库/30-网络科学_复杂网络.py) |
 | 布尔代数 | 📄 | 待补 |
-| 自动机/形式语言 | 📄 | [15-applications/CS/](../15-applications/计算机科学/) |
+| 自动机/形式语言 | 📄 | [15-applications/CS/](../15-applications/计算机科学) |
 | 编码理论（Hamming/RS/LDPC/Polar）| ✅ | [代码库 27-编码](../15-applications/代码库/27-编码理论_纠错码.py) |
-| 密码学（RSA/ECC/PQC/ZKP）| ✅ | [代码库 09-RSA](../15-applications/代码库/09-数论_RSA加密.py) + [15-applications/密码学/](../15-applications/密码学与信息安全/) ✅2文件 |
+| 密码学（RSA/ECC/PQC/ZKP）| ✅ | [代码库 09-RSA](../15-applications/代码库/09-数论_RSA加密.py) + [15-applications/密码学/](../15-applications/密码学与信息安全) ✅2文件 |
 | 计算复杂性（P/NP/BPP/PSPACE）| 📄 | [15-applications/CS/02-复杂度](../15-applications/计算机科学/02-算法复杂度理论.md) |
 
 ## 九、概率统计（Probability & Statistics）
@@ -178,7 +178,7 @@
 | 现代控制（状态空间/可控性）| ✅ | [代码库 35-控制论](../15-applications/代码库/35-控制论.py) |
 | 最优控制（LQR/Riccati）| ✅ | [代码库 35-控制论](../15-applications/代码库/35-控制论.py) |
 | Lyapunov稳定性 | ✅ | [代码库 35-控制论](../15-applications/代码库/35-控制论.py) |
-| 机器人（运动学/SLAM/规划）| 📄 | [15-applications/机器人/](../15-applications/机器人与自动化/) ✅2文件 |
+| 机器人（运动学/SLAM/规划）| 📄 | [15-applications/机器人/](../15-applications/机器人与自动化) ✅2文件 |
 
 ## 十四、信息论（Information Theory）
 
@@ -195,7 +195,7 @@
 |--------|------|---------|
 | 量子力学数学（Hilbert/酉/厄米）| 📄 | [15-applications/物理工程/02-量子力学](../15-applications/物理与工程/02-量子力学数学.md) |
 | 广义相对论（微分几何/弯曲时空）| 📄 | [代码库 21-微分几何](../15-applications/代码库/21-微分几何_曲线与曲面.py) |
-| 场论（Yang-Mills/规范理论）| 📄 | [14-frontier/conjecture进展/](../14-frontier/conjecture进展/) #4 Yang-Mills |
+| 场论（Yang-Mills/规范理论）| 📄 | [14-frontier/conjecture进展/](../14-frontier/conjecture进展) #4 Yang-Mills |
 | 统计物理 | 📄 | 待补 |
 | 弦理论数学 | 📄 | 待补 |
 
@@ -203,7 +203,7 @@
 
 | 知识点 | 状态 | 项目位置 |
 |--------|------|---------|
-| 线代/微积分/概率基础 | ✅ | [代码库 01/04/05/06](../15-applications/代码库/) |
+| 线代/微积分/概率基础 | ✅ | [代码库 01/04/05/06](../15-applications/代码库) |
 | 损失函数理论/梯度流 | ✅ | [代码库 06-梯度下降](../15-applications/代码库/06-梯度下降_线性回归从零实现.py) |
 | 核方法（RKHS/Mercer）| ✅ | [代码库 13-SVM](../15-applications/代码库/13-凸优化_SVM对偶.py) |
 | PAC学习/VC维/Rademacher | 📄 | [15-applications/AI-ML/02-深度学习理论](../15-applications/AI-ML/02-深度学习理论.md) |
@@ -218,7 +218,7 @@
 | Black-Scholes/期权定价 | ✅ | [代码库 05-期权](../15-applications/代码库/05-蒙特卡洛_期权定价.py) |
 | 蒙特卡洛方法 | ✅ | [代码库 05-期权](../15-applications/代码库/05-蒙特卡洛_期权定价.py) |
 | 随机微积分/Itô引理 | ✅ | [代码库 26-SDE](../15-applications/代码库/26-随机微分方程_SDE.py) |
-| 投资组合/风险管理 | 📄 | [15-applications/金融量化/](../15-applications/金融量化/) ✅2文件 |
+| 投资组合/风险管理 | 📄 | [15-applications/金融量化/](../15-applications/金融量化) ✅2文件 |
 
 ## 十八、形式化数学（Formal Math）
 
@@ -234,12 +234,12 @@
 
 | 知识点 | 状态 | 项目位置 |
 |--------|------|---------|
-| Langlands纲领 | 📄 | [14-frontier/conjecture进展/](../14-frontier/conjecture进展/) |
+| Langlands纲领 | 📄 | [14-frontier/conjecture进展/](../14-frontier/conjecture进展) |
 | 千禧问题（RH/PvsNP/NS/...）| 📄 | [14-frontier/conjecture进展/千禧](../14-frontier/conjecture进展/千禧问题与大猜想进展表.md) |
 | 随机矩阵/自由概率 | ✅ | [代码库 34-RMT](../15-applications/代码库/34-随机矩阵理论.py) |
 | 压缩感知 | ✅ | [代码库 29-压缩感知](../15-applications/代码库/29-压缩感知_稀疏恢复.py) |
 | TDA（拓扑数据分析）| ✅ | [代码库 20-TDA](../15-applications/代码库/20-TDA_拓扑数据分析.py) |
-| AI for Mathematics | 📄 | [14-frontier/AI-for-Math/](../14-frontier/AI-for-Math/) ✅3文件 |
+| AI for Mathematics | 📄 | [14-frontier/AI-for-Math/](../14-frontier/AI-for-Math) ✅3文件 |
 | 2026 最新突破 | 📄 | [14-frontier/热点方向追踪/2026突破](../14-frontier/热点方向追踪/2026年最新数学突破.md) |
 | 镜像对称/非交换几何/热带几何 | 📄 | 待补 |
 
@@ -247,17 +247,17 @@
 
 | 领域 | 状态 | 项目位置 |
 |------|------|---------|
-| AI/ML | ✅ | [15-applications/AI-ML/](../15-applications/AI-ML/) ✅2文件 |
-| 计算机科学 | ✅ | [15-applications/计算机科学/](../15-applications/计算机科学/) ✅2文件 |
-| 物理与工程 | ✅ | [15-applications/物理与工程/](../15-applications/物理与工程/) ✅2文件 |
-| 金融量化 | ✅ | [15-applications/金融量化/](../15-applications/金融量化/) ✅2文件 |
-| 生命科学 | ✅ | [15-applications/生命科学/](../15-applications/生命科学/) ✅2文件 |
-| 跨学科 | ✅ | [15-applications/跨学科/](../15-applications/跨学科/) ✅2文件 |
-| 密码学/信息安全 | ✅ | [15-applications/密码学与信息安全/](../15-applications/密码学与信息安全/) ✅2文件 |
-| 量子计算 | ✅ | [15-applications/量子计算/](../15-applications/量子计算/) ✅2文件 |
-| 机器人/自动化 | ✅ | [15-applications/机器人与自动化/](../15-applications/机器人与自动化/) ✅2文件 |
-| 气候/环境 | ✅ | [15-applications/气候与环境/](../15-applications/气候与环境/) ✅2文件 |
-| 区块链/分布式 | ✅ | [15-applications/区块链与分布式/](../15-applications/区块链与分布式/) ✅2文件 |
+| AI/ML | ✅ | [15-applications/AI-ML/](../15-applications/AI-ML) ✅2文件 |
+| 计算机科学 | ✅ | [15-applications/计算机科学/](../15-applications/计算机科学) ✅2文件 |
+| 物理与工程 | ✅ | [15-applications/物理与工程/](../15-applications/物理与工程) ✅2文件 |
+| 金融量化 | ✅ | [15-applications/金融量化/](../15-applications/金融量化) ✅2文件 |
+| 生命科学 | ✅ | [15-applications/生命科学/](../15-applications/生命科学) ✅2文件 |
+| 跨学科 | ✅ | [15-applications/跨学科/](../15-applications/跨学科) ✅2文件 |
+| 密码学/信息安全 | ✅ | [15-applications/密码学与信息安全/](../15-applications/密码学与信息安全) ✅2文件 |
+| 量子计算 | ✅ | [15-applications/量子计算/](../15-applications/量子计算) ✅2文件 |
+| 机器人/自动化 | ✅ | [15-applications/机器人与自动化/](../15-applications/机器人与自动化) ✅2文件 |
+| 气候/环境 | ✅ | [15-applications/气候与环境/](../15-applications/气候与环境) ✅2文件 |
+| 区块链/分布式 | ✅ | [15-applications/区块链与分布式/](../15-applications/区块链与分布式) ✅2文件 |
 
 ---
 

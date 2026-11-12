@@ -24,7 +24,7 @@ Sometimes errors occur, but we are here to help! This guide covers some of the m
 
 <Youtube id="S2EEG3JIt2A"/>
 
-1. Asking for help on the [forums](https://discuss.huggingface.co/). There are specific categories you can post your question to, like [Beginners](https://discuss.huggingface.co/c/beginners/5) or [🤗 Transformers](https://discuss.huggingface.co/c/transformers/9). Make sure you write a good descriptive forum post with some reproducible code to maximize the likelihood that your problem is solved!
+1. Asking for help on the [forums](https://discuss.huggingface.co). There are specific categories you can post your question to, like [Beginners](https://discuss.huggingface.co/c/beginners/5) or [🤗 Transformers](https://discuss.huggingface.co/c/transformers/9). Make sure you write a good descriptive forum post with some reproducible code to maximize the likelihood that your problem is solved!
 
 <Youtube id="_PAli-V4wj0"/>
 

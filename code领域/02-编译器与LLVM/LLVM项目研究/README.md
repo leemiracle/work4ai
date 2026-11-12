@@ -34,41 +34,41 @@
 
 | # | 专家 | 一句话定位 | 状态 |
 |:-:|------|-----------|:----:|
-| 01 | [**Clang 前端**](./Expert_01_Clang_Frontend/) | C/C++/ObjC/Sema/AST/静态分析 | ✅ |
-| 02 | [**LLVM IR 设计**](./Expert_02_LLVM_IR_Design/) | SSA/undef/poison/类型系统/内存模型 | ✅ |
-| 03 | [**Pass 框架**](./Expert_03_Pass_Framework/) | Legacy PM → New PM 10 年迁移史 | ✅ |
-| 04 | [**中端优化**](./Expert_04_Middle_End_Opt/) | GVN/SCCP/InstCombine + Polly + MLIR 融合 | ✅ |
-| 05 | [**代码生成**](./Expert_05_CodeGen_SelectionDAG_GlobalISel/) | SelectionDAG + GlobalISel + TableGen | ✅ |
-| 06 | [**寄存器分配与调度**](./Expert_06_RegAlloc_Scheduler/) | Greedy/Basic/Fast/PBQP + MISched + MC | ✅ |
-| 07 | [**自动向量化**](./Expert_07_Auto_Vectorization/) | Loop Vec + SLP + Vector Predication | ✅ |
+| 01 | [**Clang 前端**](./Expert_01_Clang_Frontend) | C/C++/ObjC/Sema/AST/静态分析 | ✅ |
+| 02 | [**LLVM IR 设计**](./Expert_02_LLVM_IR_Design) | SSA/undef/poison/类型系统/内存模型 | ✅ |
+| 03 | [**Pass 框架**](./Expert_03_Pass_Framework) | Legacy PM → New PM 10 年迁移史 | ✅ |
+| 04 | [**中端优化**](./Expert_04_Middle_End_Opt) | GVN/SCCP/InstCombine + Polly + MLIR 融合 | ✅ |
+| 05 | [**代码生成**](./Expert_05_CodeGen_SelectionDAG_GlobalISel) | SelectionDAG + GlobalISel + TableGen | ✅ |
+| 06 | [**寄存器分配与调度**](./Expert_06_RegAlloc_Scheduler) | Greedy/Basic/Fast/PBQP + MISched + MC | ✅ |
+| 07 | [**自动向量化**](./Expert_07_Auto_Vectorization) | Loop Vec + SLP + Vector Predication | ✅ |
 
 #### 轴二·Target 后端矩阵（4 个 P0）
 
 | # | 专家 | 一句话定位 | 状态 |
 |:-:|------|-----------|:----:|
-| 08 | [**AArch64 后端**](./Expert_08_AArch64_Backend/) | ⭐ 飞腾直接命脉（FTC86x 调度模型） | ✅ |
-| 09 | [**x86 后端**](./Expert_09_x86_Backend/) | 性能标杆对照（lea/AVX-512/Intel-AMD 分裂） | ✅ |
-| 10 | [**RISC-V 后端**](./Expert_10_RISCV_Backend/) | 国产对偶（RVV/香山/玄铁） | ✅ |
-| 11 | [**GPU/异构后端**](./Expert_11_GPU_Heterogeneous_Backend/) | ⭐ 服务器命脉级断层：AMDGPU/NVPTX/BPF 对齐债 | ✅ |
+| 08 | [**AArch64 后端**](./Expert_08_AArch64_Backend) | ⭐ 飞腾直接命脉（FTC86x 调度模型） | ✅ |
+| 09 | [**x86 后端**](./Expert_09_x86_Backend) | 性能标杆对照（lea/AVX-512/Intel-AMD 分裂） | ✅ |
+| 10 | [**RISC-V 后端**](./Expert_10_RISCV_Backend) | 国产对偶（RVV/香山/玄铁） | ✅ |
+| 11 | [**GPU/异构后端**](./Expert_11_GPU_Heterogeneous_Backend) | ⭐ 服务器命脉级断层：AMDGPU/NVPTX/BPF 对齐债 | ✅ |
 
 #### 轴三·工具链与运行时（4 个）
 
 | # | 专家 | 一句话定位 | 状态 |
 |:-:|------|-----------|:----:|
-| 12 | [**LLD + BOLT**](./Expert_12_LLD_BOLT/) | 链接器 + 后链接优化 | ✅ |
-| 13 | [**LLDB 调试器**](./Expert_13_LLDB_Debugger/) | LLDB vs GDB | ✅ |
-| 14 | [**Sanitizers + JIT**](./Expert_14_CompilerRT_Sanitizers_JIT/) | ASan/MSan/CFI + ORC JIT | ✅ |
-| 15 | [**C++ 运行时栈**](./Expert_15_Runtimes_libcxx/) | libcxx/libcxxabi/libunwind/openmp | ✅ |
+| 12 | [**LLD + BOLT**](./Expert_12_LLD_BOLT) | 链接器 + 后链接优化 | ✅ |
+| 13 | [**LLDB 调试器**](./Expert_13_LLDB_Debugger) | LLDB vs GDB | ✅ |
+| 14 | [**Sanitizers + JIT**](./Expert_14_CompilerRT_Sanitizers_JIT) | ASan/MSan/CFI + ORC JIT | ✅ |
+| 15 | [**C++ 运行时栈**](./Expert_15_Runtimes_libcxx) | libcxx/libcxxabi/libunwind/openmp | ✅ |
 
 #### 轴四·宏观与生态（3 个）
 
 | # | 专家 | 一句话定位 | 状态 |
 |:-:|------|-----------|:----:|
-| 16 | [**Flang Fortran**](./Expert_16_Flang_Fortran/) | HPC 现代化（f18/FIR/MLIR） | ✅ |
-| 17 | [**治理与 License**](./Expert_17_Governance_License/) | Apache 2.0 w/ LLVM Exception / 社区公司化 | ✅ |
-| 18 | [**⭐ 飞腾/国产化适配收口**](./Expert_18_Phytium_Adaptation/) | phytvm fork diff + phytium_repos 45 目录实证 + 国产 CPU 厂商 LLVM fork 对照 | ✅ |
+| 16 | [**Flang Fortran**](./Expert_16_Flang_Fortran) | HPC 现代化（f18/FIR/MLIR） | ✅ |
+| 17 | [**治理与 License**](./Expert_17_Governance_License) | Apache 2.0 w/ LLVM Exception / 社区公司化 | ✅ |
+| 18 | [**⭐ 飞腾/国产化适配收口**](./Expert_18_Phytium_Adaptation) | phytvm fork diff + phytium_repos 45 目录实证 + 国产 CPU 厂商 LLVM fork 对照 | ✅ |
 
-### 1.2 7 异质思维透镜（[`Lenses/`](./Lenses/)）
+### 1.2 7 异质思维透镜（[`Lenses/`](./Lenses)）
 
 | 透镜 | 范式 | 一句话定位 | 锐度 |
 |----|------|----------|:--:|
@@ -214,8 +214,8 @@ ls /data/usershare/ai/飞腾/phytium_repos/
 
 入门路径：
 - **想看 LLVM 全貌** → [`Views_LLVM.md`](./Views_LLVM.md) → [`领域资源库_LLVM.md`](./领域资源库_LLVM.md)
-- **想看飞腾特异** → [E08 AArch64](./Expert_08_AArch64_Backend/) → [E18 Phytium Adaptation](./Expert_18_Phytium_Adaptation/)
-- **想破思维定式** → [`Lenses/`](./Lenses/)（历史/Christensen/供应链/国产化）
+- **想看飞腾特异** → [E08 AArch64](./Expert_08_AArch64_Backend) → [E18 Phytium Adaptation](./Expert_18_Phytium_Adaptation)
+- **想破思维定式** → [`Lenses/`](./Lenses)（历史/Christensen/供应链/国产化）
 - **研究员/PhD** → E02 IR / E03 Pass / E11 GPU 异构债 + 各视角参考文献
 
 ---

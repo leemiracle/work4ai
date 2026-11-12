@@ -39,7 +39,7 @@ Recent advances in detecting arbitrary objects in the real world are trained and
 
 ## Prepare Dataset
 
-Please download and prepare V3Det Dataset at [V3Det Homepage](https://v3det.openxlab.org.cn/) and [V3Det Github](https://github.com/V3Det/V3Det).
+Please download and prepare V3Det Dataset at [V3Det Homepage](https://v3det.openxlab.org.cn) and [V3Det Github](https://github.com/V3Det/V3Det).
 
 The data includes a training set, a validation set, comprising 13,204 categories. The training set consists of 183,354 images, while the validation set has 29,821 images. The data organization is:
 

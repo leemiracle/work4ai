@@ -20,16 +20,16 @@ rendered properly in your Markdown viewer.
 
 # Installation
 
-Transformers works with [PyTorch](https://pytorch.org/get-started/locally/). It has been tested on Python 3.9+ and PyTorch 2.4+.
+Transformers works with [PyTorch](https://pytorch.org/get-started/locally). It has been tested on Python 3.9+ and PyTorch 2.4+.
 
 ## Virtual environment
 
-[uv](https://docs.astral.sh/uv/) is an extremely fast Rust-based Python package and project manager and requires a [virtual environment](https://docs.astral.sh/uv/pip/environments/) by default to manage different projects and avoids compatibility issues between dependencies.
+[uv](https://docs.astral.sh/uv) is an extremely fast Rust-based Python package and project manager and requires a [virtual environment](https://docs.astral.sh/uv/pip/environments) by default to manage different projects and avoids compatibility issues between dependencies.
 
-It can be used as a drop-in replacement for [pip](https://pip.pypa.io/en/stable/), but if you prefer to use pip, remove `uv` from the commands below.
+It can be used as a drop-in replacement for [pip](https://pip.pypa.io/en/stable), but if you prefer to use pip, remove `uv` from the commands below.
 
 > [!TIP]
-> Refer to the uv [installation](https://docs.astral.sh/uv/guides/install-python/) docs to install uv.
+> Refer to the uv [installation](https://docs.astral.sh/uv/guides/install-python) docs to install uv.
 
 Create a virtual environment to install Transformers in.
 
@@ -42,7 +42,7 @@ source .env/bin/activate
 
 Install Transformers with the following command.
 
-[uv](https://docs.astral.sh/uv/) is a fast Rust-based Python package and project manager.
+[uv](https://docs.astral.sh/uv) is a fast Rust-based Python package and project manager.
 
 ```bash
 uv pip install transformers

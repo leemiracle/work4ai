@@ -54,4 +54,4 @@ python examples/pytorch/text-classification/run_glue.py \
 
 用于[分布式设置](https://pytorch.org/docs/stable/distributed.html#backends)的后端(如`gloo`和`nccl`)不支持`mps`设备，这也意味着使用 MPS 后端时只能在单个 GPU 上进行训练。
 
-您可以在[Introducing Accelerated PyTorch Training on Mac](https://pytorch.org/blog/introducing-accelerated-pytorch-training-on-mac/)博客文章中了解有关 MPS 后端的更多信息。
+您可以在[Introducing Accelerated PyTorch Training on Mac](https://pytorch.org/blog/introducing-accelerated-pytorch-training-on-mac)博客文章中了解有关 MPS 后端的更多信息。

@@ -2,7 +2,7 @@
 
 > **学校**：University of Oxford
 > **学院**：Mathematical Institute
-> **一手来源**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk/) + [maths.ox.ac.uk/system/files/attachments/Prelims%20Mathematics%20Synopses%202024-25.pdf](https://www.maths.ox.ac.uk/system/files/attachments/Prelims%20Mathematics%20Synopses%202024-25.pdf)（2026-08 一手核实）
+> **一手来源**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk) + [maths.ox.ac.uk/system/files/attachments/Prelims%20Mathematics%20Synopses%202024-25.pdf](https://www.maths.ox.ac.uk/system/files/attachments/Prelims%20Mathematics%20Synopses%202024-25.pdf)（2026-08 一手核实）
 > **强项**：几何（Hitchin 等）、随机分析（Rogers/Williams）、随机矩阵（Pastur）、数学物理
 
 ---
@@ -199,7 +199,7 @@ Group Theory, Introduction to Manifolds, Number Theory, Projective Geometry
 ## 九、参考资源
 
 - Oxford Math: [maths.ox.ac.uk](https://www.maths.ox.ac.uk)
-- Course synopses: [courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk/)
+- Course synopses: [courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk)
 - Undergraduate studies: [maths.ox.ac.uk/members/students/undergraduate-courses](https://www.maths.ox.ac.uk/members/students/undergraduate-courses)
 - Algebra lecture courses: [maths.ox.ac.uk/groups/algebra/lecture-courses/undergraduate-lecture-courses](https://www.maths.ox.ac.uk/groups/algebra/lecture-courses/undergraduate-lecture-courses)
 

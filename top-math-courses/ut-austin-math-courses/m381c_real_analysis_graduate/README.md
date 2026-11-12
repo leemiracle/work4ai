@@ -1,7 +1,7 @@
 # UT Austin M 381C — Real Analysis (Graduate)
 
 > **学校**：UT Austin | **学期**：Fall (研究生)
-> **一手来源**：[catalog.utexas.edu](https://catalog.utexas.edu/general-information/coursesatoz/m/) + [math.utexas.edu/information/graduate-students/preliminary-exams](https://math.utexas.edu/information/graduate-students/preliminary-exams)
+> **一手来源**：[catalog.utexas.edu](https://catalog.utexas.edu/general-information/coursesatoz/m) + [math.utexas.edu/information/graduate-students/preliminary-exams](https://math.utexas.edu/information/graduate-students/preliminary-exams)
 
 ## 课程信息
 - **编号**：M 381C / CSEM 385R（互认）

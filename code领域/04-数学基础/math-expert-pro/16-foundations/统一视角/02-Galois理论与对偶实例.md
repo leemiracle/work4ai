@@ -57,4 +57,4 @@ Langlands 纲领预言：数论（自守表示）与几何（Galois 表示）之
 - 四种统一视角 → [统一视角/01-四种统一视角.md](01-四种统一视角.md)
 - 范畴论作为统一语言 → [范畴论/01-范畴论作为统一语言.md](../范畴论/01-范畴论作为统一语言.md)
 - Galois 群应用 → [15-applications/代码库/09-数论_RSA加密.py](../../15-applications/代码库/09-数论_RSA加密.py)
-- 数论前沿 → [14-frontier/conjecture进展/](../../14-frontier/conjecture进展/)
+- 数论前沿 → [14-frontier/conjecture进展/](../../14-frontier/conjecture进展)

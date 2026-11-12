@@ -408,7 +408,7 @@ Date: 09/28/1960
 - 「ステップごとに考えてみましょう」または「深呼吸して、問題をステップごとに解決してください」などのフレーズを追加してモデルに推論を指示します。
 
 [推論セクション](#reasoning) のマフィンの例に CoT テクニックを適用し、より大きなモデルを使用すると、
-[HuggingChat](https://huggingface.co/chat/)で遊べる(`tiiuae/falcon-180B-chat`)など、
+[HuggingChat](https://huggingface.co/chat)で遊べる(`tiiuae/falcon-180B-chat`)など、
 推論結果は大幅に改善されます。
 
 ```text

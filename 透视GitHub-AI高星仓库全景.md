@@ -99,7 +99,7 @@ microsoft 8 仓领跑（generative-ai-for-beginners、autogen、agent-framework�
 
 **① Agent 是新的"应用服务器"。** 128/279（46%）的仓在直接回答同一个问题："Agent 怎么跑起来？"——框架（autogen/crewAI）、运行时（goose/zeroclaw/elizaOS）、沙箱（daytona/e2b/OpenSandbox）、记忆（mem0/claude-mem）、技能（superpowers/taste-skill）、MCP 工具生态（awesome-mcp-servers 92K）。这对应本项目 [`讲透多Agent协作/`](./讲透多Agent协作/README.md) 与 `透视Agent系统工程/`（待写/未落盘）。
 
-**② 编码是 Agent 第一落地场景，且长出了完整食物链。** 从模型 CLI（gemini-cli、qwen-code、opencode、crush）到 harness（SWE-agent、plandex、deepagents、herdr）到外围经济（caveman 省 token、CodexBar 计量、claude-mem 记忆、cockpit-tools 账号管理）——**"Claude Code 经济圈"本身就是一条 50+ 仓的产业链**。对应 [`讲透代码生成/`](./讲透代码生成/README.md)。
+**② 编码是 Agent 第一落地场景，且长出了完整食物链。** 从模型 CLI（gemini-cli、qwen-code、opencode、crush）到 harness（SWE-agent、plandex、deepagents、herdr）到外围经济（caveman 省 token、CodexBar 计量、claude-mem 记忆、cockpit-tools 账号管理）——**"Claude Code 经济圈"本身就是一条 50+ 仓的产业链**。对应 [`讲透宇宙/01-学/讲透代码生成//`](讲透宇宙/01-学/讲透代码生成/README.md)。
 
 **③ 记忆层独立成科（2025–26 最大的新增品类之一）。** mem0 63K、claude-mem 90K、mempalace 58K、letta、cognee、EverOS、memvid、Memori——"给 Agent 装持久记忆"从 RAG 里分裂出来成为独立基础设施层。对应 [`讲透记忆/`](./讲透记忆/README.md)。
 

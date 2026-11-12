@@ -545,7 +545,7 @@ Linked PRs:
 
 - Some `RotaryEmbeddings` layers will start returning a dict of tuples, in case the model uses several RoPE configurations (Gemma2, ModernBert). Each value will be a tuple of "cos, sin" per RoPE type.
 - Config attribute for `RotaryEmbeddings` layer will be unified and accessed via `config.rope_parameters`. Config attr for `rope_theta` might not be accessible anymore for some models, and instead will be in `config.rope_parameters['rope_theta']`. BC will be supported for a while as much as possible, and in the near future we'll gradually move to the new RoPE format  (https://github.com/huggingface/transformers/pull/39847)
-- Vision Language models will not have a shortcut access to its language and vision component from the generative model via `model.language_model`. It is recommended to either access the module with `model.model.language_model` or `model.get_decoder()`. See [#42156](https://github.com/huggingface/transformers/pull/42156/)
+- Vision Language models will not have a shortcut access to its language and vision component from the generative model via `model.language_model`. It is recommended to either access the module with `model.model.language_model` or `model.get_decoder()`. See [#42156](https://github.com/huggingface/transformers/pull/42156)
 
 ### Generate
 

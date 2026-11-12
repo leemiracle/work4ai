@@ -89,7 +89,7 @@ MMDetection v2.12.0 依赖 MMCV v1.3.3 中新增加的功能，包括：使用 `
 
 在 [PR #4898](https://github.com/open-mmlab/mmdetection/pull/4898) 和 v2.12.0 之前，对小、中、大目标的 mask AP 的评估是基于其边界框区域而不是真正的 mask 区域。
 这导致 `APs` 和 `APm` 变得更高但 `APl` 变得更低，但是不会影响整体的 mask AP。 [PR #4898](https://github.com/open-mmlab/mmdetection/pull/4898) 删除了 mask AP 计算中的 `bbox` ，改为使用 mask 区域。
-新的计算方式不会影响整体的 mask AP 评估，与 [Detectron2](https://github.com/facebookresearch/detectron2/)一致。
+新的计算方式不会影响整体的 mask AP 评估，与 [Detectron2](https://github.com/facebookresearch/detectron2)一致。
 
 ## 与 MMDetection v1.x 的兼容性
 
@@ -99,7 +99,7 @@ MMDetection v2.0 经过了大规模重构并解决了许多遗留问题。 MMDet
 
 ### 坐标系
 
-新坐标系与 [Detectron2](https://github.com/facebookresearch/detectron2/) 一致，
+新坐标系与 [Detectron2](https://github.com/facebookresearch/detectron2) 一致，
 将最左上角的像素的中心视为坐标原点 (0, 0) 而不是最左上角像素的左上角。 因此 COCO 边界框和分割标注中的坐标被解析为范围 `[0，width]` 和 `[0，height]` 中的坐标。 这个修改影响了所有与 bbox 及像素选择相关的计算，变得更加自然且更加准确。
 
 - 在新坐标系中，左上角和右下角为 (x1, y1) (x2, y2) 的框的宽度及高度计算公式为 `width = x2 - x1` 和 `height = y2 - y1`。

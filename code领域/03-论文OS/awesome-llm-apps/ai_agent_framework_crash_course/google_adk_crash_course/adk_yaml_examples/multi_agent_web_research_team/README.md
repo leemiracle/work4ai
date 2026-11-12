@@ -190,7 +190,7 @@ adk run
 
 ## References
 
-- [Google ADK Documentation](https://google.github.io/adk-docs/)
+- [Google ADK Documentation](https://google.github.io/adk-docs)
 - [Agent Config Reference](https://google.github.io/adk-docs/agents/config/#build-an-agent)
-- [Firecrawl Documentation](https://docs.firecrawl.dev/)
-- [MCP Tools](https://modelcontextprotocol.io/)
+- [Firecrawl Documentation](https://docs.firecrawl.dev)
+- [MCP Tools](https://modelcontextprotocol.io)

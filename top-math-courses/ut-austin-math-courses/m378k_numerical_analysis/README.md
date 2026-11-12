@@ -1,7 +1,7 @@
 # UT Austin M 378K — Numerical Analysis
 
 > **学校**：UT Austin
-> **一手来源**：[catalog.utexas.edu](https://catalog.utexas.edu/general-information/coursesatoz/m/)
+> **一手来源**：[catalog.utexas.edu](https://catalog.utexas.edu/general-information/coursesatoz/m)
 
 ## 课程信息
 - **编号**：M 378K / M 348（简化版）

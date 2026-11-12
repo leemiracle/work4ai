@@ -270,7 +270,7 @@ Layer 1: 公理与事实      ← 1% 的人（"这条能再拆吗？拆不动了
 - 认识论：我们怎么知道模型真的"注意"对了？注意力图（attention map）是解释还是误导？
 - 方法论：用注意力作为可解释性工具，这个方法的合法性？
 
-→ 去读 [`05-intelligence/_philosophy-of-mind.md`](./05-intelligence/_philosophy-of-mind.md) + [`00-philosophy/philosophy-of-mind/`](./00-philosophy/philosophy-of-mind/)
+→ 去读 [`05-intelligence/_philosophy-of-mind.md`](./05-intelligence/_philosophy-of-mind.md) + [`00-philosophy/philosophy-of-mind/`](./00-philosophy/philosophy-of-mind)
 
 ### 反模式
 

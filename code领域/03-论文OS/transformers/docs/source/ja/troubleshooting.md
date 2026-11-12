@@ -24,7 +24,7 @@ rendered properly in your Markdown viewer.
 
 <Youtube id="S2EEG3JIt2A"/>
 
-1. [フォーラム](https://discuss.huggingface.co/)で助けを求める。 [初心者向け](https://discuss.huggingface.co/c/beginners/5) または [🤗 Transformers](https://discuss.huggingface.co/c/transformers/9) など、質問を投稿できる特定のカテゴリがあります。問題が解決される可能性を最大限にするために、再現可能なコードを含む良い説明的なフォーラム投稿を書くことを確認してください！
+1. [フォーラム](https://discuss.huggingface.co)で助けを求める。 [初心者向け](https://discuss.huggingface.co/c/beginners/5) または [🤗 Transformers](https://discuss.huggingface.co/c/transformers/9) など、質問を投稿できる特定のカテゴリがあります。問題が解決される可能性を最大限にするために、再現可能なコードを含む良い説明的なフォーラム投稿を書くことを確認してください！
 
 <Youtube id="_PAli-V4wj0"/>
 

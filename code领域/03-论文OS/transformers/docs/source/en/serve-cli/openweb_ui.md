@@ -15,7 +15,7 @@ rendered properly in your Markdown viewer.
 
 # Open WebUI
 
-[Open WebUI](https://openwebui.com/) provides a self-hosted interface for offline models. Enable [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS) to serve local models (it's disabled by default for security).
+[Open WebUI](https://openwebui.com) provides a self-hosted interface for offline models. Enable [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS) to serve local models (it's disabled by default for security).
 
 ```bash
 transformers serve --enable-cors

@@ -1,0 +1,32 @@
+# DeepWiki 索引 — HKUDS/PhoneCLI
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-11-09
+> 结构 27 页 · 全文 256263 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started & Environment Setup](1.1-getting-started-environment-setup.md)
+  - [1.2 Configuration System](1.2-configuration-system.md)
+  - [1.3 Core Concepts: App Maps, Macros, Three-Tier Execution](1.3-core-concepts-app-maps-macros-three-tier-execution.md)
+- [2 iOS Harness (phonecli)](2-ios-harness-phonecli.md)
+  - [2.1 CLI and Entrypoints](2.1-cli-and-entrypoints.md)
+  - [2.2 PhoneAgent Execution Loop](2.2-phoneagent-execution-loop.md)
+  - [2.3 App Map Build Pipeline (iOS)](2.3-app-map-build-pipeline-ios.md)
+  - [2.4 LLM/VLM Clients, Prompts and Token Accounting](2.4-llm-vlm-clients-prompts-and-token-accounting.md)
+- [3 Android Harness & AndroidLab Benchmark](3-android-harness-androidlab-benchmark.md)
+  - [3.1 Task Runner and Parallel Execution](3.1-task-runner-and-parallel-execution.md)
+  - [3.2 MacroAgent: Routing, Replay and Fallback](3.2-macroagent-routing-replay-and-fallback.md)
+  - [3.3 Device Control and Page Executors](3.3-device-control-and-page-executors.md)
+  - [3.4 Model Backends (agent)](3.4-model-backends-agent.md)
+  - [3.5 Android App Map Building](3.5-android-app-map-building.md)
+- [4 Evaluation & Results](4-evaluation-results.md)
+  - [4.1 Task Definitions and Per-App Checkers](4.1-task-definitions-and-per-app-checkers.md)
+  - [4.2 LLM Judging and Result Aggregation](4.2-llm-judging-and-result-aggregation.md)
+  - [4.3 Benchmark Results and Ablations](4.3-benchmark-results-and-ablations.md)
+- [5 OpenPhone Model: Data and Training](5-openphone-model-data-and-training.md)
+  - [5.1 Training Data Preparation (prepare_data)](5.1-training-data-preparation-prepare-data.md)
+  - [5.2 SFT and GRPO Training (model_training)](5.2-sft-and-grpo-training-model-training.md)
+  - [5.3 Model Serving with vLLM](5.3-model-serving-with-vllm.md)
+- [6 Developer Guides & Tooling](6-developer-guides-tooling.md)
+  - [6.1 Extending the Harness (docs)](6.1-extending-the-harness-docs.md)
+  - [6.2 Test Scripts and Utilities](6.2-test-scripts-and-utilities.md)
+- [7 Glossary](7-glossary.md)

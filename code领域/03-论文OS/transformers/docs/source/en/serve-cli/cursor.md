@@ -21,7 +21,7 @@ rendered properly in your Markdown viewer.
 transformers serve --enable-cors
 ```
 
-Cursor requires a public address to reach your local server. Use [ngrok](https://ngrok.com/) to create a tunnel. Sign up, authenticate, and run this command.
+Cursor requires a public address to reach your local server. Use [ngrok](https://ngrok.com) to create a tunnel. Sign up, authenticate, and run this command.
 
 ```bash
 ngrok http localhost:8000

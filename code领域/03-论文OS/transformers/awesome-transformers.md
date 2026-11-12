@@ -152,9 +152,9 @@ Keywords: Framework, simplicity, NLP
 
 Keywords: LLM, Agents, HF Hub
 
-## [transformers.js](https://github.com/huggingface/transformers.js/)
+## [transformers.js](https://github.com/huggingface/transformers.js)
 
-[transformers.js](https://github.com/huggingface/transformers.js/) is a JavaScript library targeted at running models from transformers directly within the browser.
+[transformers.js](https://github.com/huggingface/transformers.js) is a JavaScript library targeted at running models from transformers directly within the browser.
 
 Keywords: Transformers, JavaScript, browser
 
@@ -274,7 +274,7 @@ Deep Java Library (DJL) is an open-source, high-level, engine-agnostic Java fram
 
 Keywords: Java, Framework
 
-## [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness/)
+## [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness)
 
 This project provides a unified framework to test generative language models on a large number of different evaluation tasks. It has support for more than 200 tasks, and supports different ecosystems: HF Transformers, GPT-NeoX, DeepSpeed, as well as the OpenAI API.
 
@@ -352,9 +352,9 @@ Keywords: Adversarial attacks, Data augmentation, NLP
 
 Prompt-learning is a paradigm to adapt pre-trained language models (PLMs) to downstream NLP tasks, which modify the input text with a textual template and directly uses PLMs to conduct pre-trained tasks. This library provides a standard, flexible and extensible framework to deploy the prompt-learning pipeline. [OpenPrompt](https://github.com/thunlp/OpenPrompt) supports loading PLMs directly from https://github.com/huggingface/transformers.
 
-## [text-generation-webui](https://github.com/oobabooga/text-generation-webui/)
+## [text-generation-webui](https://github.com/oobabooga/text-generation-webui)
 
-[text-generation-webui](https://github.com/oobabooga/text-generation-webui/) is a Gradio Web UI for running Large Language Models like LLaMA, llama.cpp, GPT-J, Pythia, OPT, and GALACTICA.
+[text-generation-webui](https://github.com/oobabooga/text-generation-webui) is a Gradio Web UI for running Large Language Models like LLaMA, llama.cpp, GPT-J, Pythia, OPT, and GALACTICA.
 
 Keywords: LLM, WebUI
 

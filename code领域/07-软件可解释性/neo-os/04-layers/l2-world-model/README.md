@@ -22,7 +22,7 @@ L2 的"数据地基"是 commit 蒸馏（命门 V25/C1）。三域已达标：
 
 ## 当前实现（prototype）
 
-### [`c1_pipeline/`](./c1_pipeline/) — commit 蒸馏 pipeline
+### [`c1_pipeline/`](./c1_pipeline) — commit 蒸馏 pipeline
 
 | 文件 | 作用 | 状态 |
 |---|---|---|
@@ -32,7 +32,7 @@ L2 的"数据地基"是 commit 蒸馏（命门 V25/C1）。三域已达标：
 | `fetch_kernel_commits.py` | kernel commit 抓取（绕过 kernel.org 限速）| ✅ |
 | `sample_commits.sh` | Fixes: 标签 commit 抽样 | ✅ |
 
-### [`data/`](./data/) — 抽取结果 + 蒸馏规则
+### [`data/`](./data) — 抽取结果 + 蒸馏规则
 
 - `*_results.jsonl` — 三域抽取结果（sglang/etcd/kernel）
 - `l2_distilled_rules*.lean` — 48 蒸馏规则的 Lean4 形式（→ L2.5）
@@ -45,7 +45,7 @@ L2 的"数据地基"是 commit 蒸馏（命门 V25/C1）。三域已达标：
 | 方向 | 契约 |
 |---|---|
 | **上游输入** | Linux/etcd/sglang git history → c1_pipeline 抽取 (symptom, root_cause, fix) 三元组 |
-| **下游输出** | 蒸馏规则 `.lean` → [`l2_5-formal-rules/`](../l2_5-formal-rules/) 形式化验证；解释能力 → [`l3-explain/`](../l3-explain/) |
+| **下游输出** | 蒸馏规则 `.lean` → [`l2_5-formal-rules/`](../l2_5-formal-rules) 形式化验证；解释能力 → [`l3-explain/`](../l3-explain) |
 
 ---
 
@@ -68,5 +68,5 @@ L2 的"数据地基"是 commit 蒸馏（命门 V25/C1）。三域已达标：
 ## 引用
 
 - work4ai 理论弹药：[`03-methodology/from-work4ai.md`](../../03-methodology/from-work4ai.md) §B/D（讲透基础模型/世界模型/微调/RAG）
-- 形式化下游：[`l2_5-formal-rules/`](../l2_5-formal-rules/)
+- 形式化下游：[`l2_5-formal-rules/`](../l2_5-formal-rules)
 - 命门报告：[`02-research/deep/SYNTHESIS.md`](../../02-research/deep/SYNTHESIS.md)

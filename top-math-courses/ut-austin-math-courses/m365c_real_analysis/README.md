@@ -1,7 +1,7 @@
 # UT Austin M 365C — Real Analysis I
 
 > **学校**：UT Austin | **学期**：Fall/Spring | **学分**：3
-> **一手来源**：[catalog.utexas.edu/search/?P=M+365C](https://catalog.utexas.edu/search/?P=M+365C) + [utdirect.utexas.edu/.../10300546](https://utdirect.utexas.edu/apps/student/coursedocs/nlogon/download/10300546/)（一手核实）
+> **一手来源**：[catalog.utexas.edu/search/?P=M+365C](https://catalog.utexas.edu/search/?P=M+365C) + [utdirect.utexas.edu/.../10300546](https://utdirect.utexas.edu/apps/student/coursedocs/nlogon/download/10300546)（一手核实）
 
 ## 课程信息
 - **编号**：M 365C（与 M 361K 互斥）

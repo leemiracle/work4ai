@@ -19,7 +19,7 @@ rendered properly in your Markdown viewer.
 
 ## Overview
 
-[Qwen3MoE](https://huggingface.co/papers/2505.09388) refers to the mixture of experts model architecture Qwen3-235B-A22B which was released with its dense variant [Qwen3](qwen3) ([blog post](https://qwenlm.github.io/blog/qwen3/)).
+[Qwen3MoE](https://huggingface.co/papers/2505.09388) refers to the mixture of experts model architecture Qwen3-235B-A22B which was released with its dense variant [Qwen3](qwen3) ([blog post](https://qwenlm.github.io/blog/qwen3)).
 
 ### Model Details
 

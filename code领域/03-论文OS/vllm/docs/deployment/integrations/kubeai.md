@@ -4,10 +4,10 @@
 
 Please see the Installation Guides for environment specific instructions:
 
-- [Any Kubernetes Cluster](https://www.kubeai.org/installation/any/)
-- [EKS](https://www.kubeai.org/installation/eks/)
-- [GKE](https://www.kubeai.org/installation/gke/)
+- [Any Kubernetes Cluster](https://www.kubeai.org/installation/any)
+- [EKS](https://www.kubeai.org/installation/eks)
+- [GKE](https://www.kubeai.org/installation/gke)
 
 Once you have KubeAI installed, you can
-[configure text generation models](https://www.kubeai.org/how-to/configure-text-generation-models/)
+[configure text generation models](https://www.kubeai.org/how-to/configure-text-generation-models)
 using vLLM.

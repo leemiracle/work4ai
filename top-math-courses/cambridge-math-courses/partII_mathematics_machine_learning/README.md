@@ -1,7 +1,7 @@
 # Cambridge Part II — Mathematics of Machine Learning
 
 > **学校**：Cambridge | **学院**：Statistical Laboratory
-> **一手来源**：[dpmms.cam.ac.uk/study/II/MathematicsofMachineLearning](https://www.dpmms.cam.ac.uk/study/II/MathematicsofMachineLearning/) + [statslab.cam.ac.uk/~rds37/machine_learning.html](https://www.statslab.cam.ac.uk/~rds37/machine_learning.html)（**一手核实**）
+> **一手来源**：[dpmms.cam.ac.uk/study/II/MathematicsofMachineLearning](https://www.dpmms.cam.ac.uk/study/II/MathematicsofMachineLearning) + [statslab.cam.ac.uk/~rds37/machine_learning.html](https://www.statslab.cam.ac.uk/~rds37/machine_learning.html)（**一手核实**）
 
 ## 课程信息
 - **学期**：Lent (16 lectures, D-course)

@@ -73,7 +73,7 @@ This crash course covers the essential concepts of Google ADK through hands-on t
 Before starting this crash course, ensure you have:
 
 - **Python 3.11+** installed
-- **Google AI API Key** from [Google AI Studio](https://aistudio.google.com/)
+- **Google AI API Key** from [Google AI Studio](https://aistudio.google.com)
 - Basic understanding of Python and APIs
 
 ## 📖 How to Use This Course
@@ -102,10 +102,10 @@ Each tutorial includes:
 
 ## 📚 Additional Resources
 
-- [Google ADK Documentation](https://google.github.io/adk-docs/)
-- [Google AI Studio](https://aistudio.google.com/)
+- [Google ADK Documentation](https://google.github.io/adk-docs)
+- [Google AI Studio](https://aistudio.google.com)
 - [Gemini API Reference](https://ai.google.dev/docs)
-- [Pydantic Documentation](https://docs.pydantic.dev/)
+- [Pydantic Documentation](https://docs.pydantic.dev)
 
 ## 🤝 Contributing
 

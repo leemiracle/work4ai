@@ -19,7 +19,7 @@
   <div>&nbsp;</div>
 
 [![PyPI](https://img.shields.io/pypi/v/mmdet)](https://pypi.org/project/mmdet)
-[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmdetection.readthedocs.io/en/latest/)
+[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmdetection.readthedocs.io/en/latest)
 [![badge](https://github.com/open-mmlab/mmdetection/workflows/build/badge.svg)](https://github.com/open-mmlab/mmdetection/actions)
 [![codecov](https://codecov.io/gh/open-mmlab/mmdetection/branch/main/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmdetection)
 [![license](https://img.shields.io/github/license/open-mmlab/mmdetection.svg)](https://github.com/open-mmlab/mmdetection/blob/main/LICENSE)
@@ -27,7 +27,7 @@
 [![issue resolution](https://isitmaintained.com/badge/resolution/open-mmlab/mmdetection.svg)](https://github.com/open-mmlab/mmdetection/issues)
 [![Open in OpenXLab](https://cdn-static.openxlab.org.cn/app-center/openxlab_demo.svg)](https://openxlab.org.cn/apps?search=mmdet)
 
-[📘使用文档](https://mmdetection.readthedocs.io/zh_CN/latest/) |
+[📘使用文档](https://mmdetection.readthedocs.io/zh_CN/latest) |
 [🛠️安装教程](https://mmdetection.readthedocs.io/zh_CN/latest/get_started.html) |
 [👀模型库](https://mmdetection.readthedocs.io/zh_CN/latest/model_zoo.html) |
 [🆕更新日志](https://mmdetection.readthedocs.io/en/latest/notes/changelog.html) |
@@ -68,7 +68,7 @@
 
 ## 简介
 
-MMDetection 是一个基于 PyTorch 的目标检测开源工具箱。它是 [OpenMMLab](https://openmmlab.com/) 项目的一部分。
+MMDetection 是一个基于 PyTorch 的目标检测开源工具箱。它是 [OpenMMLab](https://openmmlab.com) 项目的一部分。
 
 主分支代码目前支持 PyTorch 1.8 及其以上的版本。
 
@@ -142,7 +142,7 @@ arxiv 技术报告：https://arxiv.org/abs/2401.02361
 
 请阅读[概述](https://mmdetection.readthedocs.io/zh_CN/latest/get_started.html)对 MMDetection 进行初步的了解。
 
-为了帮助用户更进一步了解 MMDetection，我们准备了用户指南和进阶指南，请阅读我们的[文档](https://mmdetection.readthedocs.io/zh_CN/latest/)：
+为了帮助用户更进一步了解 MMDetection，我们准备了用户指南和进阶指南，请阅读我们的[文档](https://mmdetection.readthedocs.io/zh_CN/latest)：
 
 - 用户指南
 

@@ -649,7 +649,7 @@ Jetzt können Sie also nur 2 spezifische Untertests durchführen:
 pytest test_this1.py::TestMathUnitTest::test_floor_0_negative  test_this1.py::TestMathUnitTest::test_floor_1_integer
 ```
 
-Das Modul [parametrisiert](https://pypi.org/project/parameterized/), das sich bereits in den Entwickler-Abhängigkeiten befindet
+Das Modul [parametrisiert](https://pypi.org/project/parameterized), das sich bereits in den Entwickler-Abhängigkeiten befindet
 von `transformers` befindet, funktioniert sowohl für `unittests` als auch für `pytest` Tests.
 
 Wenn es sich bei dem Test jedoch nicht um einen `Unittest` handelt, können Sie `pytest.mark.parametrize` verwenden (oder Sie können sehen, dass es in

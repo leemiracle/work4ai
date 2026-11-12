@@ -69,7 +69,7 @@ pip install -r requirements.txt
 
 3. Get your Google API Key
 
-- Sign up for a [Google AI Studio account](https://ai.google.dev/) and obtain your API key.
+- Sign up for a [Google AI Studio account](https://ai.google.dev) and obtain your API key.
 
 4. Run the Streamlit App
 
@@ -99,7 +99,7 @@ streamlit run research_planner_executor_agent.py
 
 - [Gemini Interactions API Docs](https://ai.google.dev/gemini-api/docs/interactions)
 - [Gemini Models](https://ai.google.dev/gemini-api/docs/models)
-- [Google AI Studio](https://ai.google.dev/)
+- [Google AI Studio](https://ai.google.dev)
 
 ## 📄 License
 

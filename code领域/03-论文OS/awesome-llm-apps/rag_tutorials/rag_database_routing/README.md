@@ -36,7 +36,7 @@ A Streamlit application that demonstrates an advanced implementation of RAG Agen
 4. **Get OpenAI API Key**: Obtain an OpenAI API key and set it in the application. This is required for initializing the language models used in the application.
 
 5. **Setup Qdrant Cloud** 
-- Visit [Qdrant Cloud](https://cloud.qdrant.io/)
+- Visit [Qdrant Cloud](https://cloud.qdrant.io)
 - Create an account or sign in
 - Create a new cluster
 - Get your credentials:

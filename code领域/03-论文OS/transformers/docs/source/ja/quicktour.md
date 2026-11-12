@@ -413,7 +413,7 @@ tensor([[0.0021, 0.0018, 0.0115, 0.2121, 0.7725],
 
 ## Train with TensorFlow
 
-すべてのモデルは標準の[`tf.keras.Model`](https://www.tensorflow.org/api_docs/python/tf/keras/Model)であるため、[Keras](https://keras.io/) APIを使用してTensorFlowでトレーニングできます。
+すべてのモデルは標準の[`tf.keras.Model`](https://www.tensorflow.org/api_docs/python/tf/keras/Model)であるため、[Keras](https://keras.io) APIを使用してTensorFlowでトレーニングできます。
 🤗 Transformersは、データセットを`tf.data.Dataset`として簡単にロードできるようにする[`~TFPreTrainedModel.prepare_tf_dataset`]メソッドを提供しており、Kerasの[`compile`](https://keras.io/api/models/model_training_apis/#compile-method)および[`fit`](https://keras.io/api/models/model_training_apis/#fit-method)メソッドを使用してトレーニングをすぐに開始できます。
 
 1. [`TFPreTrainedModel`]または[`tf.keras.Model`](https://www.tensorflow.org/api_docs/python/tf/keras/Model)から始めます：

@@ -151,7 +151,7 @@ Usually, it is slow if you do not have high-speed networking like InfiniBand.
 
 ## Manage jobs with Slurm
 
-[Slurm](https://slurm.schedmd.com/) is a good job scheduling system for computing clusters.
+[Slurm](https://slurm.schedmd.com) is a good job scheduling system for computing clusters.
 
 ### Training on a cluster with Slurm
 
@@ -284,7 +284,7 @@ python tools/test.py configs/fcn/fcn_r50-d8_4xb4-80k_ade20k-512x512.py ckpt/fcn_
 ### Testing Cityscape dataset and save predicted segment files
 
 We recommend `CityscapesMetric` which is the wrapper of Cityscapes'sdk, when you want to
-save the predicted results of Cityscape test dataset to submit them in [Cityscape test server](https://www.cityscapes-dataset.com/submit/). Here is the example configuration:
+save the predicted results of Cityscape test dataset to submit them in [Cityscape test server](https://www.cityscapes-dataset.com/submit). Here is the example configuration:
 
 ```python
 test_evaluator = dict(

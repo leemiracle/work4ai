@@ -24,13 +24,13 @@ rendered properly in your Markdown viewer.
 
 🤗 TransformersはPython 3.6+, PyTorch 1.1.0+, TensorFlow 2.0+, Flaxで動作確認しています。 使用しているDeep Learningライブラリに合わせて、以下のインストール方法に従ってください:
 
-* [PyTorch](https://pytorch.org/get-started/locally/)のインストール手順。
+* [PyTorch](https://pytorch.org/get-started/locally)のインストール手順。
 * [TensorFlow 2.0](https://www.tensorflow.org/install/pip)のインストール手順。
-* [Flax](https://flax.readthedocs.io/en/latest/)のインストール手順。
+* [Flax](https://flax.readthedocs.io/en/latest)のインストール手順。
 
 ## pipでのインストール
 
-🤗 Transformersを[仮想環境](https://docs.python.org/3/library/venv.html)にインストールする必要があります。 もし、Pythonの仮想環境に馴染みがない場合は、この[ガイド](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)をご覧ください。仮想環境によって異なるプロジェクトの管理がより簡単になり、依存関係間の互換性の問題を回避できます。
+🤗 Transformersを[仮想環境](https://docs.python.org/3/library/venv.html)にインストールする必要があります。 もし、Pythonの仮想環境に馴染みがない場合は、この[ガイド](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments)をご覧ください。仮想環境によって異なるプロジェクトの管理がより簡単になり、依存関係間の互換性の問題を回避できます。
 
 まず、プロジェクトディレクトリに仮想環境を作成することから始めましょう:
 
@@ -155,7 +155,7 @@ conda install conda-forge::transformers
 
 <Tip>
 
-環境変数`HF_DATASETS_OFFLINE=1`を設定し、オフライントレーニングワークフローに[🤗 Datasets](https://huggingface.co/docs/datasets/)を追加します。
+環境変数`HF_DATASETS_OFFLINE=1`を設定し、オフライントレーニングワークフローに[🤗 Datasets](https://huggingface.co/docs/datasets)を追加します。
 
 </Tip>
 

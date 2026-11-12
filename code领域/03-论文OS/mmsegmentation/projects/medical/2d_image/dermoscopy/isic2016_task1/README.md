@@ -14,7 +14,7 @@ This challenge provides training data (~900 images) for participants to engage i
 
 | Dataset name                                                     | Anatomical region | Task type    | Modality   | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                                |
 | ---------------------------------------------------------------- | ----------------- | ------------ | ---------- | ------------ | --------------------- | ---------------------- | ------------ | ---------------------------------------------------------------------- |
-| [ISIC-2016 Task1](https://challenge.isic-archive.com/data/#2016) | full body         | segmentation | dermoscopy | 2            | 900/-/379-            | yes/-/yes              | 2016         | [CC-0](https://creativecommons.org/share-your-work/public-domain/cc0/) |
+| [ISIC-2016 Task1](https://challenge.isic-archive.com/data/#2016) | full body         | segmentation | dermoscopy | 2            | 900/-/379-            | yes/-/yes              | 2016         | [CC-0](https://creativecommons.org/share-your-work/public-domain/cc0) |
 
 | Class Name  | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :---------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

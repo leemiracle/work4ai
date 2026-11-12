@@ -32,17 +32,17 @@ rendered properly in your Markdown viewer.
   ([`TrainingArguments`]를 통해 tqdm을 비활성화하면 첫 번째 콜백이 사용되고, 그렇지 않으면 두 번째가 사용됩니다).
 - [`~integrations.TensorBoardCallback`]는 TensorBoard가 (PyTorch >= 1.4
  또는 tensorboardX를 통해) 접근 가능하면 사용됩니다.
-- [`~integrations.WandbCallback`]는 [wandb](https://www.wandb.com/)가 설치되어 있으면
+- [`~integrations.WandbCallback`]는 [wandb](https://www.wandb.com)가 설치되어 있으면
  사용됩니다.
-- [`~integrations.CometCallback`]는 [comet_ml](https://www.comet.com/site/)이 설치되어 있으면 사용됩니다.
-- [`~integrations.MLflowCallback`]는 [mlflow](https://www.mlflow.org/)가 설치되어 있으면 사용됩니다.
-- [`~integrations.AzureMLCallback`]는 [azureml-sdk](https://pypi.org/project/azureml-sdk/)가 설치되어
+- [`~integrations.CometCallback`]는 [comet_ml](https://www.comet.com/site)이 설치되어 있으면 사용됩니다.
+- [`~integrations.MLflowCallback`]는 [mlflow](https://www.mlflow.org)가 설치되어 있으면 사용됩니다.
+- [`~integrations.AzureMLCallback`]는 [azureml-sdk](https://pypi.org/project/azureml-sdk)가 설치되어
  있으면 사용됩니다.
-- [`~integrations.CodeCarbonCallback`]는 [codecarbon](https://pypi.org/project/codecarbon/)이 설치되어
+- [`~integrations.CodeCarbonCallback`]는 [codecarbon](https://pypi.org/project/codecarbon)이 설치되어
  있으면 사용됩니다.
 - [`~integrations.ClearMLCallback`]는 [clearml](https://github.com/allegroai/clearml)이 설치되어 있으면 사용됩니다.
-- [`~integrations.DagsHubCallback`]는 [dagshub](https://dagshub.com/)이 설치되어 있으면 사용됩니다.
-- [`~integrations.FlyteCallback`]는 [flyte](https://flyte.org/)가 설치되어 있으면 사용됩니다.
+- [`~integrations.DagsHubCallback`]는 [dagshub](https://dagshub.com)이 설치되어 있으면 사용됩니다.
+- [`~integrations.FlyteCallback`]는 [flyte](https://flyte.org)가 설치되어 있으면 사용됩니다.
 - [`~integrations.DVCLiveCallback`]는 [dvclive](https://dvc.org/doc/dvclive)가 설치되어 있으면 사용됩니다.
 - [`~integrations.SwanLabCallback`]는 [swanlab](https://swanlab.cn)가 설치되어 있으면 사용됩니다.
 

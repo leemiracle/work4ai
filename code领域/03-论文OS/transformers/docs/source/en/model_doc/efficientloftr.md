@@ -135,7 +135,7 @@ processed_outputs = processor.post_process_keypoint_matching(outputs, image_size
 ## Resources
 
 - Refer to the [original EfficientLoFTR repository](https://github.com/zju3dv/EfficientLoFTR) for more examples and implementation details.
-- [EfficientLoFTR project page](https://zju3dv.github.io/efficientloftr/) with interactive demos and additional information.
+- [EfficientLoFTR project page](https://zju3dv.github.io/efficientloftr) with interactive demos and additional information.
 
 ## EfficientLoFTRConfig
 

@@ -8,7 +8,7 @@ Beifong manages your trusted articles and social media platform sources. It gene
 
 ▶️ [Watch the demo on YouTube](https://youtu.be/dB8FZY3x9EY)
 
-🔗 [Blog](https://arun477.github.io/posts/beifong_podcast_generator/)
+🔗 [Blog](https://arun477.github.io/posts/beifong_podcast_generator)
 
 ## Table of Contents
 
@@ -265,7 +265,7 @@ Modify the agent's instructions and behavior in `db/agent_config_v2.py`:
 
 ## Web Search and Browser Automation
 
-Beifong's search agent has full browser automation capabilities through the [browseruse](https://browser-use.com/) library, enabling web research and automated data collection from any website.
+Beifong's search agent has full browser automation capabilities through the [browseruse](https://browser-use.com) library, enabling web research and automated data collection from any website.
 
 ### Search Commands
 

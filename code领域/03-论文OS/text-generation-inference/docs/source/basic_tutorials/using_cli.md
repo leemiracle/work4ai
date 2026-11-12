@@ -26,7 +26,7 @@ There are many options and parameters you can pass to `text-generation-launcher`
 text-generation-launcher --help
 ```
 
-You can also find it hosted in this [Swagger UI](https://huggingface.github.io/text-generation-inference/).
+You can also find it hosted in this [Swagger UI](https://huggingface.github.io/text-generation-inference).
 
 Same documentation can be found for `text-generation-server`.
 

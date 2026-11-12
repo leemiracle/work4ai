@@ -21,14 +21,14 @@ Installez 🤗 Transformers pour n'importe quelle librairie d'apprentissage prof
 🤗 Transformers est testé avec Python 3.6+, PyTorch 1.1.0+, TensorFlow 2.0+ et Flax.
 Consulter les instructions d'installation ci-dessous pour la librairie d'apprentissage profond que vous utilisez:
 
-  * Instructions d'installation pour [PyTorch](https://pytorch.org/get-started/locally/).
+  * Instructions d'installation pour [PyTorch](https://pytorch.org/get-started/locally).
   * Instructions d'installation pour [TensorFlow 2.0](https://www.tensorflow.org/install/pip).
-  * Instructions d'installation pour [Flax](https://flax.readthedocs.io/en/latest/).
+  * Instructions d'installation pour [Flax](https://flax.readthedocs.io/en/latest).
 
 ## Installation avec pip
 
 Vous devriez installer 🤗 Transformers dans un [environnement virtuel](https://docs.python.org/3/library/venv.html).
-Si vous n'êtes pas à l'aise avec les environnements virtuels, consultez ce [guide](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
+Si vous n'êtes pas à l'aise avec les environnements virtuels, consultez ce [guide](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments).
 Utiliser un environnement virtuel permet de facilement gérer différents projets et d'éviter des erreurs de compatibilité entre les différentes dépendances.
 
 Commencez par créer un environnement virtuel dans l'espace de travail de votre projet :
@@ -169,7 +169,7 @@ Les modèles pré-entraînés sont téléchargés et mis en cache localement dan
 
 <Tip>
 
-Ajoutez [🤗 Datasets](https://huggingface.co/docs/datasets/) à votre processus d'entraînement hors ligne en définissant la variable d'environnement `HF_DATASETS_OFFLINE=1`.
+Ajoutez [🤗 Datasets](https://huggingface.co/docs/datasets) à votre processus d'entraînement hors ligne en définissant la variable d'environnement `HF_DATASETS_OFFLINE=1`.
 
 </Tip>
 

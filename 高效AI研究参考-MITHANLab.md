@@ -46,7 +46,7 @@
 | 仓库 (stars) | 技术 · 论文 | 对接 work4ai | 覆盖 |
 |---|---|---|---|
 | **tinyml** (1204★) | TinyML 教程集 | [`端侧AI架构参考`](端侧AI架构参考.md) | ✅ 浅 |
-| **TinyChatEngine** (960★) | 端侧 LLM 推理库（C++）| [`讲透GPU与系统级`](讲透GPU与系统级)（端侧推理）| ❌ 缺口 |
+| **TinyChatEngine** (960★) | 端侧 LLM 推理库（C++）| [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级)（端侧推理）| ❌ 缺口 |
 | **tinyengine** (952★) | MCUNet 推理引擎（NeurIPS 2020）| [`端侧AI架构参考`](端侧AI架构参考.md) | ❌ 缺口 |
 | **mcunet** (709★) | IoT 上的深度学习（NeurIPS 2020）—— NAS+推理引擎联合优化 | [`端侧AI架构参考`](端侧AI架构参考.md) | ✅ 浅 |
 | **tiny-training** (524★) | **256KB 内存下的端侧训练**（NeurIPS 2022）| [`讲透微调`](讲透微调)（端侧训练）| ❌ 缺口 |
@@ -57,11 +57,11 @@
 
 | 仓库 (stars) | 技术 · 论文 | 对接 work4ai | 覆盖 |
 |---|---|---|---|
-| **llm-awq** (3610★) | **AWQ：激活感知权重量化**（MLSys 2024 **Best Paper**）| [`讲透GPU与系统级`](讲透GPU与系统级)（量化）| ✅✅ (9) |
-| **smoothquant** (1674★) | **SmoothQuant：后训练量化**（ICML 2023）| [`讲透GPU与系统级`](讲透GPU与系统级) | ✅ (5) |
-| **omniserve** (852★) | **QServe：W4A8KV4 量化+系统协同**（MLSys 2025）| [`讲透GPU与系统级`](讲透GPU与系统级) | ❌ 缺口 |
-| **haq** (408★) | 硬件感知自动量化（CVPR 2019 Oral）| [`讲透GPU与系统级`](讲透GPU与系统级) | ❌ 缺口 |
-| **fouroversix** (202★) | NVFP4 量化（更精准的 4-bit 浮点）| [`讲透GPU与系统级`](讲透GPU与系统级) | ❌ 缺口 |
+| **llm-awq** (3610★) | **AWQ：激活感知权重量化**（MLSys 2024 **Best Paper**）| [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级)（量化）| ✅✅ (9) |
+| **smoothquant** (1674★) | **SmoothQuant：后训练量化**（ICML 2023）| [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级) | ✅ (5) |
+| **omniserve** (852★) | **QServe：W4A8KV4 量化+系统协同**（MLSys 2025）| [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级) | ❌ 缺口 |
+| **haq** (408★) | 硬件感知自动量化（CVPR 2019 Oral）| [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级) | ❌ 缺口 |
+| **fouroversix** (202★) | NVFP4 量化（更精准的 4-bit 浮点）| [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级) | ❌ 缺口 |
 | **apq** (160★) | 联合架构+量化搜索（CVPR 2020）| [`讲透基础模型`](讲透基础模型)（NAS+量化）| ❌ |
 
 ### 域 3 · LLM 长上下文 / 稀疏 attention（11 库，11316★）
@@ -73,7 +73,7 @@
 | **streaming-llm** (7258★) | **attention sink 流式 LLM**（ICLR 2024）——无限长上下文 | [`讲透基础模型`](讲透基础模型)（长上下文）| ✅ 浅 |
 | **lite-transformer** (609★) | 长短范围 attention（ICLR 2020）| [`讲透Transformer`](讲透Transformer) | ❌ |
 | **radial-attention** (608★) | O(nlogn) 稀疏 attention（NeurIPS 2025）| [`讲透Transformer`](讲透Transformer) | ❌ 缺口 |
-| **Block-Sparse-Attention** (544★) | 混合稀疏模式 attention kernel | [`讲透GPU与系统级`](讲透GPU与系统级)（FlashAttention 类）| ❌ |
+| **Block-Sparse-Attention** (544★) | 混合稀疏模式 attention kernel | [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级)（FlashAttention 类）| ❌ |
 | **duo-attention** (540★) | 长上下文高效（ICLR 2025）| [`讲透基础模型`](讲透基础模型) | ❌ 缺口 |
 | **Quest** (400★) | query 感知稀疏（ICML 2024）| [`讲透基础模型`](讲透基础模型) | ❌ |
 | **x-attention** (281★) | 反对角块稀疏（ICML 2025）| [`讲透Transformer`](讲透Transformer) | ❌ |
@@ -96,7 +96,7 @@
 |---|---|---|---|
 | **efficientvit** (3345★) | 高效视觉基础模型（高分辨率生成）| [`讲透基础模型`](讲透基础模型)（CV）| ❌ 缺口 |
 | **bevfusion** (3229★) | 多任务多传感器融合（ICRA 2023）——自动驾驶 | 未来具身/自动驾驶 | ❌ |
-| **torchsparse** (1470★) | 稀疏点云高效训练推理（MICRO 2023）| [`讲透GPU与系统级`](讲透GPU与系统级) | ❌ |
+| **torchsparse** (1470★) | 稀疏点云高效训练推理（MICRO 2023）| [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级) | ❌ |
 | **anycost-gan** (779★) | 交互式 GAN（CVPR 2021）| [`讲透生成模型`](讲透生成模型) | ❌ |
 | **litepose** (326★) | 高效人体姿态（CVPR 2022）| 未来 CV 系列 | ❌ |
 
@@ -113,22 +113,22 @@
 |---|---|---|---|
 | **data-efficient-gans** (1308★) | 差异化增强（NeurIPS 2020）| [`讲透生成模型`](讲透生成模型) | ❌ |
 | **gan-compression** (1116★) | GAN 压缩（CVPR 2020）| [`讲透生成模型`](讲透生成模型) | ❌ |
-| **distrifuser** (727★) | 分布式扩散推理（CVPR 2024 Highlight）| [`讲透分布式AI系统`](讲透分布式AI系统) | ❌ 缺口 |
+| **distrifuser** (727★) | 分布式扩散推理（CVPR 2024 Highlight）| [`讲透分布式AI系统`](讲透宇宙/01-学/讲透分布式AI系统) | ❌ 缺口 |
 
 ### 域 8 · 分布式 / 系统（5 库，1664★）
 
 | 仓库 (stars) | 技术 · 论文 | 对接 work4ai | 覆盖 |
 |---|---|---|---|
-| **kernel-design-agents** (815★) | kernel 设计 agent | [`讲透Agent`](讲透Agent) | ❌ |
-| **inter-operator-scheduler** (201★) | IOS 算子调度（MLSys 2021）| [`讲透GPU与系统级`](讲透GPU与系统级) | ❌ |
+| **kernel-design-agents** (815★) | kernel 设计 agent | [`讲透Agent`](讲透宇宙/01-学/讲透Agent) | ❌ |
+| **inter-operator-scheduler** (201★) | IOS 算子调度（MLSys 2021）| [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级) | ❌ |
 
 ### 域 9 · 其他 / 研究（18 库，4295★）
 
 | 仓库 (stars) | 技术 · 论文 | 对接 |
 |---|---|---|
 | **torchquantum** (1656★) | 量子-经典模拟框架 | （量子 ML，独立方向）|
-| **dlg** (483★) | **梯度泄露**（NeurIPS 2019）——联邦学习隐私攻击 | [`讲透Agent`](讲透Agent)（安全）|
-| **amc** (450★) | **AMC：AutoML 模型压缩**（ECCV 2018）——强化学习搜压缩 | [`讲透GPU与系统级`](讲透GPU与系统级) |
+| **dlg** (483★) | **梯度泄露**（NeurIPS 2019）——联邦学习隐私攻击 | [`讲透Agent`](讲透宇宙/01-学/讲透Agent)（安全）|
+| **amc** (450★) | **AMC：AutoML 模型压缩**（ECCV 2018）——强化学习搜压缩 | [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级) |
 | **offsite-tuning** (386★) | 离场微调（无需完整模型）| [`讲透微调`](讲透微调) |
 | **hardware-aware-transformers** (337★) | **HAT：硬件感知 Transformer**（ACL 2020）| [`讲透Transformer`](讲透Transformer) |
 
@@ -202,8 +202,8 @@ HAN Lab 八年的高效 AI 演进，清晰分四阶段：
 
 | 缺口库 | stars | 该补在哪 | 为什么重要 |
 |---|---:|---|---|
-| **omniserve (QServe)** | 852 | [`讲透GPU与系统级`](讲透GPU与系统级) | W4A8KV4 量化+系统协同，MLSys 2025 最新 SOTA；讲透GPU 量化章缺它 |
-| **TinyChatEngine** | 960 | [`讲透GPU与系统级`](讲透GPU与系统级) | 端侧 LLM 推理库（C++），对接端侧AI架构参考 |
+| **omniserve (QServe)** | 852 | [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级) | W4A8KV4 量化+系统协同，MLSys 2025 最新 SOTA；讲透GPU 量化章缺它 |
+| **TinyChatEngine** | 960 | [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级) | 端侧 LLM 推理库（C++），对接端侧AI架构参考 |
 | **efficientvit** | 3345 | [`讲透基础模型`](讲透基础模型)（CV） | 高效视觉基础模型，CV 高效章核心 |
 | **duo-attention** | 540 | [`讲透基础模型`](讲透基础模型)（长上下文） | ICLR 2025 长上下文高效，与 streaming-llm 配对 |
 | **tiny-training** | 524 | [`讲透微调`](讲透微调) | 256KB 端侧训练，微调章的"极端约束"案例 |
@@ -218,12 +218,12 @@ amc（AutoML 压缩）/ haq（硬件感知量化）/ distrifuser（分布式扩�
 
 | 本地图梳理的 | work4ai 深度版 |
 |---|---|
-| AWQ / SmoothQuant / QServe 量化 | [`讲透GPU与系统级`](讲透GPU与系统级)（量化章）|
+| AWQ / SmoothQuant / QServe 量化 | [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级)（量化章）|
 | Streaming-LLM / DuoAttention 长上下文 | [`讲透基础模型`](讲透基础模型)（长上下文）|
 | Once-for-All / ProxylessNAS 架构搜索 | [`讲透基础模型`](讲透基础模型)（NAS）|
 | MCUNet / TinyEngine 端侧 | [`端侧AI架构参考`](端侧AI架构参考.md) |
 | EfficientViT 高效视觉 | [`讲透基础模型`](讲透基础模型)（CV）|
-| AMC / HAQ 压缩 | [`讲透GPU与系统级`](讲透GPU与系统级)（压缩）|
+| AMC / HAQ 压缩 | [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级)（压缩）|
 
 **阅读方式**：先读本地图找到感兴趣的研究主题 → 对应读 work4ai 讲透系列搞懂原理 → 回 HAN Lab 仓库看论文配套实现。
 

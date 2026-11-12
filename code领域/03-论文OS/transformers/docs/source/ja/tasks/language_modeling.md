@@ -32,7 +32,7 @@ rendered properly in your Markdown viewer.
 
 このガイドでは、次の方法を説明します。
 
-1. [ELI5](https:/) の [r/askscience](https://www.reddit.com/r/askscience/) サブセットで [DistilGPT2](https://huggingface.co/distilbert/distilgpt2) を微調整します。 /huggingface.co/datasets/eli5) データセット。
+1. [ELI5](https:) の [r/askscience](https://www.reddit.com/r/askscience) サブセットで [DistilGPT2](https://huggingface.co/distilbert/distilgpt2) を微調整します。 /huggingface.co/datasets/eli5) データセット。
 2. 微調整したモデルを推論に使用します。
 
 <Tip>

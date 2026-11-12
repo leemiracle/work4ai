@@ -12,7 +12,7 @@
   - 18.100**Q**：B + Communication Intensive（前身 18.100C）
 - **先修**：18.102 多变量微积分 + 证明能力
 - **教材**：**Rudin, *Principles of Mathematical Analysis* (3rd ed, McGraw-Hill, 1976)** — "Baby Rudin"
-- **视频**：[OCW 18.100A Prof. Arthur Mattuck](https://ocw.mit.edu/courses/18-100a-real-analysis-fall-2020/)（A 版本，配 B 读）
+- **视频**：[OCW 18.100A Prof. Arthur Mattuck](https://ocw.mit.edu/courses/18-100a-real-analysis-fall-2020)（A 版本，配 B 读）
 
 ## 教学大纲（Rudin 目录）
 1. **The Real and Complex Number Systems**（实数构造、Dedekind 切）
@@ -35,10 +35,10 @@
 
 ## 参考资源
 - **教材**：Rudin, *Principles of Mathematical Analysis* (ISBN 978-0070542358)
-- **视频**：[OCW 18.100A Mattuck](https://ocw.mit.edu/courses/18-100a-real-analysis-fall-2020/)
+- **视频**：[OCW 18.100A Mattuck](https://ocw.mit.edu/courses/18-100a-real-analysis-fall-2020)
 - **替代教材**（更友好）：Pugh, *Real Mathematical Analysis*（Springer）
 - **替代教材**（更现代）：Axler, *Measure, Integration & Real Analysis*（开放获取）
-- **习题解答**：[OCW 18.100A problem sets](https://ocw.mit.edu/courses/18-100a-real-analysis-fall-2020/pages/assignments/)
+- **习题解答**：[OCW 18.100A problem sets](https://ocw.mit.edu/courses/18-100a-real-analysis-fall-2020/pages/assignments)
 
 ## 学习建议
 - **节奏**：每周 4-6 小时，14-16 周完成

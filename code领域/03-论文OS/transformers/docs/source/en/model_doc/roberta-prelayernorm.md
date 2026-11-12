@@ -24,7 +24,7 @@ rendered properly in your Markdown viewer.
 ## Overview
 
 The RoBERTa-PreLayerNorm model was proposed in [fairseq: A Fast, Extensible Toolkit for Sequence Modeling](https://huggingface.co/papers/1904.01038) by Myle Ott, Sergey Edunov, Alexei Baevski, Angela Fan, Sam Gross, Nathan Ng, David Grangier, Michael Auli.
-It is identical to using the `--encoder-normalize-before` flag in [fairseq](https://fairseq.readthedocs.io/).
+It is identical to using the `--encoder-normalize-before` flag in [fairseq](https://fairseq.readthedocs.io).
 
 The abstract from the paper is the following:
 
@@ -36,7 +36,7 @@ The original code can be found [here](https://github.com/princeton-nlp/DinkyTrai
 ## Usage tips
 
 - The implementation is the same as [Roberta](roberta) except instead of using *Add and Norm* it does *Norm and Add*. *Add* and *Norm* refers to the Addition and LayerNormalization as described in [Attention Is All You Need](https://huggingface.co/papers/1706.03762).
-- This is identical to using the `--encoder-normalize-before` flag in [fairseq](https://fairseq.readthedocs.io/).
+- This is identical to using the `--encoder-normalize-before` flag in [fairseq](https://fairseq.readthedocs.io).
 
 ## Resources
 

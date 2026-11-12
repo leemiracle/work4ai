@@ -5,7 +5,7 @@ MCP 도구의 사용을 보여주기 위해 [`tiny-agents`](https://huggingface.
 > [!TIP]
 > 이 예시처럼 많은 Hugging Face Spaces를 MCP 서버로 활용할 수 있습니다. 호환 가능한 모든 Spaces는 [여기](https://huggingface.co/spaces?filter=mcp-server)에서 찾을 수 있습니다.
 
-MCP 도구를 사용하려면 먼저 모델에 사용 가능한 도구를 알려야 합니다. 예를 들어, [이미지 생성 MCP 서버](https://evalstate-flux1-schnell.hf.space/)를 참조하는 `tiny-agents` 설정 파일을 살펴보겠습니다.
+MCP 도구를 사용하려면 먼저 모델에 사용 가능한 도구를 알려야 합니다. 예를 들어, [이미지 생성 MCP 서버](https://evalstate-flux1-schnell.hf.space)를 참조하는 `tiny-agents` 설정 파일을 살펴보겠습니다.
 
 ```json
 {

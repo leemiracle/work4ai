@@ -28,7 +28,7 @@ transformer-based seq2seq (encoder-decoder) model designed for end-to-end Automa
 Translation (ST). It uses a convolutional downsampler to reduce the length of speech inputs by 3/4th before they are
 fed into the encoder. The model is trained with standard autoregressive cross-entropy loss and generates the
 transcripts/translations autoregressively. Speech2Text has been fine-tuned on several datasets for ASR and ST:
-[LibriSpeech](http://www.openslr.org/12), [CoVoST 2](https://github.com/facebookresearch/covost), [MuST-C](https://ict.fbk.eu/must-c/).
+[LibriSpeech](http://www.openslr.org/12), [CoVoST 2](https://github.com/facebookresearch/covost), [MuST-C](https://ict.fbk.eu/must-c).
 
 This model was contributed by [valhalla](https://huggingface.co/valhalla). The original code can be found [here](https://github.com/pytorch/fairseq/tree/master/examples/speech_to_text).
 
@@ -45,7 +45,7 @@ predicted token ids.
 
 The feature extractor depends on `torchaudio` and the tokenizer depends on `sentencepiece` so be sure to
 install those packages before running the examples. You could either install those as extra speech dependencies with
-`pip install transformers"[speech, sentencepiece]"` or install the packages separately with `pip install torchaudio sentencepiece`. Also `torchaudio` requires the development version of the [libsndfile](http://www.mega-nerd.com/libsndfile/) package which can be installed via a system package manager. On Ubuntu it can
+`pip install transformers"[speech, sentencepiece]"` or install the packages separately with `pip install torchaudio sentencepiece`. Also `torchaudio` requires the development version of the [libsndfile](http://www.mega-nerd.com/libsndfile) package which can be installed via a system package manager. On Ubuntu it can
 be installed as follows: `apt install libsndfile1-dev`
 
 - ASR and Speech Translation

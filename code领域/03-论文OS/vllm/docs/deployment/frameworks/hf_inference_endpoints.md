@@ -2,7 +2,7 @@
 
 ## Overview
 
-Models compatible with vLLM can be deployed on Hugging Face Inference Endpoints, either starting from the [Hugging Face Hub](https://huggingface.co) or directly from the [Inference Endpoints](https://endpoints.huggingface.co/) interface. This allows you to serve models in a fully managed environment with GPU acceleration, auto-scaling, and monitoring, without managing the infrastructure manually.
+Models compatible with vLLM can be deployed on Hugging Face Inference Endpoints, either starting from the [Hugging Face Hub](https://huggingface.co) or directly from the [Inference Endpoints](https://endpoints.huggingface.co) interface. This allows you to serve models in a fully managed environment with GPU acceleration, auto-scaling, and monitoring, without managing the infrastructure manually.
 
 For advanced details on vLLM integration and deployment options, see [Advanced Deployment Details](#advanced-deployment-details).
 
@@ -130,7 +130,7 @@ These models cannot be deployed using the **Deploy** button on the model card.
 
 In this guide, we demonstrate manual deployment using the [`rednote-hilab/dots.ocr`](https://huggingface.co/rednote-hilab/dots.ocr) model, an OCR model integrated with vLLM (see vLLM [PR](https://github.com/vllm-project/vllm/pull/24645)).
 
-1. Start a new deployment. Go to [Inference Endpoints](https://endpoints.huggingface.co/) and click `New`.
+1. Start a new deployment. Go to [Inference Endpoints](https://endpoints.huggingface.co) and click `New`.
 
     ![New Endpoint](../../assets/deployment/hf-inference-endpoints-new-endpoint.png)
 

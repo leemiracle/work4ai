@@ -24,13 +24,13 @@ Installieren Sie 🤗 Transformers für die Deep-Learning-Bibliothek, mit der Si
 
 🤗 Transformers wurde unter Python 3.6+, PyTorch 1.1.0+, TensorFlow 2.0+, und Flax getestet. Folgen Sie den Installationsanweisungen unten für die von Ihnen verwendete Deep-Learning-Bibliothek:
 
-* [PyTorch](https://pytorch.org/get-started/locally/) installation instructions.
+* [PyTorch](https://pytorch.org/get-started/locally) installation instructions.
 * [TensorFlow 2.0](https://www.tensorflow.org/install/pip) installation instructions.
-* [Flax](https://flax.readthedocs.io/en/latest/) installation instructions.
+* [Flax](https://flax.readthedocs.io/en/latest) installation instructions.
 
 ## Installation mit pip
 
-Sie sollten 🤗 Transformers in einer [virtuellen Umgebung](https://docs.python.org/3/library/venv.html) installieren. Wenn Sie mit virtuellen Python-Umgebungen nicht vertraut sind, werfen Sie einen Blick auf diese [Anleitung](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/). Eine virtuelle Umgebung macht es einfacher, verschiedene Projekte zu verwalten und Kompatibilitätsprobleme zwischen Abhängigkeiten zu vermeiden.
+Sie sollten 🤗 Transformers in einer [virtuellen Umgebung](https://docs.python.org/3/library/venv.html) installieren. Wenn Sie mit virtuellen Python-Umgebungen nicht vertraut sind, werfen Sie einen Blick auf diese [Anleitung](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments). Eine virtuelle Umgebung macht es einfacher, verschiedene Projekte zu verwalten und Kompatibilitätsprobleme zwischen Abhängigkeiten zu vermeiden.
 
 Beginnen wir mit der Erstellung einer virtuellen Umgebung in Ihrem Projektverzeichnis:
 
@@ -160,7 +160,7 @@ Transformers ist in der Lage, in einer Firewall- oder Offline-Umgebung zu laufen
 
 <Tip>
 
-Fügen sie [🤗 Datasets](https://huggingface.co/docs/datasets/) zu Ihrem Offline-Trainingsworkflow hinzufügen, indem Sie die Umgebungsvariable `HF_DATASETS_OFFLINE=1` setzen.
+Fügen sie [🤗 Datasets](https://huggingface.co/docs/datasets) zu Ihrem Offline-Trainingsworkflow hinzufügen, indem Sie die Umgebungsvariable `HF_DATASETS_OFFLINE=1` setzen.
 
 </Tip>
 

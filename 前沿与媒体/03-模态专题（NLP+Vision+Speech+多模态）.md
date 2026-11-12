@@ -68,7 +68,7 @@
 | **COLING** | Intl. Committee on Computational Linguistics | 两年一度 | CCF-B |
 | **LREC** | Intl. Conf. on Language Resources and Evaluation | 两年一度 | 数据/评测方向 |
 
-> **入口**：所有 ACL 系会议论文免费下载于 [ACL Anthology](https://aclanthology.org/)（本轮实抓确认活跃，含 1990 至 2026 全论文）。
+> **入口**：所有 ACL 系会议论文免费下载于 [ACL Anthology](https://aclanthology.org)（本轮实抓确认活跃，含 1990 至 2026 全论文）。
 
 ### N4. NLP 经典数据集
 
@@ -112,7 +112,7 @@
 | **WACV** | Winter Conf. on Applications of CV | 年度 | CCF-C |
 | **BMVC** | British Machine Vision Conf. | 年度 | — |
 
-> **入口**：CVPR/ICCV/ECCV 论文在 [openaccess.thecvf.com](https://openaccess.thecvf.com/) 全免费；CVPR 2026 官网 cvpr.thecvf.com（本轮实抓活跃）。
+> **入口**：CVPR/ICCV/ECCV 论文在 [openaccess.thecvf.com](https://openaccess.thecvf.com) 全免费；CVPR 2026 官网 cvpr.thecvf.com（本轮实抓活跃）。
 
 ### V3. Vision 经典数据集
 
@@ -126,8 +126,8 @@
 
 ### V4. Vision 综述 / 教程
 
-- **CS231n 笔记**（[cs231n.github.io](https://cs231n.github.io/)）：Justin Johnson 写的反向传播/CNN/卷积笔记，至今最清楚
-- **PyImageSearch**（[pyimagesearch.com](https://pyimagesearch.com/)，本轮实抓活跃）：Adrian Rosebrock 的 OpenCV 实战博客
+- **CS231n 笔记**（[cs231n.github.io](https://cs231n.github.io)）：Justin Johnson 写的反向传播/CNN/卷积笔记，至今最清楚
+- **PyImageSearch**（[pyimagesearch.com](https://pyimagesearch.com)，本轮实抓活跃）：Adrian Rosebrock 的 OpenCV 实战博客
 - **3Brown1Brown 神经网络系列**：建直觉
 
 ---
@@ -272,7 +272,7 @@
 
 - **本篇 vs [`01-AI顶级信息源实时清单.md`](./01-AI顶级信息源实时清单.md)**：01 是横向广度（含 H 类 AI Safety、I 类评测等），本篇是模态垂直深度。
 - **本篇 vs [`02-后训练信息源专题.md`](./02-后训练信息源专题.md)**：02 是后训练（RLHF/DPO），本篇是模态。**多模态后训练是 2026 的下一波**（如 LLaVA-RLHF、RLHF-V），未来可能要单独写"多模态后训练"。
-- **本篇 vs [`../讲透公开课/`](../讲透公开课)**：CS224n（NLP）/CS231n（CV）等已在 `01-前沿课实时清单.md`。
+- **本篇 vs [`../讲透宇宙/01-学/讲透公开课//`](../讲透宇宙/01-学/讲透公开课)**：CS224n（NLP）/CS231n（CV）等已在 `01-前沿课实时清单.md`。
 
 ---
 

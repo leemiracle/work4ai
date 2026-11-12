@@ -109,7 +109,7 @@
 
 - 读 GTM 卡住 → 用 [09-crosstext 对照文件](README.md) 换本讲法
 - GTM 的抽象 → 用 [10-personal/02-AI锚点法](../10-personal/02-AI锚点法-数学落到工程.md) 落到工程
-- GTM 严格证明 → 用 [discrete-math-lean/](../) Lean 形式化验证
+- GTM 严格证明 → 用 [discrete-math-lean/](..) Lean 形式化验证
 - 范畴论 GTM 005 → [03-lens-practitioners/轴/B-范畴组合性](../03-lens-practitioners/横切轴/B-范畴组合性.md)
 
 > 📖 方向选择决策见 [00-META/ROADMAP.md §5](../00-META/ROADMAP.md)（阶段 2 末用 4 个问题锁定方向）。

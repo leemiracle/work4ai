@@ -18,11 +18,11 @@ rendered properly in your Markdown viewer.
 
 🤗 Transformersの[notebooks](./notebooks/README)と一緒に、[PyTorch](https://github.com/huggingface/transformers/tree/main/examples/pytorch)、[TensorFlow](https://github.com/huggingface/transformers/tree/main/examples/tensorflow)、または[JAX/Flax](https://github.com/huggingface/transformers/tree/main/examples/flax)を使用してモデルをトレーニングする方法を示すサンプルスクリプトもあります。
 
-また、私たちの[研究プロジェクト](https://github.com/huggingface/transformers-research-projects/)や[レガシーの例](https://github.com/huggingface/transformers/tree/main/examples/legacy)で使用したスクリプトも見つかります。これらのスクリプトは現在メンテナンスされておらず、おそらく最新バージョンのライブラリと互換性がない特定の🤗 Transformersのバージョンが必要です。
+また、私たちの[研究プロジェクト](https://github.com/huggingface/transformers-research-projects)や[レガシーの例](https://github.com/huggingface/transformers/tree/main/examples/legacy)で使用したスクリプトも見つかります。これらのスクリプトは現在メンテナンスされておらず、おそらく最新バージョンのライブラリと互換性がない特定の🤗 Transformersのバージョンが必要です。
 
 サンプルスクリプトはすべての問題でそのまま動作することは期待されておらず、解決しようとしている問題にスクリプトを適応させる必要があるかもしれません。この点をサポートするために、ほとんどのスクリプトはデータがどのように前処理されているかを完全に公開し、必要に応じて編集できるようにしています。
 
-サンプルスクリプトで実装したい機能がある場合は、[フォーラム](https://discuss.huggingface.co/)か[イシュートラッカー](https://github.com/huggingface/transformers/issues)で議論してからプルリクエストを提出してください。バグ修正は歓迎しますが、読みやすさのコストで機能を追加するプルリクエストはほとんどマージされない可能性が高いです。
+サンプルスクリプトで実装したい機能がある場合は、[フォーラム](https://discuss.huggingface.co)か[イシュートラッカー](https://github.com/huggingface/transformers/issues)で議論してからプルリクエストを提出してください。バグ修正は歓迎しますが、読みやすさのコストで機能を追加するプルリクエストはほとんどマージされない可能性が高いです。
 
 このガイドでは、[PyTorch](https://github.com/huggingface/transformers/tree/main/examples/pytorch/summarization)と[TensorFlow](https://github.com/huggingface/transformers/tree/main/examples/tensorflow/summarization)で実行するサマリゼーショントレーニングスクリプトの実行方法を示します。すべての例は、明示的に指定されていない限り、両方のフレームワークともに動作することが期待されています。
 
@@ -90,7 +90,7 @@ pip install -r requirements.txt
 
 ## Run a script
 
-この例のスクリプトは、🤗 [Datasets](https://huggingface.co/docs/datasets/) ライブラリからデータセットをダウンロードし、前処理を行います。次に、[Trainer](https://huggingface.co/docs/transformers/main_classes/trainer) を使用して要約をサポートするアーキテクチャ上でデータセットをファインチューニングします。以下の例では、[CNN/DailyMail](https://huggingface.co/datasets/cnn_dailymail) データセット上で [T5-small](https://huggingface.co/google-t5/t5-small) をファインチューニングする方法が示されています。T5 モデルは、そのトレーニング方法に起因して追加の `source_prefix` 引数が必要です。このプロンプトにより、T5 はこれが要約タスクであることを知ることができます。
+この例のスクリプトは、🤗 [Datasets](https://huggingface.co/docs/datasets) ライブラリからデータセットをダウンロードし、前処理を行います。次に、[Trainer](https://huggingface.co/docs/transformers/main_classes/trainer) を使用して要約をサポートするアーキテクチャ上でデータセットをファインチューニングします。以下の例では、[CNN/DailyMail](https://huggingface.co/datasets/cnn_dailymail) データセット上で [T5-small](https://huggingface.co/google-t5/t5-small) をファインチューニングする方法が示されています。T5 モデルは、そのトレーニング方法に起因して追加の `source_prefix` 引数が必要です。このプロンプトにより、T5 はこれが要約タスクであることを知ることができます。
 
 
 ```bash

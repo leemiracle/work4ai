@@ -155,7 +155,7 @@ NNODES=2 NODE_RANK=1 PORT=${主节点端口} MASTER_ADDR=${主节点地址} sh t
 
 ## 通过 Slurm 管理任务
 
-[Slurm](https://slurm.schedmd.com/) 是一个很好的计算集群作业调度系统。
+[Slurm](https://slurm.schedmd.com) 是一个很好的计算集群作业调度系统。
 
 ### 通过 Slurm 在集群上训练
 

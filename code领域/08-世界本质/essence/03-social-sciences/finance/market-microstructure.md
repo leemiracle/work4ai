@@ -808,8 +808,8 @@ MiFID II（金融工具市场指令第二版）是欧盟对 Reg NMS 的"升级�
 | [`china-financial-system.md`](./china-financial-system.md) | 平行 | A 股微观结构的制度背景——金融控制逻辑 |
 | [`derivatives.md`](./derivatives.md) | 平行 | 期权/期货市场的做市与微观结构（做市商机制主导） |
 | [`knowledge-graph/connections.md`](../../knowledge-graph/connections.md) | 网络 | 跨学科映射的登记处——逆向选择↔柠檬市场、闪崩↔相变 |
-| [`06-systems/feedback/`](../../06-systems/feedback/) | 跨学科 | 正反馈（闪崩级联）与负反馈（做市商存货调整） |
-| [`06-systems/complexity/`](../../06-systems/complexity/) | 跨学科 | 市场作为复杂系统——涌现、相变、自组织临界 |
+| [`06-systems/feedback/`](../../06-systems/feedback) | 跨学科 | 正反馈（闪崩级联）与负反馈（做市商存货调整） |
+| [`06-systems/complexity/`](../../06-systems/complexity) | 跨学科 | 市场作为复杂系统——涌现、相变、自组织临界 |
 
 ---
 

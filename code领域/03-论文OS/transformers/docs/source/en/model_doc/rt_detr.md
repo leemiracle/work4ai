@@ -36,7 +36,7 @@ alt="drawing" width="600"/>
 
 <small> RT-DETR performance relative to YOLO models. Taken from the <a href="https://huggingface.co/papers/2304.08069">original paper.</a> </small>
 
-The model version was contributed by [rafaelpadilla](https://huggingface.co/rafaelpadilla) and [sangbumchoi](https://github.com/SangbumChoi). The original code can be found [here](https://github.com/lyuwenyu/RT-DETR/).
+The model version was contributed by [rafaelpadilla](https://huggingface.co/rafaelpadilla) and [sangbumchoi](https://github.com/SangbumChoi). The original code can be found [here](https://github.com/lyuwenyu/RT-DETR).
 
 ## Usage tips
 

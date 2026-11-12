@@ -177,10 +177,10 @@ Get your API key from: [https://platform.openai.com/api-keys](https://platform.o
 
 ## 📚 Additional Resources
 
-- [OpenAI Agents SDK Documentation](https://openai.github.io/openai-agents-python/)
-- [OpenAI Platform](https://platform.openai.com/)
-- [Pydantic Documentation](https://docs.pydantic.dev/)
-- [Streamlit Documentation](https://docs.streamlit.io/)
+- [OpenAI Agents SDK Documentation](https://openai.github.io/openai-agents-python)
+- [OpenAI Platform](https://platform.openai.com)
+- [Pydantic Documentation](https://docs.pydantic.dev)
+- [Streamlit Documentation](https://docs.streamlit.io)
 
 ## 🤝 Contributing
 

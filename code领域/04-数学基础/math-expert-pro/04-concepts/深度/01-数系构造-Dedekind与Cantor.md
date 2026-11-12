@@ -37,4 +37,4 @@
 
 ## 关联
 - [百科-01-数学基础](../百科-01-数学基础与数系.md)
-- [16-foundations/集合论/](../../16-foundations/集合论/)
+- [16-foundations/集合论/](../../16-foundations/集合论)

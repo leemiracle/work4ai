@@ -24,13 +24,13 @@ Installa 🤗 Transformers per qualsiasi libreria di deep learning con cui stai 
 
 🤗 Transformers è testato su Python 3.6+, PyTorch 1.1.0+, TensorFlow 2.0+, e Flax. Segui le istruzioni di installazione seguenti per la libreria di deep learning che stai utilizzando:
 
-* [PyTorch](https://pytorch.org/get-started/locally/) istruzioni di installazione.
+* [PyTorch](https://pytorch.org/get-started/locally) istruzioni di installazione.
 * [TensorFlow 2.0](https://www.tensorflow.org/install/pip) istruzioni di installazione.
-* [Flax](https://flax.readthedocs.io/en/latest/) istruzioni di installazione.
+* [Flax](https://flax.readthedocs.io/en/latest) istruzioni di installazione.
 
 ## Installazione con pip
 
-Puoi installare 🤗 Transformers in un [ambiente virtuale](https://docs.python.org/3/library/venv.html). Se non sei familiare con gli ambienti virtuali in Python, dai un'occhiata a questa [guida](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/). Un ambiente virtuale rende più semplice la gestione di progetti differenti, evitando problemi di compatibilità tra dipendenze.
+Puoi installare 🤗 Transformers in un [ambiente virtuale](https://docs.python.org/3/library/venv.html). Se non sei familiare con gli ambienti virtuali in Python, dai un'occhiata a questa [guida](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments). Un ambiente virtuale rende più semplice la gestione di progetti differenti, evitando problemi di compatibilità tra dipendenze.
 
 Inizia creando un ambiente virtuale nella directory del tuo progetto:
 
@@ -150,7 +150,7 @@ I modelli pre-allenati sono scaricati e memorizzati localmente nella cache in: `
 
 <Tip>
 
-Aggiungi [🤗 Datasets](https://huggingface.co/docs/datasets/) al tuo flusso di lavoro offline di training impostando la variabile d'ambiente `HF_DATASETS_OFFLINE=1`.
+Aggiungi [🤗 Datasets](https://huggingface.co/docs/datasets) al tuo flusso di lavoro offline di training impostando la variabile d'ambiente `HF_DATASETS_OFFLINE=1`.
 
 </Tip>
 

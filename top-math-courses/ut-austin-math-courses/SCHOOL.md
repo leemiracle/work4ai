@@ -2,7 +2,7 @@
 
 > **学校**：University of Texas at Austin
 > **学院**：Department of Mathematics（College of Natural Sciences）
-> **一手来源**：[catalog.utexas.edu/general-information/coursesatoz/m](https://catalog.utexas.edu/general-information/coursesatoz/m/) + [math.utexas.edu/academics](https://math.utexas.edu/academics) + [math.utexas.edu/information/graduate-students/preliminary-exams](https://math.utexas.edu/information/graduate-students/preliminary-exams)（2026-08 一手核实）
+> **一手来源**：[catalog.utexas.edu/general-information/coursesatoz/m](https://catalog.utexas.edu/general-information/coursesatoz/m) + [math.utexas.edu/academics](https://math.utexas.edu/academics) + [math.utexas.edu/information/graduate-students/preliminary-exams](https://math.utexas.edu/information/graduate-students/preliminary-exams)（2026-08 一手核实）
 > **强项**：**应用数学全球顶级**（Shanghai 2024 数学 #5，应用数学 #7 US News，跨学科应用数学 #1 CWUR）
 
 ---
@@ -150,8 +150,8 @@ UT Austin 研究生项目有 **6 个核心方向的两学期 Prelim 序列**（1
 - UT Austin Math: [math.utexas.edu](https://math.utexas.edu)
 - 本科课程: [math.utexas.edu/academics/undergraduate-courses](https://math.utexas.edu/academics/undergraduate-courses)
 - 研究生 Prelim: [math.utexas.edu/information/graduate-students/preliminary-exams](https://math.utexas.edu/information/graduate-students/preliminary-exams)
-- 课程目录: [catalog.utexas.edu/general-information/coursesatoz/m](https://catalog.utexas.edu/general-information/coursesatoz/m/)
-- M383C 讲义 (Koch): [web.ma.utexas.edu/users/koch/M383C](https://web.ma.utexas.edu/users/koch/M383C/)
+- 课程目录: [catalog.utexas.edu/general-information/coursesatoz/m](https://catalog.utexas.edu/general-information/coursesatoz/m)
+- M383C 讲义 (Koch): [web.ma.utexas.edu/users/koch/M383C](https://web.ma.utexas.edu/users/koch/M383C)
 - 排名核实: [cns.utexas.edu/about-the-college/facts-and-rankings](https://cns.utexas.edu/about-the-college/facts-and-rankings)
 
 ## 七、推荐教材

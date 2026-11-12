@@ -85,7 +85,7 @@ The ONNX export succeeded and the exported model was saved at: distilbert_base_u
 optimum-cli export onnx --model local_path --task question-answering distilbert_base_uncased_squad_onnx/
 ```
 
-エクスポートされた `model.onnx` ファイルは、ONNX標準をサポートする[多くのアクセラレータ](https://onnx.ai/supported-tools.html#deployModel)の1つで実行できます。たとえば、[ONNX Runtime](https://onnxruntime.ai/)を使用してモデルを読み込み、実行する方法は以下の通りです：
+エクスポートされた `model.onnx` ファイルは、ONNX標準をサポートする[多くのアクセラレータ](https://onnx.ai/supported-tools.html#deployModel)の1つで実行できます。たとえば、[ONNX Runtime](https://onnxruntime.ai)を使用してモデルを読み込み、実行する方法は以下の通りです：
 
 
 ```python

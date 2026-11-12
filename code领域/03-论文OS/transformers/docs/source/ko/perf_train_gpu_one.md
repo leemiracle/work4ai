@@ -143,7 +143,7 @@ args = TrainingArguments(
 </hfoption>
 <hfoption id="tf32">
 
-[tf32](https://blogs.nvidia.com/blog/tensorfloat-32-precision-format/)는 NVIDIA Ampere GPU에서 합성곱과 행렬곱 입력을 tf32로 변환하는 모드입니다. 다른 모든 저장과 연산은 fp32로 유지됩니다. 이를 통해 tf32는 fp32와 동일한 범위, fp16과 동일한 정밀도, 그리고 bf16보다 더 높은 정밀도를 유지할 수 있습니다. tf32를 fp16 또는 bf16 혼합 정밀도 학습과 결합하면 처리량을 16배 향상할 수 있습니다.
+[tf32](https://blogs.nvidia.com/blog/tensorfloat-32-precision-format)는 NVIDIA Ampere GPU에서 합성곱과 행렬곱 입력을 tf32로 변환하는 모드입니다. 다른 모든 저장과 연산은 fp32로 유지됩니다. 이를 통해 tf32는 fp32와 동일한 범위, fp16과 동일한 정밀도, 그리고 bf16보다 더 높은 정밀도를 유지할 수 있습니다. tf32를 fp16 또는 bf16 혼합 정밀도 학습과 결합하면 처리량을 16배 향상할 수 있습니다.
 
 tf32는 NVIDIA Ampere GPU에서 기본적으로 활성화되어 있지만, fp32 학습 또는 추론 코드에 아래 코드를 추가하여 명시적으로 활성화할 수도 있습니다.
 
@@ -274,7 +274,7 @@ args = TrainingArguments(
 | aot_cudagraphs | AOTAutograd와 함께 CUDA Graphs를 사용합니다                                                                                                                            | 학습 및 추론 |
 | ofi            | TorchScripts의 [optimize_for_inference](https://pytorch.org/docs/stable/generated/torch.jit.optimize_for_inference.html#torch-jit-optimize-for-inference)를 사용합니다 | 추론         |
 | fx2trt         | [Torch-TensorRT](https://pytorch.org/TensorRT/tutorials/getting_started_with_fx_path.html)를 사용합니다                                                                | 추론         |
-| onnxrt         | CPU 및 GPU 추론을 위해 [ONNX-RT](https://onnxruntime.ai/)를 사용합니다                                                                                                 | 추론         |
+| onnxrt         | CPU 및 GPU 추론을 위해 [ONNX-RT](https://onnxruntime.ai)를 사용합니다                                                                                                 | 추론         |
 | ipex           | CPU 추론을 위해 [IPEX](https://github.com/intel/intel-extension-for-pytorch)를 사용합니다                                                                              | 추론         |
 
 ### 스케일된 내적 어텐션[[scaled-dot-production-attention]]

@@ -276,4 +276,4 @@ except PaymentError as e:
 
 - [Python Exception Handling Best Practices](https://docs.python.org/3/tutorial/errors.html)
 - [Error Handling in JavaScript](https://javascript.info/try-catch)
-- [Sentry Error Monitoring](https://sentry.io/)
+- [Sentry Error Monitoring](https://sentry.io)

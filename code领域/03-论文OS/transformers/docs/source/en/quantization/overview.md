@@ -47,7 +47,7 @@ Use the Space below to help you pick a quantization method depending on your har
 
 If you are new to quantization, we recommend checking out these beginner-friendly quantization courses in collaboration with DeepLearning.AI.
 
-* [Quantization Fundamentals with Hugging Face](https://www.deeplearning.ai/short-courses/quantization-fundamentals-with-hugging-face/)
+* [Quantization Fundamentals with Hugging Face](https://www.deeplearning.ai/short-courses/quantization-fundamentals-with-hugging-face)
 * [Quantization in Depth](https://www.deeplearning.ai/short-courses/quantization-in-depth)
 
 ## User-Friendly Quantization Tools

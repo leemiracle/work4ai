@@ -23,5 +23,5 @@ Monster 的特征标 j(q) 的系数 = 模函数 j(τ) 的 Fourier 系数。
 
 ## 对项目
 - 群论代码 → [代码库 22-群论](../../15-applications/代码库/22-群论_对称与表示.py)
-- 范畴论连接 → [16-foundations/范畴论/](../../16-foundations/范畴论/)
+- 范畴论连接 → [16-foundations/范畴论/](../../16-foundations/范畴论)
 - 数学物理(Monster与共形场论) → [百科-15-数学物理](../百科-15-数学物理.md)

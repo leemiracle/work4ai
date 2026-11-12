@@ -133,7 +133,7 @@ Terence Tao 是**唯一一位**同时具备以下身份的人：
 | 了解 PFR 猜想背景 | [conjecture进展/千禧问题与大猜想进展表.md](../conjecture进展/千禧问题与大猜想进展表.md) |
 | 追加性组合方向 | [热点方向追踪/2024-2026十大热点方向.md](../热点方向追踪/2024-2026十大热点方向.md) #2 |
 | 看 2026 最新突破 | [热点方向追踪/2026年最新数学突破.md](../热点方向追踪/2026年最新数学突破.md) |
-| 选形式化方向 | [17-decision/](../../17-decision/) |
+| 选形式化方向 | [17-decision/](../../17-decision) |
 
 ---
 
@@ -142,9 +142,9 @@ Terence Tao 是**唯一一位**同时具备以下身份的人：
 | 资源 | 链接 | 说明 |
 |------|------|------|
 | **Tao 博客** | [terrytao.wordpress.com](https://terrytao.wordpress.com) | Tao 的研究博客 |
-| **Equational Theories 项目** | [teorth.github.io/equational_theories](https://teorth.github.io/equational_theories/) | 项目主页 |
-| **《The Proof in the Code》** | [quantabooks.org](https://www.quantabooks.org/books/the-proof-in-the-code/) | Hartnett 2026 新书 |
-| **Quanta 文章** | [How Terry Tao Became an Evangelist for AI in Math](https://www.quantamagazine.org/how-terry-tao-became-an-evangelist-for-ai-in-math-20260608/) | 本文主要来源 |
+| **Equational Theories 项目** | [teorth.github.io/equational_theories](https://teorth.github.io/equational_theories) | 项目主页 |
+| **《The Proof in the Code》** | [quantabooks.org](https://www.quantabooks.org/books/the-proof-in-the-code) | Hartnett 2026 新书 |
+| **Quanta 文章** | [How Terry Tao Became an Evangelist for AI in Math](https://www.quantamagazine.org/how-terry-tao-became-an-evangelist-for-ai-in-math-20260608) | 本文主要来源 |
 | **PFR 形式化** | [arXiv:2311.05762](https://arxiv.org/abs/2311.05762) | PFR 证明原文 |
 
 ---

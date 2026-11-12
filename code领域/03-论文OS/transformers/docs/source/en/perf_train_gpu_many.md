@@ -63,7 +63,7 @@ DDP is recommended because it reduces communication overhead between GPUs, effic
 
 ### ZeRO data parallelism
 
-[Zero Redundancy Optimizer](https://www.deepspeed.ai/tutorials/zero/) is a more memory efficient type of data parallelism. It significantly improves memory efficiency by partitioning parameters, gradients, and optimizer states across data parallel processes to reduce memory usage. There are three ZeRO stages:
+[Zero Redundancy Optimizer](https://www.deepspeed.ai/tutorials/zero) is a more memory efficient type of data parallelism. It significantly improves memory efficiency by partitioning parameters, gradients, and optimizer states across data parallel processes to reduce memory usage. There are three ZeRO stages:
 
 - Stage 1 partitions the optimizer states
 - Stage 2 partitions the optimizer and gradient states
@@ -111,7 +111,7 @@ This approach optimizes parallel data processing by reducing idle GPU utilizatio
 
 ### ZeRO data parallelism, pipeline parallelism, and model parallelism (3D parallelism)
 
-Data, pipeline and model parallelism combine to form [3D parallelism](https://www.microsoft.com/en-us/research/blog/deepspeed-extreme-scale-model-training-for-everyone/) to optimize memory and compute efficiency.
+Data, pipeline and model parallelism combine to form [3D parallelism](https://www.microsoft.com/en-us/research/blog/deepspeed-extreme-scale-model-training-for-everyone) to optimize memory and compute efficiency.
 
 Memory efficiency is achieved by splitting the model across GPUs and also dividing it into stages to create a pipeline. This allows GPUs to work in parallel on micro-batches of data, reducing the memory usage of the model, optimizer, and activations.
 

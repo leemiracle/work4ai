@@ -1,8 +1,8 @@
 # 行为金融 · Behavioral Finance
 
 > **位置**：`03-social-sciences/finance/behavioral-finance.md`  
-> **关联**：[`_overview.md`](./_overview.md)（金融地图 §二 行为金融分支）+ [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（哲学锚点 §二 假设 1 理性人 + §五 心理学交叉）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（前景理论的风险感知基础）+ [`markets-and-pricing.md`](./markets-and-pricing.md)（流派 C 行为定价）+ [`../psychology/`](../psychology/)（认知心理学的金融应用）  
-> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（理性、信念更新）+ [`00-philosophy/mind/`](../../00-philosophy/)（决策的心智机制）  
+> **关联**：[`_overview.md`](./_overview.md)（金融地图 §二 行为金融分支）+ [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（哲学锚点 §二 假设 1 理性人 + §五 心理学交叉）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（前景理论的风险感知基础）+ [`markets-and-pricing.md`](./markets-and-pricing.md)（流派 C 行为定价）+ [`../psychology/`](../psychology)（认知心理学的金融应用）  
+> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（理性、信念更新）+ [`00-philosophy/mind/`](../../00-philosophy)（决策的心智机制）  
 > **核心问题**：**人为什么系统性犯错？** —— 不是偶尔犯错，而是**可预测地、同方向地、反复地**犯错。行为金融学的全部价值，就在于把这些错误编成了一份目录。
 
 ---
@@ -642,8 +642,8 @@ CAPM 是一个优雅的统一框架——一个公式解释所有资产的期望
 - [ ] **当 AI 主导交易时，偏差会消失吗？** 如果所有交易都由无情绪的算法完成，市场会更有效吗？还是算法继承了人类的偏差（因为算法是人类训练的）？参见 [`_philosophy-of-finance.md`](./_philosophy-of-finance.md) 极限 5。
 - [ ] **文化差异如何影响偏差？** 损失厌恶系数 $\lambda = 2.25$ 是在美国大学生中测的。在东亚（集体主义文化）、在散户主导的市场（中国 A 股）、在不同年龄群体中，参数会一样吗？初步研究表明 $\lambda$ 在 1.8-2.5 之间波动，但羊群效应在东亚市场显著更强。
 - [ ] **偏差是"缺陷"还是"特征"？** 从进化看，这些偏差让我们的祖先活了下来。在金融市场中它们是致命的——但在其他领域（社交、创业、创新）它们可能仍然有用。过度自信让创业者去冒险（大部分失败，少数改变世界）——这是社会的"彩票"。没有过度自信，就没有硅谷。
-- [ ] **"理性"到底意味着什么？** 如果一个人按前景理论做决策（最大化前景值 $V$），在他的参考点框架内，他是"理性"的。那"理性"的定义到底是什么？是遵循冯·诺依曼-摩根斯坦公理？还是进化适应？还是个人效用最大化？这个问题没有唯一答案——它是 [`_philosophy-of-finance.md`](./_philosophy-of-finance.md) 假设 1 的核心（参见 [`00-philosophy/`](../../00-philosophy/)）。
-- [ ] **助推（nudge）是操纵还是帮助？** 如果政府用"默认参保"来提高养老金参与率，这是善意的助推还是家长式管控（paternalism）？自由意志主义者批评助推侵犯了人的自主选择权。这是政治哲学问题（参见 [`03-social-sciences/politics/`](../politics/)）。
+- [ ] **"理性"到底意味着什么？** 如果一个人按前景理论做决策（最大化前景值 $V$），在他的参考点框架内，他是"理性"的。那"理性"的定义到底是什么？是遵循冯·诺依曼-摩根斯坦公理？还是进化适应？还是个人效用最大化？这个问题没有唯一答案——它是 [`_philosophy-of-finance.md`](./_philosophy-of-finance.md) 假设 1 的核心（参见 [`00-philosophy/`](../../00-philosophy)）。
+- [ ] **助推（nudge）是操纵还是帮助？** 如果政府用"默认参保"来提高养老金参与率，这是善意的助推还是家长式管控（paternalism）？自由意志主义者批评助推侵犯了人的自主选择权。这是政治哲学问题（参见 [`03-social-sciences/politics/`](../politics)）。
 
 ### 本质追问（留给读者）
 
@@ -653,7 +653,7 @@ CAPM 是一个优雅的统一框架——一个公式解释所有资产的期望
 >
 > Kahneman 的悲观预测是：不能。知识不等于行动。你能做的，不是"战胜偏差"，而是**设计一个让偏差无法伤害你的系统**——比如：买入时就设好止损线，交给程序执行。
 >
-> 想清楚：你要做"知道自己有偏差但能控制的人"，还是"设计系统让自己不需要控制的人"？把你的回答写进 [`insights/`](../../insights/)。
+> 想清楚：你要做"知道自己有偏差但能控制的人"，还是"设计系统让自己不需要控制的人"？把你的回答写进 [`insights/`](../../insights)。
 
 ---
 
@@ -664,12 +664,12 @@ CAPM 是一个优雅的统一框架——一个公式解释所有资产的期望
 - **风险基础**：[`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（§三 效用理论 → 前景理论的过渡）
 - **定价理论**：[`markets-and-pricing.md`](./markets-and-pricing.md)（流派 C 行为定价——价格的第三维坐标）
 - **心理学交叉**：[`../psychology/_overview.md`](../psychology/_overview.md)（认知偏差、双系统理论、决策心理学）
-- **概率之根**：[`02-formal-sciences/probability/`](../../02-formal-sciences/probability/)（期望效用、贝叶斯更新——前景理论修正的对象）
+- **概率之根**：[`02-formal-sciences/probability/`](../../02-formal-sciences/probability)（期望效用、贝叶斯更新——前景理论修正的对象）
 - **大问题**：[`questions/big-questions.md`](../../questions/big-questions.md) Q14 概率 + Q15 不确定中的决策
-- **跨学科**：[`08-cross-cutting/`](../../08-cross-cutting/)（反馈/正反馈=羊群效应、涌现/相变=泡沫与崩盘）
-- **系统科学**：[`06-systems/feedback/`](../../06-systems/feedback/)（正反馈=追涨杀跌、负反馈=均值回归）+ [`06-systems/complexity/`](../../06-systems/complexity/)（市场的涌现行为）
+- **跨学科**：[`08-cross-cutting/`](../../08-cross-cutting)（反馈/正反馈=羊群效应、涌现/相变=泡沫与崩盘）
+- **系统科学**：[`06-systems/feedback/`](../../06-systems/feedback)（正反馈=追涨杀跌、负反馈=均值回归）+ [`06-systems/complexity/`](../../06-systems/complexity)（市场的涌现行为）
 - **投资哲学**：`/mnt/c/workspace/fastisslow/`（行为金融的实战应用——反人性操作、检查清单、系统化投资）
-- **AI 与智能科学**：[`05-intelligence/`](../../05-intelligence/)（算法交易、AI 偏差、强化学习与人类决策的对比）
+- **AI 与智能科学**：[`05-intelligence/`](../../05-intelligence)（算法交易、AI 偏差、强化学习与人类决策的对比）
 - **关键思想家**：Bernoulli（1738）· Allais（1953）· Ellsberg（1961）· Kahneman-Tversky（1979/1992）· Thaler（1980/2008）· De Bondt-Thaler（1985）· Shiller（1981/2000）· De Long et al（1990）· Barber-Odean（2001）· Shleifer-Vishny（1997）· Malmendier-Tate（2008）
 
 ---

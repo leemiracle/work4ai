@@ -27,7 +27,7 @@ rendered properly in your Markdown viewer.
 
 ## Overview
 
-The GptOss model was proposed in [blog post](https://openai.com/index/introducing-gpt-oss/) by <INSERT AUTHORS HERE>.
+The GptOss model was proposed in [blog post](https://openai.com/index/introducing-gpt-oss) by <INSERT AUTHORS HERE>.
 <INSERT SHORT SUMMARY HERE>
 
 The abstract from the paper is the following:

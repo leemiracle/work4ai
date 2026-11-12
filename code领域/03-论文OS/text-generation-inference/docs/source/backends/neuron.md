@@ -111,7 +111,7 @@ docker run -p 8080:80 \
 Note: You don't need to specify any service parameters, as they will all be deduced from the model export configuration. You must however expose enough devices to match the number of cores specified during the export phase.
 
 
-### Using a neuron model from the 🤗 [HuggingFace Hub](https://huggingface.co/)
+### Using a neuron model from the 🤗 [HuggingFace Hub](https://huggingface.co)
 
 The easiest way to share a neuron model inside your organization is to push it on the Hugging Face hub, so that it can be deployed directly without requiring an export.
 

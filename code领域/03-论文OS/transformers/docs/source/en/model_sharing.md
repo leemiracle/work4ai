@@ -53,7 +53,7 @@ Each model repository features versioning, commit history, and diff visualizatio
     <img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/vis_diff.png"/>
 </div>
 
-Versioning is based on [Git](https://git-scm.com/) and [Git Large File Storage (LFS)](https://git-lfs.github.com/), and it enables revisions, a way to specify a model version with a commit hash, tag or branch.
+Versioning is based on [Git](https://git-scm.com) and [Git Large File Storage (LFS)](https://git-lfs.github.com), and it enables revisions, a way to specify a model version with a commit hash, tag or branch.
 
 For example, use the `revision` parameter in [`~PreTrainedModel.from_pretrained`] to load a specific model version from a commit hash.
 

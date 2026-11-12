@@ -14,7 +14,7 @@ The Kvasir-SEG dataset contains polyp images and their corresponding ground trut
 
 | Dataset Name                                                  | Anatomical Region | Task Type    | Modality  | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                   |
 | ------------------------------------------------------------- | ----------------- | ------------ | --------- | ------------ | --------------------- | ---------------------- | ------------ | --------------------------------------------------------- |
-| [Kvarsir-SEG](https://opendatalab.com/Kvasir-Sessile_dataset) | abdomen           | segmentation | endoscopy | 2            | 196/-/-               | yes/-/-                | 2020         | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| [Kvarsir-SEG](https://opendatalab.com/Kvasir-Sessile_dataset) | abdomen           | segmentation | endoscopy | 2            | 196/-/-               | yes/-/-                | 2020         | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

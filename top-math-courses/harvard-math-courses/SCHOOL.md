@@ -122,7 +122,7 @@
 
 - Harvard Math: [math.harvard.edu](https://www.math.harvard.edu)
 - Undergraduate brochure: [math.harvard.edu/media/Undergraduate-Brochure-Electronic-2025-2026.pdf](https://www.math.harvard.edu/media/Undergraduate-Brochure-Electronic-2025-2026.pdf)
-- Course list: [math.harvard.edu/courses](https://www.math.harvard.edu/courses/)
+- Course list: [math.harvard.edu/courses](https://www.math.harvard.edu/courses)
 
 ---
 

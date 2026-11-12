@@ -18,11 +18,11 @@ rendered properly in your Markdown viewer.
 
 除了 🤗 Transformers [notebooks](./notebooks)，还有示例脚本演示了如何使用[PyTorch](https://github.com/huggingface/transformers/tree/main/examples/pytorch)训练模型以解决特定任务。
 
-您还可以在这些示例中找到我们在[研究项目](https://github.com/huggingface/transformers-research-projects/)和[遗留示例](https://github.com/huggingface/transformers/tree/main/examples/legacy)中使用过的脚本，这些脚本主要是由社区贡献的。这些脚本已不再被积极维护，需要使用特定版本的🤗 Transformers， 可能与库的最新版本不兼容。
+您还可以在这些示例中找到我们在[研究项目](https://github.com/huggingface/transformers-research-projects)和[遗留示例](https://github.com/huggingface/transformers/tree/main/examples/legacy)中使用过的脚本，这些脚本主要是由社区贡献的。这些脚本已不再被积极维护，需要使用特定版本的🤗 Transformers， 可能与库的最新版本不兼容。
 
 示例脚本可能无法在初始配置下直接解决每个问题，您可能需要根据要解决的问题调整脚本。为了帮助您，大多数脚本都完全暴露了数据预处理的方式，允许您根据需要对其进行编辑。
 
-如果您想在示例脚本中实现任何功能，请在[论坛](https://discuss.huggingface.co/)或[issue](https://github.com/huggingface/transformers/issues)上讨论，然后再提交Pull Request。虽然我们欢迎修复错误，但不太可能合并添加更多功能的Pull Request，因为这会降低可读性。
+如果您想在示例脚本中实现任何功能，请在[论坛](https://discuss.huggingface.co)或[issue](https://github.com/huggingface/transformers/issues)上讨论，然后再提交Pull Request。虽然我们欢迎修复错误，但不太可能合并添加更多功能的Pull Request，因为这会降低可读性。
 
 本指南将向您展示如何在[PyTorch](https://github.com/huggingface/transformers/tree/main/examples/pytorch/summarization)中运行示例摘要训练脚本。
 
@@ -86,7 +86,7 @@ pip install -r requirements.txt
 ## 运行脚本
 
 
-示例脚本从🤗 [Datasets](https://huggingface.co/docs/datasets/)库下载并预处理数据集。然后，脚本通过[Trainer](https://huggingface.co/docs/transformers/main_classes/trainer)使用支持摘要任务的架构对数据集进行微调。以下示例展示了如何在[CNN/DailyMail](https://huggingface.co/datasets/cnn_dailymail)数据集上微调[T5-small](https://huggingface.co/google-t5/t5-small)。由于T5模型的训练方式，它需要一个额外的`source_prefix`参数。这个提示让T5知道这是一个摘要任务。
+示例脚本从🤗 [Datasets](https://huggingface.co/docs/datasets)库下载并预处理数据集。然后，脚本通过[Trainer](https://huggingface.co/docs/transformers/main_classes/trainer)使用支持摘要任务的架构对数据集进行微调。以下示例展示了如何在[CNN/DailyMail](https://huggingface.co/datasets/cnn_dailymail)数据集上微调[T5-small](https://huggingface.co/google-t5/t5-small)。由于T5模型的训练方式，它需要一个额外的`source_prefix`参数。这个提示让T5知道这是一个摘要任务。
 
 ```bash
 python examples/pytorch/summarization/run_summarization.py \

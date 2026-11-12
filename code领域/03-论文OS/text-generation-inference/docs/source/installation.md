@@ -29,7 +29,7 @@ Before you start, you will need to setup your environment, and install Text Gene
 
 Text Generation Inference is available on pypi, conda and GitHub.
 
-To install and launch locally, first [install Rust](https://rustup.rs/) and create a Python virtual environment with at least
+To install and launch locally, first [install Rust](https://rustup.rs) and create a Python virtual environment with at least
 Python 3.9, e.g. using conda:
 
 ```bash

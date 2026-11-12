@@ -530,14 +530,14 @@ embedding-3 + glm-4-plus
 ## 参考资源
 
 ### GLM文档
-- [GLM-4 API 文档](https://open.bigmodel.cn/)
-- [CodeGeeX4 文档](https://codegeex.ai/)
-- [Cognify 文档](https://cogvideox.github.io/)
+- [GLM-4 API 文档](https://open.bigmodel.cn)
+- [CodeGeeX4 文档](https://codegeex.ai)
+- [Cognify 文档](https://cogvideox.github.io)
 
 ### 学习资源
-- [提示词工程指南](https://promptingguide.ai/)
-- [AI辅助学习](https://learnwithai.org/)
-- [人机协作模式](https://aipatterns.org/)
+- [提示词工程指南](https://promptingguide.ai)
+- [AI辅助学习](https://learnwithai.org)
+- [人机协作模式](https://aipatterns.org)
 
 ---
 

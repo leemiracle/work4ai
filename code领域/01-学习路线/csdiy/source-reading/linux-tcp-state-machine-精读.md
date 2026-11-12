@@ -2,7 +2,7 @@
 
 > TCP 的 11 个状态不只是教科书图——它们在 Linux 内核里是真实的代码路径。
 >
-> 配套：[network-程序员视角 §四](../notes/network-程序员视角-从抓包到原理.md) | [tinyproxy](../projects/tinyproxy/)
+> 配套：[network-程序员视角 §四](../notes/network-程序员视角-从抓包到原理.md) | [tinyproxy](../projects/tinyproxy)
 > csdiy 对应：CS144 lab + network + os
 
 ---
@@ -265,4 +265,4 @@ csdiy 交叉：[network §四](../notes/network-程序员视角-从抓包到原�
 
 ---
 
-*配套：[network-程序员视角 §四](../notes/network-程序员视角-从抓包到原理.md) | [CS144 lab](../labs/cs144-网络-从零跑起来.md) | [tinyproxy](../projects/tinyproxy/)*
+*配套：[network-程序员视角 §四](../notes/network-程序员视角-从抓包到原理.md) | [CS144 lab](../labs/cs144-网络-从零跑起来.md) | [tinyproxy](../projects/tinyproxy)*

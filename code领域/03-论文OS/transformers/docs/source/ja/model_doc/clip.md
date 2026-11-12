@@ -94,7 +94,7 @@ CLIP を使い始めるのに役立つ公式 Hugging Face およびコミュニ�
 - 事前トレーニングされた CLIP を使用した画像検索と MRR (平均相互ランク) スコアの計算に関する [ノートブック](https://colab.research.google.com/drive/1bLVwVKpAndpEDHqjzxVPr_9nGrSbuOQd?usp=sharing)。 🌎
 - 画像の取得と類似性スコアの表示に関する [ノートブック](https://colab.research.google.com/github/deep-diver/image_search_with_natural_language/blob/main/notebooks/Image_Search_CLIP.ipynb)。 🌎
 - 多言語 CLIP を使用して画像とテキストを同じベクトル空間にマッピングする方法に関する [ノートブック](https://colab.research.google.com/drive/1xO-wC_m_GNzgjIBQ4a4znvQkvDoZJvH4?usp=sharing)。 🌎
-- を使用してセマンティック イメージ検索で CLIP を実行する方法に関する [ノートブック](https://colab.research.google.com/github/vivien000/clip-demo/blob/master/clip.ipynb#scrollTo=uzdFhRGqiWkR) [Unsplash](https://unsplash.com) および [TMDB](https://www.themoviedb.org/) データセット。 🌎
+- を使用してセマンティック イメージ検索で CLIP を実行する方法に関する [ノートブック](https://colab.research.google.com/github/vivien000/clip-demo/blob/master/clip.ipynb#scrollTo=uzdFhRGqiWkR) [Unsplash](https://unsplash.com) および [TMDB](https://www.themoviedb.org) データセット。 🌎
 
 **説明可能性**
 

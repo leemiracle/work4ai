@@ -24,13 +24,13 @@ rendered properly in your Markdown viewer.
 
 🤗 Transformers는 Python 3.6+, PyTorch 1.1.0+, TensorFlow 2.0+ 및 Flax에서 테스트되었습니다. 딥러닝 라이브러리를 설치하려면 아래 링크된 저마다의 공식 사이트를 참고해주세요.
 
-* [PyTorch](https://pytorch.org/get-started/locally/) 설치하기
+* [PyTorch](https://pytorch.org/get-started/locally) 설치하기
 * [TensorFlow 2.0](https://www.tensorflow.org/install/pip) 설치하기
-* [Flax](https://flax.readthedocs.io/en/latest/) 설치하기
+* [Flax](https://flax.readthedocs.io/en/latest) 설치하기
 
 ## pip으로 설치하기[[install-with-pip]]
 
-🤗 Transformers를 [가상 환경](https://docs.python.org/3/library/venv.html)에 설치하는 것을 추천드립니다. Python 가상 환경에 익숙하지 않다면, 이 [가이드](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)를 참고하세요. 가상 환경을 사용하면 서로 다른 프로젝트들을 보다 쉽게 관리할 수 있고, 의존성 간의 호환성 문제를 방지할 수 있습니다.
+🤗 Transformers를 [가상 환경](https://docs.python.org/3/library/venv.html)에 설치하는 것을 추천드립니다. Python 가상 환경에 익숙하지 않다면, 이 [가이드](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments)를 참고하세요. 가상 환경을 사용하면 서로 다른 프로젝트들을 보다 쉽게 관리할 수 있고, 의존성 간의 호환성 문제를 방지할 수 있습니다.
 
 먼저 프로젝트 디렉토리에서 가상 환경을 만들어 줍니다.
 
@@ -155,7 +155,7 @@ conda install conda-forge::transformers
 
 <Tip>
 
-`HF_DATASETS_OFFLINE=1` 환경 변수를 설정하여 오프라인 훈련 과정에 [🤗 Datasets](https://huggingface.co/docs/datasets/)을 추가할 수 있습니다.
+`HF_DATASETS_OFFLINE=1` 환경 변수를 설정하여 오프라인 훈련 과정에 [🤗 Datasets](https://huggingface.co/docs/datasets)을 추가할 수 있습니다.
 
 </Tip>
 

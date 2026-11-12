@@ -1,7 +1,7 @@
 # Expert_14 — CompilerRT / Sanitizers / ORC JIT 专家视角
 
 > **角色定位**：编译器运行时正确性工程师 + 动态编译（JIT）架构师 + 编译器供应链安全审计员。
-> 这位专家不是写后端调度（那是 [Expert_08](../Expert_08_AArch64_Backend/)）也不是写 IR 语义（那是 [Expert_02](../Expert_02_LLVM_IR_Design/)），
+> 这位专家不是写后端调度（那是 [Expert_08](../Expert_08_AArch64_Backend)）也不是写 IR 语义（那是 [Expert_02](../Expert_02_LLVM_IR_Design)），
 > 他盯着 LLVM 工具链**最后交付给程序运行时**的那一层——`compiler-rt` 运行时库。
 > 这一层包含三件命脉级武器：**(1) Sanitizers**（ASan/MSan/TSan/UBSan/CFI/HWASan，软件级错误检测）、
 > **(2) builtins**（libgcc 替代品，为原子操作/软浮点/除法等生成 out-of-line 助手）、**(3) ORC JIT**（运行时代码生成）。
@@ -13,7 +13,7 @@
 >    影子映射公式 `shadow = (addr >> 3) + offset` 的合法性**完全依赖 64 位虚拟地址空间有足够的空洞**，这在 ARM64 的 39/42/48-bit VMA 三套配置上表现截然不同。
 > 2. **拦截（interception）思维**——Sanitizer 要正确，必须**拦截（intercept）所有与内存/同步相关的 libc 函数**（`memcpy`/`malloc`/`pthread_create`），否则 libc 内部操作绕过影子内存产生漏报。
 >    拦截依赖动态链接器的符号解析，因此**静态链接 musl、版本不匹配的 glibc、自定义 allocator 都是漏报温床**。
-> 3. **翻译验证（translation validation）思维**——[Expert_02](../Expert_02_LLVM_IR_Design/) 已述 Alive2。本专家关注的是：**Sanitizer 本身也可能 miscompile**（漏插桩、影子偏移算错、拦截遗漏），而 fuzzing + SanCov 是工业界对"编译器+运行时"双重验证的实战武器。
+> 3. **翻译验证（translation validation）思维**——[Expert_02](../Expert_02_LLVM_IR_Design) 已述 Alive2。本专家关注的是：**Sanitizer 本身也可能 miscompile**（漏插桩、影子偏移算错、拦截遗漏），而 fuzzing + SanCov 是工业界对"编译器+运行时"双重验证的实战武器。
 > 4. **JIT 安全边界思维**——ORC JIT 把"编译"从离线搬进进程内，意味着**W^X 内存页、代码签名、重入安全**成为命脉。飞腾服务器若用 PG/Julia 的 LLVM JIT，必须理解 ORC 的 executor process control 模型。
 
 ---
@@ -768,7 +768,7 @@ void __sanitizer_cov_trace_gep(uintptr_t Idx) {                // 行 617  GEP
 
 ## 7. 延伸阅读
 
-- **项目内**：[Expert_02](../Expert_02_LLVM_IR_Design/)（poison/miscompilation 上游）、[Expert_08](../Expert_08_AArch64_Backend/)（LSE/PAC/TBI/MTE 能力）、[Expert_15](../Expert_15_Runtimes_libcxx/)（compiler-rt builtins 与 libcxx 运行时）、[Expert_17](../Expert_17_Governance_License/)（compiler-rt Google 主导）、[改造蓝图 §5 断层 ③](../改造蓝图_LLVM.md)、[Lens_03 供应链](../Lenses/Lens_03_SupplyChain.md)（形式化验证覆盖率 <20%）。
+- **项目内**：[Expert_02](../Expert_02_LLVM_IR_Design)（poison/miscompilation 上游）、[Expert_08](../Expert_08_AArch64_Backend)（LSE/PAC/TBI/MTE 能力）、[Expert_15](../Expert_15_Runtimes_libcxx)（compiler-rt builtins 与 libcxx 运行时）、[Expert_17](../Expert_17_Governance_License)（compiler-rt Google 主导）、[改造蓝图 §5 断层 ③](../改造蓝图_LLVM.md)、[Lens_03 供应链](../Lenses/Lens_03_SupplyChain.md)（形式化验证覆盖率 <20%）。
 - **外部**：Google Sanitizer Wiki、OSS-Fuzz、SoK 论文 [论文 3]、Alive2 GitHub、Julia/PG LLVM JIT 源码、Project Zero ShadowCallStack、xz-utils CVE-2024-3094 分析。
 
 ---

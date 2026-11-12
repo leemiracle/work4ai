@@ -2,7 +2,7 @@
 
 > **位置**：`03-social-sciences/finance/quantitative-trading.md`  
 > **关联**：[`_overview.md`](./_overview.md)（金融地图）+ [`ai-finance.md`](./ai-finance.md)（AI/ML 信号、算法交易）+ [`market-microstructure.md`](./market-microstructure.md)（订单簿、HFT、价差、流动性）+ [`portfolio-theory.md`](./portfolio-theory.md)（组合优化、风险预算）+ [`financial-econometrics.md`](./financial-econometrics.md)（计量检验、协整、因子回归，待建）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（尾部风险、黑天鹅）  
-> **上游**：[`02-formal-sciences/probability/`](../../02-formal-sciences/probability/)（随机过程、鞅）+ [`05-intelligence/learning/`](../../05-intelligence/learning/)（ML/DL）  
+> **上游**：[`02-formal-sciences/probability/`](../../02-formal-sciences/probability)（随机过程、鞅）+ [`05-intelligence/learning/`](../../05-intelligence/learning)（ML/DL）  
 > **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（可预测性、归纳问题、过拟合的认识论）+ [`00-philosophy/ontology.md`](../../00-philosophy/ontology.md)（"alpha"存在吗？）  
 > **核心问题**：**价格里有没有可被算法榨取的、未被市场消化的规律？如果有，它从哪里来、能持续多久、多少人知道后就会消失？**
 
@@ -700,7 +700,7 @@ Medallion 是量化界的圣杯，但**它的 alpha 至今是黑箱**。几个�
 | **概率论/随机过程** | 价格 = 几何布朗运动/跳跃过程；鞅定价；布朗桥执行建模 |
 | **信息论** | alpha = 未被消化的信息；Sharpe 上限 ≈ 信号/噪声比的函数 |
 | **控制论/反馈** | 做市商存货控制 = 经典反馈系统；凯利 = 最优控制 |
-| **强化学习** | 执行、组合、做市都可建模为 MDP（链回 [`rl-learning`](../../)） |
+| **强化学习** | 执行、组合、做市都可建模为 MDP（链回 [`rl-learning`](../..)） |
 | **复杂系统** | 市场是多智能体涌现；拥挤交易 = 相变；崩盘 = 临界级联 |
 | **信号处理** | 因子 = 滤波器；分数差分 = IIR 滤波；HFT 延迟 = 采样定理 |
 | **最优化** | 组合 = 凸优化；风险平价 = 不动点迭代；执行 = 随机最优控制 |
@@ -717,7 +717,7 @@ Medallion 是量化界的圣杯，但**它的 alpha 至今是黑箱**。几个�
 
 ### 12.3 与 essence 项目的关联
 
-- **上游数学**：[`02-formal-sciences/probability/`](../../02-formal-sciences/probability/)（鞅、伊藤引理）+ [`02-formal-sciences/optimization`](../../02-formal-sciences/)（凸优化、动态规划）
+- **上游数学**：[`02-formal-sciences/probability/`](../../02-formal-sciences/probability)（鞅、伊藤引理）+ [`02-formal-sciences/optimization`](../../02-formal-sciences)（凸优化、动态规划）
 - **方法论**：本文贯彻三层讲解 + 代码验证（MANIFESTO 第七条），5 段代码全部跑通
 - **哲学**：过拟合 = 归纳问题；EMH = 认识论；凯利 = 决策论（[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)）
 - **姊妹章节**：[`ai-finance.md`](./ai-finance.md)（ML 信号深化）+ [`market-microstructure.md`](./market-microstructure.md)（HFT/价差深化）+ [`portfolio-theory.md`](./portfolio-theory.md)（组合优化深化）+ [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（尾部风险深化）+ [`financial-econometrics.md`](./financial-econometrics.md)（计量检验，待建）

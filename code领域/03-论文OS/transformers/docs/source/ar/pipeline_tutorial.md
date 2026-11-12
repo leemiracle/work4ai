@@ -173,7 +173,7 @@ for out in pipe(data()):
 
 نظرًا لأن التجميع قد تسرع الأمور، فقد يكون من المفيد ضبط معلمة `batch_size` هنا.
 
-أبسط طريقة للتنقل خلال مجموعة بيانات هي فقط تحميل واحدة من 🤗 [Datasets](https://github.com/huggingface/datasets/):
+أبسط طريقة للتنقل خلال مجموعة بيانات هي فقط تحميل واحدة من 🤗 [Datasets](https://github.com/huggingface/datasets):
 
 ```py
 # KeyDataset هي أداة مساعدة ستقوم فقط بإخراج العنصر الذي نهتم به.
@@ -253,7 +253,7 @@ for out in pipe(KeyDataset(dataset, "audio")):
 
 <Tip>
 
-لتشغيل المثال أعلاه، تحتاج إلى تثبيت [`pytesseract`](https://pypi.org/project/pytesseract/) بالإضافة إلى 🤗 Transformers:
+لتشغيل المثال أعلاه، تحتاج إلى تثبيت [`pytesseract`](https://pypi.org/project/pytesseract) بالإضافة إلى 🤗 Transformers:
 
 ```bash
 sudo apt install -y tesseract-ocr
@@ -292,7 +292,7 @@ output = pipe("This is a cool example!", do_sample=True, top_p=0.95)
 
 ## إنشاء عروض توضيحية ويب من خطوط الأنابيب باستخدام `gradio`
 
-يتم دعم خطوط الأنابيب تلقائيًا في [Gradio](https://github.com/gradio-app/gradio/)، وهي مكتبة تجعل إنشاء تطبيقات تعليم الآلة الجميلة والسهلة الاستخدام على الويب أمرًا سهلاً. أولاً، تأكد من تثبيت Gradio:
+يتم دعم خطوط الأنابيب تلقائيًا في [Gradio](https://github.com/gradio-app/gradio)، وهي مكتبة تجعل إنشاء تطبيقات تعليم الآلة الجميلة والسهلة الاستخدام على الويب أمرًا سهلاً. أولاً، تأكد من تثبيت Gradio:
 
 ```
 pip install gradio

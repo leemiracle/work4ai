@@ -4,13 +4,13 @@
 
 تم اختبار 🤗 Transformers على Python 3.6  والإصدارات الأحدث، وPyTorch 1.1.0 والإصدارات الأحدث، وTensorFlow 2.0 والإصدارات الأحدث، وFlax. اتبع تعليمات التثبيت أدناه لمكتبة التعلم العميق التي تستخدمها:
 
-* تعليمات تثبيت [PyTorch](https://pytorch.org/get-started/locally/).
+* تعليمات تثبيت [PyTorch](https://pytorch.org/get-started/locally).
 * تعليمات تثبيت [TensorFlow 2.0](https://www.tensorflow.org/install/pip).
-* تعليمات تثبيت [Flax](https://flax.readthedocs.io/en/latest/).
+* تعليمات تثبيت [Flax](https://flax.readthedocs.io/en/latest).
 
 ## التثبيت باستخدام pip
 
-يجب عليك تثبيت 🤗 Transformers داخل [بيئة افتراضية](https://docs.python.org/3/library/venv.html). إذا لم تكن غير ملم ببيئات Python الافتراضية، فراجع هذا [الدليل](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/). البيئة الافتراضية تسهل إدارة المشاريع المختلف، وتجنب مشكلات التوافق بين المكتبات المطلوبة (اعتماديات المشروع).
+يجب عليك تثبيت 🤗 Transformers داخل [بيئة افتراضية](https://docs.python.org/3/library/venv.html). إذا لم تكن غير ملم ببيئات Python الافتراضية، فراجع هذا [الدليل](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments). البيئة الافتراضية تسهل إدارة المشاريع المختلف، وتجنب مشكلات التوافق بين المكتبات المطلوبة (اعتماديات المشروع).
 
 ابدأ بإنشاء بيئة افتراضية في دليل مشروعك:
 
@@ -155,7 +155,7 @@ conda install conda-forge::transformers
 
 <Tip>
 
-أضف [🤗 Datasets](https://huggingface.co/docs/datasets/) إلى سير عمل التدريب غير المتصل باستخدام متغير البيئة `HF_DATASETS_OFFLINE=1`.
+أضف [🤗 Datasets](https://huggingface.co/docs/datasets) إلى سير عمل التدريب غير المتصل باستخدام متغير البيئة `HF_DATASETS_OFFLINE=1`.
 
 </Tip>
 

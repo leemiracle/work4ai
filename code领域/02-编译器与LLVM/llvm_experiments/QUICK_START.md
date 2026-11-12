@@ -198,18 +198,18 @@ gdb ./executable
 ## 资源链接
 
 ### 官方文档
-- [LLVM Website](https://llvm.org/)
-- [LLVM Docs](https://llvm.org/docs/)
-- [Clang Docs](https://clang.llvm.org/docs/)
+- [LLVM Website](https://llvm.org)
+- [LLVM Docs](https://llvm.org/docs)
+- [Clang Docs](https://clang.llvm.org/docs)
 
 ### 学习资源
-- [Kaleidoscope Tutorial](https://llvm.org/docs/tutorial/)
+- [Kaleidoscope Tutorial](https://llvm.org/docs/tutorial)
 - [Writing an LLVM Pass](https://llvm.org/docs/WritingAnLLVMPass.html)
 - [LLVM Language Reference](https://llvm.org/docs/LangRef.html)
 
 ### 社区
-- [LLVM Dev List](https://lists.llvm.org/)
-- [Discourse](https://discourse.llvm.org/)
+- [LLVM Dev List](https://lists.llvm.org)
+- [Discourse](https://discourse.llvm.org)
 - [GitHub](https://github.com/llvm/llvm-project)
 
 ## 总结

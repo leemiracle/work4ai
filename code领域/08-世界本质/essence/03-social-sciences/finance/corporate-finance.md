@@ -882,9 +882,9 @@ print("\n洞察: 不同方法给出差异巨大的估值 → 估值是区间, �
 - **风险理论** → [`risk-and-uncertainty.md`](./risk-and-uncertainty.md)——WACC 中的风险溢价本质是 Knight 不确定性的数学化
 - **定价理论** → [`markets-and-pricing.md`](./markets-and-pricing.md)——CAPM 是资产定价在公司金融的应用
 - **中国金融** → [`china-financial-system.md`](./china-financial-system.md) §10——国企/民企融资鸿沟、城投债
-- **控制论** → [`06-systems/feedback/`](../../06-systems/feedback/)——营运资本是反馈回路
-- **博弈论** → [`06-systems/game-theory/`](../../06-systems/game-theory/)——代理问题是委托-代理博弈
-- **政治哲学** → [`00-philosophy/ethics/`](../../00-philosophy/ethics/)——ESG 与"企业为谁存在"
+- **控制论** → [`06-systems/feedback/`](../../06-systems/feedback)——营运资本是反馈回路
+- **博弈论** → [`06-systems/game-theory/`](../../06-systems/game-theory)——代理问题是委托-代理博弈
+- **政治哲学** → [`00-philosophy/ethics/`](../../00-philosophy/ethics)——ESG 与"企业为谁存在"
 
 ### 11.6 学习路径推荐
 

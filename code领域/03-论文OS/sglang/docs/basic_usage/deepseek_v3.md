@@ -84,13 +84,13 @@ Please refer to [the example](https://github.com/sgl-project/sglang/tree/main/be
 
 ### Running examples on Multi-Node
 
-- [Deploying DeepSeek on GB200 NVL72 with PD and Large Scale EP](https://lmsys.org/blog/2025-06-16-gb200-part-1/) ([Part I](https://lmsys.org/blog/2025-06-16-gb200-part-1/), [Part II](https://lmsys.org/blog/2025-09-25-gb200-part-2/)) - Comprehensive guide on GB200 optimizations.
+- [Deploying DeepSeek on GB200 NVL72 with PD and Large Scale EP](https://lmsys.org/blog/2025-06-16-gb200-part-1) ([Part I](https://lmsys.org/blog/2025-06-16-gb200-part-1), [Part II](https://lmsys.org/blog/2025-09-25-gb200-part-2)) - Comprehensive guide on GB200 optimizations.
 
-- [Deploying DeepSeek with PD Disaggregation and Large-Scale Expert Parallelism on 96 H100 GPUs](https://lmsys.org/blog/2025-05-05-deepseek-pd-ep/) - Guide on PD disaggregation and large-scale EP.
+- [Deploying DeepSeek with PD Disaggregation and Large-Scale Expert Parallelism on 96 H100 GPUs](https://lmsys.org/blog/2025-05-05-deepseek-pd-ep) - Guide on PD disaggregation and large-scale EP.
 
 - [Serving with two H20*8 nodes](https://github.com/sgl-project/sglang/tree/main/benchmark/deepseek_v3#example-serving-with-two-h208-nodes).
 
-- [Best Practices for Serving DeepSeek-R1 on H20](https://lmsys.org/blog/2025-09-26-sglang-ant-group/) - Comprehensive guide on H20 optimizations, deployment and performance.
+- [Best Practices for Serving DeepSeek-R1 on H20](https://lmsys.org/blog/2025-09-26-sglang-ant-group) - Comprehensive guide on H20 optimizations, deployment and performance.
 
 - [Serving with two H200*8 nodes and docker](https://github.com/sgl-project/sglang/tree/main/benchmark/deepseek_v3#example-serving-with-two-h2008-nodes-and-docker).
 

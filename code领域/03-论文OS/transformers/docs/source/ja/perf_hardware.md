@@ -20,7 +20,7 @@ rendered properly in your Markdown viewer.
 
 # Custom hardware for training
 
-モデルのトレーニングおよび推論に使用するハードウェアは、パフォーマンスに大きな影響を与えることがあります。GPUについて詳しく知りたい場合は、Tim Dettmerの優れた[ブログ記事](https://timdettmers.com/2020/09/07/which-gpu-for-deep-learning/)をチェックしてみてください。
+モデルのトレーニングおよび推論に使用するハードウェアは、パフォーマンスに大きな影響を与えることがあります。GPUについて詳しく知りたい場合は、Tim Dettmerの優れた[ブログ記事](https://timdettmers.com/2020/09/07/which-gpu-for-deep-learning)をチェックしてみてください。
 
 GPUセットアップの実用的なアドバイスをいくつか見てみましょう。
 

@@ -2,7 +2,7 @@
 
 > **学校**：Massachusetts Institute of Technology
 > **学院**：Department of Mathematics (Course 18)
-> **一手来源**：[catalog.mit.edu/schools/science/mathematics](https://catalog.mit.edu/schools/science/mathematics/) + [math.mit.edu/academics/classes.php](https://math.mit.edu/academics/classes.php)（2026-08 一手核实）
+> **一手来源**：[catalog.mit.edu/schools/science/mathematics](https://catalog.mit.edu/schools/science/mathematics) + [math.mit.edu/academics/classes.php](https://math.mit.edu/academics/classes.php)（2026-08 一手核实）
 > **强项**：应用数学、概率论、信息论、数值分析、理论 CS（与 6.x 系交叉）
 
 ---
@@ -196,7 +196,7 @@
 
 - MIT OCW Mathematics: [ocw.mit.edu/search/?d=Mathematics](https://ocw.mit.edu/search/?d=Mathematics)
 - MIT Math Department: [math.mit.edu](https://math.mit.edu)
-- MIT Course Catalog Math: [catalog.mit.edu/schools/science/mathematics](https://catalog.mit.edu/schools/science/mathematics/)
+- MIT Course Catalog Math: [catalog.mit.edu/schools/science/mathematics](https://catalog.mit.edu/schools/science/mathematics)
 
 ---
 

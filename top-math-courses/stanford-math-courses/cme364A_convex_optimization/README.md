@@ -1,7 +1,7 @@
 # Stanford CME 364A — Convex Optimization I
 
 > **学校**：Stanford | **学院**：ICME (Institute for Computational and Mathematical Engineering)
-> **一手来源**：[web.stanford.edu/class/cme364a](https://web.stanford.edu/class/cme364a/) + [ Boyd CVX Book](https://web.stanford.edu/~boyd/cvxbook)
+> **一手来源**：[web.stanford.edu/class/cme364a](https://web.stanford.edu/class/cme364a) + [ Boyd CVX Book](https://web.stanford.edu/~boyd/cvxbook)
 
 ## 课程信息
 - **编号**：CME 364A / MS&E 311
@@ -29,7 +29,7 @@
 ## 参考资源
 - **教材（免费 PDF）**：[web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf)
 - **视频（Boyd 全套）**：[Stanford ENGR108 YouTube](https://www.youtube.com/playlist?list=PL3940CE95F3B87249)
-- **课程主页**：[web.stanford.edu/class/cme364a](https://web.stanford.edu/class/cme364a/)
+- **课程主页**：[web.stanford.edu/class/cme364a](https://web.stanford.edu/class/cme364a)
 - **配套**：CVXPY 库 [cvxpy.org](https://cvxpy.org)
 
 ## 学习建议

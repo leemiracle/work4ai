@@ -46,7 +46,7 @@ You'll need the following API keys:
 
 2. OpenAI API Key
 
-- Sign up at [platform.openai.com](https://platform.openai.com/)
+- Sign up at [platform.openai.com](https://platform.openai.com)
 - Navigate to API Keys section
 - Generate a new API key
 

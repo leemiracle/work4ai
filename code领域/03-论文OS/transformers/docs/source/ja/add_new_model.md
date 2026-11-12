@@ -18,7 +18,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 🤗 Transformersライブラリは、コミュニティの貢献者のおかげで新しいモデルを提供できることがよくあります。
 しかし、これは難しいプロジェクトであり、🤗 Transformersライブラリと実装するモデルについての深い知識が必要です。
 Hugging Faceでは、コミュニティの多くの人々に積極的にモデルを追加する力を与えようと努力しており、
-このガイドをまとめて、PyTorchモデルを追加するプロセスを説明します（[PyTorchがインストールされていることを確認してください](https://pytorch.org/get-started/locally/)）。
+このガイドをまとめて、PyTorchモデルを追加するプロセスを説明します（[PyTorchがインストールされていることを確認してください](https://pytorch.org/get-started/locally)）。
 
 この過程で、以下のことを学びます：
 
@@ -102,7 +102,7 @@ model.config  # model has access to its config
 
 経験から言えることは、モデルを追加する際に最も重要なことは次のようになります：
 
-- 車輪の再発明をしないでください！新しい🤗 Transformersモデルのために追加するコードのほとんどはすでに🤗 Transformers内のどこかに存在しています。類似した既存のモデルやトークナイザを見つけるために、いくつかの時間をかけて探すことが重要です。[grep](https://www.gnu.org/software/grep/)と[rg](https://github.com/BurntSushi/ripgrep)はあなたの友達です。モデルのトークナイザは1つのモデル実装に基づいているかもしれませんが、モデルのモデリングコードは別の実装に基づいていることがあることに注意してください。例えば、FSMTのモデリングコードはBARTに基づいており、FSMTのトークナイザコードはXLMに基づいています。
+- 車輪の再発明をしないでください！新しい🤗 Transformersモデルのために追加するコードのほとんどはすでに🤗 Transformers内のどこかに存在しています。類似した既存のモデルやトークナイザを見つけるために、いくつかの時間をかけて探すことが重要です。[grep](https://www.gnu.org/software/grep)と[rg](https://github.com/BurntSushi/ripgrep)はあなたの友達です。モデルのトークナイザは1つのモデル実装に基づいているかもしれませんが、モデルのモデリングコードは別の実装に基づいていることがあることに注意してください。例えば、FSMTのモデリングコードはBARTに基づいており、FSMTのトークナイザコードはXLMに基づいています。
 - これは科学的な課題よりもエンジニアリングの課題です。モデルの論文の理論的な側面をすべて理解しようとするよりも、効率的なデバッグ環境を作成するために時間を費やすべきです。
 - 行き詰まった場合は助けを求めてください！モデルは🤗 Transformersのコアコンポーネントであり、Hugging Faceではモデルを追加するための各ステップでお手伝いするのを喜んでいます。進行がないことに気付いた場合は、進展していないことを気にしないでください。
 
@@ -226,7 +226,7 @@ pip install -e .
 
 一般的に、オリジナルのモデルを実行するための2つのデバッグ環境があります：
 
--  [Jupyter notebooks](https://jupyter.org/) / [google colab](https://colab.research.google.com/notebooks/intro.ipynb)
+-  [Jupyter notebooks](https://jupyter.org) / [google colab](https://colab.research.google.com/notebooks/intro.ipynb)
 -  ローカルなPythonスクリプト。
 
 Jupyterノートブックは、セルごとに実行できるため、論理的なコンポーネントをより分割し、中間結果を保存できるため、デバッグサイクルが速くなるという利点があります。また、ノートブックは他の共同作業者と簡単に共有できることが多く、Hugging Faceチームに助けを求める場合に非常に役立つ場合があります。Jupyterノートブックに精通している場合、それ

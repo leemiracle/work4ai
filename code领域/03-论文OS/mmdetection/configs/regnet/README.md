@@ -29,7 +29,7 @@ To use a regnet model, there are two steps to do:
 
 We already prepare models of FLOPs from 400M to 12G in our model zoo.
 
-For more general usage, we also provide script `regnet2mmdet.py` in the tools directory to convert the key of models pretrained by [pycls](https://github.com/facebookresearch/pycls/) to
+For more general usage, we also provide script `regnet2mmdet.py` in the tools directory to convert the key of models pretrained by [pycls](https://github.com/facebookresearch/pycls) to
 ResNet-style checkpoints used in MMDetection.
 
 ```bash

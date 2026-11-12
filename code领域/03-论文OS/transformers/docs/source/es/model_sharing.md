@@ -37,7 +37,7 @@ Para compartir un modelo con la comunidad necesitas una cuenta en [huggingface.c
 
 Cada repositorio en el Model Hub se comporta como cualquier otro repositorio en GitHub. Nuestros repositorios ofrecen versioning, commit history, y la habilidad para visualizar diferencias.
 
-El versioning desarrollado dentro del Model Hub es basado en git y [git-lfs](https://git-lfs.github.com/). En otras palabras, puedes tratar un modelo como un repositorio, brindando un mejor control de acceso y escalabilidad. Version control permite *revisions*, un método para apuntar a una versión específica de un modelo utilizando un commit hash, tag o branch.
+El versioning desarrollado dentro del Model Hub es basado en git y [git-lfs](https://git-lfs.github.com). En otras palabras, puedes tratar un modelo como un repositorio, brindando un mejor control de acceso y escalabilidad. Version control permite *revisions*, un método para apuntar a una versión específica de un modelo utilizando un commit hash, tag o branch.
 
 Como resultado, puedes cargar una versión específica del modelo con el parámetro `revision`:
 
@@ -150,7 +150,7 @@ Los usuarios de TensorFlow pueden activar la misma funcionalidad con [`PushToHub
 ... )
 ```
 
-Agregamos el callback a [`fit`](https://keras.io/api/models/model_training_apis/), y 🤗 Transformers enviará el modelo entrenado al Hub:
+Agregamos el callback a [`fit`](https://keras.io/api/models/model_training_apis), y 🤗 Transformers enviará el modelo entrenado al Hub:
 
 ```py
 >>> model.fit(tf_train_dataset, validation_data=tf_validation_dataset, epochs=3, callbacks=push_to_hub_callback)

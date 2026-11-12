@@ -1,0 +1,44 @@
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+-->
+
+# NVIDIA NeMo Fabric Runtime
+
+[![License](https://img.shields.io/github/license/NVIDIA/NeMo-Fabric)](https://github.com/NVIDIA/NeMo-Fabric/blob/main/LICENSE)
+[![GitHub](https://img.shields.io/badge/github-repo-blue?logo=github)](https://github.com/NVIDIA/NeMo-Fabric)
+[![Release](https://img.shields.io/github/v/release/NVIDIA/NeMo-Fabric?color=green)](https://github.com/NVIDIA/NeMo-Fabric/releases)
+
+![Diagram showing NeMo Fabric connecting applications, evaluation systems, and reinforcement learning rollouts to harnesses and custom agents, with results, artifacts, and telemetry as outputs.](https://raw.githubusercontent.com/NVIDIA/NeMo-Fabric/refs/heads/main/assets/fabric-hero.png)
+
+`nemo-fabric-runtime` provides the Python SDK and native Rust bindings for
+NVIDIA NeMo Fabric, a runtime execution layer for agents.
+
+Typically this is installed using the [`nemo-fabric`](https://pypi.org/project/nemo-fabric) meta package.
+
+```bash
+pip install nemo-fabric
+```
+
+Installing the runtime package directly is equivalent:
+
+```bash
+pip install nemo-fabric-runtime
+```
+
+For the default embedded NeMo Relay ATOF streaming path, install the runtime's
+`streaming` extra to include the matching collector:
+
+```bash
+pip install "nemo-fabric-runtime[streaming]"
+```
+
+The package exposes the `nemo_fabric` Python module for typed agent
+configuration, validation, run planning, runtime lifecycle management,
+normalized results, artifacts, diagnostics, and telemetry references.
+
+Refer to the [NeMo Fabric documentation](https://docs.nvidia.com/nemo/fabric)
+for installation and usage guidance. Source code is available in the
+[NVIDIA NeMo Fabric repository](https://github.com/NVIDIA/NeMo-Fabric).
+
+The package also installs `fabric-agent-ctl`, a command bridge and foreground runtime server for controlling multiple independent SDK runtime IDs inside one sandbox. Refer to the [NeMo Fabric runtime server guide](https://github.com/NVIDIA/NeMo-Fabric/blob/main/sdk/python/nemo-fabric-runtime/src/nemo_fabric/runtime_server/README.md) for SDK command mappings, runtime IDs, socket ownership, and sandbox lifecycle.

@@ -26,7 +26,7 @@ El modelado de lenguaje causal predice el siguiente token en una secuencia de to
 
 El modelado de lenguaje por enmascaramiento predice un token enmascarado en una secuencia, y el modelo puede considerar los tokens bidireccionalmente.
 
-Esta guía te mostrará cómo realizar fine-tuning [DistilGPT2](https://huggingface.co/distilbert/distilgpt2) para modelos de lenguaje causales y [DistilRoBERTa](https://huggingface.co/distilbert/distilroberta-base) para modelos de lenguaje por enmascaramiento en el [r/askscience](https://www.reddit.com/r/askscience/) subdataset [ELI5](https://huggingface.co/datasets/eli5). 
+Esta guía te mostrará cómo realizar fine-tuning [DistilGPT2](https://huggingface.co/distilbert/distilgpt2) para modelos de lenguaje causales y [DistilRoBERTa](https://huggingface.co/distilbert/distilroberta-base) para modelos de lenguaje por enmascaramiento en el [r/askscience](https://www.reddit.com/r/askscience) subdataset [ELI5](https://huggingface.co/datasets/eli5). 
 
 <Tip>
 

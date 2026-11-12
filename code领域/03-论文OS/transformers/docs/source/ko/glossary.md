@@ -285,7 +285,7 @@ DataParallel 방식에 대해 더 알아보려면 [여기](perf_train_gpu_many#d
 
 ### 자연어 생성 (NLG)
 
-텍스트를 생성하는 모든 작업을 의미합니다. (예: [Write With Transformers](https://transformer.huggingface.co/), 번역 등).
+텍스트를 생성하는 모든 작업을 의미합니다. (예: [Write With Transformers](https://transformer.huggingface.co), 번역 등).
 
 ### 자연어 처리 (NLP)
 

@@ -1,6 +1,6 @@
 # CVPR 2021 论文和开源项目合集(Papers with Code)
 
-[CVPR 2021](http://cvpr2021.thecvf.com/) 论文和开源项目合集(papers with code)！
+[CVPR 2021](http://cvpr2021.thecvf.com) 论文和开源项目合集(papers with code)！
 
 CVPR 2021 收录列表：http://cvpr2021.thecvf.com/sites/default/files/2021-03/accepted_paper_ids.txt
 

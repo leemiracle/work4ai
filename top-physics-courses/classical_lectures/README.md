@@ -102,13 +102,13 @@
 ```
 科普起点 (RESOURCES/00)
     ↓
-经典讲义逐本导读 (本目录, classical_lectures/)  ← 你在这里
+经典讲义逐本导读 (本目录, classical_lectures)  ← 你在这里
     ↓
 项目 10 校课程笔记 (mit-physics/ caltech-physics/ ...)  L01-L15
     ↓
 研究级资源 (RESOURCES/01-07: 数学/工具链/论文/训练/社区)
     ↓
-AI for Physics (ai_for_physics/)  你的弯道超车
+AI for Physics (ai_for_physics)  你的弯道超车
 ```
 
 ---

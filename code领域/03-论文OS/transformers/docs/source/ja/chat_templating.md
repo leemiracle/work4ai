@@ -107,7 +107,7 @@ LLM（Language Model）のますます一般的な使用事例の1つは「チ�
 {{ eos_token }}
 ```
 
-これが初めて見る方へ、これは[Jinjaテンプレート](https://jinja.palletsprojects.com/en/3.1.x/templates/)です。
+これが初めて見る方へ、これは[Jinjaテンプレート](https://jinja.palletsprojects.com/en/3.1.x/templates)です。
 Jinjaはテキストを生成するためのシンプルなコードを記述できるテンプレート言語です。多くの点で、コードと
 構文はPythonに似ています。純粋なPythonでは、このテンプレートは次のようになるでしょう：
 

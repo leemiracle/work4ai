@@ -427,7 +427,7 @@ test_cfg = dict(type='TestLoop') # 使用默认的测试循环。
 </tr>
 </table>
 
-事实上，在 OpenMMLab 2.0 中，我们引入了 `Loop` 来控制训练、验证和测试中的行为。`Runner` 的功能也发生了变化。您可以在 [MMMEngine](https://github.com/open-mmlab/mmengine/) 的[执行器教程](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/runner.md) 中找到更多的详细信息。
+事实上，在 OpenMMLab 2.0 中，我们引入了 `Loop` 来控制训练、验证和测试中的行为。`Runner` 的功能也发生了变化。您可以在 [MMMEngine](https://github.com/open-mmlab/mmengine) 的[执行器教程](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/runner.md) 中找到更多的详细信息。
 
 ### 运行时设置
 

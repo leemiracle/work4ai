@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 3. Get your OpenAI API Key
 
-- - Sign up for an [OpenAI account](https://platform.openai.com/) and obtain your API key.
+- - Sign up for an [OpenAI account](https://platform.openai.com) and obtain your API key.
 - Set your OPENAI_API_KEY environment variable.
 ```bash
 export OPENAI_API_KEY='your-api-key-here'

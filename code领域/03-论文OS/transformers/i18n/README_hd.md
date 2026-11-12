@@ -92,7 +92,7 @@ checkpoint: जाँच बिंदु
 
 🤗 Transformers त्वरित डाउनलोड और उपयोग के लिए एक एपीआई प्रदान करता है, जिससे आप किसी दिए गए पाठ पर एक पूर्व-प्रशिक्षित मॉडल ले सकते हैं, इसे अपने डेटासेट पर ठीक कर सकते हैं और इसे [मॉडल हब](https://huggingface.co/models) के माध्यम से समुदाय के साथ साझा कर सकते हैं। इसी समय, प्रत्येक परिभाषित पायथन मॉड्यूल पूरी तरह से स्वतंत्र है, जो संशोधन और तेजी से अनुसंधान प्रयोगों के लिए सुविधाजनक है।
 
-🤗 Transformers तीन सबसे लोकप्रिय गहन शिक्षण पुस्तकालयों का समर्थन करता है： [Jax](https://jax.readthedocs.io/en/latest/), [PyTorch](https://pytorch.org/) and [TensorFlow](https://www.tensorflow.org/) — और इसके साथ निर्बाध रूप से एकीकृत होता है। आप अपने मॉडल को सीधे एक ढांचे के साथ प्रशिक्षित कर सकते हैं और दूसरे के साथ लोड और अनुमान लगा सकते हैं।
+🤗 Transformers तीन सबसे लोकप्रिय गहन शिक्षण पुस्तकालयों का समर्थन करता है： [Jax](https://jax.readthedocs.io/en/latest), [PyTorch](https://pytorch.org) and [TensorFlow](https://www.tensorflow.org) — और इसके साथ निर्बाध रूप से एकीकृत होता है। आप अपने मॉडल को सीधे एक ढांचे के साथ प्रशिक्षित कर सकते हैं और दूसरे के साथ लोड और अनुमान लगा सकते हैं।
 
 ## ऑनलाइन डेमो
 
@@ -207,11 +207,11 @@ checkpoint: जाँच बिंदु
 
 इस रिपॉजिटरी का परीक्षण Python 3.9+, Flax 0.4.1+, PyTorch 2.1+ और TensorFlow 2.6+ के तहत किया गया है।
 
-आप [वर्चुअल एनवायरनमेंट](https://docs.python.org/3/library/venv.html) में 🤗 ट्रांसफॉर्मर इंस्टॉल कर सकते हैं। यदि आप अभी तक पायथन के वर्चुअल एनवायरनमेंट से परिचित नहीं हैं, तो कृपया इसे [उपयोगकर्ता निर्देश](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) पढ़ें।
+आप [वर्चुअल एनवायरनमेंट](https://docs.python.org/3/library/venv.html) में 🤗 ट्रांसफॉर्मर इंस्टॉल कर सकते हैं। यदि आप अभी तक पायथन के वर्चुअल एनवायरनमेंट से परिचित नहीं हैं, तो कृपया इसे [उपयोगकर्ता निर्देश](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments) पढ़ें।
 
 सबसे पहले, पायथन के उस संस्करण के साथ एक आभासी वातावरण बनाएं जिसका आप उपयोग करने और उसे सक्रिय करने की योजना बना रहे हैं।
 
-फिर, आपको Flax, PyTorch या TensorFlow में से किसी एक को स्थापित करने की आवश्यकता है। अपने प्लेटफ़ॉर्म पर इन फ़्रेमवर्क को स्थापित करने के लिए, [TensorFlow स्थापना पृष्ठ](https://www.tensorflow.org/install/), [PyTorch स्थापना पृष्ठ](https://pytorch.org/get-started/locally)
+फिर, आपको Flax, PyTorch या TensorFlow में से किसी एक को स्थापित करने की आवश्यकता है। अपने प्लेटफ़ॉर्म पर इन फ़्रेमवर्क को स्थापित करने के लिए, [TensorFlow स्थापना पृष्ठ](https://www.tensorflow.org/install), [PyTorch स्थापना पृष्ठ](https://pytorch.org/get-started/locally)
 
 देखें start-locally या [Flax स्थापना पृष्ठ](https://github.com/google/flax#quick-install).
 
@@ -251,7 +251,7 @@ conda install conda-forge::transformers
 
 |अध्याय | विवरण |
 |-|-|
-| [दस्तावेज़ीकरण](https://huggingface.co/transformers/) | पूरा एपीआई दस्तावेज़ीकरण और ट्यूटोरियल |
+| [दस्तावेज़ीकरण](https://huggingface.co/transformers) | पूरा एपीआई दस्तावेज़ीकरण और ट्यूटोरियल |
 | [कार्य सारांश](https://huggingface.co/docs/transformers/task_summary) | ट्रांसफॉर्मर समर्थित कार्य |
 | [प्रीप्रोसेसिंग ट्यूटोरियल](https://huggingface.co/docs/transformers/preprocessing) | मॉडल के लिए डेटा तैयार करने के लिए `टोकनाइज़र` का उपयोग करना |
 | [प्रशिक्षण और फाइन-ट्यूनिंग](https://huggingface.co/docs/transformers/training) | PyTorch/TensorFlow के ट्रेनिंग लूप या `ट्रेनर` API में ट्रांसफॉर्मर द्वारा दिए गए मॉडल का उपयोग करें |
@@ -261,7 +261,7 @@ conda install conda-forge::transformers
 
 ## उद्धरण
 
-हमने आधिकारिक तौर पर इस लाइब्रेरी का [पेपर](https://www.aclweb.org/anthology/2020.emnlp-demos.6/) प्रकाशित किया है, अगर आप ट्रान्सफ़ॉर्मर्स लाइब्रेरी का उपयोग करते हैं, तो कृपया उद्धृत करें:
+हमने आधिकारिक तौर पर इस लाइब्रेरी का [पेपर](https://www.aclweb.org/anthology/2020.emnlp-demos.6) प्रकाशित किया है, अगर आप ट्रान्सफ़ॉर्मर्स लाइब्रेरी का उपयोग करते हैं, तो कृपया उद्धृत करें:
 ```bibtex
 @inproceedings{wolf-etal-2020-transformers,
     title = "Transformers: State-of-the-Art Natural Language Processing",

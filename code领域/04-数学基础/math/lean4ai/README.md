@@ -19,26 +19,26 @@
 
 ## 词典系统
 
-### AI & LLM → [docs/ai/](./docs/ai/)
+### AI & LLM → [docs/ai/](./docs/ai)
 - [LLM核心词典](./docs/ai/LLM_CORE_DICTIONARY.md) - Transformer、训练、推理
 - [模型大全](./docs/ai/MODEL_ENCYCLOPEDIA.md) - 40+模型详解
 - [AI Agent指南](./docs/ai/AI_AGENT_GUIDE.md) - Agent架构与协作
 - [AI应用开发](./docs/ai/AI_APP_DEVELOPMENT.md) - Prompt、RAG、部署
 
-### 数学 → [docs/math/](./docs/math/)
+### 数学 → [docs/math/](./docs/math)
 - 12卷完整数学词典
 - [索引](./docs/math/MATH_DICTIONARY_INDEX.md)
 
-### 物理 → [docs/physics/](./docs/physics/)
+### 物理 → [docs/physics/](./docs/physics)
 - 7卷物理学词典
 - [索引](./docs/physics/PHYSICS_INDEX.md)
 
-### 哲学 → [docs/philosophy_dictionary/](./docs/philosophy_dictionary/)
+### 哲学 → [docs/philosophy_dictionary/](./docs/philosophy_dictionary)
 - 8卷哲学词典
 
 ### 其他
-- [人类学词典](./docs/anthropology_dictionary/)
-- [百科全书](./docs/encyclopedia/)
+- [人类学词典](./docs/anthropology_dictionary)
+- [百科全书](./docs/encyclopedia)
 - [军事词典](./docs/military_dictionary.md)
 
 ---
@@ -59,18 +59,18 @@
 
 ## 技术文档
 
-### Lean4 → [docs/lean4/](./docs/lean4/)
+### Lean4 → [docs/lean4/](./docs/lean4)
 - [Mathlib指南](./docs/lean4/MATHLIB_GUIDE.md)
 - [项目分析](./docs/lean4/LEAN4_PROJECTS_ANALYSIS.md)
 - [生态报告](./docs/lean4/LEAN_ECOSYSTEM_REPORT.md)
 
-### 集成文档 → [docs/integrations/](./docs/integrations/)
+### 集成文档 → [docs/integrations/](./docs/integrations)
 - [最终整合](./docs/integrations/FINAL_INTEGRATION.md)
 - [LeanDojo集成](./docs/integrations/LEANDOJO_INTEGRATION.md)
 - [YC-Killer集成](./docs/integrations/YCKILLER_LEAN4_INTEGRATION.md)
 - 等16个集成文档
 
-### 概览文档 → [docs/overviews/](./docs/overviews/)
+### 概览文档 → [docs/overviews/](./docs/overviews)
 - 八合一总览（`./docs/overviews/EIGHT_IN_ONE_OVERVIEW.md`）
 - 十九合一总览（`./docs/overviews/NINETEEN_IN_ONE_OVERVIEW.md`）
 

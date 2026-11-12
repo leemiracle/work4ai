@@ -3,7 +3,7 @@
 > **这是什么**：把教师模型（GLM-5.3 + 文献核检）头脑中的数学知识，按域系统化蒸馏为**可验证的知识卡**。
 > 与 [AI_MATH_FOREST.md](../AI_MATH_FOREST.md) 的分工：FOREST 回答"AI 需要哪些数学"（需求地图），本库回答"模型肚子里有哪些数学"（供给侧显性化）——两边对撞就是 [BIDIRECTIONAL_FLYWHEEL](../BIDIRECTIONAL_FLYWHEEL.md) 的知识面。
 > **方法论**：[METHODOLOGY.md](METHODOLOGY.md)（本地十条蒸馏规律 × 网络最新六法的融合操作规程，必读）。
-> **血缘**：本单元是 [实战案例-Prover数学Agent](../../讲透Agent/实战案例-Prover数学Agent/README.md) 逆向蒸馏经验的泛化——从"蒸馏证明能力"扩展到"蒸馏数学知识"。
+> **血缘**：本单元是 [实战案例-Prover数学Agent](../../讲透宇宙/01-学/讲透Agent//实战案例-Prover数学Agent/README.md) 逆向蒸馏经验的泛化——从"蒸馏证明能力"扩展到"蒸馏数学知识"。
 > 建库：2026-08-27。
 
 ---

@@ -27,13 +27,13 @@ The LayoutLMV2 model was proposed in [LayoutLMv2: Multi-modal Pre-training for V
 Dinei Florencio, Cha Zhang, Wanxiang Che, Min Zhang, Lidong Zhou. LayoutLMV2 improves [LayoutLM](layoutlm) to obtain
 state-of-the-art results across several document image understanding benchmarks:
 
-- information extraction from scanned documents: the [FUNSD](https://guillaumejaume.github.io/FUNSD/) dataset (a
+- information extraction from scanned documents: the [FUNSD](https://guillaumejaume.github.io/FUNSD) dataset (a
   collection of 199 annotated forms comprising more than 30,000 words), the [CORD](https://github.com/clovaai/cord)
   dataset (a collection of 800 receipts for training, 100 for validation and 100 for testing), the [SROIE](https://rrc.cvc.uab.es/?ch=13) dataset (a collection of 626 receipts for training and 347 receipts for testing)
   and the [Kleister-NDA](https://github.com/applicaai/kleister-nda) dataset (a collection of non-disclosure
   agreements from the EDGAR database, including 254 documents for training, 83 documents for validation, and 203
   documents for testing).
-- document image classification: the [RVL-CDIP](https://www.cs.cmu.edu/~aharley/rvl-cdip/) dataset (a collection of
+- document image classification: the [RVL-CDIP](https://www.cs.cmu.edu/~aharley/rvl-cdip) dataset (a collection of
   400,000 images belonging to one of 16 classes).
 - document visual question answering: the [DocVQA](https://huggingface.co/papers/2007.00398) dataset (a collection of 50,000
   questions defined on 12,000+ document images).
@@ -70,7 +70,7 @@ python -m pip install torchvision tesseract
 - LayoutLMv2 adds both a relative 1D attention bias as well as a spatial 2D attention bias to the attention scores in
   the self-attention layers. Details can be found on page 5 of the [paper](https://huggingface.co/papers/2012.14740).
 - Demo notebooks on how to use the LayoutLMv2 model on RVL-CDIP, FUNSD, DocVQA, CORD can be found [here](https://github.com/NielsRogge/Transformers-Tutorials).
-- LayoutLMv2 uses Facebook AI's [Detectron2](https://github.com/facebookresearch/detectron2/) package for its visual
+- LayoutLMv2 uses Facebook AI's [Detectron2](https://github.com/facebookresearch/detectron2) package for its visual
   backbone. See [this link](https://detectron2.readthedocs.io/en/latest/tutorials/install.html) for installation
   instructions.
 - In addition to `input_ids`, [`~LayoutLMv2Model.forward`] expects 2 additional inputs, namely
@@ -82,7 +82,7 @@ python -m pip install torchvision tesseract
   in Detectron2 are pre-trained using the BGR format. The `bbox` input are the bounding boxes (i.e. 2D-positions)
   of the input text tokens. This is identical to [`LayoutLMModel`]. These can be obtained using an
   external OCR engine such as Google's [Tesseract](https://github.com/tesseract-ocr/tesseract) (there's a [Python
-  wrapper](https://pypi.org/project/pytesseract/) available). Each bounding box should be in (x0, y0, x1, y1)
+  wrapper](https://pypi.org/project/pytesseract) available). Each bounding box should be in (x0, y0, x1, y1)
   format, where (x0, y0) corresponds to the position of the upper left corner in the bounding box, and (x1, y1)
   represents the position of the lower right corner. Note that one first needs to normalize the bounding boxes to be on
   a 0-1000 scale. To normalize, you can use the following function:
@@ -179,7 +179,7 @@ normalized bounding boxes are then provided to [`LayoutLMv2Tokenizer`] or
 `attention_mask`, `token_type_ids`, `bbox`. Optionally, one can provide word labels to the processor,
 which are turned into token-level `labels`.
 
-[`LayoutLMv2Processor`] uses [PyTesseract](https://pypi.org/project/pytesseract/), a Python
+[`LayoutLMv2Processor`] uses [PyTesseract](https://pypi.org/project/pytesseract), a Python
 wrapper around Google's Tesseract OCR engine, under the hood. Note that you can still use your own OCR engine of
 choice, and provide the words and normalized boxes yourself. This requires initializing
 [`LayoutLMv2ImageProcessor`] with `apply_ocr` set to `False`.

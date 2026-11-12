@@ -1,6 +1,6 @@
 # 🚀 Tutorial 4: Running Agents
 
-Master the complete OpenAI Agents SDK execution system! This tutorial covers all aspects of running agents including execution methods, streaming, the agent loop, exception handling, and advanced configuration based on the [official running agents documentation](https://openai.github.io/openai-agents-python/running_agents/).
+Master the complete OpenAI Agents SDK execution system! This tutorial covers all aspects of running agents including execution methods, streaming, the agent loop, exception handling, and advanced configuration based on the [official running agents documentation](https://openai.github.io/openai-agents-python/running_agents).
 
 ## 🎯 What You'll Learn
 

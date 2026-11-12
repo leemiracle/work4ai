@@ -56,7 +56,7 @@ Here are some speed comparisons between the base and fast image processors for t
   <img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/benchmark_results_full_pipeline_rt_detr_fast_batched.png" />
 </div>
 
-These benchmarks were run on an [AWS EC2 g5.2xlarge instance](https://aws.amazon.com/ec2/instance-types/g5/), utilizing an NVIDIA A10G Tensor Core GPU.
+These benchmarks were run on an [AWS EC2 g5.2xlarge instance](https://aws.amazon.com/ec2/instance-types/g5), utilizing an NVIDIA A10G Tensor Core GPU.
 
 ## ImageProcessingMixin
 

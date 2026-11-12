@@ -2,7 +2,7 @@
 
 > **教材**：Oksendal, *Stochastic Differential Equations* (6th ed, Springer)
 > **辅助**：Karatzas & Shreve, *Brownian Motion and Stochastic Calculus*；Gardiner, *Stochastic Methods*
-> **参考**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk/)
+> **参考**：[courses.maths.ox.ac.uk](https://courses.maths.ox.ac.uk)
 
 ---
 

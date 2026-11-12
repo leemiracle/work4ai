@@ -6,8 +6,8 @@
 ---
 
 > 🧰 **工具使用记录**：除了学习进度，也记录你对工具模块的使用——
-> 跑了 [15-applications/代码库/](../15-applications/代码库/) 哪些脚本？查了 [14-frontier/](../14-frontier/) 哪些前沿？
-> 做了 [17-decision/](../17-decision/) 哪次方向决策？详见 [决策日志](../17-decision/里程碑/决策日志.md)。
+> 跑了 [15-applications/代码库/](../15-applications/代码库) 哪些脚本？查了 [14-frontier/](../14-frontier) 哪些前沿？
+> 做了 [17-decision/](../17-decision) 哪次方向决策？详见 [决策日志](../17-decision/里程碑/决策日志.md)。
 
 ---
 

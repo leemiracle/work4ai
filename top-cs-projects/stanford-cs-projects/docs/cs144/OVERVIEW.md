@@ -223,7 +223,7 @@ python3 tcp_sim.py
 ### 经典论文
 
 - **Jacobson (1988)**. [Congestion Avoidance and Control](https://dl.acm.org/doi/10.1145/52324.52356). *SIGCOMM*. — TCP 拥塞控制的奠基论文，定义了 Tahoe/Reno
-- **Cardwell et al. (2017)**. [BBR: Congestion-Based Congestion Control](https://research.google/pubs/pub45646/). *ACM QUEUE*. — Google 的现代拥塞控制算法
+- **Cardwell et al. (2017)**. [BBR: Congestion-Based Congestion Control](https://research.google/pubs/pub45646). *ACM QUEUE*. — Google 的现代拥塞控制算法
 - **Saltzer, Reed, Clark (1984)**. [End-to-End Arguments in System Design](https://web.mit.edu/Saltzer/www/publications/endtoend/endtoend.pdf). *ACM TOCS*. — 互联网设计哲学
 
 ### 推荐教材（参考，非必读）
@@ -260,7 +260,7 @@ Week 11   └─ Lab 7-8: 集成联调，用自己写的 TCP 上网！
 2. **手画状态机**：TCP 11 个状态转移图必须能默写
 3. **抓包实践**：用 Wireshark 抓真实流量，对比自己的实现
 4. **从失败中学习**：Labs 的自动测试（autograder）极其严格，培养工程严谨性
-5. **读 Winstein 的 [Network Reader](https://cs144.github.io/)**：他写的课程笔记本身就是优秀的系统设计教材
+5. **读 Winstein 的 [Network Reader](https://cs144.github.io)**：他写的课程笔记本身就是优秀的系统设计教材
 
 ---
 

@@ -90,7 +90,7 @@
 - **2-bit 出现**（AngelSlim / Apple AFM）——极端压缩，需 QAT 保质量
 
 ### 对接 work4ai
-[`端侧AI架构参考`](端侧AI架构参考.md) + [`讲透GPU与系统级`](讲透GPU与系统级)（量化）
+[`端侧AI架构参考`](端侧AI架构参考.md) + [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级)（量化）
 
 ---
 
@@ -131,7 +131,7 @@
 - **DeepSeek MLA**（Multi-Latent Attention）：MoE + 低秩 KV 压缩
 
 ### 对接 work4ai
-[`讲透Transformer`](讲透Transformer)（MoE）+ [`讲透GPU与系统级`](讲透GPU与系统级)（EP）
+[`讲透Transformer`](讲透Transformer)（MoE）+ [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级)（EP）
 
 ---
 
@@ -160,7 +160,7 @@ RLVR 是 reasoning model 的引擎，但 rollout 太贵。2026 的工作（ARRoL
 |---|---|
 | 推理优化（稀疏/PD分离/KV压缩）| [`高效AI前沿-2025-2026顶会精选`](高效AI前沿-2025-2026顶会精选.md)（C，12 篇深读）|
 | test-time compute scaling | [`讲透RL/05(RLVR极限)`](讲透RL) + [`讲透基础模型`](讲透基础模型) |
-| 端侧 LLM | [`端侧AI架构参考`](端侧AI架构参考.md) + [`讲透GPU与系统级`](讲透GPU与系统级)（量化）|
+| 端侧 LLM | [`端侧AI架构参考`](端侧AI架构参考.md) + [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级)（量化）|
 | hybrid 架构 | [`讲透基础模型`](讲透基础模型)（架构）|
 | agent RL 加速 | [`讲透RL/03-06`](讲透RL)（GRPO/RLVR）|
 | MoE 高效化 | [`讲透Transformer`](讲透Transformer)（MoE）|

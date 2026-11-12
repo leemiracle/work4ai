@@ -19,7 +19,7 @@
   <div>&nbsp;</div>
 
 [![PyPI](https://img.shields.io/pypi/v/mmdet)](https://pypi.org/project/mmdet)
-[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmdetection.readthedocs.io/en/latest/)
+[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmdetection.readthedocs.io/en/latest)
 [![badge](https://github.com/open-mmlab/mmdetection/workflows/build/badge.svg)](https://github.com/open-mmlab/mmdetection/actions)
 [![codecov](https://codecov.io/gh/open-mmlab/mmdetection/branch/main/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmdetection)
 [![license](https://img.shields.io/github/license/open-mmlab/mmdetection.svg)](https://github.com/open-mmlab/mmdetection/blob/main/LICENSE)
@@ -27,7 +27,7 @@
 [![issue resolution](https://isitmaintained.com/badge/resolution/open-mmlab/mmdetection.svg)](https://github.com/open-mmlab/mmdetection/issues)
 [![Open in OpenXLab](https://cdn-static.openxlab.org.cn/app-center/openxlab_demo.svg)](https://openxlab.org.cn/apps?search=mmdet)
 
-[📘Documentation](https://mmdetection.readthedocs.io/en/latest/) |
+[📘Documentation](https://mmdetection.readthedocs.io/en/latest) |
 [🛠️Installation](https://mmdetection.readthedocs.io/en/latest/get_started.html) |
 [👀Model Zoo](https://mmdetection.readthedocs.io/en/latest/model_zoo.html) |
 [🆕Update News](https://mmdetection.readthedocs.io/en/latest/notes/changelog.html) |
@@ -69,7 +69,7 @@ English | [简体中文](README_zh-CN.md)
 ## Introduction
 
 MMDetection is an open source object detection toolbox based on PyTorch. It is
-a part of the [OpenMMLab](https://openmmlab.com/) project.
+a part of the [OpenMMLab](https://openmmlab.com) project.
 
 The main branch works with **PyTorch 1.8+**.
 
@@ -141,7 +141,7 @@ Please refer to [Installation](https://mmdetection.readthedocs.io/en/latest/get_
 
 Please see [Overview](https://mmdetection.readthedocs.io/en/latest/get_started.html) for the general introduction of MMDetection.
 
-For detailed user guides and advanced guides, please refer to our [documentation](https://mmdetection.readthedocs.io/en/latest/):
+For detailed user guides and advanced guides, please refer to our [documentation](https://mmdetection.readthedocs.io/en/latest):
 
 - User Guides
 

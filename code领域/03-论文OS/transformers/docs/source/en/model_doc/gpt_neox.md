@@ -33,7 +33,7 @@ gains far more in performance when evaluated five-shot than similarly sized GPT-
 the training and evaluation code, as well as the model weights, at [https://github.com/EleutherAI/gpt-neox](https://github.com/EleutherAI/gpt-neox).
 
 Development of the model was led by Sid Black, Stella Biderman and Eric Hallahan, and the model was trained with
-generous the support of [CoreWeave](https://www.coreweave.com/).
+generous the support of [CoreWeave](https://www.coreweave.com).
 
 GPT-NeoX-20B was trained with fp16, thus it is recommended to initialize the model as follows:
 

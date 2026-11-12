@@ -162,7 +162,7 @@ Paper-OS v2.1
 │
 ├── 数据层
 │   ├── SQLite数据库 (data/paper_os.db)
-│   ├── 代码索引 (code_index/)
+│   ├── 代码索引 (code_index)
 │   ├── 论文PDF文件
 │   └── Markdown分析文档
 │

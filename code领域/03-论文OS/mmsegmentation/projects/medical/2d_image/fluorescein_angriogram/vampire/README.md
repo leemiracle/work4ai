@@ -12,7 +12,7 @@ In order to promote evaluation of vessel segmentation on ultra-wide field-of-vie
 
 | Dataset name                                                     | Anatomical region | Task type    | Modality               | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                         |
 | ---------------------------------------------------------------- | ----------------- | ------------ | ---------------------- | ------------ | --------------------- | ---------------------- | ------------ | --------------------------------------------------------------- |
-| [Vampire](https://vampire.computing.dundee.ac.uk/vesselseg.html) | vessel            | segmentation | fluorescein angriogram | 2            | 8/-/-                 | yes/-/-                | 2017         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| [Vampire](https://vampire.computing.dundee.ac.uk/vesselseg.html) | vessel            | segmentation | fluorescein angriogram | 2            | 8/-/-                 | yes/-/-                | 2017         | [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

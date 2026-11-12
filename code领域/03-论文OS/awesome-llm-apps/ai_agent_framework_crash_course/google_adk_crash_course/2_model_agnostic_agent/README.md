@@ -11,7 +11,7 @@ Learn how to create agents that work with **different AI models** using OpenRout
 
 ## 🧠 Core Concept: One API, Many Models
 
-[OpenRouter](https://openrouter.ai/) provides a unified API to access multiple AI models:
+[OpenRouter](https://openrouter.ai) provides a unified API to access multiple AI models:
 - ✅ **Single API Key**: Access OpenAI and Anthropic with one key
 - ✅ **Easy Comparison**: Run different agents to compare responses
 - ✅ **Cost Effective**: Pay-per-use pricing

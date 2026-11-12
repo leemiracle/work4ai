@@ -17,7 +17,7 @@ Below are couple of common use cases for vision language models:
 
 ### Hugging Face Hub Python Library
 
-To infer with vision language models through Python, you can use the [`huggingface_hub`](https://pypi.org/project/huggingface-hub/) library. The `InferenceClient` class provides a simple way to interact with the [Inference API](https://huggingface.co/docs/api-inference/index). Images can be passed as URLs or base64-encoded strings. The `InferenceClient` will automatically detect the image format.
+To infer with vision language models through Python, you can use the [`huggingface_hub`](https://pypi.org/project/huggingface-hub) library. The `InferenceClient` class provides a simple way to interact with the [Inference API](https://huggingface.co/docs/api-inference/index). Images can be passed as URLs or base64-encoded strings. The `InferenceClient` will automatically detect the image format.
 
 ```python
 from huggingface_hub import InferenceClient

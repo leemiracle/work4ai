@@ -225,7 +225,7 @@ Examples automatically detect the server endpoint and tokenizer path via environ
 ```go
 type ClientConfig struct {
     // Endpoint is the gRPC endpoint URL (e.g., "grpc://localhost:20000")
-    // Required field. Must include the scheme (grpc://) and port number.
+    // Required field. Must include the scheme (grpc:) and port number.
     Endpoint string
 
     // TokenizerPath is the path to the tokenizer directory containing

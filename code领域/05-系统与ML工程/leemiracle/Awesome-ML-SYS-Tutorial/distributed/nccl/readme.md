@@ -94,7 +94,7 @@ NCCL 实现了三种通信协议：
 
 # 常见 NIVIDA 指令
 
-这里参考了 [WeLearnNLP 的指南](https://www.yourmetaverse.cn/deep_learning/199/)。
+这里参考了 [WeLearnNLP 的指南](https://www.yourmetaverse.cn/deep_learning/199)。
 
 ## `nvidia-smi topo -m`
 

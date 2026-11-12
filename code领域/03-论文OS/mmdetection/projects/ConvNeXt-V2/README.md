@@ -19,7 +19,7 @@ Driven by improved architectures and better representation learning frameworks, 
 **Note**:
 
 - This is a pre-release version of ConvNeXt-V2 object detection. The official finetuning setting of ConvNeXt-V2 has not been released yet.
-- ConvNeXt backbone needs to install [MMPretrain](https://github.com/open-mmlab/mmpretrain/) first, which has abundant backbones for downstream tasks.
+- ConvNeXt backbone needs to install [MMPretrain](https://github.com/open-mmlab/mmpretrain) first, which has abundant backbones for downstream tasks.
 
 ```shell
 pip install mmpretrain

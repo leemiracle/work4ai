@@ -186,8 +186,8 @@ struct HelloPass : public FunctionPass {
 - 《The LLVM Compiler Infrastructure》
 
 ### 在线资源
-- [LLVM Weekly](https://llvmweekly.org/)
-- [LLVM Discourse](https://discourse.llvm.org/)
+- [LLVM Weekly](https://llvmweekly.org)
+- [LLVM Discourse](https://discourse.llvm.org)
 
 ## 实践项目
 

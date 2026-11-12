@@ -1,0 +1,499 @@
+# Phase 6 — Coder
+
+The right-side coder panel is moon-ide's own coding agent. It owns
+its loop end-to-end: streams from HF Inference Providers, dispatches
+its own tool calls, routes every tool through the active
+[`WorkspaceHost`](../architecture.md#workspacehost-phase-2) so a
+containerised workspace gets a containerised agent for free.
+
+This file owns the work breakdown. The architectural spec is
+[`coder.md`](../coder.md). The pivot from "ACP host" to "in-process
+loop" is [ADR 0010](../decisions/0010-coder-rewrite-not-acp.md).
+The crate rename is
+[ADR 0011](../decisions/0011-rename-moon-agent-to-moon-remote.md).
+
+## Sub-phases
+
+### 6.0 — Skeleton
+
+**Acceptance**: signed in with HF (device flow), the right-side
+coder panel can prompt the "large" default model and render a
+non-streaming reply. Tools are read-only (`read_file`, `list_dir`,
+`grep`) plus `bash` routed through `WorkspaceHost::spawn`. No
+streaming, no mutating tools, no session UI, no bucket sync.
+
+What ships:
+
+- Rename `crates/moon-agent/` → `crates/moon-remote/`. Workspace
+  members updated; `[[bin]] name = "moon-remote"`. Per
+  [ADR 0011](../decisions/0011-rename-moon-agent-to-moon-remote.md).
+- New crate `crates/moon-coder/` with the loop scaffold:
+  `auth/` (HF OAuth device flow + keyring storage + refresh
+  middleware), `inference/` (HF router HTTP client,
+  OpenAI-compatible, non-streaming), `tools/` (`read_file`,
+  `list_dir`, `grep`, `bash`), `loop/` (stateful `Coder` with
+  `prompt() / abort()`, fully synchronous turn for now).
+- Tauri commands `coder_start_device_flow`, `coder_status`,
+  `coder_sign_out`, `coder_send`, `coder_abort` in
+  `src-tauri/src/commands/coder.rs`.
+- Right-side `CoderPanel.svelte` with the empty / signed-in /
+  active states from [`coder.md`](../coder.md#ui-placement). Reuses
+  the Slack panel's sticky-bottom scroll + auto-grow textarea.
+- Default models hardcoded in
+  `crates/moon-coder/src/defaults.rs` (`Qwen/Qwen3.5-397B-A17B:scaleway`,
+  `Qwen/Qwen3-Coder-30B-A3B-Instruct:scaleway`).
+- Single in-memory session. No persistence.
+
+Test plan: written before the commit.
+
+### 6.1 — Streaming — **done**
+
+**Acceptance**: assistant messages stream into the panel as SSE
+chunks land, with `Esc` aborting the in-flight call cleanly
+(partial assistant message preserved).
+
+What shipped:
+
+- SSE consumer in `inference.rs`. Inline `\n\n` / `\r\n\r\n` event
+  parsing + accumulator that re-assembles content + tool calls
+  from chunked OpenAI-shape deltas. Five unit tests cover the
+  parser (comment/keepalive skip, multi-`data:` events, tool-call
+  argument concatenation, LF + CRLF boundaries, empty-buffer
+  filtering).
+- New event vocabulary in `event.rs`: `AssistantMessageStart {
+id }` → N × `AssistantMessageDelta { id, delta }` →
+  `AssistantMessageEnd { id, text }` (`AssistantMessage` deleted
+  per "no premature migrations"). `End.text` carries the
+  canonical full content so any drift between concatenated
+  deltas and the final assembly heals on close. Tool-call
+  fragments are buffered server-side and only surfaced as
+  `ToolCall` once fully assembled — partial JSON arguments
+  aren't useful to render.
+- Runner uses `chat_completion_stream`. The same
+  `CancellationToken` that already cancels tool dispatch now
+  also drops the SSE byte stream; Esc-abort is one `select!`
+  arm in `consume_sse_stream`.
+- Frontend `coder.svelte.ts` reconciles deltas by id; new
+  `appendDelta` helper keeps the row mutation pure.
+- `CoderMarkdown.svelte` coalesces re-renders to one per
+  `requestAnimationFrame` tick. With ~30 deltas/sec, that caps
+  the markdown-it + DOMPurify + grammar-lookup work at one
+  render per paint frame; `End.text` triggers a final canonical
+  render.
+
+Reasoning / thinking deltas (added in the same sub-phase):
+
+- Backend accepts both `reasoning_content` (DeepSeek, Qwen) and
+  `reasoning` (other providers) under the same `thinking`
+  buffer, with serde aliases so the non-streaming path picks
+  them up too.
+- New `AssistantThinkingDelta { id, delta }` event, plus a
+  canonical `thinking: Option<String>` field on
+  `AssistantMessageEnd`. The runner fires
+  `AssistantMessageStart` on the first thinking _or_ content
+  delta, so the panel inserts the row before reasoning lands.
+- UI: collapsible `<details class="thinking">` block above the
+  answer, auto-collapsed on `assistant_message_end`. Empty
+  thinking is dropped server-side so non-reasoning models
+  don't get a useless empty disclosure.
+
+Deferred from the original 6.1 plan:
+
+- `coderStream.ts` extraction: the streaming logic ended up
+  small enough to live inline in `coder.svelte.ts`. Split out
+  if `applyEvent` grows past one screen.
+- Anthropic-style structured `thinking` blocks with
+  cryptographic signing: out of scope, the HF router doesn't
+  pass them through anyway.
+- Thinking-duration display ("Thought for 12 s"): cheap to add
+  if anyone asks, but the streaming animation already conveys
+  "the model is thinking" clearly enough.
+
+### 6.2 — Mutating tools
+
+**Acceptance**: the agent can `write_file` and `edit_file`, with
+edits showing up live in any open editor tab (CodeMirror picks
+them up via the existing fs-watch path).
+
+What ships:
+
+- `write_file` and `edit_file` tools. `edit_file` tries exact
+  byte match first, then falls back to (a) unescaping literal
+  `\n` / `\t` in `find` and retrying exact and (b) a line-aligned
+  indent-tolerant match that re-indents `replace` to fit the
+  file. `match_mode` in the result reports which path took.
+  Failure throws — the error lists matching line numbers when
+  more than one fuzzy hit exists. Multi-match disambiguation via
+  a 1-based `occurrence`
+  arg — passing it without a prior failure is fine, but the
+  prompt steers the model toward "add more context" first.
+  Open-buffer collision: if the target is a dirty open tab, the
+  agent overwrites and the editor reloads — the workspace-state
+  save path already handles "external mtime changed".
+- Tool-call render: each call shows up as a collapsible block
+  with `args` (input) and `result` (output) tabs (already in
+  6.0; no new UI surface needed).
+- System prompt updated to advertise edits and the
+  exact-string-match retry pattern.
+
+### 6.2.x — Container-aware bash
+
+**Acceptance**: `bash` runs **inside the workspace shell
+container** when that container is `Running`, on the host
+otherwise. The panel header surfaces the active target as a
+monitor / container glyph (same `TerminalTargetIcon` the bottom-
+panel terminal tabs use) next to the username.
+
+What ships:
+
+- `tools::resolve_bash_target` queries
+  `moon_container::Workspace::status()` — the same lifecycle
+  call `lsp.rs::resolve_target` makes. Routes to container only
+  when the project state is `Running`; any failure (no compose
+  project, daemon unreachable, parse error) falls back to host
+  so the agent is never made unusable by a flaky docker daemon.
+- `WorkspaceFolder.host` (`Local` / `Devcontainer`) is **not**
+  the routing signal. That field is for the orthogonal "the
+  folder's filesystem lives in a remote container" case (Phase
+  2-ish via `RemoteHost`); it doesn't track the workspace shell
+  container's runtime state and is always `Local` today. The
+  signal we want is "did the user click Set up / Resume?", which
+  is `ContainerStatus.state == Running`.
+- Container path: `docker exec -w <container_cwd> <name> bash -c <cmd>`,
+  using `moon_terminal::container_name_for_workspace` and
+  `TerminalTarget::container_cwd_for_folder` so terminals, LSP,
+  and the coder all agree on the framing. No `-it` (we want
+  captured I/O, not a TTY). Container uses non-login `bash -c` so
+  moon-base `ENV PATH` survives Debian `/etc/profile` — see
+  `coder.md`. Host path stays `bash -lc`.
+- `CoderStatus.bash_target: "host" | "container" | null` mirrors
+  the bash tool result's `target` field. The frontend listens to
+  the `container:state` Tauri event and re-probes status on
+  every state change, so the pip flips immediately when the user
+  uses the container popover or runs `docker compose down` from
+  a terminal.
+- No new `WorkspaceHost::spawn` trait method. The "container is
+  up" check belongs to the lifecycle layer, not to a host
+  abstraction; adding `spawn` to a single-implementor trait
+  would just add bookkeeping. The trait method earns its keep
+  when `RemoteHost` lands and there's a second implementor.
+
+### 6.3 — Sessions on disk + auto-rename — **done**
+
+**Acceptance**: every prompt/turn is persisted to JSONL under
+`<XDG_DATA_HOME>/moon-ide/coder-sessions/<project-slug>/`. The panel surfaces a
+sessions list (with a sticky `+` button) and an in-session
+header (with `← Sessions | title | +`). Clicking a session opens
+it; hover-revealed trash icon + confirm dialog deletes.
+`AppState.coder.last_session_id` round-trips and is restored on
+relaunch. After the _first_ turn of a fresh session, the fast
+model is asked for a 4-6 word title that replaces the
+truncated-prompt fallback.
+
+What shipped:
+
+- `crates/moon-coder/src/sessions.rs` — JSONL writer/reader, lazy
+  persistence (header written on first record append), `load_summary`
+  fast path for the list view, and `validate_session_id` to keep
+  user-supplied ids inside the sessions directory.
+- Runner refactored to track session metadata (`SessionHeader`,
+  `folder_root`, `auto_rename_pending`). On send the session
+  binds to the active workspace folder + title-from-prompt; on
+  every chat-history append the corresponding `SessionRecord`
+  flushes to disk. Open-session replays records as the same
+  events a live turn would emit so the panel's existing
+  handlers populate the transcript without a special "loaded"
+  code path.
+- New event variants: `session_loaded`,
+  `session_title_updated`, `session_list_changed`.
+- New Tauri commands: `coder_list_sessions`,
+  `coder_active_session`, `coder_new_session`,
+  `coder_open_session`, `coder_delete_session`. The open command
+  also writes `AppState.coder.last_session_id`.
+- `AppState.coder = { last_session_id }` slice + matching merge
+  rule in `app_state_save` (preserved from disk like `slack`
+  and `right_panel`).
+- `CoderPanel.svelte` gains the two-view layout (`coder.view`
+  enum: `'list' | 'session'`), sticky session-bar with
+  `← Sessions | title | +`, hover-revealed delete on session
+  rows, and an `Intl.RelativeTimeFormat` time format on the
+  list rows.
+- Auto-rename pass: spawned after the first turn completes,
+  uses the cheap model (see 6.4) with a tight system prompt
+  asking for a 4-6 word title. Result is sanitised (trim quotes,
+  ellipsis-truncate, collapse whitespace) before it lands in
+  the header. Failures keep the truncated-prompt fallback.
+
+Shipped after 6.3:
+
+- `todo_write` tool. Implementation matches
+  [`coder.md`](../coder.md#todo-list-tool): per-session list on
+  `Session.todos`, runner short-circuit in `dispatch_tool_calls`,
+  one `SessionRecord::TodosUpdate` snapshot per call, replay-
+  last-wins, available in agent + research sub-agents (each
+  scratchpad is local to its session). Frontend: header pill +
+  popover next to the context ring, `ToolBodyTodoWrite.svelte`
+  per-call body, and an in-progress-aware hint chip on the
+  collapsed tool-row summary. Test plan:
+  [`specs/test-plans/0077-todo-write-tool.md`](../test-plans/0077-todo-write-tool.md).
+
+Still deferred from 6.3 (not rolled into 6.4):
+
+- Per-folder `last_session_id`. Today the slot is flat — if
+  the user switches workspace folder, the relaunch points at
+  a session id that probably doesn't exist in the new folder
+  and the panel falls back to the list view. Switch to a
+  per-folder map when somebody actually feels this.
+- Session search / inline rename / `last_n_turns` truncation.
+  Add when asked.
+
+### 6.4 — Model picker
+
+**Acceptance**: a cog icon in the coder panel header opens a
+popover with two model fields (Standard, Cheap), a default-provider
+hint, a Bill-to dropdown, and a click-to-fill catalog sourced from
+`https://router.huggingface.co/v1/models`. Picks persist
+panel-globally per signed-in user, in `AppState.coder`.
+
+What ships:
+
+- `crates/moon-coder/src/models.rs` — `CoderModels` snapshot held
+  behind `Arc<RwLock>` and shared with `InferenceClient` for
+  `X-HF-Bill-To`. Runner / sub-agent / compaction / folder-summary
+  re-read at the top of each call site so flips apply to the next
+  round-trip.
+- `AppState.coder.{standard_model, cheap_model, default_provider,
+bill_to}` (all default-empty; runner substitutes the hardcoded
+  defaults from `crates/moon-coder/src/defaults.rs`).
+- New Tauri commands: `coder_get_model_settings`,
+  `coder_set_model_settings`, `coder_list_models`. The catalog
+  call is forwarded straight to the router; bindings live in
+  `moon-protocol::coder_models` (`RouterModel`, `RouterProvider`,
+  `RouterPricing`, `CoderModelSettings`).
+- `HfIdentity.orgs` populated from `/oauth/userinfo` so the
+  "Bill to" dropdown has something to show without a separate
+  `/api/whoami-v2` round trip.
+- `CoderModelSettingsModal.svelte` — popover behind the cog with
+  the four fields, catalog list, search, and tier-toggle (the
+  catalog list is unfiltered for the cheap tier and filtered to
+  `supports_tools_anywhere` for the standard tier).
+- Rename across the codebase: `DEFAULT_LARGE_MODEL` /
+  `DEFAULT_FAST_MODEL` → `DEFAULT_STANDARD_MODEL` /
+  `DEFAULT_CHEAP_MODEL` (and matching field names everywhere).
+  No migration; pre-6.4 sessions still parse because the JSONL
+  `model` field is purely informational metadata.
+
+### 6.5 — Steering, follow-up, ask_user
+
+**Acceptance**: pressing Enter while the agent is streaming or
+running tools queues a steering message (delivered after the
+current turn settles). Pressing Alt+Enter while the agent is
+between turns queues a follow-up (delivered after the agent stops
+calling tools). The queued message is visible above the composer
+with a tiny "queued" pip; Esc clears the queue. The agent can
+also pause its turn with `ask_user` and the panel renders an
+inline multiple-choice prompt that resolves on click.
+
+What ships:
+
+- Loop-level queue: `Coder::steer(msg)` and `Coder::follow_up(msg)`,
+  both `one-at-a-time` mode (one queued message at a time, second
+  one replaces the first with a small toast).
+- Composer keymap: Enter sends if idle, queues steer if
+  streaming/tools; Alt+Enter queues follow-up; Shift+Enter
+  newline; Esc aborts (or clears the queue if there's nothing
+  to abort).
+- Queue indicator UI above the composer.
+- `ask_user` tool per
+  [`coder.md`](../coder.md#ask-user-tool) (shipped as a
+  **multi-question** prompt, see test plan 0094). Backend parks a
+  `oneshot::Sender<PromptOutcome>` on a per-session `PromptRegistry`
+  (`prompts.rs`) keyed by `tool_call_id`; new Tauri command
+  `coder_respond_to_prompt(call_id, response)`. Cancellation tokens
+  short-circuit the parked oneshot so abort is clean. A custom
+  answer is always available (no `allow_other` flag), and the user
+  can also **skip** the whole prompt by sending a normal composer
+  message — `Coder::send` resolves the parked prompt with `Skipped`
+  and the typed message proceeds as a steer.
+- `ToolBodyAskUser.svelte` rendered inline off the existing
+  `tool_call` row (no new wire event): per-question option buttons,
+  a custom-answer textarea per question, multi-select checkboxes +
+  confirm when `allow_multiple`, single-select auto-submit when
+  there's exactly one single-select question. Renders as an
+  always-open card (not the collapsed lazy-mounted tool body) so
+  it's visible + actionable while in flight, flipping to a
+  read-only summary on settle.
+
+### 6.6 — System prompt + skills + context telemetry
+
+**Acceptance**: the agent's system prompt includes (a) the
+hardcoded base, (b) `AGENTS.md` walked from the active workspace
+folder, (c) a list of discovered `SKILL.md` files with their
+frontmatter descriptions. The agent can `read_file` a skill body
+when it decides to use one. The panel surfaces context-window
+usage as a ring around the new-session button so the user sees
+compaction coming before it lands.
+
+What ships:
+
+- Skill discovery walks `skills/`,
+  `.claude/skills/`, `.cursor/skills/`, `.cursor/skills-*/`,
+  `.agents/skills/` (recursively, one level deep) for
+  `SKILL.md` files under the active workspace folder and its
+  parents. Reads YAML frontmatter (`name`, `description`,
+  `fullPath`).
+- Single-pass compaction: when the next turn would exceed the
+  model's context limit, the older prefix is summarised by a
+  `fast`-model call and replaced in-context.
+- The full JSONL on disk is untouched (compaction only affects
+  what the LLM sees, not what we persist).
+- Context-usage telemetry: read the `usage.prompt_tokens` /
+  `usage.total_tokens` block from the final SSE chunk on every
+  turn (HF Inference Providers passes it through from the
+  underlying provider). Plumb that as a `CoderEvent::TurnUsage
+{ prompt_tokens, total_tokens, model_context_limit? }` into
+  the panel; render as a thin ring around the `+` button in the
+  session-bar (filled portion = `total / limit`). The
+  model-context-limit comes from a small hardcoded table in
+  `defaults.rs` keyed on the `model` slug — providers don't
+  echo their own limits and we don't want to force the user to
+  configure them. Unknown models render the ring at zero / no
+  fill; the compaction trigger still fires from the absolute
+  token count.
+
+### 6.7 — Bucket sync
+
+**Acceptance**: on first sign-in moon-coder ensures the
+`<user>/moon-ide-sessions` private bucket exists; every workspace's
+sessions sync to `<workspace-slug>/<session-id>.jsonl` automatically
+via `hf-xet`. The first time a fresh workspace starts uploading,
+the panel shows a one-time banner with an inline opt-out toggle.
+Sync failures pip the status bar; local JSONL stays the source of
+truth.
+
+What ships:
+
+- `crates/moon-coder/src/sync/`:
+  - REST client for the bucket lifecycle endpoints (`create`,
+    `list`, `delete`, batch metadata) — wraps the Hub APIs the
+    Python `huggingface_hub` library exposes for `repo_type="bucket"`
+    (see [Buckets API PR #3673](https://github.com/huggingface/huggingface_hub/pull/3673)).
+  - `hf-xet` integration for byte transfer (`XetSession` +
+    `new_upload_commit`).
+  - Per-session debounced upload task (5 s quiescence, force-flush
+    on session close / app exit).
+  - Tombstone file (`.tombstones`) for deleted sessions; sync
+    deletes the remote key and removes the line.
+- `coder_set_sync_enabled(enabled)` Tauri command and panel-header
+  toggle.
+- One-time per-workspace banner in `CoderPanel.svelte`.
+- `coder:sync_state` Tauri events drive a status-bar pip.
+
+End of Phase 6. Hand back for human review per
+[`AGENTS.md` § Phased delivery](../../../../../AGENTS.md#phased-delivery).
+
+## Follow-on: worktree sessions
+
+A post-Phase-6 capability built on the concurrent-session model
+([ADR 0016](../decisions/0016-coder-concurrent-sessions.md)): a session
+can opt into running in its own git worktree so several agents work the
+same project at once and each produces an independent branch / PR.
+Design and rejected alternatives:
+[ADR 0028](../decisions/0028-coder-worktree-sessions.md) and
+[`coder.md` § Worktree sessions](../coder.md#worktree-sessions). Test
+plan: [0098](../test-plans/0098-coder-worktree-sessions.md).
+
+Staged so each step is reviewable on its own:
+
+- **W.0 — git worktree primitives (landed).** `git_worktree_add` /
+  `_list` / `_remove` on `WorkspaceHost` (routed through
+  `git_command`, serialised behind the per-folder git mutex), the
+  `GitWorktree` protocol type, `fs_git_worktree_*` Tauri commands +
+  `ipc` wrappers. Unit-tested against a scratch repo on the host
+  target.
+- **W.1 — register a worktree as a bound folder (landed).** A
+  `FolderOrigin` discriminator on `WorkspaceFolder`
+  (`UserPicked` | `Worktree { parent_path, branch }`);
+  `WorkspaceRegistry::add_worktree_folder` (binds without stealing the
+  active folder); nested rendering under the parent in
+  `FolderBars.svelte` with the branch as the row label.
+- **W.2 — session ↔ worktree binding (landed).** `worktree_root` /
+  `worktree_branch` on the session header (schema → 4); the runner
+  routes `run_turn`'s `cx.folder` (and the prompt's active folder) to
+  the worktree while the session stays filed under its parent; the
+  `coder_new_worktree_session` command orchestrates create-worktree →
+  bind-folder → mint-session; a branch-glyph "new isolated session"
+  button in the coder panel.
+- **W.3 — lifecycle (landed).** `FolderOrigin` rides `session.json`
+  (`FolderSession.origin`), so `restore_session` re-binds worktree
+  folders via `add_worktree_folder` on launch and their sessions keep
+  routing to the checkout. The worktree row's `×` prunes the git
+  worktree via `coder_discard_worktree` (run against the parent repo),
+  re-confirming before `--force` when the worktree is dirty; the
+  branch is always kept and deleting the session never prunes.
+- **W.3.1 — AI branch name (next).** Replace the `moon/agent-<id>`
+  default with a cheap-model suggestion after the first turn (rename
+  the live branch, update the folder origin + session header). Pure
+  polish — the default branch name already works.
+- **W.4 — container-native isolated sessions (landed).** Isolated
+  sessions run their git / `bash` / format-on-save **in the
+  container** so builds use the container toolchain. The worktrees
+  tree is bind-mounted once at `/workspace/.worktrees` (no per-worktree
+  container recreate); worktrees are created host-side then
+  `git worktree repair`'d inside the container to hold the in-container
+  paths, and the shell resolver / `bash` cwd / `git_worktree_remove`
+  all map a worktree under that shared mount and run container-side
+  (host-side in a pure-host workspace). Repair re-runs on container
+  start/resume so metadata self-heals across restarts. Each worktree
+  is `git worktree lock`ed (unlocked before removal, preserved across
+  repair) so a stray `git gc` / `git worktree prune` can't sever it.
+  Git mechanics validated end-to-end against a live `moon-base`
+  container (create → repair → isolate → build → discard, shared-root
+  mount with no recreate, prune survival); the full IDE-in-container
+  path still wants a smoke-test.
+- **W.5 — base-branch selection (landed).** An isolated session can
+  start from an existing branch instead of a fresh one:
+  `coder_new_worktree_session` takes an optional `base_branch`, and
+  `git_worktree_add` grew a `WorktreeBranch::{New, Existing}` so
+  `Existing` checks the branch out (DWIM-creating a local tracking
+  branch from a remote, like `git switch`) without touching the
+  parent's checkout. Surfaced as a per-row "start isolated agent"
+  action in the `BranchSwitcher` (local branches + open-PR head refs).
+  Validated end-to-end against a live `moon-base` container (remote
+  branch → DWIM checkout → repair → container build, parent
+  undisturbed).
+- **W.4.1 — AI branch name (next).** Replace the `moon/agent-<id>`
+  default with a cheap-model suggestion after the first turn (rename
+  the live branch, update the folder origin + session header). Pure
+  polish — the default branch name already works.
+
+## What this phase deliberately doesn't do
+
+The full list lives in [`coder.md`'s "Out of scope"](../coder.md#out-of-scope-explicitly).
+The headline items:
+
+- **Sub-agents** — schema and design in
+  [`coder.md`](../coder.md#sub-agents-planned-not-in-initial-sub-phases),
+  no implementation. Lands when somebody surfaces the first
+  concrete use case (cheap-model research / mechanical refactor).
+- **Custom providers / OpenRouter / local OpenAI-compat** —
+  `AppState.coder.providers` slot exists, no UI.
+- **Anthropic OAuth (Claude Pro/Max)** — separate flow, lands
+  when somebody asks for subscription billing.
+- **Bucket browser** — "import a session from another machine"
+  UI. Bucket is backup-only.
+- **Plan mode / permission popups / MCP / skill packages** —
+  per ADR 0010, posture matches pi.
+
+## Open questions
+
+- **Compaction quality.** Single-pass summarisation may drop
+  context the user actually wanted. Revisit if "the agent forgot
+  the earlier discussion" reports come in. Branching / tree
+  history (pi-style `/tree`) is a possible answer; not committing
+  yet.
+- **Skill discovery walks one level deep.** `cursor`'s
+  `.cursor/skills-*/` convention has nested dirs; we'll go deeper
+  only if a real skill set we want to load needs it.
+- **`hf-xet` Tokio runtime.** The crate has its own runtime; we
+  may need to feature-flag or share Tauri's. Surface during 6.7.

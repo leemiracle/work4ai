@@ -4,7 +4,7 @@ This directory contains example WASM middleware components demonstrating how to 
 
 ## Examples Overview
 
-### [wasm-guest-auth](./wasm-guest-auth/)
+### [wasm-guest-auth](./wasm-guest-auth)
 
 API key authentication middleware that validates API keys for requests to `/api` and `/v1` paths.
 
@@ -15,7 +15,7 @@ API key authentication middleware that validates API keys for requests to `/api`
 
 **Use case:** Protect API endpoints with API key authentication.
 
-### [wasm-guest-logging](./wasm-guest-logging/)
+### [wasm-guest-logging](./wasm-guest-logging)
 
 Request tracking and status code conversion middleware.
 
@@ -26,7 +26,7 @@ Request tracking and status code conversion middleware.
 
 **Use case:** Request tracing and error status code conversion.
 
-### [wasm-guest-ratelimit](./wasm-guest-ratelimit/)
+### [wasm-guest-ratelimit](./wasm-guest-ratelimit)
 
 Rate limiting middleware with configurable limits.
 

@@ -26,7 +26,7 @@ rendered properly in your Markdown viewer.
 
 이번 가이드에서 다룰 내용은 다음과 같습니다:
 
-1. [ELI5](https://huggingface.co/datasets/eli5) 데이터 세트에서 [r/askscience](https://www.reddit.com/r/askscience/) 부분을 사용해 [DistilRoBERTa](https://huggingface.co/distilbert/distilroberta-base) 모델을 미세 조정합니다.
+1. [ELI5](https://huggingface.co/datasets/eli5) 데이터 세트에서 [r/askscience](https://www.reddit.com/r/askscience) 부분을 사용해 [DistilRoBERTa](https://huggingface.co/distilbert/distilroberta-base) 모델을 미세 조정합니다.
 2. 추론 시에 직접 미세 조정한 모델을 사용합니다.
 
 <Tip>

@@ -35,7 +35,7 @@ alt="drawing" width="600"/>
 
 - In addition to *input_ids*, [`UdopForConditionalGeneration`] also expects the input `bbox`, which are
   the bounding boxes (i.e. 2D-positions) of the input tokens. These can be obtained using an external OCR engine such
-  as Google's [Tesseract](https://github.com/tesseract-ocr/tesseract) (there's a [Python wrapper](https://pypi.org/project/pytesseract/) available). Each bounding box should be in (x0, y0, x1, y1) format, where (x0, y0) corresponds to the position of the upper left corner in the bounding box, and (x1, y1) represents the
+  as Google's [Tesseract](https://github.com/tesseract-ocr/tesseract) (there's a [Python wrapper](https://pypi.org/project/pytesseract) available). Each bounding box should be in (x0, y0, x1, y1) format, where (x0, y0) corresponds to the position of the upper left corner in the bounding box, and (x1, y1) represents the
   position of the lower right corner. Note that one first needs to normalize the bounding boxes to be on a 0-1000
   scale. To normalize, you can use the following function:
 

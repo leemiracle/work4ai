@@ -19,7 +19,7 @@ rendered properly in your Markdown viewer.
 
 ## 개요 [[overview]]
 
-Gemma2 모델은 Google의 Gemma2 팀이 작성한 [Gemma2: Open Models Based on Gemini Technology and Research](https://blog.google/technology/developers/google-gemma-2/)에서 제안되었습니다.
+Gemma2 모델은 Google의 Gemma2 팀이 작성한 [Gemma2: Open Models Based on Gemini Technology and Research](https://blog.google/technology/developers/google-gemma-2)에서 제안되었습니다.
 파라미터 크기가 각각 90억(9B)과 270억(27B)인 두 가지 Gemma2 모델이 출시되었습니다.
 
 블로그 게시물의 초록은 다음과 같습니다:

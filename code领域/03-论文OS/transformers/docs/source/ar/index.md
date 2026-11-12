@@ -1,6 +1,6 @@
 # 🤗 Transformers: لمحة عامة
 
-أحدث ما في مجال التعلم الآلي لـ [PyTorch](https://pytorch.org/) و [TensorFlow](https://www.tensorflow.org/) و [JAX](https://jax.readthedocs.io/en/latest/)
+أحدث ما في مجال التعلم الآلي لـ [PyTorch](https://pytorch.org) و [TensorFlow](https://www.tensorflow.org) و [JAX](https://jax.readthedocs.io/en/latest)
 
 توفر 🤗 Transformers واجهات برمجة التطبيقات (APIs) والأدوات اللازمة لتنزيل وتدريب أحدث النماذج المسبقة التدريب بسهولة. ويمكن أن يقلل استخدام النماذج المسبقة التدريب من تكاليف الحوسبة والحد من الأثر البيئي، وتوفّر الوقت والموارد اللازمين لتدريب نموذج من الصفر. وتدعم هذه النماذج المهام الشائعة في مجالات مختلفة، مثل:
 
@@ -12,7 +12,7 @@
 
 تدعم 🤗 Transformers التوافق بين أطر العمل المختلفة مثل PyTorch و TensorFlow و JAX. ويوفر ذلك المرونة لاستخدام إطار عمل مختلف في كل مرحلة من مراحل حياة النموذج؛ قم بتدريب نموذج في ثلاث خطوط من التعليمات البرمجية في إطار واحد، وقم بتحميله للاستدلال في إطار آخر. ويمكن أيضًا تصدير النماذج إلى صيغ مثل ONNX و TorchScript للنشر في بيئات الإنتاج.
 
-انضم إلى المجتمع المتنامي على [Hub](https://huggingface.co/models) أو [المنتدى](https://discuss.huggingface.co/) أو [Discord](https://discord.com/invite/JfAtkvEtRb) اليوم!
+انضم إلى المجتمع المتنامي على [Hub](https://huggingface.co/models) أو [المنتدى](https://discuss.huggingface.co) أو [Discord](https://discord.com/invite/JfAtkvEtRb) اليوم!
 
 ## إذا كنت تبحث عن دعم مخصص من فريق Hugging Face
 

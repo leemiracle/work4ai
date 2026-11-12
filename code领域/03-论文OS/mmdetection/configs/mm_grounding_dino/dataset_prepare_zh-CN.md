@@ -56,7 +56,7 @@ mmdetection
 
 ### 2 COCO 2017
 
-上述配置在训练过程中会评估 COCO 2017 数据集的性能，因此需要准备 COCO 2017 数据集。你可以从 [COCO](https://cocodataset.org/) 官网下载或者从 [opendatalab](https://opendatalab.com/OpenDataLab/COCO_2017) 下载
+上述配置在训练过程中会评估 COCO 2017 数据集的性能，因此需要准备 COCO 2017 数据集。你可以从 [COCO](https://cocodataset.org) 官网下载或者从 [opendatalab](https://opendatalab.com/OpenDataLab/COCO_2017) 下载
 
 下载并解压后，将其放置或者软链接到 `data/coco` 目录下，目录结构如下：
 
@@ -95,7 +95,7 @@ mmdetection
 │   │   │   ├── ...
 ```
 
-然后下载 [Flickr30k images](http://shannon.cs.illinois.edu/DenotationGraph/) 图片。这个数据下载需要先申请，再获得下载链接后才可以下载。下载并解压后，将其放置或者软链接到 `data/flickr30k_entities` 目录下，目录结构如下：
+然后下载 [Flickr30k images](http://shannon.cs.illinois.edu/DenotationGraph) 图片。这个数据下载需要先申请，再获得下载链接后才可以下载。下载并解压后，将其放置或者软链接到 `data/flickr30k_entities` 目录下，目录结构如下：
 
 ```text
 mmdetection
@@ -1067,7 +1067,7 @@ mmdetection
 
 ### 6 Cityscapes
 
-Cityscapes 是一个城市街景数据集，你可以从 [这里](https://www.cityscapes-dataset.com/) 或者 opendatalab 中下载, 然后解压到 `data/cityscapes/` 文件夹中。完整的数据集结构如下：
+Cityscapes 是一个城市街景数据集，你可以从 [这里](https://www.cityscapes-dataset.com) 或者 opendatalab 中下载, 然后解压到 `data/cityscapes/` 文件夹中。完整的数据集结构如下：
 
 ```text
 mmdetection

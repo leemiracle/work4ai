@@ -29,7 +29,7 @@ pip install -r requirements.txt
 ```
 
 3. Ensure PgVector Database is running:
-The app expects PgVector to be running on [localhost:5532](http://localhost:5532/). Adjust the configuration in the code if your setup is different.
+The app expects PgVector to be running on [localhost:5532](http://localhost:5532). Adjust the configuration in the code if your setup is different.
 
 ```bash
 docker run -d \

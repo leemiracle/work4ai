@@ -1,8 +1,8 @@
 # 金融学 · Overview
 
 > **位置**：`03-social-sciences/finance/`  
-> **关联**：[`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（哲学锚点）+ [`07-worldly-power/money/`](../../07-worldly-power/money/) + [`07-worldly-power/capital/`](../../07-worldly-power/capital/)  
-> **哲学根源**：[`00-philosophy/epistemology`](../../00-philosophy/epistemology.md)（不确定性、可预测性）+ [`00-philosophy/ethics/`](../../00-philosophy/ethics/)（价值、代际正义）  
+> **关联**：[`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（哲学锚点）+ [`07-worldly-power/money/`](../../07-worldly-power/money) + [`07-worldly-power/capital/`](../../07-worldly-power/capital)  
+> **哲学根源**：[`00-philosophy/epistemology`](../../00-philosophy/epistemology.md)（不确定性、可预测性）+ [`00-philosophy/ethics/`](../../00-philosophy/ethics)（价值、代际正义）  
 > **大问题**：[Q10 金钱](../../questions/big-questions.md) + [Q14 概率](../../questions/big-questions.md) + [Q15 决策](../../questions/big-questions.md) + 新增金融大问题
 
 ---

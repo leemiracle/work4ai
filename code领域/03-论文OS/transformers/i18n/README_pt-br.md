@@ -77,7 +77,7 @@ Os modelos Transformer também podem executar tarefas em diversas modalidades co
 
 A biblioteca 🤗 Transformers oferece APIs para baixar e usar rapidamente esses modelos pré-treinados em um texto específico, ajustá-los em seus próprios conjuntos de dados e, em seguida, compartilhá-los com a comunidade em nosso [model hub](https://huggingface.co/models). Ao mesmo tempo, cada módulo Python que define uma arquitetura é totalmente independente e pode ser modificado para permitir experimentos de pesquisa rápidos.
 
-A biblioteca 🤗 Transformers é respaldada pelas três bibliotecas de aprendizado profundo mais populares — [Jax](https://jax.readthedocs.io/en/latest/), [PyTorch](https://pytorch.org/) e [TensorFlow](https://www.tensorflow.org/) — com uma integração perfeita entre elas. É simples treinar seus modelos com uma delas antes de carregá-los para inferência com a outra
+A biblioteca 🤗 Transformers é respaldada pelas três bibliotecas de aprendizado profundo mais populares — [Jax](https://jax.readthedocs.io/en/latest), [PyTorch](https://pytorch.org) e [TensorFlow](https://www.tensorflow.org) — com uma integração perfeita entre elas. É simples treinar seus modelos com uma delas antes de carregá-los para inferência com a outra
 
 ## Demonstração Online
 
@@ -257,12 +257,12 @@ O modelo em si é um [Pytorch `nn.Module`](https://pytorch.org/docs/stable/nn.ht
 
 Este repositório é testado no Python 3.9+, Flax 0.4.1+, PyTorch 2.1+ e TensorFlow 2.6+.
 
-Você deve instalar o 🤗 Transformers em um [ambiente virtual](https://docs.python.org/3/library/venv.html). Se você não está familiarizado com ambientes virtuais em Python, confira o [guia do usuário](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
+Você deve instalar o 🤗 Transformers em um [ambiente virtual](https://docs.python.org/3/library/venv.html). Se você não está familiarizado com ambientes virtuais em Python, confira o [guia do usuário](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments).
 
 Primeiro, crie um ambiente virtual com a versão do Python que você vai usar e ative-o.
 
 Em seguida, você precisará instalar pelo menos um dos back-ends Flax, PyTorch ou TensorFlow.
-Consulte a [página de instalação do TensorFlow](https://www.tensorflow.org/install/), a [página de instalação do PyTorch](https://pytorch.org/get-started/locally/#start-locally) e/ou [Flax](https://github.com/google/flax#quick-install) e [Jax](https://github.com/google/jax#installation) páginas de instalação para obter o comando de instalação específico para a sua plataforma.
+Consulte a [página de instalação do TensorFlow](https://www.tensorflow.org/install), a [página de instalação do PyTorch](https://pytorch.org/get-started/locally/#start-locally) e/ou [Flax](https://github.com/google/flax#quick-install) e [Jax](https://github.com/google/jax#installation) páginas de instalação para obter o comando de instalação específico para a sua plataforma.
 
 Quando um desses back-ends estiver instalado, o 🤗 Transformers pode ser instalado usando pip da seguinte forma:
 
@@ -304,7 +304,7 @@ Essas implementações foram testadas em vários conjuntos de dados (veja os scr
 
 | Seção | Descrição |
 |-|-|
-| [Documentação](https://huggingface.co/docs/transformers/) | Documentação completa da API e tutoriais |
+| [Documentação](https://huggingface.co/docs/transformers) | Documentação completa da API e tutoriais |
 | [Resumo de Tarefas](https://huggingface.co/docs/transformers/task_summary) | Tarefas suportadas pelo 🤗 Transformers |
 | [Tutorial de Pré-processamento](https://huggingface.co/docs/transformers/preprocessing) | Usando a classe `Tokenizer` para preparar dados para os modelos |
 | [Treinamento e Ajuste Fino](https://huggingface.co/docs/transformers/training) | Usando os modelos fornecidos pelo 🤗 Transformers em um loop de treinamento PyTorch/TensorFlow e a API `Trainer` |
@@ -313,7 +313,7 @@ Essas implementações foram testadas em vários conjuntos de dados (veja os scr
 
 ## Citação
 
-Agora temos um [artigo](https://www.aclweb.org/anthology/2020.emnlp-demos.6/) que você pode citar para a biblioteca 🤗 Transformers:
+Agora temos um [artigo](https://www.aclweb.org/anthology/2020.emnlp-demos.6) que você pode citar para a biblioteca 🤗 Transformers:
 ```bibtex
 @inproceedings{wolf-etal-2020-transformers,
     title = "Transformers: State-of-the-Art Natural Language Processing",

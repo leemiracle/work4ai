@@ -243,7 +243,7 @@ Infine specifica come `device` da usare una GPU se ne hai una. Altrimenti, l'add
 
 <Tip>
 
-Ottieni l'accesso gratuito a una GPU sul cloud se non ne possiedi una usando un notebook sul web come [Colaboratory](https://colab.research.google.com/) o [SageMaker StudioLab](https://studiolab.sagemaker.aws/).
+Ottieni l'accesso gratuito a una GPU sul cloud se non ne possiedi una usando un notebook sul web come [Colaboratory](https://colab.research.google.com) o [SageMaker StudioLab](https://studiolab.sagemaker.aws).
 
 </Tip>
 
@@ -251,7 +251,7 @@ Ottimo, adesso possiamo addestrare! 🥳
 
 ### Training loop
 
-Per tenere traccia dei tuoi progressi durante l'addestramento, usa la libreria [tqdm](https://tqdm.github.io/) per aggiungere una progress bar sopra il numero dei passi di addestramento:
+Per tenere traccia dei tuoi progressi durante l'addestramento, usa la libreria [tqdm](https://tqdm.github.io) per aggiungere una progress bar sopra il numero dei passi di addestramento:
 
 ```py
 >>> from tqdm.auto import tqdm

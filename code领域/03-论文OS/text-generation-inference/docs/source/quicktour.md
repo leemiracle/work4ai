@@ -1,6 +1,6 @@
 # Quick Tour
 
-The easiest way of getting started is using the official Docker container. Install Docker following [their installation instructions](https://docs.docker.com/get-docker/).
+The easiest way of getting started is using the official Docker container. Install Docker following [their installation instructions](https://docs.docker.com/get-docker).
 
 ## Launching TGI
 

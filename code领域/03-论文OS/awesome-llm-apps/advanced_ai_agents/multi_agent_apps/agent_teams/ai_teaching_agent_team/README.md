@@ -47,12 +47,12 @@ A Streamlit application that brings together a team of specialized AI teaching a
 ## Configuration - IMPORTANT STEP
 
 1. Get your OpenAI API Key
-- Create an account on [OpenAI Platform](https://platform.openai.com/)
+- Create an account on [OpenAI Platform](https://platform.openai.com)
 - Navigate to API Keys section
 - Create a new API key
 
 2. Get your Composio API Key
-- Create an account on [Composio Platform](https://composio.ai/)
+- Create an account on [Composio Platform](https://composio.ai)
 - **IMPORTANT** - For you to use the app, you need to make new connection ID with google docs and composio.Follow the below two steps to do so:  
   - composio add googledocs (IN THE TERMINAL)
   - Create a new connection 
@@ -60,7 +60,7 @@ A Streamlit application that brings together a team of specialized AI teaching a
   - Select Google Account and Done.
   - On the composio account website, go to apps, select google docs tool, and [click create integration](https://app.composio.dev/app/googledocs) (violet button) and click Try connecting default’s googldocs button and we are done. 
 
-3. Sign up and get the [SerpAPI Key](https://serpapi.com/)
+3. Sign up and get the [SerpAPI Key](https://serpapi.com)
 
 ## How to Use? 
 

@@ -45,9 +45,9 @@ neo-os 的产物分两类，**只有"通用 AI 知识"才回流** work4ai：
 | [`02-research/rl/02a-rl-formal-proof.md`](code领域/07-软件可解释性/neo-os/02-research/rl/02a-rl-formal-proof.md) | RL + 形式证明（AlphaProof 谱系）| 讲透RL 仅 00-03 基础 | 🔴 | [`讲透RL/04-RL与形式证明.md`](./讲透RL/04-RL与形式证明.md) |
 | [`02-research/rl/05-paper-limit-of-rlvr.md`](code领域/07-软件可解释性/neo-os/02-research/rl/05-paper-limit-of-rlvr.md) | **RLVR 的极限**（pass@k 反转，NeurIPS 2025 Oral）| ❌ 完全无 | 🔴 | [`讲透RL/05-RLVR的极限.md`](./讲透RL/05-RLVR的极限.md) |
 | [`02-research/rl/02c-rl-systems.md`](code领域/07-软件可解释性/neo-os/02-research/rl/02c-rl-systems.md) | RL + 系统软件（MLGO/AlphaEvolve/Cold-RL）| ❌ 完全无 | 🟡 | [`讲透RL/06-RL与系统软件.md`](./讲透RL/06-RL与系统软件.md) |
-| [`02-research/deep/R2-lean4-os-verification-sota.md`](code领域/07-软件可解释性/neo-os/02-research/deep/R2-lean4-os-verification-sota.md) | **Lean4 形式化 OS 验证 SOTA**（seL4/Verus/Atmosphere/seLe4n/Veil）| ❌ **完全无新主题** | 🔴 | [`讲透形式化验证/00-为什么形式化+Lean4SOTA.md`](./讲透形式化验证/00-为什么形式化+Lean4SOTA.md) |
-| [`02-research/deep/R5-neuro-symbolic-loop-sota.md`](code领域/07-软件可解释性/neo-os/02-research/deep/R5-neuro-symbolic-loop-sota.md) | **神经符号闭环 SOTA**（AlphaProof/Delta-Prover/KVerus/VERISPECGEN）| ❌ **完全无新主题** | 🔴 | [`讲透神经符号/00-神经符号循环为什么是新范式.md`](./讲透神经符号/00-神经符号循环为什么是新范式.md) |
-| [`02-research/deep/LEAN4_REWARD_BENCH.md`](code领域/07-软件可解释性/neo-os/02-research/deep/LEAN4_REWARD_BENCH.md) | Lean4 作为 RL reward verifier 的速度可行性（实测 sub-second）| ❌ 无 | 🟡 | [`讲透形式化验证/01-Lean4作为RL奖励验证器.md`](./讲透形式化验证/01-Lean4作为RL奖励验证器.md) |
+| [`02-research/deep/R2-lean4-os-verification-sota.md`](code领域/07-软件可解释性/neo-os/02-research/deep/R2-lean4-os-verification-sota.md) | **Lean4 形式化 OS 验证 SOTA**（seL4/Verus/Atmosphere/seLe4n/Veil）| ❌ **完全无新主题** | 🔴 | [`讲透宇宙/01-学/讲透形式化验证//00-为什么形式化+Lean4SOTA.md`](讲透宇宙/01-学/讲透形式化验证/00-为什么形式化+Lean4SOTA.md) |
+| [`02-research/deep/R5-neuro-symbolic-loop-sota.md`](code领域/07-软件可解释性/neo-os/02-research/deep/R5-neuro-symbolic-loop-sota.md) | **神经符号闭环 SOTA**（AlphaProof/Delta-Prover/KVerus/VERISPECGEN）| ❌ **完全无新主题** | 🔴 | [`讲透宇宙/01-学/讲透神经符号//00-神经符号循环为什么是新范式.md`](讲透宇宙/01-学/讲透神经符号/00-神经符号循环为什么是新范式.md) |
+| [`02-research/deep/LEAN4_REWARD_BENCH.md`](code领域/07-软件可解释性/neo-os/02-research/deep/LEAN4_REWARD_BENCH.md) | Lean4 作为 RL reward verifier 的速度可行性（实测 sub-second）| ❌ 无 | 🟡 | [`讲透宇宙/01-学/讲透形式化验证//01-Lean4作为RL奖励验证器.md`](讲透宇宙/01-学/讲透形式化验证/01-Lean4作为RL奖励验证器.md) |
 | [`02-research/deep/R4-ai-software-explainability-landscape.md`](code领域/07-软件可解释性/neo-os/02-research/deep/R4-ai-software-explainability-landscape.md) | AI 驱动的软件可解释性竞品全景（4类竞品 + 解释性幻觉71.2%）| 讲透可解释性 仅模型可解释性（00-01）| 🟡 | [`讲透可解释性/S1-AI驱动的软件可解释性.md`](./讲透可解释性/S1-AI驱动的软件可解释性.md) |
 
 ### 已评估结案（不回流，附理由）
@@ -84,12 +84,12 @@ neo-os 的概念在 work4ai 里有对应讲透，便于交叉学习（对照 neo
 |------------|-------------|------|
 | L3 英文接口（三层讲解 × 17 视角 × 费曼门）| 本项目根目录方法论 + [`费曼学习法`](./费曼学习法) | neo-os L3 明确"继承 work4ai"（[§七](#七neo-os-给-work4ai-的原创回馈trace-native-升级) 的升级）|
 | L2 world model（commit 蒸馏 7B）| [`讲透基础模型`](./讲透基础模型) + [`讲透复用权重`](./讲透复用权重) + [`讲透微调`](./讲透微调) | 蒸馏 + 持续学习 + 每域 adapter |
-| L2.5 Lean4 形式化规则 | [`讲透形式化验证`](./讲透形式化验证)（本轮新建）+ [`讲透符号主义`](./讲透符号主义) + [`讲透因果推断`](./讲透因果推断) | Lean4 + 形式方法 + 因果 |
-| L1 事件本体（eBPF）| [`讲透分布式AI系统`](./讲透分布式AI系统) + [`讲透GPU与系统级`](./讲透GPU与系统级) + [`讲透KV Cache`](讲透KV Cache) | trace 流式处理 + 增量计算 |
-| L0 硬件（Intel PT）| [`讲透GPU与系统级`](./讲透GPU与系统级) | FlashAttention / 量化 / CUDA |
+| L2.5 Lean4 形式化规则 | [`讲透形式化验证`](讲透宇宙/01-学/讲透形式化验证)（本轮新建）+ [`讲透符号主义`](讲透宇宙/01-学/讲透符号主义) + [`讲透因果推断`](./讲透因果推断) | Lean4 + 形式方法 + 因果 |
+| L1 事件本体（eBPF）| [`讲透分布式AI系统`](讲透宇宙/01-学/讲透分布式AI系统) + [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级) + [`讲透KV Cache`](讲透KV Cache) | trace 流式处理 + 增量计算 |
+| L0 硬件（Intel PT）| [`讲透GPU与系统级`](讲透宇宙/01-学/讲透GPU与系统级) | FlashAttention / 量化 / CUDA |
 | C1 commit 蒸馏（root_cause 抽取）| [`讲透RL/06`](./讲透RL/06-RL与系统软件.md)（active learning）| 数据采样的 RL 视角 |
 | RL 用于规则/证明 | [`讲透RL/04`](./讲透RL/04-RL与形式证明.md) + [`讲透RL/05`](./讲透RL/05-RLVR的极限.md) | RL 能力边界 |
-| 神经符号闭环（AlphaProof 式）| [`讲透神经符号`](./讲透神经符号)（本轮新建）| LLM + Lean4 自我博弈 |
+| 神经符号闭环（AlphaProof 式）| [`讲透神经符号`](讲透宇宙/01-学/讲透神经符号)（本轮新建）| LLM + Lean4 自我博弈 |
 | GRPO（DeepSeek-R1）| [`讲透RL/03-RLHF-DPO-GRPO`](./讲透RL/03-RLHF-DPO-GRPO.md) | 已有，是 04/05 的前置 |
 
 ---

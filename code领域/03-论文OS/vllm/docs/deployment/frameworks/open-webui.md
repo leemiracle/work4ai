@@ -7,7 +7,7 @@ with built-in RAG capabilities, making it a powerful AI deployment solution.
 
 To get started with Open WebUI using vLLM, follow these steps:
 
-1. Install the [Docker](https://docs.docker.com/engine/install/).
+1. Install the [Docker](https://docs.docker.com/engine/install).
 
 2. Start the vLLM server with a supported chat completion model:
 

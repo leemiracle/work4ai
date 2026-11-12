@@ -28,7 +28,7 @@ cd awesome-llm-apps/rag_tutorials/local_rag_agent
 pip install -r requirements.txt
 ```
 
-3. Install and start [Qdrant](https://qdrant.tech/) vector database locally
+3. Install and start [Qdrant](https://qdrant.tech) vector database locally
 
 ```bash
 docker pull qdrant/qdrant

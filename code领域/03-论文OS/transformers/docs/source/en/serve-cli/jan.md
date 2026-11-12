@@ -15,7 +15,7 @@ rendered properly in your Markdown viewer.
 
 # Jan
 
-[Jan](https://jan.ai/) is an open-source ChatGPT alternative. It supports `transformers serve` natively without extra tunneling.
+[Jan](https://jan.ai) is an open-source ChatGPT alternative. It supports `transformers serve` natively without extra tunneling.
 
 Go to **Settings > Model Providers**.
 

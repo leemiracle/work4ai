@@ -1391,7 +1391,7 @@ In this release, we made lots of major refactoring and modifications.
 
 2. __Higher performance__. We change some default hyperparameters with no additional cost, which leads to a gain of performance for most models. Please refer to [compatibility](compatibility.md#training-hyperparameters) for details.
 
-3. __More documentation and tutorials__. We add a bunch of documentation and tutorials to help users get started more smoothly. Read it [here](https://mmdetection.readthedocs.io/en/latest/).
+3. __More documentation and tutorials__. We add a bunch of documentation and tutorials to help users get started more smoothly. Read it [here](https://mmdetection.readthedocs.io/en/latest).
 
 4. __Support PyTorch 1.5__. The support for 1.1 and 1.2 is dropped, and we switch to some new APIs.
 

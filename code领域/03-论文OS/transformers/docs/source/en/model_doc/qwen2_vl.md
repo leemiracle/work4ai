@@ -25,7 +25,7 @@ rendered properly in your Markdown viewer.
 
 ## Overview
 
-The [Qwen2-VL](https://huggingface.co/papers/2409.12191) ([blog post](https://qwenlm.github.io/blog/qwen2-vl/)) model is a major update to [Qwen-VL](https://huggingface.co/papers/2308.12966) from the Qwen team at Alibaba Research.
+The [Qwen2-VL](https://huggingface.co/papers/2409.12191) ([blog post](https://qwenlm.github.io/blog/qwen2-vl)) model is a major update to [Qwen-VL](https://huggingface.co/papers/2308.12966) from the Qwen team at Alibaba Research.
 
 The abstract from the blog is the following:
 

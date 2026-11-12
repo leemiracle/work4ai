@@ -1,13 +1,13 @@
 # MIT 18.701 — Algebra I
 
 > **学校**：MIT | **学期**：Fall | **学分**：12 units
-> **一手来源**：[catalog.mit.edu/subjects/18/#18.701](https://catalog.mit.edu/subjects/18/) + [OCW 18.701 Prof. Artin](https://ocw.mit.edu/courses/18-701-algebra-i-fall-2010/)
+> **一手来源**：[catalog.mit.edu/subjects/18/#18.701](https://catalog.mit.edu/subjects/18) + [OCW 18.701 Prof. Artin](https://ocw.mit.edu/courses/18-701-algebra-i-fall-2010)
 
 ## 课程信息
 - **编号**：18.701（本科纯数学序列）
 - **先修**：18.100 实分析（必须）+ 18.700 线代（推荐）
 - **教材**：**Artin, *Algebra* (2nd ed, Pearson, 2017)** ★
-- **视频**：[OCW 18.701-18.702 by Artin (1995, 经典)](https://ocw.mit.edu/courses/18-701-algebra-i-fall-2010/video_galleries/video-lectures/)
+- **视频**：[OCW 18.701-18.702 by Artin (1995, 经典)](https://ocw.mit.edu/courses/18-701-algebra-i-fall-2010/video_galleries/video-lectures)
 - **特色**：**Michael Artin 亲自为这门课写的教材**
 
 ## 教学大纲
@@ -30,7 +30,7 @@
 
 ## 参考资源
 - **教材**：Artin, *Algebra* (2nd ed, 2017) ISBN 978-0134689609
-- **视频**：[OCW 18.701 Fall 2010](https://ocw.mit.edu/courses/18-701-algebra-i-fall-2010/)
+- **视频**：[OCW 18.701 Fall 2010](https://ocw.mit.edu/courses/18-701-algebra-i-fall-2010)
 - **替代教材**：Dummit & Foote, *Abstract Algebra*（更全但更难读）
 - **替代教材**（更现代）：Vakil, *The Rising Sea*（FOAG，抽象代数 → 代数几何）
 

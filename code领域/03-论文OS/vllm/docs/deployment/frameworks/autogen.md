@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-Set up the vLLM and [AutoGen](https://microsoft.github.io/autogen/0.2/docs/installation/) environment:
+Set up the vLLM and [AutoGen](https://microsoft.github.io/autogen/0.2/docs/installation) environment:
 
 ```bash
 pip install vllm
@@ -74,6 +74,6 @@ pip install -U "autogen-agentchat" "autogen-ext[openai]"
 
 For details, see the tutorial:
 
-- [Using vLLM in AutoGen](https://microsoft.github.io/autogen/0.2/docs/topics/non-openai-models/local-vllm/)
+- [Using vLLM in AutoGen](https://microsoft.github.io/autogen/0.2/docs/topics/non-openai-models/local-vllm)
 
 - [OpenAI-compatible API examples](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html#autogen_ext.models.openai.OpenAIChatCompletionClient)

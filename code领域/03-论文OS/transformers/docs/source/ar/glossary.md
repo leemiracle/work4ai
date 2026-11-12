@@ -270,7 +270,7 @@
 
 ### توليد اللغة الطبيعية Natural language generation (NLG)
 
-جميع المهام المتعلقة بتوليد النص (على سبيل المثال، [اكتب باستخدام المحولات](https://transformer.huggingface.co/)، والترجمة).
+جميع المهام المتعلقة بتوليد النص (على سبيل المثال، [اكتب باستخدام المحولات](https://transformer.huggingface.co)، والترجمة).
 
 ### معالجة اللغة الطبيعية Natural language processing (NLP)
 

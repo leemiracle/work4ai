@@ -232,7 +232,7 @@ torch.cuda.empty_cache()
 
 <Tip>
 
-احصل على وصول مجاني إلى وحدة معالجة رسومات سحابية إذا لم يكن لديك واحدة مع دفتر ملاحظات مستضاف مثل [Colaboratory](https://colab.research.google.com/) أو [SageMaker StudioLab](https://studiolab.sagemaker.aws/).
+احصل على وصول مجاني إلى وحدة معالجة رسومات سحابية إذا لم يكن لديك واحدة مع دفتر ملاحظات مستضاف مثل [Colaboratory](https://colab.research.google.com) أو [SageMaker StudioLab](https://studiolab.sagemaker.aws).
 
 </Tip>
 
@@ -240,7 +240,7 @@ torch.cuda.empty_cache()
 
 ### حلقة التدريب
 
-لمراقبة تقدم التدريب الخاص بك، استخدم مكتبة [tqdm](https://tqdm.github.io/) لإضافة شريط تقدم فوق عدد خطوات التدريب:
+لمراقبة تقدم التدريب الخاص بك، استخدم مكتبة [tqdm](https://tqdm.github.io) لإضافة شريط تقدم فوق عدد خطوات التدريب:
 
 ```py
 >>> from tqdm.auto import tqdm

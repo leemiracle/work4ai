@@ -49,7 +49,7 @@ pip install bitsandbytes>=0.31.5
 pip install accelerate>=0.12.0
 pip install transformers>=4.23.0
 ```
-For the latest pytorch instructions please see [this](https://pytorch.org/get-started/locally/)
+For the latest pytorch instructions please see [this](https://pytorch.org/get-started/locally)
 
 and the snippet above should work.
 

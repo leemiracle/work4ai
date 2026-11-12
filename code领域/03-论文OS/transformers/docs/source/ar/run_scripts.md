@@ -2,11 +2,11 @@
 
 بالإضافة إلى دفاتر الملاحظات [notebooks](./notebooks) الخاصة بـ 🤗 Transformers، هناك أيضًا نصوص برمجية توضيحية تُظهر كيفية تدريب نموذج لمهمة باستخدام [PyTorch](https://github.com/huggingface/transformers/tree/main/examples/pytorch) أو [TensorFlow](https://github.com/huggingface/transformers/tree/main/examples/tensorflow) أو [JAX/Flax](https://github.com/huggingface/transformers/tree/main/examples/flax).
 
-كما ستجد النصوص البرمجية التي استخدمناها في [مشاريع الأبحاث](https://github.com/huggingface/transformers-research-projects/) و [الأمثلة القديمة](https://github.com/huggingface/transformers/tree/main/examples/legacy) والتي ساهم بها المجتمع بشكل أساسي. هذه النصوص البرمجية غير مدعومة بشكل نشط وقد تتطلب إصدارًا محددًا من مكتبة 🤗 Transformers والذي من المحتمل أن يكون غير متوافق مع الإصدار الأحدث من المكتبة.
+كما ستجد النصوص البرمجية التي استخدمناها في [مشاريع الأبحاث](https://github.com/huggingface/transformers-research-projects) و [الأمثلة القديمة](https://github.com/huggingface/transformers/tree/main/examples/legacy) والتي ساهم بها المجتمع بشكل أساسي. هذه النصوص البرمجية غير مدعومة بشكل نشط وقد تتطلب إصدارًا محددًا من مكتبة 🤗 Transformers والذي من المحتمل أن يكون غير متوافق مع الإصدار الأحدث من المكتبة.
 
 لا يُتوقع أن تعمل النصوص البرمجية التوضيحية بشكل مباشر على كل مشكلة، وقد تحتاج إلى تكييف النص البرمجي مع المشكلة التي تحاول حلها. ولمساعدتك في ذلك، تعرض معظم النصوص البرمجية كيفية معالجة البيانات قبل التدريب بشكل كامل، مما يتيح لك تحريرها حسب الحاجة لحالتك الاستخدام.
 
-بالنسبة لأي ميزة ترغب في تنفيذها في نص برمجي توضيحي، يرجى مناقشتها في [المنتدى](https://discuss.huggingface.co/) أو في [قضية](https://github.com/huggingface/transformers/issues) قبل إرسال طلب سحب. وفي حين أننا نرحب بإصلاح الأخطاء، فمن غير المرجح أن نقوم بدمج طلب سحب الذي يضيف المزيد من الوظائف على حساب قابلية القراءة.
+بالنسبة لأي ميزة ترغب في تنفيذها في نص برمجي توضيحي، يرجى مناقشتها في [المنتدى](https://discuss.huggingface.co) أو في [قضية](https://github.com/huggingface/transformers/issues) قبل إرسال طلب سحب. وفي حين أننا نرحب بإصلاح الأخطاء، فمن غير المرجح أن نقوم بدمج طلب سحب الذي يضيف المزيد من الوظائف على حساب قابلية القراءة.
 
 سيوضح هذا الدليل كيفية تشغيل نص برمجي توضيحي للتدريب على التلخيص في [PyTorch](https://github.com/huggingface/transformers/tree/main/examples/pytorch/summarization) و [TensorFlow](https://github.com/huggingface/transformers/tree/main/examples/tensorflow/summarization). يُتوقع أن تعمل جميع الأمثلة مع كلا الإطارين ما لم يُنص على خلاف ذلك.
 

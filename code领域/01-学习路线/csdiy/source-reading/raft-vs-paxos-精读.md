@@ -162,4 +162,4 @@ def append_entries(self, msg):
 
 ---
 
-*配套：[tinyraft](../projects/tinyraft/) | [mit6.824 lab](../labs/mit6.824-raft-从零跑起来.md)*
+*配套：[tinyraft](../projects/tinyraft) | [mit6.824 lab](../labs/mit6.824-raft-从零跑起来.md)*

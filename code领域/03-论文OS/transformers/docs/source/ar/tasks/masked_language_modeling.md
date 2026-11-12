@@ -21,7 +21,7 @@ rendered properly in your Markdown viewer.
 
 سيوضح لك هذا الدليل كيفية:
 
-1. تكييف [DistilRoBERTa](https://huggingface.co/distilbert/distilroberta-base) على مجموعة فرعية [r/askscience](https://www.reddit.com/r/askscience/) من مجموعة بيانات [ELI5](https://huggingface.co/datasets/eli5).
+1. تكييف [DistilRoBERTa](https://huggingface.co/distilbert/distilroberta-base) على مجموعة فرعية [r/askscience](https://www.reddit.com/r/askscience) من مجموعة بيانات [ELI5](https://huggingface.co/datasets/eli5).
 2. استخدام نموذج المدرب الخاص بك للاستدلال.
 
 <Tip>

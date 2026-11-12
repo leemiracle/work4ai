@@ -17,11 +17,11 @@
 
 | 内容 | 去向 |
 |---|---|
-| `llvm_experiments/`（LEARNING_PATH/QUICK_START/C 实验/脚本，工作树 37 文件） | [`llvm_experiments/`](./llvm_experiments/) |
-| 根目录 IT 学习与项目管理平台（backend/cli/frontend/knowledge-base/python-learning-project/docs + 10 个架构 md，154 文件） | [`IT学习平台/`](./IT学习平台/) |
+| `llvm_experiments/`（LEARNING_PATH/QUICK_START/C 实验/脚本，工作树 37 文件） | [`llvm_experiments/`](./llvm_experiments) |
+| 根目录 IT 学习与项目管理平台（backend/cli/frontend/knowledge-base/python-learning-project/docs + 10 个架构 md，154 文件） | [`IT学习平台/`](./IT学习平台) |
 | `llvm/include/llvm/IR/Use.h` 与 `Value.h` 的本地改动（751 行 diff） | [`patches/Use-Value头文件改动.patch`](./patches/Use-Value头文件改动.patch)（重克隆后 `git apply` 恢复） |
 | 根目录 `planning-methodology.md`（曾在 index、工作树已删，1325 行） | [`planning-methodology.md`](./planning-methodology.md) |
-| `LLVM项目研究/`（Expert_01..13 专家笔记 45 md，原在 C:\workspace 独立目录） | [`LLVM项目研究/`](./LLVM项目研究/) |
+| `LLVM项目研究/`（Expert_01..13 专家笔记 45 md，原在 C:\workspace 独立目录） | [`LLVM项目研究/`](./LLVM项目研究) |
 
 ## 未迁内容说明
 

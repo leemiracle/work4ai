@@ -14,7 +14,7 @@ The Kvasir-SEG dataset is based on the previous Kvasir dataset, which is the fir
 
 | Dataset Name                                           | Anatomical Region | Task Type    | Modality  | Num. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release Date | License                                                   |
 | ------------------------------------------------------ | ----------------- | ------------ | --------- | ------------ | --------------------- | ---------------------- | ------------ | --------------------------------------------------------- |
-| [kvasir-seg](https://tianchi.aliyun.com/dataset/84385) | abdomen           | segmentation | endoscopy | 2            | 1000/-/-              | yes/-/-                | 2020         | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| [kvasir-seg](https://tianchi.aliyun.com/dataset/84385) | abdomen           | segmentation | endoscopy | 2            | 1000/-/-              | yes/-/-                | 2020         | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

@@ -18,7 +18,7 @@ conda create --name openmmlab python=3.8 -y
 conda activate openmmlab
 ```
 
-**Step 2.** 参考 [official instructions](https://pytorch.org/get-started/locally/) 安装 PyTorch
+**Step 2.** 参考 [official instructions](https://pytorch.org/get-started/locally) 安装 PyTorch
 
 在 GPU 平台上：
 
@@ -148,7 +148,7 @@ MMSegmentation 可以在仅有 CPU 的版本上运行。在 CPU 模式，您可�
 
 #### 在 Google Colab 上安装
 
-[Google Colab](https://research.google.com/) 通常已经安装了 PyTorch，因此我们仅需要通过以下命令安装 MMCV 和 MMSegmentation。
+[Google Colab](https://research.google.com) 通常已经安装了 PyTorch，因此我们仅需要通过以下命令安装 MMCV 和 MMSegmentation。
 
 **步骤 1.** 使用 [MIM](https://github.com/open-mmlab/mim) 安装 [MMCV](https://github.com/open-mmlab/mmcv)
 
@@ -180,7 +180,7 @@ print(mmseg.__version__)
 
 ### 通过 Docker 使用 MMSegmentation
 
-我们提供了一个 [Dockerfile](https://github.com/open-mmlab/mmsegmentation/blob/master/docker/Dockerfile) 来建立映像。确保您的 [docker 版本](https://docs.docker.com/engine/install/) >=19.03.
+我们提供了一个 [Dockerfile](https://github.com/open-mmlab/mmsegmentation/blob/master/docker/Dockerfile) 来建立映像。确保您的 [docker 版本](https://docs.docker.com/engine/install) >=19.03.
 
 ```shell
 # 通过 PyTorch 1.11, CUDA 11.3 建立映像
@@ -198,7 +198,7 @@ docker run --gpus all --shm-size=8g -it -v {DATA_DIR}:/mmsegmentation/data mmseg
 
 #### 安装 GDAL
 
-[GDAL](https://gdal.org/) 是一个用于栅格和矢量地理空间数据格式的转换库。安装 GDAL 可以读取复杂格式和极大的遥感图像。
+[GDAL](https://gdal.org) 是一个用于栅格和矢量地理空间数据格式的转换库。安装 GDAL 可以读取复杂格式和极大的遥感图像。
 
 ```shell
 conda install GDAL

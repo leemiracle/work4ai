@@ -18,7 +18,7 @@ conda create --name openmmlab python=3.8 -y
 conda activate openmmlab
 ```
 
-**Step 2.** Install PyTorch following [official instructions](https://pytorch.org/get-started/locally/), e.g.
+**Step 2.** Install PyTorch following [official instructions](https://pytorch.org/get-started/locally), e.g.
 
 On GPU platforms:
 
@@ -148,7 +148,7 @@ MMSegmentation can be built for CPU only environment. In CPU mode you can train 
 
 #### Install on Google Colab
 
-[Google Colab](https://research.google.com/) usually has PyTorch installed,
+[Google Colab](https://research.google.com) usually has PyTorch installed,
 thus we only need to install MMCV and MMSegmentation with the following commands.
 
 **Step 1.** Install [MMCV](https://github.com/open-mmlab/mmcv) using [MIM](https://github.com/open-mmlab/mim).
@@ -181,7 +181,7 @@ Within Jupyter, the exclamation mark `!` is used to call external executables an
 
 ### Using MMSegmentation with Docker
 
-We provide a [Dockerfile](https://github.com/open-mmlab/mmsegmentation/blob/main/docker/Dockerfile) to build an image. Ensure that your [docker version](https://docs.docker.com/engine/install/) >=19.03.
+We provide a [Dockerfile](https://github.com/open-mmlab/mmsegmentation/blob/main/docker/Dockerfile) to build an image. Ensure that your [docker version](https://docs.docker.com/engine/install) >=19.03.
 
 ```shell
 # build an image with PyTorch 1.11, CUDA 11.3
@@ -199,7 +199,7 @@ docker run --gpus all --shm-size=8g -it -v {DATA_DIR}:/mmsegmentation/data mmseg
 
 #### Install GDAL
 
-[GDAL](https://gdal.org/) is a translator library for raster and vector geospatial data formats. Install GDAL to read complex formats and extremely large remote sensing images.
+[GDAL](https://gdal.org) is a translator library for raster and vector geospatial data formats. Install GDAL to read complex formats and extremely large remote sensing images.
 
 ```shell
 conda install GDAL

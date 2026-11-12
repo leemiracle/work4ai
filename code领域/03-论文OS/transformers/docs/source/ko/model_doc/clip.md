@@ -188,7 +188,7 @@ CLIP을 시작하는 데 도움이 되는 Hugging Face와 community 자료 목�
 - 사전학습된 CLIP모델과 MRR(Mean Reciprocal Rank) 점수 연산을 사용한 이미지 검색에 대한 [노트북](https://colab.research.google.com/drive/1bLVwVKpAndpEDHqjzxVPr_9nGrSbuOQd?usp=sharing). 🌎
 - 이미지 검색과 유사성 점수에 대해 보여주는 [노트북](https://colab.research.google.com/github/deep-diver/image_search_with_natural_language/blob/main/notebooks/Image_Search_CLIP.ipynb). 🌎
 - Multilingual CLIP를 사용해서 이미지와 텍스트를 어떻게 같은 벡터 공간에 매핑 시키는지에 대한 [노트북](https://colab.research.google.com/drive/1xO-wC_m_GNzgjIBQ4a4znvQkvDoZJvH4?usp=sharing). 🌎
-- [Unsplash](https://unsplash.com)와 [TMDB](https://www.themoviedb.org/) 데이터셋을 활용한 의미론적(semantic) 이미지 검색에서 CLIP을 구동하는 방법에 대한 [노트북](https://colab.research.google.com/github/vivien000/clip-demo/blob/master/clip.ipynb#scrollTo=uzdFhRGqiWkR). 🌎
+- [Unsplash](https://unsplash.com)와 [TMDB](https://www.themoviedb.org) 데이터셋을 활용한 의미론적(semantic) 이미지 검색에서 CLIP을 구동하는 방법에 대한 [노트북](https://colab.research.google.com/github/vivien000/clip-demo/blob/master/clip.ipynb#scrollTo=uzdFhRGqiWkR). 🌎
 
 **설명 가능성**
 

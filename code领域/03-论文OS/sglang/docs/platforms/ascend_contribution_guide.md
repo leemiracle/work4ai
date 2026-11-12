@@ -21,7 +21,7 @@ export PYTHONPATH=$PWD/python:$PYTHONPATH
 
 ## Format code with pre-commit
 
-We use [pre-commit](https://pre-commit.com/) to maintain consistent code style checks. Before pushing your changes, please run:
+We use [pre-commit](https://pre-commit.com) to maintain consistent code style checks. Before pushing your changes, please run:
 
 ```bash
 pip3 install pre-commit

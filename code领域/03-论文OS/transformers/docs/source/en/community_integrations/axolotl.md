@@ -16,7 +16,7 @@ rendered properly in your Markdown viewer.
 
 # Axolotl
 
-[Axolotl](https://docs.axolotl.ai/) is a fine-tuning and post-training framework for large language models. It supports adapter-based tuning, ND-parallel distributed training, GRPO, and QAT. Through [TRL](./trl), Axolotl also handles preference learning, reinforcement learning, and reward modeling workflows.
+[Axolotl](https://docs.axolotl.ai) is a fine-tuning and post-training framework for large language models. It supports adapter-based tuning, ND-parallel distributed training, GRPO, and QAT. Through [TRL](./trl), Axolotl also handles preference learning, reinforcement learning, and reward modeling workflows.
 
 Define your training run in a YAML config file.
 
@@ -57,4 +57,4 @@ Axolotl's [ModelLoader](https://docs.axolotl.ai/docs/api/loaders.model.html#axol
 
 ## Resources
 
-- [Axolotl](https://docs.axolotl.ai/) docs
+- [Axolotl](https://docs.axolotl.ai) docs

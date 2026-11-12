@@ -408,7 +408,7 @@ sudo ln -s /usr/bin/g++-7  /usr/local/cuda-10.2/bin/g++
 
 より大きなバッチ サイズで巨大なモデルのトレーニングを高速化するには、完全にシャード化されたデータ並列モデルを使用できます。
 このタイプのデータ並列パラダイムでは、オプティマイザーの状態、勾配、パラメーターをシャーディングすることで、より多くのデータと大規模なモデルをフィッティングできます。
-この機能とその利点の詳細については、[完全シャーディング データ並列ブログ](https://pytorch.org/blog/introducing-pytorch-full-sharded-data-Parallel-api/) をご覧ください。
+この機能とその利点の詳細については、[完全シャーディング データ並列ブログ](https://pytorch.org/blog/introducing-pytorch-full-sharded-data-Parallel-api) をご覧ください。
 最新の PyTorch の Fully Sharded Data Parallel (FSDP) トレーニング機能を統合しました。
 必要なのは、設定を通じて有効にすることだけです。
 
@@ -464,7 +464,7 @@ FSDP を有効にしたモデルの保存は、最近の修正でのみ利用で
 
 TPU ユーザーの皆様に朗報です。 PyTorch/XLA は FSDP をサポートするようになりました。
 最新の Fully Sharded Data Parallel (FSDP) トレーニングがすべてサポートされています。
-詳細については、[FSDP を使用した Cloud TPU での PyTorch モデルのスケーリング](https://pytorch.org/blog/scaling-pytorch-models-on-cloud-tpus-with-fsdp/) および [PyTorch/XLA 実装 を参照してください。 FSDP の](https://github.com/pytorch/xla/tree/master/torch_xla/distributed/fsdp)
+詳細については、[FSDP を使用した Cloud TPU での PyTorch モデルのスケーリング](https://pytorch.org/blog/scaling-pytorch-models-on-cloud-tpus-with-fsdp) および [PyTorch/XLA 実装 を参照してください。 FSDP の](https://github.com/pytorch/xla/tree/master/torch_xla/distributed/fsdp)
 必要なのは、設定を通じて有効にすることだけです。
 
 **FSDP サポートに必要な PyTorch/XLA バージョン**: >=2.0
@@ -495,7 +495,7 @@ PyTorch v1.12 リリースにより、開発者と研究者は Apple シリコ�
 これにより、プロトタイピングや微調整などの機械学習ワークフローを Mac 上でローカルで実行できるようになります。
 PyTorch のバックエンドとしての Apple の Metal Performance Shaders (MPS) はこれを可能にし、新しい `"mps"` デバイス経由で使用できます。
 これにより、計算グラフとプリミティブが MPS Graph フレームワークと MPS によって提供される調整されたカーネルにマッピングされます。
-詳細については、公式ドキュメント [Mac での Accelerated PyTorch Training の紹介](https://pytorch.org/blog/introducing-accelerated-pytorch-training-on-mac/) を参照してください。
+詳細については、公式ドキュメント [Mac での Accelerated PyTorch Training の紹介](https://pytorch.org/blog/introducing-accelerated-pytorch-training-on-mac) を参照してください。
 および [MPS バックエンド](https://pytorch.org/docs/stable/notes/mps.html)。
 
 <Tip warning={false}>

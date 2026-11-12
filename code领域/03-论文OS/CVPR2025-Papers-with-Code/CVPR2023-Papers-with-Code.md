@@ -1111,7 +1111,7 @@ Code: https://github.com/hulianyuyy/CorrNet
 
 **Adaptive Spot-Guided Transformer for Consistent Local Feature Matching**
 
-- Homepage: [https://astr2023.github.io](https://astr2023.github.io/) 
+- Homepage: [https://astr2023.github.io](https://astr2023.github.io) 
 - Paper: https://arxiv.org/abs/2303.16624
 - Code: https://github.com/ASTR2023/ASTR
 

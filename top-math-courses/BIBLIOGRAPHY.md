@@ -12,24 +12,24 @@
 
 | # | 书目 | 作者 | 免费来源 | 主要用于 |
 |---|---|---|---|---|
-| 1 | *Introduction to Linear Algebra* (6th ed, 2022) | Strang | [math.mit.edu/~gs/linearalgebra/ila6/](https://math.mit.edu/~gs/linearalgebra/ila6/) | MIT 18.06 |
+| 1 | *Introduction to Linear Algebra* (6th ed, 2022) | Strang | [math.mit.edu/~gs/linearalgebra/ila6/](https://math.mit.edu/~gs/linearalgebra/ila6) | MIT 18.06 |
 | 2 | *Linear Algebra Done Right* (4th ed, 2023) | Axler | [axler.net/LADR.html](https://axler.net/LADR.html) | Berkeley Math 110 / Princeton MAT 217 |
-| 3 | *Measure, Integration & Real Analysis* | Axler | [measure.axler.net](https://measure.axler.net/) | 实分析 graduate |
+| 3 | *Measure, Integration & Real Analysis* | Axler | [measure.axler.net](https://measure.axler.net) | 实分析 graduate |
 | 4 | *Probability: Theory and Examples* (5th ed) | Durrett | [services.math.duke.edu/~rtd/PTE/PTE5_011119.pdf](https://services.math.duke.edu/~rtd/PTE/PTE5_011119.pdf) | MIT 18.175 / Berkeley 218 / Stanford 230A / UT Austin M 385C |
 | 5 | *Probability with Martingales* | Williams | 部分 Cambridge 预览 | Cambridge Part II / Oxford B8.1 |
 | 6 | *Convex Optimization* | Boyd & Vandenberghe | [web.stanford.edu/~boyd/cvxbook](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf) | Stanford CME 364A / ETH 401-3904 |
 | 7 | *Understanding Machine Learning* | Shalev-Shwartz & Ben-David | [cs.huji.ac.il/~shais/UnderstandingMachineLearning](https://www.cs.huji.ac.il/~shais/UnderstandingMachineLearning/copy.html) | Cambridge Part II MathML |
-| 8 | *The Elements of Statistical Learning* (ESL) | Hastie, Tibshirani, Friedman | [hastie.su.domains/ElemStatLearn](https://hastie.su.domains/ElemStatLearn/) | ML 经典 |
+| 8 | *The Elements of Statistical Learning* (ESL) | Hastie, Tibshirani, Friedman | [hastie.su.domains/ElemStatLearn](https://hastie.su.domains/ElemStatLearn) | ML 经典 |
 | 9 | *Information Theory, Inference, and Learning Algorithms* | MacKay | [inference.org.uk/mackay/itila](http://www.inference.org.uk/mackay/itila/book.html) | 信息论 + ML |
 | 10 | *Algebraic Topology* | Hatcher | [pi.math.cornell.edu/~hatcher/AT](https://pi.math.cornell.edu/~hatcher/AT/ATpage.html) | Cambridge Part II / MIT 18.905 |
-| 11 | *The Rising Sea* (FOAG, 代数几何) | Vakil | [math.stanford.edu/~vakil/216blog](http://math.stanford.edu/~vakil/216blog/) | 代数几何 |
+| 11 | *The Rising Sea* (FOAG, 代数几何) | Vakil | [math.stanford.edu/~vakil/216blog](http://math.stanford.edu/~vakil/216blog) | 代数几何 |
 | 12 | *Topics in Random Matrix Theory* | Tao | [terrytao.files.wordpress.com](https://terrytao.files.wordpress.com/2011/02/matrix-book.pdf) | Oxford C7.1 |
 | 13 | *High-Dimensional Statistics* (预览章节) | Wainwright | 部分章节 Cambridge 预览 | Cambridge Part II MathML |
-| 14 | *Linear Programming* | Vanderbei | [vanderbei.princeton.edu/LPbook](https://vanderbei.princeton.edu/LPbook/) | ETH 401-3901 |
+| 14 | *Linear Programming* | Vanderbei | [vanderbei.princeton.edu/LPbook](https://vanderbei.princeton.edu/LPbook) | ETH 401-3901 |
 | 15 | *A First Course in Markov Chains* ( Norris lecture notes) | Norris | 部分公开 | Cambridge Part IB |
 | 16 | *Numerical Linear Algebra* | Trefethen & Bau | **付费 SIAM**（但盗版多，请买正版）| UT Austin M 383E |
 | 17 | *Convex Optimization: Algorithms and Complexity* | Bubeck | [now-publishers.com/article/ArticleDetails/MAL035](https://www.now-publishers.com/article/ArticleDetails/MAL035) (部分免费) | UT Austin / ETH |
-| 18 | *Analysis I & II* | Tao | [terrytao.wordpress.com/books](https://terrytao.wordpress.com/books/analysis-i-and-ii/) (免费讲义) | 实分析入门替代 |
+| 18 | *Analysis I & II* | Tao | [terrytao.wordpress.com/books](https://terrytao.wordpress.com/books/analysis-i-and-ii) (免费讲义) | 实分析入门替代 |
 | 19 | *Math 53 Worksheets* (Berkeley 公开) | Berkeley Math Dept | [math.berkeley.edu/sites/default/files/bulk_6/Math53.Berkeley.pdf](https://math.berkeley.edu/sites/default/files/bulk_6/Math53.Berkeley.pdf) | Berkeley Math 53 |
 | 20 | *An Algorithmic Introduction to Numerical Simulation of SDE* | Higham | [SIAM Review 2001, arXiv](https://epubs.siam.org/doi/10.1137/S0036144500378302) | SDE 数值入门 |
 | 21 | *Real and Functional Analysis* (Lang) 部分章节 | Lang | 部分 Springer 预览 | Berkeley Math 202A |
@@ -56,7 +56,7 @@
 | *Thomas' Calculus* | Thomas/Weir/Hass | 14th | Pearson | 978-0134438986 | 备选 |
 | *Calculus* | Apostol Vol 1/2 | 2nd | Wiley | - | 经典严格版 |
 | *Calculus* | Hughes-Hallett et al. | 7th | Wiley | - | Harvard Math 1b |
-| *Analysis I* (Lecture notes) | Tao | - | [免费讲义](https://terrytao.wordpress.com/books/analysis-i-and-ii/) | - | 实分析入门替代 |
+| *Analysis I* (Lecture notes) | Tao | - | [免费讲义](https://terrytao.wordpress.com/books/analysis-i-and-ii) | - | 实分析入门替代 |
 
 ### 2.2 线性代数（9 本）
 
@@ -87,7 +87,7 @@
 | *Real Analysis* | Royden & Fitzpatrick | 4th (2010) | 978-0131437470 | 替代 Folland | ✗ |
 | *Real and Functional Analysis* | Lang | 3rd (1993) | 978-0387940014 | Berkeley Math 202A | ✗ |
 | *Basic Real Analysis* | Knapp | 2005 | Birkhauser | Berkeley Math 202A 替代 | ✗ 部分预览 |
-| *Measure, Integration & Real Analysis* ★ | Axler | 2020 | 开放获取 | 替代 Folland | ✓ [measure.axler.net](https://measure.axler.net/) |
+| *Measure, Integration & Real Analysis* ★ | Axler | 2020 | 开放获取 | 替代 Folland | ✓ [measure.axler.net](https://measure.axler.net) |
 | *Real Analysis: Measure Theory, Integration, and Hilbert Spaces* | Stein & Shakarchi | Princeton Lectures Vol 3 | 978-0691113869 | MIT 18.125 | ✗ |
 | *A Course in Mathematical Analysis* | Garling | 3 Vol | Cambridge | Cambridge Part IA Analysis I | ✗ |
 | *Real Analysis for Graduate Students* | Bass | - | - | 替代 | 部分 |
@@ -123,7 +123,7 @@
 | *Abstract Algebra* | Dummit & Foote | 3rd (2003) | 978-0471433347 | Berkeley Math 113 | ✗ |
 | *Algebra* | Lang | 3rd (2002) | 978-0387953854 | 研究生 Addison-Wesley | ✗ |
 | *Algebra* | Hungerford | Springer (1974) | 978-0387905181 | 替代 Lang | ✗ |
-| *The Rising Sea* (FOAG) ★ | Vakil | - | - | 代数几何 | ✓ [math.stanford.edu/~vakil/216blog](http://math.stanford.edu/~vakil/216blog/) |
+| *The Rising Sea* (FOAG) ★ | Vakil | - | - | 代数几何 | ✓ [math.stanford.edu/~vakil/216blog](http://math.stanford.edu/~vakil/216blog) |
 | *Algebraic Geometry* | Hartshorne | Springer (1977) | 978-0387902449 | MIT 18.725 / Cambridge Part II | ✗ |
 | *Introduction to Commutative Algebra* | Atiyah & MacDonald | Westview (1969) | 978-0201407518 | MIT 18.705 | ✗ |
 | *Linear Representations of Finite Groups* | Serre | Springer (1977) | 978-0387901909 | MIT 18.395 | ✗ |
@@ -188,7 +188,7 @@
 | *Convex Optimization: Algorithms and Complexity* | Bubeck | Now (2015) | 978-1601988447 | UT Austin / ETH | ✓ 部分 |
 | *Lectures on Convex Optimization* | Nesterov | 2nd (2018) | 978-3319915777 | UT Austin | ✗ |
 | *Understanding and Using Linear Programming* | Matoušek & Gärtner | Springer (2007) | 978-3540306979 | ETH 401-3901 | ✗ |
-| *Linear Programming* | Vanderbei | 4th | 978-1461476290 | ETH 401-3901 | ✓ [vanderbei.princeton.edu](https://vanderbei.princeton.edu/LPbook/) |
+| *Linear Programming* | Vanderbei | 4th | 978-1461476290 | ETH 401-3901 | ✓ [vanderbei.princeton.edu](https://vanderbei.princeton.edu/LPbook) |
 | *Linear and Nonlinear Programming* | Luenberger & Ye | 4th (2016) | 978-3319237567 | 备选 | ✗ |
 | *Numerical Optimization* | Nocedal & Wright | 2nd (2006) | 978-0387303031 | 进阶 | ✗ |
 

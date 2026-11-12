@@ -1,7 +1,7 @@
 # Harvard Math 154 · 数论 精读笔记
 
 > **教材**：Niven-Zuckerman-Montgomery, *An Introduction to the Theory of Numbers*；或 Hardy-Wright
-> **参考**：[Harvard Math 154](https://www.math.harvard.edu/)
+> **参考**：[Harvard Math 154](https://www.math.harvard.edu)
 
 ---
 

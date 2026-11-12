@@ -1,6 +1,6 @@
 # 前沿与媒体 · 37 - AI MLOps 与工程化专题
 
-> 姊妹篇：[`讲透公开课 03 AI Infra`](../讲透公开课/03-AI%20Infra%20源码导读清单.md)｜ [`../讲透GPU与系统级/`](../讲透GPU与系统级)。
+> 姊妹篇：[`讲透公开课 03 AI Infra`](../讲透宇宙/01-学/讲透公开课//03-AI%20Infra%20源码导读清单.md)｜ [`../讲透宇宙/01-学/讲透GPU与系统级//`](../讲透宇宙/01-学/讲透GPU与系统级)。
 >
 > 03 是"开源 AI Infra"（vLLM/SGLang/Ray 等），本篇是"**MLOps 平台**"——端到端模型生命周期管理（实验/训练/部署/监控/治理）。给 ML 工程师 / MLOps 工程师。
 
@@ -20,7 +20,7 @@
 
 | 工具 | 强项 |
 |---|---|
-| **Weights & Biases（W&B）** [wandb.ai](https://wandb.ai/) | **MLOps 事实标准**，实验追踪 + 模型注册 + Reports |
+| **Weights & Biases（W&B）** [wandb.ai](https://wandb.ai) | **MLOps 事实标准**，实验追踪 + 模型注册 + Reports |
 | **MLflow** | 开源 Databricks（轻量、广泛）|
 | **Comet** | W&B 替代 |
 | **Neptune.ai** | 深度学习友好 |
@@ -63,7 +63,7 @@
 | **BentoML** | 模型打包 + 部署（开源）|
 | **Seldon Core** | K8s 部署 |
 | **KServe** | K8s Serverless 推理（标准）|
-| **vLLM / TGI / SGLang** | 推理引擎（已在 [`讲透公开课 03`](../讲透公开课/03-AI%20Infra%20源码导读清单.md)）|
+| **vLLM / TGI / SGLang** | 推理引擎（已在 [`讲透公开课 03`](../讲透宇宙/01-学/讲透公开课//03-AI%20Infra%20源码导读清单.md)）|
 | **TorchServe** | PyTorch 官方 |
 | **Triton Inference Server** | NVIDIA 官方 |
 
@@ -122,4 +122,4 @@
 
 ---
 
-> 🔗 相关：[`讲透公开课 03`](../讲透公开课/03-AI%20Infra%20源码导读清单.md) ｜ [`34-开源生态`](./34-AI开源生态（HF与ModelScope）专题.md) ｜ [`08-Agent`](./08-AIAgent框架与工具调用专题.md)
+> 🔗 相关：[`讲透公开课 03`](../讲透宇宙/01-学/讲透公开课//03-AI%20Infra%20源码导读清单.md) ｜ [`34-开源生态`](./34-AI开源生态（HF与ModelScope）专题.md) ｜ [`08-Agent`](./08-AIAgent框架与工具调用专题.md)

@@ -178,7 +178,7 @@ image_pose_result = pose_results[0]
         outputs = model(**inputs, dataset_index=dataset_index)
     ```
 
-- [OpenCV](https://opencv.org/) is an alternative option for visualizing the estimated pose.
+- [OpenCV](https://opencv.org) is an alternative option for visualizing the estimated pose.
 
     ```py
     # pip install opencv-python

@@ -2,7 +2,7 @@
 
 ## 개요[[overview]]
 
-The Cohere Command-R 모델은 Cohere팀이 [Command-R: 프로덕션 규모의 검색 증강 생성](https://txt.cohere.com/command-r/)라는 블로그 포스트에서 소개 되었습니다.
+The Cohere Command-R 모델은 Cohere팀이 [Command-R: 프로덕션 규모의 검색 증강 생성](https://txt.cohere.com/command-r)라는 블로그 포스트에서 소개 되었습니다.
 
 논문 초록:
 

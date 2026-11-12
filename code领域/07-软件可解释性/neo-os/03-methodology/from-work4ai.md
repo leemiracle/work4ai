@@ -18,7 +18,7 @@
 | feynman-coach | `work4ai/费曼学习法/...feynman-coach.py` | AI 扮演 12 岁连环追问 | 🟢 资产就绪 |
 | **三层讲解宪法** | `work4ai/README.md` §六 + 每个讲透系列 | L3 三层结构（直觉→数学→trace） | 🟢 已实现 |
 
-**当前 L3 实现**：[`04-layers/l3-explain/`](../04-layers/l3-explain/) ——
+**当前 L3 实现**：[`04-layers/l3-explain/`](../04-layers/l3-explain) ——
 `l3_explain.py` 调 GLM-4-plus，对 L2.5 规则生成三层英文讲解（Intuition / Formal / Trace evidence）。
 
 ---

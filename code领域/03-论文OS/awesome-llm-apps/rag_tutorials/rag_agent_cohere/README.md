@@ -36,7 +36,7 @@ A RAG Agentic system built with Cohere's new model Command-r7b-12-2024, Qdrant f
 4. Create a new API key
 
 ### 2. Qdrant Cloud Setup
-1. Visit [Qdrant Cloud](https://cloud.qdrant.io/)
+1. Visit [Qdrant Cloud](https://cloud.qdrant.io)
 2. Create an account or sign in
 3. Create a new cluster
 4. Get your credentials:

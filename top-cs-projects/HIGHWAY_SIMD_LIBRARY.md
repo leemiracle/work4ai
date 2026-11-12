@@ -30,7 +30,7 @@
 | ⭐ **[g3doc/impl_details.md](https://github.com/google/highway/blob/master/g3doc/impl_details.md)** | 官方 | 内部实现细节（适合贡献者 / 深度使用者） |
 | ⭐ **[g3doc/instruction_matrix.pdf](https://github.com/google/highway/blob/master/g3doc/instruction_matrix.pdf)** | 官方 | **每个 Highway op 在 7 架构上的指令数矩阵**（决定 op 的"性能可移植性"） |
 | **[g3doc/highway_intro.pdf](https://github.com/google/highway/blob/master/g3doc/highway_intro.pdf)** | 官方 slides | 入门幻灯片 |
-| **[在线文档](https://google.github.io/highway/en/master/)**（含[中文翻译](https://google.github.io/highway/zh/master/)）| Sphinx | 完整 HTML 文档 |
+| **[在线文档](https://google.github.io/highway/en/master)**（含[中文翻译](https://google.github.io/highway/zh/master)）| Sphinx | 完整 HTML 文档 |
 | **[hwy/examples/](https://github.com/google/highway/tree/master/hwy/examples)** | 源码 | skeleton.cc / benchmark.cc（拷贝即用的 boilerplate） |
 
 ### 0.2 入门视频与外部教程（README 推荐）
@@ -39,9 +39,9 @@
 |------|------|------|
 | ⭐ **[SIMD programming with Highway](https://www.youtube.com/watch?v=R57biOOhnJM)** | YouTube | Highway 作者 Jan Wassenberg 亲讲 |
 | ⭐ **[SIMD for C++ Developers](http://const.me/articles/simd/simd.pdf)** | const.me | C++ 工程师向的 SIMD 教程 PDF |
-| ⭐ **[Algorithms for Modern Hardware](https://en.algorithmica.org/hpc/)** | Algorithmica | 在线书：SIMD 友好算法设计 + #pragma omp + profiling |
+| ⭐ **[Algorithms for Modern Hardware](https://en.algorithmica.org/hpc)** | Algorithmica | 在线书：SIMD 友好算法设计 + #pragma omp + profiling |
 | **[Agner Fog - Optimizing C++](https://agner.org/optimize/optimizing_cpp.pdf)** | Agner Fog | Highway README 明确推荐（与本文档姊妹篇直接对接） |
-| **[Improving performance with SIMD intrinsics in three use cases](https://stackoverflow.blog/2020/07/08/improving-performance-with-simd-intrinsics-in-three-use-use-cases/)** | StackOverflow Blog | 三个真实工程案例 |
+| **[Improving performance with SIMD intrinsics in three use cases](https://stackoverflow.blog/2020/07/08/improving-performance-with-simd-intrinsics-in-three-use-use-cases)** | StackOverflow Blog | 三个真实工程案例 |
 | **[kfjahnke 的多 ISA 指南](https://github.com/kfjahnke/zimt/blob/main/examples/multi_isa_example/multi_simd_isa.md)** | @kfjahnke | 静态 vs 动态分发的可视化讲法 |
 
 ### 0.3 在线 Playground（无需装环境）
@@ -434,7 +434,7 @@ void f() {
 
 ### 6.4 AVX-512 降频陷阱（FAQ Q6.3，Agner Fog 也有讨论）
 
-- 早期 Intel（Skylake-X）跑 AVX-512 会降频 3-4%（[Lemire 实测](https://lemire.me/blog/2018/08/15/the-dangers-of-avx-512-throttling-a-3-impact/)）
+- 早期 Intel（Skylake-X）跑 AVX-512 会降频 3-4%（[Lemire 实测](https://lemire.me/blog/2018/08/15/the-dangers-of-avx-512-throttling-a-3-impact)）
 - 但**整体吞吐提升远大于降频**：JPEG XL 用 AVX-512 比 AVX2 快 1.4-1.6×
 - **Icelake/Rocket Lake 之后不再降频**；AMD 全系不降频
 - Highway 的 [vectorized Quicksort](https://github.com/google/highway/blob/master/hwy/contrib/sort/README.md#study-of-avx-512-downclocking) 实测：80 KiB 以上输入用 AVX-512 划算
@@ -481,7 +481,7 @@ Gather/Scatter（按 index 散列读写）通常**每 cycle 只处理 1 lane**�
 |------|----------------|
 | ⭐ **[JPEG XL / libjxl](https://github.com/libjxl/libjjxl)** | **Highway 的发源地**（同一作者 Jan Wassenberg）。AVX-512 比 AVX2 快 1.4-1.6× |
 | **[JPEGli](https://github.com/google/jpegli)** | Google 的高质量 JPEG 编码器 |
-| **[libaom](https://aomedia.googlesource.com/aom/)** | AV1 视频编码器参考实现 |
+| **[libaom](https://aomedia.googlesource.com/aom)** | AV1 视频编码器参考实现 |
 | **[Grok JPEG 2000](https://github.com/GrokImageCompression/grok)** / **[OpenHTJ2K](https://github.com/osamu620/OpenHTJ2K)** | JPEG 2000 编解码 |
 | **[libvips](https://github.com/libvips/libvips)** | 图像处理库 |
 | **[ssimulacra2](https://github.com/cloudinary/ssimulacra2)** | 图像质量评估 |
@@ -492,7 +492,7 @@ Gather/Scatter（按 index 散列读写）通常**每 cycle 只处理 1 lane**�
 |------|----------------|
 | **Chromium** + Vivaldi | 浏览器内核图像/视频解码 |
 | **Firefox** + floorp/librewolf/Waterfox | 同上 |
-| **[V8](https://v8.dev/)** / **[bun](https://bun.sh/)** / **[codon](https://github.com/exaloop/codon)** | JS / Python runtime 的 SIMD |
+| **[V8](https://v8.dev)** / **[bun](https://bun.sh)** / **[codon](https://github.com/exaloop/codon)** | JS / Python runtime 的 SIMD |
 | **WASM runtime** | Highway 的 `WASM` target 让 C++ SIMD 代码跑在浏览器里 |
 
 ### 7.4 算法库（contrib/）
@@ -752,7 +752,7 @@ int main() {
 
 | 关联主题 | 本文为它提供了什么 |
 |---------|-----------------|
-| [`../讲透GPU与系统级/`](../讲透GPU与系统级) | CPU SIMD 是 GPU 之外另一条并行路；高算术强度（§7.1）+ 单 binary 跨 fleet 是 CPU 不可替代的场景 |
+| [`../讲透宇宙/01-学/讲透GPU与系统级//`](../讲透宇宙/01-学/讲透GPU与系统级) | CPU SIMD 是 GPU 之外另一条并行路；高算术强度（§7.1）+ 单 binary 跨 fleet 是 CPU 不可替代的场景 |
 | [`../讲透PyTorch/`](../讲透PyTorch) | PyTorch CPU kernel 部分用类似抽象；gemma.cpp 是"不用 PyTorch 也能跑 LLM"的证据 |
 | [`../讲透NLP/`](../讲透NLP) | gemma.cpp / ScaNN 是 NLP 推理 + 检索的 SIMD 工程化 |
 | [`../端侧AI压缩技术/`](../端侧AI压缩技术) | 跨架构单 binary 是端侧 AI 部署的关键技术（vs 动态下载架构专用二进制）|

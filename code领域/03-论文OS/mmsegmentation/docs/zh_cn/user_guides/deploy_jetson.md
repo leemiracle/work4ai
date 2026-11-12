@@ -10,7 +10,7 @@
 
 ## 1 配置 [mmsegmentation](https://github.com/open-mmlab/mmsegmentation)
 
-- 根据[安装和验证](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/zh_cn/get_started.md)文档，完成开发 [mmsegmentation](https://github.com/open-mmlab/mmsegmentation) 所需的 [`pytorch`](https://pytorch.org/get-started/locally/)、[`mmcv`](https://github.com/open-mmlab/mmcv)、[`mmengine`](https://github.com/open-mmlab/mmengine) 等环境依赖安装。
+- 根据[安装和验证](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/zh_cn/get_started.md)文档，完成开发 [mmsegmentation](https://github.com/open-mmlab/mmsegmentation) 所需的 [`pytorch`](https://pytorch.org/get-started/locally)、[`mmcv`](https://github.com/open-mmlab/mmcv)、[`mmengine`](https://github.com/open-mmlab/mmengine) 等环境依赖安装。
 - 从 GitHub 使用 git clone 命令完成 [mmsegmentation](https://github.com/open-mmlab/mmsegmentation) 下载。网络不好的同学，可通过 [MMSeg GitHub](https://github.com/open-mmlab/mmsegmentation) 页面进行 zip 的下载。
   ```bash
   git clone https://github.com/open-mmlab/mmsegmentation.git

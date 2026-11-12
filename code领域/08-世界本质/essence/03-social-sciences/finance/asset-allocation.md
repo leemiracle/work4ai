@@ -718,7 +718,7 @@ A 股个人投资者交易占比 ~60-70%（美股 ~15%），导致：
 
 **配置意义**：第三支柱的启动，标志着中国**个人资产配置时代的真正开始**——居民被迫从"被动储蓄"转向"主动配置生命周期资产"。但当前面临：①税优吸引力不足；②产品供给单一；③投资者教育缺失。
 
-> **essence 判断**：中国的资产配置问题，本质是**制度转型问题**——从"房产+存款+刚兑理财"的旧范式，转向"多元化金融资产"的新范式。这个转型要 10-20 年，且伴随阵痛（房地产去泡沫、理财破净、养老缺口）。详见 [`china-financial-system.md`](./china-financial-system.md) + [`../economics/`](../economics/)。
+> **essence 判断**：中国的资产配置问题，本质是**制度转型问题**——从"房产+存款+刚兑理财"的旧范式，转向"多元化金融资产"的新范式。这个转型要 10-20 年，且伴随阵痛（房地产去泡沫、理财破净、养老缺口）。详见 [`china-financial-system.md`](./china-financial-system.md) + [`../economics/`](../economics)。
 
 ---
 
@@ -794,12 +794,12 @@ A 股个人投资者交易占比 ~60-70%（美股 ~15%），导致：
 
 | 学科 | 资产配置的对应 | 洞察 |
 |------|--------------|------|
-| **控制论**（[`06-systems/feedback/`](../../06-systems/feedback/)） | 再平衡 = 负反馈控制 | 偏离→纠正→回归目标，是恒温器原理 |
-| **信息论**（[`02-formal-sciences/probability/`](../../02-formal-sciences/probability/)） | Shannon's Demon | 波动本身可提取信息（收益），如同噪声中编码 |
-| **生态学**（[`06-systems/complexity/`](../../06-systems/complexity/)） | 多样化 = 生态韧性 | 单一作物（单一资产）易遭灾，多样化生态更稳健 |
+| **控制论**（[`06-systems/feedback/`](../../06-systems/feedback)） | 再平衡 = 负反馈控制 | 偏离→纠正→回归目标，是恒温器原理 |
+| **信息论**（[`02-formal-sciences/probability/`](../../02-formal-sciences/probability)） | Shannon's Demon | 波动本身可提取信息（收益），如同噪声中编码 |
+| **生态学**（[`06-systems/complexity/`](../../06-systems/complexity)） | 多样化 = 生态韧性 | 单一作物（单一资产）易遭灾，多样化生态更稳健 |
 | **进化论** | TDF 滑道 = 生命周期适应 | 环境变化时，策略必须随"年龄"（环境）演化 |
 | **热力学**（[`08-cross-cutting/entropy.md`](../../08-cross-cutting/entropy.md)） | 组合熵 = 分散度 | 集中 = 低熵（脆弱），分散 = 高熵（稳健） |
-| **博弈论**（[`06-systems/game-theory/`](../../06-systems/game-theory/)） | 配置 = 对"未来自我"的博弈 | 现在的理性 vs 未来的恐慌，是跨期博弈 |
+| **博弈论**（[`06-systems/game-theory/`](../../06-systems/game-theory)） | 配置 = 对"未来自我"的博弈 | 现在的理性 vs 未来的恐慌，是跨期博弈 |
 | **营养学** | 资产类别 = 营养素 | 蛋白质/碳水/脂肪 = 股/债/另类，均衡才健康 |
 
 **深层同构**：资产配置的"分散化 vs 集中"张力，与**生态系统多样性**、**饮食均衡**、**知识广度 vs 深度**是同一个数学结构——**适度分散提升韧性，过度分散稀释收益/效用**。最优分散点在哪里，取决于"收益凹性"（边际递减）与"风险凸性"（尾部破坏）的权衡。
@@ -835,8 +835,8 @@ A 股个人投资者交易占比 ~60-70%（美股 ~15%），导致：
 **跨学科关联**：
 - [`08-cross-cutting/finance-and-systems.md`](../../08-cross-cutting/finance-and-systems.md)——金融与系统科学的桥
 - [`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)——可预测性、归纳问题（配置参数的外推可靠性）
-- [`06-systems/feedback/`](../../06-systems/feedback/)——再平衡的负反馈本质
-- [`06-systems/complexity/`](../../06-systems/complexity/)——分散化与生态韧性
+- [`06-systems/feedback/`](../../06-systems/feedback)——再平衡的负反馈本质
+- [`06-systems/complexity/`](../../06-systems/complexity)——分散化与生态韧性
 - [`questions/big-questions.md`](../../questions/big-questions.md)——Q14 概率、Q15 决策
 
 ---

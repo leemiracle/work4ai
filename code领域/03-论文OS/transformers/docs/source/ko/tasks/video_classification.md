@@ -38,7 +38,7 @@ rendered properly in your Markdown viewer.
 pip install -q pytorchvideo transformers evaluate
 ```
 
-영상을 처리하고 준비하기 위해 [PyTorchVideo](https://pytorchvideo.org/)(이하 `pytorchvideo`)를 사용합니다.
+영상을 처리하고 준비하기 위해 [PyTorchVideo](https://pytorchvideo.org)(이하 `pytorchvideo`)를 사용합니다.
 
 커뮤니티에 모델을 업로드하고 공유할 수 있도록 Hugging Face 계정에 로그인하는 것을 권장합니다. 프롬프트가 나타나면 토큰을 입력하여 로그인하세요:
 
@@ -172,7 +172,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 
 ## 훈련을 위한 데이터 세트 준비하기[[prepare-the-datasets-for-training]]
 
-영상 전처리를 위해 [PyTorchVideo 라이브러리](https://pytorchvideo.org/)를 활용할 것입니다. 필요한 종속성을 가져오는 것으로 시작하세요.
+영상 전처리를 위해 [PyTorchVideo 라이브러리](https://pytorchvideo.org)를 활용할 것입니다. 필요한 종속성을 가져오는 것으로 시작하세요.
 
 ```py
 >>> import pytorchvideo.data

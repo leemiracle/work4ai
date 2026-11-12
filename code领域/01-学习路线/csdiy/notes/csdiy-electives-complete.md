@@ -282,7 +282,7 @@ csdiy 评价：*"让任何愿意花时间的同学都可以更容易实现自己
 | B站视频 | https://www.bilibili.com/video/BV1X7411F744 |
 | PPT+视频 | http://games-cn.org/graphics-intro-ppt-video/ |
 | 教材 | *Fundamentals of Computer Graphics* |
-| 作业 | [8 个 Project](http://games-cn.org/forums/topic/allhw/) |
+| 作业 | [8 个 Project](http://games-cn.org/forums/topic/allhw) |
 | 资源汇总 | https://github.com/ysj1173886760/Learning/tree/master/graphics/GAMES101 |
 
 **csdiy 评价**：国内最有名的图形学公开课。以**十分生动**的方式带入门。每个 Project 代码量不多但都很有趣。

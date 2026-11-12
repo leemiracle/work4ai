@@ -478,7 +478,7 @@ async for chunk in llm_service.chat(messages, stream=True):
 - 查看 [AI架构文档](../AI_ARCHITECTURE.md)
 - 探索 [项目文档](./DEPLOYMENT.md)
 - 学习 [LLM最佳实践](https://platform.openai.com/docs/guides/prompt-engineering)
-- 了解 [向量数据库](https://www.pinecone.io/learn/vector-database/)
+- 了解 [向量数据库](https://www.pinecone.io/learn/vector-database)
 
 ---
 

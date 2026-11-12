@@ -5,7 +5,7 @@
 > 时间: 每周 2 次讲座 + 论文讨论
 > 先修: CS147 或同等 HCI 经验；强烈建议有研究兴趣
 > 难度: ⭐⭐⭐⭐⭐（研究级阅读量 + 批判性思考）
-> 官网: http://cs347.stanford.edu/ (或 https://magrawala.github.io/cs347-sp26/)
+> 官网: http://cs347.stanford.edu/ (或 https://magrawala.github.io/cs347-sp26)
 
 ---
 

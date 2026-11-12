@@ -2,7 +2,7 @@
 
 > **位置**：`03-social-sciences/finance/insurance.md`  
 > **关联**：[`risk-and-uncertainty.md`](./risk-and-uncertainty.md)（风险 vs 不确定性——保险能管的是"风险"，管不了"不确定性"）+ [`behavioral-finance.md`](./behavioral-finance.md)（前景理论·损失厌恶·概率扭曲——解释人为什么买保险）+ [`fixed-income.md`](./fixed-income.md)（保险公司是债券市场最大买家·浮存金投资）+ [`_overview.md`](./_overview.md)（金融地图）  
-> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（概率可知性）+ [`00-philosophy/ethics/`](../../00-philosophy/ethics/)（代际正义·公平定价·强制保险的合法性）  
+> **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（概率可知性）+ [`00-philosophy/ethics/`](../../00-philosophy/ethics)（代际正义·公平定价·强制保险的合法性）  
 > **核心问题**：**保险的本质是什么？** —— 不是"出事赔钱"，而是"**用群体的确定性替代个体的不确定性**"。保险是人类发明的最古老的风险管理工具——它的数学根基（大数法则）在 300 年前就被赌博催生，它的社会功能（互助共济）在人类文明黎明期就已存在。但它的核心矛盾（信息不对称）至今没有完美解法。
 
 ---
@@ -912,10 +912,10 @@ P2P 保险（如 Lemonade、Friendsurance）的模型：
 - **行为之根**：[`behavioral-finance.md`](./behavioral-finance.md)——损失厌恶（λ=2.25）解释保险需求；概率权重函数解释为什么人买几乎不可能出事的保险
 - **固定收益**：[`fixed-income.md`](./fixed-income.md)——保险公司是债券市场最大买家；浮存金投资；利率风险对寿险的资产负债双杀
 - **学科总览**：[`_overview.md`](./_overview.md)（金融地图 §二 风险管理分支）+ [`_philosophy-of-finance.md`](./_philosophy-of-finance.md)（代际正义·公平定价的伦理）
-- **概率论**：[`02-formal-sciences/probability/`](../../02-formal-sciences/probability/)（大数法则、泊松过程、对数正态分布——保险的数学地基）
-- **博弈论/信息经济学**：[`06-systems/game-theory/`](../../06-systems/game-theory/)（逆向选择=信号甄别；道德风险=委托代理）
-- **复杂系统**：[`06-systems/complexity/`](../../06-systems/complexity/)（巨灾=相变/临界点；保险网络=级联失效）
-- **伦理学**：[`00-philosophy/ethics/`](../../00-philosophy/ethics/)（强制保险的合法性、基因歧视、代际正义）
+- **概率论**：[`02-formal-sciences/probability/`](../../02-formal-sciences/probability)（大数法则、泊松过程、对数正态分布——保险的数学地基）
+- **博弈论/信息经济学**：[`06-systems/game-theory/`](../../06-systems/game-theory)（逆向选择=信号甄别；道德风险=委托代理）
+- **复杂系统**：[`06-systems/complexity/`](../../06-systems/complexity)（巨灾=相变/临界点；保险网络=级联失效）
+- **伦理学**：[`00-philosophy/ethics/`](../../00-philosophy/ethics)（强制保险的合法性、基因歧视、代际正义）
 - **关键思想家**：Jakob Bernoulli（大数法则, 1713）· Frank Knight（风险 vs 不确定性, 1921）· George Akerlof（柠檬市场/逆向选择, 1970 Nobel 2001）· Michael Rothschild & Joseph Stiglitz（甄别均衡, 1976 Nobel 2001）· Hans Bühlmann（精算数学）· Warren Buffett（浮存金商业模式）
 
 ---
@@ -928,7 +928,7 @@ P2P 保险（如 Lemonade、Friendsurance）的模型：
 >
 > **保险的本质，是把"不可承受的灾难"换成"可承受的保费"。但有些灾难——黑天鹅——保费也承受不了。**
 >
-> 想清楚这个问题：在你的生活中，哪些风险值得保险，哪些只能靠**反脆弱**（降低自己对金钱的依赖、保持冗余、让自己从冲击中变强）？把你的回答写进 [`insights/`](../../insights/)。
+> 想清楚这个问题：在你的生活中，哪些风险值得保险，哪些只能靠**反脆弱**（降低自己对金钱的依赖、保持冗余、让自己从冲击中变强）？把你的回答写进 [`insights/`](../../insights)。
 
 ---
 

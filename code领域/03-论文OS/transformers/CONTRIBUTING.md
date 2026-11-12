@@ -61,7 +61,7 @@ feedback.
 The 🤗 Transformers library is robust and reliable thanks to users who report the problems they encounter.
 
 Before you report an issue, we would really appreciate it if you could **make sure the bug was not
-already reported** (use the search bar on GitHub under Issues). Your issue should also be related to bugs in the library itself, and not your code. If you're unsure whether the bug is in your code or the library, please ask in the [forum](https://discuss.huggingface.co/) or on our [discord](https://discord.com/invite/hugging-face-879548962464493619) first. This helps us respond quicker to fixing issues related to the library versus general questions.
+already reported** (use the search bar on GitHub under Issues). Your issue should also be related to bugs in the library itself, and not your code. If you're unsure whether the bug is in your code or the library, please ask in the [forum](https://discuss.huggingface.co) or on our [discord](https://discord.com/invite/hugging-face-879548962464493619) first. This helps us respond quicker to fixing issues related to the library versus general questions.
 
 > [!TIP]
 > We have a [docs bot](https://huggingface.co/spaces/huggingchat/hf-docs-chat), and we highly encourage you to ask all your questions there. There is always a chance your bug can be fixed with a simple flag 👾🔫
@@ -347,7 +347,7 @@ You'll need **[Python 3.9](https://github.com/huggingface/transformers/blob/main
    ```
 
    Please remember to write [good commit
-   messages](https://chris.beams.io/posts/git-commit/) to clearly communicate the changes you made!
+   messages](https://chris.beams.io/posts/git-commit) to clearly communicate the changes you made!
 
    To keep your copy of the code up to date with the original
    repository, rebase your branch on `upstream/branch` *before* you open a pull request or if requested by a maintainer:
@@ -469,7 +469,7 @@ for more information.
 
 ### Develop on Windows
 
-On Windows (unless you're working in [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/) or WSL), you need to configure git to transform Windows `CRLF` line endings to Linux `LF` line endings:
+On Windows (unless you're working in [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl) or WSL), you need to configure git to transform Windows `CRLF` line endings to Linux `LF` line endings:
 
 ```bash
 git config core.autocrlf input
@@ -477,7 +477,7 @@ git config core.autocrlf input
 
 One way to run the `make` command on Windows is with MSYS2:
 
-1. [Download MSYS2](https://www.msys2.org/), and we assume it's installed in `C:\msys64`.
+1. [Download MSYS2](https://www.msys2.org), and we assume it's installed in `C:\msys64`.
 2. Open the command line `C:\msys64\msys2.exe` (it should be available from the **Start** menu).
 3. Run in the shell: `pacman -Syu` and install `make` with `pacman -S make`.
 4. Add `C:\msys64\usr\bin` to your PATH environment variable.

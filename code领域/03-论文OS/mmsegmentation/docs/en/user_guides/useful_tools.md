@@ -166,7 +166,7 @@ Description of arguments:
 
 ## Model Serving
 
-In order to serve an `MMSegmentation` model with [`TorchServe`](https://pytorch.org/serve/), you can follow the steps:
+In order to serve an `MMSegmentation` model with [`TorchServe`](https://pytorch.org/serve), you can follow the steps:
 
 ### 1. Convert model from MMSegmentation to TorchServe
 

@@ -78,16 +78,16 @@ All resources are freely available except those with a 💲 icon.
 
 * [Khan Academy](https://www.khanacademy.org/math)
 * [Coursera](https://www.coursera.org/courses?query=mathematics&languages=en)
-* [MIT OpenCourseWare](http://ocw.mit.edu/courses/mathematics/)
+* [MIT OpenCourseWare](http://ocw.mit.edu/courses/mathematics)
 * [edX](https://www.edx.org/course/subject/math)
 * [Brilliant](https://brilliant.org/courses/#math-foundational)
-* [WooTube](https://misterwootube.com/)
-* [Mathigon](https://mathigon.org/)
-* [Calculus.org](http://calculus.org/)
-* [Ximera](https://ximera.osu.edu/) : free interactive mathematics textbooks (Ohio State University)
-* [Almost Fun](https://www.almostfun.org/lessons/)
+* [WooTube](https://misterwootube.com)
+* [Mathigon](https://mathigon.org)
+* [Calculus.org](http://calculus.org)
+* [Ximera](https://ximera.osu.edu) : free interactive mathematics textbooks (Ohio State University)
+* [Almost Fun](https://www.almostfun.org/lessons)
 * [Oxford Mathematics](https://www.youtube.com/c/OxfordMathematics)
-* [Math Academy](https://mathacademy.com/)
+* [Math Academy](https://mathacademy.com)
 
 ## Learn to Learn
 
@@ -117,42 +117,42 @@ All resources are freely available except those with a 💲 icon.
 
 ## Tools
 
-* [Symbolab](https://www.symbolab.com/)
+* [Symbolab](https://www.symbolab.com)
 * [Desmos](https://www.desmos.com/calculator)
-* [Math Words](http://www.mathwords.com/)
-* [Wolfram Alpha](http://www.wolframalpha.com/)
-* [Maxima](https://maxima.sourceforge.io/)
-* [Sympy](https://www.sympy.org/)
-* [Sagemath](http://www.sagemath.org/)
+* [Math Words](http://www.mathwords.com)
+* [Wolfram Alpha](http://www.wolframalpha.com)
+* [Maxima](https://maxima.sourceforge.io)
+* [Sympy](https://www.sympy.org)
+* [Sagemath](http://www.sagemath.org)
 * [Unit Converter](https://unitconverters.net)
 * [GeoGebra](https://www.geogebra.org/?lang=en)
-* [Macaulay2](http://www2.macaulay2.com/Macaulay2/)
-* [Singular](https://www.singular.uni-kl.de/)
-* [GNU Octave](https://www.gnu.org/software/octave/)
-* [Magma](http://magma.maths.usyd.edu.au/magma/)
-* [Maple](https://www.maplesoft.com/products/Maple/)
+* [Macaulay2](http://www2.macaulay2.com/Macaulay2)
+* [Singular](https://www.singular.uni-kl.de)
+* [GNU Octave](https://www.gnu.org/software/octave)
+* [Magma](http://magma.maths.usyd.edu.au/magma)
+* [Maple](https://www.maplesoft.com/products/Maple)
 * [Matlab](https://www.mathworks.com/products/matlab.html)
-* [Wolfram Mathematica](https://www.wolfram.com/mathematica/)
+* [Wolfram Mathematica](https://www.wolfram.com/mathematica)
 * [Free Math](https://freemathapp.org)
 * [xhub](https://chrome.google.com/webstore/detail/xhub/anidddebgkllnnnnjfkmjcaallemhjee)
-* [CopyPasteMathjax](https://www.copypastemathjax.com/)
+* [CopyPasteMathjax](https://www.copypastemathjax.com)
 * [Finance calculators](https://www.financecharts.com/pages/5724-retirement-calculators-and-stock-market-tips)
 * [Mathcheap](https://mathcheap.xyz)
 * [Midpoint Calculator](https://midpointcalculator.co)
 * [Quartiles Calculator](https://quartilecalculator.net)
-* [Corca Editor](https://corca.io/)
+* [Corca Editor](https://corca.io)
 
 ## Questions and Answers
 
-* [Mathematics Stack Exchange](http://math.stackexchange.com/)
-* [MathOverflow](http://mathoverflow.net/) - for professional mathematicians
+* [Mathematics Stack Exchange](http://math.stackexchange.com)
+* [MathOverflow](http://mathoverflow.net) - for professional mathematicians
 
 ## Encyclopedia
 
 * [Encyclopedia of Mathematics](https://www.encyclopediaofmath.org)
-* [Planetmath](http://planetmath.org/)
+* [Planetmath](http://planetmath.org)
 * [ProofWiki](https://proofwiki.org/wiki/Main_Page)
-* [Wolfram Mathworld](http://mathworld.wolfram.com/)
+* [Wolfram Mathworld](http://mathworld.wolfram.com)
 * [The On-Line Encyclopedia of Integer Sequences](https://oeis.org) - Great compendium of many different integer sequences. Founded 1964 by N. J. A. Sloane.
 * 💲 [The Princeton Companion to Mathematics](https://press.princeton.edu/books/hardcover/9780691118802/the-princeton-companion-to-mathematics) - Timothy Gowers (Professor, Fields medallist), June Barrow-Green (Professor), and Imre Leader (Professor).
 * 💲 [Encyclopedia of Distances (4th Edition)](https://link.springer.com/book/10.1007/978-3-662-52844-0) - Michel Marie Deza, Elena Deza.
@@ -170,36 +170,36 @@ All resources are freely available except those with a 💲 icon.
 
 ## Magazines
 
-* [Quanta Magazine](https://www.quantamagazine.org/mathematics/) - Features latest research breakthroughs in an accessible style for non-experts.
+* [Quanta Magazine](https://www.quantamagazine.org/mathematics) - Features latest research breakthroughs in an accessible style for non-experts.
 * [Bulletin of the American Mathematical Society](https://www.ams.org/journals/bull/all_issues.html) - Expository articles on contemporary mathematical research, written in a way that gives insight to mathematicians who may not be experts in the particular topic.
 * [Notices of the American Mathematical Society](http://www.ams.org/cgi-bin/notices/amsnotices.pl?article_id=fullissue&article_type=gallery&gallery_type=fullissue) - Publicizes activities of the Society and features surveys, reports, news, announcements, and opinions on industry trends, academia, and research.
 * [European Mathematical Society Magazine](https://euromathsoc.org/magazine) - The Magazine features announcements about meetings and conferences, articles outlining current trends in scientific development, reports on member societies, and many other informational items.
-* [Mathematics Today by Institute of Mathematics and its Applications](https://ima.org.uk/publications/mathematics-today/) - News, opinions, and articles related to mathematics, so the reader stays updated.
-* [Crux Mathematicorum by Canadian Mathematical Society](https://cms.math.ca/publications/crux/) - source of unique and challenging mathematical problems designed for the secondary and undergraduate levels. It includes an Olympiad Corner which is helpful for math competitions.
+* [Mathematics Today by Institute of Mathematics and its Applications](https://ima.org.uk/publications/mathematics-today) - News, opinions, and articles related to mathematics, so the reader stays updated.
+* [Crux Mathematicorum by Canadian Mathematical Society](https://cms.math.ca/publications/crux) - source of unique and challenging mathematical problems designed for the secondary and undergraduate levels. It includes an Olympiad Corner which is helpful for math competitions.
 
 ## Blogs
 
-* [BetterExplained](https://betterexplained.com/) - Maintained by Kalid Azad
-* [ILoveMaths](http://ilovemaths.com/) - For grades 6 thru 12 in K-12 system
-* [3blue1brown](https://www.3blue1brown.com/) - Animated Maths
+* [BetterExplained](https://betterexplained.com) - Maintained by Kalid Azad
+* [ILoveMaths](http://ilovemaths.com) - For grades 6 thru 12 in K-12 system
+* [3blue1brown](https://www.3blue1brown.com) - Animated Maths
 * [Mathsisfun](https://www.mathsisfun.com) simple text lightweight site for students up to highschool
 * [MathematicsIsAScience](https://calculus123.com/wiki/Peter_Saveliev) - Peter Saveliev (Professor of mathematics at Marshall University, Huntington WV, USA)
 
 ## Meetings and Conferences
 
-* [MathsJam](https://mathsjam.com/) - monthly local recreational maths/puzzle meetups and an annual gathering in Staffordshire, England
-* [Talking Maths in Public](https://talkingmathsinpublic.uk/) - a conference for maths communicators, running every two years, usually in the UK
-* [Bridges](https://www.bridgesmathart.org/) - an annual conference on mathematical connections in art, music, architecture, and culture. The 2025 meeting is in Eindhoven, Netherlands.
+* [MathsJam](https://mathsjam.com) - monthly local recreational maths/puzzle meetups and an annual gathering in Staffordshire, England
+* [Talking Maths in Public](https://talkingmathsinpublic.uk) - a conference for maths communicators, running every two years, usually in the UK
+* [Bridges](https://www.bridgesmathart.org) - an annual conference on mathematical connections in art, music, architecture, and culture. The 2025 meeting is in Eindhoven, Netherlands.
 
 ## Misc
 * [Areas of mathematics on Wikipedia](https://en.wikipedia.org/wiki/Areas_of_mathematics)
-* [Paul's Online Math Notes](http://tutorial.math.lamar.edu/) - Paul Dawkins (Lamar University)
+* [Paul's Online Math Notes](http://tutorial.math.lamar.edu) - Paul Dawkins (Lamar University)
 * [List of electronic textbooks](http://faculty.atu.edu/mfinan/nnotes.html) - Marcel B. Finan (Arkansas Tech University)
-* [Topology Atlas](http://at.yorku.ca/topology/)
+* [Topology Atlas](http://at.yorku.ca/topology)
 * [Recreations in Math](http://djm.cc/library/Recreations_in_Mathematics_Licks_edited.pdf) - H. E. Licks (1917)
 * [Magic Squares and Cubes](http://djm.cc/library/Magic_Squares_Cubes_Andrews_edited.pdf) - W. S. Andrews (1917)
-* [Convex Optimization](https://web.stanford.edu/~boyd/cvxbook/) - Stephen Boyd and Lieven Vandenberghe
-* [Fabrice Baudoin's Notes](https://fabricebaudoin.wordpress.com/) - Both research and lecture notes on many topics, Including Diffusions on foliated manifold, Stochastic Calculus, Global analysis in Dirichlet spaces, and more.
+* [Convex Optimization](https://web.stanford.edu/~boyd/cvxbook) - Stephen Boyd and Lieven Vandenberghe
+* [Fabrice Baudoin's Notes](https://fabricebaudoin.wordpress.com) - Both research and lecture notes on many topics, Including Diffusions on foliated manifold, Stochastic Calculus, Global analysis in Dirichlet spaces, and more.
 
 # Branches of Mathematics
 
@@ -211,15 +211,15 @@ All resources are freely available except those with a 💲 icon.
 ## Foundations of Mathematics
 ### Transition To Pure Rigour Math
 * 📝 [Basic Concepts of Mathematics](http://www.trillia.com/zakon1.html) - Elias Zakon
-* 📝 [Book of Proof](https://richardhammack.github.io/BookOfProof/) - Richard Hammak (Virginia Commonwealth University)
+* 📝 [Book of Proof](https://richardhammack.github.io/BookOfProof) - Richard Hammak (Virginia Commonwealth University)
 * 📖 [How to Prove It: A Structured Approach (3rd Edition)](https://ia800501.us.archive.org/7/items/how-to-prove-it-a-structured-approach-daniel-j.-velleman/How%20to%20Prove%20It%20A%20Structured%20Approach%20%28Daniel%20J.%20Velleman%29.pdf) - Daniel J. Velleman (Professor).
 
 ### Set Theory
 
 * 📝 [Sets, Relations, Functions](http://www.cosc.brocku.ca/~duentsch/papers/methprimer1.html) - Ivo Düntsch, Günther Gediga
 * 📝 [An Introduction to Set Theory](http://www.math.toronto.edu/weiss/set_theory.pdf) - William A. R. Weiss
-* 📝 [Set Theory and Foundations of Mathematics](http://www.settheory.net/) - Sylvain Poirier
-* 📝 [Set Theory on the Stanford Encyclopedia of Philosophy](http://plato.stanford.edu/entries/set-theory/)
+* 📝 [Set Theory and Foundations of Mathematics](http://www.settheory.net) - Sylvain Poirier
+* 📝 [Set Theory on the Stanford Encyclopedia of Philosophy](http://plato.stanford.edu/entries/set-theory)
 
 ### Logic
 
@@ -234,9 +234,9 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Predictive Arithmetic](https://web.math.princeton.edu/~nelson/books/pa.pdf) - Edward Nelson
 * 📝 [Proofs and Concepts: the fundamentals of abstract mathematics](http://people.uleth.ca/~dave.morris/books/proofs+concepts.html) - Joy Morris, Dave Morris
 * 📝 [Mathematical Reasoning: Writing and Proof](https://www.tedsundstrom.com/mathreasoning) - Ted Sundstrom
-* 📝 [Logic and Proof](http://leanprover.github.io/logic_and_proof/) -  Jeremy Avigad, Robert Y. Lewis, and Floris van Doorn
+* 📝 [Logic and Proof](http://leanprover.github.io/logic_and_proof) -  Jeremy Avigad, Robert Y. Lewis, and Floris van Doorn
 * 📝 [QED - an interactive textbook](https://teorth.github.io/QED) - Terence Tao
-* 📝 [Open Logic Textbook](http://builds.openlogicproject.org/) - collaborative effort, main contributors listed [here](https://openlogicproject.org/people/)
+* 📝 [Open Logic Textbook](http://builds.openlogicproject.org) - collaborative effort, main contributors listed [here](https://openlogicproject.org/people)
 
 ### Category Theory
 
@@ -251,12 +251,12 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Basic Concepts of Enriched Category Theory](http://www.tac.mta.ca/tac/reprints/articles/10/tr10abs.html) - G. M. Kelley
 * 📝 [Abstract and Concrete Categories: The Joy of Cats](http://www.tac.mta.ca/tac/reprints/articles/17/tr17abs.html) - Jiri Adamek, Horst Herrlich, George Strecker
 * 📝 [Seven Sketches in Compositionality: An Invitation to Applied Category Theory](http://math.mit.edu/~dspivak/teaching/sp18/7Sketches.pdf) - Brendan Fong and David I. Spivak (MIT)
-* 📝 [Category Theory in Context](http://www.math.jhu.edu/~eriehl/context/) - Emily Riehl (John Hopkins University)
+* 📝 [Category Theory in Context](http://www.math.jhu.edu/~eriehl/context) - Emily Riehl (John Hopkins University)
 
 ### Type Theory
 * 📝 [Proofs and Types](http://www.paultaylor.eu/stable/prot.pdf) - Jean-Yves Girard
 * 📝 [Intuitionistic Type Theory](https://archive-pml.github.io/martin-lof/pdfs/Bibliopolis-Book-retypeset-1984.pdf) - Per Martin-Lof
-* 📝 [Type Theory and Functional Programming](https://www.cs.kent.ac.uk/people/staff/sjt/TTFP/) - Simon Thompson
+* 📝 [Type Theory and Functional Programming](https://www.cs.kent.ac.uk/people/staff/sjt/TTFP) - Simon Thompson
 * 📝 [Programming in Martin-Lof’s Type Theory](http://www.cse.chalmers.se/research/group/logic/book/book.pdf) - Bengt Nordstrom, Kent Petersson, Jan M. Smith
 
 ### Homotopy Type Theory
@@ -278,7 +278,7 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [A Computational Introduction to Number Theory and Algebra](http://shoup.net/ntb/ntb-v2.pdf) - Victor Shoup
 * 📝 [Number Theory: A Contemporary Introduction](http://alpha.math.uga.edu/~pete/4400FULL.pdf) - Pete L. Clark
 * 📝 [An Introduction to the Theory of Numbers](http://www.trillia.com/moser-number.html) - Leo Moser
-* 📝 [Yet Another Introductory Number Theory Textbook](https://www.poritz.net/jonathan/share/yaintt/) - Jonathan A. Poritz
+* 📝 [Yet Another Introductory Number Theory Textbook](https://www.poritz.net/jonathan/share/yaintt) - Jonathan A. Poritz
 
 ### Algebraic Number Theory
 
@@ -332,17 +332,17 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Vector Space Theory](http://www.maths.usyd.edu.au/u/bobh/UoS/MATH2902/vswhole.pdf) - Robert Howlett
 * 📝 [Linear Algebra](http://joshua.smcvt.edu/linearalgebra) - Jim Hefferon
 * 📝 [MIT OpenCourseWare Lectures on Linear Algebra (18.06) as Jupyter Notebooks](https://github.com/juanklopper/MIT_OCW_Linear_Algebra_18_06) - Juan Klopper
-* 📝 [Elementary Linear Algebra](http://www.numbertheory.org/book/) - Keith Matthews
-* 📝 [A First Courses in Linear Algebra](http://linear.ups.edu/) - Rob Breezer
-* 📝 [Linear Algebra](https://www.math.ucdavis.edu/~linear/) - David Cherney, Tom Denton, Andrew Waldron
+* 📝 [Elementary Linear Algebra](http://www.numbertheory.org/book) - Keith Matthews
+* 📝 [A First Courses in Linear Algebra](http://linear.ups.edu) - Rob Breezer
+* 📝 [Linear Algebra](https://www.math.ucdavis.edu/~linear) - David Cherney, Tom Denton, Andrew Waldron
 * 📝 [Introduction to vectors and tensors, Vol 1: linear and multilinear algebra](http://oaktrust.library.tamu.edu/handle/1969.1/2502) - Ray M Bowen, C. C. Wang
 * 📝 [Introduction to vectors and tensors, Vol 2: vector and tensor analysis](http://oaktrust.library.tamu.edu/handle/1969.1/3609) - Ray M Bowen, C. C. Wang
 * 📝 [Introduction to Applied Linear Algebra](https://web.stanford.edu/~boyd/vmls/vmls.pdf) - Stephen Boyd (Stanford University), Lieven Vandenberghe (UCLA)
 * 📝 [Linear Algebra Done Wrong](https://www.math.brown.edu/~treil/papers/LADW/LADW_2017-09-04.pdf) - Sergei Treil
 * 📝 [Immersive Linear Algebra](http://immersivemath.com/ila/index.html) - J. Ström, K. Åström, and T. Akenine-Möller
-* 📝 [Interactive Linear Algebra](https://textbooks.math.gatech.edu/ila/) - Dan Margalit and Joseph Rabinoff
+* 📝 [Interactive Linear Algebra](https://textbooks.math.gatech.edu/ila) - Dan Margalit and Joseph Rabinoff
 * 📝 [Linear Algebra, Infinite Dimensions, and Maple](https://people.math.gatech.edu/~herod/Hspace/Hspace.html) - James Herod
-* 📖 [Linear Algebra Done Right](https://linear.axler.net/) - Sheldon Axler
+* 📖 [Linear Algebra Done Right](https://linear.axler.net) - Sheldon Axler
 
 ### Ring Theory
 
@@ -379,9 +379,9 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Fundamentals of Geometry](http://polly.phys.msu.ru/~belyaev/geometry.pdf) - Oleg A. Belyaev
 * 📝 [A=B](https://www.math.upenn.edu/~wilf/AeqB.html) - M. Petkovsek, H. Wilf, D. Zeilberger
 * 📝 [Elements](http://aleph0.clarku.edu/~djoyce/java/elements/toc.html) - Euclid
-* 📝 [Euclid's Elements Redux](http://starrhorse.com/euclid/) - Daniel Callahan
-* 📝 [Mathematical Illustrations](http://www.math.ubc.ca/~cass/graphics/manual/) - Bill Casselman
-* 📝 [Byrne's Euclid](https://www.c82.net/euclid/) - Oliver Byrne
+* 📝 [Euclid's Elements Redux](http://starrhorse.com/euclid) - Daniel Callahan
+* 📝 [Mathematical Illustrations](http://www.math.ubc.ca/~cass/graphics/manual) - Bill Casselman
+* 📝 [Byrne's Euclid](https://www.c82.net/euclid) - Oliver Byrne
 * 📝 [Plane Geometry](http://djm.cc/library/Plane_Geometry_Wentworth_Smith_edited.pdf) - George Wentworth and David Eugene Smith (1913)
 * 📝 [Planes and Spherical Trigonometry](http://djm.cc/library/Plane_Spherical_Trigonometry_Wentworth_Smith_edited_2.pdf) - George Wentworth and David Eugene Smith (1915)
 * 📝 [Coordinate Geometry](http://djm.cc/library/Coordinate_Geometry_Fine_Thompson_edited03.pdf) - Henry Buchard Fine and Henry Dallas Thompson (1911)
@@ -394,7 +394,7 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Topics in Differential Geometry](http://www.mat.univie.ac.at/~michor/dgbook.pdf) - Peter W. Michor
 * 📝 [Lectures on Differential Geometry](http://mysite.science.uottawa.ca/rossmann/Differential%20Geometry%20book_files/Diffgeo.pdf) - Wulf Rossmann
 * 📝 [An Introduction to Riemannian Geometry](http://www.matematik.lu.se/matematiklu/personal/sigma/Riemann.pdf) - Sigmundur Gudmundsson (Lund University)
-* 📝 [The Geometry and Topology of Three-Manifolds](http://msri.org/publications/books/gt3m/) - W. Thurston
+* 📝 [The Geometry and Topology of Three-Manifolds](http://msri.org/publications/books/gt3m) - W. Thurston
 * 📝 [Semi-Riemann Geometry and General Relativity](http://www.math.harvard.edu/~shlomo/docs/semi_riemannian_geometry.pdf) - Shlomo Sternberg
 * 📝 [Discrete Differential Geometry](http://www.cs.cmu.edu/~kmcrane/Projects/DDG/paper.pdf) - Keenan Crane
 
@@ -406,7 +406,7 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Algebraic Geometry](http://www.cis.upenn.edu/~jean/algeoms.pdf) - Jean Gallier, Stephen S. Shatz (University of Pennsylvania)
 * 📝 [Algebraic Geometry](http://www.jmilne.org/math/CourseNotes/AG.pdf) - J.S. Milne
 * 📝 [Algebraic Geometry](http://www.mathematik.uni-kl.de/~gathmann/class/alggeom-2002/main.pdf) - Andreas Gathmann (University of Kaiserslautern)
-* 📝 [The Stacks Project](https://stacks.math.columbia.edu/) - Maintained by Aise Johan de Jong (Columbia)
+* 📝 [The Stacks Project](https://stacks.math.columbia.edu) - Maintained by Aise Johan de Jong (Columbia)
 
 ### Algebraic Statistics
 * 📝 [Lectures on Algebraic Statistics](https://math.berkeley.edu/~bernd/owl.pdf) - Mathias Drton, Bernd Sturmfels, Seth Sullivant
@@ -440,7 +440,7 @@ All resources are freely available except those with a 💲 icon.
 
 ### Real Analysis
 
-* 📝 [MIT OpenCourseWare Lectures on Calculus](https://ocw.mit.edu/resources/res-18-001-calculus-online-textbook-spring-2005/textbook/) - G. Strang
+* 📝 [MIT OpenCourseWare Lectures on Calculus](https://ocw.mit.edu/resources/res-18-001-calculus-online-textbook-spring-2005/textbook) - G. Strang
 * 📝 [Elementary Calculus: An Approach Using Infinitesimals](http://www.math.wisc.edu/~keisler/calc.html) - Professor H. Jerome Keisler
 * 📝 [An Introduction to Real Analysis](https://www.math.ucdavis.edu/~hunter/intro_analysis_pdf/intro_analysis.pdf) - John K. Hunter (University of California at Davis)
 * 📝 [Introduction to Real Analysis](http://ramanujan.math.trinity.edu/wtrench/texts/TRENCH_REAL_ANALYSIS.PDF) - William F. Trench (Trinity University, Texas)
@@ -454,14 +454,14 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Mathematical Analysis Vol II](http://www.trillia.com/zakon-analysisII.html) - Elias Zakon
 * 📝 [Advanced Calculus](http://www.math.harvard.edu/~shlomo/docs/Advanced_Calculus.pdf) - Lynn Loomis, Schlomo Sternberg
 * 📝 [ Analysis of Functions of a Single Variable](http://spot.colorado.edu/~baggett/analysis.html) - Lawerence Baggett
-* 📝 [The Calculus of Functions of Several Variables](http://www.synechism.org/wp/the-calculus-of-functions-of-several-variables/) - Dan Sloughter
+* 📝 [The Calculus of Functions of Several Variables](http://www.synechism.org/wp/the-calculus-of-functions-of-several-variables) - Dan Sloughter
 * 📝 [A ProblemText in Advanced Calculus](http://web.pdx.edu/~erdman/PTAC/problemtext_pdf.pdf) - John M. Erdman
 * 📝 [Calculus and Linear Algebra. Vol. 1](http://hdl.handle.net/2027/spo.5597602.0001.001) - Wilfred Kaplan, Donald J. Lewis
 * 📝 [Calculus and Linear Algebra. Vol. 2](https://quod.lib.umich.edu/s/spobooks/5597602.0002.001) - Wilfred Kaplan, Donald J. Lewis
 * 📝 [Introduction to Calculus I and II](http://www.math.odu.edu/~jhh/counter10.html) - J.H. Heinbockel
 * 📝 [Active Calculus](http://faculty.gvsu.edu/boelkinm/Home/Active_Calculus.html) - Matt Boelkins
 * 📝 [Supplements to the Exercises in Chapters 1-7 of Walter Rudin's "Principles of Mathematical Analysis"](https://math.berkeley.edu/~gbergman/ug.hndts/#Rudin) - George M. Bergman
-* 📝 [Calculus Made Easy](http://calculusmadeeasy.org/) - Silvanus P. Thompson (1910)
+* 📝 [Calculus Made Easy](http://calculusmadeeasy.org) - Silvanus P. Thompson (1910)
 * 📝 [Elements of Differential and Integral Calculus](http://djm.cc/library/Elements_Differential_Integral_Calculus_Granville_edited_2.pdf) - William Anthony Granville (1911)
 * 📝 [Precalculus](https://stitz-zeager.com/szprecalculus07042013.pdf) - Carl Stitz, Jeff Zeager
 
@@ -486,7 +486,7 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Complex Analysis](https://web.archive.org/web/20150620124453/https://www.math.washington.edu/~marshall/math_536/Notes.pdf) - Donald E. Marshall
 * 📝 [A Concise Course in Complex Analysis and Riemann Surfaces](https://gauss.math.yale.edu/~ws442/complex.pdf) - Wilhelm Schlag
 * 📝 [Complex Analysis](http://people.math.gatech.edu/%7Ecain/winter99/complex.html) - G. Cain (Georgia Tech)
-* 📝 [Complex Analysis](https://complex-analysis.com/) - Juan Carlos Ponce Campuzano
+* 📝 [Complex Analysis](https://complex-analysis.com) - Juan Carlos Ponce Campuzano
 
 ### Functional Analysis
 
@@ -511,23 +511,23 @@ All resources are freely available except those with a 💲 icon.
 
 ### Ordinary Differential Equations
 
-* 📝 [Difference Equations To Differential Equations](http://www.synechism.org/wp/difference-equations-to-differential-equations/) - Dan Sloughter
+* 📝 [Difference Equations To Differential Equations](http://www.synechism.org/wp/difference-equations-to-differential-equations) - Dan Sloughter
 * 📝 [Ordinary Differential Equation](https://www.math.uni-bielefeld.de/~grigor/odelec2008.pdf) - Alexander Grigorian (University of Bielefeld)
 * 📝 [Ordinary Differential Equations: Lecture Notes](http://www.cs.bgu.ac.il/~leonid/ode_bio_files/Ionascu_LectNotes.pdf) - Eugen J. Ionascu
 * 📝 [Ordinary Differential Equations](http://www.math.lmu.de/~philip/publications/lectureNotes/ODE.pdf) - Peter Philip
 * 📝 [Ordinary Differential Equations](http://users.math.msu.edu/users/gnagy/teaching/ode.pdf) - Gabriel Nagy
 * 📝 [Ordinary Differential Equations and Dynamical Systems](http://www.mat.univie.ac.at/~gerald/ftp/book-ode/ode.pdf) - Gerald Teschl
 * 📝 [Notes on Differential Equations](http://leipper.org/manuals/zip-fill/dn-difeq-notes.pdf) - Bob Terrell
-* 📝 [Elementary Differential Equations](http://digitalcommons.trinity.edu/mono/8/) - William F. Trench
-* 📝 [Elementary Differential Equations With Boundary Value Problems](http://digitalcommons.trinity.edu/mono/9/) - William F. Trench
-* 📝 [Notes on Diffy Qs: Differential Equations for Engineers](http://www.jirka.org/diffyqs/) - Jiří Lebl
+* 📝 [Elementary Differential Equations](http://digitalcommons.trinity.edu/mono/8) - William F. Trench
+* 📝 [Elementary Differential Equations With Boundary Value Problems](http://digitalcommons.trinity.edu/mono/9) - William F. Trench
+* 📝 [Notes on Diffy Qs: Differential Equations for Engineers](http://www.jirka.org/diffyqs) - Jiří Lebl
 * 📝 [Differential Equations](http://djm.cc/library/Differential_Equations_Phillips_edited.pdf) - H. B. Phillips (1922)
 
 ### Partial Differential Equations
 
 * 📝 [Notes on Partial Differential Equations](https://www.math.ucdavis.edu/~hunter/pdes/pde_notes.pdf) - John K. Hunter (University of California at Davis)
 * 📝 [Partial Differential Equations: Lecture Notes](http://www.math.uni-leipzig.de/~miersemann/pdebook.pdf) - Erich Miersemann (Leipzig University)
-* 📝 [Linear Methods of Applied Mathematics](http://www.mathphysics.com/pde/) - E. Harrell, J. Herod (Georgia Tech)
+* 📝 [Linear Methods of Applied Mathematics](http://www.mathphysics.com/pde) - E. Harrell, J. Herod (Georgia Tech)
 
 
 ## Probability and Statistics
@@ -539,7 +539,7 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [A Short Introduction to Probability](http://www.maths.uq.edu.au/~kroese/asitp.pdf) - Dirk P. Kroese (University of Queensland)
 * 📝 [Probability: Theory and Examples](https://www.math.duke.edu/~rtd/PTE/PTE4_1.pdf) - Rick Durrett
 * 📝 [Probability and Statistics Cookbook](https://github.com/mavam/stat-cookbook/releases/download/0.2.3/stat-cookbook.pdf) - Matthias Vallentin (UC Berkeley)
-* 📝 [The Only Probability Cheatsheet You'll Ever Need](http://www.wzchen.com/probability-cheatsheet/) - William Chen
+* 📝 [The Only Probability Cheatsheet You'll Ever Need](http://www.wzchen.com/probability-cheatsheet) - William Chen
 * 📝 [An Introduction to Probability and Random Processes](http://www.ellerman.org/Davids-Stuff/Maths/Rota-Baclawski-Prob-Theory-79.pdf) - Gian-Carlo Rota, Kenneth Baclawski
 * 📝 [Foundations of Constructive Probability Theory](https://arxiv.org/pdf/1906.01803.pdf) - Yuen-Kwok Chan
 
@@ -553,14 +553,14 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Theory of Statistics](http://mason.gmu.edu/~jgentle/books/MathStat.pdf) - James E. Gentle (George Mason University)
 * 📝 [Theory of Statistics](http://math.arizona.edu/~jwatkins/notests.pdf) - Joseph C. Watkins (University of Arizona)
 * 📝 [Glossary of Data Modeling](https://web.archive.org/web/20130523134625/http://www.aiaccess.net/e_gm.htm) - AI Access
-* 📝 [Statistics Papers](http://www.ats.ucla.edu/stat/papers/) - List of statistics papers curated by the Institute for Digital Research and Education (IDRE) at UCLA on methods such as bootstrap and factor invariance.
+* 📝 [Statistics Papers](http://www.ats.ucla.edu/stat/papers) - List of statistics papers curated by the Institute for Digital Research and Education (IDRE) at UCLA on methods such as bootstrap and factor invariance.
 * 📝 [NIST Handbook of Statistical Methods](http://itl.nist.gov/div898/handbook/index.htm) - Resource on practical statistics directed towards scientists and engineers.
-* 📝 [Concepts and Applications of Inferential Statistics](http://vassarstats.net/textbook/) - Richard Lowry
+* 📝 [Concepts and Applications of Inferential Statistics](http://vassarstats.net/textbook) - Richard Lowry
 * 📝 [Rough set data analysis: A road to non-invasive knowledge discovery](http://www.cosc.brocku.ca/~duentsch/papers/methprimer2.html) - Ivo Düntsch, Günther Gediga
-* 📝 [Statistical Thinking for the 21st Century](https://statsthinking21.org/) - Russell A. Poldrack
-* 📝 [Odds and Ends: Introducing Probability & Decision with a Visual Emphasis](https://jonathanweisberg.org/vip/) - Jonathan Weisberg
-* 📝 [Seeing Theory](https://seeing-theory.brown.edu/) - Daniel Kunin, Jingru Guo, Tyler Dae Devlin, and Daniel Xiang
-* 📝 [Statistics Done Wrong](https://www.statisticsdonewrong.com/) - Alex Reinhart
+* 📝 [Statistical Thinking for the 21st Century](https://statsthinking21.org) - Russell A. Poldrack
+* 📝 [Odds and Ends: Introducing Probability & Decision with a Visual Emphasis](https://jonathanweisberg.org/vip) - Jonathan Weisberg
+* 📝 [Seeing Theory](https://seeing-theory.brown.edu) - Daniel Kunin, Jingru Guo, Tyler Dae Devlin, and Daniel Xiang
+* 📝 [Statistics Done Wrong](https://www.statisticsdonewrong.com) - Alex Reinhart
 * 📝 [All of Statistics: A Concise Course in Statistical Inference](https://link.springer.com/book/10.1007/978-0-387-21736-9) - Larry Wasserman
 
 ### Statistical Learning
@@ -590,7 +590,7 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Numerical Analysis](http://people.cs.uchicago.edu/~ridg/newna/nalrs.pdf) - L. Ridgway Scott
 * 📝 [Lectures In Basic Computational Numerical Analysis](https://uknowledge.uky.edu/cgi/viewcontent.cgi?article=1000&context=math_textbooks) - J. M. McDonough (University of Kentucky)
 * 📝 [Advanced Numerical Methods and Their Applications to Industrial Problems: Adaptive Finite Element Methods](https://user.math.uni-bremen.de/schmi/SS04/YSU_Notes.pdf) - Alfred Schmidt, Arsen Narimanyan
-* 📝 [Numerical Analysis for Engineers](https://ece.uwaterloo.ca/~dwharder/nm/) - Douglas Wilhelm Harder
+* 📝 [Numerical Analysis for Engineers](https://ece.uwaterloo.ca/~dwharder/nm) - Douglas Wilhelm Harder
 * 📝🎥 [Advanced Linear Algebra: Foundations to Frontiers](https://www.cs.utexas.edu/users/flame/laff/alaff/frontmatter.html) - Robert van de Geijn, Margaret Myers (University of Texas at Austin)
 
 ## Signal processing
@@ -598,7 +598,7 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Introduction to Signal Processing](http://www.ece.rutgers.edu/~orfanidi/intro2sp/orfanidis-i2sp.pdf) - Sophocles J. Orfanidis (Rutgers University)
 * 📝 [Foundations of Signal Processing](http://www.fourierandwavelets.org/FSP_v1.1_2014.pdf) - Martin Vetterli, Jelena Kovacevic, Vivek K Goyal
 * 📝 [An Introduction to Statistical Signal Processing](https://ee.stanford.edu/~gray/sp.pdf) - Robert M. Gray, Lee D. Davisson
-* 📝 [Think DSP](https://greenteapress.com/wp/think-dsp/) - Allen B. Downey
+* 📝 [Think DSP](https://greenteapress.com/wp/think-dsp) - Allen B. Downey
 * 📝 [Linear algebra, signal processing, and wavelets. A unified approach.](https://www.uio.no/studier/emner/matnat/math/MAT-INF2360/v15/kompendium/applinalgpython.pdf) - Øyvind Ryan (University of Oslo)
 
 
@@ -608,7 +608,7 @@ All resources are freely available except those with a 💲 icon.
 * 📝 [Algorithms and Complexity](http://www.math.upenn.edu/%7Ewilf/AlgComp3.html) - H. Wilf
 * 📝 [Lecture Notes on Optimization](http://people.eecs.berkeley.edu/~varaiya/papers_ps.dir/NOO.pdf) - Pravin Varaiya
 * 📝 [Information Theory, Inference, and Learning Algorithms](http://www.inference.org.uk/mackay/itila/book.html) - David J. C. MacKay
-* 📝 [The Chaos Textbook: Mathematics in the age of the computer](https://hypertextbook.com/chaos/) - Glenn Elert
+* 📝 [The Chaos Textbook: Mathematics in the age of the computer](https://hypertextbook.com/chaos) - Glenn Elert
 
 ## Mathematical Biology
 
@@ -617,18 +617,18 @@ All resources are freely available except those with a 💲 icon.
 ## Mathematical Physics
 
 * 📝 [Introduction to Continuum Mechanics](http://oaktrust.library.tamu.edu/handle/1969.1/2501) - Ray. M. Bowen
-* 📝 [Mathematical Tools for Physics](http://www.physics.miami.edu/nearing/mathmethods/) - James Nearing
+* 📝 [Mathematical Tools for Physics](http://www.physics.miami.edu/nearing/mathmethods) - James Nearing
 * 📝 [Mechanism of the Heavens (1831)](http://www.malaspina.com/etext/heavens.htm) - Mary Somerville
 
 # Students Lecture Notes
 * [Evan Chen](https://web.evanchen.cc/coursework.html) - MIT. 2012 ~ 2018. Covers Combinatorics, Number Theory, Honors Algebra, Set Theory, Real Analysis, Graph Theory, and more.
-* [Dexter Chua](https://dec41.user.srcf.net/notes/) - Harvard. 2013 ~ 2018. Covers Analysis, Probability, Linear Algebra, Complex Analysis, Numerical Analysis, Statistics, Optimization, Algebraic Topology, Quantum Field Theory, and more.
+* [Dexter Chua](https://dec41.user.srcf.net/notes) - Harvard. 2013 ~ 2018. Covers Analysis, Probability, Linear Algebra, Complex Analysis, Numerical Analysis, Statistics, Optimization, Algebraic Topology, Quantum Field Theory, and more.
 
 # Related Awesome Lists
 * [Theoretical Computer Science](https://github.com/mostafatouny/awesome-theoretical-computer-science)
 
 # License
 
-[![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)](http://creativecommons.org/publicdomain/zero/1.0/)
+[![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)](http://creativecommons.org/publicdomain/zero/1.0)
 
 To the extent possible under law, [Cyrille Rossant](http://cyrille.rossant.net) has waived all copyright and related or neighboring rights to this work.

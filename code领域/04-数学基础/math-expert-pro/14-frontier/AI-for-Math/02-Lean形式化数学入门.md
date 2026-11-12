@@ -8,7 +8,7 @@
 
 ## 🎯 这篇指南给谁
 
-- 你学完本科核心数学（[01-track/stage-1](../../01-track/stage-1-本科核心/)），想知道"形式化"到底怎么入手
+- 你学完本科核心数学（[01-track/stage-1](../../01-track/stage-1-本科核心)），想知道"形式化"到底怎么入手
 - 你听说 AlphaProof 用 Lean 在 IMO 拿银牌，想亲眼看 Lean 怎么验证证明
 - 你想给自己的数学笔记加一道"机器验证"保险（[NOTES_TEMPLATE.md](../../NOTES_TEMPLATE.md) §4 严格证明的进阶版）
 
@@ -28,7 +28,7 @@
 - **程序** = 证明（如 `Nat.zero_add n` 是 `n + 0 = n` 这个类型的实例）
 - **类型检查** = 证明验证（如果程序能通过类型检查，证明就成立）
 
-> 💡 这就是 **Curry-Howard 同构**——命题即类型，证明即程序。详见 [16-foundations/Curry-Howard/](../../16-foundations/Curry-Howard/)。
+> 💡 这就是 **Curry-Howard 同构**——命题即类型，证明即程序。详见 [16-foundations/Curry-Howard/](../../16-foundations/Curry-Howard)。
 
 **为什么是 Lean 而不是 Coq/Agda/Isabelle**：
 | 证明器 | 优势 | 劣势 | 2024 现状 |
@@ -75,7 +75,7 @@
 
 ### 方式一：Lean Web Editor（最快）
 
-打开 [https://live.lean-lang.org/](https://live.lean-lang.org/)（Lean 官方在线编辑器）：
+打开 [https://live.lean-lang.org/](https://live.lean-lang.org)（Lean 官方在线编辑器）：
 
 ```lean
 -- 你的第一个 Lean 证明
@@ -95,7 +95,7 @@ theorem zero_add (n : ℕ) : 0 + n = n := by
 
 Kevin Buzzard 设计的互动游戏，从皮亚诺公理一步步证明自然数性质：
 
-🔗 [https://adam.math.hhu.de/](https://adam.math.hhu.de/) → 找 "Natural Number Game"
+🔗 [https://adam.math.hhu.de/](https://adam.math.hhu.de) → 找 "Natural Number Game"
 
 - 每关一个定理，你填 tactic，它告诉你对不对
 - 从 `0 + n = n` 一路证到 `n + m = m + n`（加法交换律）
@@ -105,7 +105,7 @@ Kevin Buzzard 设计的互动游戏，从皮亚诺公理一步步证明自然数
 
 官方交互式教程，每章一个数学主题：
 
-🔗 [https://leanprover-community.github.io/mathematics_in_lean/](https://leanprover-community.github.io/mathematics_in_lean/)
+🔗 [https://leanprover-community.github.io/mathematics_in_lean/](https://leanprover-community.github.io/mathematics_in_lean)
 
 覆盖：集合 / 函数 / 数论 / 拓扑 / 微积分，每节都可在线运行。
 
@@ -207,20 +207,20 @@ example (x : ℝ) (h : x^2 < 4) : -2 < x ∧ x < 2 := by nlinarith
 ## 📈 学习路径（4 阶段）
 
 ### 阶段 0：尝鲜（2-4 小时）
-- ✅ 玩 [Natural Number Game](https://adam.math.hhu.de/)（通关 = 掌握归纳法）
-- ✅ 读 [Mathematics in Lean](https://leanprover-community.github.io/mathematics_in_lean/) 前 3 章
+- ✅ 玩 [Natural Number Game](https://adam.math.hhu.de)（通关 = 掌握归纳法）
+- ✅ 读 [Mathematics in Lean](https://leanprover-community.github.io/mathematics_in_lean) 前 3 章
 
-### 阶段 1：基础（1-2 周，配合 [01-track/stage-1](../../01-track/stage-1-本科核心/)）
+### 阶段 1：基础（1-2 周，配合 [01-track/stage-1](../../01-track/stage-1-本科核心)）
 - 学会常用 tactic：`intro / apply / exact / rw / simp / induction / ring / norm_num`
 - 能把本科证明（集合 / 函数 / 数论基础）翻译成 Lean
 - 目标：形式化你 [NOTES_TEMPLATE.md](../../NOTES_TEMPLATE.md) §4 的一个证明
 
-### 阶段 2：进阶（1-3 月，配合 [01-track/stage-2](../../01-track/)）
+### 阶段 2：进阶（1-3 月，配合 [01-track/stage-2](../../01-track)）
 - 读 Mathlib 源码，学风格
 - 能用 Mathlib 现有定理组合证明
 - 尝试给 mathlib 提 PR（从证明一个小引理开始）
 
-### 阶段 3：研究级（阶段 3，[01-track/stage-3](../../01-track/)）
+### 阶段 3：研究级（阶段 3，[01-track/stage-3](../../01-track)）
 - 形式化你的研究方向的核心定理
 - 关注 [14-frontier/AI-for-Math/](.) 的 AlphaProof 进展——AI 可能帮你生成 Lean 证明草稿
 
@@ -230,15 +230,15 @@ example (x : ℝ) (h : x^2 < 4) : -2 < x ∧ x < 2 := by nlinarith
 
 | 资源 | 链接 | 用途 |
 |------|------|------|
-| **Lean 官方文档** | [leanprover.github.io](https://leanprover.github.io/) | 语言手册 |
-| **Mathlib 文档** | [leanprover-community.github.io/mathlib4_docs/](https://leanprover-community.github.io/mathlib4_docs/) | 查定理（像查字典）|
-| **Mathematics in Lean** | [leanprover-community.github.io/mathematics_in_lean/](https://leanprover-community.github.io/mathematics_in_lean/) | 官方交互教程 ⭐ |
-| **Natural Number Game** | [adam.math.hhu.de](https://adam.math.hhu.de/) | 新手游戏 ⭐ |
-| **Lean Zulip** | [leanprover.zulipchat.com](https://leanprover.zulipchat.com/) | 社区问答（数学家都在）|
+| **Lean 官方文档** | [leanprover.github.io](https://leanprover.github.io) | 语言手册 |
+| **Mathlib 文档** | [leanprover-community.github.io/mathlib4_docs/](https://leanprover-community.github.io/mathlib4_docs) | 查定理（像查字典）|
+| **Mathematics in Lean** | [leanprover-community.github.io/mathematics_in_lean/](https://leanprover-community.github.io/mathematics_in_lean) | 官方交互教程 ⭐ |
+| **Natural Number Game** | [adam.math.hhu.de](https://adam.math.hhu.de) | 新手游戏 ⭐ |
+| **Lean Zulip** | [leanprover.zulipchat.com](https://leanprover.zulipchat.com) | 社区问答（数学家都在）|
 | **Mathlib GitHub** | [github.com/leanprover-community/mathlib4](https://github.com/leanprover-community/mathlib4) | 源码 + 贡献 |
-| **Kevin Buzzard 博客** | [xena.io](https://xena.io/) | 帝国理工 Lean 推广者 |
-| **Terence Tao 博客** | [terrytao.wordpress.com](https://terrytao.wordpress.com/) | 经常讨论 Lean |
-| **lean4web** | [live.lean-lang.org](https://live.lean-lang.org/) | 在线编辑器 |
+| **Kevin Buzzard 博客** | [xena.io](https://xena.io) | 帝国理工 Lean 推广者 |
+| **Terence Tao 博客** | [terrytao.wordpress.com](https://terrytao.wordpress.com) | 经常讨论 Lean |
+| **lean4web** | [live.lean-lang.org](https://live.lean-lang.org) | 在线编辑器 |
 
 ---
 
@@ -246,12 +246,12 @@ example (x : ℝ) (h : x^2 < 4) : -2 < x ∧ x < 2 := by nlinarith
 
 | 你想... | 跳到 |
 |---------|------|
-| 理解 Curry-Howard 同构（命题=类型，证明=程序）| [16-foundations/Curry-Howard/](../../16-foundations/Curry-Howard/) |
-| 理解依赖类型论（Lean 的数学基础）| [16-foundations/类型论/](../../16-foundations/类型论/) |
+| 理解 Curry-Howard 同构（命题=类型，证明=程序）| [16-foundations/Curry-Howard/](../../16-foundations/Curry-Howard) |
+| 理解依赖类型论（Lean 的数学基础）| [16-foundations/类型论/](../../16-foundations/类型论) |
 | 看 AI 怎么用 Lean 做数学 | [01-AI正在重写数学研究.md](01-AI正在重写数学研究.md) |
 | 形式化你笔记里的证明 | [NOTES_TEMPLATE.md](../../NOTES_TEMPLATE.md) §4（加一个"Lean 验证"子节）|
-| 用 Lean 做研究方向 | [17-decision/](../../17-decision/)（选方向后形式化核心定理）|
-| 找 Lean 学习社区 | [18-resources/社区/](../../18-resources/社区/) |
+| 用 Lean 做研究方向 | [17-decision/](../../17-decision)（选方向后形式化核心定理）|
+| 找 Lean 学习社区 | [18-resources/社区/](../../18-resources/社区) |
 
 ---
 
@@ -260,7 +260,7 @@ example (x : ℝ) (h : x^2 < 4) : -2 < x ∧ x < 2 := by nlinarith
 | 坑 | 表现 | 解药 |
 |----|------|------|
 | **装不上** | `lake build` 卡住 / 内存爆 | 先用在线编辑器；本地需 8GB+ 内存 |
-| **找不到定理** | "这个定理 mathlib 有吗" | 查 [Mathlib 文档](https://leanprover-community.github.io/mathlib4_docs/)，或在 Zulip 问 |
+| **找不到定理** | "这个定理 mathlib 有吗" | 查 [Mathlib 文档](https://leanprover-community.github.io/mathlib4_docs)，或在 Zulip 问 |
 | **tactic 不工作** | `simp` 没证出来 | 加具体引理参数 `simp [xxx]`，或换 `rw` 手动重写 |
 | **过度依赖自动化** | 全靠 `simp` 不理解证明 | 先手写，再让 `simp` 检查你的理解对不对 |
 | **版本不匹配** | Lean 4 vs mathlib 版本冲突 | 用 `elan` 管理版本，`lake update` 同步 |
@@ -271,7 +271,7 @@ example (x : ℝ) (h : x^2 < 4) : -2 < x ∧ x < 2 := by nlinarith
 
 - 本指南事实截至 **2024 年底 / 2025 年初**
 - Mathlib 规模每月增长，具体数字查 [Mathlib GitHub](https://github.com/leanprover-community/mathlib4)
-- AlphaProof 进展查 [14-frontier/conjecture进展/](../conjecture进展/) 和 DeepMind 官方
+- AlphaProof 进展查 [14-frontier/conjecture进展/](../conjecture进展) 和 DeepMind 官方
 - 每年 ICM 后（8 月）+ 年底（12 月）刷新一次
 
 ---

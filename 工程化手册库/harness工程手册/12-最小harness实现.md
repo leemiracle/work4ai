@@ -125,7 +125,7 @@ def run(task, ..., steer=None):
 
 语义来自 openclaw agent-loop.ts:512-517：运行中用户插话 → 注入消息流 → **消化完插话才准 agent_end**。不是 UI 层暂停键，是循环级原语。
 
-**② tool-call repair（T 组件修复层）**——把"模型以纯文本吐工具调用"升格为结构化再执行（三语法：JSON-ish / `<tool_call>` XML / named-bracket；后者必须带工具名白名单防代码噪音）。中小/开源模型命中率不低，丢弃 = 工具面失效。实现：[tools/tool_call_repair.py](../../deepseek-agent-harness/tools/tool_call_repair.py)（零依赖 + 6 用例自测）；工程先例：openclaw 2900 行独立包（[案例笔记 02](../../讲透Agent/Agent框架案例/openclaw/notes/02-六组件实证.md)）——repair 出的调用**同受 L 组件门禁**（升格 ≠ 免检）。
+**② tool-call repair（T 组件修复层）**——把"模型以纯文本吐工具调用"升格为结构化再执行（三语法：JSON-ish / `<tool_call>` XML / named-bracket；后者必须带工具名白名单防代码噪音）。中小/开源模型命中率不低，丢弃 = 工具面失效。实现：[tools/tool_call_repair.py](../../deepseek-agent-harness/tools/tool_call_repair.py)（零依赖 + 6 用例自测）；工程先例：openclaw 2900 行独立包（[案例笔记 02](../../讲透宇宙/01-学/讲透Agent//Agent框架案例/openclaw/notes/02-六组件实证.md)）——repair 出的调用**同受 L 组件门禁**（升格 ≠ 免检）。
 
 ---
 

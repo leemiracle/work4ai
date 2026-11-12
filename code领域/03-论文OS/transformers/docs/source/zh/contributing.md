@@ -51,7 +51,7 @@ limitations under the License.
 
 🤗 Transformers 之所以强大可靠，要感谢用户报告了他们遇到的问题。
 
-在提出issue之前，请你**确认该 bug 尚未被报告**（使用 GitHub 的 Issues 下面的搜索栏）。issue 也应该是与库本身的 bug 有关，而不是与你的代码有关。如果不确定 bug 是在你的代码中还是在库中，请先在[论坛](https://discuss.huggingface.co/)中询问。这有助于我们更快地解决与库相关的问题。
+在提出issue之前，请你**确认该 bug 尚未被报告**（使用 GitHub 的 Issues 下面的搜索栏）。issue 也应该是与库本身的 bug 有关，而不是与你的代码有关。如果不确定 bug 是在你的代码中还是在库中，请先在[论坛](https://discuss.huggingface.co)中询问。这有助于我们更快地解决与库相关的问题。
 
 一旦你确认该 bug 尚未被报告，请在你的 issue 中包含以下信息，以便我们快速解决：
 
@@ -194,7 +194,7 @@ python src/transformers/commands/transformers_cli.py env
    git commit
    ```
 
-   请记得写一个[好的提交信息](https://chris.beams.io/posts/git-commit/)来清晰地传达你所做的更改！
+   请记得写一个[好的提交信息](https://chris.beams.io/posts/git-commit)来清晰地传达你所做的更改！
 
    为了保持你的代码副本与原始仓库的最新状态一致，在你创建 PR *之前*或者在管理员要求的情况下，把你的分支在 `upstream/branch` 上进行 rebase：
 
@@ -286,7 +286,7 @@ python -m unittest discover -s examples -t examples -v
 
 ### 在 Windows 上开发
 
-在 Windows 上（除非你正在使用 [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/) 或 WSL），你需要配置 git 将 Windows 的 `CRLF` 行结束符转换为 Linux 的 `LF` 行结束符：
+在 Windows 上（除非你正在使用 [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl) 或 WSL），你需要配置 git 将 Windows 的 `CRLF` 行结束符转换为 Linux 的 `LF` 行结束符：
 
 ```bash
 git config core.autocrlf input
@@ -294,7 +294,7 @@ git config core.autocrlf input
 
 在 Windows 上有一种方法可以运行 `make` 命令，那就是使用 MSYS2：
 
-1. [下载 MSYS2](https://www.msys2.org/)，假设已经安装在 `C:\msys64`。
+1. [下载 MSYS2](https://www.msys2.org)，假设已经安装在 `C:\msys64`。
 2. 从命令行打开 `C:\msys64\msys2.exe` （可以在 **开始** 菜单中找到）。
 3. 在 shell 中运行： `pacman -Syu` ，并使用 `pacman -S make` 安装 `make`。
 4. 把 `C:\msys64\usr\bin` 添加到你的 PATH 环境变量中。

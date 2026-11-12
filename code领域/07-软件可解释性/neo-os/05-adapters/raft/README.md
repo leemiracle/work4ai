@@ -47,7 +47,7 @@
 
 按 [`00-constitution/ROADMAP.md`](../../00-constitution/ROADMAP.md) Gate G1-G5：
 
-1. **G1 adapter<20% 特化**：把 [`04-layers/l2-world-model/c1_pipeline/`](../../04-layers/l2-world-model/c1_pipeline/) 在 Raft 域的特化代码隔离成 `raft/trace_source.py` 等模块，证明 <20%
+1. **G1 adapter<20% 特化**：把 [`04-layers/l2-world-model/c1_pipeline/`](../../04-layers/l2-world-model/c1_pipeline) 在 Raft 域的特化代码隔离成 `raft/trace_source.py` 等模块，证明 <20%
 2. **G2 五原子零修改**：把 Raft ontology（Leader/Follower/...）映射到 Event/State/Causality/Invariant/DecisionPoint，证明五原子定义零修改
 3. **G3 形式化非平凡**：当前 3 Raft 定理已 sorry=0，扩到 5-10 条覆盖 ElectionSafety + LogMatching + StateMachineSafety
 4. **G4 蒸馏验证**：从 etcd commit 抽取的规则 ≥50% 在 dsyme 716 定理中有对应（验证 L2 蒸馏质量）

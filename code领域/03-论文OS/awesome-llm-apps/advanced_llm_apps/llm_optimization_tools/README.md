@@ -6,7 +6,7 @@ A collection of tools and techniques to optimize your LLM applications - reduce 
 
 ## 📚 Tools Available
 
-### 🎯 [Toonify Token Optimization](toonify_token_optimization/)
+### 🎯 [Toonify Token Optimization](toonify_token_optimization)
 
 **Reduce LLM API costs by 30-60%** using TOON (Token-Oriented Object Notation) format.
 

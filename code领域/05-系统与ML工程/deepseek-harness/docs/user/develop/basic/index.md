@@ -96,7 +96,7 @@ export const inject = ['tools']
 
 export function apply(ctx: Context) {
   // ctx.tools is ready here.
-  ctx.tools.register(/* ... */)
+  ctx.tools.register(/* ... *)
 }
 ```
 

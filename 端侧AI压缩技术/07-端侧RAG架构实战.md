@@ -463,5 +463,5 @@ async function query(text, topK = 5) {
 
 📌 **下一步**：
 - 看学术前沿 → [08 前沿综述](08-前沿综述-端侧AI-2024-2026.md)
-- MRL 深入 → [../讲透MRL/](../讲透MRL/README.md)
-- 你 mem0 项目的具体方案 → [bge-small-zh-v1.5 + Matryoshka-Adaptor](../讲透MRL/03-从零实现.md)
+- MRL 深入 → [../讲透MRL/](../讲透宇宙/01-学/讲透MRL//README.md)
+- 你 mem0 项目的具体方案 → [bge-small-zh-v1.5 + Matryoshka-Adaptor](../讲透宇宙/01-学/讲透MRL//03-从零实现.md)

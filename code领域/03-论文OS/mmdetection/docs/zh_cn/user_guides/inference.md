@@ -69,7 +69,7 @@ inferencer('demo/demo.jpg', show=True)
   inferencer = DetInferencer(model='path/to/rtmdet_config.py', weights='path/to/rtmdet.pth')
   ```
 
-- 默认情况下，[MMEngine](https://github.com/open-mmlab/mmengine/) 会在训练模型时自动将配置文件转储到权重文件中。如果你有一个在 MMEngine 上训练的权重，你也可以将权重文件的路径传递给 `weights`，而不需要指定 `model`：
+- 默认情况下，[MMEngine](https://github.com/open-mmlab/mmengine) 会在训练模型时自动将配置文件转储到权重文件中。如果你有一个在 MMEngine 上训练的权重，你也可以将权重文件的路径传递给 `weights`，而不需要指定 `model`：
 
   ```python
   # 如果无法在权重中找到配置文件，则会引发错误。目前 MMDetection 模型库中只有 ddq-detr-4scale_r50 的权重可以这样加载。
@@ -80,7 +80,7 @@ inferencer('demo/demo.jpg', show=True)
 
 #### 推理设备
 
-每个推理器实例都会跟一个设备绑定。默认情况下，最佳设备是由 [MMEngine](https://github.com/open-mmlab/mmengine/) 自动决定的。你也可以通过指定 `device` 参数来改变设备。例如，你可以使用以下代码在 GPU 1 上创建一个推理器。
+每个推理器实例都会跟一个设备绑定。默认情况下，最佳设备是由 [MMEngine](https://github.com/open-mmlab/mmengine) 自动决定的。你也可以通过指定 `device` 参数来改变设备。例如，你可以使用以下代码在 GPU 1 上创建一个推理器。
 
 ```python
 inferencer = DetInferencer(model='rtmdet_tiny_8xb32-300e_coco', device='cuda:1')
@@ -358,7 +358,7 @@ python demo/large_image_demo.py \
 
 ## 多模态算法的推理和验证
 
-随着多模态视觉算法的不断发展，MMDetection 也完成了对这类算法的支持。这一小节我们通过 GLIP 算法和模型来演示如何使用对应多模态算法的 demo 和 eval 脚本。同时 MMDetection 也在 projects 下完成了 [gradio_demo 项目](../../../projects/gradio_demo/)，用户可以参照[文档](../../../projects/gradio_demo/README.md)在本地快速体验 MMDetection 中支持的各类图片输入的任务。
+随着多模态视觉算法的不断发展，MMDetection 也完成了对这类算法的支持。这一小节我们通过 GLIP 算法和模型来演示如何使用对应多模态算法的 demo 和 eval 脚本。同时 MMDetection 也在 projects 下完成了 [gradio_demo 项目](../../../projects/gradio_demo)，用户可以参照[文档](../../../projects/gradio_demo/README.md)在本地快速体验 MMDetection 中支持的各类图片输入的任务。
 
 ### 模型准备
 

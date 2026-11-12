@@ -390,11 +390,11 @@ grep -ri "phytium|ftc86|ftc66|ft2000" llvm/**/*.td   →  No files found
 2. **[实测-.mailmap]** 本项目实测 `OpenXiangShan/llvm-project/.mailmap`（67 行），提取 Qualcomm/ARM/Apple/SiFive/StreamComputing/ByteDance/Imagination/Loongson/Meta/Google/NVIDIA/Microsoft 企业邮箱域名清单。访问 2026-07-07。
 3. **[实测-目录]** 本项目实测 `OpenXiangShan/llvm-project/llvm/lib/Target/` 25 个后端子目录及各 `*Sched*.td` 调度模型文件名（AArch64SchedOryon/ThunderX/Ampere/Neoverse/A64FX、Hexagon V60-V81、SystemZ Z13-Z17、RISCVSchedXiangShanNanHu/SiFive/TTAscalon/Spacemit 等）。访问 2026-07-07。
 4. **[实测-grep]** 本项目实测 `grep -ri "phytium|ftc86|ftc66|ft2000" llvm/**/*.td` → 无匹配；`grep LoongArch Processor` → la464/la664 等全 `NoSchedModel`。访问 2026-07-07。
-5. **[官方]** LLVM Foundation, *Annual Report*（[foundation.llvm.org](https://foundation.llvm.org/)）—— LLVM 赞助结构与公司化贡献披露。
+5. **[官方]** LLVM Foundation, *Annual Report*（[foundation.llvm.org](https://foundation.llvm.org)）—— LLVM 赞助结构与公司化贡献披露。
 6. **[GitHub]** LLVM Project contributors graph（[github.com/llvm/llvm-project/graphs/contributors](https://github.com/llvm/llvm-project/graphs/contributors)）—— 公司化 commit 份额公开数据源（社区共识 % 的印证来源）。
 7. **[GitHub]** AliveToolkit/alive2（[github.com/AliveToolkit/alive2](https://github.com/AliveToolkit/alive2)）—— Nuno Lopes 团队 LLVM Pass 形式化验证工具，判断四形式化覆盖缺口依据。
 8. **[报道]** LWN.net / The Verge, *The xz-utils backdoor (CVE-2024-3094)* coverage, 2024-03/04 —— xz utils 供应链后门事件，判断四对照依据。
-9. **[Discourse]** LLVM Discourse（[discourse.llvm.org](https://discourse.llvm.org/)）—— 各后端治理讨论、miscompilation CVE 史、cfe-dev undef/poison 语义争论（社区共识 % 与单点判断印证）。
+9. **[Discourse]** LLVM Discourse（[discourse.llvm.org](https://discourse.llvm.org)）—— 各后端治理讨论、miscompilation CVE 史、cfe-dev undef/poison 语义争论（社区共识 % 与单点判断印证）。
 10. **[论文]** Nuno P. Lopes et al., *Alive2: Bounded Translation Validation for LLVM*, USENIX ATC 2021 / PLDI 2022 —— 形式化验证 LLVM Pass 正确性的奠基论文。
 11. **[书]** Chris Miller, *Chip War*（Scribner, 2022）—— 飞腾项目 Lens_03 引用，本透镜对偶参考其"供应链集中度"分析框架。
 12. **[社区-LLVM 资源库]** 本项目 [`领域资源库_LLVM.md`](../领域资源库_LLVM.md) §9.1（LLVM commit 统计）、§11（飞腾 PhyCC/PhyGCC 实证）—— 本透镜公司化养育地图的交叉印证源。

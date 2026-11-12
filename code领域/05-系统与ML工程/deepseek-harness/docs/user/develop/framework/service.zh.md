@@ -25,7 +25,7 @@ export const inject = ['tools']
 
 export function apply(ctx: Context) {
   // ctx.tools exists and is ready here.
-  ctx.tools.register(/* ... */)
+  ctx.tools.register(/* ... *)
 }
 ```
 
@@ -147,4 +147,4 @@ export function apply(ctx: Context) {
 ## 下一步
 
 - [事件系统](./events.md) — 插件间松耦合通信
-- [能力分层](../practice/) — 将服务用作能力接口
+- [能力分层](../practice) — 将服务用作能力接口

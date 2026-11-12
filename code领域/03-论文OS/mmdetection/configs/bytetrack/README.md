@@ -112,7 +112,7 @@ val_dataloader = dict(
 
 #### 4.2 Example on MOTxx-test dataset
 
-If you want to get the results of the [MOT Challenge](https://motchallenge.net/) test set, please use the following command to generate result files that can be used for submission. It will be stored in `./mot_17_test_res`, you can modify the saved path in `test_evaluator` of the config.
+If you want to get the results of the [MOT Challenge](https://motchallenge.net) test set, please use the following command to generate result files that can be used for submission. It will be stored in `./mot_17_test_res`, you can modify the saved path in `test_evaluator` of the config.
 
 ```shell
 bash tools/dist_test_tracking.sh configs/bytetrack/bytetrack_yolox_x_8xb4-amp-80e_crowdhuman-mot17halftrain_test-mot17test.py 8 --checkpoint ${CHECKPOINT_FILE}

@@ -29,7 +29,7 @@
 **Lean 形式化**：
 
 **学术社区**：
-- [Math StackExchange](https://math.stackexchange.com/)
+- [Math StackExchange](https://math.stackexchange.com)
 
 ## 🎯 综合学习路径
 

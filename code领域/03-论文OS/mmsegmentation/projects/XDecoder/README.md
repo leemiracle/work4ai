@@ -14,4 +14,4 @@ We present X-Decoder, a generalized decoding model that can predict pixel-level 
 
 ## Usage
 
-We implement it based on [mmdetection](https://github.com/open-mmlab/mmdetection/), please refer to [mmdetection/projects/XDecoder](https://github.com/open-mmlab/mmdetection/tree/main/projects/XDecoder) for more details.
+We implement it based on [mmdetection](https://github.com/open-mmlab/mmdetection), please refer to [mmdetection/projects/XDecoder](https://github.com/open-mmlab/mmdetection/tree/main/projects/XDecoder) for more details.

@@ -37,7 +37,7 @@ Before you begin, make sure you have all the necessary libraries installed:
 pip install -q pytorchvideo transformers evaluate
 ```
 
-You will use [PyTorchVideo](https://pytorchvideo.org/) (dubbed `pytorchvideo`) to process and prepare the videos.
+You will use [PyTorchVideo](https://pytorchvideo.org) (dubbed `pytorchvideo`) to process and prepare the videos.
 
 We encourage you to log in to your Hugging Face account so you can upload and share your model with the community. When prompted, enter your token to log in:
 
@@ -195,7 +195,7 @@ The warning is telling us we are throwing away some weights (e.g. the weights an
 
 ## Prepare the datasets for training
 
-For preprocessing the videos, you will leverage the [PyTorchVideo library](https://pytorchvideo.org/). Start by importing the dependencies we need.
+For preprocessing the videos, you will leverage the [PyTorchVideo library](https://pytorchvideo.org). Start by importing the dependencies we need.
 
 ```py
 >>> import pytorchvideo.data

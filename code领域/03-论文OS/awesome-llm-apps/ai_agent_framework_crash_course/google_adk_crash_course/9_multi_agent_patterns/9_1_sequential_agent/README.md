@@ -10,7 +10,7 @@
 
 ## 🧠 Core Concept: Sequential Agent with Search Capabilities
 
-According to the [ADK workflow agents documentation](https://google.github.io/adk-docs/agents/workflow-agents/), **Sequential Agents** execute sub-agents one after another, in sequence. This tutorial demonstrates a **Business Implementation Plan Generator** that combines web search capabilities with sequential analysis:
+According to the [ADK workflow agents documentation](https://google.github.io/adk-docs/agents/workflow-agents), **Sequential Agents** execute sub-agents one after another, in sequence. This tutorial demonstrates a **Business Implementation Plan Generator** that combines web search capabilities with sequential analysis:
 
 ```
 Business Topic → SequentialAgent → 4 Sub-agents (Sequential Execution)
@@ -46,7 +46,7 @@ Create a `.env` file with your Google API key:
 echo "GOOGLE_API_KEY=your_ai_studio_key_here" > .env
 ```
 
-**Important**: Get your API key from [Google AI Studio](https://aistudio.google.com/)
+**Important**: Get your API key from [Google AI Studio](https://aistudio.google.com)
 
 ### 3. Run the Streamlit App
 ```bash

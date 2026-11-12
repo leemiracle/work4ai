@@ -1,7 +1,7 @@
 # 国际金融专题
 
 > **位置**：`03-social-sciences/finance/international-finance.md`  
-> **关联**：[`_overview.md`](./_overview.md)（金融地图 §国际金融）+ [`china-financial-system.md`](./china-financial-system.md)（§五 汇率/国际化）+ [`financial-history.md`](./financial-history.md)（§3.5 亚洲金融危机）+ [`money-and-credit.md`](./money-and-credit.md)（货币本体论）+ [`07-worldly-power/capital/`](../../07-worldly-power/capital/)（美元霸权）  
+> **关联**：[`_overview.md`](./_overview.md)（金融地图 §国际金融）+ [`china-financial-system.md`](./china-financial-system.md)（§五 汇率/国际化）+ [`financial-history.md`](./financial-history.md)（§3.5 亚洲金融危机）+ [`money-and-credit.md`](./money-and-credit.md)（货币本体论）+ [`07-worldly-power/capital/`](../../07-worldly-power/capital)（美元霸权）  
 > **哲学根源**：[`00-philosophy/epistemology.md`](../../00-philosophy/epistemology.md)（可预测性——汇率是金融最难预测的变量之一）  
 > **核心命题**：国际金融 = **汇率 × 国际收支 × 资本流动 × 货币政策** 的四元联动系统；**三元悖论**是这个系统的宪法。
 
@@ -1038,10 +1038,10 @@ print("→ 关键洞见: 危机不是储备归零才发生,而是'影子汇率'�
 | 市场与定价（汇率预测） | [`markets-and-pricing.md`](./markets-and-pricing.md) |
 | 风险与不确定性（套利交易/黑天鹅） | [`risk-and-uncertainty.md`](./risk-and-uncertainty.md) |
 | 货币与信用（美元本质） | [`money-and-credit.md`](./money-and-credit.md) |
-| 资本霸权 | [`../../07-worldly-power/capital/`](../../07-worldly-power/capital/)（美元霸权） |
+| 资本霸权 | [`../../07-worldly-power/capital/`](../../07-worldly-power/capital)（美元霸权） |
 | 反馈与系统 | `../../06-systems/feedback/`（`../../06-systems/feedback.md`） |
 | 复杂系统（传染/级联） | `../../06-systems/complexity/`（`../../06-systems/complexity.md`） |
-| 经济学（宏观开放经济） | [`../economics/`](../economics/) |
+| 经济学（宏观开放经济） | [`../economics/`](../economics) |
 | essence 大问题（Q10 金钱） | [`../../questions/big-questions.md`](../../questions/big-questions.md) |
 
 ---

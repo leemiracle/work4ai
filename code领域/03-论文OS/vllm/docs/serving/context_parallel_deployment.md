@@ -44,4 +44,4 @@ Decode context parallel is supported in vLLM, for both MLA and GQA models. Some 
 
 ## Technical Discussions
 
-The main discussions happen in the `#sig-context-parallel` channel of [vLLM Slack](https://slack.vllm.ai/).
+The main discussions happen in the `#sig-context-parallel` channel of [vLLM Slack](https://slack.vllm.ai).

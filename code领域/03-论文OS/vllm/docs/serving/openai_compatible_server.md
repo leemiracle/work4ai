@@ -73,7 +73,7 @@ In addition, we have the following custom APIs:
 - [Score API](#score-api) (`/score`)
     - Applicable to [embedding models and cross-encoder models](../models/pooling_models.md).
 - [Re-rank API](#re-rank-api) (`/rerank`, `/v1/rerank`, `/v2/rerank`)
-    - Implements [Jina AI's v1 re-rank API](https://jina.ai/reranker/)
+    - Implements [Jina AI's v1 re-rank API](https://jina.ai/reranker)
     - Also compatible with [Cohere's v1 & v2 re-rank APIs](https://docs.cohere.com/v2/reference/rerank)
     - Jina and Cohere's APIs are very similar; Jina's includes extra information in the rerank endpoint's response.
     - Only applicable to [cross-encoder models](../models/pooling_models.md).
@@ -1021,7 +1021,7 @@ You can find the documentation for cross encoder models at [sbert.net](https://w
 
 The rerank endpoints support popular re-rank models such as `BAAI/bge-reranker-base` and other models supporting the
 `score` task. Additionally, `/rerank`, `/v1/rerank`, and `/v2/rerank`
-endpoints are compatible with both [Jina AI's re-rank API interface](https://jina.ai/reranker/) and
+endpoints are compatible with both [Jina AI's re-rank API interface](https://jina.ai/reranker) and
 [Cohere's re-rank API interface](https://docs.cohere.com/v2/reference/rerank) to ensure compatibility with
 popular open-source tools.
 

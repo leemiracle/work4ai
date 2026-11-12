@@ -2,7 +2,7 @@
 
 > **课程**：Numerical Analysis (Undergraduate)
 > **教材**：Burden & Faires, *Numerical Analysis*；或 Atkinson, *An Introduction to Numerical Analysis*
-> **参考**：[utexas.edu/math](https://www.ma.utexas.edu/)
+> **参考**：[utexas.edu/math](https://www.ma.utexas.edu)
 
 ---
 

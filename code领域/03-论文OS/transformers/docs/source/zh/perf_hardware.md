@@ -21,7 +21,7 @@ rendered properly in your Markdown viewer.
 
 # 训练用的定制硬件
 
-您用来运行模型训练和推断的硬件可能会对性能产生重大影响。要深入了解 GPU，务必查看 Tim Dettmer 出色的[博文](https://timdettmers.com/2020/09/07/which-gpu-for-deep-learning/)。
+您用来运行模型训练和推断的硬件可能会对性能产生重大影响。要深入了解 GPU，务必查看 Tim Dettmer 出色的[博文](https://timdettmers.com/2020/09/07/which-gpu-for-deep-learning)。
 
 让我们来看一些关于 GPU 配置的实用建议。
 

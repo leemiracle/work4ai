@@ -516,7 +516,7 @@ We are excited to announce the release of MMDetection 3.0.0rc0. MMDet 3.0.0rc0 i
 
 2. **Unified interfaces**. As a part of the OpenMMLab 2.0 projects, MMDet 3.x unifies and refactors the interfaces and internal logic of training, testing, datasets, models, evaluation, and visualization. All the OpenMMLab 2.0 projects share the same design in those interfaces and logic to allow the emergence of multi-task/modality algorithms.
 
-3. **Faster speed**. We optimize the training and inference speed for common models and configurations, achieving a faster or similar speed than [Detection2](https://github.com/facebookresearch/detectron2/). Model details of benchmark will be updated in [this note](./benchmark.md#comparison-with-detectron2).
+3. **Faster speed**. We optimize the training and inference speed for common models and configurations, achieving a faster or similar speed than [Detection2](https://github.com/facebookresearch/detectron2). Model details of benchmark will be updated in [this note](./benchmark.md#comparison-with-detectron2).
 
 4. **General semi-supervised object detection**. Benefitting from the unified interfaces, we support a general semi-supervised learning framework that works with all the object detectors supported in MMDet 3.x. Please refer to [semi-supervised object detection](../user_guides/semi_det.md) for details.
 
@@ -528,14 +528,14 @@ We are excited to announce the release of MMDetection 3.0.0rc0. MMDet 3.0.0rc0 i
    - [SoftTeacher](https://arxiv.org/abs/2106.09018)
    - [the updated CenterNet](https://arxiv.org/abs/2103.07461)
 
-7. **More documentation and tutorials**. We add a bunch of documentation and tutorials to help users get started more smoothly. Read it [here](https://mmdetection.readthedocs.io/en/3.x/).
+7. **More documentation and tutorials**. We add a bunch of documentation and tutorials to help users get started more smoothly. Read it [here](https://mmdetection.readthedocs.io/en/3.x).
 
 ### Breaking Changes
 
 MMDet 3.x has undergone significant changes for better design, higher efficiency, more flexibility, and more unified interfaces.
 Besides the changes in API, we briefly list the major breaking changes in this section.
 We will update the [migration guide](../migration.md) to provide complete details and migration instructions.
-Users can also refer to the [API doc](https://mmdetection.readthedocs.io/en/3.x/) for more details.
+Users can also refer to the [API doc](https://mmdetection.readthedocs.io/en/3.x) for more details.
 
 #### Dependencies
 

@@ -139,5 +139,5 @@ export function apply(ctx: Context) {
 
 ## 下一步
 
-- [能力分层](../practice/) — 了解能力接口中的事件
+- [能力分层](../practice) — 了解能力接口中的事件
 - [LLM（大语言模型）适配器](../practice/llm-adapter.md) — 实现一个完整的 LLM 后端

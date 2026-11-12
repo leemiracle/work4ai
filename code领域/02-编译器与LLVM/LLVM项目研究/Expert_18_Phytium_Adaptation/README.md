@@ -532,7 +532,7 @@ E17 讲"Linux 内核 GCC→Clang 迁移"（断层⑤）。本专家补充：飞�
 ## 7. 参考文献（≥18 条，分级标注）
 
 ### 飞腾官方（[官方]）
-1. **[官方]** 飞腾开发者平台 - 编译器. [phytium.com.cn/developer/36](https://www.phytium.com.cn/developer/36/). 访问 2026-07-07. —— PhyCC 1.0/2.0 + PhyGCC 二进制下载.
+1. **[官方]** 飞腾开发者平台 - 编译器. [phytium.com.cn/developer/36](https://www.phytium.com.cn/developer/36). 访问 2026-07-07. —— PhyCC 1.0/2.0 + PhyGCC 二进制下载.
 2. **[官方]** PhyCC 2.0 发布页. "PhyCC 2.0 基于 LLVM 研发"——飞腾唯一直接说"基于 LLVM"的官方编译器.
 3. **[官方]** 飞腾招聘 NPU 编译器工程师 JD. phytium.com.cn/recruitment 2024-07. "在 llvm 基础上移植一个新的后端". —— 飞腾自研 LLVM 后端的唯一实锤 + 团队规模推测依据（§2.6）.
 

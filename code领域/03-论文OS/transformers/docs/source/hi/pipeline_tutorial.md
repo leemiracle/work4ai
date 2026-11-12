@@ -199,7 +199,7 @@ for out in pipe(data()):
 
 चूंकि बैचिंग से चीज़ें तेज़ हो सकती हैं, इसलिए यहां `batch_size` प्राचल को ट्यून करने का प्रयास करना उपयोगी हो सकता है।
 
-किसी डेटासेट पर पुनरावृति करने का सबसे सरल तरीका बस एक को 🤗 [Dataset](https://github.com/huggingface/datasets/) से लोड करना है:
+किसी डेटासेट पर पुनरावृति करने का सबसे सरल तरीका बस एक को 🤗 [Dataset](https://github.com/huggingface/datasets) से लोड करना है:
 
 ```py
 # KeyDataset is a util that will just output the item we're interested in.
@@ -281,7 +281,7 @@ NLP कार्यों के लिए [`pipeline`] का उपयोग �
 
 <Tip>
 
-ऊपर दिए गए उदाहरण को चलाने के लिए आपको 🤗 ट्रांसफॉर्मर के अलावा [`pytesseract`](https://pypi.org/project/pytesseract/) इंस्टॉल करना होगा:
+ऊपर दिए गए उदाहरण को चलाने के लिए आपको 🤗 ट्रांसफॉर्मर के अलावा [`pytesseract`](https://pypi.org/project/pytesseract) इंस्टॉल करना होगा:
 
 ```bash
 sudo apt install -y tesseract-ocr

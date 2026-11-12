@@ -41,7 +41,7 @@ apps/*  (applications: apps/web = vite app, apps/cli = bin dispatch)
 packages/host/*                      packages/client/*
   apiproxy   front layer: protocol     pure libs: ui-slots / web-react / ui-primitives
   runtime    assembly / host entity    dsh.client plugins ×8 (node half = empty apply,
-  webserver  Web HTTP carriage                              client half = src/client/)
+  webserver  Web HTTP carriage                              client half = src/client)
   │ ctx.plugin(...)                      ▲ import only apiproxy's /api /client subpaths
   ▼                                      │ (type-only + the client base class)
 harness core packages ──────────────────┘ (types reach the browser via import type)
@@ -62,7 +62,7 @@ On the protocol side: TS interfaces (`packages/host/apiproxy/src/api/`, zero Nod
 
 | Layer | Package | Responsibility | Key discipline |
 |---|---|---|---|
-| Front layer | `dsh-host-apiproxy` | TS/zod definitions (api/) + the fetch abstraction (fetch/: handler + client base class) | Keep it simple — every consumer needs it; importable from Node and browser alike; protocol content in the "Message protocol" sections below; clients must not bypass api through ctx |
+| Front layer | `dsh-host-apiproxy` | TS/zod definitions (api) + the fetch abstraction (fetch/: handler + client base class) | Keep it simple — every consumer needs it; importable from Node and browser alike; protocol content in the "Message protocol" sections below; clients must not bypass api through ctx |
 | Assembly layer | `dsh-host-runtime` | Plugin composition + ApiProxy integration + the web UI plugin mount (in-memory Loader tree over the eight dsh.client packages); home of host-level configuration (defaults/persistenceRoot, future user profile) | Which plugins mount and with what defaults is decided only here; shells must not alter the assembly |
 | Carrier layer | `dsh-host-webserver` | Web HTTP and upgrade: static serving + `/api/*`→handler forwarding + WebSocket upgrade route + close semantics; plugin bundle endpoint + `__DSH_BOOT__` manifest injection (fed by the web plugin registry) | Web (browser access) only; zero workspace dependencies (the registry arrives by structural injection); Electron does not reuse it |
 | Client libraries | `dsh-client-ui-slots` / `dsh-client-web-react` / `dsh-client-ui-primitives` | Slot registry core / ctx↔React glue / pure React atoms | Zero cordis runtime dependency in components; seeded into the loader module table by the shell |

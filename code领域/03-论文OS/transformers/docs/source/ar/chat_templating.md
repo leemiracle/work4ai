@@ -530,7 +530,7 @@ print(gen_text)
     {{- '<|assistant|>\n' }}
 {%- endif %}
 ```
-إذا لم تكن قد رأيت أحد هذه القوالب من قبل، فهذا [قالب Jinja](https://jinja.palletsprojects.com/en/3.1.x/templates/) .Jinja هي لغة قوالب تسمح لك بكتابة تعليمات برمجية بسيطة تُوَلّد نصًا. من نواحٍ عديدة، يُشبه الرمز والتركيب للغة Python. أما في لغة Python، سيبدو هذا القالب كما يلي:
+إذا لم تكن قد رأيت أحد هذه القوالب من قبل، فهذا [قالب Jinja](https://jinja.palletsprojects.com/en/3.1.x/templates) .Jinja هي لغة قوالب تسمح لك بكتابة تعليمات برمجية بسيطة تُوَلّد نصًا. من نواحٍ عديدة، يُشبه الرمز والتركيب للغة Python. أما في لغة Python، سيبدو هذا القالب كما يلي:
 
 ```python
 for message in messages:

@@ -14,7 +14,7 @@ Modern object detectors rely heavily on rectangular bounding boxes, such as anch
 
 ## Introdution
 
-By [Ze Yang](https://yangze.tech/), [Shaohui Liu](http://b1ueber2y.me/), and [Han Hu](https://ancientmooner.github.io/).
+By [Ze Yang](https://yangze.tech), [Shaohui Liu](http://b1ueber2y.me), and [Han Hu](https://ancientmooner.github.io).
 
 We provide code support and configuration files to reproduce the results in the paper for
 ["RepPoints: Point Set Representation for Object Detection"](https://arxiv.org/abs/1904.11490) on COCO object detection.
@@ -44,7 +44,7 @@ The results on COCO 2017val are shown in the table below.
 - `DCN` denotes replacing 3x3 conv with the 3x3 deformable convolution in `c3-c5` stages of backbone.
 - `none` in the `anchor` column means 2-d `center point` (x,y) is used to represent the initial object hypothesis. `single` denotes one 4-d anchor box (x,y,w,h) with IoU based label assign criterion is adopted.
 - `moment`, `partial MinMax`, `MinMax` in the `convert func` column are three functions to convert a point set to a pseudo box.
-- Note the results here are slightly different from those reported in the paper, due to framework change. While the original paper uses an [MXNet](https://mxnet.apache.org/) implementation, we re-implement the method in [PyTorch](https://pytorch.org/) based on mmdetection.
+- Note the results here are slightly different from those reported in the paper, due to framework change. While the original paper uses an [MXNet](https://mxnet.apache.org) implementation, we re-implement the method in [PyTorch](https://pytorch.org) based on mmdetection.
 
 ## Citation
 

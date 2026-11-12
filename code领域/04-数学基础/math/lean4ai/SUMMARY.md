@@ -172,7 +172,7 @@ dose = med_verifier.calculate_dose('paracetamol', 70.0, 30, 'moderate')
 ## 📚 学习资源
 
 ### Lean4
-- [官方教程](https://lean-lang.org/theorem_proving_in_lean4/)
+- [官方教程](https://lean-lang.org/theorem_proving_in_lean4)
 - [mathlib4 文档](https://leanprover-community.github.io/mathlib4_docs)
 - [Zulip 社区](https://leanprover.zulipchat.com)
 

@@ -1,7 +1,7 @@
 # UT Austin M 383C — Methods of Applied Mathematics
 
 > **学校**：UT Austin | **学期**：Fall (研究生)
-> **一手来源**：[web.ma.utexas.edu/users/koch/M383C](https://web.ma.utexas.edu/users/koch/M383C/) + [math.utexas.edu/information/graduate-students/preliminary-exams](https://math.utexas.edu/information/graduate-students/preliminary-exams)
+> **一手来源**：[web.ma.utexas.edu/users/koch/M383C](https://web.ma.utexas.edu/users/koch/M383C) + [math.utexas.edu/information/graduate-students/preliminary-exams](https://math.utexas.edu/information/graduate-students/preliminary-exams)
 
 ## 课程信息
 - **编号**：M 383C / CSEM 386C（互认）
@@ -42,7 +42,7 @@
 ## 参考资源
 - Kreyszig, *Introductory Functional Analysis with Applications* (Wiley, 1978)
 - Reed & Simon, *Methods of Modern Mathematical Physics* Vol 1
-- **Koch 讲义**：[web.ma.utexas.edu/users/koch/M383C](https://web.ma.utexas.edu/users/koch/M383C/)（UT Austin 公开）
+- **Koch 讲义**：[web.ma.utexas.edu/users/koch/M383C](https://web.ma.utexas.edu/users/koch/M383C)（UT Austin 公开）
 - Lax, *Functional Analysis* (Wiley)
 - MIT 对照：[MIT 18.102](../../mit-math-courses)
 

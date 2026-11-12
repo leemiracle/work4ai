@@ -204,7 +204,7 @@ NCCL implements three protocols:
 <!--我记得好像有这个东西，有空写吧-->
 
 ## Common NVIDIA Tools
-Reference: [WeLearnNLP Guide](https://www.yourmetaverse.cn/deep_learning/199/).
+Reference: [WeLearnNLP Guide](https://www.yourmetaverse.cn/deep_learning/199).
 
 ## `nvidia-smi topo -m`
 Compare two cluster topologies:

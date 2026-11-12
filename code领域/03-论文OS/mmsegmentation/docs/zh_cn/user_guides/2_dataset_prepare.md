@@ -2,7 +2,7 @@
 
 我们建议将数据集根目录符号链接到 `$MMSEGMENTATION/data`。
 如果您的目录结构不同，您可能需要更改配置文件中相应的路径。
-对于中国境内的用户，我们也推荐通过开源数据平台 [OpenDataLab](https://opendatalab.com/) 来下载dsdl标准数据，以获得更好的下载和使用体验，这里有一个下载dsdl数据集并进行训练的案例[DSDLReadme](../../../configs/dsdl/README.md)，欢迎尝试。
+对于中国境内的用户，我们也推荐通过开源数据平台 [OpenDataLab](https://opendatalab.com) 来下载dsdl标准数据，以获得更好的下载和使用体验，这里有一个下载dsdl数据集并进行训练的案例[DSDLReadme](../../../configs/dsdl/README.md)，欢迎尝试。
 
 ```none
 mmsegmentation
@@ -237,7 +237,7 @@ mim download mmsegmentation --dataset ade20k
 
 ## Cityscapes
 
-Cityscapes [官方网站](https://www.cityscapes-dataset.com/)可以下载 Cityscapes 数据集，按照官网要求注册并登陆后，数据可以在[这里](https://www.cityscapes-dataset.com/downloads/)找到。
+Cityscapes [官方网站](https://www.cityscapes-dataset.com)可以下载 Cityscapes 数据集，按照官网要求注册并登陆后，数据可以在[这里](https://www.cityscapes-dataset.com/downloads)找到。
 
 按照惯例，`**labelTrainIds.png` 用于 cityscapes 训练。
 我们提供了一个基于 [cityscapesscripts](https://github.com/mcordts/cityscapesScripts) 的[脚本](https://github.com/open-mmlab/mmsegmentation/blob/1.x/tools/dataset_converters/cityscapes.py)用于生成 `**labelTrainIds.png`。
@@ -264,7 +264,7 @@ python tools/dataset_converters/voc_aug.py data/VOCdevkit data/VOCdevkit/VOCaug 
 ## ADE20K
 
 ADE20K 的训练和验证集可以从这个[链接](http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip)下载。
-如果需要下载测试数据集，可以在[官网](http://host.robots.ox.ac.uk/)注册后，下载[测试集](http://host.robots.ox.ac.uk:8080/eval/downloads/VOC2010test.tar)。
+如果需要下载测试数据集，可以在[官网](http://host.robots.ox.ac.uk)注册后，下载[测试集](http://host.robots.ox.ac.uk:8080/eval/downloads/VOC2010test.tar)。
 
 ## Pascal Context
 
@@ -336,7 +336,7 @@ python tools/dataset_converters/chase_db1.py /path/to/CHASEDB1.zip
 
 ## DRIVE
 
-按照[官网](https://drive.grand-challenge.org/)要求，注册并登陆后，便可以下载 DRIVE 的训练和验证数据集。
+按照[官网](https://drive.grand-challenge.org)要求，注册并登陆后，便可以下载 DRIVE 的训练和验证数据集。
 
 要将 DRIVE 数据集转换为 MMSegmentation 的格式，请运行以下命令：
 
@@ -507,7 +507,7 @@ LIP 数据集的内容包括：
 
 ## Synapse dataset
 
-此数据集可以从[此页面](https://www.synapse.org/#!Synapse:syn3193805/wiki/)下载。
+此数据集可以从[此页面](https://www.synapse.org/#!Synapse:syn3193805/wiki)下载。
 
 遵循 [TransUNet](https://arxiv.org/abs/2102.04306) 的数据准备设定，将原始训练集（30 次扫描）拆分为新的训练集（18 次扫描）和验证集（12 次扫描）。请运行以下命令来准备数据集。
 
@@ -677,9 +677,9 @@ python tools/convert_datasets/refuge.py --raw_data_root=/path/to/refuge/REFUGE2/
 
 ## LEVIR-CD
 
-[LEVIR-CD](https://justchenhao.github.io/LEVIR/) 大规模遥感建筑变化检测数据集。
+[LEVIR-CD](https://justchenhao.github.io/LEVIR) 大规模遥感建筑变化检测数据集。
 
-数据集可以在[主页](https://justchenhao.github.io/LEVIR/)上请求获得。
+数据集可以在[主页](https://justchenhao.github.io/LEVIR)上请求获得。
 
 数据集的补充版本可以在[主页](https://github.com/S2Looking/Dataset)上请求获得。
 
@@ -707,7 +707,7 @@ python tools/dataset_converters/levircd.py --dataset-path /path/to/LEVIR-CD+ --o
 
 ## BDD100K
 
-- 可以从[官方网站](https://bdd-data.berkeley.edu/) 下载 BDD100K数据集（语义分割任务主要是10K数据集），按照官网要求注册并登陆后，数据可以在[这里](https://bdd-data.berkeley.edu/portal.html#download)找到。
+- 可以从[官方网站](https://bdd-data.berkeley.edu) 下载 BDD100K数据集（语义分割任务主要是10K数据集），按照官网要求注册并登陆后，数据可以在[这里](https://bdd-data.berkeley.edu/portal.html#download)找到。
 
 - 图像数据对应的名称是是`10K Images`, 语义分割标注对应的名称是`Segmentation`
 

@@ -229,8 +229,8 @@ class VoiceSessionManager:
 ## 🔗 Related Examples
 
 - **[Static Voice](../static/README.md)**: Turn-based voice interaction
-- **[Voice Pipeline Documentation](https://openai.github.io/openai-agents-python/voice/pipeline/)**: Official pipeline docs
-- **[Streaming Events](https://openai.github.io/openai-agents-python/voice/quickstart/)**: Voice event handling
+- **[Voice Pipeline Documentation](https://openai.github.io/openai-agents-python/voice/pipeline)**: Official pipeline docs
+- **[Streaming Events](https://openai.github.io/openai-agents-python/voice/quickstart)**: Voice event handling
 
 ## 🛠️ Advanced Customization
 

@@ -38,7 +38,7 @@ A RAG Agentic system built with the new Gemini 2.0 Flash Thinking model and gemi
 3. Create a new API key
 
 ### 2. Qdrant Cloud Setup
-1. Visit [Qdrant Cloud](https://cloud.qdrant.io/)
+1. Visit [Qdrant Cloud](https://cloud.qdrant.io)
 2. Create an account or sign in
 3. Create a new cluster
 4. Get your credentials:

@@ -235,7 +235,7 @@ Carregue um modelo do TensorFlow com o número esperado de rótulos:
 >>> model = TFAutoModelForSequenceClassification.from_pretrained("google-bert/bert-base-cased", num_labels=5)
 ```
 
-A seguir, compile e ajuste o fine-tuning a seu modelo com [`fit`](https://keras.io/api/models/model_training_apis/) como
+A seguir, compile e ajuste o fine-tuning a seu modelo com [`fit`](https://keras.io/api/models/model_training_apis) como
 faria com qualquer outro modelo do Keras:
 
 ```py
@@ -350,7 +350,7 @@ em uma CPU pode acabar levando várias horas em vez de minutos.
 <Tip>
 
     Se necessário, você pode obter o acesso gratuito a uma GPU na núvem por meio de um notebook no
-    [Colaboratory](https://colab.research.google.com/) ou [SageMaker StudioLab](https://studiolab.sagemaker.aws/)
+    [Colaboratory](https://colab.research.google.com) ou [SageMaker StudioLab](https://studiolab.sagemaker.aws)
     se não tiver esse recurso de forma local.
 
 </Tip>
@@ -359,7 +359,7 @@ Perfeito, agora estamos prontos para começar o treinamento! 🥳
 
 ### Ciclo de treinamento
 
-Para visualizar melhor o processo de treinamento, utilize a biblioteca [tqdm](https://tqdm.github.io/) para adicionar
+Para visualizar melhor o processo de treinamento, utilize a biblioteca [tqdm](https://tqdm.github.io) para adicionar
 uma barra de progresso sobre o número de passos percorridos no treinamento atual:
 
 ```py

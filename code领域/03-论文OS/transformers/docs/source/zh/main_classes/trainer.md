@@ -386,7 +386,7 @@ sudo ln -s /usr/bin/g++-7  /usr/local/cuda-10.2/bin/g++
 
 ### PyTorch完全分片数据并行（FSDP)
 
-为了加速在更大批次大小上训练庞大模型，我们可以使用完全分片的数据并行模型。这种数据并行范例通过对优化器状态、梯度和参数进行分片，实现了在更多数据和更大模型上的训练。要了解更多信息以及其优势，请查看[完全分片的数据并行博客](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api/)。我们已经集成了最新的PyTorch完全分片的数据并行（FSDP）训练功能。您只需通过配置启用它。
+为了加速在更大批次大小上训练庞大模型，我们可以使用完全分片的数据并行模型。这种数据并行范例通过对优化器状态、梯度和参数进行分片，实现了在更多数据和更大模型上的训练。要了解更多信息以及其优势，请查看[完全分片的数据并行博客](https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api)。我们已经集成了最新的PyTorch完全分片的数据并行（FSDP）训练功能。您只需通过配置启用它。
 
 **FSDP支持所需的PyTorch版本**: PyTorch Nightly（或者如果你在发布后阅读这个，使用1.12.0版本，因为带有激活的FSDP的模型保存仅在最近的修复中可用。
 
@@ -420,7 +420,7 @@ sudo ln -s /usr/bin/g++-7  /usr/local/cuda-10.2/bin/g++
 
 ### PyTorch/XLA 完全分片数据并行
 
-对于所有TPU用户，有个好消息！PyTorch/XLA现在支持FSDP。所有最新的完全分片数据并行（FSDP）训练都受支持。有关更多信息，请参阅[在云端TPU上使用FSDP扩展PyTorch模型](https://pytorch.org/blog/scaling-pytorch-models-on-cloud-tpus-with-fsdp/)和[PyTorch/XLA FSDP的实现](https://github.com/pytorch/xla/tree/master/torch_xla/distributed/fsdp)。使用它只需通过配置启用。
+对于所有TPU用户，有个好消息！PyTorch/XLA现在支持FSDP。所有最新的完全分片数据并行（FSDP）训练都受支持。有关更多信息，请参阅[在云端TPU上使用FSDP扩展PyTorch模型](https://pytorch.org/blog/scaling-pytorch-models-on-cloud-tpus-with-fsdp)和[PyTorch/XLA FSDP的实现](https://github.com/pytorch/xla/tree/master/torch_xla/distributed/fsdp)。使用它只需通过配置启用。
 
 **需要的 PyTorch/XLA 版本以支持 FSDP**：>=2.0
 
@@ -438,7 +438,7 @@ sudo ln -s /usr/bin/g++-7  /usr/local/cuda-10.2/bin/g++
 ### 在 Mac 上使用 Trainer 进行加速的 PyTorch 训练
 
 随着 PyTorch v1.12 版本的发布，开发人员和研究人员可以利用 Apple Silicon GPU 进行显著更快的模型训练。这使得可以在 Mac 上本地执行原型设计和微调等机器学习工作流程。Apple 的 Metal Performance Shaders（MPS）作为 PyTorch 的后端实现了这一点，并且可以通过新的 `"mps"` 设备来使用。
-这将在 MPS 图形框架上映射计算图和神经图元，并使用 MPS 提供的优化内核。更多信息，请参阅官方文档 [Introducing Accelerated PyTorch Training on Mac](https://pytorch.org/blog/introducing-accelerated-pytorch-training-on-mac/) 和 [MPS BACKEND](https://pytorch.org/docs/stable/notes/mps.html)。
+这将在 MPS 图形框架上映射计算图和神经图元，并使用 MPS 提供的优化内核。更多信息，请参阅官方文档 [Introducing Accelerated PyTorch Training on Mac](https://pytorch.org/blog/introducing-accelerated-pytorch-training-on-mac) 和 [MPS BACKEND](https://pytorch.org/docs/stable/notes/mps.html)。
 
 
 <Tip warning={false}>

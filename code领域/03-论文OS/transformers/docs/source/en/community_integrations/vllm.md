@@ -47,4 +47,4 @@ Setting `model_impl="transformers"` bypasses the vLLM model registry and loads d
 ## Resources
 
 - [vLLM docs](https://docs.vllm.ai/en/latest/models/supported_models.html#transformers) for more usage examples and tips.
-- [Integration with Hugging Face](https://docs.vllm.ai/en/latest/design/huggingface_integration/) explains how vLLM integrates with Transformers.
+- [Integration with Hugging Face](https://docs.vllm.ai/en/latest/design/huggingface_integration) explains how vLLM integrates with Transformers.

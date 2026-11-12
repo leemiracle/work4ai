@@ -72,7 +72,7 @@ This model was contributed by [ikuyamada](https://huggingface.co/ikuyamada) and 
     entity typing, e.g. the [Open Entity dataset](https://www.cs.utexas.edu/~eunsol/html_pages/open_entity.html).
     This model places a linear head on top of the output entity representation.
   - [`LukeForEntityPairClassification`], for tasks to classify the relationship between two entities
-    such as relation classification, e.g. the [TACRED dataset](https://nlp.stanford.edu/projects/tacred/). This
+    such as relation classification, e.g. the [TACRED dataset](https://nlp.stanford.edu/projects/tacred). This
     model places a linear head on top of the concatenated output representation of the pair of given entities.
   - [`LukeForEntitySpanClassification`], for tasks to classify the sequence of entity spans, such as
     named entity recognition (NER). This model places a linear head on top of the output entity representations. You

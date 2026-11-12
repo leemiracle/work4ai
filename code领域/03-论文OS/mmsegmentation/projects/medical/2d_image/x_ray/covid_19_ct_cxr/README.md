@@ -14,7 +14,7 @@ The 2019 novel coronavirus (COVID-19) presents several unique features [Fang, 20
 
 | Dataset Name                                                           | Anatomical Region | Task Type    | Modality | Nnum. Classes | Train/Val/Test Images | Train/Val/Test Labeled | Release date | License                                                               |
 | ---------------------------------------------------------------------- | ----------------- | ------------ | -------- | ------------- | --------------------- | ---------------------- | ------------ | --------------------------------------------------------------------- |
-| [Covid-19-ct-cxr](https://github.com/ieee8023/covid-chestxray-dataset) | thorax            | segmentation | x_ray    | 2             | 205/-/714             | yes/-/no               | 2021         | [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) |
+| [Covid-19-ct-cxr](https://github.com/ieee8023/covid-chestxray-dataset) | thorax            | segmentation | x_ray    | 2             | 205/-/714             | yes/-/no               | 2021         | [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0) |
 
 | Class Name | Num. Train | Pct. Train | Num. Val | Pct. Val | Num. Test | Pct. Test |
 | :--------: | :--------: | :--------: | :------: | :------: | :-------: | :-------: |

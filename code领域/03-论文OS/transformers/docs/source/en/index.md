@@ -32,7 +32,7 @@ simple, customizable, and efficient.
 
 There are over 1M+ Transformers [model checkpoints](https://huggingface.co/models?library=transformers&sort=trending) on the [Hugging Face Hub](https://huggingface.com/models) you can use.
 
-Explore the [Hub](https://huggingface.com/) today to find a model and use Transformers to help you get started right away.
+Explore the [Hub](https://huggingface.com) today to find a model and use Transformers to help you get started right away.
 
 Explore the [Models Timeline](./models_timeline) to discover the latest text, vision, audio and multimodal model architectures in Transformers.
 

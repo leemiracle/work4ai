@@ -354,7 +354,7 @@ vllm:time_to_first_token_seconds_count{model_name="meta-llama/Llama-3.1-8B-Instr
 ### Cache Config Info
 
 `prometheus_client` has support for
-[Info metrics](https://prometheus.github.io/client_python/instrumenting/info/)
+[Info metrics](https://prometheus.github.io/client_python/instrumenting/info)
 which are equivalent to a `Gauge` whose value is permanently set to 1,
 but exposes interesting key/value pair information via labels. This is
 used for information about an instance that does not change - so it
@@ -655,7 +655,7 @@ vLLM has support for OpenTelemetry tracing:
 
 - Added by <https://github.com/vllm-project/vllm/pull/4687> and reinstated by <https://github.com/vllm-project/vllm/pull/20372>
 - Configured with `--oltp-traces-endpoint` and `--collect-detailed-traces`
-- [OpenTelemetry blog post](https://opentelemetry.io/blog/2024/llm-observability/)
+- [OpenTelemetry blog post](https://opentelemetry.io/blog/2024/llm-observability)
 - [User-facing docs](../examples/online_serving/opentelemetry.md)
 - [Blog post](https://medium.com/@ronen.schaffer/follow-the-trail-supercharging-vllm-with-opentelemetry-distributed-tracing-aa655229b46f)
 - [IBM product docs](https://www.ibm.com/docs/en/instana-observability/current?topic=mgaa-monitoring-large-language-models-llms-vllm-public-preview)

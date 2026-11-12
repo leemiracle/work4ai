@@ -519,11 +519,11 @@
 - 📎 **Rodrik** (2004), *Industrial Policy for the Twenty-First Century* —— 产业政策评估（与飞腾 E06 共享）
 
 **🌍 国产 CPU 厂商编译器官方入口**
-- **飞腾**：[phytium.com.cn/developer/36](https://www.phytium.com.cn/developer/36/)（PhyCC/PhyGCC）
+- **飞腾**：[phytium.com.cn/developer/36](https://www.phytium.com.cn/developer/36)（PhyCC/PhyGCC）
 - **华为鲲鹏 BiSheng**：[hikunpeng.com/developer/hpc/bisheng](https://www.hikunpeng.com/developer/hpc/bisheng)
-- **华为昇腾 CANN/AscendNPU-IR**：[hiascend.com](https://www.hiascend.com/) + [gitcode.com/Ascend](https://gitcode.com/Ascend)
+- **华为昇腾 CANN/AscendNPU-IR**：[hiascend.com](https://www.hiascend.com) + [gitcode.com/Ascend](https://gitcode.com/Ascend)
 - **龙芯 LoongArch**：[loongson.cn/system/loongarch](https://loongson.cn/system/loongarch) + [github.com/loongson](https://github.com/loongson)
-- **平头哥 OpenC910/c-sky**：[github.com/c-sky](https://github.com/c-sky) + [occ.t-head.cn](https://occ.t-head.cn/)
+- **平头哥 OpenC910/c-sky**：[github.com/c-sky](https://github.com/c-sky) + [occ.t-head.cn](https://occ.t-head.cn)
 - **海光**：GCC/LLVM 主线 commit（搜 Hygon/c86-4g）
 - **申威**：swLLVM 论文（软件学报 2024）+ PaddlePaddle SW64 支持
 

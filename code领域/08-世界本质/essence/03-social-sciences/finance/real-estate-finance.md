@@ -1125,7 +1125,7 @@ for dr in [0.60, 0.80, 0.90]:
 | **心理学** | 买房冲动 = 损失厌恶 + 羊群效应 + 锚定 | "再不买就永远买不起" = 恐惧驱动的正反馈 |
 | **社会学** | 房子 = 阶层符号 + 婚姻门槛 + 学区门票 | 房产 = 社会资本的物化 |
 | **政治学** | 土地财政 = 国家与社会关系的财政表达 | 房地产调控 = 治理能力的测试 |
-| **系统科学** | 房地产 = 系统关键节点 | [`06-systems/feedback/`](../../06-systems/feedback/)：正/负反馈、级联失效 |
+| **系统科学** | 房地产 = 系统关键节点 | [`06-systems/feedback/`](../../06-systems/feedback)：正/负反馈、级联失效 |
 | **伦理学** | 住房权 vs 财产权；居住正义 vs 市场效率 | "房住不炒" = 伦理对市场的纠偏 |
 
 ### 11.2 开放问题
@@ -1156,7 +1156,7 @@ for dr in [0.60, 0.80, 0.90]:
 | 风险与不确定性（Knight/黑天鹅） | [`risk-and-uncertainty.md`](./risk-and-uncertainty.md) |
 | 房地产系统危机洞察 | [`../../insights/2026-07/2026-07-12-real-estate-system-crisis.md`](../../insights/2026-07/2026-07-12-real-estate-system-crisis.md) |
 | 土地财政洞察 | [`../../insights/2026-07/2026-07-12-land-finance.md`](../../insights/2026-07/2026-07-12-land-finance.md) |
-| 系统科学（反馈/级联） | [`../../06-systems/feedback/`](../../06-systems/feedback/) |
+| 系统科学（反馈/级联） | [`../../06-systems/feedback/`](../../06-systems/feedback) |
 
 ---
 

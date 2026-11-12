@@ -29,8 +29,8 @@ pip install -r requirements.txt
 ```
 
 3. Set up your API keys:
-- Get your [OpenAI API key](https://platform.openai.com/)
-- Set up a [Qdrant Cloud](https://cloud.qdrant.io/) account and get your API key and URL
+- Get your [OpenAI API key](https://platform.openai.com)
+- Set up a [Qdrant Cloud](https://cloud.qdrant.io) account and get your API key and URL
 - Create a `.env` file with your credentials:
 ```bash
 OPENAI_API_KEY='your-openai-api-key'

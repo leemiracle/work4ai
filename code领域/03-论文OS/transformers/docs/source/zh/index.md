@@ -16,7 +16,7 @@ rendered properly in your Markdown viewer.
 
 # 🤗 Transformers简介
 
-为 [PyTorch](https://pytorch.org/) 打造的先进的机器学习工具.
+为 [PyTorch](https://pytorch.org) 打造的先进的机器学习工具.
 
 🤗 Transformers 提供了可以轻松地下载并且训练先进的预训练模型的 API 和工具。使用预训练模型可以减少计算消耗和碳排放，并且节省从头训练所需要的时间和资源。这些模型支持不同模态中的常见任务，比如：
 
@@ -27,7 +27,7 @@ rendered properly in your Markdown viewer.
 
 🤗 Transformers 模型可以被导出为 ONNX 和 TorchScript 格式，用于在生产环境中部署。
 
-马上加入在 [Hub](https://huggingface.co/models)、[论坛](https://discuss.huggingface.co/) 或者 [Discord](https://discord.com/invite/JfAtkvEtRb) 上正在快速发展的社区吧！
+马上加入在 [Hub](https://huggingface.co/models)、[论坛](https://discuss.huggingface.co) 或者 [Discord](https://discord.com/invite/JfAtkvEtRb) 上正在快速发展的社区吧！
 
 ## 如果你需要来自 Hugging Face 团队的个性化支持
 

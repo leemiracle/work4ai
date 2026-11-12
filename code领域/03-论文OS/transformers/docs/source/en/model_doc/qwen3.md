@@ -19,7 +19,7 @@ rendered properly in your Markdown viewer.
 
 ## Overview
 
-[Qwen3](https://huggingface.co/papers/2505.09388) refers to the dense model architecture Qwen3-32B which was released with its mixture of experts variant [Qwen3MoE](qwen3_moe) ([blog post](https://qwenlm.github.io/blog/qwen3/)).
+[Qwen3](https://huggingface.co/papers/2505.09388) refers to the dense model architecture Qwen3-32B which was released with its mixture of experts variant [Qwen3MoE](qwen3_moe) ([blog post](https://qwenlm.github.io/blog/qwen3)).
 
 ### Model Details
 

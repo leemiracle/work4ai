@@ -18,7 +18,7 @@
 | 中文入门 | Evian-Zhang LLVM IR 入门指南 / 小彭老师 LLVM | GitHub 高 star 中文教程 |
 | 中文视频 | VectorizeOrz C++&LLVM Tutorial / 先进编译实验室 MLIR | B 站系统教程 |
 | 官方一手 | llvm.org / LLVM Discourse / LLVM Doxygen | 三大官方入口 |
-| 创始人 | Chris Lattner [@clattner_llvm](https://twitter.com/clattner_llvm) / [nondot.org/sabre](http://nondot.org/sabre/) | LLVM/Clang/Swift/Mojo 之父 |
+| 创始人 | Chris Lattner [@clattner_llvm](https://twitter.com/clattner_llvm) / [nondot.org/sabre](http://nondot.org/sabre) | LLVM/Clang/Swift/Mojo 之父 |
 | 英文社区 | LLVM Discourse / r/LLVM / Discord / Hacker News | 四大讨论阵地 |
 | 编译顶会 | PLDI/POPL/CC/CGO/PPoPP | 编译器研究顶会 |
 | LLVM 自办会议 | US LLVM Dev Mtg / EuroLLVM / LLVM Dev Tokyo | 每年三场官方会 |
@@ -50,7 +50,7 @@
 - **EuroLLVM**（每年春，欧洲轮换）—— 欧洲开发者会
 - **LLVM Dev Meeting Tokyo**（2025-06 已办，Chris Lattner keynote）[官方](https://llvm.org/devmtg/2025-06/slides/keynote/lattner-keynote.pdf)
 
-**CFP/前沿跟踪**：各会议官网 + LLVM Discourse + [LLVM Weekly](https://llvmweekly.org/)（Alex Denner 编辑的周报）。
+**CFP/前沿跟踪**：各会议官网 + LLVM Discourse + [LLVM Weekly](https://llvmweekly.org)（Alex Denner 编辑的周报）。
 
 ---
 
@@ -64,7 +64,7 @@
 | **测试框架** | `FileCheck` `lit` `llvm-lit` | LLVM 测试基础设施 | regression test 必备 |
 | **调试** | `bugpoint` `llvm-reduce` | 自动 bug 最小化 | miscompilation 必用 |
 | **性能分析** | `llvm-profdata` `llvm-cov` `llvm-profgen` | PGO、代码覆盖 | ThinLTO 配套 |
-| **在线工具** | [Compiler Explorer (godbolt.org)](https://godbolt.org/) | 在线对比多编译器/多版本汇编 | ⭐ 必备 |
+| **在线工具** | [Compiler Explorer (godbolt.org)](https://godbolt.org) | 在线对比多编译器/多版本汇编 | ⭐ 必备 |
 | **形式化验证** | [Alive2](https://github.com/AliveToolkit/alive2) | 验证 LLVM Pass 正确性 | Nuno Lopes 团队 |
 | **教学样板** | [llvm-tutor](https://github.com/banach-space/llvm-tutor) | 现代 Pass 教程（HelloWorld/DominatorTree 等） | Banach-Space 维护 |
 | **可视化** | `opt -view-cfg` `opt -view-dom` | 控制流图、支配树可视化 | graphviz 出图 |
@@ -77,7 +77,7 @@
 
 | 教材 | 作者 | 版本 | 豆瓣 | 一句话定位 |
 |------|------|------|------|----------|
-| **Compilers: Principles, Techniques, and Tools (龙书)** | Aho, Lam, Sethi, Ullman | 2nd (2006) | [9.x](https://book.douban.com/subject/5409835/) 公认 | 编译原理圣经，所有编译器工程师必读 |
+| **Compilers: Principles, Techniques, and Tools (龙书)** | Aho, Lam, Sethi, Ullman | 2nd (2006) | [9.x](https://book.douban.com/subject/5409835) 公认 | 编译原理圣经，所有编译器工程师必读 |
 | **Engineering a Compiler** | Cooper & Torczon | 3rd (2022, MK) | — | 现代 Pass Pipeline 设计的标准教材 |
 | **Computer Systems: A Programmer's Perspective (CSAPP)** | Bryant & O'Hallaron | 3rd (2015) | 9.8 | CMU 15-213 教材，连接软硬 |
 | **Advanced Compiler Design and Implementation (鲸书)** | Muchnick | 1997, MK | — | 后端优化（调度、RegAlloc）权威 |
@@ -86,9 +86,9 @@
 
 | 教材 | 作者/译者 | 版本 | 豆瓣 | 一句话定位 |
 |------|---------|------|------|----------|
-| **LLVM 编译器实战教程**（*Getting Started with LLVM Core Libraries*） | Bruno Cardoso Lopes & Rafael Auler / 过敏意 冷静文 译 | 机械工业 2019 | [6.5](https://book.douban.com/subject/34802579/)（21 人评价） | LLVM 入门唯一中译本；评分偏低但仍是首选 |
-| **深入理解 LLVM：代码生成** | 彭成寒 / 李灵 / 戴贤泽 / 王志磊 / 俞佳嘉 | 机械工业 2024-9 | [豆瓣](https://book.douban.com/subject/37078652/) 评价人数不足 | "近些年最详细、最准确的编译器原理和实现图书"；以 LLVM 15 为基线讲后端 |
-| **LLVM 编译器原理与实践** | 吴建明 / 吴一昊 | 机械工业 2024-10 | [豆瓣](https://book.douban.com/subject/37107379/) 差评 | ⚠️ 豆瓣有"避雷吴建明"评论，谨慎 |
+| **LLVM 编译器实战教程**（*Getting Started with LLVM Core Libraries*） | Bruno Cardoso Lopes & Rafael Auler / 过敏意 冷静文 译 | 机械工业 2019 | [6.5](https://book.douban.com/subject/34802579)（21 人评价） | LLVM 入门唯一中译本；评分偏低但仍是首选 |
+| **深入理解 LLVM：代码生成** | 彭成寒 / 李灵 / 戴贤泽 / 王志磊 / 俞佳嘉 | 机械工业 2024-9 | [豆瓣](https://book.douban.com/subject/37078652) 评价人数不足 | "近些年最详细、最准确的编译器原理和实现图书"；以 LLVM 15 为基线讲后端 |
+| **LLVM 编译器原理与实践** | 吴建明 / 吴一昊 | 机械工业 2024-10 | [豆瓣](https://book.douban.com/subject/37107379) 差评 | ⚠️ 豆瓣有"避雷吴建明"评论，谨慎 |
 | **LLVM Cookbook** | Mayur Pandey | 2015, Packt | — | 老但实操 |
 | **Learn LLVM 17** | xiaoweiChen 译 | [GitHub](https://github.com/xiaoweiChen/Learn-LLVM-17) | — | 中文译本，LLVM 17 |
 
@@ -96,15 +96,15 @@
 
 | 教材 | 作者 | 豆瓣 | 一句话定位 |
 |------|------|------|----------|
-| **Modern Compiler Implementation in C (虎书)** | Andrew W. Appel | [8.4 人邮 2006 版](https://book.douban.com/subject/1806974/) / [8.9 图灵版](https://book.douban.com/subject/30191414/) | 虎书 C 版，编译器实现三语言对照（C/ML/Java） |
-| **Advanced Compiler Design and Implementation (鲸书)** | Steven S. Muchnick | [8.8 (51 人评价)](https://www.douban.com/doulist/47594/) | 鲸书，编译器后端优化权威，适合研究生 |
+| **Modern Compiler Implementation in C (虎书)** | Andrew W. Appel | [8.4 人邮 2006 版](https://book.douban.com/subject/1806974) / [8.9 图灵版](https://book.douban.com/subject/30191414) | 虎书 C 版，编译器实现三语言对照（C/ML/Java） |
+| **Advanced Compiler Design and Implementation (鲸书)** | Steven S. Muchnick | [8.8 (51 人评价)](https://www.douban.com/doulist/47594) | 鲸书，编译器后端优化权威，适合研究生 |
 | **Optimizing Compilers for Modern Architectures** | Allen & Kennedy | — | 循环变换、依赖分析奠基（2001, MK） |
-| **SSA Book**（*Static Single Assignment Book*） | INRIA | — | [ssabook.gforge.inria.fr](http://ssabook.gforge.inria.fr/) SSA 形式权威在线书 |
+| **SSA Book**（*Static Single Assignment Book*） | INRIA | — | [ssabook.gforge.inria.fr](http://ssabook.gforge.inria.fr) SSA 形式权威在线书 |
 | **Modern Processor Design** | Shen & Lipasti | — | 2013 重印，指令级并行工程圣经 |
 | **Performance Analysis and Tuning on Modern CPUs** | Denis Bakhvalov | — | 2020，现代乱序 CPU 性能调优 |
-| **Learn LLVM 12**（中文译本） | Kai Nacke / xiaoweiChen 译 | [2021 书评](https://book.douban.com/review/13878106/) | LLVM Cookbook 第 12 版中译，PDF 下载 |
+| **Learn LLVM 12**（中文译本） | Kai Nacke / xiaoweiChen 译 | [2021 书评](https://book.douban.com/review/13878106) | LLVM Cookbook 第 12 版中译，PDF 下载 |
 
-### 3.3.1 编译原理三大经典对照（豆瓣 [书单](https://www.douban.com/doulist/47594/)）
+### 3.3.1 编译原理三大经典对照（豆瓣 [书单](https://www.douban.com/doulist/47594)）
 
 | 俗名 | 英文名 | 作者 | 中文译名 | 豆瓣 | 定位 |
 |------|--------|------|---------|:----:|------|
@@ -116,9 +116,9 @@
 
 | 讲义 | 作者 | 链接 | 一句话定位 |
 |------|------|------|----------|
-| **CMU 15-411 Compiler Design** | CMU | [cs.cmu.edu/1511](https://www.cs.cmu.edu/~janh/courses/411/) | 编译器设计名课，LLVM 实战 |
-| **MIT 6.035 Computer Language Engineering** | MIT | [6.035 web](https://6350.csail.mit.edu/) | Sussman/Harold，老牌编译课 |
-| **Cornell CS 6120: Advanced Compilers** | Adrian Sampson (Cornell) | [cs.cornell.edu/courses/cs6120](https://www.cs.cornell.edu/courses/cs6120/2020fa/) | ⭐ 现代编译器课，全部视频开源，用 LLVM |
+| **CMU 15-411 Compiler Design** | CMU | [cs.cmu.edu/1511](https://www.cs.cmu.edu/~janh/courses/411) | 编译器设计名课，LLVM 实战 |
+| **MIT 6.035 Computer Language Engineering** | MIT | [6.035 web](https://6350.csail.mit.edu) | Sussman/Harold，老牌编译课 |
+| **Cornell CS 6120: Advanced Compilers** | Adrian Sampson (Cornell) | [cs.cornell.edu/courses/cs6120](https://www.cs.cornell.edu/courses/cs6120/2020fa) | ⭐ 现代编译器课，全部视频开源，用 LLVM |
 | **LLVM Kaleidoscope Tutorial**（官方） | Chris Lattner | [llvm.org/docs/tutorial](https://llvm.org/docs/tutorial/MyFirstLanguageFrontend/index.html) | 从零写编译器的经典教程 |
 
 ### 3.5 经典论文谱系（溯源法素材）
@@ -147,13 +147,13 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 
 | 资源 | 链接 | 一句话定位 |
 |------|------|----------|
-| **DBLP** | [dblp.org](https://dblp.org/) | 任意公司/作者论文可复核 |
-| **CSrankings.org** | [csrankings.org](https://csrankings.org/) | 按机构/领域（含 PL）检索论文 |
+| **DBLP** | [dblp.org](https://dblp.org) | 任意公司/作者论文可复核 |
+| **CSrankings.org** | [csrankings.org](https://csrankings.org) | 按机构/领域（含 PL）检索论文 |
 | **The Morning Paper** (停更) | blog.acolyer.org | 经典论文导读，每天 1 篇 |
 | **Papers We Love** | paperswelove.org | 经典论文社区导读 |
 | **AK @_akhaliq** | Twitter/X | 每日 arXiv 速递（偏 ML，含 MLIR/XLA） |
 | **arXiv cs.PL/cs.LG** | arxiv.org/list/cs.PL/recent | 编译器/PL 每日 |
-| **SIGPLAN Blog** | [sigplan.org/Blog](https://sigplan.blog/) | PL 社区综述 |
+| **SIGPLAN Blog** | [sigplan.org/Blog](https://sigplan.blog) | PL 社区综述 |
 
 ---
 
@@ -166,13 +166,13 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 | **Pass Manager** | [New Pass Manager](https://llvm.org/docs/NewPassManager.html) | New PM 文档 |
 | **后端开发** | [Writing an LLVM Backend](https://llvm.org/docs/WritingAnLLVMBackend.html) / [TableGen](https://llvm.org/docs/TableGen/index.html) | 后端 .td 描述 |
 | **代码生成** | [Code Generator](https://llvm.org/docs/CodeGenerator.html) | SelectionDAG/GlobalISel |
-| **API 参考** | [LLVM Doxygen](https://llvm.org/doxygen/) | C++ API 全文档 |
+| **API 参考** | [LLVM Doxygen](https://llvm.org/doxygen) | C++ API 全文档 |
 | **Getting Started** | [Getting Started with LLVM](https://llvm.org/docs/GettingStarted.html) | 编译/贡献 |
 | **Developer Policy** | [llvm.org/docs/DeveloperPolicy](https://llvm.org/docs/DeveloperPolicy.html) | 贡献规范 |
-| **C++ 标准** | ISO C++ Committee / [open-std.org](http://www.open-std.org/jtc1/sc22/wg21/) | libcxx 实现 |
-| **DWARF** | [dwarfstd.org](http://dwarfstd.org/) | LLDB 调试信息标准 |
+| **C++ 标准** | ISO C++ Committee / [open-std.org](http://www.open-std.org/jtc1/sc22/wg21) | libcxx 实现 |
+| **DWARF** | [dwarfstd.org](http://dwarfstd.org) | LLDB 调试信息标准 |
 | **AArch64 ARM ARM** | DDI 0487（飞腾项目资源库 §4） | AArch64 后端必读 |
-| **RISC-V** | [riscv.org/technical/specifications](https://riscv.org/technical/specifications/) | RISC-V 后端必读 |
+| **RISC-V** | [riscv.org/technical/specifications](https://riscv.org/technical/specifications) | RISC-V 后端必读 |
 
 ---
 
@@ -196,22 +196,22 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 | 资源 | 链接 | 一句话定位 | 可信度 |
 |------|------|----------|:----:|
 | **Evian-Zhang/llvm-ir-tutorial** | [github.com/Evian-Zhang/llvm-ir-tutorial](https://github.com/Evian-Zhang/llvm-ir-tutorial) | ⭐⭐⭐⭐⭐ LLVM IR 入门指南（中文，接近 1000 star，LLVM 16） | [GitHub] |
-| **小彭老师带你学 LLVM** | [parallel101.github.io/cppguidebook/llvm_intro](https://parallel101.github.io/cppguidebook/llvm_intro/) | ⭐⭐⭐⭐⭐ parallel101（小彭大典），C++ 名师小彭老师 | [社区] |
+| **小彭老师带你学 LLVM** | [parallel101.github.io/cppguidebook/llvm_intro](https://parallel101.github.io/cppguidebook/llvm_intro) | ⭐⭐⭐⭐⭐ parallel101（小彭大典），C++ 名师小彭老师 | [社区] |
 | **urlyy/llvm-new-pass-tutor** | [github.com/urlyy/llvm-new-pass-tutor](https://github.com/urlyy/llvm-new-pass-tutor) | ⭐⭐⭐⭐ 基于 LLVM-18 New PM Pass 教程（含 B 站视频 BV1Bf3neVEnN） | [GitHub] |
 | **Learn LLVM 17** | [github.com/xiaoweiChen/Learn-LLVM-17](https://github.com/xiaoweiChen/Learn-LLVM-17) | ⭐⭐⭐ xiaoweiChen 中文译本 | [GitHub] |
-| **LLVM Kaleidoscope 中文** | [llvm-tutorial-cn.readthedocs.io](https://llvm-tutorial-cn.readthedocs.io/) | ⭐⭐⭐⭐ 连城译，Chris Lattner 原著中译 | [社区] |
-| **Getting Started with LLVM Core Libraries 中文版** | [getting-started-with-llvm-core-libraries-zh-cn.readthedocs.io](https://getting-started-with-llvm-core-libraries-zh-cn.readthedocs.io/) | ⭐⭐⭐ 教材中译 | [社区] |
+| **LLVM Kaleidoscope 中文** | [llvm-tutorial-cn.readthedocs.io](https://llvm-tutorial-cn.readthedocs.io) | ⭐⭐⭐⭐ 连城译，Chris Lattner 原著中译 | [社区] |
+| **Getting Started with LLVM Core Libraries 中文版** | [getting-started-with-llvm-core-libraries-zh-cn.readthedocs.io](https://getting-started-with-llvm-core-libraries-zh-cn.readthedocs.io) | ⭐⭐⭐ 教材中译 | [社区] |
 
 ### 6.2 ⭐ B 站视频课程
 
 | 课程 | UP 主 / 链接 | 一句话定位 | 可信度 |
 |------|------------|----------|:----:|
-| **C++&LLVM 入门项目（手把手 LLVM Tutorial）** | [VectorizeOrz BV1UQU7BHEs2](https://www.bilibili.com/video/BV1UQU7BHEs2/) | ⭐⭐⭐⭐⭐ 7 集 LLVM Tutorial 全套（2025-11 起更） | [B站] |
-| **LLVM 编译器入门（三）：IR 优化** | [先进编译实验室 BV1fX4y1x79Y](https://www.bilibili.com/video/BV1fX4y1x79Y/) | ⭐⭐⭐⭐ 高校实验室 | [B站] |
-| **人工智能编译器 MLIR 官方入门教程讲解** | [先进编译实验室 BV1Hd4y1U7mb](https://www.bilibili.com/video/BV1Hd4y1U7mb/) | ⭐⭐⭐⭐ 3.1 万播放，MLIR 入门首选 | [B站] |
-| **如何使用 LLVM 和 MLIR 来构建一个编译器（全 20 集）** | [ZOMI酱 BV1CG4y1V7Dn](https://www.bilibili.com/video/BV1CG4y1V7Dn/) | ⭐⭐⭐⭐ 4.4 万播放 | [B站] |
+| **C++&LLVM 入门项目（手把手 LLVM Tutorial）** | [VectorizeOrz BV1UQU7BHEs2](https://www.bilibili.com/video/BV1UQU7BHEs2) | ⭐⭐⭐⭐⭐ 7 集 LLVM Tutorial 全套（2025-11 起更） | [B站] |
+| **LLVM 编译器入门（三）：IR 优化** | [先进编译实验室 BV1fX4y1x79Y](https://www.bilibili.com/video/BV1fX4y1x79Y) | ⭐⭐⭐⭐ 高校实验室 | [B站] |
+| **人工智能编译器 MLIR 官方入门教程讲解** | [先进编译实验室 BV1Hd4y1U7mb](https://www.bilibili.com/video/BV1Hd4y1U7mb) | ⭐⭐⭐⭐ 3.1 万播放，MLIR 入门首选 | [B站] |
+| **如何使用 LLVM 和 MLIR 来构建一个编译器（全 20 集）** | [ZOMI酱 BV1CG4y1V7Dn](https://www.bilibili.com/video/BV1CG4y1V7Dn) | ⭐⭐⭐⭐ 4.4 万播放 | [B站] |
 | **手把手带你入门实践 LLVM** | iiicp（B 站专栏） | ⭐⭐⭐⭐ 2024 录制，LLVM 17，零基础 | [B站] |
-| **【硬核开课】从零带你写出自己的编程语言和编译器** | [硬核子牙 BV1C3gSzsEUn](https://www.bilibili.com/video/BV1C3gSzsEUn/) | ⭐⭐⭐ 偏付费课程 | [B站] |
+| **【硬核开课】从零带你写出自己的编程语言和编译器** | [硬核子牙 BV1C3gSzsEUn](https://www.bilibili.com/video/BV1C3gSzsEUn) | ⭐⭐⭐ 偏付费课程 | [B站] |
 | **编译原理 — 中科大**（B 站搜） | 中科大 | ⭐⭐⭐⭐ 高校公开课 | [B站] |
 
 ### 6.3 ⭐ CSDN 专栏（精选，质量参差需甄别）
@@ -222,7 +222,7 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 | **LLVM 系列**（写 FunctionPass 等 20+ 篇） | Zhanglin_Wu | ⭐⭐⭐⭐ 实战 Pass 开发 | [社区] |
 | **LLVM11 实战教程：用最简单的方式运行自定义 Pass** | [QingYun2077](https://blog.csdn.net/QingYun2077/article/details/143599148) | ⭐⭐⭐ 最小可运行示例 | [社区] |
 | **LLVM Pass 开发实战：从 IR 遍历到指令级优化** | [2301_81410839](https://blog.csdn.net/2301_81410839/article/details/162446069) | ⭐⭐⭐ 2026-06 最新 | [社区] |
-| **LLVM 入门教程之 Pass 编写** | [Yuuoniy](https://blog.yuuoniy.cn/posts/llvm-pass-1/) | ⭐⭐⭐⭐ 经典老文 | [社区] |
+| **LLVM 入门教程之 Pass 编写** | [Yuuoniy](https://blog.yuuoniy.cn/posts/llvm-pass-1) | ⭐⭐⭐⭐ 经典老文 | [社区] |
 | **从零开始的 LLVM+Clang（下载、配置到第一个 Pass）** | [qq_41048815](https://blog.csdn.net/qq_41048815/article/details/108556465) | ⭐⭐⭐ Ubuntu 编译 LLVM 实操 | [社区] |
 | **llvm19.0 源码树外编译 Pass（New PM）** | [weixin_43890959](https://blog.csdn.net/weixin_43890959/article/details/144483164) | ⭐⭐⭐⭐ LLVM 19 最新 | [社区] |
 
@@ -238,11 +238,11 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 
 | 博客 | 作者 / 链接 | 一句话定位 | 可信度 |
 |------|-----------|----------|:----:|
-| **LLVM 简明教程** | [Gality（藏器于身）](https://gality.cn/llvm/llvm-tutorial/) | ⭐⭐⭐⭐ 新手视角笔记 | [社区] |
-| **LeadroyaL — LLVM New PM 适配** | [leadroyal.cn/p/221](https://leadroyal.cn/p/221/) | ⭐⭐⭐⭐ iOS 越狱圈 LLVM Pass 实战 | [社区] |
-| **小彭大典** | [parallel101.github.io](https://parallel101.github.io/) | ⭐⭐⭐⭐⭐ 小彭老师全栈 C++ 教程 | [社区] |
-| **Yuuoniy blog** | [blog.yuuoniy.cn](https://blog.yuuoniy.cn/) | ⭐⭐⭐⭐ LLVM/JVM 编译器学习笔记 | [社区] |
-| **qfrost** | [qfrost.com/posts/llvm](http://www.qfrost.com/posts/llvm/) | ⭐⭐⭐⭐ Windows 下优雅使用 LLVM Pass | [社区] |
+| **LLVM 简明教程** | [Gality（藏器于身）](https://gality.cn/llvm/llvm-tutorial) | ⭐⭐⭐⭐ 新手视角笔记 | [社区] |
+| **LeadroyaL — LLVM New PM 适配** | [leadroyal.cn/p/221](https://leadroyal.cn/p/221) | ⭐⭐⭐⭐ iOS 越狱圈 LLVM Pass 实战 | [社区] |
+| **小彭大典** | [parallel101.github.io](https://parallel101.github.io) | ⭐⭐⭐⭐⭐ 小彭老师全栈 C++ 教程 | [社区] |
+| **Yuuoniy blog** | [blog.yuuoniy.cn](https://blog.yuuoniy.cn) | ⭐⭐⭐⭐ LLVM/JVM 编译器学习笔记 | [社区] |
+| **qfrost** | [qfrost.com/posts/llvm](http://www.qfrost.com/posts/llvm) | ⭐⭐⭐⭐ Windows 下优雅使用 LLVM Pass | [社区] |
 
 ### 6.6 ⭐ 洛谷 / SegmentFault / 其他
 
@@ -274,7 +274,7 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 
 | 资源 | 主讲 / 链接 | 一句话定位 | 可信度 |
 |------|-----------|----------|:----:|
-| **RustTalk 播客 008：与小福聊聊编译器那些事** | [Jiacai Liu / 韦清福](https://rusttalk.github.io/podcast/008/) | ⭐⭐⭐⭐⭐ 字节 JVM → NVIDIA 编译器后端，2 小时深度访谈 | [社区] |
+| **RustTalk 播客 008：与小福聊聊编译器那些事** | [Jiacai Liu / 韦清福](https://rusttalk.github.io/podcast/008) | ⭐⭐⭐⭐⭐ 字节 JVM → NVIDIA 编译器后端，2 小时深度访谈 | [社区] |
 | **极客时间《编译原理之美》（第一季）** | [宫文学（北京原点代码 CEO）](https://time.geekbang.org/column/intro/219) | ⭐⭐⭐⭐ 付费 56 讲，前端+后端+实战（含 LLVM） | [社区] |
 | **极客时间《编译原理实战课》（第二季）** | [宫文学](https://time.geekbang.org/column/article/243248) | ⭐⭐⭐⭐⭐ 付费，解析 Java/Graal/Python/Julia/Go/华为方舟/V8 等真实编译器源码 | [社区] |
 | **PlayWithCompiler**（极客时间课程练习） | [github.com/leizongmin/PlayWithCompiler](https://github.com/leizongmin/PlayWithCompiler) | ⭐⭐⭐ 宫文学课程配套代码 | [GitHub] |
@@ -297,44 +297,44 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 
 | 资源 | 链接 | 一句话定位 |
 |------|------|----------|
-| **LLVM Project 主页** | [llvm.org](https://llvm.org/) | 官方入口 |
+| **LLVM Project 主页** | [llvm.org](https://llvm.org) | 官方入口 |
 | **LLVM GitHub Monorepo** | [github.com/llvm/llvm-project](https://github.com/llvm/llvm-project) | 22 子项目源码 |
-| **LLVM Doxygen C++ API** | [llvm.org/doxygen](https://llvm.org/doxygen/) | C++ 类/函数权威文档 |
-| **LLVM Discussion Forums (Discourse)** | [discourse.llvm.org](https://discourse.llvm.org/) | ⭐⭐⭐⭐⭐ 主讨论区（2022 起取代 mailing list） |
+| **LLVM Doxygen C++ API** | [llvm.org/doxygen](https://llvm.org/doxygen) | C++ 类/函数权威文档 |
+| **LLVM Discussion Forums (Discourse)** | [discourse.llvm.org](https://discourse.llvm.org) | ⭐⭐⭐⭐⭐ 主讨论区（2022 起取代 mailing list） |
 | **LLVM Discord** | [discord.gg/xS7Z362](https://discord.gg/xS7Z362) | 实时聊天，按子项目分频道 |
-| **LLVM Mailing List Archives** | [lists.llvm.org/pipermail](https://lists.llvm.org/pipermail/) | 2022 前历史归档 |
-| **LLVM Weekly** | [llvmweekly.org](https://llvmweekly.org/) | ⭐⭐⭐⭐⭐ Alex Denner 周报（必订） |
+| **LLVM Mailing List Archives** | [lists.llvm.org/pipermail](https://lists.llvm.org/pipermail) | 2022 前历史归档 |
+| **LLVM Weekly** | [llvmweekly.org](https://llvmweekly.org) | ⭐⭐⭐⭐⭐ Alex Denner 周报（必订） |
 | **LLVM Bugzilla**（旧） / GitHub Issues | github.com/llvm/llvm-project/issues | bug 追踪 |
-| **LLVM Blog** | [blog.llvm.org](https://blog.llvm.org/) | 官方博客 |
-| **LLVM Foundation** | [foundation.llvm.org](https://foundation.llvm.org/) | 501(c)(3) 非营利 |
+| **LLVM Blog** | [blog.llvm.org](https://blog.llvm.org) | 官方博客 |
+| **LLVM Foundation** | [foundation.llvm.org](https://foundation.llvm.org) | 501(c)(3) 非营利 |
 
 ### 7.2 ⭐ LLVM 自办活动
 
 | 活动 | 频率 | 链接 | 价值 |
 |------|------|------|:----:|
-| **US LLVM Developers' Meeting** | 每年秋 | [llvm.org/devmtg](https://llvm.org/devmtg/) | ⭐⭐⭐⭐⭐ 演讲/PDF 必看 |
+| **US LLVM Developers' Meeting** | 每年秋 | [llvm.org/devmtg](https://llvm.org/devmtg) | ⭐⭐⭐⭐⭐ 演讲/PDF 必看 |
 | **EuroLLVM** | 每年春 | 同上 | ⭐⭐⭐⭐ |
 | **LLVM Dev Mtg Tokyo** | 不定期 | [2025-06](https://llvm.org/devmtg/2025-06/slides/keynote/lattner-keynote.pdf) | ⭐⭐⭐⭐ |
 | **Women in Compilers and Tools (WiCT)** | 年度 | WiCT 社区 | ⭐⭐⭐ |
-| **Google Summer of Code (LLVM)** | 每年 | [llvm.org/GSoC](https://llvm.org/gsoc/) | ⭐⭐⭐ 学生入门 |
+| **Google Summer of Code (LLVM)** | 每年 | [llvm.org/GSoC](https://llvm.org/gsoc) | ⭐⭐⭐ 学生入门 |
 
 ### 7.3 ⭐ 创始人 / 关键贡献者
 
 | 人物 | 链接 | 一句话定位 |
 |------|------|----------|
-| **Chris Lattner**（LLVM/Clang/Swift/Mojo 之父） | [nondot.org/sabre](http://www.nondot.org/sabre/) / [LinkedIn](https://linkedin.com/in/chris-lattner-5664498a) / [GitHub @lattner](https://github.com/lattner) / [@clattner_llvm](https://twitter.com/clattner_llvm) | ⭐⭐⭐⭐⭐ LLVM 单一最大贡献者，现 Modular CEO |
-| **Chris Lattner Lex Fridman 访谈** | [Lex #21 (2019)](https://lexfridman.com/chris-lattner/) / [Lex #381 (2023)](https://www.youtube.com/watch?v=pdJQ8iVTwj8) / [The PrimeTime 2024](https://www.youtube.com/watch?v=ovYbgbrQ-v8) | ⭐⭐⭐⭐⭐ LLVM/Swift/Mojo 创业史 |
-| **Chris Lattner SC21 Fireside Chat** | [hpcwire.com](https://www.hpcwire.com/2021/12/27/lessons-from-llvm-an-sc21-fireside-chat-with-chris-lattner/) | ⭐⭐⭐⭐ LLVM 历史回顾 |
+| **Chris Lattner**（LLVM/Clang/Swift/Mojo 之父） | [nondot.org/sabre](http://www.nondot.org/sabre) / [LinkedIn](https://linkedin.com/in/chris-lattner-5664498a) / [GitHub @lattner](https://github.com/lattner) / [@clattner_llvm](https://twitter.com/clattner_llvm) | ⭐⭐⭐⭐⭐ LLVM 单一最大贡献者，现 Modular CEO |
+| **Chris Lattner Lex Fridman 访谈** | [Lex #21 (2019)](https://lexfridman.com/chris-lattner) / [Lex #381 (2023)](https://www.youtube.com/watch?v=pdJQ8iVTwj8) / [The PrimeTime 2024](https://www.youtube.com/watch?v=ovYbgbrQ-v8) | ⭐⭐⭐⭐⭐ LLVM/Swift/Mojo 创业史 |
+| **Chris Lattner SC21 Fireside Chat** | [hpcwire.com](https://www.hpcwire.com/2021/12/27/lessons-from-llvm-an-sc21-fireside-chat-with-chris-lattner) | ⭐⭐⭐⭐ LLVM 历史回顾 |
 | **Chris Lattner Pragmatic Engineer 访谈** | [newsletter.pragmaticengineer.com](https://newsletter.pragmaticengineer.com/p/from-swift-to-mojo-and-high-performance) | ⭐⭐⭐⭐ 2025-11 Swift/Mojo/编译器 |
 | **Vikram Adve**（LLVM 共同创建者，Lattner 博导） | [cs.illinois.edu/~vadve](https://cs.illinois.edu/people/faculty/vikram-s-adve) | Lattner 博士导师 |
-| **Tanya Lattner**（LLVM Foundation 主席，前 Apple） | [foundation.llvm.org](https://foundation.llvm.org/) | LLVM Foundation 治理 |
+| **Tanya Lattner**（LLVM Foundation 主席，前 Apple） | [foundation.llvm.org](https://foundation.llvm.org) | LLVM Foundation 治理 |
 
 ### 7.4 ⭐ 大众社区
 
 | 平台 | 链接 | 一句话定位 |
 |------|------|----------|
-| **Reddit r/LLVM** | [reddit.com/r/LLVM](https://www.reddit.com/r/LLVM/) | ⭐⭐⭐⭐ 大众讨论 |
-| **Hacker News** | [news.ycombinator.com](https://news.ycombinator.com/) | ⭐⭐⭐⭐⭐ 重磅编译器新闻首发讨论 |
+| **Reddit r/LLVM** | [reddit.com/r/LLVM](https://www.reddit.com/r/LLVM) | ⭐⭐⭐⭐ 大众讨论 |
+| **Hacker News** | [news.ycombinator.com](https://news.ycombinator.com) | ⭐⭐⭐⭐⭐ 重磅编译器新闻首发讨论 |
 | **Stack Overflow [llvm] [clang] [llvm-llvm]** | stackoverflow.com | ⭐⭐⭐⭐ 实操 Q&A |
 
 **HN 经典讨论（必读）**：
@@ -350,22 +350,22 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 
 | 博客 | 作者 / 链接 | 一句话定位 |
 |------|-----------|----------|
-| **LLVM Project Blog** | [blog.llvm.org](https://blog.llvm.org/) | 官方博客 |
-| **Alex Denisov**（lowlevelbits） | [lowlevelbits.org](https://lowlevelbits.org/) | ⭐⭐⭐⭐⭐ LLVM 深度教程 |
-| **Marc-André Cournoyer (mcyoung)** | [mcyoung.xyz](https://mcyoung.xyz/) | "A Gentle Introduction to LLVM IR" 作者 |
-| **Eli Bendersky** | [eli.thegreenplace.net](https://eli.thegreenplace.net/) | ⭐⭐⭐⭐ 编译器/Go 长期博客 |
+| **LLVM Project Blog** | [blog.llvm.org](https://blog.llvm.org) | 官方博客 |
+| **Alex Denisov**（lowlevelbits） | [lowlevelbits.org](https://lowlevelbits.org) | ⭐⭐⭐⭐⭐ LLVM 深度教程 |
+| **Marc-André Cournoyer (mcyoung)** | [mcyoung.xyz](https://mcyoung.xyz) | "A Gentle Introduction to LLVM IR" 作者 |
+| **Eli Bendersky** | [eli.thegreenplace.net](https://eli.thegreenplace.net) | ⭐⭐⭐⭐ 编译器/Go 长期博客 |
 | **Bruce Hoult**（RISC-V / LLVM） | News/RWC 社区活跃 | — |
-| **Nuno Lopes**（Alive2） | [web.ist.utl.pt/nuno-lopes](http://web.ist.utl.pt/~nuno-lopes/) | ⭐⭐⭐⭐ LLVM Pass 形式化验证 |
-| **Adrian Sampson**（Cornell CS 6120） | [www.cs.cornell.edu/~asampson](https://www.cs.cornell.edu/~asampson/) | ⭐⭐⭐⭐ 现代编译器课 |
+| **Nuno Lopes**（Alive2） | [web.ist.utl.pt/nuno-lopes](http://web.ist.utl.pt/~nuno-lopes) | ⭐⭐⭐⭐ LLVM Pass 形式化验证 |
+| **Adrian Sampson**（Cornell CS 6120） | [www.cs.cornell.edu/~asampson](https://www.cs.cornell.edu/~asampson) | ⭐⭐⭐⭐ 现代编译器课 |
 
 ### 7.6 学术圈博客 / 协会
 
 | 平台 | 链接 | 一句话定位 |
 |------|------|----------|
-| **ACM SIGPLAN Blog** | [sigplan.org/Blog](https://sigplan.blog/) | PL 社区综述 |
-| **ACM SIGPLAN** | [sigplan.org](https://www.sigplan.org/) | PL 顶会组织 |
-| **ACM POPL** | [popl.host](https://popl.host/) | POPL 顶会 |
-| **CACM: The LLVM Compiler Infrastructure**（2026-07） | [cacm.acm.org/.../the-llvm-compiler-infrastructure](https://cacm.acm.org/federal-funding-of-academic-research/the-llvm-compiler-infrastructure/) | ⭐⭐⭐⭐⭐ NSF 资助 LLVM 25 年回顾（Lattner 等撰） |
+| **ACM SIGPLAN Blog** | [sigplan.org/Blog](https://sigplan.blog) | PL 社区综述 |
+| **ACM SIGPLAN** | [sigplan.org](https://www.sigplan.org) | PL 顶会组织 |
+| **ACM POPL** | [popl.host](https://popl.host) | POPL 顶会 |
+| **CACM: The LLVM Compiler Infrastructure**（2026-07） | [cacm.acm.org/.../the-llvm-compiler-infrastructure](https://cacm.acm.org/federal-funding-of-academic-research/the-llvm-compiler-infrastructure) | ⭐⭐⭐⭐⭐ NSF 资助 LLVM 25 年回顾（Lattner 等撰） |
 
 ### 7.7 ⭐ LLVM Discourse 经典讨论（必读，按主题）
 
@@ -396,31 +396,31 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 
 | 课程 | 学校 / 讲师 | 链接 | 一句话定位 |
 |------|-----------|------|----------|
-| **CS 6120: Advanced Compilers** | Adrian Sampson (Cornell) | [cs.cornell.edu/courses/cs6120](https://www.cs.cornell.edu/courses/cs6120/2020fa/) | ⭐⭐⭐⭐⭐ 现代编译器课，全视频开源，用 LLVM |
-| **15-411 Compiler Design** | CMU | [cs.cmu.edu/1511](https://www.cs.cmu.edu/~janh/courses/411/) | ⭐⭐⭐⭐⭐ LLVM 实战名课 |
-| **6.035 Computer Language Engineering** | MIT | [6350.csail.mit.edu](https://6350.csail.mit.edu/) | ⭐⭐⭐⭐ 老牌编译课 |
-| **CS 241: Foundations of Sequential Programs** | UWaterloo | [student.cs.uwaterloo.ca/~cs241](https://student.cs.uwaterloo.ca/~cs241/) | ⭐⭐⭐⭐ 含 LLVM 后端实验 |
-| **Stanford CS143: Compilers** | Stanford | [web.stanford.edu/class/cs143](https://web.stanford.edu/class/cs143/) | ⭐⭐⭐⭐ 经典（COOL 语言） |
+| **CS 6120: Advanced Compilers** | Adrian Sampson (Cornell) | [cs.cornell.edu/courses/cs6120](https://www.cs.cornell.edu/courses/cs6120/2020fa) | ⭐⭐⭐⭐⭐ 现代编译器课，全视频开源，用 LLVM |
+| **15-411 Compiler Design** | CMU | [cs.cmu.edu/1511](https://www.cs.cmu.edu/~janh/courses/411) | ⭐⭐⭐⭐⭐ LLVM 实战名课 |
+| **6.035 Computer Language Engineering** | MIT | [6350.csail.mit.edu](https://6350.csail.mit.edu) | ⭐⭐⭐⭐ 老牌编译课 |
+| **CS 241: Foundations of Sequential Programs** | UWaterloo | [student.cs.uwaterloo.ca/~cs241](https://student.cs.uwaterloo.ca/~cs241) | ⭐⭐⭐⭐ 含 LLVM 后端实验 |
+| **Stanford CS143: Compilers** | Stanford | [web.stanford.edu/class/cs143](https://web.stanford.edu/class/cs143) | ⭐⭐⭐⭐ 经典（COOL 语言） |
 
 ### 8.2 ⭐ LLVM 官方视频
 
 | 资源 | 链接 | 一句话定位 |
 |------|------|----------|
 | **LLVM Developer Meeting Videos** | [youtube.com/@LLVMPROJ](https://www.youtube.com/@LLVMPROJ) | ⭐⭐⭐⭐⭐ 官方 YouTube 频道 |
-| **LLVM Dev Mtg 历年 PPT** | [llvm.org/devmtg](https://llvm.org/devmtg/) | 演讲 PDF/PPT，部分有视频 |
+| **LLVM Dev Mtg 历年 PPT** | [llvm.org/devmtg](https://llvm.org/devmtg) | 演讲 PDF/PPT，部分有视频 |
 
 ### 8.3 ⭐ AI 编译器专属（MLIR/StableHLO/IREE/Mojo）
 
 | 资源 | 链接 | 一句话定位 |
 |------|------|----------|
-| **IREE / MLIR / Linalg tutorial** | [iree.dev/community/blog/2024-01-29-iree-mlir-linalg-tutorial](https://iree.dev/community/blog/2024-01-29-iree-mlir-linalg-tutorial/) | ⭐⭐⭐⭐⭐ IREE 官方 Linalg 教程 |
+| **IREE / MLIR / Linalg tutorial** | [iree.dev/community/blog/2024-01-29-iree-mlir-linalg-tutorial](https://iree.dev/community/blog/2024-01-29-iree-mlir-linalg-tutorial) | ⭐⭐⭐⭐⭐ IREE 官方 Linalg 教程 |
 | **StableHLO Specification** | [openxla.org/stablehlo/spec](https://openxla.org/stablehlo/spec) | ⭐⭐⭐⭐ StableHLO 规范（OpenXLA） |
 | **StableHLO 项目** | [openxla.org/stablehlo](https://openxla.org/stablehlo) / [GitHub openxla/stablehlo](https://github.com/openxla/stablehlo) | ⭐⭐⭐⭐ ML 模型可移植层 |
-| **MLIR 官方文档** | [mlir.llvm.org](https://mlir.llvm.org/) | ⭐⭐⭐⭐⭐ MLIR 一手 |
-| **IREE 项目** | [iree.dev](https://iree.dev/) | ⭐⭐⭐⭐⭐ Google AI 编译器运行时 |
+| **MLIR 官方文档** | [mlir.llvm.org](https://mlir.llvm.org) | ⭐⭐⭐⭐⭐ MLIR 一手 |
+| **IREE 项目** | [iree.dev](https://iree.dev) | ⭐⭐⭐⭐⭐ Google AI 编译器运行时 |
 | **torch-mlir** | [github.com/llvm/torch-mlir](https://github.com/llvm/torch-mlir) | ⭐⭐⭐⭐ PyTorch → MLIR |
 | **Mojo**（Chris Lattner 新语言） | [modular.com/mojo](https://www.modular.com/mojo) | ⭐⭐⭐⭐⭐ AI 编程语言，Python+性能 |
-| **Modular**（Chris Lattner 公司） | [modular.com](https://www.modular.com/) | ⭐⭐⭐⭐⭐ AI 基础设施公司 |
+| **Modular**（Chris Lattner 公司） | [modular.com](https://www.modular.com) | ⭐⭐⭐⭐⭐ AI 基础设施公司 |
 
 ---
 
@@ -430,9 +430,9 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 
 | 数据 | 来源 | 一句话定位 |
 |------|------|----------|
-| **LLVM 6 个月 release** | [releases.llvm.org](https://releases.llvm.org/) | 每年 3/9 月新版本 |
+| **LLVM 6 个月 release** | [releases.llvm.org](https://releases.llvm.org) | 每年 3/9 月新版本 |
 | **GitHub commit 统计** | [github.com/llvm/llvm-project/graphs/contributors](https://github.com/llvm/llvm-project/graphs/contributors) | 公司化贡献结构 |
-| **LLVM Weekly 历史** | [llvmweekly.org](https://llvmweekly.org/) | 每周 commit 速报 |
+| **LLVM Weekly 历史** | [llvmweekly.org](https://llvmweekly.org) | 每周 commit 速报 |
 | **Open Hub LLVM stats** | [openhub.net/p/llvm](https://www.openhub.net/p/llvm) | 历史代码统计 |
 | **LLVM Releases Timeline** | [en.wikipedia.org/wiki/LLVM](https://en.wikipedia.org/wiki/LLVM) | 版本时间线 |
 
@@ -440,11 +440,11 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 
 | 来源 | 链接 | 一句话定位 |
 |------|------|----------|
-| **LLVM Foundation Annual Report** | [foundation.llvm.org](https://foundation.llvm.org/) | 财报/赞助 |
+| **LLVM Foundation Annual Report** | [foundation.llvm.org](https://foundation.llvm.org) | 财报/赞助 |
 | **RedMonk 编译器圈分析** | redmonk.com | 偶尔深度 |
-| **Phoronix 编译器测试** | [phoronix.com/scan.php?page=...](https://www.phoronix.com/) | ⭐⭐⭐⭐ GCC vs Clang 性能对比 |
-| **Linaro**（ARM 编译器圈） | [linaro.org](https://www.linaro.org/) | ⭐⭐⭐⭐ ARM 生态 |
-| **Agner Fog**（指令吞吐表） | [agner.org/optimize](https://www.agner.org/optimize/) | ⭐⭐⭐⭐⭐ x86/ARM 微架构指令表（飞腾项目也用） |
+| **Phoronix 编译器测试** | [phoronix.com/scan.php?page=...](https://www.phoronix.com) | ⭐⭐⭐⭐ GCC vs Clang 性能对比 |
+| **Linaro**（ARM 编译器圈） | [linaro.org](https://www.linaro.org) | ⭐⭐⭐⭐ ARM 生态 |
+| **Agner Fog**（指令吞吐表） | [agner.org/optimize](https://www.agner.org/optimize) | ⭐⭐⭐⭐⭐ x86/ARM 微架构指令表（飞腾项目也用） |
 
 ---
 
@@ -456,25 +456,25 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 
 | 子项目 | 用途 | 官方入口 | 本项目 Expert |
 |--------|------|---------|----------|
-| **llvm**（core） | IR/Pass/CodeGen/RegAlloc/MC | [llvm.org/docs](https://llvm.org/docs/) | E02/E03/E04/E05/E06/E07 |
-| **clang** | C/C++/ObjC 前端 | [clang.llvm.org](https://clang.llvm.org/) / [clang.llvm.org/docs](https://clang.llvm.org/docs/) | E01 |
+| **llvm**（core） | IR/Pass/CodeGen/RegAlloc/MC | [llvm.org/docs](https://llvm.org/docs) | E02/E03/E04/E05/E06/E07 |
+| **clang** | C/C++/ObjC 前端 | [clang.llvm.org](https://clang.llvm.org) / [clang.llvm.org/docs](https://clang.llvm.org/docs) | E01 |
 | **clang-tools-extra** | clang-tidy/clangd/clang-format | 同 clang | 合并 E01 |
-| **mlir** | 多级 IR（AI/异构编译） | [mlir.llvm.org](https://mlir.llvm.org/) | E04（融合裂痕断层） |
-| **lld** | 链接器 | [lld.llvm.org](https://lld.llvm.org/) | E12 |
-| **lldb** | 调试器 | [lldb.llvm.org](https://lldb.llvm.org/) | E13 |
-| **compiler-rt** | 运行时/sanitizers | [compiler-rt.llvm.org](https://compiler-rt.llvm.org/) | E14 |
-| **libcxx** | C++ 标准库 | [libcxx.llvm.org](https://libcxx.llvm.org/) | E15 |
+| **mlir** | 多级 IR（AI/异构编译） | [mlir.llvm.org](https://mlir.llvm.org) | E04（融合裂痕断层） |
+| **lld** | 链接器 | [lld.llvm.org](https://lld.llvm.org) | E12 |
+| **lldb** | 调试器 | [lldb.llvm.org](https://lldb.llvm.org) | E13 |
+| **compiler-rt** | 运行时/sanitizers | [compiler-rt.llvm.org](https://compiler-rt.llvm.org) | E14 |
+| **libcxx** | C++ 标准库 | [libcxx.llvm.org](https://libcxx.llvm.org) | E15 |
 | **libcxxabi** | C++ ABI | 同 libcxx | E15 |
 | **libunwind** | stack unwinder | 同 libcxx | E15 |
-| **openmp** | OpenMP runtime | [openmp.llvm.org](https://openmp.llvm.org/) | E15 |
-| **flang** + **flang-rt** | Fortran 前端 | [flang.llvm.org](https://flang.llvm.org/) | E16 |
+| **openmp** | OpenMP runtime | [openmp.llvm.org](https://openmp.llvm.org) | E15 |
+| **flang** + **flang-rt** | Fortran 前端 | [flang.llvm.org](https://flang.llvm.org) | E16 |
 | **bolt** | 后链接二进制优化器 | [github.com/llvm/llvm-project/tree/main/bolt](https://github.com/llvm/llvm-project/tree/main/bolt) | 合并 E12 |
 | **orc-rt** | JIT runtime | [github.com/.../orc-rt](https://github.com/llvm/llvm-project/tree/main/orc-rt) | 合并 E14 |
-| **polly** | 多面体优化 | [polly.llvm.org](https://polly.llvm.org/) | 合并 E04 |
+| **polly** | 多面体优化 | [polly.llvm.org](https://polly.llvm.org) | 合并 E04 |
 | **offload** | OpenMP target offload | 同 openmp | 合并 E11 |
-| **libsycl**（llvm-libc++-support for SYCL） | SYCL/CUDA | [sycl.tech](https://sycl.tech/) / [intel.github.io/llvm-docs](https://intel.github.io/llvm-docs/) | 合并 E11 |
-| **libc** | 实验性 C 运行时 | [libc.llvm.org](https://libc.llvm.org/) | 只索引 |
-| **libclc** | OpenCL C | [libclc.llvm.org](https://libclc.llvm.org/) | 只索引 |
+| **libsycl**（llvm-libc++-support for SYCL） | SYCL/CUDA | [sycl.tech](https://sycl.tech) / [intel.github.io/llvm-docs](https://intel.github.io/llvm-docs) | 合并 E11 |
+| **libc** | 实验性 C 运行时 | [libc.llvm.org](https://libc.llvm.org) | 只索引 |
+| **libclc** | OpenCL C | [libclc.llvm.org](https://libclc.llvm.org) | 只索引 |
 | **llvm-libgcc** | GCC 兼容层 | github 同上 | 只索引 |
 | **runtimes** | 元构建 | [llvm.org/docs/...runtimes](https://llvm.org/docs/BuildingADistribution.html#runtimes-build) | 只索引 |
 | **cross-project-tests** | 跨项目测试 | github 同上 | 只索引 |
@@ -484,12 +484,12 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 #### libc（实验性 C 运行库）
 - 路径：`OpenXiangShan/llvm-project/libc/`
 - 定位：LLVM 实验性 C 标准库实现，目标替代 glibc/musl。**飞腾当前用 glibc**，本项目只索引其存在与路线图，不单独成文。
-- 入口：[libc.llvm.org](https://libc.llvm.org/) | [libc-dev mailing list → Discourse Runtimes/C](https://discourse.llvm.org/c/runtimes/libc/22)
+- 入口：[libc.llvm.org](https://libc.llvm.org) | [libc-dev mailing list → Discourse Runtimes/C](https://discourse.llvm.org/c/runtimes/libc/22)
 
 #### libclc（OpenCL C 库）
 - 路径：`OpenXiangShan/llvm-project/libclc/`
 - 定位：OpenCL 1.2/2.0 C 库实现。小众，本项目只索引。
-- 入口：[libclc.llvm.org](https://libclc.llvm.org/)
+- 入口：[libclc.llvm.org](https://libclc.llvm.org)
 
 #### llvm-libgcc（GCC 兼容层）
 - 路径：`OpenXiangShan/llvm-project/llvm-libgcc/`
@@ -514,11 +514,11 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 
 | 资源 | 链接 | 一句话定位 |
 |------|------|----------|
-| **飞腾开发者平台 - 编译器** | [phytium.com.cn/developer/36](https://www.phytium.com.cn/developer/36/) | PhyCC 1.0/2.0 + PhyGCC 二进制下载 |
-| **PhyCC 2.0 发布页** | [飞腾开发者平台 - 独立软件 36](https://www.phytium.com.cn/developer/independent_software/detail/36/28/) | **"PhyCC 2.0 基于 LLVM 研发"** —— 这是飞腾唯一直接说"基于 LLVM"的官方编译器 [官方] |
+| **飞腾开发者平台 - 编译器** | [phytium.com.cn/developer/36](https://www.phytium.com.cn/developer/36) | PhyCC 1.0/2.0 + PhyGCC 二进制下载 |
+| **PhyCC 2.0 发布页** | [飞腾开发者平台 - 独立软件 36](https://www.phytium.com.cn/developer/independent_software/detail/36/28) | **"PhyCC 2.0 基于 LLVM 研发"** —— 这是飞腾唯一直接说"基于 LLVM"的官方编译器 [官方] |
 | **PhyGCC 10.3.2 发布页** | 同上 | PhyGCC 10.3.2（兼容 GCC，针对 FTC86X 微架构）[官方] |
 | **PhyCC 1.0 商业仓库** | [phytium.com.cn/developer/repository/view/?id=320](https://www.phytium.com.cn/developer/repository/view/?id=320) | **"PhyCC 1.0 基于 LLVM 研发"** + 集成高性能 malloc/math 库 [官方] |
-| **飞腾招聘 NPU 编译器工程师** | [phytium.com.cn/recruitment](https://www.phytium.com.cn/recruitment/) | JD 明文："1.从事飞腾 NPU 编译器开发工作，**在 llvm 基础上移植一个新的后端**，并支持新的指令集" —— 这是飞腾自研 LLVM 后端的唯一实锤 [官方] |
+| **飞腾招聘 NPU 编译器工程师** | [phytium.com.cn/recruitment](https://www.phytium.com.cn/recruitment) | JD 明文："1.从事飞腾 NPU 编译器开发工作，**在 llvm 基础上移植一个新的后端**，并支持新的指令集" —— 这是飞腾自研 LLVM 后端的唯一实锤 [官方] |
 
 ### 11.2 PhyGCC 安装与配置（社区）
 

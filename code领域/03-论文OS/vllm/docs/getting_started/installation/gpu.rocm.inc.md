@@ -26,7 +26,7 @@ uv pip install vllm --extra-index-url https://wheels.vllm.ai/rocm/
 ```
 
 !!! tip
-    You can find out about which ROCm version the latest vLLM supports by checking the index in extra-index-url [https://wheels.vllm.ai/rocm/](https://wheels.vllm.ai/rocm/) .
+    You can find out about which ROCm version the latest vLLM supports by checking the index in extra-index-url [https://wheels.vllm.ai/rocm/](https://wheels.vllm.ai/rocm) .
 
 To install a specific version and ROCm variant of vLLM wheel.
 
@@ -53,11 +53,11 @@ uv pip install vllm --extra-index-url https://wheels.vllm.ai/rocm/0.15.0/rocm700
 0. Install prerequisites (skip if you are already in an environment/docker with the following installed):
 
     - [ROCm](https://rocm.docs.amd.com/en/latest/deploy/linux/index.html)
-    - [PyTorch](https://pytorch.org/)
+    - [PyTorch](https://pytorch.org)
 
     For installing PyTorch, you can start from a fresh docker image, e.g, `rocm/pytorch:rocm7.0_ubuntu22.04_py3.10_pytorch_release_2.8.0`, `rocm/pytorch-nightly`. If you are using docker image, you can skip to Step 3.
 
-    Alternatively, you can install PyTorch using PyTorch wheels. You can check PyTorch installation guide in PyTorch [Getting Started](https://pytorch.org/get-started/locally/). Example:
+    Alternatively, you can install PyTorch using PyTorch wheels. You can check PyTorch installation guide in PyTorch [Getting Started](https://pytorch.org/get-started/locally). Example:
 
     ```bash
     # Install PyTorch

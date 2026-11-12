@@ -20,7 +20,7 @@ A Streamlit application that allows you to browse and interact with websites usi
 - Python 3.8+
 - Node.js and npm (for Playwright)
   - This is a critical requirement! The app uses Playwright to control a headless browser
-  - Download and install from [nodejs.org](https://nodejs.org/)
+  - Download and install from [nodejs.org](https://nodejs.org)
 - OpenAI or Anthropic API Key
 
 ### Installation
@@ -86,5 +86,5 @@ The application uses:
 - Streamlit for the user interface
 - MCP (Model Context Protocol) to connect the LLM with tools
 - Playwright for browser automation
-- [MCP-Agent](https://github.com/lastmile-ai/mcp-agent/) for the Agentic Framework
+- [MCP-Agent](https://github.com/lastmile-ai/mcp-agent) for the Agentic Framework
 - OpenAI's models to interpret commands and generate responses

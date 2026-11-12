@@ -84,7 +84,7 @@ val_dataloader = dict(
 
 ### 4.2 Example on MOTxx-test dataset
 
-If you want to get the results of the [MOT Challenge](https://motchallenge.net/) test set,
+If you want to get the results of the [MOT Challenge](https://motchallenge.net) test set,
 please use the following command to generate result files that can be used for submission.
 It will be stored in `./mot_17_test_res`, you can modify the saved path in `test_evaluator` of the config.
 

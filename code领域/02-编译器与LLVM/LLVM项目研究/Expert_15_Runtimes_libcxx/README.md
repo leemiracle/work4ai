@@ -541,7 +541,7 @@ offload 子项目（[实测-offload/]）提供 OpenMP target offload + 异构运
 
 ### 4.1 C++ 运行时栈视角的盲区
 
-**盲区一：libcxx/libcxxabi/libunwind 的性能基准本 Expert 没跑。** 本文引用的"ARM64 异常展开 5-20 μs"是[推测-依据: 社区基准]，不是飞腾 FTC862 实测。要严谨，应在 D3000/S5000C 上跑 Nico Curti 的 [cxx-exception-benchmark](https://github.com/) 或自写微基准。**这是本 Expert 的最大盲区——性能数字未经实测**。
+**盲区一：libcxx/libcxxabi/libunwind 的性能基准本 Expert 没跑。** 本文引用的"ARM64 异常展开 5-20 μs"是[推测-依据: 社区基准]，不是飞腾 FTC862 实测。要严谨，应在 D3000/S5000C 上跑 Nico Curti 的 [cxx-exception-benchmark](https://github.com) 或自写微基准。**这是本 Expert 的最大盲区——性能数字未经实测**。
 
 **盲区二：飞腾麒麟/UOS/OpenEuler 服务器版的 libcxx/libstdc++ 选择未开源验证。** 本文"飞腾服务器默认 libstdc++"是基于 phytium_repos 的 OpenEuler **embedded** BSP（纯 GCC）推断，但飞腾商业服务器发行版（麒麟联合版/UOS 版/OpenEuler 服务器版）未在 phytium_repos 开源。**它们是否预装 libcxx、是否默认 libstdc++，需联系飞腾或装真实发行版验证**。
 
@@ -667,7 +667,7 @@ offload 子项目（[实测-offload/]）提供 OpenMP target offload + 异构运
 
 ### §.2 C++ 运行时栈性能分析
 
-- **异常开销**：跑 [cxx-exception-benchmark](https://github.com/)，对比"throw + catch 10 帧"在 ARM64 vs x86-64 的开销
+- **异常开销**：跑 [cxx-exception-benchmark](https://github.com)，对比"throw + catch 10 帧"在 ARM64 vs x86-64 的开销
 - **OpenMP 扩展性**：跑 STREAM OpenMP 版（飞腾 Yocto 的 `stream_c_openmp`），从 1 线程到 N 线程看带宽扩展曲线
 - **unwinder 开销**：`perf stat -e instructions,cycles ./a.out` 对比有异常 vs 无异常的指令数差异
 
@@ -678,8 +678,8 @@ offload 子项目（[实测-offload/]）提供 OpenMP target offload + 异构运
 | **飞腾 FreeBSD libcxx Makefile** | `phytium_repos/freebsd/lib/libc++/Makefile` | libcxx + libcxxrt 混搭实证 | `[实测]` |
 | **飞腾 FreeBSD libgcc_eh Makefile.inc** | `phytium_repos/freebsd/lib/libgcc_eh/Makefile.inc` | libunwind 伪装 libgcc_eh 实证 | `[实测]` |
 | **飞腾 Yocto stream-openmp** | `phytium_repos/phytium-linux-yocto/meta-bsp/recipes-benchmark/stream/` | 飞腾实际用 OpenMP 测多核带宽 | `[实测]` |
-| **飞腾招聘 NPU 编译器工程师** | [phytium.com.cn/recruitment](https://www.phytium.com.cn/recruitment/) | "在 llvm 基础上移植一个新的后端"——飞腾 NPU 不走 offload 栈的反向证据 | `[官方]` |
-| **PhyCC 2.0** | [飞腾开发者平台](https://www.phytium.com.cn/developer/independent_software/detail/36/28/) | 飞腾基于 LLVM 的商业编译器（闭源） | `[官方]` |
+| **飞腾招聘 NPU 编译器工程师** | [phytium.com.cn/recruitment](https://www.phytium.com.cn/recruitment) | "在 llvm 基础上移植一个新的后端"——飞腾 NPU 不走 offload 栈的反向证据 | `[官方]` |
+| **PhyCC 2.0** | [飞腾开发者平台](https://www.phytium.com.cn/developer/independent_software/detail/36/28) | 飞腾基于 LLVM 的商业编译器（闭源） | `[官方]` |
 
 ---
 

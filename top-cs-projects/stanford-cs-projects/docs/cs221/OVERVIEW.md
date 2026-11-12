@@ -273,10 +273,10 @@ python3 dspy_framework.py
 
 ### 核心教材（全部免费在线）
 
-- **Russell & Norvig**. [*Artificial Intelligence: A Modern Approach*](http://aima.cs.berkeley.edu/) (AIMA). — **AI 圣经**，CS221 的非官方参考书，覆盖所有主题
+- **Russell & Norvig**. [*Artificial Intelligence: A Modern Approach*](http://aima.cs.berkeley.edu) (AIMA). — **AI 圣经**，CS221 的非官方参考书，覆盖所有主题
 - **Sutton & Barto**. [*Reinforcement Learning: An Introduction*](http://incompleteideas.net/book/the-book-2nd.html). — RL 领域的奠基教材（免费）
 - **Koller & Friedman**. [*Probabilistic Graphical Models*](http://mitpress.mit.edu/books/probabilistic-graphical-models). — 贝叶斯网络权威（CS228 教材）
-- **Hastie, Tibshirani & Friedman**. [*The Elements of Statistical Learning*](https://web.stanford.edu/~hastie/ElemStatLearn/). — 机器学习的统计视角（免费）
+- **Hastie, Tibshirani & Friedman**. [*The Elements of Statistical Learning*](https://web.stanford.edu/~hastie/ElemStatLearn). — 机器学习的统计视角（免费）
 
 ### 关键论文
 

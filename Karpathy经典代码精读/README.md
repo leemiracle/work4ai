@@ -33,10 +33,10 @@ GitHub 直连（`github.com:443`）当前**连接超时**，主流镜像（kkgit
 | 2 | **nanoGPT** | 62k | `model.py` 330 + `train.py` 336 | 最简可训 GPT | [`讲透Transformer`](../讲透Transformer) / [`讲透基础模型`](../讲透基础模型) | ⏳ |
 | 3 | **minbpe** | 10k | `base.py` 165 + `regex.py` 164 | BPE 分词器从零实现 | [`讲透NLP`](../讲透NLP)(分词) / [`讲透Transformer/13`](../讲透Transformer/13-Tokenizer.md) | ⏳ |
 | 4 | **makemore** | 4.1k | `makemore.py` 719 | 字符级 AR LM（bigram→MLP→RNN→Transformer 渐进）| [`讲透NLP/03`](../讲透NLP/03-N元语法语言模型.md) | ⏳ |
-| 5 | **llama2.c** | 19k | `runq.c` 1092 + `run.c` 973 + `export.py` 567 | 纯 C 推理 Llama2 | [`讲透GPU与系统级`](../讲透GPU与系统级)(推理) | ⏳ |
+| 5 | **llama2.c** | 19k | `runq.c` 1092 + `run.c` 973 + `export.py` 567 | 纯 C 推理 Llama2 | [`讲透GPU与系统级`](../讲透宇宙/01-学/讲透GPU与系统级)(推理) | ⏳ |
 | 6 | **minGPT** | 24k | `model.py` 310 + `trainer.py` 109 | minimal GPT（nanoGPT 前身）| [`讲透Transformer`](../讲透Transformer) | ⏳ |
 | 7 | **build-nanogpt** | 5.4k | `train_gpt2.py` 521 | 视频+代码：从零搭 GPT2 | [`讲透基础模型`](../讲透基础模型) | ⏳ |
-| 8 | **llm.c** | 30k | `train_gpt2.cu` 1904 | C/CUDA 训练 GPT2 | [`讲透GPU与系统级`](../讲透GPU与系统级)(CUDA) | ⏳ |
+| 8 | **llm.c** | 30k | `train_gpt2.cu` 1904 | C/CUDA 训练 GPT2 | [`讲透GPU与系统级`](../讲透宇宙/01-学/讲透GPU与系统级)(CUDA) | ⏳ |
 | 9 | **nn-zero-to-hero** | 23k | 8 个 `.ipynb` | 神经网零到英雄课（micrograd→makemore→GPT）| 全系列前置 | ⏳ |
 | 10 | **lecun1989-repro** | 780 | `modern.py` 210 + `repro.py` 167 | 复现 LeCun 1989 论文 | [`讲透反向传播`](../讲透PyTorch/01-Autograd与计算图.md)(历史) | ⏳ |
 | 11 | **pytorch-normalizing-flows** | 917 | `flows.py` 294 + `spline_flows.py` 253 | Normalizing Flows | [`讲透生成模型`](../讲透生成模型) | ⏳ |

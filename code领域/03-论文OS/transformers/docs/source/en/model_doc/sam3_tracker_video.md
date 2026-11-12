@@ -29,7 +29,7 @@ limitations under the License.
 
 ## Overview
 
-SAM3 (Segment Anything Model 3) was introduced in [SAM 3: Segment Anything with Concepts](https://ai.meta.com/research/publications/sam-3-segment-anything-with-concepts/).
+SAM3 (Segment Anything Model 3) was introduced in [SAM 3: Segment Anything with Concepts](https://ai.meta.com/research/publications/sam-3-segment-anything-with-concepts).
 
 Sam3TrackerVideo performs **Promptable Visual Segmentation (PVS)** on videos. PVS takes interactive visual prompts (points, boxes, masks) or text inputs to track a **specific object instance** per prompt across video frames.
 

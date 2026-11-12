@@ -124,6 +124,6 @@ cat mr-out-* | sort | more                      # 看结果
 ## 8. 下一步
 
 - 2A 过后按顺序：2B（日志复制 `TestBasicAgree2B`）→ 2C（持久化 `TestPersist1`）。
-- 必读三篇（`third-party/MIT6.824-2021/docs/lab2.md` 提到）：课程给的 [raft-locking.txt](https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt)、[raft-structure.txt](https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt)、TA 的 [Students' Guide to Raft](https://thesquareplanet.com/blog/students-guide-to-raft/)。
+- 必读三篇（`third-party/MIT6.824-2021/docs/lab2.md` 提到）：课程给的 [raft-locking.txt](https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt)、[raft-structure.txt](https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt)、TA 的 [Students' Guide to Raft](https://thesquareplanet.com/blog/students-guide-to-raft)。
 - 提交：`make lab2a`（需 `api.key`，国内一般跳过，本地 `go test` 通过即可）。
 - 论文图 2（RequestVote + AppendEntries 状态机）逐行对照实现，是少踩坑的关键。

@@ -5,7 +5,7 @@
 > Time: MW 10:30am-12:20pm, Skilling Auditorium
 > 先修: 无硬性先修；CS147 / CS148 / CS142 有帮助；需 Web 编程（JS / D3.js / Vega-Lite）
 > 难度: ⭐⭐⭐⭐（理论 + 编程并重）
-> 官网: http://cs448b.stanford.edu/ (或 https://magrawala.github.io/cs448b-fa24/)
+> 官网: http://cs448b.stanford.edu/ (或 https://magrawala.github.io/cs448b-fa24)
 
 ---
 

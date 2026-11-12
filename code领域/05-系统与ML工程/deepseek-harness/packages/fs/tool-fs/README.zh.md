@@ -167,7 +167,7 @@ Use the edit tool for targeted changes to existing UTF-8 text files. It replaces
 
 ## 已知限制与暂缓事项
 
-- **未交付面向模型的目录列表工具**：`ctx.fs.listDir` 服务于 skill（技能）发现等提供方代码，同级 [`dsh-tool-fs-search`](../tool-fs-search/) 包则提供基于 ripgrep 的 `glob` 与 `grep`，而不是扩展文件系统 seam。
+- **未交付面向模型的目录列表工具**：`ctx.fs.listDir` 服务于 skill（技能）发现等提供方代码，同级 [`dsh-tool-fs-search`](../tool-fs-search) 包则提供基于 ripgrep 的 `glob` 与 `grep`，而不是扩展文件系统 seam。
 - **`read` 只处理 UTF-8 文本文件**：图像使用独立的、按扩展名路由的 `read_image` 工具；PDF、音频和视频仍延期处理。目录目标为 `FS_NOT_REGULAR_FILE`。
 - **路由门禁与并发模型切换存在竞态**：`read_image` 在执行时检查最新路由的模型；在该检查与下一次请求之间提交的切换，可能让图像块落在拒绝图像内容的路由上。Web 宿主已拒绝把含图像的会话切到纯文本模型；其他前端拥有各自的等价防护。
 - **媒体类型按扩展名声明**：扩展名选择声明类型，附件存储的魔数校验保持权威；扩展名错误但格式正确的图像会得到改名修复提示，而不是被嗅探接受。

@@ -1,7 +1,7 @@
 # MIT 18.175 — Theory of Probability
 
 > **学校**：MIT | **学期**：Spring（研究生+本科高年级）| **学分**：12 units
-> **一手来源**：[catalog.mit.edu/subjects/18/#18.175](https://catalog.mit.edu/subjects/18/) + Prof. Dudley / Prof. Sheffield 历年讲义
+> **一手来源**：[catalog.mit.edu/subjects/18/#18.175](https://catalog.mit.edu/subjects/18) + Prof. Dudley / Prof. Sheffield 历年讲义
 
 ## 课程信息
 - **编号**：18.175（同号研究生/本科合上）

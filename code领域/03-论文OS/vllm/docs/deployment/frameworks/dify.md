@@ -14,7 +14,7 @@ Set up the vLLM environment:
 pip install vllm
 ```
 
-And install [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
+And install [Docker](https://docs.docker.com/engine/install) and [Docker Compose](https://docs.docker.com/compose/install).
 
 ## Deploy
 

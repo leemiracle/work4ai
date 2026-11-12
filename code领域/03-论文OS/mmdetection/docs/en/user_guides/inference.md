@@ -67,7 +67,7 @@ Each Inferencer must be initialized with a model. You can also choose the infere
   inferencer = DetInferencer(model='path/to/rtmdet_config.py', weights='path/to/rtmdet.pth')
   ```
 
-- By default, [MMEngine](https://github.com/open-mmlab/mmengine/) dumps config to the weight. If you have a weight trained on MMEngine, you can also pass the path to the weight file to `weights` without specifying `model`:
+- By default, [MMEngine](https://github.com/open-mmlab/mmengine) dumps config to the weight. If you have a weight trained on MMEngine, you can also pass the path to the weight file to `weights` without specifying `model`:
 
   ```python
   # It will raise an error if the config file cannot be found in the weight. Currently, within the MMDetection model repository, only the weights of ddq-detr-4scale_r50 can be loaded in this manner.
@@ -79,7 +79,7 @@ Each Inferencer must be initialized with a model. You can also choose the infere
 ### Device
 
 Each Inferencer instance is bound to a device.
-By default, the best device is automatically decided by [MMEngine](https://github.com/open-mmlab/mmengine/). You can also alter the device by specifying the `device` argument. For example, you can use the following code to create an Inferencer on GPU 1.
+By default, the best device is automatically decided by [MMEngine](https://github.com/open-mmlab/mmengine). You can also alter the device by specifying the `device` argument. For example, you can use the following code to create an Inferencer on GPU 1.
 
 ```python
 inferencer = DetInferencer(model='rtmdet_tiny_8xb32-300e_coco', device='cuda:1')
@@ -360,7 +360,7 @@ python demo/large_image_demo.py \
 
 ## Multi-modal algorithm inference demo and evaluation
 
-As multimodal vision algorithms continue to evolve, MMDetection has also supported such algorithms. This section demonstrates how to use the demo and eval scripts corresponding to multimodal algorithms using the GLIP algorithm and model as the example. Moreover, MMDetection integrated a [gradio_demo project](../../../projects/gradio_demo/), which allows developers to quickly play with all image input tasks in MMDetection on their local devices. Check the [document](../../../projects/gradio_demo/README.md) for more details.
+As multimodal vision algorithms continue to evolve, MMDetection has also supported such algorithms. This section demonstrates how to use the demo and eval scripts corresponding to multimodal algorithms using the GLIP algorithm and model as the example. Moreover, MMDetection integrated a [gradio_demo project](../../../projects/gradio_demo), which allows developers to quickly play with all image input tasks in MMDetection on their local devices. Check the [document](../../../projects/gradio_demo/README.md) for more details.
 
 ### Preparation
 
