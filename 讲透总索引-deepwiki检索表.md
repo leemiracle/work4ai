@@ -117,7 +117,7 @@
 | 推理与服务 | [讲透LMCache](讲透宇宙/03-查/讲透LMCache/deepwiki/INDEX.md) | LMCache/LMCache | 90 | L查 |
 | 推理与服务 | [讲透miles](讲透宇宙/03-查/讲透miles/deepwiki/INDEX.md) | radixark/miles | 69 | L查 |
 | 推理与服务 | [讲透MLC-LLM](讲透宇宙/02-透/讲透MLC-LLM/deepwiki/INDEX.md) | ? | 28 | L透 |
-| 推理与服务 | [讲透Mooncake](讲透宇宙/03-查/讲透Mooncake/deepwiki/INDEX.md) | kvcache-ai/Mooncake | 72 | L查 |
+| 推理与服务 | [讲透Mooncake](讲透宇宙/03-查/讲透Mooncake/README.md)✅已蒸馏 | kvcache-ai/Mooncake | 72 | L查 |
 | 推理与服务 | [讲透sglang](讲透宇宙/03-查/讲透sglang/deepwiki/INDEX.md) | sgl-project/sglang | 114 | L查 |
 | 推理与服务 | [讲透SGLang](讲透宇宙/02-透/讲透SGLang/deepwiki/INDEX.md) | ? | 110 | L透 |
 | 推理与服务 | [讲透tokenspeed](讲透宇宙/03-查/讲透tokenspeed/deepwiki/INDEX.md) | lightseekorg/tokenspeed | 45 | L查 |
