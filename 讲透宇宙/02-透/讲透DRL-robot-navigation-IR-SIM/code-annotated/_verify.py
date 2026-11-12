@@ -22,7 +22,7 @@ from pathlib import Path
 
 ORIG = Path("/usr-data/data1/workspace/rl/DRL-robot-navigation-IR-SIM")
 DEST = Path("/file-not-set")  # 由 __main__ 设置
-DEST_DEFAULT = Path("/data/usershare/ai/work4ai/讲透DRL-robot-navigation-IR-SIM/code-annotated")
+DEST_DEFAULT = Path("~/ai/work4ai/讲透DRL-robot-navigation-IR-SIM/code-annotated")
 
 
 def verify(rel: str) -> tuple[bool, str, float]:

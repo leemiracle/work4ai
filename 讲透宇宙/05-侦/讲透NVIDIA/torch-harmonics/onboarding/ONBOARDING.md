@@ -85,7 +85,7 @@ distributed/utils.py:83 init 显式接收两个进程组：polar 组（:73，纬
 
 - docs/guide/ 五篇：spherical_harmonic_transforms.ipynb（SHT 数学推导与归一化约定）、spectral_convolutions.ipynb、disco_convolutions.ipynb、spherical_attention.ipynb、distributed.md。
 - notebooks/ 13 篇教程：getting_started 起步、train_spherical_neural_operator 训 SFNO、shallow_water_equations 数据集、stanford_2d3ds_dataset 球面分割、equivariance_test 等价性检验。
-- DeepWiki 45 页全量镜像：/data/usershare/ai/work4ai/讲透NVIDIA/torch-harmonics/deepwiki/（2026-10-26 抓取，结构 45/45 全命中）。
+- DeepWiki 45 页全量镜像：~/ai/work4ai/讲透NVIDIA/torch-harmonics/deepwiki/（2026-10-26 抓取，结构 45/45 全命中）。
 - agent 协作资产：SKILL.md 索引 + .skills/disco-kernel-dev（内核开发全流程 checklist）与 .skills/test-writing（测试规范）。
 - 图谱资产：12 步 tour 与 30 枢纽见 .understand-anything/onboard-input.json，完整 knowledge-graph.json 可下钻；批阶段 44 条甄别笔记在 NOTES-DIGEST.md。
 

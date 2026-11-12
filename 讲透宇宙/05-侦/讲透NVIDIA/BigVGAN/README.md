@@ -51,7 +51,7 @@
 ```bash
 cd /usr-data/data2/repos/agent-repos/NVIDIA/BigVGAN
 # 图谱校验
-node /data/usershare/ai/pipeline-bin/understand/ua-inline-validate.cjs .understand-anything/knowledge-graph.json /tmp/vr.json
+node ~/ai/pipeline-bin/understand/ua-inline-validate.cjs .understand-anything/knowledge-graph.json /tmp/vr.json
 # 任一勘误锚抽查，例：勘误 #2
 sed -n '200,210p' loss.py
 ```

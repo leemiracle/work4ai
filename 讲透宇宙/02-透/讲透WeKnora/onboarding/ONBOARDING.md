@@ -110,7 +110,7 @@ flowchart LR
 
 ## 延伸阅读
 
-- **DeepWiki 索引**：`/data/usershare/ai/work4ai/讲透WeKnora/deepwiki/INDEX.md`（90 页）。
+- **DeepWiki 索引**：`~/ai/work4ai/讲透WeKnora/deepwiki/INDEX.md`（90 页）。
 - **docs/ 关键文档**：`开发指南.md`、`RBAC说明.md`、`QA.md`、`agent-tools-design.md`、`CHUNKING.md`、`sandbox-docker-backend.md`、`worker-pool-governance.md`、`Langfuse集成.md`。
 - **website-docs/**：VitePress 文档站，六板块覆盖约 360 个 API 端点与约 150 个环境变量。
 - **图谱与配置源头**：`.understand-anything/knowledge-graph.json`；`config/` 下 config.yaml、builtin_agents.yaml 与 prompt_templates/。

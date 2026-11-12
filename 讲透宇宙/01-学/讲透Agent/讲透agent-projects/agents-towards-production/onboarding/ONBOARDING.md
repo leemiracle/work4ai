@@ -92,5 +92,5 @@ agents-towards-production/
 ## 8. 延伸阅读
 
 - 仓内：`README.md`（22 教程总索引 + 赞助商矩阵）、`CONTRIBUTING.md`（教程收录规范）、`tutorials/kotlin-agent-with-koog/tutorial.md`（最长单篇正文，Koog 全流程）。
-- 同目录 DeepWiki 素材：`/data/usershare/ai/work4ai/讲透agent-projects/agents-towards-production/deepwiki/`（31 页全量 wiki，含 3 章安全框架、4 章部署基础设施的横向综述，可补足图谱未覆盖的 17 条教程线）。
+- 同目录 DeepWiki 素材：`~/ai/work4ai/讲透agent-projects/agents-towards-production/deepwiki/`（31 页全量 wiki，含 3 章安全框架、4 章部署基础设施的横向综述，可补足图谱未覆盖的 17 条教程线）。
 - 上游：github.com/NirDiamant/agents-towards-production；cognee / CrewAI / Koog / RunPod 官方文档为各线第一手参考。

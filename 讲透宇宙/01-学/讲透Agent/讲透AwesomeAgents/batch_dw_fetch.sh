@@ -4,10 +4,10 @@
 # 台账 RETRY 行不覆盖终态——本脚本只在终态缺席时写入，重跑=断点续跑。
 # 并发 4（MCP 公开端点礼节并发）。
 set -u
-BASE="/data/usershare/ai/work4ai/讲透AwesomeAgents"
+BASE="~/ai/work4ai/讲透AwesomeAgents"
 LEDGER="$BASE/_ledger.tsv"
 LOGS="$BASE/logs"
-TOOL="/data/usershare/ai/pipeline-bin/deepwiki/dw_fetch_mcp.py"
+TOOL="~/ai/pipeline-bin/deepwiki/dw_fetch_mcp.py"
 MANIFEST="$BASE/manifest.txt"
 mkdir -p "$LOGS"
 touch "$LEDGER"

@@ -620,9 +620,9 @@ offload 子项目（[实测-offload/]）提供 OpenMP target offload + 异构运
 
 ### 6.3 社区与实测（本项目一手）
 
-15. **OpenXiangShan/llvm-project**（LLVM 23.0.0git）. `/data/usershare/ai/riscv/OpenXiangShan/llvm-project/`. `[实测]` —— 本 Expert 所有代码行号锚点的来源
-16. **飞腾 phytium_repos/freebsd**（FreeBSD 15-CURRENT）. `/data/usershare/ai/飞腾/phytium_repos/freebsd/`. `[实测]` —— 飞腾 FreeBSD libcxx/libcxxrt/libunwind 实证（[lib/libc++/Makefile]、[lib/libgcc_eh/Makefile.inc]、[contrib/llvm-project/]）
-17. **飞腾 phytium_repos/phytium-linux-yocto**（meta-bsp）. `/data/usershare/ai/飞腾/phytium_repos/phytium-linux-yocto/`. `[实测]` —— stream-openmp 基准实证（[meta-bsp/recipes-benchmark/stream/stream_5.10.bb]）
+15. **OpenXiangShan/llvm-project**（LLVM 23.0.0git）. `~/ai/riscv/OpenXiangShan/llvm-project/`. `[实测]` —— 本 Expert 所有代码行号锚点的来源
+16. **飞腾 phytium_repos/freebsd**（FreeBSD 15-CURRENT）. `~/ai/飞腾/phytium_repos/freebsd/`. `[实测]` —— 飞腾 FreeBSD libcxx/libcxxrt/libunwind 实证（[lib/libc++/Makefile]、[lib/libgcc_eh/Makefile.inc]、[contrib/llvm-project/]）
+17. **飞腾 phytium_repos/phytium-linux-yocto**（meta-bsp）. `~/ai/飞腾/phytium_repos/phytium-linux-yocto/`. `[实测]` —— stream-openmp 基准实证（[meta-bsp/recipes-benchmark/stream/stream_5.10.bb]）
 18. **libcxxrt 项目**（Howard Hinnant 原始，现社区维护）. https://github.com/libcxxrt/libcxxrt. `[GitHub]` —— FreeBSD 用的独立 C++ ABI 库
 19. **hwloc 项目**. https://www.open-mpi.org/projects/hwloc/. `[官方]` —— OpenMP runtime 依赖的硬件拓扑库
 20. **飞腾开发者平台 - PhyCC**. https://www.phytium.com.cn/developer/independent_software/detail/36/28/. `[官方]` —— "PhyCC 2.0 基于 LLVM"（飞腾唯一直接说基于 LLVM 的官方编译器）

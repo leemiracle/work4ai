@@ -6,7 +6,7 @@ import os
 import re
 import sys
 
-BASE = "/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104"
+BASE = "~/ai/work4ai/讲透DeepSeek-Harness/_update-20261104"
 ROOT = "/usr-data/data2/repos/deepseek-ai/deepseek-harness"
 
 rescan = json.load(open(os.path.join(BASE, "tmp-worker", "imports-rescan-051-060.json")))

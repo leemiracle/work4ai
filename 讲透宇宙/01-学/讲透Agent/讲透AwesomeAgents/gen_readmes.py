@@ -7,7 +7,7 @@
 import re
 from pathlib import Path
 
-BASE = Path("/data/usershare/ai/work4ai/讲透AwesomeAgents")
+BASE = Path("~/ai/work4ai/讲透AwesomeAgents")
 from datetime import date
 D = date.today().isoformat()
 

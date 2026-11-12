@@ -29,7 +29,7 @@
 
 ## 抓取元数据
 
-- 通道：`mcp.deepwiki.com/mcp`（stateless streamable HTTP，工具 `/data/usershare/ai/pipeline-bin/deepwiki/dw_fetch_mcp.py`）
+- 通道：`mcp.deepwiki.com/mcp`（stateless streamable HTTP，工具 `~/ai/pipeline-bin/deepwiki/dw_fetch_mcp.py`）
 - 覆盖率对账：`deepwiki/_coverage-check.md`（24/24=100%）；每页头部带源文件 `<details>` 清单+行号锚（`robot_nav/models/...`），understand 阶段交叉对账素材
 - 抓取日期：2026-10-14
 

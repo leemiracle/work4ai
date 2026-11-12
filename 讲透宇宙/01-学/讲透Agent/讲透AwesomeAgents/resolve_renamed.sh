@@ -3,10 +3,10 @@
 # 逻辑：github.com 重定向解析现 slug → DeepWiki MCP 探测 → 有 wiki 则更新 manifest+重抓；
 #       无 wiki（原 slug 或新 slug 都没有）→ 保持 NOT_INDEXED（真未索引，终态）。
 set -u
-BASE="/data/usershare/ai/work4ai/讲透AwesomeAgents"
+BASE="~/ai/work4ai/讲透AwesomeAgents"
 LEDGER="$BASE/_ledger.tsv"
 PROXY="http://127.0.0.1:7890"
-TOOL="/data/usershare/ai/pipeline-bin/deepwiki/dw_fetch_mcp.py"
+TOOL="~/ai/pipeline-bin/deepwiki/dw_fetch_mcp.py"
 
 probe_mcp() {  # $1=slug → 输出 OK 或 ERR
   local r

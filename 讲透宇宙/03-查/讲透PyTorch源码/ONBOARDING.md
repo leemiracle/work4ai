@@ -1,6 +1,6 @@
 # PyTorch 源码新人上手指南（ONBOARDING）
 
-> 生成时间：2026-09-03 ｜ 依据：本地仓库 `/data/usershare/pytorch`（commit `f634d0e`）知识图谱（637 文件 / 4730 节点 / 10744 边 / 15 架构层 / 14 步导览）× DeepWiki pytorch/pytorch 全量 80 页（indexed 2026-09-02, commit `580b06`）
+> 生成时间：2026-09-03 ｜ 依据：本地仓库 `~/pytorch`（commit `f634d0e`）知识图谱（637 文件 / 4730 节点 / 10744 边 / 15 架构层 / 14 步导览）× DeepWiki pytorch/pytorch 全量 80 页（indexed 2026-09-02, commit `580b06`）
 > 图谱文件：`understand/knowledge-graph.json`（可用 `/understand-dashboard` 交互式浏览）
 
 ---

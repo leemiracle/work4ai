@@ -4,8 +4,8 @@ import re
 from datetime import date
 from pathlib import Path
 
-BATCH = Path("/data/usershare/ai/work4ai/讲透AgentEco/_batch")
-COLL = Path("/data/usershare/ai/work4ai/讲透AgentEco")
+BATCH = Path("~/ai/work4ai/讲透AgentEco/_batch")
+COLL = Path("~/ai/work4ai/讲透AgentEco")
 TODAY = date.today().isoformat()
 
 # 1. reconcile 终判过的 ERROR → DONE

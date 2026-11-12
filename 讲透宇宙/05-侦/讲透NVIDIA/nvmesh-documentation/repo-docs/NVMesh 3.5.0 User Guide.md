@@ -3078,7 +3078,7 @@ During initial formatting of a drive, the entire drive is trimmed. By default, t
 
 In addition, when a volume is deleted, drive blocks may contain previously written data. Therefore, these blocks must be zeroed out before reuse for security purposes. This zeroing starts immediately after the volume is deleted. As a result, client reads from the volume will never fetch old data from the drives.
 
-Zeroing behavior is governed by three parameters set directly on targets using the [toma_rpc](toma_rpc#_The_) utility.
+Zeroing behavior is governed by three parameters set directly on targets using the toma_rpc utility.
 
 To alter the zeroing behavior defined, run commands such as in the following example that sets the current default values, which are to TRIM without verifying that the blocks are later read as zeroes.
 

@@ -25,7 +25,9 @@
 
 - pip 版桩体解码（16B 全解）：`test rdi,rdi; je+9; mov dword[rdi],0x5919(=22809); xor eax,eax; ret`——**完整 GetVersion 实现（版本码内联），非薄桩**。
 - **"弱桩"真相终判**：T/W 同地址别名结构三代稳定（2.27.3/2.28.9 sys+pip）；UCCL 开发线真机 SIGSEGV 139 的机制=**wheel 构建无 ENDBR × CET/IBT 强制环境（间接调用无 ENDBR 目标→#CP→SIGSEGV）**，非 NCCL 机制变化，且**由分发渠道决定**（apt/deb 有保护、wheel 无）。
-- ⚠️ **UCCL 修复预警（实锤升级 2026-11-12）**：nccl_family.cpp:23-40 用 p 探桩面替代普通面——**2.29.7 x86_64 wheel（开发线真机同渠道，PyPI 下载实测）pncclGetVersion(T)@0xa8f3f ≡ ncclGetVersion(W) 同地址且同无 ENDBR**（桩体=完整实现版本码 0x597b=22907 内联；pncclAllReduce(T)≡ncclAllReduce(W)@0x74ea0 同样）——**换 p 面在 IBT 强制机器上不能解决 #CP 崩溃**（p/普通面是同一地址同一函数体）。若开发线换 p 面后真机不再崩，则原 SIGSEGV 根因可能并非 IBT（如双 libnccl 共存下 dlsym 句柄错配），建议复核。稳妥方案=dlsym 后查首字节 `f3 0f 1e fa`，无 ENDBR 且需间接调用时走直连或 IBT=Permissive。**wheel 全版本线（2.28.9/2.29.7/2.30.7 aarch64+x86_64）无 ENDBR，sys/deb 带保护——分发渠道决定 CET 兼容性定型**。源码侧互证：上游 Makefile/CMake 零 cf-protection 强制+pnccl\* 为真实独立函数声明（nccl.h.in:263-284，非宏别名）。样本归档 samples/nv-pip297-libnccl.so.2.29.7（400MB）。
+- **本机 dlopen 实证（2026-11-12，2.30.7 aarch64 wheel，麒麟内核）**：①dlsym("ncclGetVersion")==dlsym("pncclGetVersion")**返回同一指针**（0x7f69243588，T/W 别名的 dlsym 语义层实证）；②**经指针间接调用成功**（ret=0/version=23007/null 出参=4）——无 BTI 前缀二进制在非强制环境完全可用；③x86 Linux 默认 IBT 不强制——**SIGSEGV 139 只在显式启用 CET/BTI 的进程发生**。
+- **UCCL 开发线修复追踪（56da648 "IBT 探测修"）**：p 面优先+真 NV 无 p 面放弃探测；其回归三真复跑通过。但与铁数据矛盾（p/普通面同一地址同一函数体——"换 p 面"不构成机制性修复）；最可能=同 commit 其他修复真起效（版本配对/CPU 池收束）而 p 面归因搭车，或 .11 现场走了"无 p 面放弃探测"分支。**复核方法（一分钟）**：在 .11 崩溃现场打印 `dlsym(h,"ncclGetVersion")` 与 `dlsym(h,"pncclGetVersion")` 指针值——若相等（预期），则原崩溃根因即非"W 弱桩 IBT"，需查双 libnccl 共存（torch wheel 与系统库）句柄错配。
+- 稳妥方案=dlsym 后查首字节 `f3 0f 1e fa`，无 ENDBR 且需间接调用时走直连或 IBT=Permissive。**wheel 全版本线（2.28.9/2.29.7/2.30.7/2.32.6 双架构）无 ENDBR，sys/deb 带保护——分发渠道决定 CET 兼容性定型**。源码侧互证：上游 Makefile/CMake 零 cf-protection 强制+pnccl\* 为真实独立函数声明（nccl.h.in:263-284，非宏别名）。样本归档 samples/nv-pip297-libnccl.so.2.29.7（400MB）。
 
 ## 3. ncclCommWindowRegister/Deregister 对称窗口主机侧路径（CONFIRMED，源码级锚）
 

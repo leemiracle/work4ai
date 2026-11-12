@@ -59,4 +59,4 @@ For Azure Automation specifically, see the [`../../azure/`](../../azure) folder 
 
 ## Common errors and fixes
 
-See the parent [`SharePoint/<File or Folder>/README.md`](../../../../../../../../README.md#troubleshooting) for the full troubleshooting table — same issues apply to all of these scripts.
+See the parent `SharePoint/<File or Folder>/README.md` for the full troubleshooting table — same issues apply to all of these scripts.

@@ -56,3 +56,10 @@ corex/（libnccl.so.5.0.0.2289 146MB aarch64+libixsysnccl+ixccl.h/IX 头+宿主 
 - 2.29.7 x86_64 wheel 实测（400MB 归档）：**p 面与普通面同地址同无 ENDBR——换 p 探桩规避 IBT 崩溃无效（实锤）**；wheel 全版本线（2.28.9/2.29.7/2.30.7 双架构）无 CET 保护定型，sys/deb 带保护
 - NV wheel 也带 libnccl_device.bc——bitcode 分发不是沐曦独有
 - 第八轮全部开放项清零
+
+## 实证章（2026-11-12 10:4x）
+
+- **dlopen 本机三连**（2.30.7 aarch64 wheel）：dlsym 两名同一指针（T/W 别名 dlsym 语义层实证）+间接调用成功（非 BTI 强制环境无保护前缀安全）+null 出参=4——x86 默认 IBT 不强制，139 只在显式 CET 进程发生；tools/dlopen_probe.c 固化（开发线一分钟复核法）
+- **UCCL patch 合入确认**：56da648 含本人 DU_FASTPATH（git log -S 命中）；其"p 面优先 IBT 修"与铁数据矛盾（同地址同函数体）——归因疑点+复核法已写 nvnccl 报告 §2
+- **2.32.6 最新版仍无 ENDBR**（T≡W@0xf839b）——wheel 无 CET 保护贯穿四版本点（2.28.9→2.32.6），NVIDIA 未修属常态；420MB 归档 samples/nv-pip326
+- **归档位置变更**：work4ai 讲透宇宙重组（另一实例 a3f8f17a2），本目录新路径=讲透宇宙/03-查/讲透国产GPU栈逆向

@@ -176,13 +176,13 @@ JSON → static-results.json
   [PASS] F01: DDP 梯度桶默认 25MB (源码显式) — 签名默认 None 是哨兵; 源码 'default case (bucket cap is 25 MiB)' → bucket_cap_mb=25
   [PASS] F02: NCCL watchdog/PG 默认超时=10min (文档/实现) — doc 含 '10 minutes' 且 timeout 可配; TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC 等环境变量控制 watchdog 行为
   [PASS] F03: ProcessGroupNCCL 通信器缓存 (C++ 层, Python 仅可见封装) — C++ 实现不可内省; 该断言属 torch 源码机制, 见 check_framework.sh 源码 grep
-== L5: vLLM 侧断言 (/data/usershare/ai/vllm) ==
+== L5: vLLM 侧断言 (~/ai/vllm) ==
   [PASS] F04 PyNcclCommunicator 附加非 NCCL 组 — pynccl wrapper 依赖非 NCCL 组广播 uniqueId
   [PASS] F04b PyNcclCommunicator 类存在 — 直接绑定 NCCL 动态库的轻量封装
   [PASS] F05 CustomAllreduce→NCCL 回退 — 引擎开关与回退路径存在
   [PASS] F06 权重传输 Broadcast/packed — P/D 权重广播引擎
 
-== L5: SGLang 侧断言 (/data/usershare/ai/sglang) ==
+== L5: SGLang 侧断言 (~/ai/sglang) ==
   [PASS] F07 GroupCoordinator 抽象 — 统一调度 pynccl/custom_allreduce
   [PASS] F07b pynccl 寄生非 NCCL 组 — PyNcclCommunicator 附加 gloo 组
   [PASS] F08 CustomAllreduce 16B/单节点/dtype — 尺寸/dtype 门控细节

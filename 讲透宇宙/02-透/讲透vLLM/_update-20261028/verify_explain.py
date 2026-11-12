@@ -8,8 +8,8 @@
 import re, sys, os, subprocess, random
 
 REPO = "/usr-data/data2/repos/pytorch-landscape/repos/vllm"
-EXPLAIN = "/data/usershare/ai/work4ai/讲透vLLM/explain"
-ONBOARD = "/data/usershare/ai/work4ai/讲透vLLM/onboarding/ONBOARDING.md"
+EXPLAIN = "~/ai/work4ai/讲透vLLM/explain"
+ONBOARD = "~/ai/work4ai/讲透vLLM/onboarding/ONBOARDING.md"
 
 # 篇名 → 主文件（缩写锚归位目标）
 PIECES = {

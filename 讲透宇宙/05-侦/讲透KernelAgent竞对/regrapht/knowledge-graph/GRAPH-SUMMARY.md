@@ -3,7 +3,7 @@
 - 生成：2026-09-03（understand --language zh 全链路）· git commit `d1ea9b4e91e5`
 - 规模：**48 节点 / 84 边 / 6 架构层 / 9 步导览**
 - 校验：内联校验 0 issue（详见 FINAL-REPORT）
-- 交互：在本体仓（/data/usershare/ai/ReGraphT）运行 /understand-dashboard 或 /understand-chat 查询
+- 交互：在本体仓（~/ai/ReGraphT）运行 /understand-dashboard 或 /understand-chat 查询
 
 ## 节点类型分布
 

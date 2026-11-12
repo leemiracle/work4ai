@@ -2,7 +2,7 @@
 
 > 抓取：2026-08-25 · DeepWiki MCP `read_wiki_contents`（v2.14.3）· wiki 索引 2026-08-18 @ fa955b
 > 上游：https://deepwiki.com/basecamp/omarchy · 39 页全量（含 83 个 mermaid 架构图）
-> 分叉对照：本归档来自上游 basecamp/omarchy；/data/usershare/linux-src/omarchy-quattro 为其 v4 分叉（见 ../omarchy-深读卡.md §分叉差异）
+> 分叉对照：本归档来自上游 basecamp/omarchy；~/linux-src/omarchy-quattro 为其 v4 分叉（见 ../omarchy-深读卡.md §分叉差异）
 
 # Page: 1 Overview
 

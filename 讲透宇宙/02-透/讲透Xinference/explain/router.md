@@ -1,6 +1,6 @@
 # router/app.py — Token-aware Router 精讲
 
-> 源文件：`/data/usershare/ai/inference/xinference/router/app.py`（970 行；协作者 classifier/runtime/tokenization/admission/config/control_plane。HEAD b3de260 已无老版 `router/router.py`）
+> 源文件：`~/ai/inference/xinference/router/app.py`（970 行；协作者 classifier/runtime/tokenization/admission/config/control_plane。HEAD b3de260 已无老版 `router/router.py`）
 
 ## 1. 角色定位
 

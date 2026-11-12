@@ -1,7 +1,7 @@
 # NCCL v2.32.3 量化分析报告 —— 用《深入理解 AI Infra》模型对照工程实现
 
 > 方法论：《深入理解 AI Infra》（bojieli/ai-infra-book）「从约束推导设计」+ 数据搬移五问。
-> 工具集：`/data/usershare/ai/ai-infra-tools/`（collective_model / protocol_crossover / busbw_table / topology_cut / nccl_structure_scan）。
+> 工具集：`~/ai/ai-infra-tools/`（collective_model / protocol_crossover / busbw_table / topology_cut / nccl_structure_scan）。
 > 生成日期：2026-11-03。对象：本仓 v2.32.3-1（commit 3e46c089）。全部锚点可点击复核。
 
 ---
@@ -165,7 +165,7 @@ Blackwell 树 LL128（55.6）> 环（40.0）：新架构上树协议内核反而
 ## 6. 复现命令
 
 ```bash
-T=/data/usershare/ai/ai-infra-tools
+T=~/ai/ai-infra-tools
 python3 $T/nccl_structure_scan.py --repo /usr-data/data2/kylin/nccl          # §1
 python3 $T/collective_model.py --n 8 --bytes 696320 --bw 450e9 --alpha-us 0.24  # §2.1 交叉点 691KB
 python3 $T/protocol_crossover.py --bw 450e9 --eff-ll 0.5 --eff-ll128 0.92    # §2.3 协议交叉
@@ -173,4 +173,4 @@ python3 $T/busbw_table.py --n 8 --bw 450e9 --op allreduce                    # �
 python3 $T/topology_cut.py --n 16 --g 8 --bw-nv 450e9 --bw-nic 50e9          # 跨机场景下界
 ```
 
-公式蒸馏底稿：`/data/usershare/ai/ai-infra-tools/docs/infrabook-ch67-distill.md`（34 公式带书 § 出处）。
+公式蒸馏底稿：`~/ai/ai-infra-tools/docs/infrabook-ch67-distill.md`（34 公式带书 § 出处）。

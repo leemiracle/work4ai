@@ -43,6 +43,6 @@ Each script calls `Connect-MgGraph -Scopes <required-scope>` which pops up a bro
 
 The output CSVs match the schema the parent PBIT consumes (15-column pre-parsed format for interactions, etc.) — you can either:
 - Upload them to SharePoint manually and point the PBIT at the URLs
-- Use them directly with the local-CSV variant of the dashboard ([`../../1. Manual/`](../../../1.%20Manual) — if it exists in this repo)
+- Use them directly with the local-CSV variant of the dashboard (`../../1. Manual/` — if it exists in this repo)
 
 For unattended / scheduled runs, switch to [`../appreg/`](../appreg).

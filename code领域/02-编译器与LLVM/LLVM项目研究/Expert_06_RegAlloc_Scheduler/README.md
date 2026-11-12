@@ -913,7 +913,7 @@ def FTC862UnitLdSt  : ProcResource<1>;  // 飞腾 1 Load/Store 端口 [推测]
 ### 资源指引
 
 详见 `领域资源库_LLVM.md`（`../../领域资源库_LLVM.md`） §RegAlloc 章节。核心入口：
-- LLVM `lib/CodeGen/` 源码（本地 `/data/usershare/ai/riscv/OpenXiangShan/llvm-project/llvm/lib/CodeGen/`）
+- LLVM `lib/CodeGen/` 源码（本地 `~/ai/riscv/OpenXiangShan/llvm-project/llvm/lib/CodeGen/`）
 - AArch64 调度模型（本地 `llvm/lib/Target/AArch64/AArch64Sched*.td`，34 个文件）
 - 飞腾实测数据：飞腾 Expert_11 §2.2（`../../体系结构实验/Expert_11_Compiler_Research/README.md`）
 - MLGO 项目：[Google AI Blog 2021](https://ai.googleblog.com) + `MLRegAllocEvictAdvisor.cpp`

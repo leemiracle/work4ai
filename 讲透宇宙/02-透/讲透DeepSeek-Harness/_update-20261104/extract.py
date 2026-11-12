@@ -4,7 +4,7 @@ Read-only on the source repo. Outputs extracted.json (machine) + digest.md (cond
 import json, os, re, sys
 
 ROOT = '/usr-data/data2/repos/deepseek-ai/deepseek-harness'
-BASE = '/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104'
+BASE = '~/ai/work4ai/讲透DeepSeek-Harness/_update-20261104'
 PKG_MAP = json.load(open(os.path.join(BASE, 'packages-map.json')))
 
 def strip_comments_keep_lines(src: str, blank_strings: bool = False) -> str:

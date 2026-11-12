@@ -1,6 +1,6 @@
 # KCCL 多厂商链路量化对比 —— 用《深入理解 AI Infra》割集模型（含 2026-11-03 麒麟集群实测回填）
 
-> 工具：`/data/usershare/ai/ai-infra-tools/topology_cut.py`（--preset / --kccl-mixed 模式）。
+> 工具：`~/ai/ai-infra-tools/topology_cut.py`（--preset / --kccl-mixed 模式）。
 > 对象：/usr-data/data2/kylin/kccl（麒麟多厂商 GPU 统一集合通信库，v2.32.3 NCCL 基座）。
 > 姊妹报告：讲透NCCL/infra-quant/REPORT.md（单域 NCCL 深度对照）。2026-11-03。
 
@@ -46,7 +46,7 @@ T ≈ max_group(2(g−1)/g · M / B_intra)  +  2(G−1)/G · M / B_bridge
 
 复现：
 ```bash
-T=/data/usershare/ai/ai-infra-tools
+T=~/ai/ai-infra-tools
 python3 $T/collective_model.py --n 8 --bytes 1073741824 --bw 450e9 --alpha-us 0.24   # 基线
 python3 $T/topology_cut.py --kccl-mixed nvidia:4,metax-c550:4 --bytes 1073741824 --bridge 50e9
 python3 $T/topology_cut.py --kccl-mixed nvidia:4,metax-c550:4 --bytes 1073741824 --bridge 12.5e9

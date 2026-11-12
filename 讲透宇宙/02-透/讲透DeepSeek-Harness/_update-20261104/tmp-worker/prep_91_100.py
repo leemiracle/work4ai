@@ -7,7 +7,7 @@ import subprocess
 import sys
 
 ROOT = "/usr-data/data2/repos/deepseek-ai/deepseek-harness"
-BASE = "/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104"
+BASE = "~/ai/work4ai/讲透DeepSeek-Harness/_update-20261104"
 SKILL = "/home/lwz/.understand-anything-plugin/skills/understand/extract-structure.mjs"
 TMP = os.path.join(BASE, "tmp-worker")
 

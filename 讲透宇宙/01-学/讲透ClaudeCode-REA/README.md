@@ -53,7 +53,7 @@
 # 解包（自研 Bun standalone 解析器，见 00 册）
 ls /usr-data/data2/aios/rea-claude/extracted/$bunfs/root/   # 1,818 模块
 # REA 图谱（v6.5.0，morluto/rea）
-cat /data/usershare/ai/work4ai/讲透REA/deepwiki/INDEX.md     # REA 工具链文档
+cat ~/ai/work4ai/讲透REA/deepwiki/INDEX.md     # REA 工具链文档
 # 手搓简化版
 python3 rl-and-agents/mini_claude.py -p "任务"
 ```

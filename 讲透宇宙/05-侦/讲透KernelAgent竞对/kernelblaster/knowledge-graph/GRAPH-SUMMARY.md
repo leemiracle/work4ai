@@ -3,7 +3,7 @@
 - 生成：2026-09-03（understand --language zh 全链路）· git commit `84237f91a391`
 - 规模：**269 节点 / 589 边 / 10 架构层 / 15 步导览**
 - 校验：内联校验 0 issue（详见 FINAL-REPORT）
-- 交互：在本体仓（/data/usershare/ai/KernelBlaster）运行 /understand-dashboard 或 /understand-chat 查询
+- 交互：在本体仓（~/ai/KernelBlaster）运行 /understand-dashboard 或 /understand-chat 查询
 
 ## 节点类型分布
 

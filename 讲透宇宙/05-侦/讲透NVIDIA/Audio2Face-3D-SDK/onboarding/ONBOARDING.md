@@ -258,4 +258,4 @@ admm.cu 两内核（ADMMupdateKernel:32 + ClipKernel:75）只服务 GPU 求解�
 
 - 图谱：`/usr-data/data2/repos/agent-repos/NVIDIA/Audio2Face-3D-SDK/.understand-anything/knowledge-graph.json`（726n/1312e/15 层/16 步 tour，validator 0 issues，fingerprints 267 文件 @ 1ca0f025）
 - 批甄别笔记：同目录 `NOTES-DIGEST.md`（36 条）
-- 覆盖：`/data/usershare/ai/work4ai/讲透NVIDIA/Audio2Face-3D-SDK/deepwiki/`（前置轮产物）
+- 覆盖：`~/ai/work4ai/讲透NVIDIA/Audio2Face-3D-SDK/deepwiki/`（前置轮产物）

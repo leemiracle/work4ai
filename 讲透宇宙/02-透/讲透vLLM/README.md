@@ -88,4 +88,4 @@ L1 Python 定义 ──→ L2 算子图 ──→ L3 算子 ──→ L4 硬件�
   ch2(配置)/explain-config    ch2.4+3.1(EngineCore)   ch3.3/3.4(调度/KV)+自定义ops   ch4(GPU执行)+10/11.4(JIT)
 ```
 
-**两仓交汇点**：PyTorch 仓 ch5.5 = vLLM CI。总索引：`/data/usershare/ai/hpc-agent/docs/FOUR-LAYER-PIPELINE.md`（hpc-agent 06 规则库各层已挂本专区锚点）。
+**两仓交汇点**：PyTorch 仓 ch5.5 = vLLM CI。总索引：`~/ai/hpc-agent/docs/FOUR-LAYER-PIPELINE.md`（hpc-agent 06 规则库各层已挂本专区锚点）。

@@ -4,9 +4,9 @@
 # 结果文件 results/<safe>.status: DONE / INCOMPLETE / NOT_INDEXED / ERROR
 set -u
 REPO="$1"; LOCAL="$2"
-BATCH="/data/usershare/ai/work4ai/讲透AgentEco/_batch"
-COLL="/data/usershare/ai/work4ai/讲透AgentEco"
-TOOL="/data/usershare/ai/pipeline-bin/deepwiki/dw_fetch_mcp.py"
+BATCH="~/ai/work4ai/讲透AgentEco/_batch"
+COLL="~/ai/work4ai/讲透AgentEco"
+TOOL="~/ai/pipeline-bin/deepwiki/dw_fetch_mcp.py"
 SAFE="${REPO/\//_}"
 OUT="$COLL/$SAFE/deepwiki"
 LOG="$BATCH/logs/$SAFE.log"

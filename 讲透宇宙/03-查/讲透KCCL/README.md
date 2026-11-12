@@ -11,4 +11,4 @@
 | **充分逆向+性能方案全集** | 仓内 `infra-analysis/REVERSE-202611/`（REPORT 295 行+notes 四件 923 行）：kccl 源码精读（新缺陷 17/改进 18）+三节点栈探测（**翻案：在役 MCCL=2.30.4 非复盘 2.16.5，本地头是旧头；天数=NCCL 2.28.9 零改名；RCCL 停 2.22**）+DeepSeek CUDA 用法 20 项映射+量化差距全公式；**§6 方案全集 40 项**（正确性 9/性能 11/调优 7/削量 4/训练 6/推理 6/可观测 4/混合域 5） | ✅ | 2026-11-04 |
 
 姊妹产物：[讲透NCCL](讲透宇宙/02-透/讲透NCCL)（DeepWiki 58 页 + 图谱 4306n + infra-quant 单域深度对照）。
-工具集：/data/usershare/ai/ai-infra-tools/（topology_cut --kccl-mixed 可复算本报告全部场景）。
+工具集：~/ai/ai-infra-tools/（topology_cut --kccl-mixed 可复算本报告全部场景）。

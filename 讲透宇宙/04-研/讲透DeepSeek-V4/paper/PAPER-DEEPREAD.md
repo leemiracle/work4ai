@@ -102,7 +102,7 @@ mHC（Manifold-Constrained Hyper-Connections，§2.2；专门论文 arXiv 2512.2
 - **无 GitHub 代码仓（钉版）**：论文脚注 1 的 open-source implementation = HF checkpoint 仓 `DeepSeek-V4-Pro/tree/main/inference`（HTML href 实证）；全文唯一 GitHub 引用=DeepGEMM PR #304（§3.1）。读官方实现去 HF 仓 inference/ 目录。
 - **TileKernels 有 mHC 算子**（钉版）：DeepSeek 开源 infra 家族的 TileKernels 仓含 mHC 实现，对应论文 §3.4.2 融合 kernel 叙事，是 mHC 代码对照入口。
 - **TRT-LLM day-0 支持**：本地 `/usr-data/data2/repos/agent-repos/NVIDIA/TensorRT-LLM`（blog15/17/26 在 `docs/source/blogs/tech_blog/`）；V4 sparse attention 后端长在 blog17 的通用稀疏注意力框架上（选择逻辑与后端解耦，blog26 L86），DSA→V4 是同一框架两代实例。
-- **前传档案**：`/data/usershare/ai/work4ai/讲透DeepSeek-V3.2-Exp/paper/PAPER-DEEPREAD.md`（V3.2=DSA、TopK 2048）；blog15 是 V3.2 Blackwell 优化实录（Top-K 确定性/radix-select 源头）。
+- **前传档案**：`~/ai/work4ai/讲透DeepSeek-V3.2-Exp/paper/PAPER-DEEPREAD.md`（V3.2=DSA、TopK 2048）；blog15 是 V3.2 Blackwell 优化实录（Top-K 确定性/radix-select 源头）。
 
 ## ⑪ 勘误与口径差（论文 vs blog26 / 元数据）
 

@@ -477,7 +477,7 @@ ShadowCallStack 是 **LLVM 为 ARM64 优先开发**的（x86 后补，因 x86 �
 
 **上一版 README 的错误断言**："`phytium_repos` 45 目录里 `grep sanitizer|compiler-rt|asan` 零命中"。
 
-**本次 `grep -rn "fsanitize=address|fsanitize=memory|libasan|compiler-rt.*sanitizer" /data/usershare/ai/飞腾/phytium_repos/` 的真实结果**：**命中数十处**，断言错误。但深入分类后，**反向锚点不仅成立，而且更锐利**。三类命中，全部非生产：
+**本次 `grep -rn "fsanitize=address|fsanitize=memory|libasan|compiler-rt.*sanitizer" ~/ai/飞腾/phytium_repos/` 的真实结果**：**命中数十处**，断言错误。但深入分类后，**反向锚点不仅成立，而且更锐利**。三类命中，全部非生产：
 
 **(a) 上游第三方 vendored 构建脚本（未改动）**——飞腾只是把上游代码 vendored 进来，不是飞腾自己启用：
 - `phytium_repos/onnxruntime/` 数十处 `-fsanitize=address`（build.py:1627、CMakeLists.txt:64-93）——微软 ONNX Runtime 上游 CI 脚本。

@@ -38,5 +38,5 @@
 
 ## 复跑入口
 
-- 批终验：`python3 /tmp/ua2/verify_batch.py <repo> <N>`（part 文件聚合）；merge：`python3 ~/.agents/skills/understand/merge-batch-graphs.py <repo>`；finalize：`python3 /data/usershare/ai/pipeline-bin/understand/finalize_graph.py <repo>`
+- 批终验：`python3 /tmp/ua2/verify_batch.py <repo> <N>`（part 文件聚合）；merge：`python3 ~/.agents/skills/understand/merge-batch-graphs.py <repo>`；finalize：`python3 ~/ai/pipeline-bin/understand/finalize_graph.py <repo>`
 - 台账：仓内 `.understand-anything/PROGRESS.md`；派发模板：`DISPATCH-TEMPLATE.md`

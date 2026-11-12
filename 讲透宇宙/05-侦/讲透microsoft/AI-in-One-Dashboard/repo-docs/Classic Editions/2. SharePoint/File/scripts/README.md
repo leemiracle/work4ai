@@ -16,6 +16,6 @@ Three subfolders, by who runs the script and how often.
 
 ## Common errors and fixes
 
-See the parent [`README.md`](../../../../../../../../README.md#troubleshooting) for the troubleshooting table — same issues apply across all subfolders.
+See the parent `README.md` for the troubleshooting table — same issues apply across all subfolders.
 
 For Azure Automation specifically, see [`../azure/`](../azure) for Bicep templates + runbook examples that wire the `appreg/` scripts up to a managed-identity-enabled Automation Account.

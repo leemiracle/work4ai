@@ -177,7 +177,7 @@ token 计数的**资产化**是这条线的精髓（`router/tokenizer.py`）：`
 
 ## 8. 深入索引
 
-**图谱资产**（`/data/usershare/ai/inference/.understand-anything/`）：
+**图谱资产**（`~/ai/inference/.understand-anything/`）：
 
 - `knowledge-graph.json`——全量图谱（2785 节点/5826 边），节点 id 形如 `file:xinference/core/supervisor.py`、`class:AudioEngineModel`，可按 id 精确定位；
 - `onboard-input.json`——本文档的输入（14 层分层 + 16 步 tour + 30 个 hub 节点带摘要），想看某层的完整代表文件清单直接查 `layers[].representativeNodes`；

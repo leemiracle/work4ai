@@ -1,6 +1,6 @@
 # omarchy-深读 —— DeepWiki 全量归档 + quattro 文档产出的知识模块
 
-> **触发**：把 DeepWiki（https://deepwiki.com/basecamp/omarchy）39 子页全量蒸馏，与本地分叉 `/data/usershare/linux-src/omarchy-quattro`（v4.0.0.alpha）逐条对照，补齐其 `docs/` 主题空缺——"AI coding agent 的一等公民桌面"的完整设计在此归档。
+> **触发**：把 DeepWiki（https://deepwiki.com/basecamp/omarchy）39 子页全量蒸馏，与本地分叉 `~/linux-src/omarchy-quattro`（v4.0.0.alpha）逐条对照，补齐其 `docs/` 主题空缺——"AI coding agent 的一等公民桌面"的完整设计在此归档。
 > **管线**：DeepWiki MCP（`read_wiki_structure` + `read_wiki_contents`，一次返回全 wiki 含 mermaid）→ 全文归档三件套 → wiki 断言逐条对 quattro 代码核实 → 新增 10 页 repo docs + 深读卡。同 `../../../../讲透宇宙/01-学/讲透Agent//Agent框架案例/DeepWiki深读卡/` 管线，但 omarchy 非 agent 仓，独立成模块。
 > **执行日**：2026-08-25（wiki 索引 2026-08-18 @ fa955b）
 

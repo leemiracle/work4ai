@@ -78,7 +78,7 @@
 
 📄 完整清单：[`主线LLVM_FTC86_源码确认.md`](./主线LLVM_FTC86_源码确认.md)
 
-**结论**：LLVM 23.0.0git 全树（`llvm/`+`clang/`+`AArch64/`）grep `FTC86|FTC66|Phytium|ftc86|ftc66|phytium` **零命中** `[实测-grep]`（路径 `/data/usershare/ai/riscv/OpenXiangShan/llvm-project/`）。
+**结论**：LLVM 23.0.0git 全树（`llvm/`+`clang/`+`AArch64/`）grep `FTC86|FTC66|Phytium|ftc86|ftc66|phytium` **零命中** `[实测-grep]`（路径 `~/ai/riscv/OpenXiangShan/llvm-project/`）。
 
 34 个 AArch64 调度模型（`AArch64Sched*.td`）中**无飞腾**，但有：
 - **华为 TSV110**（鲲鹏 920）：`AArch64Processors.td:833/1544`，带 `TSV110Model`——华为向 LLVM 上游贡献的

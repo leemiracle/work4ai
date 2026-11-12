@@ -14,7 +14,7 @@ Lakehouse Files/{audit_raw,licensed_raw,org_raw}/
 PySpark notebook (parse / load) → Delta tables
 ```
 
-The current flow is a **one-stage Direct Ingester**: a single PySpark notebook authenticates to Microsoft Graph and writes Delta tables directly. No CSV landing step, no PowerShell, no app reg secrets stored on the operator's laptop. Scheduled via the [`../pipelines/CopilotAdoptionPipeline.DataPipeline/`](../pipelines/CopilotAdoptionPipeline.DataPipeline) Fabric Data Pipeline.
+The current flow is a **one-stage Direct Ingester**: a single PySpark notebook authenticates to Microsoft Graph and writes Delta tables directly. No CSV landing step, no PowerShell, no app reg secrets stored on the operator's laptop. Scheduled via the `../pipelines/CopilotAdoptionPipeline.DataPipeline/` Fabric Data Pipeline.
 
 | Concern | Legacy 2-stage flow | Direct Ingester (current) |
 |---|---|---|
@@ -31,7 +31,7 @@ If you're a customer running the legacy flow today:
 2. Run the three Direct Ingester notebooks under [`../notebooks/`](../notebooks) — they produce the same Delta tables, so your PBIT and any downstream consumers keep working.
 3. The Lakehouse `Files/audit_raw/`, `Files/licensed_raw/`, `Files/org_raw/` folders can stay (notebooks ignore them) or be cleaned up.
 4. Once you've verified a successful Direct Ingester run, the app registration created for the legacy flow can be reused — it has the same Graph permissions.
-5. Optionally: import the new [`../pipelines/CopilotAdoptionPipeline.DataPipeline/`](../pipelines/CopilotAdoptionPipeline.DataPipeline) into your workspace to schedule the Direct Ingesters automatically.
+5. Optionally: import the new `../pipelines/CopilotAdoptionPipeline.DataPipeline/` into your workspace to schedule the Direct Ingesters automatically.
 
 ## What's in here
 

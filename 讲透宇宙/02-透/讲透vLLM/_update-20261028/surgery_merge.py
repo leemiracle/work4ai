@@ -6,7 +6,7 @@
 import json, os, sys, glob, collections
 
 REPO = '/usr-data/data2/repos/pytorch-landscape/repos/vllm'
-W = '/data/usershare/ai/work4ai/讲透vLLM/_update-20261028'
+W = '~/ai/work4ai/讲透vLLM/_update-20261028'
 DRY = '--dry' in sys.argv
 
 delta = json.load(open(f'{W}/delta.json'))

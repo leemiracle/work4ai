@@ -1,6 +1,6 @@
 # PyTorch 架构全景（2026-09 版）
 
-> **文档来源三重交叉验证**：DeepWiki pytorch/pytorch 全量 80 页（indexed 2026-09-02 @ `580b06`）× 本地仓库源码（`/data/usershare/pytorch` @ `f634d0e`）× understand 知识图谱（637 文件 / 4730 节点 / 10744 边）。
+> **文档来源三重交叉验证**：DeepWiki pytorch/pytorch 全量 80 页（indexed 2026-09-02 @ `580b06`）× 本地仓库源码（`~/pytorch` @ `f634d0e`）× understand 知识图谱（637 文件 / 4730 节点 / 10744 边）。
 > 本文档是「讲透PyTorch源码」系列的架构总纲，细节请下钻 `deepwiki/`（按页）与 `重要文件讲解/`（按文件）。
 
 ---
@@ -127,7 +127,7 @@
               对照 deepwiki ch2 相应页
 第三遍（按需）：06-10（Inductor/c10d/TensorImpl/Module/FX）+ ch3/ch4 深读
 工具：understand/knowledge-graph.json 用 /understand-dashboard 交互浏览
-      （在 /data/usershare/pytorch 下启动；图谱绑定本地 commit f634d0e）
+      （在 ~/pytorch 下启动；图谱绑定本地 commit f634d0e）
 ```
 
 ---

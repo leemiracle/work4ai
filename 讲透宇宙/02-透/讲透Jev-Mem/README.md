@@ -29,7 +29,7 @@ Jev，把**深层推理**留给 System-Two LLM——LoCoMo 上 GPT-4o-mini 报�
 7. **Glossary**
 
 抓取通道：`mcp.deepwiki.com/mcp`（网页端 Vercel 盾，MCP 直连可用），工具
-`/data/usershare/ai/pipeline-bin/deepwiki/dw_fetch_mcp.py`。每页自带 `<details>`
+`~/ai/pipeline-bin/deepwiki/dw_fetch_mcp.py`。每页自带 `<details>`
 源文件清单 + file:line 引用锚（understand 阶段交叉对账已用）。
 
 > 坑（钉版）：dw_fetch_mcp.py 结构解析只认两层缩进，3.3.1/3.3.2 三层嵌套子页会被
@@ -106,7 +106,7 @@ LongMemEval → 实验档 → 测试/CI/发布。
 
 ## 流水线工具（本轮固化）
 
-understand 步全链五件套已固化 `/data/usershare/ai/pipeline-bin/understand/`：
+understand 步全链五件套已固化 `~/ai/pipeline-bin/understand/`：
 `prepare_understand.sh`（scan+import-map+batches）→ `phase4_prep.py`（file 级精简输入）
 → `finalize_graph.py`（组装+0 issues 闸+fingerprints+meta）→ `onboard_prep.py`
 （子代理安全输入）→ `ua-inline-validate.cjs`。批分析 4 并发子代理派发模板

@@ -18,7 +18,7 @@
 
 ## 输出
 
-写 `/data/usershare/ai/work4ai/讲透Vide/dev/parts/{UNIT}.md`（先确保目录存在）。
+写 `~/ai/work4ai/讲透Vide/dev/parts/{UNIT}.md`（先确保目录存在）。
 
 结构：
 ```markdown

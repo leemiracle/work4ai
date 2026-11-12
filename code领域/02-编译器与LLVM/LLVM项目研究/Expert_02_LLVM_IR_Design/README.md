@@ -387,7 +387,7 @@ Bitcode（`.bc`）是 LLVM IR 的二进制序列化格式。设计初衷是"**�
 
 ### 2.10 飞腾反向锚点：主线 LLVM 无 FTC86 调度模型，IR 层意味着什么
 
-**特异性测试 a 实证**：`grep -rn "Phytium|FTC86|ftc86|phytium" /data/usershare/ai/riscv/OpenXiangShan/llvm-project/llvm/` **零命中**。
+**特异性测试 a 实证**：`grep -rn "Phytium|FTC86|ftc86|phytium" ~/ai/riscv/OpenXiangShan/llvm-project/llvm/` **零命中**。
 
 这意味着：飞腾 FTC862 在主线 LLVM 的 IR 层**没有任何特化**。后果：
 

@@ -36,10 +36,10 @@ lobehub(6629ts) · pinpoint(8266java) · coze-studio(10970ts)
 
 ## 流水线命令（钉版，全在 pipeline-bin/understand/）
 ```bash
-bash /data/usershare/ai/pipeline-bin/understand/prepare_understand.sh <repo> <name> <中文描述>
+bash ~/ai/pipeline-bin/understand/prepare_understand.sh <repo> <name> <中文描述>
 # 4 并发子代理批分析（file-analyzer.md + batches.json batchIndex 从 1 起 + 写 batch-N.json 无 slug + 禁原仓编译 + imports 对账）
 python3 /home/lwz/.agents/skills/understand/merge-batch-graphs.py <repo>
-python3 /data/usershare/ai/pipeline-bin/understand/phase4_prep.py <repo>   # layers/tour 任务输入
-python3 /data/usershare/ai/pipeline-bin/understand/finalize_graph.py <repo>  # 组装+0issues+fingerprint
-python3 /data/usershare/ai/pipeline-bin/understand/onboard_prep.py <repo>    # onboard 输入
+python3 ~/ai/pipeline-bin/understand/phase4_prep.py <repo>   # layers/tour 任务输入
+python3 ~/ai/pipeline-bin/understand/finalize_graph.py <repo>  # 组装+0issues+fingerprint
+python3 ~/ai/pipeline-bin/understand/onboard_prep.py <repo>    # onboard 输入
 ```

@@ -18,7 +18,7 @@ Scheduled orchestration for the Direct Ingester notebooks. Two ways to use:
 
 3. **Create a new pipeline** in Fabric:
    - Workspace → **+ New** → **Data pipeline** → name it `CopilotAdoptionPipeline`
-   - Use the JSON view (toolbar → **View** → **JSON** or "Code") and paste the contents of [`CopilotAdoptionPipeline.DataPipeline/pipeline-content.json`](CopilotAdoptionPipeline.DataPipeline/pipeline-content.json)
+   - Use the JSON view (toolbar → **View** → **JSON** or "Code") and paste the contents of `CopilotAdoptionPipeline.DataPipeline/pipeline-content.json`
    - Replace the 4 placeholder values:
      - `REPLACE_WITH_AUDIT_LOG_NOTEBOOK_ID` → your audit-log notebook GUID
      - `REPLACE_WITH_LICENSED_USERS_NOTEBOOK_ID` → your users notebook GUID

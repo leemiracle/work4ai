@@ -1,7 +1,7 @@
 # 讲透 goose
 
 > aaif-goose/goose（Block 出品，AAIF 聚合）—— Rust 开源 AI agent 全家桶：crates 架构（agent core/provider/MCP 扩展）+ 桌面端（Electron UI）+ CLI + ACP server + Recipes 调度。
-> 本地仓：/usr-data/data2/repos/aaif-projects/repos/goose（HEAD 390dfb8c，迁移自 /data/usershare/ai/explore/ai-trending/goose，原路径软链回读）
+> 本地仓：/usr-data/data2/repos/aaif-projects/repos/goose（HEAD 390dfb8c，迁移自 ~/ai/explore/ai-trending/goose，原路径软链回读）
 
 ## 状态（2026-10-23 全链完成 ✅）
 

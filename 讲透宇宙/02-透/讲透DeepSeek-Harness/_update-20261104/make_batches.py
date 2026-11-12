@@ -3,7 +3,7 @@
 v1 教训：按包分组导致 615 组/645 批（均值 6 文件）——dsh 是 379 微包仓，必须跨包合并"""
 import json, os, collections
 
-W = '/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104'
+W = '~/ai/work4ai/讲透DeepSeek-Harness/_update-20261104'
 files = json.load(open(f'{W}/reanalyze-set.json'))['files']
 
 PRIORITY = [

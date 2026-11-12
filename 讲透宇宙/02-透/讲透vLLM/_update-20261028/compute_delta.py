@@ -4,7 +4,7 @@ import json, subprocess, os, sys, collections
 
 REPO = '/usr-data/data2/repos/pytorch-landscape/repos/vllm'
 UA = os.path.join(REPO, '.understand-anything')
-OUT = '/data/usershare/ai/work4ai/讲透vLLM/_update-20261028'
+OUT = '~/ai/work4ai/讲透vLLM/_update-20261028'
 BASELINE = '7894394b0759ba0f2d9c9cca249a6e49ecdd814f'
 
 # 1. 旧图谱节点归因（所有带 filePath 的节点）

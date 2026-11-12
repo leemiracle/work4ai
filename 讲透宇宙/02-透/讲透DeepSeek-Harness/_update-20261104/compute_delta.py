@@ -5,7 +5,7 @@ import json, subprocess, os, sys, collections
 
 REPO = '/usr-data/data2/repos/deepseek-ai/deepseek-harness'
 UA = os.path.join(REPO, '.understand-anything')
-OUT = '/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104'
+OUT = '~/ai/work4ai/讲透DeepSeek-Harness/_update-20261104'
 BASELINE = '76fda729799f'
 
 # 1. 旧图谱节点归因（所有带 filePath 的节点）

@@ -6,7 +6,7 @@ import json, os, re, sys
 from collections import Counter
 from importlib import import_module
 
-BASE = '/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104'
+BASE = '~/ai/work4ai/讲透DeepSeek-Harness/_update-20261104'
 ROOT = '/usr-data/data2/repos/deepseek-ai/deepseek-harness'
 EXT = json.load(open(os.path.join(BASE, 'extracted.json')))
 MANUAL_RESOLVE = {

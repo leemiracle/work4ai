@@ -3,7 +3,7 @@
 - 生成：2026-09-03（understand --language zh 全链路）· git commit `af61b2a307d6`
 - 规模：**86 节点 / 136 边 / 5 架构层 / 9 步导览**
 - 校验：内联校验 0 issue（详见 FINAL-REPORT）
-- 交互：在本体仓（/data/usershare/ai/EvoKernel）运行 /understand-dashboard 或 /understand-chat 查询
+- 交互：在本体仓（~/ai/EvoKernel）运行 /understand-dashboard 或 /understand-chat 查询
 
 ## 节点类型分布
 

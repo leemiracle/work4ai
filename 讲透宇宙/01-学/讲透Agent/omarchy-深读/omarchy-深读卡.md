@@ -1,7 +1,7 @@
 # omarchy 深读卡 —— AI 编码 Agent 的一等公民桌面：把 agent 选择/启动/用量/崩溃诊断做进 OS 层的 Hyprland 发行版
 
 > **定位**：omarchy（basecamp/omarchy，MIT，DHH）是基于 Arch + Hyprland + Quickshell 的 opinionated 桌面发行版。对 work4ai 的价值不在"又一个 Linux 发行版"，而在它是**第一个把 AI coding agent 当系统组件设计的桌面**：`omarchy-agent` 家族（默认 agent 选择/无值守启动/别名 `a`）、用量采集管线（Claude/Codex/Fireworks 本地 transcript 扫描 + 官方限额端点 → 面板）、崩溃自动诊断（coredumpctl → 默认 agent + diagnose-crash skill）、以及 AGENTS.md/skills 的 agent 工程约定。工程侧的 bash 元数据路由、Lua 分层 Hyprland 配置、Btrfs+Snapper+Limine 快照回滚 update 管线、Quickshell 插件 IPC 桌面，都是可迁移的系统设计范式。
-> **本地**：`/data/usershare/linux-src/omarchy-quattro`（v4.0.0.alpha 分叉，即上游 v4 线的本地工作副本）｜**深读**：deepwiki 39 子页归档 `deepwiki/omarchy/full.md`（2026-08-25 抓取，wiki 索引 2026-08-18 @ fa955b）｜**文档产出**：向 quattro `docs/` 新增 10 页（见 `quattro文档映射-2026-08-25.md`）
+> **本地**：`~/linux-src/omarchy-quattro`（v4.0.0.alpha 分叉，即上游 v4 线的本地工作副本）｜**深读**：deepwiki 39 子页归档 `deepwiki/omarchy/full.md`（2026-08-25 抓取，wiki 索引 2026-08-18 @ fa955b）｜**文档产出**：向 quattro `docs/` 新增 10 页（见 `quattro文档映射-2026-08-25.md`）
 
 ## 一、组件栈（DeepWiki 蒸馏 + quattro 本地修正）
 

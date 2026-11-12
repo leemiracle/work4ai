@@ -532,13 +532,13 @@ Lopes et al 2022 (Alive2: Verifying LLVM Passes)
 
 | 资源 | 路径 | 用途 |
 |------|------|------|
-| **飞腾 Linux 内核** | `/data/usershare/ai/飞腾/phytium_repos/phytium-linux-kernel/` | 内核编译（GCC/Clang） |
-| **飞腾 Yocto** | `/data/usershare/ai/飞腾/phytium_repos/phytium-linux-yocto/` | **含 LLVM 13.0.1 recipe**（飞腾嵌入式用） |
-| **飞腾 Android 11 设备树** | `/data/usershare/ai/飞腾/phytium_repos/e2000-android11-device/` | **含 LLVM 精简版（external_llvm-project）** |
-| **飞腾 FreeBSD** | `/data/usershare/ai/飞腾/phytium_repos/freebsd/` | **含 LLVM ports**（clang/lld/lldb/compiler-rt/libcxx） |
-| **飞腾 Buildroot** | `/data/usershare/ai/飞腾/phytium_repos/buildroot*/` | 嵌入式交叉编译 |
-| **飞腾 NPU SDK**（TVM fork） | `/data/usershare/ai/飞腾/phytium_repos/opt-npu/ncsdk/common/phytvm/` | ⚠️ **是 Apache TVM fork**（非飞腾自研 LLVM 后端，oracle §0.3 已澄清） |
-| **OpenXiangShan LLVM** | `/data/usershare/ai/riscv/OpenXiangShan/llvm-project/` | 完整 LLVM monorepo（22 子项目），本项目代码级实例主源 |
+| **飞腾 Linux 内核** | `~/ai/飞腾/phytium_repos/phytium-linux-kernel/` | 内核编译（GCC/Clang） |
+| **飞腾 Yocto** | `~/ai/飞腾/phytium_repos/phytium-linux-yocto/` | **含 LLVM 13.0.1 recipe**（飞腾嵌入式用） |
+| **飞腾 Android 11 设备树** | `~/ai/飞腾/phytium_repos/e2000-android11-device/` | **含 LLVM 精简版（external_llvm-project）** |
+| **飞腾 FreeBSD** | `~/ai/飞腾/phytium_repos/freebsd/` | **含 LLVM ports**（clang/lld/lldb/compiler-rt/libcxx） |
+| **飞腾 Buildroot** | `~/ai/飞腾/phytium_repos/buildroot*/` | 嵌入式交叉编译 |
+| **飞腾 NPU SDK**（TVM fork） | `~/ai/飞腾/phytium_repos/opt-npu/ncsdk/common/phytvm/` | ⚠️ **是 Apache TVM fork**（非飞腾自研 LLVM 后端，oracle §0.3 已澄清） |
+| **OpenXiangShan LLVM** | `~/ai/riscv/OpenXiangShan/llvm-project/` | 完整 LLVM monorepo（22 子项目），本项目代码级实例主源 |
 
 ### 11.4 国产 CPU 厂商 LLVM/GCC 生态（开源可查部分）
 

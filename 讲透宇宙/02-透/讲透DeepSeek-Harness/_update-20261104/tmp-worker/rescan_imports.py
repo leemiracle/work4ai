@@ -16,7 +16,7 @@ import sys
 from collections import OrderedDict
 
 ROOT = "/usr-data/data2/repos/deepseek-ai/deepseek-harness"
-BASE = "/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104"
+BASE = "~/ai/work4ai/讲透DeepSeek-Harness/_update-20261104"
 PKGMAP = json.load(open(os.path.join(BASE, "packages-map.json")))
 
 IMPORT_RE = re.compile(

@@ -137,12 +137,12 @@ LLVM项目研究/
 
 | 资源 | 路径 | 用途 |
 |------|------|------|
-| LLVM monorepo（22 子项目全） | `/data/usershare/ai/riscv/OpenXiangShan/llvm-project/` | 代码级实例素材库 |
-| 飞腾 OS/固件/嵌入式生态 | `/data/usershare/ai/飞腾/phytium_repos/` | 飞腾工程实证素材库（45 目录） |
-| 飞腾 NPU SDK（TVM fork） | `/data/usershare/ai/飞腾/phytium_repos/opt-npu/ncsdk/common/phytvm/` | E18 必做 diff |
-| Yocto LLVM recipe | `/data/usershare/ai/飞腾/phytium_repos/phytium-linux-yocto/.../llvm/` | E12/E17 实证 |
-| Android 11 LLVM | `/data/usershare/ai/飞腾/phytium_repos/e2000-android11-device/external_llvm-project/` | E17/E18 实证 |
-| FreeBSD LLVM ports | `/data/usershare/ai/飞腾/phytium_repos/freebsd/contrib/llvm-project/` | E12/E17/E18 实证 |
+| LLVM monorepo（22 子项目全） | `~/ai/riscv/OpenXiangShan/llvm-project/` | 代码级实例素材库 |
+| 飞腾 OS/固件/嵌入式生态 | `~/ai/飞腾/phytium_repos/` | 飞腾工程实证素材库（45 目录） |
+| 飞腾 NPU SDK（TVM fork） | `~/ai/飞腾/phytium_repos/opt-npu/ncsdk/common/phytvm/` | E18 必做 diff |
+| Yocto LLVM recipe | `~/ai/飞腾/phytium_repos/phytium-linux-yocto/.../llvm/` | E12/E17 实证 |
+| Android 11 LLVM | `~/ai/飞腾/phytium_repos/e2000-android11-device/external_llvm-project/` | E17/E18 实证 |
+| FreeBSD LLVM ports | `~/ai/飞腾/phytium_repos/freebsd/contrib/llvm-project/` | E12/E17/E18 实证 |
 
 ---
 
@@ -204,8 +204,8 @@ cat oracle战略评审.md
 cat ../体系结构实验/Expert_11_Compiler_Research/README.md
 
 # 4. 探查本地资源
-ls /data/usershare/ai/riscv/OpenXiangShan/llvm-project/<子项目>/
-ls /data/usershare/ai/飞腾/phytium_repos/
+ls ~/ai/riscv/OpenXiangShan/llvm-project/<子项目>/
+ls ~/ai/飞腾/phytium_repos/
 
 # 5. 按 Expert 模板（宪法 §8）起草
 ```

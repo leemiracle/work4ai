@@ -7,7 +7,7 @@
 import json, os, sys, glob, collections
 
 REPO = '/usr-data/data2/repos/deepseek-ai/deepseek-harness'
-W = '/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104'
+W = '~/ai/work4ai/讲透DeepSeek-Harness/_update-20261104'
 DRY = '--dry' in sys.argv
 
 delta = json.load(open(f'{W}/delta.json'))

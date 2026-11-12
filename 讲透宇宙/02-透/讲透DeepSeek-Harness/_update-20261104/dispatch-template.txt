@@ -4,11 +4,11 @@
 /home/lwz/.understand-anything-plugin/agents/file-analyzer.md
 
 ## 你的批次
-/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104/batches/batch-{NNN}.json
+~/ai/work4ai/讲透DeepSeek-Harness/_update-20261104/batches/batch-{NNN}.json
 （每个文件含 batchIndex 与 files 列表，路径相对仓根 /usr-data/data2/repos/deepseek-ai/deepseek-harness）
 
 ## 产出（每批一个文件，做完一批立即落盘，防中断丢稿）
-/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104/products/batch-{NNN}.json
+~/ai/work4ai/讲透DeepSeek-Harness/_update-20261104/products/batch-{NNN}.json
 格式：{"nodes":[...], "edges":[...]}，与下列真实样例同构：
 节点: {"id":"class:packages/core/session/session.ts:SessionManager","type":"class","name":"SessionManager","filePath":"packages/core/session/session.ts","lineRange":[91,330],"summary":"中文一句话职责","tags":["..."],"complexity":"simple|moderate|complex"}
      file 级节点 id 为 "file:<相对路径>"，必须有（每文件≥1个）；class/function 节点 id 为 "class:<路径>:<名>"/"function:<路径>:<名>"，带 lineRange。
@@ -18,7 +18,7 @@
 ## 硬性质量条款（钉版，历轮实证）
 1. **行号锚从源码核实，禁止凭记忆**——lineRange 必须打开文件确认；summary 必须基于真实读到的代码，任务书/直觉与源码冲突时以源码为准并如实描述。
 2. **imports 1:1 对账**——用 re.S 多行正则重扫源码（单行正则会漏多行 `import {...} from`）；每条 imports 边的目标路径必须在磁盘上验证存在。本仓三类解析：
-   a. `@deepseek-ai/dsh-*` 包名导入 → 查 /data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104/packages-map.json（379 包名→目录映射）；包根导入（如 '@deepseek-ai/dsh-util'）目标为该包 src/index.ts。
+   a. `@deepseek-ai/dsh-*` 包名导入 → 查 ~/ai/work4ai/讲透DeepSeek-Harness/_update-20261104/packages-map.json（379 包名→目录映射）；包根导入（如 '@deepseek-ai/dsh-util'）目标为该包 src/index.ts。
    b. 相对导入（'./x' '../y/z'）——本仓 ESM 相对导入常带 .js/.ts 显式扩展名，'./x.js' 实际指 './x.ts'，剥 .js 补 .ts 再验证；无扩展名则依次试 .ts/.tsx/index.ts。
    c. `import type` 与动态 `import()` 都是真实依赖，收 imports 边。
 3. **Cordis 插件语义**：define()/inject 声明、ctx.effect/ctx.on 注册、Service 抽象类继承（extends Service）都是重要信号——Service 子类建 class 节点，summary 点明它是 Service Definition/Provider/Consumer 哪个角色（若可判断）。

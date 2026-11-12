@@ -12,7 +12,7 @@ import re
 from datetime import date
 from pathlib import Path
 
-BASE = Path("/data/usershare/ai/work4ai/讲透AwesomeAgents")
+BASE = Path("~/ai/work4ai/讲透AwesomeAgents")
 
 
 def parse_structure(path):

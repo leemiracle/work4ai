@@ -1,6 +1,6 @@
 # 讲透PyTorch源码 —— PyTorch 源码深度学习专区
 
-> 创建：2026-09-03 ｜ 源仓库：`/data/usershare/pytorch`（HEAD `f634d0e`, main）
+> 创建：2026-09-03 ｜ 源仓库：`~/pytorch`（HEAD `f634d0e`, main）
 > 数据源：DeepWiki pytorch/pytorch 全量 80 页（@580b06，2026-09-02 索引）+ understand 知识图谱（637 文件/4730 节点）+ 10 篇源码精读
 
 ## 📚 目录导航
@@ -44,12 +44,12 @@
 
 ```bash
 # 交互式浏览（在 pytorch 仓库目录下）
-cd /data/usershare/pytorch
+cd ~/pytorch
 # 然后运行 /understand-dashboard（understand-anything 插件）
 # 图谱位置: .understand-anything/knowledge-graph.json（与本目录副本同源）
 
 # 增量更新图谱
-cd /data/usershare/pytorch && /understand   # 自动检测 f634d0e 之后的变更
+cd ~/pytorch && /understand   # 自动检测 f634d0e 之后的变更
 ```
 
 ## ⚠️ 阅读须知
@@ -62,7 +62,7 @@ cd /data/usershare/pytorch && /understand   # 自动检测 f634d0e 之后的变�
 
 ## 🔗 四层编译管线视角（2026-09-03 补）
 
-模型运行流程的统一抽象（与 vLLM 共享，**hpc-agent 项目总索引**：`/data/usershare/ai/hpc-agent/docs/FOUR-LAYER-PIPELINE.md`）：
+模型运行流程的统一抽象（与 vLLM 共享，**hpc-agent 项目总索引**：`~/ai/hpc-agent/docs/FOUR-LAYER-PIPELINE.md`）：
 
 ```
 L1 Python 定义 ──→ L2 算子图 ──→ L3 算子 ──→ L4 硬件指令

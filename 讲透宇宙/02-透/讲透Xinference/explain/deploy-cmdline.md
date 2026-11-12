@@ -1,6 +1,6 @@
 # deploy/cmdline.py — CLI 入口与 xinference-local 启动链精讲
 
-> 仓库 `/data/usershare/ai/inference`（包 `xinference/`），文件 1876 行。
+> 仓库 `~/ai/inference`（包 `xinference/`），文件 1876 行。
 
 ## 一、角色定位
 

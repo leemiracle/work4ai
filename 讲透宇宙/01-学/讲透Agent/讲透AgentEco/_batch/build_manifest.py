@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path("/usr-data/data1/agent/repo/agent")
-BATCH = Path("/data/usershare/ai/work4ai/讲透AgentEco/_batch")
+BATCH = Path("~/ai/work4ai/讲透AgentEco/_batch")
 
 # 常见 github 镜像域名（路径直接镜像 github）——剥壳后取前两段
 MIRROR_HOSTS = ("kkgithub.com", "bgithub.xyz", "hub.fastgit.xyz", "gitclone.com",

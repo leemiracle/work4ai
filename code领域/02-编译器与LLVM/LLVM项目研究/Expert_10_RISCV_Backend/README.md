@@ -18,7 +18,7 @@
 
 ## §0. 必须先看的事实：本次 grep 实证全表
 
-> 本节是全文的"证据底座"，所有后续判断都从这里出。实测对象：`/data/usershare/ai/riscv/OpenXiangShan/llvm-project/llvm/lib/Target/RISCV/`（LLVM 23.0.0git 主线），实测日期 2026-07-07。
+> 本节是全文的"证据底座"，所有后续判断都从这里出。实测对象：`~/ai/riscv/OpenXiangShan/llvm-project/llvm/lib/Target/RISCV/`（LLVM 23.0.0git 主线），实测日期 2026-07-07。
 
 ### 0.1 RISC-V 后端后端目录全貌（`ls llvm/lib/Target/RISCV/` 实测）
 
@@ -523,7 +523,7 @@ Lens_07 §2.3 已论证"自研 ISA + upstream 框架 + 自家 maintainer 是现�
 
 ### GitHub / 开源仓库（实测）
 
-9. **[实测]** 本项目 grep `/data/usershare/ai/riscv/OpenXiangShan/llvm-project/llvm/lib/Target/RISCV/`，关键词 `xiangshan|nanhu|spacemit|thead|sg2042|sifive|FTC86|phytium`（2026-07-07）—— §0.3 国产痕迹全表，§2.3 核心实证。
+9. **[实测]** 本项目 grep `~/ai/riscv/OpenXiangShan/llvm-project/llvm/lib/Target/RISCV/`，关键词 `xiangshan|nanhu|spacemit|thead|sg2042|sifive|FTC86|phytium`（2026-07-07）—— §0.3 国产痕迹全表，§2.3 核心实证。
 10. **[实测]** 本项目 `ls llvm/lib/Target/RISCV/RISCVSched*.td`（2026-07-07）—— §0.2 调度模型 15 套清单。
 11. **[GitHub]** llvm/llvm-project, *RISCVRegisterInfo.td vscale 注释*（:586-598）, 访问 2026-07-07. —— §2.1 `vscale = VLEN/64` 的源码锚点。
 12. **[GitHub]** llvm/llvm-project, *RISCVInsertVSETVLI.cpp*（1087 行, 3-phase dataflow）, 访问 2026-07-07. —— §2.11 VSETVLI 心脏 Pass 源码。

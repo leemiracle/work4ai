@@ -38,7 +38,7 @@ hpc-agent 论文线（TRANSFER-LAWS）的四个竞对/关联项目的系统性�
 └── regrapht/       {同构, explain/(4篇)}
 ```
 
-本体仓路径（图谱交互用）：`/data/usershare/ai/{KernelBlaster,KernelMem,EvoKernel,ReGraphT}`——各仓 `.understand-anything/knowledge-graph.json` 支持 understand 增量更新（fingerprints 基线已建）。
+本体仓路径（图谱交互用）：`~/ai/{KernelBlaster,KernelMem,EvoKernel,ReGraphT}`——各仓 `.understand-anything/knowledge-graph.json` 支持 understand 增量更新（fingerprints 基线已建）。
 
 ## 推荐阅读路径
 

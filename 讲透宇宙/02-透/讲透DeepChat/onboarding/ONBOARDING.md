@@ -137,6 +137,6 @@ pnpm build:unpack   # 本地验证 electron-builder 目录包
 ## 8. 深入资源
 
 - **知识图谱**：`/usr-data/data1/browser/deepchat/.understand-anything/knowledge-graph.json`（7093 节点/16655 边）+ 同目录 `layers.json`（15 层）、`tour.json`（16 步）。入度之王可当必读清单：`agent-interface.d.ts`（221）、`shadcn/lib/utils.ts` 的 cn()（222）、`agentSessionIds.ts`（47）。
-- **DeepWiki 文档**：`/data/usershare/ai/work4ai/讲透DeepChat/deepwiki/`（INDEX.md，9 章 56 页）。
+- **DeepWiki 文档**：`~/ai/work4ai/讲透DeepChat/deepwiki/`（INDEX.md，9 章 56 页）。
 - **16 步导览清单**：①全景与三进程 ②启动与组合根 ③共享契约 ④进程边界 ⑤Tape 与投影 ⑥记忆与知识 ⑦Agent 运行时 ⑧编排与 ACP ⑨Provider ⑩工具与安全 ⑪辅助域 ⑫渲染 API ⑬主界面装配 ⑭辅助窗口 ⑮组件库 ⑯i18n。
 - 仓库自带 `AGENTS.md`/`CONTRIBUTING.md`，改前必读。

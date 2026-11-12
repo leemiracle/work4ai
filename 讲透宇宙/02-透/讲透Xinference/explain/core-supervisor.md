@@ -1,6 +1,6 @@
 # core/supervisor.py — SupervisorActor 集群中枢精讲
 
-> 仓库 `/data/usershare/ai/inference`（包 `xinference/`），文件 7120 行。
+> 仓库 `~/ai/inference`（包 `xinference/`），文件 7120 行。
 
 ## 一、角色定位
 

@@ -112,6 +112,6 @@
 ## 8. 延伸阅读
 
 - **知识图谱**：`/usr-data/data2/repos/termux-repo/termux-x11/.understand-anything/knowledge-graph.json`（519 节点/923 边/12 层/16 步 tour，commit 29d4460b）；本仓 30 个枢纽节点中最高连接度集中在 MainActivity/LorieView/lorie.h/buffer.c 四处，即上文反复出现的四个名字。
-- **DeepWiki 快照**：`/data/usershare/ai/work4ai/讲透Termux/termux-x11/deepwiki/`（21/21 页 100%，2026-10-26 抓取；2.4 节 Shared memory and IPC 与本文第 5.2 小节互为印证）。
+- **DeepWiki 快照**：`~/ai/work4ai/讲透Termux/termux-x11/deepwiki/`（21/21 页 100%，2026-10-26 抓取；2.4 节 Shared memory and IPC 与本文第 5.2 小节互为印证）。
 - **上游**：Xorg xserver（gitlab.freedesktop.org/xorg/xserver）——读本仓 patches/xserver.patch 时开着上游源码对照；Chromium Remoting 输入管线是 input/ 目录的血统来源；libandroid-shmem 独立子项目在 GitHub 另有上游（本仓 shm/ 为内嵌版）。
 - **姊妹仓**：termux-packages 的 x11-packages/ 是 X11 应用生态的打包侧；termux-app 是宿主终端。

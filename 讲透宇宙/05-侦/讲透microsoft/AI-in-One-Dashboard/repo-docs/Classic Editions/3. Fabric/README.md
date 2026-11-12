@@ -8,11 +8,11 @@ This is the **fastest, most reliable** way to run the AI-in-One Dashboard on rea
 
 | Item | Purpose |
 |---|---|
-| [`AI-in-One Dashboard - Fabric.pbit`](AI-in-One%20Dashboard%20-%20Fabric.pbit) | The Power BI template (thin client — sources all three input tables from a Lakehouse SQL endpoint) |
-| [`notebooks/Copilot_Audit_Log_Direct_Ingester.ipynb`](notebooks/Copilot_Audit_Log_Direct_Ingester.ipynb) | Calls the Graph audit-log API → `dbo.copilot_interactions_parsed` |
-| [`notebooks/Copilot_Licensed_Users_Direct_Ingester.ipynb`](notebooks/Copilot_Licensed_Users_Direct_Ingester.ipynb) | Calls the Graph M365 active-user report → `dbo.copilot_licensed_users` |
-| [`notebooks/Copilot_Org_Data_Direct_Ingester.ipynb`](notebooks/Copilot_Org_Data_Direct_Ingester.ipynb) | Calls Graph `/users` (with manager expand) → `dbo.copilot_org_data` |
-| [`pipelines/CopilotAdoptionPipeline.DataPipeline/`](pipelines/CopilotAdoptionPipeline.DataPipeline) | Fabric Data Pipeline that orchestrates the three Direct Ingester notebooks on a schedule (audit → in parallel: licensed users + org data) |
+| `AI-in-One Dashboard - Fabric.pbit` | The Power BI template (thin client — sources all three input tables from a Lakehouse SQL endpoint) |
+| `notebooks/Copilot_Audit_Log_Direct_Ingester.ipynb` | Calls the Graph audit-log API → `dbo.copilot_interactions_parsed` |
+| `notebooks/Copilot_Licensed_Users_Direct_Ingester.ipynb` | Calls the Graph M365 active-user report → `dbo.copilot_licensed_users` |
+| `notebooks/Copilot_Org_Data_Direct_Ingester.ipynb` | Calls Graph `/users` (with manager expand) → `dbo.copilot_org_data` |
+| `pipelines/CopilotAdoptionPipeline.DataPipeline/` | Fabric Data Pipeline that orchestrates the three Direct Ingester notebooks on a schedule (audit → in parallel: licensed users + org data) |
 | [`archive/`](archive) | The legacy two-stage flow (PowerShell → CSVs → Parser/Loader notebooks). Kept for migration reference only. See [`archive/README.md`](archive/README.md). |
 
 ## When to use this path

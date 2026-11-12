@@ -1,6 +1,6 @@
 # restful_api.py — RESTful API 服务面精讲
 
-> 源文件：`/data/usershare/ai/inference/xinference/api/restful_api.py`（HEAD b3de260，3832 行）
+> 源文件：`~/ai/inference/xinference/api/restful_api.py`（HEAD b3de260，3832 行）
 
 ## 1. 角色定位
 

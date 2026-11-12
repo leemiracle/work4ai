@@ -107,7 +107,7 @@
 
 #### 2.1.1 主线 LLVM/GCC 中的国产 CPU 痕迹（实测 grep）
 
-本项目对 `/data/usershare/ai/riscv/OpenXiangShan/llvm-project/llvm/lib/Target/AArch64/` 做 grep 实测（2026-07-07）：
+本项目对 `~/ai/riscv/OpenXiangShan/llvm-project/llvm/lib/Target/AArch64/` 做 grep 实测（2026-07-07）：
 
 ```
    主线 LLVM AArch64 后端 国产 CPU 痕迹实测（grep 实测，2026-07-07）
@@ -468,7 +468,7 @@
 
 12. **[GitHub]** llvm/llvm-project, *PR #176700: release/22.x: [LoongArch] Add support for LA32R/LA32S*（github.com/llvm/llvm-project/pull/176700）, merged 2026-01-22. —— LLVM 22.x 加 LoongArch32 支持，§2.1 矩阵龙芯一等公民证据。
 13. **[GitHub]** gcc-patches, *[PATCH] gcc-16: LoongArch: Update changes for code model and vector intrinsics*（gcc.gnu.org/pipermail/gcc-patches/2026-April/715312.html）, 2026-04-30. —— GCC 16 加 LoongArch FMV + 向量 intrinsics，§2.1 矩阵龙芯 GCC 一等公民证据。
-14. **[实测]** 本项目 grep `/data/usershare/ai/riscv/OpenXiangShan/llvm-project/llvm/lib/Target/AArch64/`，关键词 `phytium|ftc86|ftc66`（2026-07-07）—— **零命中**。§2.1 判断一核心实测证据：飞腾在主线 LLVM AArch64 后端零痕迹。
+14. **[实测]** 本项目 grep `~/ai/riscv/OpenXiangShan/llvm-project/llvm/lib/Target/AArch64/`，关键词 `phytium|ftc86|ftc66`（2026-07-07）—— **零命中**。§2.1 判断一核心实测证据：飞腾在主线 LLVM AArch64 后端零痕迹。
 15. **[实测]** 本项目 grep 同上路径，关键词 `tsv110|taishan`——命中 `AArch64Processors.td:833`（SubtargetFeature<"tsv110">）+ `:1544`（ProcessorModel<"tsv110", TSV110Model>）。§2.1 判断一核心实测证据：华为鲲鹏 TSV110 是主线 LLVM 一等公民。
 
 ### 报道 / 第三方（媒体）

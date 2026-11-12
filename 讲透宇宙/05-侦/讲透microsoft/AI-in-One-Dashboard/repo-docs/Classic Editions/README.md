@@ -23,7 +23,7 @@ All reports and guides can be found on the [Analytics Hub](https://microsoft.git
 </div>
 
 > [!NOTE]
-> **New here?** This page covers the earlier editions, kept for existing deployments. Start with [the app](../../../../../README.md#-start-here-the-app-preview) or the [Power BI report](../../../../../README.md#-the-power-bi-report) in the main README.
+> **New here?** This page covers the earlier editions, kept for existing deployments. Start with the app or the Power BI report in the main README.
 
 # ℹ️ **Agent Dashboard in Copilot Analytics**  
 The Agent Dashboard is now generally available (GA), providing one-click visibility into agent usage. Work with your IT admin to enable it.
@@ -41,7 +41,7 @@ This repository contains the <strong>AI-in-One Dashboard</strong> Power BI templ
 
 See the dashboard in action:
 
-![AI-in-One Dashboard animated preview](Images/AIO%20v10%20Gif.gif)
+!AI-in-One Dashboard animated preview
 
 ---
 
@@ -69,9 +69,9 @@ Pick the path that matches your environment. Each folder is self-contained — R
 
 | Path | Folder | Best when… | Volume ceiling |
 |---|---|---|---|
-| **Rollup Edition** | [Repo root](../../../../../README.md#-the-power-bi-report) | Data is pre-processed before Power BI ever loads it — dramatically smaller files, near-instant dashboard opens, and no out-of-memory errors. Works with local files, SharePoint, or Fabric — one template covers all three | Any size tenant, including large enterprise |
+| **Rollup Edition** | Repo root | Data is pre-processed before Power BI ever loads it — dramatically smaller files, near-instant dashboard opens, and no out-of-memory errors. Works with local files, SharePoint, or Fabric — one template covers all three | Any size tenant, including large enterprise |
 | **Manual** *(Classic Edition)* | [`1. Manual/`](1.%20Manual) | One-off, ad-hoc, or single-user. Customer manually exports audit CSV from Purview UI, drops into the local PBIT | < ~100K events lifetime |
-| **SharePoint — Single File** *(Classic Edition)* | [`2. SharePoint/Single File/`](2.%20SharePoint/Single%20File) | Scheduled refresh in PBI Service without a Gateway. Script overwrites one CSV per refresh — no folder iteration, no privacy firewall errors | Rolling 30 days, refreshes weekly or daily |
+| **SharePoint — Single File** *(Classic Edition)* | `2. SharePoint/Single File/` | Scheduled refresh in PBI Service without a Gateway. Script overwrites one CSV per refresh — no folder iteration, no privacy firewall errors | Rolling 30 days, refreshes weekly or daily |
 | **SharePoint — Folder** *(Classic Edition)* | [`2. SharePoint/Folder/`](2.%20SharePoint/Folder) | Need > 30 days of accumulated history but no Fabric. Folder iteration auto-unions all daily CSVs | Up to 180 days (Graph cap), heavier PBI memory footprint |
 | **Fabric / Lakehouse** *(Classic Edition)* | [`3. Fabric/`](3.%20Fabric) | Have Fabric capacity. JSON parsing happens upstream in a notebook → best performance, multi-year history, sub-second dashboard | Millions of events, multi-year |
 
@@ -79,7 +79,7 @@ Inside each path:
 - The PBIT for that pattern (and a README explaining what parameters to fill in)
 - `scripts/` — automation scripts for data processing and export; contents vary by edition but may include data pre-processors, manual one-shot PowerShell (interactive browser sign-in), unattended app-registration scripts (service principal for scheduled jobs), and Azure Automation runbooks with Bicep deployment
 
-For customers whose dataset is growing or where Power BI load times and refresh failures are a concern, the **[Rollup Edition](../../../../../README.md#-the-power-bi-report)** pre-processes data upstream before Power BI ever sees it — typically reducing file sizes by 70%+ and cutting dashboard open times from hours to minutes - and sometimes seconds! It natively supports local files, SharePoint, and Fabric in a single template, making it the right fit regardless of your storage tier. The Manual, SharePoint, and Fabric Classic Editions remain available for existing deployments.
+For customers whose dataset is growing or where Power BI load times and refresh failures are a concern, the **Rollup Edition** pre-processes data upstream before Power BI ever sees it — typically reducing file sizes by 70%+ and cutting dashboard open times from hours to minutes - and sometimes seconds! It natively supports local files, SharePoint, and Fabric in a single template, making it the right fit regardless of your storage tier. The Manual, SharePoint, and Fabric Classic Editions remain available for existing deployments.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -267,7 +267,7 @@ Follow the traditional workflow using browser-based portals to export your data:
 <details>
 <summary>⚡ Option C: Automated PowerShell Scripts *(Classic Edition)*</summary>
 
-Use the PowerShell automation scripts in the [scripts](scripts) folder for a faster, repeatable workflow. This method supports two execution modes:
+Use the PowerShell automation scripts in the scripts folder for a faster, repeatable workflow. This method supports two execution modes:
 
 - Run locally (PowerShell) and export CSVs
 - Run in Azure Automation (runbooks) and upload outputs to SharePoint
@@ -302,8 +302,8 @@ cd scripts/automation
 ~~~
 
 📖 **Documentation**:
-- Local scripts: [scripts/readme.md](scripts/readme.md)
-- Azure Automation runbooks: [scripts/automation/README.md](scripts/automation/README.md)
+- Local scripts: scripts/readme.md
+- Azure Automation runbooks: scripts/automation/README.md
 
 </details>
 
@@ -506,7 +506,7 @@ Refer back to the [**Choose your deployment path**](#choose-your-deployment-path
 |---|---|---|
 | **Rollup Edition** *(local · SharePoint · Fabric)* | `AIO Dashboard - Rollup Edition - 2026-06-25.pbit` and `AIO Dashboard - Rollup Edition - PBI-SharePoint - 2026-06-25.pbit`, in the repo root | [`docs/power-bi-report.md`](../docs/power-bi-report.md) |
 | **Manual** *(Classic Edition)* | `1. Manual/AI-in-One Dashboard.pbit` (single local CSV) | [`1. Manual/README.md`](1.%20Manual/README.md) |
-| **SharePoint — Single File** *(Classic Edition · recommended default for scheduled refresh)* | `2. SharePoint/Single File/AI-in-One Dashboard.pbit` | [`2. SharePoint/Single File/README.md`](2.%20SharePoint/Single%20File/README.md) |
+| **SharePoint — Single File** *(Classic Edition · recommended default for scheduled refresh)* | `2. SharePoint/Single File/AI-in-One Dashboard.pbit` | `2. SharePoint/Single File/README.md` |
 | **SharePoint — Folder** *(Classic Edition · advanced; >30 days history without Fabric)* | `2. SharePoint/Folder/AI-in-One Dashboard - SP Folder.pbit` | [`2. SharePoint/Folder/README.md`](2.%20SharePoint/Folder/README.md) |
 | **Fabric / Lakehouse** *(Classic Edition · upstream JSON parsing, large tenants)* | `3. Fabric/AI-in-One Dashboard - Fabric.pbit` | [`3. Fabric/README.md`](3.%20Fabric/README.md) |
 
@@ -612,13 +612,13 @@ Check the `/Archived Templates` folder for previous versions of the dashboard te
 
 ##  License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the LICENSE.md file for details.
 
 ---
 
 ## 🔒 Security
 
-Please see [SECURITY.md](SECURITY.md) for information on reporting security vulnerabilities.
+Please see SECURITY.md for information on reporting security vulnerabilities.
 
 ---
 

@@ -69,7 +69,7 @@ RDB 内核层（105 文件）   rdb_store_impl 门面 → connection_pool → sq
 ```bash
 # 图谱位于仓内（fingerprint 基线已建，commit cce98de98）
 # 增量更新：改代码后重跑 /understand --auto-update（scan-result.json 已保留）
-# DeepWiki 更新：python3 /data/usershare/ai/pipeline-bin/deepwiki/dw_fetch.py \
+# DeepWiki 更新：python3 ~/ai/pipeline-bin/deepwiki/dw_fetch.py \
 #   --repo openharmony/distributeddatamgr_relational_store --out <dir> --threads 3 --no-proxy
 ```
 

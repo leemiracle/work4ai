@@ -7,4 +7,4 @@
 | understand/ONBOARDING.md | 8 节 | ✅ |
 | understand/explain/ | 12 篇 54977 字符 | ✅ |
 
-真源：仓内 /data/usershare/ai/tvm/.understand-anything/（fingerprints@15b607d；含 target 58 文件补录——scanner target 目录误判坑钉版）
+真源：仓内 ~/ai/tvm/.understand-anything/（fingerprints@15b607d；含 target 58 文件补录——scanner target 目录误判坑钉版）
