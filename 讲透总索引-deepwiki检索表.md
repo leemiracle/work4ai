@@ -1,6 +1,6 @@
 # 讲透总索引 · deepwiki 检索表（原料仓定位用）
 
-> 生成 2026-11-12（物理重组后路径）· 166 个含 deepwiki 原料的单元。用法：**先按领域找到仓，再点进 `讲透宇宙/0N-区/讲透X/deepwiki/` 读对应章节页**；附录章节清单支持全文 grep（如 `grep -i "cache" 本文件`）。
+> 生成 2026-11-12（物理重组后路径）· 165 个含 deepwiki 原料的单元（sglang 已并入 SGLang 双基线）。用法：**先按领域找到仓，再点进 `讲透宇宙/0N-区/讲透X/deepwiki/` 读对应章节页**；附录章节清单支持全文 grep（如 `grep -i "cache" 本文件`）。
 
 ## 主表（按领域分组）
 
@@ -118,7 +118,6 @@
 | 推理与服务 | [讲透miles](讲透宇宙/03-查/讲透miles/deepwiki/INDEX.md) | radixark/miles | 69 | L查 |
 | 推理与服务 | [讲透MLC-LLM](讲透宇宙/02-透/讲透MLC-LLM/deepwiki/INDEX.md) | ? | 28 | L透 |
 | 推理与服务 | [讲透Mooncake](讲透宇宙/03-查/讲透Mooncake/README.md)✅已蒸馏 | kvcache-ai/Mooncake | 72 | L查 |
-| 推理与服务 | [讲透sglang](讲透宇宙/03-查/讲透sglang/deepwiki/INDEX.md) | sgl-project/sglang | 114 | L查 |
 | 推理与服务 | [讲透SGLang](讲透宇宙/02-透/讲透SGLang/deepwiki/INDEX.md) | ? | 110 | L透 |
 | 推理与服务 | [讲透tokenspeed](讲透宇宙/03-查/讲透tokenspeed/deepwiki/INDEX.md) | lightseekorg/tokenspeed | 45 | L查 |
 | 推理与服务 | [讲透vLLM](讲透宇宙/02-透/讲透vLLM/deepwiki/INDEX.md) | ? | 74 | L透 |
